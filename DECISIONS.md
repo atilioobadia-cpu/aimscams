@@ -158,6 +158,25 @@ entries are never rewritten (D-004). Every assumption lives in one table
 **Revisit when** an accountant or regulator gives written direction. That becomes a new policy
 version; the old one stays for historical entries.
 
+### D-016 — Ledger rules live in the schema; tests run real PostgreSQL through PGlite
+**Status:** Accepted 2026-10-23 · `packages/ledger`
+
+The ledger's invariants are enforced by the database, not by application code: deferred
+constraint triggers refuse an unbalanced entry at commit, triggers make posted entries and their
+lines immutable, a period guard refuses writes outside an open period, composite foreign keys
+make cross-tenant lines impossible, and forced row-level security isolates tenants.
+
+Amounts are `bigint` minor units end to end — the same representation as `packages/domain` — so
+no shilling is lost between the domain and the book and no ledger amount is ever a float.
+
+**Why PGlite.** The development machine has no Docker, and mocking a database would test nothing.
+PGlite is PostgreSQL compiled to WASM, so the suite applies the exact `schema.sql` and exercises
+the real triggers and RLS. The schema is plain, standard SQL; staging and production use a normal
+PostgreSQL 16 server with the same file.
+
+**Consequences.** The test suite is slower (about 20 seconds for the ledger package) because each
+case starts a database. That is the price of testing the constraints instead of trusting them.
+
 ---
 
 ## Open
