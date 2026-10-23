@@ -1,0 +1,17 @@
+{
+  "name": "aimscams",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AIMSCAMS - Alpha Integrated Management System - CAMS. Tanzania SACCO and microfinance back office.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

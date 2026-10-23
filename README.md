@@ -10,8 +10,9 @@ The system described here is **AIMSCAMS**, owned and operated by Alpha Integrate
 System (AIMS). Its behaviour was reverse-engineered from a production system the team had
 access to; that product is referred to throughout as *the observed product*.
 
-There is **no application code yet**. This repo holds the specification that the build will
-follow. Read it before writing a line of production code.
+Build started 2026-10-23 with the **domain kernel** in `packages/domain` — money, repayment
+schedules, payment allocation and arrears ageing, all pure and tested. No API, database or
+screens yet. The specification is the contract; read it before writing production code.
 
 > Independent interoperability analysis. Not affiliated with, endorsed by, or containing the
 > source code of any vendor product. See [Evidence and privacy](#evidence-and-privacy).
@@ -46,7 +47,7 @@ Full index: [`docs/README.md`](docs/README.md).
 | Domain specification | Complete (145 screens, 53 reports, 17 statutory returns) |
 | Architecture and data model | Complete, decisions recorded |
 | Delivery plan | Complete — phases, gates, team shape, quality bar |
-| Application code | **Not started** |
+| Application code | **Started** — domain kernel: money, schedules, allocation, arrears (34 tests) |
 | Data | **Greenfield** — structure only, no data migrated from any observed tenant |
 | Accounting policy sign-off | **Open** — see [DECISIONS.md](DECISIONS.md#open) |
 | Regulatory form versions | **To verify** against current TCDC / BoT forms |
@@ -63,6 +64,8 @@ docs/                 the specification (9 documents)
   README.md           index, provenance, known gaps
   01..08              overview, modules, flows, architecture, data model, regulatory, build plan, delivery plan
 DECISIONS.md          decision register — what is settled and what is not
+packages/
+  domain/             pure domain kernel: money, schedules, allocation, arrears (34 tests)
 evidence/             non-sensitive artefacts (route index, source inventory)
 tools/
   mermaid-check/      parses every diagram in docs/ with the real mermaid parser

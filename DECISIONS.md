@@ -133,9 +133,36 @@ personal data into a new controller's environment without a lawful basis.
 - The screenshots are the only remaining link to the observed tenant, and they stay out of the
   repository (D-012).
 
+### D-015 — Kickoff rulings: the screenshots are the rulebook, gaps are marked assumptions
+**Status:** Accepted 2026-10-23 · supersedes O-001…O-007
+
+The build starts now. No external sign-off gates it. The observed system, as captured in the 426
+screenshots, is the baseline for posting rules, allocation order, accrual and provisioning.
+
+| Item | Ruling |
+|---|---|
+| O-001 repayment direction | Implement as observed (`Dr 1205 + Dr 4005 / Cr 1005`), marked `assumption`, stored as a policy row, correctable without code |
+| O-002 provision grids | Seed typical SACCOS and MFI Type 1/Type 2 buckets and rates, flagged `assumption`; MSP03 reads the table |
+| O-003 submission channel | PDF/Excel export plus manual portal upload; acknowledgement attached to the submission |
+| O-004 MSP10 source | Build a complaints register; MSP10 reads it |
+| O-005 MSP11 counterparty | Manual register in Settings |
+| O-006 Campaigns / Services | Out of MVP; remove the navigation entries rather than ship dead links |
+| O-007 council type | `council_type` (CC/MC/DC/TC) on branch, in the first migration |
+| O-008 legacy import format | Still open, low priority, blocks nothing |
+
+**Why this is safe.** Rules are data (D-005), keyed by `(dialect, event, version)`. An assumption
+is a row, not a hard-coded branch; correcting one is a new policy version, and already-posted
+entries are never rewritten (D-004). Every assumption lives in one table
+(`docs/06-regulatory-reporting.md §8.3`) so an adviser reviews a page, not a codebase.
+
+**Revisit when** an accountant or regulator gives written direction. That becomes a new policy
+version; the old one stays for historical entries.
+
 ---
 
 ## Open
+
+> Resolved items are ruled on in **D-015**; the entries below are kept for their problem statements.
 
 ### O-001 — Accounting policy: repayment entry direction
 **Status:** OPEN · blocks the posting rule table · `docs/03-flows.md §7`, `docs/04-architecture.md §6.2`

@@ -6,6 +6,9 @@ merged/
 # Node
 node_modules/
 npm-debug.log*
+dist/
+coverage/
+*.tsbuildinfo
 
 # OS / editor
 .DS_Store
