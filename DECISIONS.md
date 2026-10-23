@@ -92,6 +92,23 @@ the API tier if the team is Microsoft-centric; the architecture does not change.
 It contains real member names and phone numbers. Local regeneration only. `ocr/` and `merged/`
 are gitignored.
 
+### D-013 — The product is AIMSCAMS; the observed product is evidence only
+**Status:** Accepted · `LICENSE`, `NOTICE`
+
+The system being built is **AIMSCAMS** (*Alpha Integrated Management System — CAMS*), owned by
+Alpha Integrated Management System (AIMS) and authored by Atilio Obadia. Wakandi CAMS Admin is
+*the observed product*: it is cited as the source of behavioural evidence and is never the name
+of what we ship.
+
+Consequences:
+- Product identity (UI, docs titles, package names, environment names) is AIMSCAMS.
+- Observed artefacts keep their original labels — route slugs, the tenant's own GL account
+  names (`1001 Wakandi`), the captured footer — because they are evidence. Renaming them would
+  falsify the record.
+- The platform billing context (WBA) is AIMS-branded in a new deployment; the observed account
+  names are seed-data differences, not architecture.
+- Copyright and licence text live in `LICENSE` and `NOTICE`, not in individual documents.
+
 ---
 
 ## Open

@@ -1,14 +1,23 @@
-# Microfinance CAMS
+# AIMSCAMS
+
+**Alpha Integrated Management System — CAMS.**
 
 Specification-first repository for a **SACCO / microfinance back office for Tanzania**:
 members and KYC, savings and shares, credit, teller operations, double-entry accounting,
 and the statutory returns required by TCDC and the Bank of Tanzania.
 
-There is **no application code yet**. This repo holds the reverse-engineered specification
-that the build will follow. Read it before writing a line of production code.
+The system described here is **AIMSCAMS**, owned and operated by Alpha Integrated Management
+System (AIMS). Its behaviour was reverse-engineered from a production system the team had
+access to; that product is referred to throughout as *the observed product*.
+
+There is **no application code yet**. This repo holds the specification that the build will
+follow. Read it before writing a line of production code.
 
 > Independent interoperability analysis. Not affiliated with, endorsed by, or containing the
 > source code of any vendor product. See [Evidence and privacy](#evidence-and-privacy).
+
+© 2026 Alpha Integrated Management System (AIMS). All rights reserved.
+Developed by **Atilio Obadia**. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 ---
 
@@ -23,6 +32,7 @@ that the build will follow. Read it before writing a line of production code.
 | Writing a migration | [`docs/05-data-model.md`](docs/05-data-model.md) |
 | Building a return (MSP01–MSP11) | [`docs/06-regulatory-reporting.md`](docs/06-regulatory-reporting.md) |
 | Planning a sprint | [`docs/07-build-plan.md`](docs/07-build-plan.md) |
+| Planning delivery, gates and team | [`docs/08-delivery-plan.md`](docs/08-delivery-plan.md) |
 | Arguing about a decision | [`DECISIONS.md`](DECISIONS.md) |
 
 Full index: [`docs/README.md`](docs/README.md).
@@ -35,7 +45,7 @@ Full index: [`docs/README.md`](docs/README.md).
 |---|---|
 | Domain specification | Complete (145 screens, 53 reports, 17 statutory returns) |
 | Architecture and data model | Complete, decisions recorded |
-| Delivery plan | Complete; MVP cut defined |
+| Delivery plan | Complete — phases, gates, team shape, quality bar |
 | Application code | **Not started** |
 | Accounting policy sign-off | **Open** — see [DECISIONS.md](DECISIONS.md#open) |
 | Regulatory form versions | **To verify** against current TCDC / BoT forms |
@@ -48,9 +58,9 @@ MSP01 and MSP02.
 ## Repository layout
 
 ```
-docs/                 the specification (8 documents)
+docs/                 the specification (9 documents)
   README.md           index, provenance, known gaps
-  01..07              overview, modules, flows, architecture, data model, regulatory, build plan
+  01..08              overview, modules, flows, architecture, data model, regulatory, build plan, delivery plan
 DECISIONS.md          decision register — what is settled and what is not
 evidence/             non-sensitive artefacts (route index, source inventory)
 tools/

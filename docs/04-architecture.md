@@ -1,6 +1,7 @@
 # 04 — Target Architecture
 
-This document specifies the architecture you should build, not the one Wakandi built. It is
+This document specifies the architecture you should build for AIMSCAMS, not the one the
+observed product implements. It is
 constrained by the flows in `03-flows.md` and the screen surface in `02-modules.md`, but it
 makes explicit decisions so you do not rediscover them mid-build.
 
@@ -116,7 +117,7 @@ flowchart TB
         CRB["Credit bureau"]
         SMS["SMS · email · push"]
         REG["Regulator<br/>exports"]
-        WBA["Wakandi billing<br/>wallet"]
+        WBA["AIMS billing<br/>wallet"]
     end
 
     SPA --> CDN --> WAF --> GW --> API
@@ -412,7 +413,7 @@ Design points:
 | Bank disbursement | outbound | file or API | batch approval before send |
 | Credit bureau (CRB) | outbound | REST | score 500–800 stored on application |
 | SMS / email / push | outbound | provider API | credit-metered; see Billing |
-| Wakandi billing (WBA) | outbound | internal service | wallet, invoices, settlements |
+| AIMS billing (WBA) | outbound | internal service | wallet, invoices, settlements |
 | Regulator | outbound | export / portal upload | no live API assumed |
 
 Every adapter sits behind a port (`PaymentProviderPort`, `NotificationPort`,

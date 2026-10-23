@@ -1,0 +1,63 @@
+# NOTICE
+
+## Ownership
+
+**AIMSCAMS** — *Alpha Integrated Management System — CAMS* — is a product of
+**Alpha Integrated Management System (AIMS)**.
+
+Specification, architecture and documentation authored by **Atilio Obadia**.
+
+Copyright (c) 2026 Alpha Integrated Management System (AIMS). All rights reserved.
+See [LICENSE](LICENSE). No licence is granted beyond reading and evaluation.
+
+## Provenance
+
+The behavioural requirements in `docs/` were reconstructed from 426 screenshots of a
+production system plus four import templates and two report exports. That product is
+referred to throughout as *the observed product*.
+
+No vendor source code, build artefacts, proprietary assets, logos or branding are
+included. Reconstructed screen inventories, field names and ledger codes are recorded
+as **evidence**, not as reusable assets. AIMSCAMS is an independent implementation and
+is not affiliated with, endorsed by, sponsored by, or certified by the observed
+product's vendor.
+
+The reference tenant used to validate the reconstruction is **Mafanikio Financial
+Services Limited (MFSL)**, a microfinance institution in Tanzania. Its name appears
+because it was the tenant under observation; it does not imply a commercial
+relationship, endorsement, or authorisation beyond that observation.
+
+## Personal data
+
+The screenshot corpus contains personal data of real individuals (names, telephone
+numbers, national identification fragments). It is deliberately **not** committed to
+this repository. See `README.md#evidence-and-privacy` and the Tanzanian Personal Data
+Protection Act 2022.
+
+Any tenant data introduced during pilot or migration must be handled under a written
+data-processing agreement and must never be committed to this repository.
+
+## Trademarks
+
+"Wakandi", "CAMS", "MFSL", "Mafanikio Financial Services Limited" and any other
+product or company names mentioned are the property of their respective owners. They
+are used here descriptively, for identification and interoperability analysis only.
+
+## Third-party components
+
+The only third-party software in this repository is development tooling under
+`tools/mermaid-check`:
+
+| Component | Licence |
+|---|---|
+| mermaid | MIT |
+| jsdom | MIT |
+
+Runtime dependencies added to the application will be reviewed for licence
+compatibility before they enter the build, and recorded here.
+
+## Regulatory material
+
+Statutory return layouts (MSP01–MSP11) are described from observation and must be
+verified against the current TCDC and Bank of Tanzania forms before filing. Nothing in
+this repository is legal, accounting or tax advice.

@@ -1,10 +1,14 @@
-# Wakandi CAMS Admin — Reverse-Engineered Specification
+# AIMSCAMS — System Specification
 
-A build-ready specification of the **Wakandi CAMS Admin** SACCO / microfinance back office,
-reconstructed from 426 production screenshots, and translated into an architecture, data model
+A build-ready specification of **AIMSCAMS** (*Alpha Integrated Management System — CAMS*),
+the SACCO / microfinance back office for Tanzania, reconstructed from 426 production
+screenshots of the Wakandi CAMS Admin product and translated into an architecture, data model
 and delivery plan you can implement.
 
 **Scope:** Tanzania. SACCOS (TCDC-regulated) and microfinance institutions (BoT-regulated).
+
+© 2026 Alpha Integrated Management System (AIMS). All rights reserved.
+Developed by Atilio Obadia. See [LICENSE](../LICENSE).
 
 ---
 
@@ -19,8 +23,11 @@ and delivery plan you can implement.
 | 05 | [`05-data-model.md`](05-data-model.md) | You are writing migrations — 5 ERDs, entity dictionary, enums, constraints |
 | 06 | [`06-regulatory-reporting.md`](06-regulatory-reporting.md) | You are building MSP01–MSP11, or need to know which data must be captured on day one |
 | 07 | [`07-build-plan.md`](07-build-plan.md) | You are planning sprints, hiring, or deciding what to cut |
+| 08 | [`08-delivery-plan.md`](08-delivery-plan.md) | You need the phased execution plan: gates, team shape, quality bars, skill playbook |
+| — | [`../DECISIONS.md`](../DECISIONS.md) | You are about to build something that depends on an unsettled policy |
 
-Reading order for a new team member: **01 → 02 → 03 → 04 → 05 → 06 → 07**.
+Reading order for a new team member: **01 → 02 → 03 → 04 → 05 → 06 → 08**, with
+`DECISIONS.md` open beside 04 and 05.
 
 ---
 

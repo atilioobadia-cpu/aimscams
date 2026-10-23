@@ -2,9 +2,10 @@
 
 ## 1. What this system is
 
-**Wakandi CAMS Admin** is a multi-tenant, browser-based back office for deposit-taking
-cooperative financial institutions in Tanzania — SACCOs, SACCOS-like community groups, and
-small microfinance institutions (MFIs).
+**AIMSCAMS** (Alpha Integrated Management System — CAMS) is a multi-tenant, browser-based back
+office for deposit-taking cooperative financial institutions in Tanzania — SACCOs, SACCOS-like
+community groups, and small microfinance institutions (MFIs). Its requirements were
+reconstructed from the *observed product*, Wakandi CAMS Admin.
 
 It is not a banking core. It is the *operational shell* around a savings-and-credit core:
 
@@ -16,7 +17,8 @@ It is not a banking core. It is the *operational shell* around a savings-and-cre
   TCDC (for SACCOs) and the Bank of Tanzania (for MFIs),
 - it bills the tenant for platform usage through a prepaid wallet (WBA).
 
-The observed tenant (`MFSL MFI`, Wakandi Id `101457`) runs **Module Type: Microfinance**,
+The reference tenant is **Mafanikio Financial Services Limited** (`MFSL MFI`, account
+`101457`): **Module Type: Microfinance**,
 **License: MSP2021**, **Mode: STANDARD**, **Stage: Live**, financial year **01-01 → 31-12**.
 
 ### Scale of the product as observed
@@ -174,7 +176,7 @@ flowchart TB
         CRB["Credit reference bureau<br/>score 500–800"]
         SMS["SMS / email / push"]
         REG["Regulator portals<br/>TCDC · Bank of Tanzania"]
-        WBA["Wakandi Business Account<br/>billing wallet"]
+        WBA["AIMS Business Account<br/>billing wallet"]
     end
 
     TEL --> UI
@@ -211,7 +213,7 @@ The tenant is configured, not forked. Observed tenant-level settings:
 | Module Type | Microfinance | Selects the regulatory report family |
 | License Number | MSP2021 | BoT microfinance service provider licence |
 | Mode | STANDARD | Operating mode switch |
-| Wakandi Id | 101457 | Tenant identifier across the platform |
+| Account Id | 101457 | Tenant identifier across the platform |
 | KYC Status | Verified | Tenant-level KYC attestation |
 | Stage | Live | Lifecycle: onboarding → live |
 | Financial Year | 01-01 → 31-12 | Drives period control |

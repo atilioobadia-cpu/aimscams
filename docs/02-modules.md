@@ -551,8 +551,11 @@ Templates: `Member Template`, `Account_Standard_Template.xlsx`,
 
 ## 11. Business Account (WBA)
 
-Wakandi's own billing relationship with the tenant. Not SACCO business logic — but it is in
-the product, so build it as a **separate bounded context** with its own ledger codes.
+The platform operator's own billing relationship with the tenant. Not SACCO business logic —
+but it is in the product, so build it as a **separate bounded context** with its own ledger
+codes. In AIMSCAMS the operator is AIMS: the observed account names (`1001 Wakandi`,
+`5501 Wakandi Fees`) and setting keys (`MoveWakandiFeesToSystemExpense`) become AIMS-branded
+equivalents at seed time.
 
 | Element | Detail |
 |---|---|
