@@ -56,8 +56,10 @@ evidence/             non-sensitive artefacts (route index, source inventory)
 tools/
   mermaid-check/      parses every diagram in docs/ with the real mermaid parser
   corpus/             scripts that regenerate the OCR corpus locally (output is gitignored)
-.github/workflows/    docs validation on every PR
 ```
+
+CI: `tools/mermaid-check/ci-workflow.yml` is ready to enable — see
+[its README](tools/mermaid-check/README.md#ci).
 
 ---
 
@@ -85,7 +87,8 @@ These come out of the spec and are not open for reinterpretation during implemen
 
 - Branch from `main`: `feat/<scope>`, `fix/<scope>`, `docs/<scope>`.
 - Conventional commits (`feat:`, `fix:`, `docs:`, `chore:`).
-- Documentation changes must keep `tools/mermaid-check` green — CI runs it on every PR.
+- Documentation changes must keep `tools/mermaid-check` green — enable the workflow in
+  `tools/mermaid-check/ci-workflow.yml` so it runs on every PR.
 - If you change a documented rule or field, update the doc **in the same PR**. The spec is the
   contract; drift between docs and code is a defect.
 - Never commit real member data. See below.
