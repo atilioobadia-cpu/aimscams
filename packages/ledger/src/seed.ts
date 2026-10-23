@@ -102,8 +102,8 @@ export const POSTING_POLICIES: readonly PolicySeed[] = [
     assumption: true,
     note:
       'Observed ledger shows Dr 1205 Staff Loan + Dr 4005 Interest Income / Cr 1005 Bank. ' +
-      'This template uses standard double entry; replace with the observed direction if the ' +
-      'accountant confirms it (D-015).',
+      'This template posts the standard direction because debiting income is not double ' +
+      'entry and 1205 is the staff-loan ledger (D-017). The split remains an assumption.',
   },
   {
     eventCode: 'LOAN_WRITE_OFF',

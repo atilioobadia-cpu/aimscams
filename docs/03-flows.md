@@ -297,8 +297,8 @@ flowchart TD
 6. **`Recalculate Interest On Repayment` / `On Accrual`** are product switches — respect them
    or the schedule will drift.
 7. The observed entry for a bank repayment: **Dr 1205 Staff Loan + Dr 4005 Interest Income,
-   Cr 1005 Bank NMB**. The direction is unusual (income debited) but it is what the ledger
-   shows; verify against your own accounting policy before copying.
+   Cr 1005 Bank NMB**. The direction is unusual (income debited) and `1205` is the staff-loan
+   ledger. AIMSCAMS keeps this as evidence but posts the standard direction — see D-017.
 
 ---
 

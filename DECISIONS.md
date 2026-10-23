@@ -141,7 +141,7 @@ screenshots, is the baseline for posting rules, allocation order, accrual and pr
 
 | Item | Ruling |
 |---|---|
-| O-001 repayment direction | Implement as observed (`Dr 1205 + Dr 4005 / Cr 1005`), marked `assumption`, stored as a policy row, correctable without code |
+| O-001 repayment direction | Implement as observed (`Dr 1205 + Dr 4005 / Cr 1005`), marked `assumption`, stored as a policy row, correctable without code — **superseded by D-017** |
 | O-002 provision grids | Seed typical SACCOS and MFI Type 1/Type 2 buckets and rates, flagged `assumption`; MSP03 reads the table |
 | O-003 submission channel | PDF/Excel export plus manual portal upload; acknowledgement attached to the submission |
 | O-004 MSP10 source | Build a complaints register; MSP10 reads it |
@@ -176,6 +176,32 @@ PostgreSQL 16 server with the same file.
 
 **Consequences.** The test suite is slower (about 20 seconds for the ledger package) because each
 case starts a database. That is the price of testing the constraints instead of trusting them.
+
+### D-017 — A loan repayment posts the standard direction, not the observed row
+**Status:** Accepted 2026-10-23 · supersedes the O-001 row in D-015 · `packages/ledger/src/seed.ts`
+
+The observed ledger shows a repayment as
+`Dr 1205 Staff loan + Dr 4005 Interest income / Cr 1005 Bank`. AIMSCAMS posts
+`Dr cash / Cr 1201 Loans receivable (principal) / Cr 4001 Interest income (interest) /
+Cr 4101 Loan management fee / Cr 4104 Loan penalty`, with the policy row flagged
+`is_assumption`.
+
+**Why the ruling changed.** D-015 was written before the posting engine and the chart of accounts
+existed. Two things became explicit once they did:
+
+- Debiting an income account on a repayment *reduces* income rather than recognising it. The
+  entry does not represent the transaction under double entry.
+- `1205` is the staff-loan ledger. A member repayment does not belong there; the receivable is
+  `1201`.
+
+**Consequences.**
+
+- The observed row stays in `docs/03-flows.md §7` and `docs/04-architecture.md §6.2` as
+  evidence, annotated with this ruling.
+- The policy row stays `is_assumption = true`: a CPA still has to confirm how a repayment splits
+  between interest, fees and penalties.
+- Correcting it later is a new policy version. Posted entries are never restated (D-004).
+- No `4005` account is seeded until a policy needs it.
 
 ---
 

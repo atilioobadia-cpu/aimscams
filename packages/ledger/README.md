@@ -119,9 +119,9 @@ The chart follows the observed ledger's codes where they were captured (`1002`, 
 no screenshot showed them: `2101 Member savings` and `5001 Interest expense — member savings`.
 
 `LOAN_REPAYMENT` is also flagged `is_assumption`: the observed ledger debits an income account,
-which is not standard double entry. The template uses the standard direction and the note on the
-policy row records the discrepancy. Correcting it is a new policy version, never an edit to
-posted history (D-015).
+which is not standard double entry, and it uses the staff-loan ledger as the receivable. The
+template posts the standard direction; the note on the policy row records the discrepancy.
+Correcting it is a new policy version, never an edit to posted history (D-017).
 
 ## Assumptions and gaps in this slice
 

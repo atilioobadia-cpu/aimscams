@@ -250,10 +250,11 @@ hope.
 | Contra / transfer | Destination ledger | Source ledger | Branch inter-ledger code |
 | Reversal | Mirror of original | Mirror of original | New entry, links `reversed_entry_id` |
 
-> **Verify before copying.** The observed repayment entry shows
+> **Settled: the observed row is not copied.** The observed repayment entry shows
 > `Dr 4005 Interest Income` alongside `Dr 1205 Staff Loan` and `Cr 1005 Bank`. Debiting an
-> income account for a repayment is not standard. Establish your own accounting policy with
-> the tenant's accountant and encode *that*, not the screenshot.
+> income account reduces income instead of recognising it, and `1205` is the staff-loan ledger.
+> AIMSCAMS posts the standard direction, with the policy row flagged as an assumption until a
+> CPA confirms the split — see D-017.
 
 ### 6.3 Guarantees the engine must provide
 
