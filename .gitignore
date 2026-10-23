@@ -1,0 +1,18 @@
+# Ignore the OCR working corpus: it contains real member names and phone numbers
+# from the screenshots and must not be published. Keep it local (see docs/README.md).
+ocr/
+merged/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local scratch
+*.log
+*.tmp

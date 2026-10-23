@@ -1,0 +1,1017 @@
+[
+ {
+  "route": "transaction-teller-transaction",
+  "shots": 29,
+  "ocr_ok": 29,
+  "chars": 6887,
+  "lines": 381
+ },
+ {
+  "route": "accounting-chart-of-accounts",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 4685,
+  "lines": 363
+ },
+ {
+  "route": "reports-loan-ActiveLoanReport",
+  "shots": 7,
+  "ocr_ok": 7,
+  "chars": 4036,
+  "lines": 306
+ },
+ {
+  "route": "accounting-reports-CashBook",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 3827,
+  "lines": 303
+ },
+ {
+  "route": "reports-msp-MSP01Report",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 3538,
+  "lines": 136
+ },
+ {
+  "route": "clients-group-1789",
+  "shots": 20,
+  "ocr_ok": 20,
+  "chars": 3119,
+  "lines": 246
+ },
+ {
+  "route": "accounting-reports-GeneralLedgerBook",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 3082,
+  "lines": 226
+ },
+ {
+  "route": "reports-loan-ExpectedLoanRepaymentsReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 2762,
+  "lines": 215
+ },
+ {
+  "route": "reports-client-ClientListReport",
+  "shots": 8,
+  "ocr_ok": 8,
+  "chars": 2753,
+  "lines": 216
+ },
+ {
+  "route": "settings-policies-credit-product-policy-5",
+  "shots": 10,
+  "ocr_ok": 10,
+  "chars": 2742,
+  "lines": 156
+ },
+ {
+  "route": "settings-role",
+  "shots": 5,
+  "ocr_ok": 5,
+  "chars": 2664,
+  "lines": 155
+ },
+ {
+  "route": "accounting-entries",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 2487,
+  "lines": 142
+ },
+ {
+  "route": "accounting-reports-notes-of-account",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 2482,
+  "lines": 123
+ },
+ {
+  "route": "settings-products-loan-5",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 2447,
+  "lines": 128
+ },
+ {
+  "route": "settings-policies-credit-product-policy-5-edit",
+  "shots": 9,
+  "ocr_ok": 9,
+  "chars": 2345,
+  "lines": 130
+ },
+ {
+  "route": "reports-msp-MSP02Report",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 2179,
+  "lines": 95
+ },
+ {
+  "route": "accounting-reports-TrialBalanceReport",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1995,
+  "lines": 112
+ },
+ {
+  "route": "account-loan",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 1936,
+  "lines": 111
+ },
+ {
+  "route": "core-wba-business-account",
+  "shots": 7,
+  "ocr_ok": 7,
+  "chars": 1936,
+  "lines": 119
+ },
+ {
+  "route": "account-loan-details-118-summary",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1919,
+  "lines": 141
+ },
+ {
+  "route": "account-loan-application-details-124",
+  "shots": 5,
+  "ocr_ok": 5,
+  "chars": 1906,
+  "lines": 126
+ },
+ {
+  "route": "accounting-reports-CashFlowStatement",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1883,
+  "lines": 81
+ },
+ {
+  "route": "accounting-reports-ComprehensiveTrialBalance",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1847,
+  "lines": 104
+ },
+ {
+  "route": "reports-loan-AllLoanReport",
+  "shots": 13,
+  "ocr_ok": 13,
+  "chars": 1769,
+  "lines": 124
+ },
+ {
+  "route": "accounting-reports-JournalBook",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1662,
+  "lines": 135
+ },
+ {
+  "route": "reports-loan-DeferredInterestReport",
+  "shots": 11,
+  "ocr_ok": 11,
+  "chars": 1609,
+  "lines": 110
+ },
+ {
+  "route": "accounting-fixed-asset",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 1546,
+  "lines": 94
+ },
+ {
+  "route": "reports-msp-MSP08Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1533,
+  "lines": 58
+ },
+ {
+  "route": "settings-account",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 1519,
+  "lines": 83
+ },
+ {
+  "route": "reports-loan-AccruedInstallmentsReport",
+  "shots": 8,
+  "ocr_ok": 8,
+  "chars": 1512,
+  "lines": 115
+ },
+ {
+  "route": "settings-accounting-settings",
+  "shots": 8,
+  "ocr_ok": 8,
+  "chars": 1507,
+  "lines": 111
+ },
+ {
+  "route": "settings-administrator",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1486,
+  "lines": 79
+ },
+ {
+  "route": "reports-msp-MSP03Type1Report",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1451,
+  "lines": 123
+ },
+ {
+  "route": "reports-loan-ExpectedRepaymentReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 1414,
+  "lines": 105
+ },
+ {
+  "route": "account-loan-application-details-39",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 1410,
+  "lines": 100
+ },
+ {
+  "route": "account-loan-application",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 1396,
+  "lines": 77
+ },
+ {
+  "route": "account-loan-application-edit-39",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1295,
+  "lines": 88
+ },
+ {
+  "route": "reports-msp-MSP11Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1291,
+  "lines": 56
+ },
+ {
+  "route": "reports-msp-MSP09Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1287,
+  "lines": 60
+ },
+ {
+  "route": "reports-msp-MSP03Type2Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1244,
+  "lines": 102
+ },
+ {
+  "route": "accounting-reports-FinancialPositionReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1211,
+  "lines": 68
+ },
+ {
+  "route": "messages-users-list",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1211,
+  "lines": 76
+ },
+ {
+  "route": "accounting-reports-MonthlyTrialBalance",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1207,
+  "lines": 76
+ },
+ {
+  "route": "reports-transaction-FeesIncomeReport",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 1176,
+  "lines": 81
+ },
+ {
+  "route": "reports-loan-LoanOutstandingReport",
+  "shots": 7,
+  "ocr_ok": 7,
+  "chars": 1164,
+  "lines": 92
+ },
+ {
+  "route": "reports-msp-MSP03MFIReport",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 1133,
+  "lines": 92
+ },
+ {
+  "route": "account-loan-details-118-guarantors",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1084,
+  "lines": 84
+ },
+ {
+  "route": "reports-msp-MSP10Report",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1060,
+  "lines": 46
+ },
+ {
+  "route": "reports-msp-MSP05MFIReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 1027,
+  "lines": 49
+ },
+ {
+  "route": "reports-loan-LoanArrearsReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 1016,
+  "lines": 83
+ },
+ {
+  "route": "settings-branch-add",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 1010,
+  "lines": 65
+ },
+ {
+  "route": "messages-template-list",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 988,
+  "lines": 74
+ },
+ {
+  "route": "accounting-reports-IncomeStatementReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 979,
+  "lines": 63
+ },
+ {
+  "route": "reports-loan-RiskClassificationOfAssets",
+  "shots": 5,
+  "ocr_ok": 5,
+  "chars": 954,
+  "lines": 77
+ },
+ {
+  "route": "settings-policies-membership-policy-2-edit",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 944,
+  "lines": 62
+ },
+ {
+  "route": "reports-msp-MSP07Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 942,
+  "lines": 67
+ },
+ {
+  "route": "reports-loan-LoanAgingReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 940,
+  "lines": 79
+ },
+ {
+  "route": "account-loan-details-118-schedule",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 924,
+  "lines": 78
+ },
+ {
+  "route": "reports-msp-MSP10MFIReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 924,
+  "lines": 68
+ },
+ {
+  "route": "reports-loan",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 902,
+  "lines": 51
+ },
+ {
+  "route": "reports-loan-AccruedInterestReport",
+  "shots": 10,
+  "ocr_ok": 10,
+  "chars": 901,
+  "lines": 67
+ },
+ {
+  "route": "transaction-online-transaction",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 897,
+  "lines": 67
+ },
+ {
+  "route": "clients",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 893,
+  "lines": 56
+ },
+ {
+  "route": "reports-loan-PortfolioRiskReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 866,
+  "lines": 72
+ },
+ {
+  "route": "settings-products-savings-edit-1",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 856,
+  "lines": 61
+ },
+ {
+  "route": "accounting-assets",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 851,
+  "lines": 63
+ },
+ {
+  "route": "settings-policies-membership-policy-create",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 846,
+  "lines": 57
+ },
+ {
+  "route": "reports-loan-IssuedLoansAndArrearsReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 839,
+  "lines": 62
+ },
+ {
+  "route": "reports-msp-MSP04MFIReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 830,
+  "lines": 55
+ },
+ {
+  "route": "settings-administrator-add",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 830,
+  "lines": 65
+ },
+ {
+  "route": "settings-products-fee-penalties",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 823,
+  "lines": 72
+ },
+ {
+  "route": "reports-msp-MSP04Report",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 816,
+  "lines": 64
+ },
+ {
+  "route": "settings-products-savings-create",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 803,
+  "lines": 56
+ },
+ {
+  "route": "messages-message-logs",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 791,
+  "lines": 63
+ },
+ {
+  "route": "reports-loan-ExpectedPaymentByDateReport",
+  "shots": 9,
+  "ocr_ok": 9,
+  "chars": 789,
+  "lines": 64
+ },
+ {
+  "route": "settings-policies-membership-policy-1-edit",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 785,
+  "lines": 54
+ },
+ {
+  "route": "settings-policies-membership-policy-1",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 766,
+  "lines": 59
+ },
+ {
+  "route": "reports-loan-SummarizedPortfolioAtRiskReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 762,
+  "lines": 63
+ },
+ {
+  "route": "reports-loan-LoanDisbursementReport",
+  "shots": 6,
+  "ocr_ok": 6,
+  "chars": 760,
+  "lines": 64
+ },
+ {
+  "route": "settings-policies-membership-policy-2",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 751,
+  "lines": 58
+ },
+ {
+  "route": "accounting-reports-OwnersEquity",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 741,
+  "lines": 52
+ },
+ {
+  "route": "reports-loan-WrittenOffLoanReport",
+  "shots": 5,
+  "ocr_ok": 5,
+  "chars": 729,
+  "lines": 55
+ },
+ {
+  "route": "account-loan-details-118-transactions",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 722,
+  "lines": 54
+ },
+ {
+  "route": "reports-transaction-ExpenseReport",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 720,
+  "lines": 63
+ },
+ {
+  "route": "reports-loan-GuarantorsReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 689,
+  "lines": 54
+ },
+ {
+  "route": "reports-loan-PaidOffLoansReport",
+  "shots": 5,
+  "ocr_ok": 5,
+  "chars": 679,
+  "lines": 56
+ },
+ {
+  "route": "reports-loan-LoanRepaymentReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 677,
+  "lines": 55
+ },
+ {
+  "route": "reports-loan-PendingLoanApplications",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 672,
+  "lines": 54
+ },
+ {
+  "route": "reports-transaction-DailyTransactionReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 660,
+  "lines": 57
+ },
+ {
+  "route": "settings-policies-credit-product-policy",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 656,
+  "lines": 54
+ },
+ {
+  "route": "reports-msp-MSP06Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 648,
+  "lines": 46
+ },
+ {
+  "route": "reports-loan-TransactionReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 645,
+  "lines": 56
+ },
+ {
+  "route": "reports-saving-SavingSnapshotReport",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 639,
+  "lines": 54
+ },
+ {
+  "route": "account-loan-application-create",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 638,
+  "lines": 50
+ },
+ {
+  "route": "account-saving",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 637,
+  "lines": 56
+ },
+ {
+  "route": "reports-loan-LoanInsuranceReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 637,
+  "lines": 54
+ },
+ {
+  "route": "settings-policies-holidays",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 631,
+  "lines": 76
+ },
+ {
+  "route": "transaction-all-transaction",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 630,
+  "lines": 45
+ },
+ {
+  "route": "account-loan-details-118-documents",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 620,
+  "lines": 50
+ },
+ {
+  "route": "accounting-reports",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 614,
+  "lines": 41
+ },
+ {
+  "route": "transaction-teller-transaction-history",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 613,
+  "lines": 49
+ },
+ {
+  "route": "reports-loan-FeeStatusReport",
+  "shots": 4,
+  "ocr_ok": 4,
+  "chars": 611,
+  "lines": 53
+ },
+ {
+  "route": "accounting-reports-reconcile-statement",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 604,
+  "lines": 46
+ },
+ {
+  "route": "reports-saving-SavingReport",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 604,
+  "lines": 54
+ },
+ {
+  "route": "account-loan-details-118-repayments",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 599,
+  "lines": 49
+ },
+ {
+  "route": "settings-products-loan",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 596,
+  "lines": 52
+ },
+ {
+  "route": "reports-transaction-ReversedTransactionReport",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 593,
+  "lines": 49
+ },
+ {
+  "route": "accounting-reports-CorporateTaxStatement",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 585,
+  "lines": 39
+ },
+ {
+  "route": "accounting-reports-LedgerStatementReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 568,
+  "lines": 37
+ },
+ {
+  "route": "reports-saving-SavingBeyondPolicyLimitsReport",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 560,
+  "lines": 44
+ },
+ {
+  "route": "accounting-ledger-entries",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 547,
+  "lines": 36
+ },
+ {
+  "route": "reports-msp-MSP05Report",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 546,
+  "lines": 38
+ },
+ {
+  "route": "settings-products-loan-provisioning-create",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 540,
+  "lines": 45
+ },
+ {
+  "route": "requests",
+  "shots": 3,
+  "ocr_ok": 3,
+  "chars": 532,
+  "lines": 42
+ },
+ {
+  "route": "reports-msp-MSP09MFIReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 526,
+  "lines": 40
+ },
+ {
+  "route": "import-member-new",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 518,
+  "lines": 34
+ },
+ {
+  "route": "reports-loan-LoanOfficerIncomeReport",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 515,
+  "lines": 47
+ },
+ {
+  "route": "import-account-new",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 506,
+  "lines": 34
+ },
+ {
+  "route": "accounting-reports-Assets",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 504,
+  "lines": 33
+ },
+ {
+  "route": "clients-create",
+  "shots": 2,
+  "ocr_ok": 2,
+  "chars": 489,
+  "lines": 39
+ },
+ {
+  "route": "accounting-reports-Reconciliation",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 484,
+  "lines": 33
+ },
+ {
+  "route": "settings-products-savings",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 483,
+  "lines": 45
+ },
+ {
+  "route": "settings-policies-membership-policy",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 476,
+  "lines": 44
+ },
+ {
+  "route": "import-member",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 475,
+  "lines": 41
+ },
+ {
+  "route": "settings-branch",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 473,
+  "lines": 47
+ },
+ {
+  "route": "import-transaction-new",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 470,
+  "lines": 32
+ },
+ {
+  "route": "accounting-reports-reconcile-statement-settings",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 467,
+  "lines": 37
+ },
+ {
+  "route": "messages-template-list-create-3793",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 448,
+  "lines": 38
+ },
+ {
+  "route": "settings-products-interest-rate-create",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 447,
+  "lines": 38
+ },
+ {
+  "route": "import-account",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 444,
+  "lines": 38
+ },
+ {
+  "route": "settings-products-interest-rate",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 430,
+  "lines": 40
+ },
+ {
+  "route": "import-transaction",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 429,
+  "lines": 36
+ },
+ {
+  "route": "transaction-teller-transaction-request",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 428,
+  "lines": 36
+ },
+ {
+  "route": "transaction-online-payment-reconciliation",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 426,
+  "lines": 36
+ },
+ {
+  "route": "messages-segment-list",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 422,
+  "lines": 40
+ },
+ {
+  "route": "settings-products-loan-provisioning",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 412,
+  "lines": 38
+ },
+ {
+  "route": "reports-statement-AccountStatementReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 376,
+  "lines": 33
+ },
+ {
+  "route": "reports-statement-MemberStatementReport",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 365,
+  "lines": 32
+ },
+ {
+  "route": "clients-create-group",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 350,
+  "lines": 28
+ },
+ {
+  "route": "messages-recharge-credits",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 342,
+  "lines": 29
+ },
+ {
+  "route": "messages-send-message",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 332,
+  "lines": 31
+ },
+ {
+  "route": "reports-statement",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 315,
+  "lines": 27
+ },
+ {
+  "route": "messages-segment-list-create",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 298,
+  "lines": 28
+ },
+ {
+  "route": "settings-service-provider",
+  "shots": 1,
+  "ocr_ok": 1,
+  "chars": 272,
+  "lines": 27
+ },
+ {
+  "route": "reports-client-MemberVerificationReport",
+  "shots": 3,
+  "ocr_ok": 0,
+  "chars": 0,
+  "lines": 0
+ }
+]

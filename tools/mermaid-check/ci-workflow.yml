@@ -1,0 +1,32 @@
+name: docs
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - 'tools/mermaid-check/**'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'tools/mermaid-check/**'
+      - '.github/workflows/docs.yml'
+
+jobs:
+  mermaid:
+    name: Mermaid diagrams parse
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: tools/mermaid-check
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: tools/mermaid-check/package-lock.json
+
+      - run: npm ci
+      - run: npm run check
