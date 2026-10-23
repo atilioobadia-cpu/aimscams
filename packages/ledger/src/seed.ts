@@ -178,3 +178,130 @@ export async function seedPostingPolicies(
   }
   return inserted;
 }
+
+export type Dialect = 'SACCOS' | 'MFI';
+export type CouncilType = 'CC' | 'MC' | 'DC' | 'TC';
+
+export interface TenantInput {
+  code: string;
+  name: string;
+  dialect: Dialect;
+  branch?: {
+    code?: string;
+    name?: string;
+    councilType?: CouncilType;
+  };
+  /** At least one fiscal period. Usually the current year and the next. */
+  periods: readonly { startsOn: string; endsOn: string }[];
+}
+
+export interface ProvisionedTenant {
+  tenantId: string;
+  branchId: string;
+  periodIds: string[];
+  accounts: number;
+  policies: number;
+  /** True when the tenant already existed and only missing pieces were added. */
+  reused: boolean;
+}
+
+/**
+ * Creates a tenant, its head-office branch, its fiscal periods, the chart of
+ * accounts and the posting policies — one transaction, idempotent by tenant
+ * code, so a retried deployment cannot create a second book.
+ *
+ * Overlapping periods are refused here rather than in the schema: a period
+ * overlap would let one day belong to two books, and the posting engine picks
+ * a period by date.
+ */
+export async function provisionTenant(db: Db, input: TenantInput): Promise<ProvisionedTenant> {
+  if (input.periods.length === 0) {
+    throw new Error('a tenant needs at least one fiscal period');
+  }
+
+  const ordered = [...input.periods].sort((a, b) => a.startsOn.localeCompare(b.startsOn));
+  for (let index = 1; index < ordered.length; index += 1) {
+    const previous = ordered[index - 1];
+    const current = ordered[index];
+    if (previous && current && previous.endsOn >= current.startsOn) {
+      throw new Error(
+        `fiscal periods overlap: ${previous.startsOn}..${previous.endsOn} and ` +
+          `${current.startsOn}..${current.endsOn}`,
+      );
+    }
+  }
+
+  return db.transaction(async (tx) => {
+    const created = await tx.query<{ id: string }>(
+      `insert into tenant (code, name, dialect)
+       values ($1, $2, $3)
+       on conflict (code) do nothing
+       returning id`,
+      [input.code, input.name, input.dialect],
+    );
+
+    let tenantId = created.rows[0]?.id;
+    if (!tenantId) {
+      const existing = await tx.query<{ id: string }>(`select id from tenant where code = $1`, [
+        input.code,
+      ]);
+      tenantId = existing.rows[0]?.id;
+    }
+    if (!tenantId) throw new Error(`tenant ${input.code} could not be created or found`);
+
+    const branchCode = input.branch?.code ?? 'HQ';
+    const branchName = input.branch?.name ?? 'Head office';
+
+    const branch = await tx.query<{ id: string }>(
+      `insert into branch (tenant_id, code, name, council_type)
+       values ($1, $2, $3, $4)
+       on conflict (tenant_id, code) do nothing
+       returning id`,
+      [tenantId, branchCode, branchName, input.branch?.councilType ?? null],
+    );
+
+    let branchId = branch.rows[0]?.id;
+    if (!branchId) {
+      const existing = await tx.query<{ id: string }>(
+        `select id from branch where tenant_id = $1 and code = $2`,
+        [tenantId, branchCode],
+      );
+      branchId = existing.rows[0]?.id;
+    }
+    if (!branchId) throw new Error(`branch ${branchCode} could not be created or found`);
+
+    const periodIds: string[] = [];
+    for (const period of ordered) {
+      const row = await tx.query<{ id: string }>(
+        `insert into fiscal_period (tenant_id, starts_on, ends_on)
+         values ($1, $2, $3)
+         on conflict (tenant_id, starts_on) do nothing
+         returning id`,
+        [tenantId, period.startsOn, period.endsOn],
+      );
+
+      let periodId = row.rows[0]?.id;
+      if (!periodId) {
+        const existing = await tx.query<{ id: string }>(
+          `select id from fiscal_period where tenant_id = $1 and starts_on = $2`,
+          [tenantId, period.startsOn],
+        );
+        periodId = existing.rows[0]?.id;
+      }
+      if (!periodId) throw new Error(`period ${period.startsOn} could not be created or found`);
+      periodIds.push(periodId);
+    }
+
+    const accounts = await seedChartOfAccounts(tx, tenantId);
+    const policies = await seedPostingPolicies(tx, tenantId);
+
+    return {
+      tenantId,
+      branchId,
+      periodIds,
+      accounts,
+      policies,
+      reused: created.rows.length === 0,
+    };
+  });
+}

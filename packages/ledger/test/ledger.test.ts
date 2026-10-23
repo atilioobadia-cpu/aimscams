@@ -4,9 +4,12 @@ import { fromMajor } from '@aimscams/domain';
 
 import {
   accountBalance,
+  CHART_OF_ACCOUNTS,
   createDatabase,
+  POSTING_POLICIES,
   postEntry,
   postEvent,
+  provisionTenant,
   seedChartOfAccounts,
   seedPostingPolicies,
   trialBalance,
@@ -265,6 +268,75 @@ describe('the database enforces the ledger', () => {
       [TENANT],
     );
     expect(Number(count.rows[0]?.count)).toBe(1);
+  });
+});
+
+describe('provisioning', () => {
+  it('creates a usable book, and a retry does not create a second one', async () => {
+    const db = await createDatabase();
+    open = db;
+
+    const input = {
+      code: 'DEMO1',
+      name: 'AIMS Demo SACCO',
+      dialect: 'SACCOS' as const,
+      branch: { code: 'HQ', name: 'Head office', councilType: 'MC' as const },
+      periods: [{ startsOn: '2026-01-01', endsOn: '2026-12-31' }],
+    };
+
+    const first = await provisionTenant(db, input);
+    expect(first.reused).toBe(false);
+    expect(first.accounts).toBe(CHART_OF_ACCOUNTS.length);
+    expect(first.policies).toBe(POSTING_POLICIES.length);
+    expect(first.periodIds).toHaveLength(1);
+
+    const second = await provisionTenant(db, input);
+    expect(second.reused).toBe(true);
+    expect(second.tenantId).toBe(first.tenantId);
+    expect(second.periodIds[0]).toBe(first.periodIds[0]);
+    expect(second.accounts).toBe(0);
+    expect(second.policies).toBe(0);
+
+    const branch = await db.query<{ council_type: string }>(
+      `select council_type from branch where id = $1`,
+      [first.branchId],
+    );
+    expect(branch.rows[0]?.council_type).toBe('MC');
+
+    const balance = await trialBalance(db, first.tenantId, '2026-12-31');
+    expect(balance.rows).toHaveLength(CHART_OF_ACCOUNTS.length);
+    expect(balance.debitMinor).toBe(0n);
+    expect(balance.creditMinor).toBe(0n);
+
+    await postEvent(db, {
+      tenantId: first.tenantId,
+      entryDate: '2026-03-01',
+      eventCode: 'SAVINGS_DEPOSIT',
+      sourceType: 'savings',
+      sourceId: 'opening',
+      amounts: { total: fromMajor('250.00') },
+    });
+
+    expect(await accountBalance(db, first.tenantId, '2101', '2026-12-31')).toBe(
+      fromMajor('250.00').minor,
+    );
+  });
+
+  it('refuses overlapping fiscal periods', async () => {
+    const db = await createDatabase();
+    open = db;
+
+    await expect(
+      provisionTenant(db, {
+        code: 'DEMO2',
+        name: 'AIMS Demo Two',
+        dialect: 'MFI',
+        periods: [
+          { startsOn: '2026-01-01', endsOn: '2026-12-31' },
+          { startsOn: '2026-06-01', endsOn: '2027-05-31' },
+        ],
+      }),
+    ).rejects.toThrow(/overlap/);
   });
 });
 

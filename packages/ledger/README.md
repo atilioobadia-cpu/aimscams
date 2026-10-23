@@ -77,6 +77,25 @@ Both return `{ id, entryNo, reused }`. A repeated idempotency key returns the or
 Policy lines name an amount key (`total`, `principal`, `interest`, `penalty`, `charges`); a key
 that is missing or zero is skipped, which is how a repayment with no penalty still balances.
 
+## Provisioning a tenant
+
+One transaction creates the tenant, its head-office branch, its fiscal periods, the chart of
+accounts and the posting policies:
+
+```ts
+const { tenantId } = await provisionTenant(db, {
+  code: 'DEMO1',
+  name: 'AIMS Demo SACCO',
+  dialect: 'SACCOS',
+  branch: { code: 'HQ', name: 'Head office', councilType: 'MC' },
+  periods: [{ startsOn: '2026-01-01', endsOn: '2026-12-31' }],
+});
+```
+
+It is idempotent by tenant code, so a retried deployment adds what is missing instead of
+creating a second book. Overlapping periods are refused before anything is written — a day may
+belong to only one fiscal period.
+
 ## Trial balance
 
 ```ts
@@ -117,9 +136,10 @@ posted history (D-015).
 npm test -w @aimscams/ledger
 ```
 
-Eleven cases cover the constraints (unbalanced, single-line, both-sides, immutability, closed
-period, date outside period, unknown account, idempotency), a five-day scripted week that ties
-out to the cent, date-bounded reporting, and tenant isolation under a non-superuser role.
+Thirteen cases cover the constraints (unbalanced, single-line, both-sides, immutability, closed
+period, date outside period, unknown account, idempotency), provisioning (idempotent, overlapping
+periods refused), a five-day scripted week that ties out to the cent, date-bounded reporting, and
+tenant isolation under a non-superuser role.
 
 Each case starts a fresh **PGlite** database — PostgreSQL in WASM — and applies the real
 `schema.sql`. Staging and production run the same file against PostgreSQL 16. See D-016.
