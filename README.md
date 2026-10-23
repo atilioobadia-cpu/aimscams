@@ -68,7 +68,7 @@ docs/                 the specification (9 documents)
 DECISIONS.md          decision register — what is settled and what is not
 packages/
   domain/             pure domain kernel: money, schedules, allocation, arrears (34 tests)
-  ledger/             chart of accounts, posting policies, journal, trial balance (11 tests)
+  ledger/             chart of accounts, posting policies, journal, trial balance (13 tests)
 evidence/             non-sensitive artefacts (route index, source inventory)
 tools/
   mermaid-check/      parses every diagram in docs/ with the real mermaid parser
@@ -96,7 +96,7 @@ These come out of the spec and are not open for reinterpretation during implemen
 8. **Every row is tenant-scoped**, enforced by row-level security as well as application code.
 9. **Two regulators, two dialects.** `MSP05`, `MSP09` and `MSP10` mean different returns under
    TCDC (SACCOS) and BoT (MFI). Template keys are `(dialect, code, version)`.
-10. **Money is never a float.** Integer minor units in transport, `NUMERIC(18,2)` at rest.
+10. **Money is never a float.** Integer minor units in transport and at rest.
 
 ---
 
