@@ -3,7 +3,8 @@
 ## Ownership
 
 **AIMSCAMS** — *Alpha Integrated Management System — CAMS* — is a product of
-**Alpha Integrated Management System (AIMS)**.
+**Alpha Integrated Management System (AIMS)**, a company registered in the United Republic of
+Tanzania.
 
 Specification, architecture and documentation authored by **Atilio Obadia**.
 
@@ -25,7 +26,9 @@ product's vendor.
 The reference tenant used to validate the reconstruction is **Mafanikio Financial
 Services Limited (MFSL)**, a microfinance institution in Tanzania. Its name appears
 because it was the tenant under observation; it does not imply a commercial
-relationship, endorsement, or authorisation beyond that observation.
+relationship, endorsement, or authorisation beyond that observation. **No data from it
+is used** — not in this repository and not in the product. AIMSCAMS starts greenfield;
+see `DECISIONS.md` D-014.
 
 ## Personal data
 

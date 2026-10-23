@@ -77,7 +77,8 @@ observed catalogue (`Loan Account : Approve`, `Transaction : Reversal Approval`,
 **Status:** Accepted · `docs/07-build-plan.md §4`
 
 Three-step wizard (upload → map → validate), batch audit, re-runnable, posts accounting for
-financial rows. Tenants arrive with spreadsheets; the migration path is the product.
+financial rows. Future tenants arrive with spreadsheets; the import path is the product.
+AIMSCAMS itself starts greenfield — see D-014.
 
 ### D-011 — TypeScript monorepo, Angular + NestJS + PostgreSQL
 **Status:** Accepted · `docs/04-architecture.md §17`
@@ -108,6 +109,29 @@ Consequences:
 - The platform billing context (WBA) is AIMS-branded in a new deployment; the observed account
   names are seed-data differences, not architecture.
 - Copyright and licence text live in `LICENSE` and `NOTICE`, not in individual documents.
+
+### D-014 — Greenfield data: nothing is migrated from the observed tenant
+**Status:** Accepted · `docs/08-delivery-plan.md` Phase 6
+
+AIMSCAMS starts with an empty database. No members, accounts, balances, transactions, documents
+or staff records from MFSL — or from any other observed tenant — are copied, imported, mirrored
+or used as seed data.
+
+**Why.** The observation transferred *structure*: fields, codes, flows and rules. It did not
+transfer a business. The two systems have different charts of accounts, different products and
+different opening positions; carrying balances across would import a history the new ledger
+never generated, and the ledger would be unauditable from its first day. It would also move
+personal data into a new controller's environment without a lawful basis.
+
+**Consequences.**
+- The first tenant gets an empty chart of accounts seeded from the AIMSCAMS template, not the
+  observed tenant's names (`1001 Wakandi`, `5501 Wakandi Fees`).
+- Validation uses a synthetic dataset generated to the same shape — 1 000 members, a statement
+  file — never production rows.
+- Import remains a first-class module (D-010), because future tenants will arrive with
+  spreadsheets of their own.
+- The screenshots are the only remaining link to the observed tenant, and they stay out of the
+  repository (D-012).
 
 ---
 
@@ -161,12 +185,13 @@ them before promising either.
 MSP07/MSP10 need CC / MC / DC / TC per branch. Not present in the observed branch form; add the
 field.
 
-### O-008 — Confirm the tenant migration source format
-**Status:** OPEN · `docs/02-modules.md §10`
+### O-008 — Confirm the import format for tenants arriving with legacy data
+**Status:** OPEN · low priority · `docs/02-modules.md §10`
 
-Import templates were recovered (`Member Template`, `Account_Standard_Template.xlsx`,
-`Transaction_Template.xlsx`), but the first real tenant's export format is unknown. Import a
-real file in month 2.
+AIMSCAMS starts greenfield, so the first tenant has nothing to import. The import templates were
+recovered (`Member Template`, `Account_Standard_Template.xlsx`, `Transaction_Template.xlsx`) and
+are the default. Revisit when a tenant wants to bring a legacy system's export — the format will
+be theirs, not the observed product's.
 
 ---
 

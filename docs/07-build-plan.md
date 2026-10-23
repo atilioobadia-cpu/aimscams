@@ -55,7 +55,8 @@ At 8 people: **6–7 months**.
 6. **No feature without a permission.** Add the `Entity : Action` string at the same time as
    the endpoint.
 7. **No feature without an audit event.** Same commit.
-8. **Migrate real data early.** Import a real 1 000-member file in month 2, not month 8.
+8. **Prove bulk import early.** A synthetic 1 000-member file in month 2, not month 8. The
+   system starts greenfield; import exists for future tenants arriving with spreadsheets.
 
 ---
 
@@ -281,7 +282,7 @@ Hard dependencies worth stating:
 | 45 | Online collections + reconciliation | 6 | L | 4 |
 | 46 | Campaigns | 7 | S | 1.5 |
 | 47 | Services registry | 7 | S | 1 |
-| 48 | Hardening, pen test, perf, migration rehearsal | 7 | L | 5 |
+| 48 | Hardening, pen test, perf, import rehearsal | 7 | L | 5 |
 
 **Total ≈ 175 person-weeks** of engineering. At 5 engineers × 44 productive weeks ≈ 220
 person-weeks available in a year, so the schedule has ~20% slack for the unknown — which is
@@ -316,7 +317,7 @@ MVP timeline: **~4.5 months** with 5 people.
 | 3 | Guarantor reservation released twice | Medium | High | Idempotent release keyed on reservation id; property tests |
 | 4 | Scope creep from 145 screens | High | Medium | Phase gates; the "done" definition in §1 is the contract |
 | 5 | Domain knowledge gap (no SACCO BA) | Medium | High | Hire or contract one; do not substitute with screenshots |
-| 6 | Data migration quality | High | Medium | Import real files monthly from month 2; per-row error reporting |
+| 6 | Bulk import quality | Medium | Medium | Synthetic 1 000-member file in month 2; per-row error reporting |
 | 7 | Report sprawl | Medium | Medium | One engine, definitions not components; reject bespoke reports |
 | 8 | Unknown modules (Campaigns, Services) | Certain | Low | Defer; design extension seams |
 | 9 | Multi-tenant leakage | Low | Critical | RLS + cross-tenant tests in CI + pen test |

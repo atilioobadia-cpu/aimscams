@@ -47,6 +47,7 @@ Full index: [`docs/README.md`](docs/README.md).
 | Architecture and data model | Complete, decisions recorded |
 | Delivery plan | Complete — phases, gates, team shape, quality bar |
 | Application code | **Not started** |
+| Data | **Greenfield** — structure only, no data migrated from any observed tenant |
 | Accounting policy sign-off | **Open** — see [DECISIONS.md](DECISIONS.md#open) |
 | Regulatory form versions | **To verify** against current TCDC / BoT forms |
 

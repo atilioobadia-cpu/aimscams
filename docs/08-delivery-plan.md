@@ -20,7 +20,7 @@ whether it renders.
 | 2 | Every money movement posts through the outbox and produces a balanced entry; the test asserts the entry, not just the balance. |
 | 3 | The permission is enforced on the server. Hiding a button is not enforcement. |
 | 4 | The audit trail records actor, before, after, and the request id. |
-| 5 | Migrations are tested against data shaped like the reference tenant's, not against an empty schema. |
+| 5 | Migrations are tested against production-shaped data, not against an empty schema. |
 | 6 | No member PII in logs, metrics, traces, error trackers or URLs. |
 | 7 | `docs/` is updated in the same PR that changes behaviour. Spec drift is a defect. |
 | 8 | The feature can be switched off. Anything touching the ledger ships behind a flag. |
@@ -37,12 +37,36 @@ whether it renders.
 | Backend engineers | 2–3 | TypeScript/NestJS; one with strong SQL |
 | Frontend engineers | 2 | Angular 18 + PrimeNG; one owns the design system |
 | QA / automation | 1 | E2E, regression, release sign-off |
-| Business analyst | 1 | Turns screens into stories; owns the MFSL relationship |
+| Business analyst | 1 | Turns screens into stories; owns tenant onboarding and UAT |
 | Accountant adviser | 0.2 | Signs off O-001, O-002 and every return layout |
 | DevOps / security | 0.3 | Environments, CI, backups, threat model |
 
 Minimum viable team is 5: lead, 2 backend, 1 frontend, 1 QA, with the accountant on retainer.
 Below that, the schedule does not hold — the ledger and credit phases are where the work is.
+
+### The accountant adviser — what to hire
+
+Do not use a general bookkeeper, and do not let the engineering team self-certify the accounting
+policy. Hire for three fixed deliverables, not for hours:
+
+| Deliverable | Resolves | Acceptance |
+|---|---|---|
+| Posting policy memo: all 14 event templates — Dr/Cr, allocation order, accrual and reversal, write-off, provisioning | O-001 | Signed by a CPA(T); the engineer implements it without interpretation |
+| Provision grid mapping: SACCOS/TCDC and MFI Type 1/Type 2 buckets and rates, each cell traceable to a circular or guideline | O-002 | One table per dialect |
+| Return layout verification: MSP01–MSP11 line items against the current TCDC and BoT forms | O-003, O-004, O-005 | Line-by-line sign-off; discrepancies listed |
+
+Profile: **CPA(T) registered with the NBAA**, five or more years in a deposit-taking SACCO, MFI
+or bank finance function, and direct experience preparing or auditing TCDC returns. Independence
+matters — not the developer, not a shareholder of AIMS.
+
+How to source it: approach two or three NBAA-registered firms with a financial-institutions
+practice and ask specifically for the partner or manager who signs SACCO or MFI work. A
+cost-effective shape is a firm for the formal sign-off plus a retired SACCO accountant or former
+TCDC examiner as the day-to-day sounding board. Fixed fee per deliverable; the scope above is
+small enough to price.
+
+Because AIMSCAMS is greenfield (D-014), there is no historical restatement to negotiate — the
+adviser defines policy forward, which is the cheapest moment to involve them.
 
 ---
 
@@ -125,25 +149,28 @@ produces a reversing entry and never mutates the original.
 for one full month; a filed return cannot be mutated; the SACCOS and MFI dialects produce
 different, correct results for MSP05, MSP09 and MSP10.
 
-### Phase 6 — Migration and messaging · 4 weeks
+### Phase 6 — Import and messaging · 4 weeks
+
+AIMSCAMS starts greenfield: there is **no migration from the observed tenant**. Import exists
+because future tenants will arrive with spreadsheets.
 
 - Three-step import wizard (upload → map → validate), batch audit, re-runnable
 - Member / account / transaction templates
 - SMS, email and push templates, segments, dispatch log
-- MFSL data migration dry run
+- A synthetic 1 000-member dataset and a statement file, generated to the reference shape
 
-**Gate G6:** MFSL's real data is imported twice into a clean environment with identical
-results, opening balances reconcile to their trial balance, and no duplicate members or accounts
-are created on the second run.
+**Gate G6:** the synthetic dataset imports twice into a clean environment with identical
+results and no duplicate members or accounts; per-row errors are reported and fixable without
+re-uploading the whole file.
 
 ### Phase 7 — Hardening, pilot, go-live · 6 weeks
 
 - Performance work against production-shaped data
 - External security review and remediation
 - Backup/restore drill, disaster recovery runbook
-- UAT with MFSL, training, cutover and rollback plan
+- UAT with the first tenant, training, go-live and rollback plan
 
-**Gate G7:** UAT signed by MFSL; restore drill completed inside the agreed RTO; security
+**Gate G7:** UAT signed by the first tenant; restore drill completed inside the agreed RTO; security
 findings closed or accepted in writing; rollback rehearsed.
 
 ---
@@ -184,7 +211,7 @@ are signed. Boilerplate that encodes the wrong accounting model is worse than no
 | O-001 unresolved when credit starts | Posting rules rewritten, historical entries restated | Hard gate at G0; do not encode observed entries |
 | O-002 grids wrong per regulator | Returns rejected; provisions misstated | Obtain the current forms; accountant signs the bucket table |
 | Scope creep from 145 screens | Phase 3 slips; MVP never ships | MVP cut in 07; everything else is Phase 5+ |
-| Migration data quality | Opening balances do not reconcile | Two clean dry runs at G6; reconciliation report signed by MFSL |
+| Bulk import quality | A tenant's opening balances do not reconcile | Two clean runs at G6; reconciliation report signed by the tenant |
 | Regulator changes forms mid-build | Rework in Phase 5 | Templates versioned from day one; no hard-coded layouts |
 | Key-person dependency | Delivery stalls | Architecture decisions written down; pairing on ledger and credit |
 | Tenant isolation defect | Cross-tenant data exposure | RLS + application scoping + automated isolation tests in CI |
@@ -213,6 +240,6 @@ are signed. Boilerplate that encodes the wrong accounting model is worse than no
 5. Write the tenancy and ledger migrations with their constraints, and a test that proves each
    constraint fires.
 6. Agree the branch/PR/merge policy and the definition of done with the team.
-7. Draft the MFSL validation plan: which month, which reports, who signs.
+7. Draft the validation plan with the first tenant: which month, which reports, who signs.
 
 If items 1–5 are not done in ten days, the delay is in decisions, not in engineering.

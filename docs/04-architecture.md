@@ -534,7 +534,7 @@ constraint**. That pages someone at 3 a.m.
 | Integration | real PostgreSQL (Testcontainers), outbox → worker → posted |
 | Contract | OpenAPI schema tests between SPA and API |
 | Regression | replay a year of anonymised tenant transactions; balances must match |
-| Migration | import a real 1 000-member file and a real statement file from `F:\Wakandi` |
+| Import | a synthetic 1 000-member file and a statement file, generated to the reference tenant's shape |
 | E2E | Playwright over the 10 flows in `03-flows.md` |
 | Security | cross-tenant access attempts, privilege escalation, IDOR on loan/account ids |
 

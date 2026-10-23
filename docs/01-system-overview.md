@@ -21,6 +21,10 @@ The reference tenant is **Mafanikio Financial Services Limited** (`MFSL MFI`, ac
 `101457`): **Module Type: Microfinance**,
 **License: MSP2021**, **Mode: STANDARD**, **Stage: Live**, financial year **01-01 → 31-12**.
 
+It is the source of the *structure* described here — fields, codes, flows and rules. It is not a
+data source: AIMSCAMS starts with an empty database and carries over no members, balances,
+transactions or documents from it.
+
 ### Scale of the product as observed
 
 | Dimension | Count |
