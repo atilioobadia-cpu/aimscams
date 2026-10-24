@@ -1,0 +1,78 @@
+<aside class="rail">
+  <div class="rail-head">
+    <div class="avatar">AA</div>
+    <div class="who">
+      <div>Ally Juma Ally</div>
+      <span>MFSL MFI · 101457</span>
+    </div>
+  </div>
+  <div class="brand"><b>AIMS</b><span>CAMS</span></div>
+
+  <nav #navEl id="nav-root" aria-label="Main navigation">
+    <!-- persistent highlight pill + ghost layer for overlapping crossfade -->
+    <span #pillEl class="nav-pill" [class.show]="pillShown()"
+      [style.height.px]="pillStyle()?.height ?? 0"
+      [style.transform]="pillStyle() ? `translateY(${pillStyle()!.top}px)` : ''"></span>
+    <span #ghostEl class="nav-pill ghost" [class.show]="ghostShown()"
+      [style.height.px]="ghostStyle()?.height ?? 0"
+      [style.transform]="ghostStyle() ? `translateY(${ghostStyle()!.top}px)` : ''"></span>
+
+    <section class="nav-section">Main</section>
+
+    @for (item of NAV; track item.id) {
+      @if (item.children) {
+        <button class="nav-item nav-toggle"
+          [class.soon]="item.soon"
+          [attr.data-group]="item.id"
+          [attr.aria-expanded]="openGroups().has(item.id)"
+          [attr.data-label]="item.label"
+          [attr.id]="'nav-' + item.id"
+          [attr.title]="item.soon ? 'Coming soon' : item.label"
+          [disabled]="item.soon"
+          (click)="item.soon ? $event.preventDefault() : toggleGroup(item.id)">
+          <span [innerHTML]="iconOf(item.icon)"></span>
+          <span>{{ item.label }}</span>
+          <span [innerHTML]="iconOf('chev')"></span>
+        </button>
+        <div class="nav-children" [class.open]="openGroups().has(item.id)">
+          <div>
+            @for (child of item.children; track child.id) {
+              <a class="nav-child" [class.active]="navActive() === child.id" [class.soon]="child.soon"
+                [attr.data-id]="child.id"
+                [attr.title]="child.soon ? 'Coming soon' : child.label"
+                (click)="handleNavClick($event, child.id, null, child.soon)">
+                {{ child.label }}
+              </a>
+            }
+          </div>
+        </div>
+      } @else {
+        <a class="nav-item" [class.active]="navActive() === item.id" [class.soon]="item.soon"
+          [attr.data-id]="item.id"
+          [attr.data-label]="item.label"
+          [attr.id]="'nav-' + item.id"
+          [attr.href]="item.soon ? null : (item.href ?? null)"
+          [attr.title]="item.soon ? 'Coming soon' : item.label"
+          (click)="handleNavClick($event, item.id, item.href ?? null, item.soon)">
+          <span [innerHTML]="iconOf(item.icon)"></span>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    }
+  </nav>
+
+  <div class="rail-foot"><b>AIMS</b> CAMS · 0.0 prototype<br />
+    Synthetic data · no member records<br />
+    © 2026 AIMS · Atilio Obadia
+  </div>
+
+  <button class="rail-toggle" type="button"
+    [attr.aria-expanded]="!collapsed()"
+    [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+    [attr.title]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
+    (click)="toggleCollapsed()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+  </button>
+</aside>
+
+<div class="rail-scrim" [class.show]="open()" (click)="drawer.toggle()"></div>
