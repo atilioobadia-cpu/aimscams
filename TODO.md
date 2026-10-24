@@ -252,6 +252,10 @@
 ---
 
 ## CURRENT FOCUS
-**Next Task:** Start with Phase 0 - Auth & tenancy structure (after verifying current navigation is solid)
+**Next Task:** Phase 3 — Loan application wizard (5 steps) and loan detail tabs
 
-**Last Verified:** Navigation system tested with Playwright - all working correctly
+**Last Verified:** 10 routes rendered in browser with 0 console errors
+(/clients, /savings-accounts, /loan-applications, /loan-accounts, /teller,
+/transactions, /requests, /chart-of-accounts, /journal-entries, /trial-balance).
+Auth guard redirect to /login confirmed. Sidebar active state, group auto-expand
+and highlight pill verified on /chart-of-accounts.
