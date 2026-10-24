@@ -28,7 +28,7 @@
 ## PHASE 1: Money Core (6 weeks)
 
 ### Chart of Accounts
-- [ ] Chart of Accounts tree view
+- [x] Chart of Accounts tree view - Verified
 - [ ] 347 category taxonomy integration
 - [ ] Add/edit ledger accounts
 - [ ] Bank/cash account flags
