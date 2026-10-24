@@ -44,7 +44,7 @@
 - [ ] Idempotency keys
 
 ### Reports
-- [ ] Trial Balance report
+- [x] Trial Balance report - Verified
 - [ ] General Ledger book
 - [ ] Ledger drilldown
 

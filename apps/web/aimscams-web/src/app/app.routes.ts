@@ -5,6 +5,7 @@ import { SavingsSharesComponent } from './features/savings-shares/savings-shares
 import { LoginComponent } from './features/auth/login/login.component';
 import { ChartOfAccountsComponent } from './features/accounting/chart-of-accounts/chart-of-accounts.component';
 import { JournalEntriesComponent } from './features/accounting/journal-entries/journal-entries.component';
+import { TrialBalanceComponent } from './features/accounting/trial-balance/trial-balance.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -16,5 +17,6 @@ export const routes: Routes = [
   { path: 'savings', component: SavingsSharesComponent, canActivate: [authGuard] },
   { path: 'chart-of-accounts', component: ChartOfAccountsComponent, canActivate: [authGuard] },
   { path: 'journal-entries', component: JournalEntriesComponent, canActivate: [authGuard] },
+  { path: 'trial-balance', component: TrialBalanceComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '/dashboard' },
 ];
