@@ -43,7 +43,7 @@
                 [attr.data-id]="child.id"
                 [attr.href]="child.soon ? null : (child.href ?? null)"
                 [attr.title]="child.soon ? 'Coming soon' : child.label"
-                (click)="child.soon && $event.preventDefault()">
+                (click)="onNavChildClick($event, child.id, child.href ?? null, child.soon)">
                 {{ child.label }}
               </a>
             }
@@ -56,7 +56,7 @@
           [attr.id]="'nav-' + item.id"
           [attr.href]="item.soon ? null : (item.href ?? null)"
           [attr.title]="item.soon ? 'Coming soon' : item.label"
-          (click)="item.soon && $event.preventDefault()">
+          (click)="onNavItemClick($event, item.id, item.href ?? null, item.soon)">
           <span class="nav-icon" [innerHTML]="NAVICONS[item.icon ?? ''] | safeHtml"></span>
           <span class="nav-label">{{ item.label }}</span>
         </a>

@@ -23,6 +23,30 @@ export class AuthService {
   
   user = this.currentUser.asReadonly();
   
+  constructor() {
+    // Synchronous initialization - runs BEFORE any guards
+    this.initFromStorage();
+  }
+  
+  private initFromStorage(): void {
+    const stored = localStorage.getItem('aimscams_user');
+    if (stored) {
+      try {
+        const user = JSON.parse(stored);
+        this.currentUser.set(user);
+        this.isAuthenticated.set(true);
+      } catch {
+        this.clearAuth();
+      }
+    }
+  }
+  
+  private clearAuth(): void {
+    this.currentUser.set(null);
+    this.isAuthenticated.set(false);
+    localStorage.removeItem('aimscams_user');
+  }
+  
   login(email: string, password: string): Observable<boolean> {
     // Mock login - will be replaced with real OIDC
     const mockUser: User = {
@@ -43,9 +67,7 @@ export class AuthService {
   }
   
   logout(): void {
-    this.currentUser.set(null);
-    this.isAuthenticated.set(false);
-    localStorage.removeItem('aimscams_user');
+    this.clearAuth();
     this.router.navigate(['/login']);
   }
   
@@ -56,16 +78,8 @@ export class AuthService {
     return user.permissions.includes(permission);
   }
   
+  /** @deprecated - initialization now happens in constructor */
   checkAuth(): void {
-    const stored = localStorage.getItem('aimscams_user');
-    if (stored) {
-      try {
-        const user = JSON.parse(stored);
-        this.currentUser.set(user);
-        this.isAuthenticated.set(true);
-      } catch {
-        this.logout();
-      }
-    }
+    this.initFromStorage();
   }
 }

@@ -1,8 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ShellComponent } from './components/layout/shell/shell.component';
-import { AuthService } from './core/auth/auth.service';
 
 @Component({
   selector: 'aims-root',
@@ -16,13 +15,8 @@ import { AuthService } from './core/auth/auth.service';
     }
   `,
 })
-export class AppComponent implements OnInit {
-  private auth = inject(AuthService);
+export class AppComponent {
   private router = inject(Router);
-  
-  ngOnInit(): void {
-    this.auth.checkAuth();
-  }
   
   isLoginRoute(): boolean {
     return this.router.url.includes('/login');

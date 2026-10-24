@@ -244,6 +244,28 @@ export class SidebarComponent implements AfterViewInit {
     this.movePill(false);
   }
 
+  /** Click handler for top-level nav items (non-soon). Sets active state immediately. */
+  onNavItemClick(event: MouseEvent, id: string, href: string | null, soon?: boolean) {
+    if (soon) {
+      event.preventDefault();
+      return;
+    }
+    // Set active state instantly for responsive UI
+    this.navActive.set(id);
+    this.movePill(false);
+    // Browser will follow href naturally
+  }
+
+  /** Click handler for child nav items. */
+  onNavChildClick(event: MouseEvent, id: string, href: string | null, soon?: boolean) {
+    if (soon) {
+      event.preventDefault();
+      return;
+    }
+    this.navActive.set(id);
+    this.movePill(false);
+  }
+
   /* ---------------- pill geometry (ported from prototype) ---------------- */
 
   private movePill(instant: boolean) {
