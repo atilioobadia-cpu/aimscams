@@ -6,22 +6,26 @@
     </button>
     <div class="header-left">
       <div class="header-brand">
-        <b>AIMS</b><span>CAMS</span>
-      </div>
-      <div class="header-user">
-        <div class="header-avatar">AJ</div>
-        <div class="header-user-info">
-          <div>Ally Juma Ally</div>
-          <span>MFSL MFI · 101457</span>
+        <div class="header-logo" style="width: 36px; height: 36px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: 13px; font-weight: 700; flex: none;">AI</div>
+        <div>
+          <div style="font-weight: 700; font-size: 15px; letter-spacing: .02em;">AIMS CAMS</div>
+          <div style="font-size: 11px; color: var(--ink-faint);">MFSL MFI · 101457</div>
         </div>
       </div>
+      <div class="header-divider" style="width: 1px; height: 24px; background: var(--border); margin: 0 16px;"></div>
     </div>
     <span class="header-spacer"></span>
     <div class="header-right">
-      <select class="header-lang" aria-label="Language">
-        <option>English</option>
-        <option>Kiswahili</option>
-      </select>
+      <div class="header-branch" style="display: flex; align-items: center; gap: 8px; padding: 4px 12px; background: var(--brand-soft); border-radius: 999px; font-size: 11.5px; color: var(--brand); font-weight: 600; white-space: nowrap;">
+        <span>{{ branch() }}</span>
+        <span style="background: var(--brand); color: #fff; padding: 2px 8px; border-radius: 999px; font-size: 9px; font-weight: 700;">{{ branchStatus() }}</span>
+      </div>
+      <div class="header-divider" style="width: 1px; height: 24px; background: var(--border); margin: 0 16px;"></div>
+      <div class="header-user-menu" style="display: flex; align-items: center; gap: 8px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; background: #fff;">
+        <div class="header-user-avatar" style="width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-size: 10px; font-weight: 700; flex: none;">AJ</div>
+        <div style="font-size: 12px; font-weight: 600; color: var(--ink);">Ally Juma Ally</div>
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" style="color: var(--ink-faint);"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
     </div>
   </header>
 

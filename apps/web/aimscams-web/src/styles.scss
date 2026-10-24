@@ -1,22 +1,23 @@
 :root {
-  /* Wakandi sampled colors */
-  --brand: #0f4c3a;           /* Brand dark green (active pill) */
+  /* Wakandi reference colors (sampled) */
+  --brand: #0f4d3a;           /* Brand dark green (active pill) - OUR brand color */
   --brand-deep: #0a3529;      /* Brand deeper green */
   --brand-soft: #e7f0ec;      /* Brand soft green (hover) */
   --brand-line: #cfe0d8;      /* Brand line color */
   
-  --sidebar-bg: #ffffff;      /* Sidebar background - pure white */
+  /* Wakandi reference colors (sampled from reference) */
   --header-bg: #ffffff;       /* Header background - pure white */
-  --page-bg: #f4f6f8;         /* Page/content background - light grey */
+  --sidebar-bg: #ffffff;      /* Sidebar background - pure white */
+  --page-bg: #ececec;         /* Page/content background - light grey (Wakandi reference) */
   --card-bg: #ffffff;         /* Card background - pure white */
-  --border: #e4e8ea;          /* Border/divider color */
+  --border: #e0e0e0;          /* Border/divider color */
   --border-strong: #d3d9dc;   /* Stronger border */
   
-  --nav-text: #2b332f;        /* Nav item text color */
+  --nav-text: #3c4043;        /* Nav item text color */
   --nav-text-faint: #5c6a63;  /* Nav item text faint */
-  --nav-icon: #4f5b55;        /* Nav icon color */
-  --nav-hover-bg: #f0f4f2;    /* Nav hover background - light grey tint */
-  --nav-active-bg: #0f4c3a;   /* Nav active background - brand dark green */
+  --nav-icon: #5f6368;        /* Nav icon color */
+  --nav-hover-bg: #f1f3f4;    /* Nav hover background - light grey tint */
+  --nav-active-bg: #0f4d3a;   /* Nav active background - OUR brand dark green */
   --nav-active-text: #ffffff; /* Nav active text - white */
   
   --footer-text: #55625b;     /* Footer text color */
@@ -279,21 +280,38 @@ button, input, select { font: inherit; color: inherit; }
   color: var(--nav-active-text); 
 }
 
+/* Expanded group state (parent of open submenu) - highlighted but NOT active pill */
+.nav-item.expanded {
+  background: var(--nav-hover-bg);
+  color: var(--brand);
+}
+.nav-item.expanded .nav-icon,
+.nav-item.expanded .chev-wrap {
+  color: var(--brand);
+}
+
 /* Soon/disabled state */
-.nav-item.soon { 
+.nav-item.soon,
+.nav-child.soon { 
   color: var(--nav-text-faint); 
   cursor: not-allowed; 
   opacity: 0.6; 
   pointer-events: none; 
 }
-.nav-item.soon .nav-label::after { 
-  content: "Soon"; 
-  margin-left: auto; 
-  font-size: 9px; 
-  letter-spacing: .08em; 
-  text-transform: uppercase; 
-  color: var(--nav-text-faint); 
-  font-weight: 600; 
+
+/* Soon badge - separate element in template */
+.soon-badge {
+  display: inline-flex !important;
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--nav-text-faint);
+  font-weight: 600;
+  background: var(--nav-hover-bg);
+  padding: 2px 6px;
+  border-radius: 999px;
+  margin-left: auto;
+  white-space: nowrap;
 }
 
 /* Focus visible */
@@ -397,10 +415,16 @@ button, input, select { font: inherit; color: inherit; }
   color: var(--footer-text); 
   line-height: 1.6; 
   text-align: center; 
+  flex-shrink: 0;
 }
 .sidebar-footer b { 
   color: var(--brand); 
   letter-spacing: .1em; 
+}
+
+/* Hide footer in collapsed mode */
+@media (min-width: 901px) {
+  body.rail-collapsed .sidebar-footer { display: none; }
 }
 
 /* Collapse/expand toggle - straddles right edge of sidebar, near bottom of nav */
@@ -434,6 +458,7 @@ button, input, select { font: inherit; color: inherit; }
 }
 @media (min-width: 901px) {
   body.rail-collapsed .rail-toggle svg { transform: rotate(180deg); }
+  body.rail-collapsed .rail-toggle { bottom: 80px; /* Above hidden footer */ }
 }
 
 /* Collapsed mode styles */
@@ -442,30 +467,39 @@ button, input, select { font: inherit; color: inherit; }
   body.rail-collapsed .sidebar-nav { padding: 8px 8px 12px; }
   body.rail-collapsed .rail-toggle { right: -14px; }
   
-  /* Hide labels, chevrons, child menus in collapsed mode */
+  /* Hide labels, chevrons, child menus, soon badges in collapsed mode */
   body.rail-collapsed .nav-label,
   body.rail-collapsed .chev-wrap,
+  body.rail-collapsed .soon-badge,
   body.rail-collapsed .nav-children { display: none !important; }
   
-  /* Center icons in collapsed mode */
-  body.rail-collapsed .nav-item { 
+  /* Center icons in collapsed mode - ALL items use same rules */
+  body.rail-collapsed .nav-item,
+  body.rail-collapsed .nav-toggle { 
     justify-content: center; 
     padding: 0; 
     height: var(--nav-item-height); 
   }
-  body.rail-collapsed .nav-item .nav-icon { margin: 0; }
-  body.rail-collapsed .nav-item .nav-icon svg { width: 22px; height: 22px; }
+  body.rail-collapsed .nav-item .nav-icon,
+  body.rail-collapsed .nav-toggle .nav-icon { margin: 0; }
+  body.rail-collapsed .nav-item .nav-icon svg,
+  body.rail-collapsed .nav-toggle .nav-icon svg { width: 22px; height: 22px; }
   
   /* Active state in collapsed mode - full pill with white icon */
-  body.rail-collapsed .nav-item.active { 
+  body.rail-collapsed .nav-item.active,
+  body.rail-collapsed .nav-toggle.active { 
     background: var(--nav-active-bg); 
     color: var(--nav-active-text); 
   }
-  body.rail-collapsed .nav-item.active .nav-icon { color: var(--nav-active-text); }
+  body.rail-collapsed .nav-item.active .nav-icon,
+  body.rail-collapsed .nav-toggle.active .nav-icon { color: var(--nav-active-text); }
   body.rail-collapsed .nav-item.active::after { display: none; }
   
   /* Hide pill in collapsed mode since item itself is highlighted */
   body.rail-collapsed .nav-pill { display: none; }
+  
+  /* Hide soon badges in collapsed mode */
+  body.rail-collapsed .soon-badge { display: none !important; }
 }
 
 /* Mobile drawer */
@@ -512,8 +546,27 @@ button, input, select { font: inherit; color: inherit; }
   width: 100%; 
 }
 
-/* ---------- page ---------- */
-.page { padding: 24px 26px 70px; max-width: 1280px; width: 100%; }
+/* Card styles for page content */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Page header */
 .page-head { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 16px; }
 .page-head h1 { margin: 0 0 3px; font-size: 21px; letter-spacing: -.015em; font-weight: 650; }
 .page-head p { margin: 0; color: var(--ink-faint); font-size: 12.5px; }

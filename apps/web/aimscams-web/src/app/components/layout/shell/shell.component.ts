@@ -52,6 +52,7 @@ export class ShellComponent {
   
   protected breadcrumb = signal('Overview');
   protected branch = signal('Head office');
+  protected branchStatus = signal('Open');
   protected navActive = signal<string>('');
   protected sidebarCollapsed = signal(false);
 

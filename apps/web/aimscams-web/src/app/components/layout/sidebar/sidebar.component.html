@@ -13,7 +13,7 @@
         @if (item.children) {
           <button class="nav-item nav-toggle"
             [class.soon]="item.soon"
-            [class.active]="openGroups().has(item.id)"
+            [class.expanded]="openGroups().has(item.id)"
             [attr.data-group]="item.id"
             [attr.aria-expanded]="openGroups().has(item.id)"
             [attr.data-label]="item.label"
@@ -37,6 +37,9 @@
                   (click)="onNavChildClick($event, child.id, child.href ?? null, child.soon)">
                   <span class="nav-icon" [innerHTML]="NAVICONS[child.icon ?? ''] | safeHtml"></span>
                   <span class="nav-label">{{ child.label }}</span>
+                  @if (child.soon) {
+                    <span class="soon-badge">Soon</span>
+                  }
                 </a>
               }
             </div>
@@ -51,6 +54,9 @@
             (click)="onNavItemClick($event, item.id, item.href ?? null, item.soon)">
             <span class="nav-icon" [innerHTML]="NAVICONS[item.icon ?? ''] | safeHtml"></span>
             <span class="nav-label">{{ item.label }}</span>
+            @if (item.soon) {
+              <span class="soon-badge">Soon</span>
+            }
           </a>
         }
       }

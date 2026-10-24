@@ -174,14 +174,6 @@ export class SidebarComponent implements AfterViewInit {
     // Mobile drawer bus: the topbar menu button asks the sidebar to open/close.
     this.drawer.toggle$.subscribe(() => this.open.update((o) => !o));
 
-    // Recompute pill geometry whenever the active item or open groups change.
-    // DOM updates from signal bindings commit before effects run, so rects are current.
-    effect(() => {
-      this.navActive();
-      this.openGroups();
-      this.movePill(false);
-    });
-    
     // Sync active state with the current route, and auto-expand the parent group
     // when the matched item is a child (so the active child is actually visible).
     const syncFromUrl = () => {
@@ -203,6 +195,15 @@ export class SidebarComponent implements AfterViewInit {
     // Run once at startup so a refresh on a deep link highlights the right row.
     syncFromUrl();
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(syncFromUrl);
+
+    // Recompute pill geometry whenever the active item or open groups change.
+    // DOM updates from signal bindings commit before effects run, so rects are current.
+    effect(() => {
+      this.navActive();
+      this.openGroups();
+      // Use requestAnimationFrame to ensure DOM has updated with new active class
+      requestAnimationFrame(() => this.movePill(false));
+    });
   }
 
   ngAfterViewInit() {
@@ -227,8 +228,13 @@ export class SidebarComponent implements AfterViewInit {
   toggleGroup(id: string) {
     this.openGroups.update((groups) => {
       const next = new Set(groups);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        // Accordion: close all other groups
+        next.clear();
+        next.add(id);
+      }
       return next;
     });
     this.movePill(true);
@@ -254,7 +260,8 @@ export class SidebarComponent implements AfterViewInit {
     }
     // Set active state instantly for responsive UI
     this.navActive.set(id);
-    this.movePill(false);
+    // Defer pill movement until after DOM updates with new active class
+    requestAnimationFrame(() => this.movePill(false));
     // Browser will follow href naturally
   }
 
@@ -265,7 +272,7 @@ export class SidebarComponent implements AfterViewInit {
       return;
     }
     this.navActive.set(id);
-    this.movePill(false);
+    requestAnimationFrame(() => this.movePill(false));
   }
 
   /* ---------------- pill geometry (ported from prototype) ---------------- */
