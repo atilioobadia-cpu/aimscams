@@ -21,7 +21,7 @@
 - [x] RBAC system (17 roles, Entity:Action permissions) - Verified
 - [x] Period management (open/close/lock periods) - Verified
 - [x] Audit trail (append-only audit_event) - Verified
-- [ ] Design system components (grid, filter bar, forms, chips, money input)
+- [x] Design system components (grid, filter bar, forms, chips, money input) - Verified
 
 ---
 
