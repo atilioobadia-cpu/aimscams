@@ -61,7 +61,7 @@
 - [ ] Recent activity feed
 
 ### Members/Clients
-- [ ] Client list (search, filters by type/status)
+- [x] Client list (search, filters by type/status) - Verified
 - [ ] Add Client wizard - Step 1: Membership Details
 - [ ] Add Client wizard - Step 2: Personal Details
 - [ ] Add Client wizard - Step 3: Contact Details
