@@ -78,8 +78,8 @@
 - [ ] Member profile - History/Statement/Transaction/MNO tabs
 
 ### Savings & Shares
-- [~] Savings & Shares page structure
-- [ ] Savings accounts list
+- [x] Savings & Shares page structure - Verified
+- [x] Savings accounts list - Verified
 - [ ] New savings account
 - [ ] Savings deposits/withdrawals
 - [ ] Shares account management
