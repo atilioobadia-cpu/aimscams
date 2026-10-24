@@ -99,6 +99,7 @@ export const NAV: NavItem[] = [
 
 /** Route path -> nav item id, so the rail highlights the right row on any URL. */
 const ROUTE_TO_NAV: Record<string, string> = {
+  '/': 'dashboard',
   '/dashboard': 'dashboard',
   '/clients': 'members',
   '/members': 'members',
@@ -149,7 +150,7 @@ export class SidebarComponent implements AfterViewInit {
   protected collapsed = signal(
     localStorage.getItem('aimscams.rail.collapsed') === '1',
   );
-  protected navActive = signal<string>('dashboard');
+  protected navActive = signal<string>('');
   protected openGroups = signal<Set<string>>(new Set());
   protected open = signal(false);
 
