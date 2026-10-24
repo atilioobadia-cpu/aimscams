@@ -100,7 +100,7 @@
 ## PHASE 3: Credit/Loans (10 weeks)
 
 ### Loan Applications
-- [ ] Loan application list
+- [x] Loan application list - Verified
 - [ ] New application wizard - Step 1: Details
 - [ ] New application wizard - Step 2: Additional Details
 - [ ] New application wizard - Step 3: Next of Kin/Guarantors

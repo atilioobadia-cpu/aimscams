@@ -8,6 +8,7 @@ import { JournalEntriesComponent } from './features/accounting/journal-entries/j
 import { TrialBalanceComponent } from './features/accounting/trial-balance/trial-balance.component';
 import { ClientListComponent } from './features/members/client-list/client-list.component';
 import { SavingsAccountsComponent } from './features/savings/savings-accounts/savings-accounts.component';
+import { LoanApplicationsComponent } from './features/loans/loan-applications/loan-applications.component';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'savings-shares', component: SavingsSharesComponent, canActivate: [authGuard] },
   { path: 'savings', component: SavingsSharesComponent, canActivate: [authGuard] },
   { path: 'savings-accounts', component: SavingsAccountsComponent, canActivate: [authGuard] },
+  { path: 'loan-applications', component: LoanApplicationsComponent, canActivate: [authGuard] },
   { path: 'chart-of-accounts', component: ChartOfAccountsComponent, canActivate: [authGuard] },
   { path: 'journal-entries', component: JournalEntriesComponent, canActivate: [authGuard] },
   { path: 'trial-balance', component: TrialBalanceComponent, canActivate: [authGuard] },
