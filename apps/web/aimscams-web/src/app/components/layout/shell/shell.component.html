@@ -1,9 +1,40 @@
 <div class="app">
-  <aims-sidebar (navItemClick)="onNavItem($event)"></aims-sidebar>
-  <div class="main">
-    <aims-topbar></aims-topbar>
-    <main class="page">
+  <!-- Full-width header -->
+  <header class="header">
+    <button class="menu-btn" type="button" aria-label="Open navigation" (click)="drawer.toggle()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
+    </button>
+    <div class="header-left">
+      <div class="header-brand">
+        <b>AIMS</b><span>CAMS</span>
+      </div>
+      <div class="header-user">
+        <div class="header-avatar">AJ</div>
+        <div class="header-user-info">
+          <div>Ally Juma Ally</div>
+          <span>MFSL MFI · 101457</span>
+        </div>
+      </div>
+    </div>
+    <span class="header-spacer"></span>
+    <div class="header-right">
+      <select class="header-lang" aria-label="Language">
+        <option>English</option>
+        <option>Kiswahili</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Sidebar + Main content -->
+  <aside class="sidebar">
+    <aims-sidebar 
+      (navItemClick)="onNavItemClick($event)">
+    </aims-sidebar>
+  </aside>
+
+  <main class="main" [class.expanded]="!sidebarCollapsed()">
+    <div class="page">
       <router-outlet></router-outlet>
-    </main>
-  </div>
+    </div>
+  </main>
 </div>

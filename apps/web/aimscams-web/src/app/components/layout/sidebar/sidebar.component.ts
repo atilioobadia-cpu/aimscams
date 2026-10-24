@@ -18,6 +18,7 @@ export interface NavChild {
   id: string;
   label: string;
   href?: string;
+  icon?: string;
   soon?: boolean;
 }
 
@@ -61,39 +62,39 @@ export const NAV: NavItem[] = [
   { id: 'transactions', label: 'Transactions', href: '/transactions', icon: 'swap' },
   { id: 'teller', label: 'Teller', href: '/teller', icon: 'cash' },
   { id: 'accounting', label: 'Accounting', icon: 'book', children: [
-    { id: 'chart-of-accounts', label: 'Chart of accounts', href: '/chart-of-accounts' },
-    { id: 'journal', label: 'Journal', href: '/journal-entries' },
-    { id: 'trial-balance', label: 'Trial balance', href: '/trial-balance' },
+    { id: 'chart-of-accounts', label: 'Chart of accounts', href: '/chart-of-accounts', icon: 'grid' },
+    { id: 'journal', label: 'Journal', href: '/journal-entries', icon: 'file' },
+    { id: 'trial-balance', label: 'Trial balance', href: '/trial-balance', icon: 'shield' },
   ] },
   { id: 'requests', label: 'Requests', href: '/requests', icon: 'bell' },
   { id: 'messages', label: 'Messages', soon: true, icon: 'message' },
   { id: 'campaigns', label: 'Campaigns', icon: 'megaphone', children: [
-    { id: 'run-campaign', label: 'Run Campaign', soon: true },
-    { id: 'active-campaigns', label: 'Active Campaigns', soon: true },
+    { id: 'run-campaign', label: 'Run Campaign', soon: true, icon: 'megaphone' },
+    { id: 'active-campaigns', label: 'Active Campaigns', soon: true, icon: 'megaphone' },
   ] },
   { id: 'reports', label: 'Reports', icon: 'chart', children: [
-    { id: 'rep-loan', label: 'Loan', soon: true },
-    { id: 'rep-savings', label: 'Savings', soon: true },
-    { id: 'rep-tx', label: 'Transactions', soon: true },
-    { id: 'rep-client', label: 'Client', soon: true },
-    { id: 'rep-msp', label: 'MSP', soon: true },
-    { id: 'rep-statement', label: 'Statement', soon: true },
+    { id: 'rep-loan', label: 'Loan', soon: true, icon: 'file' },
+    { id: 'rep-savings', label: 'Savings', soon: true, icon: 'coin' },
+    { id: 'rep-tx', label: 'Transactions', soon: true, icon: 'swap' },
+    { id: 'rep-client', label: 'Client', soon: true, icon: 'users' },
+    { id: 'rep-msp', label: 'MSP', soon: true, icon: 'shield' },
+    { id: 'rep-statement', label: 'Statement', soon: true, icon: 'file' },
   ] },
   { id: 'import', label: 'Import', icon: 'upload', children: [
-    { id: 'imp-member', label: 'Member', soon: true },
-    { id: 'imp-account', label: 'Account', soon: true },
-    { id: 'imp-transaction', label: 'Transaction', soon: true },
+    { id: 'imp-member', label: 'Member', soon: true, icon: 'users' },
+    { id: 'imp-account', label: 'Account', soon: true, icon: 'wallet' },
+    { id: 'imp-transaction', label: 'Transaction', soon: true, icon: 'swap' },
   ] },
   { id: 'business', label: 'Business Account', soon: true, icon: 'briefcase' },
   { id: 'settings', label: 'Settings', icon: 'gear', children: [
-    { id: 'gen', label: 'General', soon: true },
-    { id: 'acc-settings', label: 'Accounting', soon: true },
-    { id: 'branches', label: 'Branches', soon: true },
-    { id: 'products', label: 'Products', soon: true },
-    { id: 'policies', label: 'Policies', soon: true },
-    { id: 'users', label: 'Users', soon: true },
-    { id: 'roles', label: 'Roles', soon: true },
-    { id: 'services', label: 'Services', soon: true },
+    { id: 'gen', label: 'General', soon: true, icon: 'gear' },
+    { id: 'acc-settings', label: 'Accounting', soon: true, icon: 'book' },
+    { id: 'branches', label: 'Branches', soon: true, icon: 'briefcase' },
+    { id: 'products', label: 'Products', soon: true, icon: 'wallet' },
+    { id: 'policies', label: 'Policies', soon: true, icon: 'shield' },
+    { id: 'users', label: 'Users', soon: true, icon: 'users' },
+    { id: 'roles', label: 'Roles', soon: true, icon: 'shield' },
+    { id: 'services', label: 'Services', soon: true, icon: 'megaphone' },
   ] },
 ];
 
