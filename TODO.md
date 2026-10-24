@@ -36,7 +36,7 @@
 
 ### Posting Engine & Journal
 - [ ] Posting engine integration (from packages/ledger)
-- [ ] Journal entries list
+- [x] Journal entries list - Verified
 - [ ] Journal entry detail with balanced lines
 - [ ] Outbox + worker infrastructure
 - [ ] Unposted transactions queue with resubmit
