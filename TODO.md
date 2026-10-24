@@ -17,8 +17,8 @@
 - [x] Port styling from prototype/app.html
 
 ### Auth, RBAC & Core Infrastructure
-- [ ] Auth & tenancy (OIDC login, tenant resolution, branch context)
-- [ ] RBAC system (17 roles, Entity:Action permissions)
+- [x] Auth & tenancy (OIDC login, tenant resolution, branch context) - Verified
+- [x] RBAC system (17 roles, Entity:Action permissions) - Verified
 - [ ] Period management (open/close/lock periods)
 - [ ] Audit trail (append-only audit_event)
 - [ ] Design system components (grid, filter bar, forms, chips, money input)
