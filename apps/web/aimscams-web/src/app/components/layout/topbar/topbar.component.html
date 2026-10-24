@@ -1,0 +1,12 @@
+<header class="topbar">
+  <button class="back-btn" type="button" aria-label="Go back" (click)="back.emit()" [disabled]="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="m15 18-6-6 6-6"/></svg>
+  </button>
+  <button class="menu-btn" type="button" aria-label="Open navigation" (click)="drawer.toggle()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
+  </button>
+  <span class="crumb">{{ breadcrumb }}</span>
+  <span class="chip">{{ branch }}</span>
+  <span class="spacer"></span>
+  <select class="lang" aria-label="Language"><option>English</option><option>Kiswahili</option></select>
+</header>

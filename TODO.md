@@ -87,7 +87,7 @@
 - [ ] Interest calculation/display
 
 ### Teller Operations
-- [ ] Teller console (4 categories)
+- [x] Teller console (4 categories) - Verified
 - [ ] Till opening with denominations
 - [ ] Till balance/counting
 - [ ] Till closing
@@ -111,7 +111,7 @@
 - [ ] Guarantor/collateral validation
 
 ### Loan Accounts
-- [ ] Loan list (Active/New/Closed)
+- [x] Loan list (Active/New/Closed) - Verified
 - [ ] Loan detail - Summary tab
 - [ ] Loan detail - Repayment schedule tab
 - [ ] Loan detail - Repayments tab
@@ -216,14 +216,14 @@
 - [ ] Import templates & batch tracking
 
 ### Transactions
-- [ ] All transactions ledger
+- [x] All transactions ledger - Verified
 - [ ] Online transactions (payment intents)
 - [ ] Online payment reconciliation
 - [ ] Need Attention queue
 - [ ] Unmatched payment handling
 
 ### Other Operations
-- [ ] Requests (unified request centre)
+- [x] Requests (unified request centre) - Verified
 - [ ] Messages
 - [ ] Campaigns
 - [ ] Business Account (WBA) - wallet, invoices, fees

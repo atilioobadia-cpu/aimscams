@@ -39,8 +39,9 @@
             @for (child of item.children; track child.id) {
               <a class="nav-child" [class.active]="navActive() === child.id" [class.soon]="child.soon"
                 [attr.data-id]="child.id"
+                [attr.href]="child.soon ? null : (child.href ?? null)"
                 [attr.title]="child.soon ? 'Coming soon' : child.label"
-                (click)="handleNavClick($event, child.id, null, child.soon)">
+                (click)="handleNavClick($event, child.id, child.href ?? null, child.soon)">
                 {{ child.label }}
               </a>
             }
@@ -61,9 +62,8 @@
     }
   </nav>
 
-  <div class="rail-foot"><b>AIMS</b> CAMS · 0.0 prototype<br />
-    Synthetic data · no member records<br />
-    © 2026 AIMS · Atilio Obadia
+  <div class="rail-foot"><b>AIMS</b> CAMS · Tanzania<br />
+    © 2026 Alpha Integrated Management System<br />
   </div>
 
   <button class="rail-toggle" type="button"
