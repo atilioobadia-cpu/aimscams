@@ -254,8 +254,12 @@
 ## CURRENT FOCUS
 **Next Task:** Phase 3 — Loan application wizard (5 steps) and loan detail tabs
 
-**Last Verified:** 10 routes rendered in browser with 0 console errors
-(/clients, /savings-accounts, /loan-applications, /loan-accounts, /teller,
-/transactions, /requests, /chart-of-accounts, /journal-entries, /trial-balance).
-Auth guard redirect to /login confirmed. Sidebar active state, group auto-expand
-and highlight pill verified on /chart-of-accounts.
+**Last Verified:** All core navigation bugs fixed:
+- Refresh on deep links (e.g., /loan-accounts, /chart-of-accounts) stays on page
+- Click navigation updates active state instantly
+- Child nav items work, parent group auto-expands and stays open
+- Mobile sidebar toggle works
+- Collapsed sidebar (72px): labels hidden, icons visible
+- Chevron rotation on group expand/collapse
+- Auth guard no longer redirects on refresh
+- 10 routes verified with 0 console errors
