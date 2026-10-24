@@ -10,7 +10,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { DrawerService } from '../../../../app/core/services/drawer.service';
 
 export interface NavChild {
@@ -121,10 +122,12 @@ const CHILD_TO_GROUP: Record<string, string> = {
   'trial-balance': 'accounting',
 };
 
+import { SafeHtmlPipe } from '../../../../app/shared/pipes/safe-html.pipe';
+
 @Component({
   selector: 'aims-sidebar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SafeHtmlPipe],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   host: { '(window:resize)': 'onResize()' },
@@ -197,7 +200,7 @@ export class SidebarComponent implements AfterViewInit {
 
     // Run once at startup so a refresh on a deep link highlights the right row.
     syncFromUrl();
-    this.router.events.subscribe(syncFromUrl);
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(syncFromUrl);
   }
 
   ngAfterViewInit() {
@@ -217,34 +220,6 @@ export class SidebarComponent implements AfterViewInit {
   onResize() {
     // On resize the row positions can shift (e.g. wrap). Re-place without animation.
     this.movePill(true);
-  }
-
-  /** Top-level nav item or child row clicked. */
-  onNavItem(id: string, href: string | null) {
-    // Don't navigate if item is marked as soon
-    const navItem = this.NAV.find((n) => n.id === id) || this.NAV.flatMap((n) => n.children || []).find((c) => c.id === id);
-    if ((navItem as any)?.soon) {
-      return;
-    }
-    
-    this.navActive.set(id);
-    this.movePill(false);
-    this.navItemClick.emit(id);
-    
-    // Navigate directly if href is provided
-    if (href) {
-      this.router.navigateByUrl(href).catch(() => {});
-    }
-  }
-
-  handleNavClick(event: Event, id: string, href: string | null, soon?: boolean) {
-    if (soon) {
-      event.preventDefault();
-      event.stopPropagation();
-      return;
-    }
-    event.preventDefault();
-    this.onNavItem(id, href);
   }
 
   toggleGroup(id: string) {

@@ -1,4 +1,4 @@
-<aside class="rail">
+<aside class="rail" [class.open]="open()">
   <div class="rail-head">
     <div class="avatar">AA</div>
     <div class="who">
@@ -30,9 +30,11 @@
           [attr.title]="item.soon ? 'Coming soon' : item.label"
           [disabled]="item.soon"
           (click)="item.soon ? $event.preventDefault() : toggleGroup(item.id)">
-          <span [innerHTML]="iconOf(item.icon)"></span>
-          <span>{{ item.label }}</span>
-          <span [innerHTML]="iconOf('chev')"></span>
+          <span class="nav-icon" [innerHTML]="NAVICONS[item.icon ?? ''] | safeHtml"></span>
+          <span class="nav-label">{{ item.label }}</span>
+          <span class="chev-wrap">
+            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m6 9 6 6 6-6"/></svg>
+          </span>
         </button>
         <div class="nav-children" [class.open]="openGroups().has(item.id)">
           <div>
@@ -41,7 +43,7 @@
                 [attr.data-id]="child.id"
                 [attr.href]="child.soon ? null : (child.href ?? null)"
                 [attr.title]="child.soon ? 'Coming soon' : child.label"
-                (click)="handleNavClick($event, child.id, child.href ?? null, child.soon)">
+                (click)="child.soon && $event.preventDefault()">
                 {{ child.label }}
               </a>
             }
@@ -54,9 +56,9 @@
           [attr.id]="'nav-' + item.id"
           [attr.href]="item.soon ? null : (item.href ?? null)"
           [attr.title]="item.soon ? 'Coming soon' : item.label"
-          (click)="handleNavClick($event, item.id, item.href ?? null, item.soon)">
-          <span [innerHTML]="iconOf(item.icon)"></span>
-          <span>{{ item.label }}</span>
+          (click)="item.soon && $event.preventDefault()">
+          <span class="nav-icon" [innerHTML]="NAVICONS[item.icon ?? ''] | safeHtml"></span>
+          <span class="nav-label">{{ item.label }}</span>
         </a>
       }
     }
