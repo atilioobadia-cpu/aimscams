@@ -3,6 +3,11 @@
 > Track progress: [ ] Not Started | [~] In Progress | [x] Completed & Verified  
 > Start one by one. Mark verified only after testing with Playwright/build checks.
 
+> **2026-10-26 — stack changed.** D-018 replaces Angular with Next.js + Tailwind/shadcn and
+> RabbitMQ with Redis/BullMQ. The Phase 0 shell items below describe the **legacy** Angular app:
+> historical, not the plan. Read `DECISIONS.md` D-018…D-023 and `docs/10-technology-stack.md`
+> before ticking anything; Phase 0 is re-planned from the Next.js scaffold.
+
 ## PHASE 0: Foundation (4 weeks)
 
 ### Shell & Navigation

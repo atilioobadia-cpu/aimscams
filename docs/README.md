@@ -24,9 +24,13 @@ Developed by Atilio Obadia. See [LICENSE](../LICENSE).
 | 06 | [`06-regulatory-reporting.md`](06-regulatory-reporting.md) | You are building MSP01–MSP11, or need to know which data must be captured on day one |
 | 07 | [`07-build-plan.md`](07-build-plan.md) | You are planning sprints, hiring, or deciding what to cut |
 | 08 | [`08-delivery-plan.md`](08-delivery-plan.md) | You need the phased execution plan: gates, team shape, quality bars, skill playbook |
+| 09 | [`09-system-blueprint.md`](09-system-blueprint.md) | You need the complete functional scope: 147 pages, 13 flows, the System Logs specification |
+| 10 | [`10-technology-stack.md`](10-technology-stack.md) | You are writing code, choosing libraries, deploying, or planning the module build |
+| 11 | [`11-ui-contract.md`](11-ui-contract.md) | You are building or verifying any screen — exact tokens, measurements and the checklist |
 | — | [`../DECISIONS.md`](../DECISIONS.md) | You are about to build something that depends on an unsettled policy |
+| — | [`../AGENTS.md`](../AGENTS.md) | You are an agent starting a session — read this first |
 
-Reading order for a new team member: **01 → 02 → 03 → 04 → 05 → 06 → 08**, with
+Reading order for a new team member: **01 → 02 → 03 → 04 → 05 → 06 → 08 → 09 → 10 → 11**, with
 `DECISIONS.md` open beside 04 and 05.
 
 ---

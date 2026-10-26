@@ -21,10 +21,14 @@ imports, exports and notifications. Microservices only after a module demonstrab
 Distributed transactions would be worse than the coupling they solve.
 
 ### D-002 — Single PostgreSQL cluster, tenant-scoped rows with RLS
-**Status:** Accepted · `docs/04-architecture.md §2.2`
+**Status:** Superseded by D-019 for deployment topology · `docs/04-architecture.md §2.2`
 
 `tenant_id` on every business table, enforced by row-level security *and* application scoping.
 Not schema-per-tenant, not database-per-tenant.
+
+**Superseded 2026-10-26.** D-019 deploys one database per institution. The tenant-scoped columns
+and RLS remain as defence in depth; only the "one shared cluster for every tenant" choice is
+reversed.
 
 ### D-003 — Outbox-driven asynchronous posting
 **Status:** Accepted · `docs/03-flows.md §8`, `docs/04-architecture.md §6`
@@ -81,11 +85,14 @@ financial rows. Future tenants arrive with spreadsheets; the import path is the 
 AIMSCAMS itself starts greenfield — see D-014.
 
 ### D-011 — TypeScript monorepo, Angular + NestJS + PostgreSQL
-**Status:** Accepted · `docs/04-architecture.md §17`
+**Status:** Superseded by D-018 · `docs/04-architecture.md §17`
 
 Angular 18 + PrimeNG (closest to the observed surface, largest local hiring pool), NestJS,
 PostgreSQL 16, Redis, RabbitMQ, S3-compatible storage. `.NET 8` is an acceptable substitute for
 the API tier if the team is Microsoft-centric; the architecture does not change.
+
+**Superseded 2026-10-26.** D-018 replaces Angular with Next.js + Tailwind/shadcn and RabbitMQ
+with Redis + BullMQ. NestJS, PostgreSQL, Redis and S3-compatible storage carry forward.
 
 ### D-012 — Raw OCR corpus is not committed
 **Status:** Accepted · `README.md#evidence-and-privacy`
@@ -203,6 +210,119 @@ existed. Two things became explicit once they did:
 - Correcting it later is a new policy version. Posted entries are never restated (D-004).
 - No `4005` account is seeded until a policy needs it.
 
+### D-018 — Stack: Next.js, NestJS, PostgreSQL, Prisma, Redis/BullMQ, S3
+**Status:** Accepted 2026-10-26 · supersedes D-011 · owner decision · `docs/10-technology-stack.md`
+
+| Layer | Choice |
+|---|---|
+| Frontend | Next.js + TypeScript |
+| UI system | Tailwind CSS + shadcn/ui |
+| Backend | NestJS + TypeScript |
+| Database | PostgreSQL |
+| Data access | Prisma, with hand-written SQL migrations where needed |
+| Authentication | Keycloak *or* application auth — `O-009` |
+| Authorisation | RBAC plus resource-level scoping |
+| Background work | Redis + BullMQ |
+| Documents | Private S3-compatible storage |
+| API documentation | Swagger / OpenAPI |
+| Testing | Jest + Playwright |
+| Deployment | Docker + Linux + Nginx |
+| Monitoring | Prometheus + Grafana |
+
+**Why.** One typed language end to end, a single relational system of record, and one API plus
+one worker rather than microservices (D-001 still holds). The stack adds no architectural
+capability that the blueprint lacked; it names the implementation.
+
+**Consequences.**
+- The Angular application is legacy from this point (`O-012`); the Next.js app is the frontend.
+- Prisma is the access layer, not the owner of correctness. Triggers, deferred constraints,
+  immutability, the period guard and RLS stay as SQL migrations (D-016, `docs/10 §7`).
+- The API is the only writer; Next.js may read but must not mutate business data.
+- Versions are pinned at kickoff and recorded in the lockfile, not in the decision text.
+
+### D-019 — One installation and one database per institution
+**Status:** Accepted 2026-10-26 · supersedes D-002 for deployment topology · `docs/10 §2`
+
+One shared codebase, deployed separately for every institution. Each installation has its own
+application instance, PostgreSQL database and credentials, users and roles, encryption keys,
+object-storage scope, backups, and institution-specific financial configuration.
+
+**Why.** Isolation by deployment stops a breach or a bad migration at one institution; it gives
+each institution a boundary its auditor can inspect; it allows on-premise or in-country hosting
+where required; and it permits per-institution configuration without feature flags accumulating
+in one shared database.
+
+**Consequences.**
+- `organisation_id` and `branch_id` stay on every business row, and RLS stays enabled (D-002's
+  mechanism, now defence in depth rather than the isolation boundary).
+- There is no cross-institution report. Fleet-level metrics are collected out of band.
+- Every release and migration runs N times. Productise it: versioned images, one Compose/Helm
+  template, a migration runner, a schema-version health endpoint, a tested restore drill
+  (`docs/10` R-2).
+- Backups and restores are per institution and must be rehearsed, not assumed.
+
+### D-020 — The measured reference is the visual contract; the identity is AIMSCAMS
+**Status:** Accepted 2026-10-26 · supersedes the earlier styling targets · `docs/11-ui-contract.md`
+
+Adopt the measured surface exactly: tokens, 97px header, 300px sidebar, 12-item navigation,
+44px active pills, 12px card radius, KPI geometry, chart treatment, floating chat button.
+Substitute AIMSCAMS identity per D-013: wordmark, footer, and synthetic demo institution,
+branch and user.
+
+**Why.** The measurements are evidence of a working product, not a mood board. Copying them
+removes guesswork from every screen. Copying another company's *identity* is not permitted by
+D-013, so the mark changes and the geometry does not.
+
+**Consequences.**
+- Brand colour for this UI is `#057573`; page background `#ebe9e9`. These supersede `#0F4D3A`
+  and `#ECEBEC`.
+- The footer reads "© 2026 AIMSCAMS. All rights reserved."
+- Demo tenant, branch and user are synthetic; no observed tenant's staff or member data appears.
+- A UI change is not done until the rendered result has been measured in a real browser against
+  the checklist in `docs/11 §8`.
+
+### D-021 — Money is integer minor units at rest
+**Status:** Accepted 2026-10-26 · clarifies the "decimal monetary types" requirement · `docs/10 §7`
+
+Amounts are `bigint` TZS×100 at rest, mapped to `Prisma.BigInt`; the API serialises them as
+strings or integer minor units; the UI formats them for display. No `Float`, no expensive
+`Decimal` conversion inside the ledger.
+
+**Why.** This satisfies "precise, never floating point" more strictly than `numeric(18,2)` while
+keeping one representation across `packages/domain`, `packages/ledger` and the database. Two
+representations would create a conversion surface where rounding bugs live.
+
+**Consequences.** A JSON transformer is required because `bigint` is not JSON-serialisable.
+Decimal parsing happens only at the input and display boundaries.
+
+### D-022 — The outbox is the source of truth; BullMQ is transport
+**Status:** Accepted 2026-10-26 · extends D-003 · `docs/10 §7, §12 R-1`
+
+The business row and its outbox row commit in one transaction. A relay publishes the outbox row
+to BullMQ; a worker consumes it and posts with the same idempotency key. Nothing is enqueued
+before commit.
+
+**Why.** Redis can lose recent writes. If the queue were the record, a flush would lose a
+posting. The outbox makes delivery at-least-once and replay harmless.
+
+**Consequences.** Consumers must be idempotent. Retries use backoff, then a dead-letter queue
+that is visible in the System Logs posting tab. A non-empty dead-letter queue is a P1 alert.
+
+### D-023 — Tanzania-specific capabilities stay in scope
+**Status:** Accepted 2026-10-26 · `docs/10 §5.3`
+
+Retained even though the stack plan does not mention them: statutory returns MSP01–MSP11 in both
+TCDC and BoT dialects, teller and vault cash control with denominations and variance, guarantor
+fund reservations, immutable policy versioning stamped on each loan, the unposted-transactions
+queue with `Resubmit`, maker-checker approvals, and the tamper-evident audit trail.
+
+**Why.** These are the capabilities that make the product sellable to a Tanzanian SACCO or MFI,
+and they constrain the ledger, chart of accounts and branch model. Retrofitting them after the
+schema settles is the expensive path.
+
+**Consequences.** The roadmap in `docs/10 §11` includes them before the pilot, not in a later
+phase. Their data requirements are already in `docs/05` and `docs/06`.
+
 ---
 
 ## Open
@@ -265,6 +385,57 @@ recovered (`Member Template`, `Account_Standard_Template.xlsx`, `Transaction_Tem
 are the default. Revisit when a tenant wants to bring a legacy system's export — the format will
 be theirs, not the observed product's.
 
+### O-009 — Keycloak or application authentication
+**Status:** OPEN · blocks identity implementation · `docs/10 §12 R-6`
+
+Both were named as acceptable. Keycloak gives OIDC, MFA and SSO out of the box, but it is a
+stateful service with a realm, theme and upgrade path *per installation*. Application auth
+(argon2id + TOTP, clean OIDC-shaped boundary) is less to operate across N installations and can
+be swapped later.
+
+**Needed:** a ruling. Default recommendation: application auth unless SSO across products is a
+contractual requirement.
+
+### O-010 — Branding fidelity during development
+**Status:** OPEN · blocks UI text and screenshots · `docs/11 §7`
+
+Adopt the reference measurements exactly (D-020). The open part is identity: ship AIMSCAMS
+branding from the first screen, or keep the literal reference wordmark and tenant while
+comparing pixel-for-pixel, then substitute before any demo.
+
+**Needed:** a ruling. Default recommendation: AIMSCAMS from day one, with a synthetic demo tenant
+that keeps the same text lengths so measurements still hold.
+
+### O-011 — Sidebar information architecture
+**Status:** OPEN · blocks navigation build · `docs/09 §3`, `docs/11 §4`
+
+The measured reference has 12 top-level items with chevrons. The blueprint proposes an 8-group
+IA. D-020 adopts the 12-item sidebar because it is the measured contract; grouping is a product
+improvement that changes the geometry.
+
+**Needed:** confirm 12 items for parity, with regrouping deferred until after the visual
+baseline is verified.
+
+### O-012 — Retirement of the Angular application
+**Status:** OPEN · blocks frontend workstream · `docs/10 §4`
+
+`apps/web/aimscams-web` exists and renders a shell. D-018 makes Next.js the frontend. Keeping
+both means two design systems and two sets of bugs.
+
+**Needed:** decide between delete-on-port (clean, history retains it) and keep-until-parity
+(safer if the dashboard must be demoed during the transition). Default recommendation:
+delete once the Next.js dashboard passes the `docs/11 §8` checklist, and never extend it
+in the meantime.
+
+### O-013 — Where installations run
+**Status:** OPEN · blocks deployment, backup and support design · `docs/10 §2`
+
+Institution on-premise, vendor-hosted, or both. This decides TLS termination, who owns backups,
+how upgrades are scheduled, whether remote support is possible, and how data residency is
+evidenced.
+
+**Needed:** a ruling, or a per-institution policy with a supported default.
+
 ---
 
 ## Rejected
@@ -274,7 +445,7 @@ be theirs, not the observed product's.
 | Event-sourcing the whole domain | Operational cost with little gain; append-only ledger already provides auditability |
 | Microservices from the start | Transactional coupling; team size; reporting needs joins |
 | Document database as system of record | Financial reporting and reconciliation are relational |
-| Schema-per-tenant or database-per-tenant | Migration and cost burden at this tenant size |
+| Schema-per-tenant inside one shared cluster | Migration and configuration burden across schemas. Database-per-institution is now accepted in D-019; schema-per-tenant remains rejected |
 | Business logic in stored procedures | Untestable, unversioned, hard to review |
 | A generic BPMN engine for approvals | Four fixed stages plus a request queue; BPMN is overkill |
 | Deriving balances only from operational rows | Guarantees silent ledger drift |
