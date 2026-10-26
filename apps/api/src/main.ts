@@ -33,12 +33,18 @@ function assertConfiguration(): void {
     );
     process.exit(1);
   }
+
+  if (process.env.AUTH_BYPASS === "true" && process.env.APP_ENV !== "local") {
+    console.error("AIMSCAMS API cannot start; AUTH_BYPASS is permitted only when APP_ENV=local.");
+    process.exit(1);
+  }
 }
 
 async function bootstrap() {
   assertConfiguration();
 
   const app = await NestFactory.create(AppModule);
+  app.getHttpAdapter().getInstance().set("trust proxy", 1);
   app.enableCors({
     origin: process.env.WEB_ORIGIN ?? "http://localhost:3000",
     credentials: true,
