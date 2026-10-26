@@ -48,37 +48,37 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   return (
     <header
       data-testid="app-header"
-      className="fixed inset-x-0 top-0 z-50 flex h-[97px] items-center border-b border-chrome bg-surface px-7"
+      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-[18px]"
     >
-      <div className="flex min-w-0 items-center gap-3.5">
+      <div className="flex min-w-0 items-center gap-2">
         <div
           data-testid="tenant-logo"
-          className="grid size-[60px] shrink-0 place-items-center rounded-full bg-tenant text-on-primary"
+          className="grid size-[52px] shrink-0 place-items-center rounded-full bg-tenant text-on-primary"
         >
-          <AimscamsMark className="size-8" />
+          <AimscamsMark className="size-7" />
         </div>
         <div className="min-w-0">
-          <p className="truncate text-[18px] font-semibold leading-tight text-body">
+          <p className="truncate text-[16px] font-semibold leading-tight text-body">
             {institution.name}
           </p>
-          <p className="mt-1 truncate text-[16px] leading-tight text-muted-foreground">
+          <p className="truncate text-[14px] leading-tight text-muted-foreground">
             {institution.dialect} SACCOS · {institution.code}
           </p>
         </div>
       </div>
 
-      <div className="ml-auto flex items-center gap-6 2xl:gap-9">
+      <div className="ml-auto flex items-center gap-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
               data-testid="language-trigger"
               aria-label={`Language: ${language}`}
-              className="flex items-center gap-2.5 rounded-lg px-2 py-2 text-[16px] text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="flex items-center gap-2 rounded-md px-2 py-2 text-[16px] text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <TanzaniaFlag />
               <span>{language}</span>
-              <ChevronDown className="size-4" aria-hidden="true" />
+              <ChevronDown className="size-5" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-44">
@@ -95,10 +95,10 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           data-testid="branch-context"
           aria-label={`Branch: ${branch.name}, ${branch.status}`}
         >
-          <Building2 className="size-6 shrink-0 text-brand" aria-hidden="true" />
+          <Building2 className="size-5 shrink-0 text-brand" aria-hidden="true" />
           <div>
-            <p className="text-[17px] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className="mt-1 flex items-center gap-1.5 text-[13px] leading-none text-brand">
+            <p className="text-[16px] font-semibold leading-tight text-brand">{branch.name}</p>
+            <p className="mt-1 flex items-center gap-1.5 text-[12px] leading-none text-brand">
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
               {branch.status}
             </p>
@@ -111,11 +111,11 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               type="button"
               data-testid="user-menu-trigger"
               aria-label={`Account menu for ${user.name}`}
-              className="flex items-center gap-3 rounded-lg px-2 py-1.5 outline-none transition-colors hover:bg-subtle focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="flex items-center gap-3 rounded-md py-1.5 pl-2 pr-0 outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-[50px] shrink-0 place-items-center rounded-full bg-avatar text-base font-bold text-on-primary"
+                className="grid size-[44px] shrink-0 place-items-center rounded-full bg-avatar text-[14px] font-bold text-on-primary"
               >
                 {user.initials}
               </span>
@@ -125,7 +125,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               >
                 {user.name}
               </span>
-              <ChevronDown className="size-4 text-body" aria-hidden="true" />
+              <ChevronDown className="size-5 text-body" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-64">

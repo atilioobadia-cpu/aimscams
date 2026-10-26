@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { useState } from "react";
 import {
   ArrowLeftRight,
   BarChart3,
@@ -13,7 +14,7 @@ import {
   ChevronRight,
   ClipboardList,
   Landmark,
-  LayoutDashboard,
+  Home,
   Megaphone,
   MessageSquare,
   Settings,
@@ -24,10 +25,10 @@ import {
 
 import { cn } from "cn";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { navItems, type NavIcon, type NavItem } from "@/lib/nav";
+import { navItems, type NavChild, type NavIcon, type NavItem } from "@/lib/nav";
 
 const navIcons: Record<NavIcon, LucideIcon> = {
-  dashboard: LayoutDashboard,
+  dashboard: Home,
   clients: Users,
   accounts: Landmark,
   transactions: ArrowLeftRight,
@@ -53,27 +54,27 @@ function isActivePath(pathname: string, href: string): boolean {
 
 function SidebarItem({
   item,
+  pathname,
   collapsed,
   active,
+  expanded,
+  onToggleExpand,
 }: {
   item: NavItem;
+  pathname: string;
   collapsed: boolean;
   active: boolean;
+  expanded: boolean;
+  onToggleExpand: () => void;
 }) {
   const Icon = navIcons[item.icon];
   const label = item.disabled ? `${item.label} (coming soon)` : item.label;
-
-  const classes = cn(
-    "flex h-11 flex-1 items-center gap-3 rounded-[8px] pl-4 pr-4 text-left text-[18px] leading-none outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/50",
-    collapsed ? "mx-3 justify-center px-0" : "ml-3 mr-[23px]",
-    active ? "bg-brand font-semibold text-on-primary hover:bg-brand" : "text-body hover:bg-subtle",
-    item.disabled && "cursor-not-allowed text-muted-foreground/70 hover:bg-transparent",
-  );
+  const activeChild = item.children?.find((child) => isActivePath(pathname, child.href));
 
   const content = (
     <>
       <Icon
-        className={cn("size-5 shrink-0", active ? "text-on-primary" : "text-body")}
+        className={cn("size-5 shrink-0", active ? "text-on-primary" : "text-heading")}
         strokeWidth={1.8}
         aria-hidden="true"
       />
@@ -82,11 +83,11 @@ function SidebarItem({
           <span className="min-w-0 truncate">{item.label}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2">
             {item.badge ? (
-              <span className="rounded-full bg-subtle px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <span className="rounded-full bg-subtle px-2 py-1 text-micro font-semibold uppercase tracking-wide text-muted-foreground">
                 {item.badge}
               </span>
             ) : null}
-            {item.chevron ? (
+            {item.chevron && !item.children ? (
               <ChevronDown
                 className={cn("size-4", active ? "text-on-primary" : "text-muted-foreground")}
                 aria-hidden="true"
@@ -99,6 +100,15 @@ function SidebarItem({
   );
 
   let control: ReactNode;
+  const controlClass = cn(
+    "flex h-[38px] min-w-0 flex-1 items-center gap-[7px] rounded-[8px] px-[14px] text-left text-[16px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    !collapsed && "mx-2",
+    collapsed && "mx-3 justify-center px-0",
+    active
+      ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
+      : "text-heading hover:bg-tab-inactive",
+    item.disabled && "cursor-not-allowed text-muted-foreground/70 hover:bg-transparent",
+  );
 
   if (item.disabled || !item.href) {
     control = (
@@ -109,7 +119,7 @@ function SidebarItem({
         data-testid="nav-item"
         data-nav-label={item.label}
         tabIndex={-1}
-        className={classes}
+        className={controlClass}
       >
         {content}
       </div>
@@ -124,27 +134,124 @@ function SidebarItem({
         data-testid="nav-item"
         data-nav-label={item.label}
         data-active={active ? "true" : undefined}
-        className={classes}
+        className={controlClass}
       >
         {content}
       </Link>
     );
   }
 
-  if (!collapsed) return control;
+  if (item.children && !collapsed && item.href) {
+    const isGroupActive = active || activeChild !== undefined;
+    const groupLinkClass = cn(
+      "flex h-[var(--sidebar-row-height)] min-w-0 flex-1 items-center gap-[7px] rounded-[8px] pl-[14px] pr-1 text-left text-[16px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
+    );
+
+    return (
+      <li
+        data-testid="nav-group"
+        data-nav-label={item.label}
+        data-expanded={expanded ? "true" : "false"}
+        className={cn(
+          "mx-2 shrink-0 overflow-hidden rounded-[10px]",
+          expanded || isGroupActive ? "bg-primary-tint" : "",
+        )}
+      >
+        <div className="flex h-[var(--sidebar-row-height)] items-center">
+          <Link
+            href={item.href}
+            prefetch={false}
+            data-testid="nav-item"
+            data-nav-label={item.label}
+            data-active={active ? "true" : undefined}
+            aria-current={active ? "page" : undefined}
+            className={groupLinkClass}
+          >
+            <Icon className="size-5 shrink-0 text-primary" strokeWidth={1.8} aria-hidden="true" />
+            <span className="min-w-0 truncate">{item.label}</span>
+          </Link>
+          <button
+            type="button"
+            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
+            aria-expanded={expanded}
+            onClick={onToggleExpand}
+            className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[8px] text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          >
+            <ChevronDown
+              className={cn("size-4 transition-transform", expanded && "rotate-180")}
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+        {expanded ? (
+          <ul className="m-0 flex list-none flex-col p-0">
+            {item.children.map((child) => (
+              <SidebarChild
+                key={child.href}
+                child={child}
+                active={isActivePath(pathname, child.href)}
+              />
+            ))}
+          </ul>
+        ) : null}
+      </li>
+    );
+  }
+
+  if (!collapsed) {
+    return (
+      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center">
+        {control}
+      </li>
+    );
+  }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>{control}</TooltipTrigger>
-      <TooltipContent side="right" sideOffset={12}>
-        {label}
-      </TooltipContent>
-    </Tooltip>
+    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center">
+      <Tooltip>
+        <TooltipTrigger asChild>{control}</TooltipTrigger>
+        <TooltipContent side="right" sideOffset={12}>
+          {label}
+        </TooltipContent>
+      </Tooltip>
+    </li>
+  );
+}
+
+function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
+  const Icon = navIcons[child.icon];
+
+  return (
+    <li className="h-[var(--sidebar-subitem-height)] shrink-0">
+      <Link
+        href={child.href}
+        prefetch={false}
+        aria-current={active ? "page" : undefined}
+        data-testid="nav-subitem"
+        data-nav-label={child.label}
+        data-active={active ? "true" : undefined}
+        className={cn(
+          "flex h-full w-full items-center gap-[7px] rounded-[6px] pl-[14px] pr-2 text-[16px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          active
+            ? "bg-primary font-semibold text-primary-foreground"
+            : "text-heading hover:bg-white/60",
+        )}
+      >
+        <Icon className="size-5 shrink-0" aria-hidden="true" />
+        <span className="min-w-0 truncate">{child.label}</span>
+      </Link>
+    </li>
   );
 }
 
 export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const pathname = usePathname();
+  const activeGroup = navItems.find((item) =>
+    item.children?.some((child) => isActivePath(pathname, child.href)),
+  );
+  const [manuallyExpandedGroup, setManuallyExpandedGroup] = useState<string | null>(null);
+  const expandedGroup = activeGroup?.label ?? manuallyExpandedGroup;
 
   return (
     <aside
@@ -152,20 +259,32 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       data-state={collapsed ? "collapsed" : "expanded"}
       aria-label="Sidebar"
       style={{ width: "var(--sidebar-width)" }}
-      className="fixed bottom-0 left-0 top-[97px] z-40 flex flex-col border-r border-chrome bg-surface transition-[width] duration-200"
+      className="fixed bottom-0 left-0 top-[var(--header-height)] z-40 flex flex-col border-r border-chrome bg-surface transition-[width] duration-200"
     >
       <nav
         id="app-sidebar-nav"
         aria-label="Primary"
-        className="sidebar-scroll min-h-0 flex-1 overflow-y-auto pt-[66px]"
+        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-hidden max-[699px]:overflow-y-auto"
       >
-        <ul className="pb-4">
+        <ul className="m-0 flex list-none flex-col p-0">
           {navItems.map((item) => {
             const active = item.href ? isActivePath(pathname, item.href) : false;
+            const expanded = expandedGroup === item.label;
+
             return (
-              <li key={item.label} className="flex h-[60px] items-center">
-                <SidebarItem item={item} collapsed={collapsed} active={active} />
-              </li>
+              <SidebarItem
+                key={item.label}
+                item={item}
+                pathname={pathname}
+                collapsed={collapsed}
+                active={active}
+                expanded={expanded}
+                onToggleExpand={() =>
+                  setManuallyExpandedGroup((current) =>
+                    current === item.label ? null : item.label,
+                  )
+                }
+              />
             );
           })}
         </ul>
@@ -178,8 +297,8 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         aria-expanded={!collapsed}
         aria-controls="app-sidebar-nav"
         onClick={onToggle}
-        style={{ top: "clamp(320px, 716px, calc(100vh - 330px))" }}
-        className="absolute -right-[22px] z-10 grid size-11 place-items-center rounded-full border border-chrome bg-surface text-brand shadow-sm outline-none transition-colors hover:bg-subtle focus-visible:ring-3 focus-visible:ring-ring/50"
+        style={{ bottom: "calc(var(--sidebar-footer-height) + 6px)" }}
+        className="absolute -right-[18px] z-10 grid size-9 place-items-center rounded-full border border-chrome bg-surface text-brand outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
       >
         {collapsed ? (
           <ChevronRight className="size-5" aria-hidden="true" />
@@ -190,19 +309,27 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
 
       <div
         data-testid="sidebar-footer"
-        className="shrink-0 border-t border-chrome px-4 py-5 text-center"
+        className="sidebar-footer flex shrink-0 items-center justify-center border-t border-chrome text-center"
       >
         {collapsed ? (
-          <p className="text-lg font-bold text-brand-logo" aria-label="AIMSCAMS">
+          <p className="sidebar-footer-wordmark font-bold text-brand-logo" aria-label="AIMSCAMS">
             A
           </p>
         ) : (
           <>
-            <p className="text-[18px] font-bold tracking-wide text-brand-logo">AIMSCAMS</p>
-            <p className="mt-2 text-[14px] leading-5 text-muted-foreground">
-              © 2026 AIMSCAMS.
-              <br />
-              All rights reserved.
+            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo">
+              AIMSCAMS
+            </p>
+            <p
+              className="sidebar-footer-copyright text-muted-foreground"
+              aria-label="© 2026 AIMSCAMS. All rights reserved."
+            >
+              <span className="sidebar-footer-copyright-full">
+                © 2026 AIMSCAMS.<br />All rights reserved.
+              </span>
+              <span className="sidebar-footer-copyright-short" aria-hidden="true">
+                © 2026
+              </span>
             </p>
           </>
         )}

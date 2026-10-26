@@ -12,6 +12,12 @@ export type NavIcon =
   | "business-account"
   | "settings";
 
+export type NavChild = {
+  label: string;
+  icon: NavIcon;
+  href: string;
+};
+
 export type NavItem = {
   label: string;
   icon: NavIcon;
@@ -19,11 +25,12 @@ export type NavItem = {
   chevron?: boolean;
   disabled?: boolean;
   badge?: string;
+  children?: NavChild[];
 };
 
 /**
- * D-024: twelve flat items in the measured order. Campaigns stays present for
- * geometry but is never a link (D-015).
+ * Preserve the 12 top-level destinations. Settings exposes only its built routes.
+ * Campaigns stays present for geometry but is never a link (D-015).
  */
 export const navItems: NavItem[] = [
   { label: "Dashboard", icon: "dashboard", href: "/dashboard" },
@@ -43,5 +50,15 @@ export const navItems: NavItem[] = [
   { label: "Reports", icon: "reports", href: "/reports", chevron: true },
   { label: "Import", icon: "import", href: "/import", chevron: true },
   { label: "Business Account", icon: "business-account", href: "/business-account" },
-  { label: "Settings", icon: "settings", href: "/settings", chevron: true },
+  {
+    label: "Settings",
+    icon: "settings",
+    href: "/settings",
+    chevron: true,
+    children: [
+      { label: "Users", icon: "clients", href: "/settings-administrator" },
+      { label: "Add user", icon: "settings", href: "/settings-administrator-add" },
+      { label: "Roles", icon: "settings", href: "/settings-role" },
+    ],
+  },
 ];

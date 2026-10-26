@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties, ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AppHeader } from "@/components/shell/app-header";
 import { AppSidebar } from "@/components/shell/app-sidebar";
@@ -9,7 +9,7 @@ import { ChatFab } from "@/components/shell/chat-fab";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
-  expanded: 300,
+  expanded: 239,
   collapsed: 76,
 } as const;
 
@@ -22,6 +22,15 @@ type AppShellProps = {
 
 export function AppShell({ children, institution, branch, user }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false);
+
+  useEffect(() => {
+    const narrowViewport = window.matchMedia("(max-width: 800px)");
+    const syncCollapsedState = () => setCollapsed(narrowViewport.matches);
+
+    syncCollapsedState();
+    narrowViewport.addEventListener("change", syncCollapsedState);
+    return () => narrowViewport.removeEventListener("change", syncCollapsedState);
+  }, []);
 
   const width = collapsed ? SIDEBAR_WIDTH.collapsed : SIDEBAR_WIDTH.expanded;
 
@@ -46,8 +55,8 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
 
       <main
         id="main-content"
-        style={{ paddingLeft: width }}
-        className="min-h-screen pt-[97px] transition-[padding-left] duration-200"
+        style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
+        className="min-h-screen transition-[padding-left] duration-200"
       >
         <div className="px-[22px] pb-12 pt-5">{children}</div>
       </main>

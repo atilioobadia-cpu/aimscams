@@ -2,72 +2,97 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Central UI scale. Tune this single value (e.g. 0.75 or 0.8) to resize the whole
-   desktop UI without touching component styles. Mobile/narrow screens are unaffected. */
-:root {
-  --ui-scale: 1;
-}
-
-/* Wakandi uses a 12.8px root font size for denser typography. */
+/* One rendered-pixel scale: 1rem is 16px at Chrome's 100% zoom. */
 html {
-  font-size: 12.8px;
+  font-size: 16px;
 }
 
-/* AIMSCAMS design tokens. Source: docs/11-ui-contract.md §1.
-   Never use a hex literal in a component; use these token-backed utilities. */
 :root {
   color-scheme: light;
 
-  /* Brand */
-  --brand-primary: #057573;
-  --brand-primary-fab: #037674;
+  /* Product palette */
+  --primary: #057573;
+  --primary-tint: #e6f1f1;
+  --primary-fab: #037674;
+  --page-bg: #ebe9e9;
+  --surface: #ffffff;
+  --border: #dee2e6;
+  --border-header: #c3c6ca;
+  --text-heading: #495057;
+  --text-strong: #111827;
+  --text-muted: #6c757d;
+  --danger: #dc3545;
+  --tab-inactive-bg: #f8fafc;
+
+  /* Type scale, in rendered pixels */
+  --font-size-micro: 12px;
+  --font-size-helper: 13px;
+  --font-size-secondary: 14px;
+  --font-size-body: 16px;
+  --font-size-section: 18px;
+  --font-size-page-title: 26px;
+  --font-size-kpi: 28px;
+
+  /* Spacing scale, in rendered pixels */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Shared geometry */
+  --header-height: 77px;
+  --sidebar-width: 239px;
+  --sidebar-collapsed-width: 76px;
+  --sidebar-footer-height: 72px;
+  --sidebar-subitem-height: 38px;
+  --sidebar-row-height: clamp(38px, calc(8.3333vh - 22.25px), 54px);
+  --content-padding: 18px;
+  --control-height: 44px;
+  --control-compact-height: 36px;
+  --icon-size: 20px;
+  --icon-box-size: 44px;
+  --active-pill-height: 38px;
+  --tab-strip-height: 52px;
+  --card-radius: 10px;
+  --control-radius: 6px;
+  --pill-radius: 8px;
+
+  /* Existing component aliases retained while components move onto the scale. */
+  --brand-primary: var(--primary);
+  --brand-primary-fab: var(--primary-fab);
   --brand-logo-teal: #479b92;
   --brand-tenant-blue: #29aae3;
   --avatar-blue: #377ab1;
-
-  /* Surfaces */
-  --bg-page: #ebe9e9;
-  --bg-surface: #ffffff;
-  --bg-subtle: #f8f9fa;
-
-  /* Borders */
-  --border-card: #e2e8f0;
-  --border-chrome: #dee2e6;
+  --bg-page: var(--page-bg);
+  --bg-surface: var(--surface);
+  --bg-subtle: var(--tab-inactive-bg);
+  --border-card: var(--border);
+  --border-chrome: var(--border);
   --grid-line: #e5e5e5;
-
-  /* Text */
-  --text-strong: #000000;
-  --text-body: #495057;
-  --text-muted: #6c757d;
-  --text-label: #64748b;
+  --text-body: var(--text-heading);
+  --text-label: var(--text-muted);
   --text-axis: #666666;
   --text-on-primary: #ffffff;
-
-  /* Semantic accents */
-  --accent-teal: #057573;
-  --accent-teal-bg: #e0eeed;
-  --accent-red: #c75a43;
+  --accent-teal: var(--primary);
+  --accent-teal-bg: var(--primary-tint);
+  --accent-red: var(--danger);
   --accent-red-bg: #f8eae7;
   --accent-yellow: #e6c120;
   --accent-yellow-bg: #fcf7e3;
-
-  /* Chart */
   --chart-bar: #c75a43;
-
-  /* National flag. External symbol, not part of the product palette. */
   --flag-green: #1eb53a;
   --flag-yellow: #fcd116;
   --flag-black: #000000;
   --flag-blue: #00a3dd;
-
-  /* shadcn/ui semantic surface, mapped to the measured tokens above. */
   --background: var(--bg-page);
   --foreground: var(--text-body);
   --card: var(--bg-surface);
   --card-foreground: var(--text-strong);
   --popover: var(--bg-surface);
   --popover-foreground: var(--text-strong);
-  --primary: var(--brand-primary);
   --primary-foreground: var(--text-on-primary);
   --secondary: var(--bg-subtle);
   --secondary-foreground: var(--text-body);
@@ -77,10 +102,9 @@ html {
   --accent-foreground: var(--brand-primary);
   --destructive: var(--accent-red);
   --destructive-foreground: var(--text-on-primary);
-  --border: var(--border-card);
   --input: var(--border-card);
   --ring: var(--brand-primary);
-  --radius: 0.75rem;
+  --radius: var(--card-radius);
 
   --chart-1: var(--chart-bar);
   --chart-2: var(--accent-teal);
@@ -98,13 +122,40 @@ html {
   --sidebar-ring: var(--brand-primary);
 }
 
+@media (max-height: 799px) {
+  :root {
+    --sidebar-footer-height: 52px;
+    --sidebar-subitem-height: 32px;
+    --sidebar-row-height: clamp(38px, calc(8.3333vh - 19px), 54px);
+  }
+}
+
 @theme inline {
   --font-sans: var(--font-roboto), Roboto, Arial, Helvetica, sans-serif;
   --font-heading: var(--font-sans);
 
+  --text-micro: var(--font-size-micro);
+  --text-helper: var(--font-size-helper);
+  --text-secondary: var(--font-size-secondary);
+  --text-body-size: var(--font-size-body);
+  --text-section-title: var(--font-size-section);
+  --text-page-title: var(--font-size-page-title);
+  --text-kpi: var(--font-size-kpi);
+
+  --spacing-space-4: var(--space-4);
+  --spacing-space-8: var(--space-8);
+  --spacing-space-12: var(--space-12);
+  --spacing-space-16: var(--space-16);
+  --spacing-space-18: var(--space-18);
+  --spacing-space-24: var(--space-24);
+  --spacing-space-32: var(--space-32);
+
   --color-page: var(--bg-page);
   --color-surface: var(--bg-surface);
   --color-subtle: var(--bg-subtle);
+  --color-border-header: var(--border-header);
+  --color-primary-tint: var(--primary-tint);
+  --color-tab-inactive: var(--tab-inactive-bg);
   --color-chrome: var(--border-chrome);
   --color-card-border: var(--border-card);
   --color-grid-line: var(--grid-line);
@@ -169,10 +220,10 @@ html {
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: var(--radius);
+  --radius-sm: var(--control-radius);
+  --radius-md: var(--pill-radius);
+  --radius-lg: var(--card-radius);
+  --radius-xl: var(--card-radius);
 }
 
 @layer base {
@@ -219,4 +270,66 @@ html {
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background-color: var(--border-chrome);
   border-radius: 9999px;
+}
+
+.sidebar-footer {
+  height: var(--sidebar-footer-height);
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 8px;
+}
+
+.sidebar-footer-wordmark {
+  font-size: 18px;
+  line-height: 22px;
+}
+
+.sidebar-footer-copyright {
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.sidebar-footer-copyright-short {
+  display: none;
+}
+
+@media (max-height: 799px) {
+  .sidebar-footer {
+    flex-direction: row;
+    gap: 8px;
+    padding: 0 6px;
+  }
+
+  .sidebar-footer-wordmark {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .sidebar-footer-copyright {
+    font-size: 12px;
+    line-height: 16px;
+    white-space: nowrap;
+  }
+
+  .sidebar-footer-copyright-full {
+    display: none;
+  }
+
+  .sidebar-footer-copyright-short {
+    display: inline;
+  }
+}
+
+@media (max-height: 699px) {
+  .sidebar-scroll {
+    scrollbar-width: none;
+  }
+
+  .sidebar-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.app-header {
+  box-shadow: 0 1px 0 var(--border-header);
 }
