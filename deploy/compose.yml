@@ -1,0 +1,127 @@
+name: aimscams
+
+x-app: &app
+  image: ${AIMSCAMS_IMAGE:-aimscams:local}
+  build:
+    context: ..
+    dockerfile: Dockerfile
+  environment:
+    NODE_ENV: production
+    APP_ENV: ${APP_ENV:-local}
+    TZ: Africa/Dar_es_Salaam
+    PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:4000}
+    INSTITUTION_CODE: ${INSTITUTION_CODE:-AIM-DEMO}
+    INSTITUTION_DIALECT: ${INSTITUTION_DIALECT:-TCDC}
+    DATABASE_URL: postgresql://aimscams:${POSTGRES_PASSWORD:-aimscams}@postgres:5432/aimscams
+    REDIS_URL: redis://redis:6379
+    S3_ENDPOINT: http://minio:9000
+    S3_BUCKET: ${S3_BUCKET:-aimscams-documents}
+    S3_REGION: ${S3_REGION:-us-east-1}
+    S3_ACCESS_KEY: ${MINIO_ROOT_USER:-aimscams}
+    S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-aimscams-local-only}
+    S3_FORCE_PATH_STYLE: "true"
+    # Local compose defaults. Production must override both with real secrets.
+    JWT_SECRET: ${JWT_SECRET:-local-compose-only-jwt-secret-change-me}
+    TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY:-local-compose-only-totp-key-change-me}
+    SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN:-localhost}
+    METRICS_TOKEN: ${METRICS_TOKEN:-local-metrics-token}
+    LOG_LEVEL: ${LOG_LEVEL:-info}
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aimscams
+      POSTGRES_USER: aimscams
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aimscams}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aimscams -d aimscams"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-aimscams}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-aimscams-local-only}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 ${MINIO_ROOT_USER:-aimscams} ${MINIO_ROOT_PASSWORD:-aimscams-local-only} &&
+      mc mb --ignore-existing local/${S3_BUCKET:-aimscams-documents} &&
+      mc anonymous set none local/${S3_BUCKET:-aimscams-documents}
+      "
+
+  api:
+    <<: *app
+    command: ["api"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  web:
+    <<: *app
+    command: ["web"]
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+
+  worker:
+    <<: *app
+    command: ["worker"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  redis-data:
+  minio-data:

@@ -10,6 +10,13 @@ dist/
 coverage/
 *.tsbuildinfo
 
+# Next.js
+.next/
+out/
+
+# Prisma generated client (recreate with `npm run db:generate`)
+packages/db/src/generated/
+
 # Environment and secrets — never commit real values (see docs/12-deployment.md)
 .env
 .env.*

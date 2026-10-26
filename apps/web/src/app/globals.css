@@ -1,0 +1,178 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* AIMSCAMS design tokens. Source: docs/11-ui-contract.md §1.
+   Never use a hex literal in a component; use these token-backed utilities. */
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --brand-primary: #057573;
+  --brand-primary-fab: #037674;
+  --brand-logo-teal: #479b92;
+  --brand-tenant-blue: #29aae3;
+  --avatar-blue: #377ab1;
+
+  /* Surfaces */
+  --bg-page: #ebe9e9;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f8f9fa;
+
+  /* Borders */
+  --border-card: #e2e8f0;
+  --border-chrome: #dee2e6;
+  --grid-line: #e5e5e5;
+
+  /* Text */
+  --text-strong: #000000;
+  --text-body: #495057;
+  --text-muted: #6c757d;
+  --text-label: #64748b;
+  --text-axis: #666666;
+  --text-on-primary: #ffffff;
+
+  /* Semantic accents */
+  --accent-teal: #057573;
+  --accent-teal-bg: #e0eeed;
+  --accent-red: #c75a43;
+  --accent-red-bg: #f8eae7;
+  --accent-yellow: #e6c120;
+  --accent-yellow-bg: #fcf7e3;
+
+  /* Chart */
+  --chart-bar: #c75a43;
+
+  /* shadcn/ui semantic surface, mapped to the measured tokens above. */
+  --background: var(--bg-page);
+  --foreground: var(--text-body);
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-strong);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-strong);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--text-on-primary);
+  --secondary: var(--bg-subtle);
+  --secondary-foreground: var(--text-body);
+  --muted: var(--bg-subtle);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--accent-teal-bg);
+  --accent-foreground: var(--brand-primary);
+  --destructive: var(--accent-red);
+  --destructive-foreground: var(--text-on-primary);
+  --border: var(--border-card);
+  --input: var(--border-card);
+  --ring: var(--brand-primary);
+  --radius: 0.75rem;
+
+  --chart-1: var(--chart-bar);
+  --chart-2: var(--accent-teal);
+  --chart-3: var(--accent-yellow);
+  --chart-4: var(--brand-tenant-blue);
+  --chart-5: var(--text-axis);
+
+  --sidebar: var(--bg-surface);
+  --sidebar-foreground: var(--text-body);
+  --sidebar-primary: var(--brand-primary);
+  --sidebar-primary-foreground: var(--text-on-primary);
+  --sidebar-accent: var(--accent-teal-bg);
+  --sidebar-accent-foreground: var(--brand-primary);
+  --sidebar-border: var(--border-chrome);
+  --sidebar-ring: var(--brand-primary);
+}
+
+@theme inline {
+  --font-sans: var(--font-roboto), Roboto, Arial, Helvetica, sans-serif;
+  --font-heading: var(--font-sans);
+
+  --color-page: var(--bg-page);
+  --color-surface: var(--bg-surface);
+  --color-subtle: var(--bg-subtle);
+  --color-chrome: var(--border-chrome);
+  --color-card-border: var(--border-card);
+  --color-grid-line: var(--grid-line);
+
+  --color-brand: var(--brand-primary);
+  --color-brand-fab: var(--brand-primary-fab);
+  --color-brand-logo: var(--brand-logo-teal);
+  --color-tenant: var(--brand-tenant-blue);
+  --color-avatar: var(--avatar-blue);
+
+  --color-strong: var(--text-strong);
+  --color-body: var(--text-body);
+  --color-label: var(--text-label);
+  --color-axis: var(--text-axis);
+  --color-on-primary: var(--text-on-primary);
+
+  --color-accent-teal: var(--accent-teal);
+  --color-accent-teal-bg: var(--accent-teal-bg);
+  --color-accent-red: var(--accent-red);
+  --color-accent-red-bg: var(--accent-red-bg);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-yellow-bg: var(--accent-yellow-bg);
+  --color-chart-bar: var(--chart-bar);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    @apply border-border outline-ring/50;
+  }
+
+  html,
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-body);
+  }
+
+  body {
+    font-family: var(--font-roboto), Roboto, Arial, Helvetica, sans-serif;
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    @apply font-sans;
+  }
+}

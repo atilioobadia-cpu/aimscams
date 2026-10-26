@@ -1,0 +1,14 @@
+node_modules
+**/node_modules
+.next
+**/.next
+dist
+**/dist
+coverage
+**/coverage
+package-lock.json
+artifacts
+ocr
+merged
+prototype
+apps/web/aimscams-web

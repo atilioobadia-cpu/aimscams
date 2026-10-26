@@ -13,8 +13,9 @@ access to; that product is referred to throughout as *the observed product*.
 Build started 2026-10-23 with the **domain kernel** in `packages/domain` — money, repayment
 schedules, payment allocation and arrears ageing, all pure and tested — followed by the
 **ledger** in `packages/ledger`: chart of accounts, posting policies, journal entries, trial
-balance, with the accounting rules enforced by PostgreSQL constraints. No API or screens yet.
-The specification is the contract; read it before writing production code.
+balance, with the accounting rules enforced by PostgreSQL constraints. Phase 0 then added the
+web, API and worker applications, Prisma, Tailwind/shadcn and CI. The specification is the
+contract; read it before writing production code.
 
 > Independent interoperability analysis. Not affiliated with, endorsed by, or containing the
 > source code of any vendor product. See [Evidence and privacy](#evidence-and-privacy).
@@ -49,7 +50,7 @@ Full index: [`docs/README.md`](docs/README.md).
 | Domain specification | Complete (145 screens, 53 reports, 17 statutory returns) |
 | Architecture and data model | Complete, decisions recorded |
 | Delivery plan | Complete — phases, gates, team shape, quality bar |
-| Application code | **Started** — domain kernel (34 tests) and ledger schema, posting engine, trial balance (11 tests) |
+| Application code | **Started** — domain kernel (34 tests), ledger schema/posting engine/trial balance (11 tests), Phase 0 scaffold (Next.js, NestJS, worker, Prisma, CI) |
 | Data | **Greenfield** — structure only, no data migrated from any observed tenant |
 | Accounting policy sign-off | **Open** — see [DECISIONS.md](DECISIONS.md#open) |
 | Regulatory form versions | **To verify** against current TCDC / BoT forms |
@@ -66,14 +67,41 @@ docs/                 the specification (9 documents)
   README.md           index, provenance, known gaps
   01..08              overview, modules, flows, architecture, data model, regulatory, build plan, delivery plan
 DECISIONS.md          decision register — what is settled and what is not
+apps/
+  web/                Next.js application (all screens)
+  api/                NestJS REST API — the only writer
+  worker/             BullMQ consumers and schedulers
 packages/
   domain/             pure domain kernel: money, schedules, allocation, arrears (34 tests)
   ledger/             chart of accounts, posting policies, journal, trial balance (13 tests)
+  db/                 Prisma schema, SQL migrations, seed and tenant bootstrap
+  contracts/          shared Zod request/response schemas
+deploy/               Dockerfile entrypoint and Compose stack
 evidence/             non-sensitive artefacts (route index, source inventory)
 tools/
   mermaid-check/      parses every diagram in docs/ with the real mermaid parser
+  ui-audit/           measures rendered pages against docs/11 in a real browser
+  seed/               synthetic demo data (local/test only)
   corpus/             scripts that regenerate the OCR corpus locally (output is gitignored)
 ```
+
+## Development quickstart
+
+```powershell
+# 1. Infrastructure (PostgreSQL 16, Redis 7, MinIO) — or use your own services
+docker compose -f deploy/compose.yml up -d postgres redis minio
+
+# 2. Install and configure
+npm ci
+Copy-Item .env.example .env      # then fill any empty required values
+
+# 3. Database and apps
+npm run db:deploy
+npm run dev                      # web on :3000, api on :4000
+```
+
+The API refuses to start when `DATABASE_URL`, `REDIS_URL`, `PUBLIC_BASE_URL`, `TZ`,
+`INSTITUTION_CODE` or `INSTITUTION_DIALECT` is missing. Never commit `.env`.
 
 CI: `tools/mermaid-check/ci-workflow.yml` is ready to enable — see
 [its README](tools/mermaid-check/README.md#ci).
@@ -113,6 +141,11 @@ These come out of the spec and are not open for reinterpretation during implemen
 ### Checks
 
 ```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+
 cd tools/mermaid-check
 npm install
 npm run check

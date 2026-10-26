@@ -1,0 +1,13 @@
+{
+  "name": "@aimscams/seed",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic Tanzanian demo data. Never imports real member data.",
+  "scripts": {
+    "seed": "tsx seed.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.15"
+  }
+}

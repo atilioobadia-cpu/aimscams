@@ -52,7 +52,9 @@ codebase, one installation and one database **per institution**. Reconstructed f
   real PostgreSQL via PGlite.
 - `docs/01`–`docs/13` — specification complete through stack, UI contract, deployment and build sequence.
 - `apps/web/aimscams-web` — Angular shell, **legacy** under D-018. Do not extend it (`O-012`).
-- Next.js app, NestJS API, Prisma schema and worker: **not started**.
+- `apps/web` (Next.js), `apps/api` (NestJS), `apps/worker` (BullMQ) — Phase 0 scaffold.
+- `packages/db` (Prisma 7 + PostgreSQL 16), `packages/contracts` (Zod) — Phase 0 scaffold.
+- `deploy/` and `.github/workflows/ci.yml` — one Linux image with web/api/worker commands.
 
 ## Commands
 

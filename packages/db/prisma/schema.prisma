@@ -1,0 +1,23 @@
+// AIMSCAMS database schema.
+// Phase 0 contains infrastructure metadata only; business models start in Phase 2.
+// Invariants that Prisma cannot express (RLS, append-only ledger, period guard) live
+// in hand-written SQL migrations and packages/ledger/src/schema.sql.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Installation-level metadata. Not business data and not tenant-scoped.
+model AppMeta {
+  key       String   @id
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("app_meta")
+}
