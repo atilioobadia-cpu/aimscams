@@ -9,14 +9,14 @@ export class AccountingController {
   constructor(private readonly accounting: AccountingService) {}
 
   @Get('chart-of-accounts')
-  @RequirePermissions('Accounting : View')
+  @RequirePermissions('Settings Accounting : View')
   async chartOfAccounts(@CurrentAuth() auth: AuthContext) {
     const organisationId = auth.user.organisation.id;
     return this.accounting.getChartOfAccounts(organisationId);
   }
 
   @Get('trial-balance')
-  @RequirePermissions('Accounting : View')
+  @RequirePermissions('Settings Accounting : View')
   async trialBalance(@CurrentAuth() auth: AuthContext, @Query('asOf') asOf?: string) {
     const organisationId = auth.user.organisation.id;
     return this.accounting.getTrialBalance(organisationId, asOf ?? new Date().toISOString().slice(0, 10));

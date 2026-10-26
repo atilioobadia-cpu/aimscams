@@ -25,7 +25,7 @@ type FieldErrors = {
 
 const fieldClass =
   "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-[14px] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[14px]";
-const fieldErrorClass = "mt-1 text-[12.8px] leading-4 text-accent-red";
+const fieldErrorClass = "mt-1 text-[13px] leading-4 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
   if (!candidate?.startsWith("/") || candidate.startsWith("//")) return "/dashboard";

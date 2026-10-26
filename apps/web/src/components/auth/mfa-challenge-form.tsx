@@ -125,7 +125,7 @@ export function MfaChallengeForm() {
   if (!isHydrated) {
     return (
       <AuthCard title="Two-step verification" description="Checking your sign-in…">
-        <div className="flex items-center gap-2.5 text-[12.8px] text-label">
+        <div className="flex items-center gap-2.5 text-[13px] text-label">
           <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
           Loading your verification challenge
         </div>
@@ -145,7 +145,7 @@ export function MfaChallengeForm() {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-subtle px-4 py-3.5">
           <Clock3 className="mt-0.5 size-4 shrink-0 text-label" aria-hidden="true" />
-          <p className="text-[12.8px] leading-5 text-body">
+          <p className="text-[13px] leading-5 text-body">
             For security, a challenge is valid for five minutes and only once.
           </p>
         </div>
@@ -194,11 +194,11 @@ export function MfaChallengeForm() {
             />
           </div>
           {fieldError ? (
-            <p id="mfa-code-error" className="mt-1 text-[12.8px] leading-4 text-accent-red">
+            <p id="mfa-code-error" className="mt-1 text-[13px] leading-4 text-accent-red">
               {fieldError}
             </p>
           ) : (
-            <p id="mfa-code-hint" className="mt-1 text-[12.8px] leading-4 text-label">
+            <p id="mfa-code-hint" className="mt-1 text-[13px] leading-4 text-label">
               {mode === "totp"
                 ? "Enter the 6-digit code shown in your authenticator app."
                 : "Enter one of the single-use recovery codes you saved."}
@@ -239,7 +239,7 @@ export function MfaChallengeForm() {
             setFieldError(null);
             setFormError(null);
           }}
-          className="mt-2 w-full rounded-md py-1 text-center text-[12.8px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="mt-2 w-full rounded-md py-1 text-center text-[13px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
         >
           {mode === "totp"
             ? "Use a recovery code instead"
@@ -247,7 +247,7 @@ export function MfaChallengeForm() {
         </button>
       </form>
 
-      <div className="mt-3 flex items-center justify-between gap-3 border-t border-card-border pt-3 text-[12.8px] text-label">
+      <div className="mt-3 flex items-center justify-between gap-3 border-t border-card-border pt-3 text-[13px] text-label">
         <span className="flex items-center gap-1.5">
           <Clock3 className="size-3.5" aria-hidden="true" />
           Expires in {remaining === null ? "5:00" : formatRemaining(remaining)}

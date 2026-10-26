@@ -34,7 +34,7 @@ const PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
 ];
 
 const labelClass = "sr-only";
-const fieldErrorClass = "mt-1 text-[12.8px] leading-4 text-accent-red";
+const fieldErrorClass = "mt-1 text-[13px] leading-4 text-accent-red";
 
 export function ForgotPasswordForm({ token }: { token?: string }) {
   const [email, setEmail] = useState("");
@@ -140,7 +140,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-subtle px-4 py-3.5">
           <Mail className="mt-0.5 size-4 shrink-0 text-label" aria-hidden="true" />
-          <div className="text-[12.8px] leading-5 text-body">
+          <div className="text-[13px] leading-5 text-body">
             <p>
               The link is valid for 30 minutes and can be used once. Check your spam folder
               if it does not arrive.
@@ -154,16 +154,16 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             data-testid="dev-reset-panel"
             className="mt-3 rounded-lg border border-accent-yellow/40 bg-accent-yellow-bg px-4 py-3"
           >
-            <p className="text-[12.8px] font-semibold uppercase tracking-[0.08em] text-strong">
+            <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-strong">
               Local development delivery
             </p>
-            <p className="mt-1 text-[12.8px] leading-5 text-body">
+            <p className="mt-1 text-[13px] leading-5 text-body">
               SMTP is not configured. This link appears only in local development.
             </p>
             <a
               href={devResetUrl}
               data-testid="dev-reset-link"
-              className="mt-2 inline-flex text-[12.8px] font-semibold text-brand outline-none hover:underline focus-visible:underline"
+              className="mt-2 inline-flex text-[13px] font-semibold text-brand outline-none hover:underline focus-visible:underline"
             >
               Open password reset screen
             </a>
@@ -181,7 +181,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             setDevResetUrl(null);
             setEmail("");
           }}
-          className="mt-2 w-full rounded-md py-1 text-center text-[12.8px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="mt-2 w-full rounded-md py-1 text-center text-[13px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
         >
           Use a different email address
         </button>
@@ -197,7 +197,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-accent-teal-bg px-4 py-4">
           <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
-          <p className="text-[12.8px] leading-5 text-body">
+          <p className="text-[13px] leading-5 text-body">
             Sign in with your new password. If you did not make this change, contact your
             institution administrator immediately.
           </p>
@@ -215,7 +215,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
         title="Choose a new password"
         description="Use a password you have not used for this account before."
         footer={
-          <p className="text-[12.8px] leading-5 text-label">
+          <p className="text-[13px] leading-5 text-label">
             This link is valid for 30 minutes and can only be used once.
           </p>
         }
@@ -280,7 +280,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
           </div>
 
           <div className="mt-4 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
-            <p id="password-requirements" className="text-[12.8px] font-semibold text-body">
+            <p id="password-requirements" className="text-[13px] font-semibold text-body">
               Password requirements
             </p>
             <ul className="mt-2 grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
@@ -291,8 +291,8 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                     key={requirement.label}
                     className={
                       met
-                        ? "flex items-center gap-1.5 text-[12.8px] leading-5 text-brand"
-                        : "flex items-center gap-1.5 text-[12.8px] leading-5 text-label"
+                        ? "flex items-center gap-1.5 text-[13px] leading-5 text-brand"
+                        : "flex items-center gap-1.5 text-[13px] leading-5 text-label"
                     }
                   >
                     <span
@@ -335,7 +335,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
 
           <Link
             href="/forgot-password"
-            className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-1 text-[12.8px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-1 text-[13px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
           >
             <ArrowLeft className="size-3.5" aria-hidden="true" />
             Request a new link
@@ -349,7 +349,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
     <AuthCard
       title="Enter your registered email address"
       footer={
-        <p className="text-[12.8px] leading-5 text-label">
+        <p className="text-[13px] leading-5 text-label">
           Remembered your password?{" "}
           <Link
             href="/login"
