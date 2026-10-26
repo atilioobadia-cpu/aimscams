@@ -1,4 +1,4 @@
-import {
+﻿import {
   BadRequestException,
   ForbiddenException,
   Injectable,
@@ -9,7 +9,7 @@ import { Inject } from '@nestjs/common';
 import { PRISMA } from '../prisma/prisma.module.js';
 import type { PrismaClient } from '@aimscams/db';
 import { AuditService } from '../auth/audit.service.js';
-import { normalizeEmail, hashSessionToken } from '../auth/auth.crypto.js';
+import { normalizeEmail } from '../auth/auth.crypto.js';
 import { passwordPolicyError, hashPassword } from '../auth/password-policy.js';
 import type { AuthContext } from '../auth/auth.types.js';
 
@@ -48,6 +48,12 @@ interface UpdateRoleInput {
   name?: unknown;
   description?: unknown;
   permissionKeys?: unknown;
+}
+
+function asText(value: unknown): string {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+    ? String(value)
+    : '';
 }
 
 @Injectable()
@@ -100,18 +106,18 @@ export class UsersService {
 
   async createUser(auth: AuthContext, body: CreateUserInput, context: UserContext) {
     const organisationId = auth.user.organisation.id;
-    const email = normalizeEmail(String(body.email ?? ''));
+    const email = normalizeEmail(asText(body.email ?? ''));
     if (!email) throw new BadRequestException('Email is required.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       throw new BadRequestException('A valid email address is required.');
     }
 
-    const fullName = String(body.fullName ?? '').trim();
+    const fullName = asText(body.fullName ?? '').trim();
     if (!fullName) throw new BadRequestException('Full name is required.');
 
     const phone = body.phone === undefined || body.phone === null
       ? null
-      : String(body.phone).trim() || null;
+      : asText(body.phone).trim() || null;
 
     const password = typeof body.password === 'string' ? body.password : '';
     const passwordError = passwordPolicyError(password, email);
@@ -188,21 +194,18 @@ export class UsersService {
 
     if (isSelf && (changingRoles || changingStatus)) {
       throw new ForbiddenException('You cannot change your own roles or status.');
-    }
-
-    const before = this.toUser(target);
-    const updates: Prisma.UserUpdateInput = {};
+    }    const updates: Prisma.UserUpdateInput = {};
     const after: Record<string, unknown> = {};
 
     if (body.fullName !== undefined) {
-      const fullName = String(body.fullName).trim();
+      const fullName = asText(body.fullName).trim();
       if (!fullName) throw new BadRequestException('Full name is required.');
       updates.fullName = fullName;
       after.fullName = fullName;
     }
 
     if (body.phone !== undefined) {
-      const phone = body.phone === null ? null : String(body.phone).trim() || null;
+      const phone = body.phone === null ? null : asText(body.phone).trim() || null;
       updates.phone = phone;
       after.phone = phone;
     }
@@ -220,8 +223,8 @@ export class UsersService {
       updates.status = status as any;
     }
 
-    if (body.password !== undefined && String(body.password).trim() !== '') {
-      const password = String(body.password);
+    if (body.password !== undefined && asText(body.password).trim() !== '') {
+      const password = asText(body.password);
       const passwordError = passwordPolicyError(password, target.email);
       if (passwordError) throw new BadRequestException(passwordError);
       updates.passwordHash = await hashPassword(password);
@@ -362,12 +365,12 @@ export class UsersService {
 
     const updates: Prisma.RoleUpdateInput = {};
     if (body.name !== undefined) {
-      const name = String(body.name).trim();
+      const name = asText(body.name).trim();
       if (!name) throw new BadRequestException('Role name is required.');
       updates.name = name;
     }
     if (body.description !== undefined) {
-      updates.description = body.description === null ? null : String(body.description).trim();
+      updates.description = body.description === null ? null : asText(body.description).trim();
     }
 
     if (Object.keys(updates).length > 0) {
@@ -376,7 +379,7 @@ export class UsersService {
 
     if (body.permissionKeys !== undefined) {
       const permissionKeys = Array.isArray(body.permissionKeys)
-        ? body.permissionKeys.map((item) => String(item))
+        ? body.permissionKeys.map((item) => asText(item))
         : [];
       const permissions = await this.prisma.permission.findMany({
         where: { key: { in: permissionKeys } },
@@ -432,7 +435,7 @@ export class UsersService {
   }
 
   private parseStatus(value: unknown, fallback?: string): string {
-    const status = String(value ?? fallback ?? '').trim().toUpperCase();
+    const status = asText(value ?? fallback ?? '').trim().toUpperCase();
     if (!['ACTIVE', 'INACTIVE', 'LOCKED'].includes(status)) {
       throw new BadRequestException('Status must be ACTIVE, INACTIVE, or LOCKED.');
     }
@@ -444,12 +447,12 @@ export class UsersService {
     if (!Array.isArray(value)) {
       throw new BadRequestException('roleCodes must be an array.');
     }
-    return [...new Set(value.map((item) => String(item).trim()).filter(Boolean))];
+    return [...new Set(value.map((item) => asText(item).trim()).filter(Boolean))];
   }
 
   private async validateBranch(organisationId: string, value: unknown): Promise<string | null> {
     if (value === undefined || value === null || value === '') return null;
-    const branchId = String(value);
+    const branchId = asText(value);
     const branch = await this.prisma.branch.findFirst({
       where: { id: branchId, organisationId },
       select: { id: true },
@@ -501,3 +504,4 @@ export class UsersService {
     };
   }
 }
+

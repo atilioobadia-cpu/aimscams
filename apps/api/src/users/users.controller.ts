@@ -1,15 +1,12 @@
-import {
-  BadRequestException,
+﻿import {
   Body,
   Controller,
-  ForbiddenException,
   Get,
   Param,
   Patch,
   Post,
   Query,
   Req,
-  UnauthorizedException,
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { RequirePermissions } from '../auth/auth.decorators.js';
@@ -103,3 +100,4 @@ function requestContext(request: Request): {
     userAgent: request.headers['user-agent'],
   };
 }
+
