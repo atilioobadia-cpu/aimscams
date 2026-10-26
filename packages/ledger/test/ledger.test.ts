@@ -297,11 +297,11 @@ describe('provisioning', () => {
     expect(second.accounts).toBe(0);
     expect(second.policies).toBe(0);
 
-    const branch = await db.query<{ council_type: string }>(
-      `select council_type from branch where id = $1`,
+    const branch = await db.query<{ councilType: string }>(
+      `select "councilType" from branch where id = $1`,
       [first.branchId],
     );
-    expect(branch.rows[0]?.council_type).toBe('MC');
+    expect(branch.rows[0]?.councilType).toBe('MC');
 
     const balance = await trialBalance(db, first.tenantId, '2026-12-31');
     expect(balance.rows).toHaveLength(CHART_OF_ACCOUNTS.length);

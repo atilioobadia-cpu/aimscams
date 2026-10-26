@@ -3,7 +3,7 @@
 -- The database, not the application, enforces the rules that must never be
 -- broken:
 --
---   1. every entry balances â€” checked at commit by a deferred constraint
+--   1. every entry balances ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â checked at commit by a deferred constraint
 --      trigger, so an entry and its lines can be written in any order;
 --   2. an entry has at least two lines, and every line carries exactly one
 --      side: a debit or a credit, never both, never neither;
@@ -25,12 +25,12 @@ create table organisation (
 );
 
 create table branch (
-  id            uuid primary key default gen_random_uuid(),
-  organisation_id     uuid not null references organisation (id),
-  code          text not null,
-  name          text not null,
-  council_type  text check (council_type in ('CC', 'MC', 'DC', 'TC')),
-  unique (organisation_id, code)
+  id              uuid primary key default gen_random_uuid(),
+  "organisationId" uuid not null references organisation (id),
+  code            text not null,
+  name            text not null,
+  "councilType"   text check ("councilType" in ('CC', 'MC', 'DC', 'TC')),
+  unique ("organisationId", code)
 );
 
 create table fiscal_period (
@@ -275,8 +275,8 @@ alter table journal_entry   force row level security;
 alter table journal_line    force row level security;
 
 create policy tenant_isolation on branch
-  using (organisation_id = current_tenant_id())
-  with check (organisation_id = current_tenant_id());
+  using ("organisationId" = current_tenant_id())
+  with check ("organisationId" = current_tenant_id());
 
 create policy tenant_isolation on fiscal_period
   using (organisation_id = current_tenant_id())
@@ -297,4 +297,3 @@ create policy tenant_isolation on journal_entry
 create policy tenant_isolation on journal_line
   using (organisation_id = current_tenant_id())
   with check (organisation_id = current_tenant_id());
-

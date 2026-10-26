@@ -179,7 +179,7 @@ export async function seedPostingPolicies(
   return inserted;
 }
 
-export type Dialect = 'SACCOS' | 'MFI';
+export type Dialect = 'TCDC' | 'BOT';
 export type CouncilType = 'CC' | 'MC' | 'DC' | 'TC';
 
 export interface TenantInput {
@@ -253,9 +253,9 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
     const branchName = input.branch?.name ?? 'Head office';
 
     const branch = await tx.query<{ id: string }>(
-      `insert into branch (organisation_id, code, name, council_type)
+      `insert into branch ("organisationId", code, name, "councilType")
        values ($1, $2, $3, $4)
-       on conflict (organisation_id, code) do nothing
+       on conflict ("organisationId", code) do nothing
        returning id`,
       [tenantId, branchCode, branchName, input.branch?.councilType ?? null],
     );
@@ -263,7 +263,7 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
     let branchId = branch.rows[0]?.id;
     if (!branchId) {
       const existing = await tx.query<{ id: string }>(
-        `select id from branch where organisation_id = $1 and code = $2`,
+        `select id from branch where "organisationId" = $1 and code = $2`,
         [tenantId, branchCode],
       );
       branchId = existing.rows[0]?.id;
