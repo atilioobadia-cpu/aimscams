@@ -29,9 +29,9 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     <Tabs value={tab} onValueChange={setTab} className="gap-0">
       <div
         data-testid="dashboard-tab-card"
-        className="flex h-[104px] items-center justify-between gap-6 rounded-xl border border-card-border bg-surface px-5"
+        className="flex h-[var(--header-height)] items-center justify-between gap-6 rounded-[var(--card-radius)] border border-card-border bg-surface px-[var(--space-18)]"
       >
-        <TabsList aria-label="Dashboard views" className="h-auto gap-[30px] bg-transparent p-0">
+        <TabsList aria-label="Dashboard views" className="h-auto gap-[var(--space-24)] bg-transparent p-0">
           {tabs.map((item) => {
             const Icon = item.icon;
             const active = tab === item.value;
@@ -42,13 +42,13 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                 value={item.value}
                 data-testid={`dashboard-tab-${item.value}`}
                 className={cn(
-                  "flex-none shrink-0 gap-2.5 rounded-[8px] border-0 px-0 text-[19px] font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-3 focus-visible:ring-ring/50 data-active:shadow-none",
+                  "flex-none shrink-0 gap-[var(--space-8)] rounded-[var(--pill-radius)] border-0 px-0 text-[var(--font-size-body)] font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
                   active ? "font-semibold" : "text-strong",
                 )}
                 style={{
                   width: 154,
                   height: 44,
-                  backgroundColor: active ? "var(--brand-primary)" : "transparent",
+                  backgroundColor: active ? "var(--primary)" : "transparent",
                   color: active ? "var(--text-on-primary)" : "var(--text-strong)",
                 }}
               >
