@@ -1,6 +1,7 @@
 "use client";
 
-import { Building2, CheckCircle2, ChevronDown, LogOut, Settings, UserRound } from "lucide-react";
+import { Building2, CheckCircle2, ChevronDown, LoaderCircle, LogOut, Settings, UserRound } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { AimscamsMark } from "@/components/brand/aimscams-mark";
@@ -15,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { apiRequest } from "@/lib/api";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 type AppHeaderProps = {
@@ -24,7 +26,24 @@ type AppHeaderProps = {
 };
 
 export function AppHeader({ institution, branch, user }: AppHeaderProps) {
+  const router = useRouter();
   const [language, setLanguage] = useState("English");
+  const [signingOut, setSigningOut] = useState(false);
+  const [signOutError, setSignOutError] = useState<string | null>(null);
+
+  async function signOut() {
+    if (signingOut) return;
+    setSigningOut(true);
+    setSignOutError(null);
+    try {
+      await apiRequest("/auth/logout", { method: "POST" });
+      router.replace("/login");
+      router.refresh();
+    } catch {
+      setSignOutError("Could not sign out. Try again.");
+      setSigningOut(false);
+    }
+  }
 
   return (
     <header
@@ -121,7 +140,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               <UserRound aria-hidden="true" />
               Profile
               <span className="ml-auto text-[10px] uppercase tracking-wide text-muted-foreground">
-                Phase 2
+                Soon
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem disabled>
@@ -132,12 +151,22 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled>
-              <LogOut aria-hidden="true" />
-              Sign out
-              <span className="ml-auto text-[10px] uppercase tracking-wide text-muted-foreground">
-                Phase 2
-              </span>
+            {signOutError ? (
+              <p className="px-1.5 py-1 text-[11px] leading-4 text-accent-red" role="alert">
+                {signOutError}
+              </p>
+            ) : null}
+            <DropdownMenuItem
+              data-testid="sign-out"
+              disabled={signingOut}
+              onSelect={() => void signOut()}
+            >
+              {signingOut ? (
+                <LoaderCircle className="animate-spin" aria-hidden="true" />
+              ) : (
+                <LogOut aria-hidden="true" />
+              )}
+              {signingOut ? "Signing out" : "Sign out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
