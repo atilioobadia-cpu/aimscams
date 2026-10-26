@@ -28,6 +28,7 @@ Developed by Atilio Obadia. See [LICENSE](../LICENSE).
 | 10 | [`10-technology-stack.md`](10-technology-stack.md) | You are writing code, choosing libraries, deploying, or planning the module build |
 | 11 | [`11-ui-contract.md`](11-ui-contract.md) | You are building or verifying any screen — exact tokens, measurements and the checklist |
 | 12 | [`12-deployment.md`](12-deployment.md) | You are deploying, releasing, backing up, or provisioning an institution |
+| 13 | [`13-build-sequence.md`](13-build-sequence.md) | You are building pages: the order, the per-page gate, and the commit policy |
 | — | [`../DECISIONS.md`](../DECISIONS.md) | You are about to build something that depends on an unsettled policy |
 | — | [`../AGENTS.md`](../AGENTS.md) | You are an agent starting a session — read this first |
 

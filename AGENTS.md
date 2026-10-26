@@ -12,6 +12,7 @@ codebase, one installation and one database **per institution**. Reconstructed f
 | [`docs/10-technology-stack.md`](docs/10-technology-stack.md) | Deciding **how** it is built: stack, deployment, modules, DB invariants, payments, security gates, roadmap |
 | [`docs/11-ui-contract.md`](docs/11-ui-contract.md) | Touching **any** UI, styling, layout, or verifying a rendered screen |
 | [`docs/12-deployment.md`](docs/12-deployment.md) | Deploying, releasing, backing up, or provisioning an institution |
+| [`docs/13-build-sequence.md`](docs/13-build-sequence.md) | Building a page: order, verification gate, commit policy |
 | [`DECISIONS.md`](DECISIONS.md) | A decision looks wrong, or you are about to contradict one. D-018…D-026 are current |
 | [`docs/05-data-model.md`](docs/05-data-model.md) · [`docs/06-regulatory-reporting.md`](docs/06-regulatory-reporting.md) | Writing migrations, or building returns MSP01–MSP11 |
 
@@ -49,7 +50,7 @@ codebase, one installation and one database **per institution**. Reconstructed f
 - `packages/domain` — money, schedule generation, allocation, arrears. Tested.
 - `packages/ledger` — `schema.sql` invariants, posting engine, trial balance. Tested against
   real PostgreSQL via PGlite.
-- `docs/01`–`docs/12` — specification complete through stack, UI contract and deployment.
+- `docs/01`–`docs/13` — specification complete through stack, UI contract, deployment and build sequence.
 - `apps/web/aimscams-web` — Angular shell, **legacy** under D-018. Do not extend it (`O-012`).
 - Next.js app, NestJS API, Prisma schema and worker: **not started**.
 

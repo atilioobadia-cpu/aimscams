@@ -216,6 +216,11 @@ flowchart TB
 
 ### 4.2 Proposed navigation (8 groups, was 15 flat items)
 
+> **Build ruling.** `D-024` fixes navigation at the measured **12-item flat sidebar** in
+> [`docs/11-ui-contract.md` §4](11-ui-contract.md). The grouping below is **not** the build target;
+> it is retained as a future option if the page count later makes grouping necessary. Campaigns
+> stays in the 12 as a disabled "Soon" item - no dead link, no route (`D-015`, `O-006`).
+
 The reference product's sidebar had 11 flat items. Our current shell has 15, which forces the
 nav to scroll and breaks the "no scrolling" rule. Group them:
 
@@ -280,6 +285,10 @@ page is a configuration of it.
 
 All 145 observed routes, grouped by module, plus the new System Logs page. Route slugs are the
 URL segments after the tenant host; they are the best handle when cutting vertical slices.
+
+> Build order, the per-page verification gate and the commit policy are in
+> [`docs/13-build-sequence.md`](13-build-sequence.md). This section defines **what** each page is;
+> `docs/13` defines **when** it is built.
 
 ### 6.1 DB — Dashboard (1 page)
 
@@ -2162,24 +2171,16 @@ reports-transaction-ReversedTransactionReport
 
 ---
 
-## Appendix B — Reference measurements used for the visual layer
+## Appendix B — Visual measurements
 
-These come from the UI-polish brief and are recorded here so the blueprint and the visual spec
-do not drift apart. They are **targets**, to be re-measured in the browser after any styling
-change.
+**Superseded.** The authoritative visual contract is
+[`docs/11-ui-contract.md`](11-ui-contract.md), measured from the reference at 1837px and adopted by
+`D-020`/`D-024`.
 
-| Element | Target |
-|---|---|
-| Header | 96px tall, white, 1px `#D4D4D4` bottom border, fixed |
-| Sidebar | 300px expanded, 72px collapsed, white, 1px `#D9D9D9` right border |
-| Nav row | 44px tall, 8px radius, 12px side margins, icon 22–24px, label 17–18px |
-| Nav pitch | fluid: `min(60px, available / nav-count)`, no scrollbar at 860px and above |
-| Page background | `#ECEBEC` |
-| Card | white, 10px radius, 1px `#EEEEEE`, 30px padding, 21px gaps |
-| Content padding | 21px sides, 22px top |
-| Brand | `#0F4D3A` (AIMS green, replacing the reference teal) |
-| Font | Roboto 400 / 500 / 700, system fallbacks |
-| Scroll behaviour | header and sidebar fixed; only content scrolls |
+Earlier provisional targets in this appendix - a 96px header, 72px collapsed sidebar, `#ECEBEC`
+page background, `#0F4D3A` brand and a 10px card radius - are **historical and must not be used**.
+The current values are a 97px header, 300px sidebar, `#ebe9e9` page, `#057573` brand and a 12px
+card radius. Re-measure in the browser after any styling change.
 
 ---
 
