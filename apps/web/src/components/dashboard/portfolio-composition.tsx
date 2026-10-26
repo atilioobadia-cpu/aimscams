@@ -50,7 +50,7 @@ export function PortfolioComposition({ portfolio }: { portfolio: DashboardFixtur
             />
             <div className="min-w-0">
               <p className="truncate text-sm text-muted-foreground">{segment.label}</p>
-              <p className="mt-0.5 text-[17px] font-semibold leading-tight text-strong">
+              <p className="mt-0.5 text-[16px] font-semibold leading-tight text-strong">
                 {formatTzs(segment.value)}
               </p>
             </div>

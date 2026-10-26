@@ -70,7 +70,7 @@ export function StatCard({ kpi, className }: { kpi: KpiFixture; className?: stri
       </div>
 
       <div>
-        <p className="text-[30px] font-bold leading-none tracking-tight text-strong">
+        <p className="text-[28px] font-bold leading-none tracking-tight text-strong">
           {displayValue(kpi)}
         </p>
         {kpi.hint ? (

@@ -22,7 +22,7 @@ export function EmptyState({ icon: Icon, title, description, action, className }
       <span className="grid size-16 place-items-center rounded-full bg-accent-teal-bg text-brand">
         <Icon className="size-7" strokeWidth={1.8} aria-hidden="true" />
       </span>
-      <h2 className="mt-5 text-xl font-bold text-strong">{title}</h2>
+      <h2 className="mt-5 text-[18px] font-bold text-strong">{title}</h2>
       <p className="mt-2 max-w-lg text-sm leading-6 text-muted-foreground">{description}</p>
       {action ? <div className="mt-6">{action}</div> : null}
     </section>
