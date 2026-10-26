@@ -353,6 +353,35 @@ Angular shell stays runnable for demos but is not extended.
 - If SSO across AIMS products becomes a contractual requirement, that is a new decision, not a
   reinterpretation of this one.
 
+### D-025 — Production runs Linux containers; WSL is development only
+**Status:** Accepted 2026-10-26 · `docs/10 §2.2`
+
+Production and staging run on a **Linux host** (Ubuntu LTS or Debian) with Docker Engine, Docker
+Compose and Nginx terminating TLS. The application ships as Linux container images. The host
+distribution is an operational detail; the application depends only on the Linux container
+runtime.
+
+**WSL2 is never a deployed target.** It is a developer convenience on Windows.
+
+**Why.**
+- WSL is a single-user desktop VM tied to a Windows session, with no service SLA and restarts
+  driven by Windows updates.
+- Its networking (NAT, localhost forwarding), clock and filesystem semantics differ from a real
+  server, so failures found there do not predict production behaviour.
+- Backups, firewalling, monitoring and unattended security updates are first-class on a Linux
+  server and bolted on in WSL.
+- Containers already isolate the application from the host, so targeting Linux costs nothing and
+  removes a class of "works on my machine" defects.
+
+**Consequences.**
+- Local development may use WSL2 for PostgreSQL and Redis containers, but the deployment
+  artefacts must be exercised against the same Linux images used in staging.
+- Prisma Client and native modules are generated and compiled **inside** the Linux image. Copying
+  `node_modules` from the Windows host into an image is prohibited.
+- Windows containers are not a supported target.
+- This decides the runtime, not the hosting location; `O-013` still governs where the Linux hosts
+  live.
+
 ---
 
 ## Open

@@ -101,6 +101,32 @@ hosting decision (`O-013`), not a schema decision.
 **The backup unit is the installation** — database, object storage and secrets together. A
 database dump alone does not restore a working institution.
 
+### 2.2 Host operating system
+
+| Environment | Host | Notes |
+|---|---|---|
+| Production | **Linux** — Ubuntu LTS or Debian, Docker Engine + Compose, Nginx | One installation per institution |
+| Staging | Same Linux images, same Compose file | Different secrets and data; never production data |
+| Local development | Windows, with PostgreSQL and Redis in containers | WSL2 is the container backend, not the application host |
+| Not supported | WSL2 or Windows containers as a deployed target | No service SLA; different networking and filesystem behaviour |
+
+The application is host-agnostic **because** it ships in Linux containers. What must not happen is
+treating a WSL distro as a server: no uptime guarantee, no proper service management, and Windows
+updates reboot it underneath you.
+
+**On the current workstation.** WSL2 with Ubuntu 24.04 is installed; Docker is not. Install Docker
+Engine inside that distro (no Docker Desktop licence, and it is the same engine production uses),
+or install Docker Desktop with the WSL2 backend. Only PostgreSQL and Redis need containers for
+local work; Next.js and NestJS can run natively for fast reload.
+
+**Image build rules.**
+- Run `prisma generate` and compile native modules (`argon2`, any image library) **inside** the
+  Linux image. Platform-specific binaries from a Windows host do not run in the container.
+- Build multi-stage: dependencies → build → runtime. The runtime image carries no toolchain.
+- Pin the Node LTS major in the image; keep it identical to the version in `engines`.
+- One image set serves every institution; configuration comes from environment and secrets,
+  never from a per-institution build.
+
 ---
 
 ## 3. Runtime topology

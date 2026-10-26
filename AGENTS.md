@@ -39,6 +39,8 @@ codebase, one installation and one database **per institution**. Reconstructed f
    impressions. "Looks right" is not evidence.
 9. **Statistics must reconcile.** Page counts and report counts in the blueprint are asserted;
    if you change one, re-derive the totals.
+10. **Production is Linux containers.** WSL2 may host development databases, but it is never a
+    deployed target. Generate Prisma Client and compile native modules inside the Linux image.
 
 ## Current state
 
