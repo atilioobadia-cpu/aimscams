@@ -2,13 +2,10 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LoaderCircle } from "lucide-react";
+import { Eye, EyeOff, KeyRound, LoaderCircle, User } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
-import { AuthCard } from "@/components/auth/auth-card";
 import { FormError } from "@/components/auth/form-error";
-import { PasswordInput } from "@/components/auth/password-input";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ApiError, apiRequest } from "@/lib/api";
 import {
@@ -25,7 +22,8 @@ type FieldErrors = {
   password?: string;
 };
 
-const labelClass = "mb-1.5 block text-[13px] font-medium text-body";
+const fieldClass =
+  "h-[69px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-[63px] pr-[20px] text-[21px] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[21px]";
 const fieldErrorClass = "mt-1.5 text-[12px] leading-5 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
@@ -38,6 +36,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -91,101 +90,102 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
   }
 
   return (
-    <AuthCard title="Login">
-      <form onSubmit={handleSubmit} noValidate>
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="email" className={labelClass}>
-              Email
-            </label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              inputMode="email"
-              autoComplete="username"
-              autoCapitalize="none"
-              spellCheck={false}
-              autoFocus
-              value={email}
-              onChange={(event) => {
-                setEmail(event.target.value);
-                if (fieldErrors.email) {
-                  setFieldErrors((current) => ({ ...current, email: undefined }));
-                }
-              }}
-              aria-invalid={Boolean(fieldErrors.email)}
-              aria-describedby={fieldErrors.email ? "email-error" : undefined}
-              disabled={submitting}
-              className="h-[46px] px-[14px] text-[14px] rounded-[4px]"
-              placeholder="name@institution.co.tz"
-            />
-            {fieldErrors.email ? (
-              <p id="email-error" className={fieldErrorClass}>
-                {fieldErrors.email}
-              </p>
-            ) : null}
-          </div>
-
-          <div>
-            <div className="mb-1.5 flex items-center justify-between gap-4">
-              <label htmlFor="password" className="text-[13px] font-medium text-body">
-                Password
-              </label>
-              <Link
-                href="/forgot-password"
-                className="text-[12px] font-medium text-brand outline-none hover:underline focus-visible:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            <PasswordInput
-              id="password"
-              name="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-                if (fieldErrors.password) {
-                  setFieldErrors((current) => ({ ...current, password: undefined }));
-                }
-              }}
-              aria-invalid={Boolean(fieldErrors.password)}
-              aria-describedby={fieldErrors.password ? "password-error" : undefined}
-              disabled={submitting}
-              placeholder="Enter your password"
-              className="h-[46px] text-[14px]"
-            />
-            {fieldErrors.password ? (
-              <p id="password-error" className={fieldErrorClass}>
-                {fieldErrors.password}
-              </p>
-            ) : null}
-          </div>
-        </div>
-
-        {formError ? (
-          <div className="mt-4">
-            <FormError message={formError} />
-          </div>
-        ) : null}
-
-        <Button
-          type="submit"
+    <form onSubmit={handleSubmit} noValidate className="space-y-0">
+      <div className="relative">
+        <User className="pointer-events-none absolute left-[24px] top-1/2 size-[22px] -translate-y-1/2 text-[#666666]" />
+        <Input
+          name="email"
+          type="email"
+          inputMode="email"
+          autoComplete="username"
+          autoCapitalize="none"
+          spellCheck={false}
+          autoFocus
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            if (fieldErrors.email) {
+              setFieldErrors((current) => ({ ...current, email: undefined }));
+            }
+          }}
+          aria-invalid={Boolean(fieldErrors.email)}
+          aria-describedby={fieldErrors.email ? "email-error" : undefined}
           disabled={submitting}
-          aria-busy={submitting}
-          className="mt-5 h-[50px] w-full gap-2 text-[16px] font-semibold"
+          className={fieldClass}
+          placeholder="Email"
+        />
+      </div>
+      {fieldErrors.email ? (
+        <p id="email-error" className={fieldErrorClass}>
+          {fieldErrors.email}
+        </p>
+      ) : null}
+
+      <div className="relative mt-[72px]">
+        <KeyRound className="pointer-events-none absolute left-[24px] top-1/2 size-[22px] -translate-y-1/2 text-[#666666]" />
+        <Input
+          name="password"
+          type={showPassword ? "text" : "password"}
+          autoComplete="current-password"
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+            if (fieldErrors.password) {
+              setFieldErrors((current) => ({ ...current, password: undefined }));
+            }
+          }}
+          aria-invalid={Boolean(fieldErrors.password)}
+          aria-describedby={fieldErrors.password ? "password-error" : undefined}
+          disabled={submitting}
+          className={`${fieldClass} pl-[63px] pr-[52px]`}
+          placeholder="Password"
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword((current) => !current)}
+          aria-label={showPassword ? "Hide password" : "Show password"}
+          aria-pressed={showPassword}
+          className="absolute inset-y-0 right-0 grid w-[52px] place-items-center text-[#212121] outline-none"
         >
-          {submitting ? (
-            <>
-              <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
-              Signing in
-            </>
-          ) : (
-            "Login"
-          )}
-        </Button>
-      </form>
-    </AuthCard>
+          {showPassword ? <EyeOff className="size-[22px]" /> : <Eye className="size-[22px]" />}
+        </button>
+      </div>
+      {fieldErrors.password ? (
+        <p id="password-error" className={fieldErrorClass}>
+          {fieldErrors.password}
+        </p>
+      ) : null}
+
+      <div className="mt-[44px] flex justify-end">
+        <Link
+          href="/forgot-password"
+          className="text-[20px] font-normal text-[#057573] outline-none hover:underline focus-visible:underline"
+        >
+          Forgot password
+        </Link>
+      </div>
+
+      {formError ? (
+        <div className="mt-[8px] w-full">
+          <FormError message={formError} />
+        </div>
+      ) : null}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        aria-busy={submitting}
+        className="mt-[42px] flex h-[75px] w-full items-center justify-center rounded-[4px] bg-[#057573] text-[24px] font-medium text-white transition-colors hover:bg-[#046664] disabled:opacity-60"
+      >
+        {submitting ? (
+          <>
+            <LoaderCircle className="mr-2 size-5 animate-spin" aria-hidden="true" />
+            Signing in
+          </>
+        ) : (
+          "Login"
+        )}
+      </button>
+    </form>
   );
 }

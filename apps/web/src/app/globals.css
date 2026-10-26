@@ -2,8 +2,6 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 /* Central UI scale. Tune this single value (e.g. 0.75 or 0.8) to resize the whole
    desktop UI without touching component styles. Mobile/narrow screens are unaffected. */
 :root {
