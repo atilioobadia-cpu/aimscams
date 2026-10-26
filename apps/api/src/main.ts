@@ -15,6 +15,7 @@ const REQUIRED_ENV = [
   "TZ",
   "INSTITUTION_CODE",
   "INSTITUTION_DIALECT",
+  "TOTP_ENCRYPTION_KEY",
 ] as const;
 
 function assertConfiguration(): void {
@@ -36,6 +37,17 @@ function assertConfiguration(): void {
 
   if (process.env.AUTH_BYPASS === "true" && process.env.APP_ENV !== "local") {
     console.error("AIMSCAMS API cannot start; AUTH_BYPASS is permitted only when APP_ENV=local.");
+    process.exit(1);
+  }
+
+  const totpKey = process.env.TOTP_ENCRYPTION_KEY ?? "";
+  const totpKeyBytes = /^[0-9a-f]{64}$/i.test(totpKey)
+    ? Buffer.from(totpKey, "hex")
+    : Buffer.from(totpKey, "base64");
+  if (totpKeyBytes.length !== 32) {
+    console.error(
+      "AIMSCAMS API cannot start; TOTP_ENCRYPTION_KEY must be 32 bytes encoded as hex or base64.",
+    );
     process.exit(1);
   }
 }

@@ -16,6 +16,7 @@ export interface AuthUser {
   phone: string | null;
   status: string;
   mfaEnabled: boolean;
+  mfaEnrollmentRequired: boolean;
   organisation: {
     id: string;
     code: string;
@@ -36,6 +37,27 @@ export interface AuthContext {
 export interface LoginResult {
   sessionToken: string;
   csrfToken: string;
+  sessionId: string;
   expiresAt: Date;
   user: AuthUser;
+}
+
+export interface MfaChallengeIssued {
+  mfaRequired: true;
+  challengeToken: string;
+  expiresAt: Date;
+}
+
+export type LoginResponse = LoginResult | MfaChallengeIssued;
+
+export interface MfaEnrollment {
+  secret: string;
+  otpauthUri: string;
+  recoveryCodes: string[];
+}
+
+export interface MfaStatus {
+  enabled: boolean;
+  pending: boolean;
+  recoveryCodesRemaining: number;
 }

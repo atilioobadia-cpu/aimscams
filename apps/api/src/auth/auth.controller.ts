@@ -21,7 +21,7 @@ import {
   type AuthenticatedRequest,
 } from './auth.decorators.js';
 import { readCookie } from './auth.crypto.js';
-import type { AuthContext } from './auth.types.js';
+import type { AuthContext, LoginResult } from './auth.types.js';
 
 function cookieOptions(maxAge?: number): CookieOptions {
   return {
@@ -40,6 +40,38 @@ function requestContext(request: Request): {
   return {
     ipAddress: request.ip,
     userAgent: request.headers['user-agent'],
+  };
+}
+
+function requiredString(
+  body: Record<string, unknown>,
+  field: string,
+  message: string,
+): string {
+  const value = body?.[field];
+  if (typeof value !== 'string' || !value.trim()) {
+    throw new BadRequestException(message);
+  }
+  return value.trim();
+}
+
+function setSessionCookies(response: Response, result: LoginResult): void {
+  response.cookie(
+    SESSION_COOKIE,
+    result.sessionToken,
+    cookieOptions(SESSION_TTL_MS),
+  );
+  response.cookie(CSRF_COOKIE, result.csrfToken, {
+    ...cookieOptions(SESSION_TTL_MS),
+    httpOnly: false,
+  });
+}
+
+function loginPayload(result: LoginResult) {
+  return {
+    user: result.user,
+    csrfToken: result.csrfToken,
+    expiresAt: result.expiresAt.toISOString(),
   };
 }
 
@@ -66,26 +98,137 @@ export class AuthController {
       password,
       requestContext(request),
     );
-    response.cookie(
-      SESSION_COOKIE,
-      result.sessionToken,
-      cookieOptions(SESSION_TTL_MS),
-    );
-    response.cookie(CSRF_COOKIE, result.csrfToken, {
-      ...cookieOptions(SESSION_TTL_MS),
-      httpOnly: false,
-    });
+    response.setHeader('Cache-Control', 'no-store');
 
-    return {
-      user: result.user,
-      csrfToken: result.csrfToken,
-      expiresAt: result.expiresAt.toISOString(),
-    };
+    if ('mfaRequired' in result) {
+      return {
+        mfaRequired: true,
+        challengeToken: result.challengeToken,
+        expiresAt: result.expiresAt.toISOString(),
+      };
+    }
+
+    setSessionCookies(response, result);
+    return loginPayload(result);
+  }
+
+  @Public()
+  @Post('mfa/challenge')
+  @HttpCode(200)
+  async completeMfaChallenge(
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const challengeToken = requiredString(
+      body,
+      'challengeToken',
+      'An authentication challenge is required.',
+    );
+    const code = requiredString(
+      body,
+      'code',
+      'An authentication code is required.',
+    );
+
+    const result = await this.authService.completeMfaChallenge(
+      challengeToken,
+      code,
+      requestContext(request),
+    );
+    setSessionCookies(response, result);
+    response.setHeader('Cache-Control', 'no-store');
+    return loginPayload(result);
   }
 
   @Get('me')
   me(@CurrentAuth() auth: AuthContext) {
     return { user: auth.user };
+  }
+
+  @Get('mfa/status')
+  async mfaStatus(@CurrentAuth() auth: AuthContext) {
+    return this.authService.getMfaStatus(auth.user.id);
+  }
+
+  @Post('mfa/enroll')
+  @HttpCode(200)
+  async enrollMfa(@CurrentAuth() auth: AuthContext, @Req() request: Request) {
+    return this.authService.enrollMfa(auth.user.id, requestContext(request));
+  }
+
+  @Post('mfa/activate')
+  @HttpCode(200)
+  async activateMfa(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    const code = requiredString(
+      body,
+      'code',
+      'An authentication code is required.',
+    );
+    await this.authService.activateMfa(
+      auth.user.id,
+      auth.sessionId,
+      code,
+      requestContext(request),
+    );
+    return { ok: true, mfaEnabled: true };
+  }
+
+  @Post('mfa/recovery-codes')
+  @HttpCode(200)
+  async regenerateRecoveryCodes(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    const password = requiredString(
+      body,
+      'password',
+      'Your password is required.',
+    );
+    const code = requiredString(
+      body,
+      'code',
+      'An authentication code is required.',
+    );
+    const recoveryCodes = await this.authService.regenerateRecoveryCodes(
+      auth.user.id,
+      password,
+      code,
+      requestContext(request),
+    );
+    return { recoveryCodes };
+  }
+
+  @Post('mfa/disable')
+  @HttpCode(200)
+  async disableMfa(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    const password = requiredString(
+      body,
+      'password',
+      'Your password is required.',
+    );
+    const code = requiredString(
+      body,
+      'code',
+      'An authentication code is required.',
+    );
+    await this.authService.disableMfa(
+      auth.user.id,
+      auth.sessionId,
+      password,
+      code,
+      requestContext(request),
+    );
+    return { ok: true, mfaEnabled: false };
   }
 
   @Post('logout')

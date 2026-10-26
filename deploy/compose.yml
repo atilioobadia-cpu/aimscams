@@ -22,7 +22,7 @@ x-app: &app
     S3_FORCE_PATH_STYLE: "true"
     # Local compose defaults. Production must override both with real secrets.
     JWT_SECRET: ${JWT_SECRET:-local-compose-only-jwt-secret-change-me}
-    TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY:-local-compose-only-totp-key-change-me}
+    TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY:-bG9jYWwtY29tcG9zZS10b3RwLWtleS0zMmJ5dGVzISE=}
     SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN:-localhost}
     METRICS_TOKEN: ${METRICS_TOKEN:-local-metrics-token}
     LOG_LEVEL: ${LOG_LEVEL:-info}

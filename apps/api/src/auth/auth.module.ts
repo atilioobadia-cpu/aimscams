@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { AuditService } from './audit.service.js';
 import { CsrfGuard } from './csrf.guard.js';
+import { MfaPolicyGuard } from './mfa-policy.guard.js';
 import { PermissionsGuard } from './permissions.guard.js';
 import { SessionGuard } from './session.guard.js';
 
@@ -15,6 +16,10 @@ import { SessionGuard } from './session.guard.js';
     {
       provide: APP_GUARD,
       useClass: SessionGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: MfaPolicyGuard,
     },
     {
       provide: APP_GUARD,

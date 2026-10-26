@@ -4,6 +4,7 @@ export type {
   AuditEvent,
   Branch,
   LoginAttempt,
+  MfaChallenge,
   MfaSecret,
   Organisation,
   Permission,
