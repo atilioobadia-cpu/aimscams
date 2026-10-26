@@ -143,6 +143,9 @@ The rule is: standardise on **OCI images**, not on one vendor's runtime. Build o
 Docker Engine by default, Podman where rootless is required, or systemd where containers are
 refused. Never maintain two code paths.
 
+The environment matrix, release sequence, configuration contract and backup rules live in
+[`docs/12-deployment.md`](12-deployment.md).
+
 **On the current workstation.** WSL2 with Ubuntu 24.04 is installed; Docker is not. Two valid
 options: install Docker Engine inside that distro (same engine as production), or install
 PostgreSQL and Redis with `apt` and skip containers entirely for local work. Only the database and

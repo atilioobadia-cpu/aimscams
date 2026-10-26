@@ -388,6 +388,37 @@ containers, provided it runs the same built output and does not fork the codebas
 - This decides the runtime, not the hosting location; `O-013` still governs where the Linux hosts
   live.
 
+### D-026 — Deployment environments and toolchain
+**Status:** Accepted 2026-10-26 · `docs/12-deployment.md`
+
+Five environments: **local**, **CI**, **staging**, **production** (one per institution) and **DR**.
+Every environment runs the same Linux images; only secrets and data differ. No production data
+reaches staging or CI.
+
+| Concern | Ruling |
+|---|---|
+| Runtime | Docker Engine + Compose v2; Podman compatible; native systemd fallback |
+| Images | One app image, three commands (web, api, worker); pinned base images |
+| Registry | GHCR private; in-country Harbor if required |
+| CI | GitHub Actions: lint, typecheck, unit, integration, Playwright, migration check, Trivy |
+| CD | SSH + `deploy/deploy.sh`; no agent on the institution's host |
+| Migrations | `prisma migrate deploy` as a dedicated step after backup, never on app boot |
+| Proxy / TLS | Nginx; Let's Encrypt or institution certificate |
+| Secrets | Compose file secrets, SOPS + age at rest, per institution, never in git |
+| Backups | Nightly full + WAL where PITR is warranted; restic off-host, encrypted, in-country |
+| Observability | Central Prometheus + Grafana per fleet over mTLS/VPN; no member data in metrics |
+| Orchestration | None. Compose is the right size; Kubernetes is rejected at this scale |
+
+**Why.** With one installation per institution, the release process is the product's operational
+risk. Reproducible images, a backup before every migration and an expand/contract rule are what
+make a bad release survivable. A central control plane would add cost without removing that risk.
+
+**Consequences.**
+- A release is not "done" until it ran on staging and passed the smoke test.
+- Rollback is by image tag; migrations must therefore stay backwards-compatible for one release.
+- Monitoring is central, but customer data stays in the institution's installation.
+- Hosting provider and per-institution domain naming remain `O-013`.
+
 ---
 
 ## Open
