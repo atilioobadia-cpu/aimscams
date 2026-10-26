@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+﻿import type { NextConfig } from "next";
 import { loadEnvFile } from "node:process";
 import { fileURLToPath } from "node:url";
 
@@ -12,6 +12,7 @@ try {
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  devIndicators: false,
 };
 
 export default nextConfig;

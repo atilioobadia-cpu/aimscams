@@ -6,6 +6,7 @@ import { Eye, EyeOff, KeyRound, LoaderCircle, User } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { FormError } from "@/components/auth/form-error";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ApiError, apiRequest } from "@/lib/api";
 import {
@@ -23,8 +24,8 @@ type FieldErrors = {
 };
 
 const fieldClass =
-  "h-[69px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-[63px] pr-[20px] text-[21px] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[21px]";
-const fieldErrorClass = "mt-1.5 text-[12px] leading-5 text-accent-red";
+  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-[14px] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[14px]";
+const fieldErrorClass = "mt-1 text-[12.8px] leading-4 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
   if (!candidate?.startsWith("/") || candidate.startsWith("//")) return "/dashboard";
@@ -92,8 +93,9 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-0">
       <div className="relative">
-        <User className="pointer-events-none absolute left-[24px] top-1/2 size-[22px] -translate-y-1/2 text-[#666666]" />
+        <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]" aria-hidden="true" />
         <Input
+          id="login-email"
           name="email"
           type="email"
           inputMode="email"
@@ -108,6 +110,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               setFieldErrors((current) => ({ ...current, email: undefined }));
             }
           }}
+          aria-label="Email"
           aria-invalid={Boolean(fieldErrors.email)}
           aria-describedby={fieldErrors.email ? "email-error" : undefined}
           disabled={submitting}
@@ -121,9 +124,10 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
         </p>
       ) : null}
 
-      <div className="relative mt-[72px]">
-        <KeyRound className="pointer-events-none absolute left-[24px] top-1/2 size-[22px] -translate-y-1/2 text-[#666666]" />
+      <div className="relative mt-3">
+        <KeyRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]" aria-hidden="true" />
         <Input
+          id="login-password"
           name="password"
           type={showPassword ? "text" : "password"}
           autoComplete="current-password"
@@ -134,10 +138,11 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               setFieldErrors((current) => ({ ...current, password: undefined }));
             }
           }}
+          aria-label="Password"
           aria-invalid={Boolean(fieldErrors.password)}
           aria-describedby={fieldErrors.password ? "password-error" : undefined}
           disabled={submitting}
-          className={`${fieldClass} pl-[63px] pr-[52px]`}
+          className={`${fieldClass} pr-10`}
           placeholder="Password"
         />
         <button
@@ -145,9 +150,9 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           onClick={() => setShowPassword((current) => !current)}
           aria-label={showPassword ? "Hide password" : "Show password"}
           aria-pressed={showPassword}
-          className="absolute inset-y-0 right-0 grid w-[52px] place-items-center text-[#212121] outline-none"
+          className="absolute inset-y-0 right-0 grid w-10 place-items-center text-[#212121] outline-none"
         >
-          {showPassword ? <EyeOff className="size-[22px]" /> : <Eye className="size-[22px]" />}
+          {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
         </button>
       </div>
       {fieldErrors.password ? (
@@ -156,36 +161,36 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
         </p>
       ) : null}
 
-      <div className="mt-[44px] flex justify-end">
+      <div className="mt-3 flex justify-end">
         <Link
           href="/forgot-password"
-          className="text-[20px] font-normal text-[#057573] outline-none hover:underline focus-visible:underline"
+          className="text-[14px] font-medium text-[#057573] outline-none hover:underline focus-visible:underline"
         >
           Forgot password
         </Link>
       </div>
 
       {formError ? (
-        <div className="mt-[8px] w-full">
+        <div className="mt-2 w-full">
           <FormError message={formError} />
         </div>
       ) : null}
 
-      <button
+      <Button
         type="submit"
         disabled={submitting}
         aria-busy={submitting}
-        className="mt-[42px] flex h-[75px] w-full items-center justify-center rounded-[4px] bg-[#057573] text-[24px] font-medium text-white transition-colors hover:bg-[#046664] disabled:opacity-60"
+        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] text-[14px] font-semibold text-white hover:bg-[#046664]"
       >
         {submitting ? (
           <>
-            <LoaderCircle className="mr-2 size-5 animate-spin" aria-hidden="true" />
+            <LoaderCircle className="mr-2 size-4 animate-spin" aria-hidden="true" />
             Signing in
           </>
         ) : (
           "Login"
         )}
-      </button>
+      </Button>
     </form>
   );
 }

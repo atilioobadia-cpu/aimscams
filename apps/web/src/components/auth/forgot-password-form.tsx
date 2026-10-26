@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, Check, CheckCircle2, LoaderCircle, Mail } from "lucide-react";
+import { ArrowLeft, Check, CheckCircle2, LoaderCircle, Mail, User } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { AuthCard } from "@/components/auth/auth-card";
@@ -33,8 +33,8 @@ const PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
   { label: "A symbol", met: (value) => /[^A-Za-z0-9]/.test(value) },
 ];
 
-const labelClass = "mb-1.5 block text-[13px] font-medium text-body";
-const fieldErrorClass = "mt-1.5 text-[12px] leading-5 text-accent-red";
+const labelClass = "sr-only";
+const fieldErrorClass = "mt-1 text-[12.8px] leading-4 text-accent-red";
 
 export function ForgotPasswordForm({ token }: { token?: string }) {
   const [email, setEmail] = useState("");
@@ -140,7 +140,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-subtle px-4 py-3.5">
           <Mail className="mt-0.5 size-4 shrink-0 text-label" aria-hidden="true" />
-          <div className="text-[13px] leading-5 text-body">
+          <div className="text-[12.8px] leading-5 text-body">
             <p>
               The link is valid for 30 minutes and can be used once. Check your spam folder
               if it does not arrive.
@@ -152,25 +152,25 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
         {devResetUrl ? (
           <div
             data-testid="dev-reset-panel"
-            className="mt-4 rounded-lg border border-accent-yellow/40 bg-accent-yellow-bg px-4 py-3.5"
+            className="mt-3 rounded-lg border border-accent-yellow/40 bg-accent-yellow-bg px-4 py-3"
           >
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-strong">
+            <p className="text-[12.8px] font-semibold uppercase tracking-[0.08em] text-strong">
               Local development delivery
             </p>
-            <p className="mt-1 text-[12px] leading-5 text-body">
+            <p className="mt-1 text-[12.8px] leading-5 text-body">
               SMTP is not configured. This link appears only in local development.
             </p>
             <a
               href={devResetUrl}
               data-testid="dev-reset-link"
-              className="mt-2 inline-flex text-[13px] font-semibold text-brand outline-none hover:underline focus-visible:underline"
+              className="mt-2 inline-flex text-[12.8px] font-semibold text-brand outline-none hover:underline focus-visible:underline"
             >
               Open password reset screen
             </a>
           </div>
         ) : null}
 
-        <Button asChild variant="outline" className="mt-6 h-11 w-full text-[15px]">
+        <Button asChild variant="outline" className="mt-3 h-[42px] w-full rounded-[4px] text-[14px]">
           <Link href="/login">Back to sign in</Link>
         </Button>
 
@@ -181,7 +181,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             setDevResetUrl(null);
             setEmail("");
           }}
-          className="mt-3 w-full rounded-md py-1 text-center text-[12px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="mt-2 w-full rounded-md py-1 text-center text-[12.8px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
         >
           Use a different email address
         </button>
@@ -197,12 +197,12 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-accent-teal-bg px-4 py-4">
           <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
-          <p className="text-[13px] leading-5 text-body">
+          <p className="text-[12.8px] leading-5 text-body">
             Sign in with your new password. If you did not make this change, contact your
             institution administrator immediately.
           </p>
         </div>
-        <Button asChild className="mt-6 h-11 w-full text-[15px] font-semibold">
+        <Button asChild className="mt-3 h-[42px] w-full rounded-[4px] text-[14px] font-medium">
           <Link href="/login">Continue to sign in</Link>
         </Button>
       </AuthCard>
@@ -215,13 +215,13 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
         title="Choose a new password"
         description="Use a password you have not used for this account before."
         footer={
-          <p className="text-[12px] leading-5 text-label">
+          <p className="text-[12.8px] leading-5 text-label">
             This link is valid for 30 minutes and can only be used once.
           </p>
         }
       >
         <form onSubmit={handleReset} noValidate>
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div>
               <label htmlFor="new-password" className={labelClass}>
                 New password
@@ -243,6 +243,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                 }
                 disabled={resetting}
                 placeholder="Enter a new password"
+                className="h-[42px] text-[14px] md:text-[14px]"
               />
               {passwordError ? (
                 <p id="new-password-error" className={fieldErrorClass}>
@@ -268,6 +269,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                 aria-describedby={confirmationError ? "confirm-password-error" : undefined}
                 disabled={resetting}
                 placeholder="Repeat the new password"
+                className="h-[42px] text-[14px] md:text-[14px]"
               />
               {confirmationError ? (
                 <p id="confirm-password-error" className={fieldErrorClass}>
@@ -278,7 +280,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
           </div>
 
           <div className="mt-4 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
-            <p id="password-requirements" className="text-[11px] font-semibold text-body">
+            <p id="password-requirements" className="text-[12.8px] font-semibold text-body">
               Password requirements
             </p>
             <ul className="mt-2 grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
@@ -289,8 +291,8 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                     key={requirement.label}
                     className={
                       met
-                        ? "flex items-center gap-1.5 text-[12px] leading-5 text-brand"
-                        : "flex items-center gap-1.5 text-[12px] leading-5 text-label"
+                        ? "flex items-center gap-1.5 text-[12.8px] leading-5 text-brand"
+                        : "flex items-center gap-1.5 text-[12.8px] leading-5 text-label"
                     }
                   >
                     <span
@@ -319,7 +321,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             type="submit"
             disabled={resetting}
             aria-busy={resetting}
-            className="mt-5 h-11 w-full gap-2 text-[15px] font-semibold"
+            className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-[14px] font-medium"
           >
             {resetting ? (
               <>
@@ -333,7 +335,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
 
           <Link
             href="/forgot-password"
-            className="mt-3 flex items-center justify-center gap-1.5 rounded-md py-1 text-[12px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-1 text-[12.8px] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
           >
             <ArrowLeft className="size-3.5" aria-hidden="true" />
             Request a new link
@@ -345,10 +347,9 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
 
   return (
     <AuthCard
-      title="Reset your password"
-      description="Enter the email address on your account and we will send a reset link."
+      title="Enter your registered email address"
       footer={
-        <p className="text-[12px] leading-5 text-label">
+        <p className="text-[12.8px] leading-5 text-label">
           Remembered your password?{" "}
           <Link
             href="/login"
@@ -364,26 +365,29 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
           <label htmlFor="reset-email" className={labelClass}>
             Email address
           </label>
-          <Input
-            id="reset-email"
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            autoCapitalize="none"
-            spellCheck={false}
-            autoFocus
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              if (emailError) setEmailError(null);
-            }}
-            aria-invalid={Boolean(emailError)}
-            aria-describedby={emailError ? "reset-email-error" : undefined}
-            disabled={requesting}
-            className="h-11 px-3.5 text-[15px]"
-            placeholder="name@institution.co.tz"
-          />
+          <div className="relative">
+            <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]" aria-hidden="true" />
+            <Input
+              id="reset-email"
+              name="email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              autoFocus
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                if (emailError) setEmailError(null);
+              }}
+              aria-invalid={Boolean(emailError)}
+              aria-describedby={emailError ? "reset-email-error" : undefined}
+              disabled={requesting}
+              className="h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-3 text-[14px] placeholder:text-[#9e9e9e] md:text-[14px]"
+              placeholder="Email"
+            />
+          </div>
           {emailError ? (
             <p id="reset-email-error" className={fieldErrorClass}>
               {emailError}
@@ -401,7 +405,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
           type="submit"
           disabled={requesting}
           aria-busy={requesting}
-          className="mt-6 h-11 w-full gap-2 text-[15px] font-semibold"
+          className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-[14px] font-medium"
         >
           {requesting ? (
             <>

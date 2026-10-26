@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, LockKeyhole } from "lucide-react";
 import * as React from "react";
 
 import { Input } from "@/components/ui/input";
@@ -17,19 +17,26 @@ export function PasswordInput({
       <Input
         {...props}
         type={visible ? "text" : "password"}
-        className={cn("h-11 px-3.5 pr-12 text-[15px]", className)}
+        className={cn(
+          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-10 text-[14px] placeholder:text-[#9e9e9e] md:text-[14px]",
+          className,
+        )}
+      />
+      <LockKeyhole
+        className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]"
+        aria-hidden="true"
       />
       <button
         type="button"
         onClick={() => setVisible((current) => !current)}
         aria-label={visible ? "Hide password" : "Show password"}
         aria-pressed={visible}
-        className="absolute inset-y-0 right-0 grid w-11 place-items-center rounded-r-lg text-label outline-none transition-colors hover:text-strong focus-visible:text-brand focus-visible:ring-3 focus-visible:ring-ring/30"
+        className="absolute inset-y-0 right-0 grid w-[42px] place-items-center rounded-r-lg text-label outline-none transition-colors hover:text-strong focus-visible:text-brand focus-visible:ring-3 focus-visible:ring-ring/30"
       >
         {visible ? (
-          <EyeOff className="size-[18px]" aria-hidden="true" />
+          <EyeOff className="size-4" aria-hidden="true" />
         ) : (
-          <Eye className="size-[18px]" aria-hidden="true" />
+          <Eye className="size-4" aria-hidden="true" />
         )}
       </button>
     </div>
