@@ -7,6 +7,7 @@ export type {
   MfaChallenge,
   MfaSecret,
   Organisation,
+  PasswordResetToken,
   Permission,
   Role,
   RolePermission,

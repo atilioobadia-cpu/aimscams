@@ -238,6 +238,10 @@ the API exist. Wiring replaces the fixture source; it does not rewrite the compo
 **Auth bypass is local-only.** A dev session may skip login under `APP_ENV=local`. The flag is
 refused at startup in staging and production; it is never a runtime toggle.
 
+**Password-reset mail is explicit.** SMTP settings deliver reset links outside local development.
+For local-only end-to-end testing, set `PASSWORD_RESET_DEV_DELIVERY=true`; the API then returns
+the reset URL in its generic response. The flag has no effect unless `APP_ENV=local`.
+
 **Verification is measurement, not impression.** Playwright runs at 1837×1080, reads computed
 styles and bounding boxes against `docs/11 §8`, checks the console, and writes screenshots to
 `artifacts/ui/` (gitignored). The reported result is the measured values.

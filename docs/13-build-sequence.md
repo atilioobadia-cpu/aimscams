@@ -331,7 +331,7 @@ Plus three screens outside the inventory: sign in, MFA challenge/enrolment, pass
 **Work**
 
 - Prisma models: organisation, branch, user, role, permission, role-permission, session, MFA secret,
-  login attempt, audit event.
+  MFA challenge, password reset token, login attempt, audit event.
 - Argon2id password hashing; TOTP enrolment and recovery codes; lockout and throttling; secure,
   httpOnly, same-site session cookie; CSRF defence.
 - Permission model from `docs/09 §3` — `Entity : Action`, 17 roles, segregation-of-duties rules.

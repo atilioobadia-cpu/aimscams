@@ -4,7 +4,9 @@ import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { AuditService } from './audit.service.js';
 import { CsrfGuard } from './csrf.guard.js';
+import { MailService } from './mail.service.js';
 import { MfaPolicyGuard } from './mfa-policy.guard.js';
+import { PasswordResetService } from './password-reset.service.js';
 import { PermissionsGuard } from './permissions.guard.js';
 import { SessionGuard } from './session.guard.js';
 
@@ -13,6 +15,8 @@ import { SessionGuard } from './session.guard.js';
   providers: [
     AuthService,
     AuditService,
+    MailService,
+    PasswordResetService,
     {
       provide: APP_GUARD,
       useClass: SessionGuard,

@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpCode,
   Post,
   Req,
@@ -10,6 +11,7 @@ import {
 } from '@nestjs/common';
 import type { CookieOptions, Request, Response } from 'express';
 import { AuthService } from './auth.service.js';
+import { PasswordResetService } from './password-reset.service.js';
 import {
   CSRF_COOKIE,
   SESSION_COOKIE,
@@ -77,7 +79,10 @@ function loginPayload(result: LoginResult) {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly passwordReset: PasswordResetService,
+  ) {}
 
   @Public()
   @Post('login')
@@ -110,6 +115,53 @@ export class AuthController {
 
     setSessionCookies(response, result);
     return loginPayload(result);
+  }
+
+  @Public()
+  @Post('password-reset/request')
+  @Header('Cache-Control', 'no-store')
+  @HttpCode(202)
+  async requestPasswordReset(
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    const email = typeof body?.email === 'string' ? body.email.trim() : '';
+    if (!email) {
+      throw new BadRequestException('Email is required.');
+    }
+
+    const result = await this.passwordReset.request(
+      email,
+      requestContext(request),
+    );
+    return {
+      requested: true,
+      message:
+        'If an account exists for that email, a password reset link has been sent.',
+      ...result,
+    };
+  }
+
+  @Public()
+  @Post('password-reset/confirm')
+  @Header('Cache-Control', 'no-store')
+  @HttpCode(200)
+  async confirmPasswordReset(
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    const token = requiredString(
+      body,
+      'token',
+      'A password reset token is required.',
+    );
+    const password = typeof body?.password === 'string' ? body.password : '';
+    if (!password) {
+      throw new BadRequestException('A new password is required.');
+    }
+
+    await this.passwordReset.confirm(token, password, requestContext(request));
+    return { ok: true };
   }
 
   @Public()

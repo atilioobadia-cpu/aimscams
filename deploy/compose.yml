@@ -24,6 +24,13 @@ x-app: &app
     JWT_SECRET: ${JWT_SECRET:-local-compose-only-jwt-secret-change-me}
     TOTP_ENCRYPTION_KEY: ${TOTP_ENCRYPTION_KEY:-bG9jYWwtY29tcG9zZS10b3RwLWtleS0zMmJ5dGVzISE=}
     SESSION_COOKIE_DOMAIN: ${SESSION_COOKIE_DOMAIN:-localhost}
+    WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:3000}
+    PASSWORD_RESET_DEV_DELIVERY: ${PASSWORD_RESET_DEV_DELIVERY:-false}
+    SMTP_HOST: ${SMTP_HOST:-}
+    SMTP_PORT: ${SMTP_PORT:-587}
+    SMTP_USER: ${SMTP_USER:-}
+    SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+    MAIL_FROM: ${MAIL_FROM:-no-reply@aimscams.local}
     METRICS_TOKEN: ${METRICS_TOKEN:-local-metrics-token}
     LOG_LEVEL: ${LOG_LEVEL:-info}
   restart: unless-stopped

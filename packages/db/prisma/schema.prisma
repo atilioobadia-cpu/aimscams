@@ -98,14 +98,15 @@ model User {
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
 
-  organisation  Organisation   @relation(fields: [organisationId], references: [id], onDelete: Cascade)
-  branch        Branch?        @relation(fields: [branchId], references: [id], onDelete: SetNull)
-  roles         UserRole[]
-  sessions      Session[]
-  mfaSecret     MfaSecret?
-  mfaChallenges MfaChallenge[]
-  loginAttempts LoginAttempt[]
-  auditEvents   AuditEvent[]
+  organisation        Organisation         @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch              Branch?              @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  roles               UserRole[]
+  sessions            Session[]
+  mfaSecret           MfaSecret?
+  mfaChallenges       MfaChallenge[]
+  passwordResetTokens PasswordResetToken[]
+  loginAttempts       LoginAttempt[]
+  auditEvents         AuditEvent[]
 
   @@unique([organisationId, email])
   @@index([organisationId, status])
@@ -215,6 +216,25 @@ model MfaChallenge {
 
   @@index([userId, expiresAt])
   @@map("mfa_challenge")
+}
+
+/// A short-lived, single-use password-reset token. Only the SHA-256 hash is
+/// stored; a database leak must not produce working reset links.
+model PasswordResetToken {
+  id                 String    @id @default(uuid()) @db.Uuid
+  userId             String    @db.Uuid
+  tokenHash          String    @unique
+  requestedIp        String?
+  requestedUserAgent String?
+  expiresAt          DateTime
+  consumedAt         DateTime?
+  createdAt          DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@index([requestedIp, createdAt])
+  @@map("password_reset_token")
 }
 
 model LoginAttempt {
