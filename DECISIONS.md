@@ -356,10 +356,14 @@ Angular shell stays runnable for demos but is not extended.
 ### D-025 — Production runs Linux containers; WSL is development only
 **Status:** Accepted 2026-10-26 · `docs/10 §2.2`
 
-Production and staging run on a **Linux host** (Ubuntu LTS or Debian) with Docker Engine, Docker
-Compose and Nginx terminating TLS. The application ships as Linux container images. The host
-distribution is an operational detail; the application depends only on the Linux container
-runtime.
+Production and staging run on a **Linux host** (Ubuntu LTS or Debian) with an **OCI container
+runtime** — Docker Engine by default, Podman where a rootless daemon is required — plus Nginx
+terminating TLS. The application ships as Linux container images. The host distribution is an
+operational detail; the application depends only on the Linux container runtime.
+
+**Docker is the default, not a dependency.** The artefact is an OCI image; any compatible runtime
+may execute it. A native systemd deployment is a supported fallback for institutions that forbid
+containers, provided it runs the same built output and does not fork the codebase.
 
 **WSL2 is never a deployed target.** It is a developer convenience on Windows.
 
@@ -378,6 +382,8 @@ runtime.
   artefacts must be exercised against the same Linux images used in staging.
 - Prisma Client and native modules are generated and compiled **inside** the Linux image. Copying
   `node_modules` from the Windows host into an image is prohibited.
+- A native systemd deployment path is supported for institutions that refuse containers; it runs
+  the same build output and is not a second codebase.
 - Windows containers are not a supported target.
 - This decides the runtime, not the hosting location; `O-013` still governs where the Linux hosts
   live.

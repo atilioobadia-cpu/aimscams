@@ -24,7 +24,7 @@ are marked **R-n** and are not decisions until they are moved into `DECISIONS.md
 | Documents | **Private S3-compatible storage** | KYC, loan agreements, exports, backups of generated files | Signed URLs, per-institution bucket or prefix |
 | API docs | **Swagger / OpenAPI** | Contract for the web client and integration tests | Generated from NestJS DTOs |
 | Testing | **Jest + Playwright** | Unit/integration and end-to-end | Ledger invariants additionally run against PGlite (`D-016`) |
-| Deployment | **Docker + Linux + Nginx** | One image set, one installation per institution | Compose for small institutions, orchestrated if needed |
+| Deployment | **Linux + OCI containers + Nginx** | One image set, one installation per institution | Docker Engine default; Podman compatible; native systemd fallback |
 | Monitoring | **Prometheus + Grafana** | Health, queue depth, posting failures, latency | Add before the pilot, not after |
 
 Versions are **not** pinned here. Pin the current stable major of each at kickoff and record it in
@@ -105,19 +105,48 @@ database dump alone does not restore a working institution.
 
 | Environment | Host | Notes |
 |---|---|---|
-| Production | **Linux** — Ubuntu LTS or Debian, Docker Engine + Compose, Nginx | One installation per institution |
+| Production | **Linux** — Ubuntu LTS or Debian, an OCI runtime, Nginx | Docker Engine by default; Podman compatible. One installation per institution |
 | Staging | Same Linux images, same Compose file | Different secrets and data; never production data |
-| Local development | Windows, with PostgreSQL and Redis in containers | WSL2 is the container backend, not the application host |
+| Local development | Windows, with PostgreSQL and Redis in containers *or* installed natively in WSL | WSL2 is the container backend, not the application host |
 | Not supported | WSL2 or Windows containers as a deployed target | No service SLA; different networking and filesystem behaviour |
 
 The application is host-agnostic **because** it ships in Linux containers. What must not happen is
 treating a WSL distro as a server: no uptime guarantee, no proper service management, and Windows
 updates reboot it underneath you.
 
-**On the current workstation.** WSL2 with Ubuntu 24.04 is installed; Docker is not. Install Docker
-Engine inside that distro (no Docker Desktop licence, and it is the same engine production uses),
-or install Docker Desktop with the WSL2 backend. Only PostgreSQL and Redis need containers for
-local work; Next.js and NestJS can run natively for fast reload.
+#### Is Docker mandatory?
+
+**No.** Nothing in the stack requires it. Next.js, NestJS, PostgreSQL, Redis and Nginx all run
+natively on Linux. Docker is chosen because the deployment unit is repeated N times, and a
+reproducible image is the cheapest way to keep N installations identical.
+
+| Option | Verdict |
+|---|---|
+| **Docker Engine + Compose** | Default. Best balance of reproducibility, upgrade/rollback and operational familiarity |
+| **Podman** | Supported alternative. Daemonless and rootless; Docker-compatible CLI and Compose. Use it where a root daemon is not acceptable |
+| **Native systemd** (built output + distro PostgreSQL/Redis + Nginx) | Supported fallback for institutions that forbid containers. Simplest on a single small box, but upgrades, rollback and version drift must be handled by hand |
+| Kubernetes / K3s | Overkill for one installation per institution. Revisit only if a hosted fleet grows beyond what Compose can manage |
+| Managed PaaS | Conflicts with per-institution database control and in-country hosting requirements |
+
+**What containers buy here**
+- One tested artefact per release, identical in every institution.
+- Pinned Node, PostgreSQL and Redis versions — no drift between installations.
+- Upgrade and rollback by image tag instead of by hand.
+- Prisma Client and native modules built once, on Linux, where they will run.
+- Staging that actually matches production.
+
+**What they cost**
+- A root-equivalent daemon, a registry, volume backups, and one more thing to monitor.
+- On a small on-premise box, a local administrator may genuinely find systemd easier.
+
+The rule is: standardise on **OCI images**, not on one vendor's runtime. Build once, run with
+Docker Engine by default, Podman where rootless is required, or systemd where containers are
+refused. Never maintain two code paths.
+
+**On the current workstation.** WSL2 with Ubuntu 24.04 is installed; Docker is not. Two valid
+options: install Docker Engine inside that distro (same engine as production), or install
+PostgreSQL and Redis with `apt` and skip containers entirely for local work. Only the database and
+cache are needed locally; the ledger suite already runs on PGlite.
 
 **Image build rules.**
 - Run `prisma generate` and compile native modules (`argon2`, any image library) **inside** the
