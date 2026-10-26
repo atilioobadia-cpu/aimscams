@@ -93,14 +93,14 @@ export default function RolesPage() {
   }, [grouped, search]);
 
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Loading roles...</p>;
+    return <p className="text-[var(--font-size-secondary)] text-muted-foreground">Loading roles...</p>;
   }
 
   return (
     <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
       <div className="space-y-3">
         <h1 className="text-[26px] font-bold leading-tight text-strong">Roles</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-[var(--font-size-secondary)] text-muted-foreground">
           Permission matrix for the 17 institution roles.
         </p>
         <div className="space-y-2">
@@ -120,7 +120,7 @@ export default function RolesPage() {
               }`}
             >
               <span className="block font-semibold text-strong">{role.name}</span>
-              <span className="block text-[11px] text-muted-foreground">
+              <span className="block text-[var(--font-size-micro)] text-muted-foreground">
                 {role.code} · {role.userCount} users
               </span>
             </button>
@@ -139,10 +139,10 @@ export default function RolesPage() {
           <>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-[20px] font-bold text-strong">{selectedRole.name}</h2>
-                <p className="text-sm text-muted-foreground">{selectedRole.description}</p>
+                <h2 className="text-[var(--font-size-section)] font-bold text-strong">{selectedRole.name}</h2>
+                <p className="text-[var(--font-size-secondary)] text-muted-foreground">{selectedRole.description}</p>
               </div>
-              <Button onClick={() => void save()} disabled={saving} aria-busy={saving} className="h-10 px-4 text-[14px] font-semibold">
+              <Button onClick={() => void save()} disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold">
                 {saving ? "Saving..." : "Save permissions"}
               </Button>
             </div>
@@ -151,18 +151,18 @@ export default function RolesPage() {
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Filter permissions"
-              className="h-10 max-w-sm"
+              className="h-[var(--control-height)] max-w-sm"
             />
 
             <div className="space-y-4">
               {Object.entries(filteredGroups).map(([entity, keys]) => (
-                <div key={entity} className="rounded-xl border border-card-border bg-surface p-4">
-                  <p className="mb-3 text-[13px] font-semibold text-strong">{entity}</p>
+                <div key={entity} className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+                  <p className="mb-[var(--space-8)] text-[var(--font-size-secondary)] font-semibold text-strong">{entity}</p>
                   <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
                     {keys.map((key) => {
                       const action = key.split(" : ")[1] ?? key;
                       return (
-                        <label key={key} className="flex items-center gap-2 text-[13px] text-body">
+                        <label key={key} className="flex items-center gap-2 text-[var(--font-size-secondary)] text-body">
                           <input
                             type="checkbox"
                             checked={draftPermissions.includes(key)}
@@ -179,7 +179,7 @@ export default function RolesPage() {
             </div>
           </>
         ) : (
-          <p className="text-sm text-muted-foreground">Select a role to edit its permissions.</p>
+          <p className="text-[var(--font-size-secondary)] text-muted-foreground">Select a role to edit its permissions.</p>
         )}
       </div>
     </div>

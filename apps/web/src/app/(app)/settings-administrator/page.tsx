@@ -102,27 +102,27 @@ export default function UsersPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-[26px] font-bold leading-tight text-strong">Users</h1>
-          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+          <p className="mt-1 max-w-3xl text-[var(--font-size-secondary)] text-muted-foreground">
             Institution accounts, roles and branch access.
           </p>
         </div>
-        <Button asChild className="h-10 px-4 text-[14px] font-semibold">
+        <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold">
           <Link href="/settings-administrator-add">Add user</Link>
         </Button>
       </div>
 
-      <div className="rounded-xl border border-card-border bg-surface p-4">
-        <div className="grid gap-3 md:grid-cols-4">
+      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+        <div className="grid gap-[var(--space-8)] md:grid-cols-4">
           <Input
             value={q}
             onChange={(event) => setQ(event.target.value)}
             placeholder="Search name or email"
-            className="h-10"
+            className="h-[var(--control-height)]"
           />
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value)}
-            className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
           >
             <option value="">All statuses</option>
             <option value="ACTIVE">Active</option>
@@ -132,7 +132,7 @@ export default function UsersPage() {
           <select
             value={role}
             onChange={(event) => setRole(event.target.value)}
-            className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
           >
             <option value="">All roles</option>
             {roles.map((item) => (
@@ -144,7 +144,7 @@ export default function UsersPage() {
           <select
             value={branchId}
             onChange={(event) => setBranchId(event.target.value)}
-            className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
           >
             <option value="">All branches</option>
             {branches.map((item) => (
@@ -162,10 +162,10 @@ export default function UsersPage() {
         </div>
       ) : null}
 
-      <div className="overflow-hidden rounded-xl border border-card-border bg-surface">
+      <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[920px] text-left text-[13px]">
-            <thead className="border-b border-card-border bg-subtle text-[11px] font-semibold uppercase tracking-wide text-label">
+          <table className="w-full min-w-[920px] text-left text-[var(--font-size-secondary)]">
+            <thead className="border-b border-card-border bg-subtle text-[var(--font-size-micro)] font-semibold uppercase tracking-wide text-label">
               <tr>
                 <th className="px-4 py-3">Full name</th>
                 <th className="px-4 py-3">Email</th>
@@ -199,7 +199,7 @@ export default function UsersPage() {
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                        className={`rounded-full px-2.5 py-1 text-[var(--font-size-micro)] font-semibold ${
                           user.status === "ACTIVE"
                             ? "bg-accent-teal-bg text-brand"
                             : user.status === "LOCKED"
