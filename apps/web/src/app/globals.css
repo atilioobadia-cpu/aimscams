@@ -4,6 +4,18 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Central UI scale. Tune this single value (e.g. 0.75 or 0.8) to resize the whole
+   desktop UI without touching component styles. Mobile/narrow screens are unaffected. */
+:root {
+  --ui-scale: 0.667;
+}
+
+@media (min-width: 1024px) {
+  html {
+    zoom: var(--ui-scale);
+  }
+}
+
 /* AIMSCAMS design tokens. Source: docs/11-ui-contract.md §1.
    Never use a hex literal in a component; use these token-backed utilities. */
 :root {
