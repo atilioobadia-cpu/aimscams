@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useState, type FormEvent } from "react";
 
 import { AuthCard } from "@/components/auth/auth-card";
@@ -91,21 +91,12 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
   }
 
   return (
-    <AuthCard
-      title="Sign in"
-      description="Use your institution account. Access follows your role and branch."
-      footer={
-        <p className="text-[12px] leading-5 text-label">
-          Accounts are created by your institution administrator. Contact them if you
-          cannot access your account.
-        </p>
-      }
-    >
+    <AuthCard title="Login">
       <form onSubmit={handleSubmit} noValidate>
-        <div className="space-y-5">
+        <div className="space-y-4">
           <div>
             <label htmlFor="email" className={labelClass}>
-              Email address
+              Email
             </label>
             <Input
               id="email"
@@ -126,7 +117,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               aria-invalid={Boolean(fieldErrors.email)}
               aria-describedby={fieldErrors.email ? "email-error" : undefined}
               disabled={submitting}
-              className="h-11 px-3.5 text-[15px]"
+              className="h-10 px-3 text-[14px]"
               placeholder="name@institution.co.tz"
             />
             {fieldErrors.email ? (
@@ -163,6 +154,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               aria-describedby={fieldErrors.password ? "password-error" : undefined}
               disabled={submitting}
               placeholder="Enter your password"
+              className="h-10 text-[14px]"
             />
             {fieldErrors.password ? (
               <p id="password-error" className={fieldErrorClass}>
@@ -173,7 +165,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
         </div>
 
         {formError ? (
-          <div className="mt-5">
+          <div className="mt-4">
             <FormError message={formError} />
           </div>
         ) : null}
@@ -182,7 +174,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           type="submit"
           disabled={submitting}
           aria-busy={submitting}
-          className="mt-6 h-11 w-full gap-2 text-[15px] font-semibold"
+          className="mt-5 h-10 w-full gap-2 text-[14px] font-semibold"
         >
           {submitting ? (
             <>
@@ -190,10 +182,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               Signing in
             </>
           ) : (
-            <>
-              Sign in
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </>
+            "Login"
           )}
         </Button>
       </form>
