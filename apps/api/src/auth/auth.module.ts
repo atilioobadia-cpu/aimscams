@@ -34,6 +34,6 @@ import { SessionGuard } from './session.guard.js';
       useClass: PermissionsGuard,
     },
   ],
-  exports: [AuthService],
+  exports: [AuthService, AuditService],
 })
 export class AuthModule {}
