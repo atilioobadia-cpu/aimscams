@@ -58,7 +58,9 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
         style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
         className="min-h-screen transition-[padding-left] duration-200"
       >
-        <div className="px-[22px] pb-12 pt-5">{children}</div>
+        <div className="px-[var(--content-padding)] pb-12 pt-[var(--content-padding)]">
+          {children}
+        </div>
       </main>
 
       <ChatFab />
