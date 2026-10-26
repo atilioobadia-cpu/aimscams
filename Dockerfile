@@ -28,6 +28,11 @@ RUN npm ci --no-audit --no-fund
 
 COPY . .
 RUN npm run db:generate
+
+# Install with development dependencies, but build Next in production mode.
+# A global NODE_ENV=development here makes React resolve its development build
+# under the production server renderer, crashing /_global-error prerendering.
+ENV NODE_ENV=production
 RUN npm run build
 
 # Production dependencies only. Next and Nest are runtime dependencies, so the
