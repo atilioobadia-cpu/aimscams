@@ -216,3 +216,34 @@ dashboards. This document is the specification for those files, not a descriptio
 
 **Open:** the hosting provider and domain plan per institution (`O-013`). The design assumes one
 public HTTPS hostname per installation; the naming scheme is decided with the provider.
+
+---
+
+## 11. Previewing work during development
+
+The agent and the developer share one machine, so a running dev server is visible in the local
+browser. No tunnel or deployment is needed to review a slice.
+
+| Item | Value |
+|---|---|
+| Web | `npm run dev` in `apps/web` → `http://localhost:3000` |
+| API | `npm run start:dev` in `apps/api` → `http://localhost:4000` |
+| Database / cache | `localhost:5432` / `localhost:6379`, internal only |
+| Hot reload | Next.js Fast Refresh and Nest watch mode; no rebuild between edits |
+
+**Build the shell against fixtures first.** The first UI slice renders the dashboard from typed
+synthetic fixtures, so header, sidebar, KPI cards and chart are visible before PostgreSQL, auth or
+the API exist. Wiring replaces the fixture source; it does not rewrite the components.
+
+**Auth bypass is local-only.** A dev session may skip login under `APP_ENV=local`. The flag is
+refused at startup in staging and production; it is never a runtime toggle.
+
+**Verification is measurement, not impression.** Playwright runs at 1837×1080, reads computed
+styles and bounding boxes against `docs/11 §8`, checks the console, and writes screenshots to
+`artifacts/ui/` (gitignored). The reported result is the measured values.
+
+**Parity check before calling a slice done.** `npm run build && npm start` must render the same
+screen; a dev-only success is not a success.
+
+**Remote demo.** Use a tunnel only for a deliberate demonstration, never with real data and never
+as a substitute for staging.

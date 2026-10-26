@@ -27,3 +27,6 @@ Thumbs.db
 # Local scratch
 *.log
 *.tmp
+
+# Generated verification artefacts (screenshots, traces)
+artifacts/
