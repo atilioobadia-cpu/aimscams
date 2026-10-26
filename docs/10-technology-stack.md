@@ -74,6 +74,33 @@ N backups. That is the real price, and it is why §12 R-2 exists.
 > Server permissions, network rules, secret management and deployment discipline still decide
 > whether one institution can reach another's data.
 
+### 2.1 What "one database" means — and what it must not mean
+
+Three different splits get confused. Only the first is adopted.
+
+| Split | Adopted? | Consequence |
+|---|---|---|
+| **One database per institution** | **Yes** (D-019) | One restore unit, one upgrade unit, one credential set, one configuration. A breach or bad migration stops at one institution |
+| One database for every institution | No | One leaked credential or one wrong RLS policy exposes all of them; per-institution restore is impossible; a large institution degrades the others |
+| One database per module inside an institution | No | A disbursement writes loans, savings, charges, the ledger and the outbox **atomically**. Splitting modules across databases turns one ACID transaction into 2PC or a saga, and makes the ledger eventually consistent with the loans it describes |
+
+Inside an institution's database:
+
+- **One schema.** Normal tables live together so foreign keys and joins work. Optional `ledger`
+  and `audit` schemas are justified only if a `REVOKE` boundary is actually wanted; otherwise they
+  add migration friction for no benefit.
+- **Three roles, minimum.** `migrator` owns DDL; `app` has DML and cannot `UPDATE`/`DELETE` posted
+  journals; `reporting` is read-only. The API never connects as the owner.
+- **RLS on.** It is the seatbelt, not the boundary. The boundary is the installation.
+
+**Physical placement is a separate question.** Database-per-institution on one shared PostgreSQL
+server is *logical* isolation: a superuser on that server can still read every database. If an
+institution needs stronger separation, give it its own cluster or virtual machine. That is the
+hosting decision (`O-013`), not a schema decision.
+
+**The backup unit is the installation** — database, object storage and secrets together. A
+database dump alone does not restore a working institution.
+
 ---
 
 ## 3. Runtime topology
@@ -376,17 +403,26 @@ client will talk to a newer API. Expand-migrate-contract, and never break a publ
 The shared foundation is the same; the differences are configuration plus three modules, and
 building all three at once triples the test surface before anything is proven.
 
+**R-11 — Treat shadcn as source, not as a theme.** Components are copied into the repository by
+the CLI (or fetched through the shadcn MCP registry), so they are ours to edit. Restyle them
+against `docs/11` tokens instead of accepting the default neutral theme; set the sidebar width
+variables to the measured 300px expanded and the chosen rail width; override the chart wrapper for
+the measured bar geometry. Use shadcn for **behaviour** — dropdown, dialog, table, form, toast —
+and hand-build visuals where the reference diverges from shadcn's defaults. Do not fork a
+component before checking the registry: `@shadcn/sidebar` and `@shadcn/chart` already solve
+problems that are easy to rebuild badly.
+
 ---
 
 ## 13. Open questions
 
-| ID | Question | Blocks |
+| ID | Question | Status |
 |---|---|---|
-| O-009 | Keycloak or application authentication? | Identity implementation, deployment shape |
-| O-010 | Keep literal reference branding during development, or AIMSCAMS branding from day one? | UI text, screenshots, demo data |
-| O-011 | Sidebar: the measured 12 items, or the 8-group IA from the blueprint? | Navigation build |
-| O-012 | When does the Angular app retire? | Frontend workstream |
-| O-013 | Where do installations run — institution on-premise, vendor-hosted, or both? | Backup, TLS, upgrade, support model |
+| O-009 | Keycloak or application authentication? | **Resolved:** application auth, OIDC-shaped boundary (D-024) |
+| O-010 | Literal reference branding, or AIMSCAMS from day one? | **Resolved:** AIMSCAMS with a synthetic demo tenant (D-024) |
+| O-011 | The measured 12 items, or the 8-group IA? | **Resolved:** 12 items for parity (D-024) |
+| O-012 | When does the Angular app retire? | **Resolved:** freeze now, delete after parity (D-024) |
+| O-013 | Where do installations run? | **Open:** default vendor-hosted in-country, on-premise as a variant (D-024) |
 
 ---
 

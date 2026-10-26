@@ -323,6 +323,36 @@ schema settles is the expensive path.
 **Consequences.** The roadmap in `docs/10 §11` includes them before the pilot, not in a later
 phase. Their data requirements are already in `docs/05` and `docs/06`.
 
+### D-024 — Kickoff rulings: application auth, AIMSCAMS branding, measured sidebar, Angular retirement
+**Status:** Accepted 2026-10-26 · resolves O-009…O-012 · sets the O-013 default
+
+| ID | Question | Ruling |
+|---|---|---|
+| O-009 | Keycloak or application authentication | **Application auth**: argon2id, TOTP for privileged users and approvers, OIDC-shaped boundary so a Keycloak adapter is a swap rather than a rewrite |
+| O-010 | Branding fidelity during the build | **AIMSCAMS from day one**; synthetic demo tenant, branch and user with the same text lengths so the measured layout still holds |
+| O-011 | Sidebar information architecture | **The measured 12 items** for parity; the 8-group IA stays a proposal until the visual baseline is verified |
+| O-012 | Angular retirement | **Freeze now, delete when Next.js passes `docs/11 §8`**; no new features and no styling fixes in the Angular app in the meantime |
+| O-013 | Where installations run | **Default: vendor-hosted in-country**, on-premise supported as a per-institution variant. Contract confirmation still pending |
+
+**Why application auth.** Keycloak is a stateful service with a realm, theme, database and upgrade
+path *per installation*. With one installation per institution that multiplies the operational
+surface by the customer count. Argon2id plus TOTP delivers the required MFA with one less
+service. The identity boundary stays OIDC-shaped, so adopting Keycloak later changes the adapter,
+not the domain.
+
+**Why the 12-item sidebar.** It is the measured contract (D-020). Regrouping into 8 areas is a
+product improvement that changes the geometry; it can be evaluated once there is a verified
+baseline to compare against.
+
+**Why freeze Angular now.** Two frontends means two design systems and two sets of defects. The
+Angular shell stays runnable for demos but is not extended.
+
+**Consequences.**
+- No literal Wakandi wordmark, footer or tenant appears in committed UI (D-013).
+- No infrastructure is provisioned until O-013 is confirmed, but design proceeds on the default.
+- If SSO across AIMS products becomes a contractual requirement, that is a new decision, not a
+  reinterpretation of this one.
+
 ---
 
 ## Open
@@ -386,7 +416,7 @@ are the default. Revisit when a tenant wants to bring a legacy system's export �
 be theirs, not the observed product's.
 
 ### O-009 — Keycloak or application authentication
-**Status:** OPEN · blocks identity implementation · `docs/10 §12 R-6`
+**Status:** RESOLVED by D-024 (application auth) · blocks identity implementation · `docs/10 §12 R-6`
 
 Both were named as acceptable. Keycloak gives OIDC, MFA and SSO out of the box, but it is a
 stateful service with a realm, theme and upgrade path *per installation*. Application auth
@@ -397,7 +427,7 @@ be swapped later.
 contractual requirement.
 
 ### O-010 — Branding fidelity during development
-**Status:** OPEN · blocks UI text and screenshots · `docs/11 §7`
+**Status:** RESOLVED by D-024 (AIMSCAMS from day one) · blocks UI text and screenshots · `docs/11 §7`
 
 Adopt the reference measurements exactly (D-020). The open part is identity: ship AIMSCAMS
 branding from the first screen, or keep the literal reference wordmark and tenant while
@@ -407,7 +437,7 @@ comparing pixel-for-pixel, then substitute before any demo.
 that keeps the same text lengths so measurements still hold.
 
 ### O-011 — Sidebar information architecture
-**Status:** OPEN · blocks navigation build · `docs/09 §3`, `docs/11 §4`
+**Status:** RESOLVED by D-024 (measured 12 items) · blocks navigation build · `docs/09 §3`, `docs/11 §4`
 
 The measured reference has 12 top-level items with chevrons. The blueprint proposes an 8-group
 IA. D-020 adopts the 12-item sidebar because it is the measured contract; grouping is a product
@@ -417,7 +447,7 @@ improvement that changes the geometry.
 baseline is verified.
 
 ### O-012 — Retirement of the Angular application
-**Status:** OPEN · blocks frontend workstream · `docs/10 §4`
+**Status:** RESOLVED by D-024 (freeze now, delete after parity) · blocks frontend workstream · `docs/10 §4`
 
 `apps/web/aimscams-web` exists and renders a shell. D-018 makes Next.js the frontend. Keeping
 both means two design systems and two sets of bugs.
@@ -428,7 +458,7 @@ delete once the Next.js dashboard passes the `docs/11 §8` checklist, and never 
 in the meantime.
 
 ### O-013 — Where installations run
-**Status:** OPEN · blocks deployment, backup and support design · `docs/10 §2`
+**Status:** OPEN · default set by D-024 (vendor-hosted in-country) · blocks deployment, backup and support design · `docs/10 §2`
 
 Institution on-premise, vendor-hosted, or both. This decides TLS termination, who owns backups,
 how upgrades are scheduled, whether remote support is possible, and how data residency is

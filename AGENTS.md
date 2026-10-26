@@ -28,6 +28,8 @@ codebase, one installation and one database **per institution**. Reconstructed f
    are idempotent; a non-empty dead-letter queue is a P1.
 5. **Isolation:** each institution gets its own installation and database. Keep
    `organisation_id`/`branch_id` on business rows and RLS enabled as defence in depth.
+   **One database per institution, never one per module** — a disbursement must write loans,
+   savings, charges, the ledger and the outbox in one transaction.
 6. **No real people.** No member, staff or tenant data from the observed product. Demo data is
    synthetic; `ocr/` and `merged/` stay gitignored.
 7. **AIMSCAMS branding, never Wakandi** in shipped UI, docs titles, package names or env names.
@@ -55,8 +57,10 @@ npm run typecheck        # all workspaces
 cd tools/mermaid-check; npm run check   # validate Mermaid in docs
 ```
 
-## Open decisions
+## Settled decisions
 
-`O-009` Keycloak vs app auth · `O-010` branding fidelity during build · `O-011` 12-item vs
-8-group sidebar · `O-012` when Angular retires · `O-013` where installations run. Do not silently
-pick one; ask, or follow the stated default in `DECISIONS.md`.
+`D-024` rules O-009…O-012: application auth (not Keycloak), AIMSCAMS branding from day one, the
+measured 12-item sidebar, and a frozen Angular app deleted after Next.js reaches parity. `O-013`
+is the only open item: installations default to vendor-hosted in-country, with on-premise as a
+variant. Do not re-litigate a resolved decision without new evidence; record a new decision if the
+evidence changes.
