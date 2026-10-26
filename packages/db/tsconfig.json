@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolvePackageJsonExports": true,
+    "rewriteRelativeImportExtensions": true,
+    "types": ["node"]
+  },
+  "include": ["src/index.ts", "src/client.ts", "src/generated/**/*.ts"],
+  "exclude": ["src/seed.ts", "dist", "node_modules"]
+}
