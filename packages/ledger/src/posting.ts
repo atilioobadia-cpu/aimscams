@@ -1,8 +1,8 @@
-/**
+﻿/**
  * The posting engine.
  *
  * One rule: an entry is written as a draft, its lines are written, and then it
- * is marked posted — all inside a transaction. If anything is wrong the
+ * is marked posted â€” all inside a transaction. If anything is wrong the
  * database refuses the commit, so a half-posted entry cannot exist.
  *
  * The engine validates before it writes as well, but that is for a readable
@@ -56,7 +56,7 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
 
   if (input.idempotencyKey) {
     const existing = await db.query<{ id: string; entry_no: unknown }>(
-      `select id, entry_no from journal_entry where tenant_id = $1 and idempotency_key = $2`,
+      `select id, entry_no from journal_entry where organisation_id = $1 and idempotency_key = $2`,
       [input.tenantId, input.idempotencyKey],
     );
     const row = existing.rows[0];
@@ -66,7 +66,7 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
   return db.transaction(async (tx) => {
     const period = await tx.query<{ id: string }>(
       `select id from fiscal_period
-        where tenant_id = $1 and $2::date between starts_on and ends_on`,
+        where organisation_id = $1 and $2::date between starts_on and ends_on`,
       [input.tenantId, input.entryDate],
     );
     const periodId = period.rows[0]?.id;
@@ -74,7 +74,7 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
 
     const codes = [...new Set(input.lines.map((line) => line.account))];
     const accounts = await tx.query<{ id: string; code: string }>(
-      `select id, code from gl_account where tenant_id = $1 and code = any($2::text[])`,
+      `select id, code from gl_account where organisation_id = $1 and code = any($2::text[])`,
       [input.tenantId, codes],
     );
     const accountId = new Map(accounts.rows.map((row) => [row.code, row.id]));
@@ -87,7 +87,7 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
 
     const entry = await tx.query<{ id: string; entry_no: unknown }>(
       `insert into journal_entry
-         (tenant_id, entry_date, period_id, event_code, source_type, source_id,
+         (organisation_id, entry_date, period_id, event_code, source_type, source_id,
           description, idempotency_key, reversal_of)
        values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        returning id, entry_no`,
@@ -112,7 +112,7 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
       lineNo += 1;
       await tx.query(
         `insert into journal_line
-           (tenant_id, entry_id, line_no, account_id, debit_minor, credit_minor, memo)
+           (organisation_id, entry_id, line_no, account_id, debit_minor, credit_minor, memo)
          values ($1, $2, $3, $4, $5, $6, $7)`,
         [
           input.tenantId,
@@ -138,7 +138,7 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
 export async function postEvent(db: Db, input: PostEventInput): Promise<PostedEntry> {
   const policy = await db.query<{ lines: PolicyLine[] }>(
     `select lines from posting_policy
-      where tenant_id = $1 and event_code = $2
+      where organisation_id = $1 and event_code = $2
       order by version desc
       limit 1`,
     [input.tenantId, input.eventCode],
@@ -186,3 +186,4 @@ function validate(lines: readonly EntryLineInput[]): void {
     throw new Error(`entry is unbalanced: debit ${debits} <> credit ${credits}`);
   }
 }
+

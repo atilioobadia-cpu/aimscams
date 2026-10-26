@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Reports read the book; they never write it.
  *
  * A trial balance is the first tie-out: for every account, the debits and
@@ -53,11 +53,11 @@ export async function trialBalance(
          select line.account_id, line.debit_minor, line.credit_minor
            from journal_line line
            join journal_entry entry on entry.id = line.entry_id
-          where entry.tenant_id = $1
+          where entry.organisation_id = $1
             and entry.status = 'posted'
             and entry.entry_date <= $2::date
        ) l on l.account_id = a.id
-      where a.tenant_id = $1
+      where a.organisation_id = $1
         and a.is_postable
       group by a.code, a.name, a.type, a.normal_balance
       order by a.code`,
@@ -110,3 +110,4 @@ function asBigInt(value: unknown): bigint {
   if (typeof value === 'string' || typeof value === 'number') return BigInt(value);
   throw new Error(`expected an integer amount, received ${typeof value}`);
 }
+

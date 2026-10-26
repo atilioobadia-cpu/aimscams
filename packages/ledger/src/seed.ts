@@ -1,10 +1,10 @@
-/**
- * Chart of accounts and posting policy for a new tenant.
+﻿/**
+ * Chart of accounts and posting policy for a new organisation.
  *
  * Codes and names follow the observed ledger where it was captured; anything
  * the screenshots did not show is flagged `is_assumption` so an adviser can
  * find it without reading the code. Nothing here is specific to the observed
- * tenant's history — this is the AIMSCAMS starting template (D-014).
+ * organisation's history â€” this is the AIMSCAMS starting template (D-014).
  */
 
 import type { Db } from './db.js';
@@ -136,9 +136,9 @@ export async function seedChartOfAccounts(
   let inserted = 0;
   for (const account of accounts) {
     const result = await db.query(
-      `insert into gl_account (tenant_id, code, name, type, normal_balance, is_assumption)
+      `insert into gl_account (organisation_id, code, name, type, normal_balance, is_assumption)
        values ($1, $2, $3, $4, $5, $6)
-       on conflict (tenant_id, code) do nothing
+       on conflict (organisation_id, code) do nothing
        returning id`,
       [
         tenantId,
@@ -162,9 +162,9 @@ export async function seedPostingPolicies(
   let inserted = 0;
   for (const policy of policies) {
     const result = await db.query(
-      `insert into posting_policy (tenant_id, event_code, version, lines, is_assumption, note)
+      `insert into posting_policy (organisation_id, event_code, version, lines, is_assumption, note)
        values ($1, $2, 1, $3::jsonb, $4, $5)
-       on conflict (tenant_id, event_code, version) do nothing
+       on conflict (organisation_id, event_code, version) do nothing
        returning id`,
       [
         tenantId,
@@ -201,13 +201,13 @@ export interface ProvisionedTenant {
   periodIds: string[];
   accounts: number;
   policies: number;
-  /** True when the tenant already existed and only missing pieces were added. */
+  /** True when the organisation already existed and only missing pieces were added. */
   reused: boolean;
 }
 
 /**
- * Creates a tenant, its head-office branch, its fiscal periods, the chart of
- * accounts and the posting policies — one transaction, idempotent by tenant
+ * Creates a organisation, its head-office branch, its fiscal periods, the chart of
+ * accounts and the posting policies â€” one transaction, idempotent by organisation
  * code, so a retried deployment cannot create a second book.
  *
  * Overlapping periods are refused here rather than in the schema: a period
@@ -216,7 +216,7 @@ export interface ProvisionedTenant {
  */
 export async function provisionTenant(db: Db, input: TenantInput): Promise<ProvisionedTenant> {
   if (input.periods.length === 0) {
-    throw new Error('a tenant needs at least one fiscal period');
+    throw new Error('a organisation needs at least one fiscal period');
   }
 
   const ordered = [...input.periods].sort((a, b) => a.startsOn.localeCompare(b.startsOn));
@@ -233,7 +233,7 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
 
   return db.transaction(async (tx) => {
     const created = await tx.query<{ id: string }>(
-      `insert into tenant (code, name, dialect)
+      `insert into organisation (code, name, dialect)
        values ($1, $2, $3)
        on conflict (code) do nothing
        returning id`,
@@ -242,20 +242,20 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
 
     let tenantId = created.rows[0]?.id;
     if (!tenantId) {
-      const existing = await tx.query<{ id: string }>(`select id from tenant where code = $1`, [
+      const existing = await tx.query<{ id: string }>(`select id from organisation where code = $1`, [
         input.code,
       ]);
       tenantId = existing.rows[0]?.id;
     }
-    if (!tenantId) throw new Error(`tenant ${input.code} could not be created or found`);
+    if (!tenantId) throw new Error(`organisation ${input.code} could not be created or found`);
 
     const branchCode = input.branch?.code ?? 'HQ';
     const branchName = input.branch?.name ?? 'Head office';
 
     const branch = await tx.query<{ id: string }>(
-      `insert into branch (tenant_id, code, name, council_type)
+      `insert into branch (organisation_id, code, name, council_type)
        values ($1, $2, $3, $4)
-       on conflict (tenant_id, code) do nothing
+       on conflict (organisation_id, code) do nothing
        returning id`,
       [tenantId, branchCode, branchName, input.branch?.councilType ?? null],
     );
@@ -263,7 +263,7 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
     let branchId = branch.rows[0]?.id;
     if (!branchId) {
       const existing = await tx.query<{ id: string }>(
-        `select id from branch where tenant_id = $1 and code = $2`,
+        `select id from branch where organisation_id = $1 and code = $2`,
         [tenantId, branchCode],
       );
       branchId = existing.rows[0]?.id;
@@ -273,9 +273,9 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
     const periodIds: string[] = [];
     for (const period of ordered) {
       const row = await tx.query<{ id: string }>(
-        `insert into fiscal_period (tenant_id, starts_on, ends_on)
+        `insert into fiscal_period (organisation_id, starts_on, ends_on)
          values ($1, $2, $3)
-         on conflict (tenant_id, starts_on) do nothing
+         on conflict (organisation_id, starts_on) do nothing
          returning id`,
         [tenantId, period.startsOn, period.endsOn],
       );
@@ -283,7 +283,7 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
       let periodId = row.rows[0]?.id;
       if (!periodId) {
         const existing = await tx.query<{ id: string }>(
-          `select id from fiscal_period where tenant_id = $1 and starts_on = $2`,
+          `select id from fiscal_period where organisation_id = $1 and starts_on = $2`,
           [tenantId, period.startsOn],
         );
         periodId = existing.rows[0]?.id;
@@ -305,3 +305,4 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
     };
   });
 }
+

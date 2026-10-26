@@ -3,20 +3,20 @@
 -- The database, not the application, enforces the rules that must never be
 -- broken:
 --
---   1. every entry balances — checked at commit by a deferred constraint
+--   1. every entry balances â€” checked at commit by a deferred constraint
 --      trigger, so an entry and its lines can be written in any order;
 --   2. an entry has at least two lines, and every line carries exactly one
 --      side: a debit or a credit, never both, never neither;
 --   3. a posted entry and its lines can never be updated or deleted;
 --   4. an entry can only be written into an open fiscal period, and its date
 --      must fall inside that period;
---   5. a line can never reference another tenant's entry or account;
+--   5. a line can never reference another organisation's entry or account;
 --   6. tenants are isolated by row-level security, forced on the owner too.
 --
 -- Amounts are integer minor units (TZS x 100). No floats, no numeric, so a
 -- shilling can never be lost to rounding between the domain and the book.
 
-create table tenant (
+create table organisation (
   id          uuid primary key default gen_random_uuid(),
   code        text not null unique,
   name        text not null,
@@ -26,53 +26,53 @@ create table tenant (
 
 create table branch (
   id            uuid primary key default gen_random_uuid(),
-  tenant_id     uuid not null references tenant (id),
+  organisation_id     uuid not null references organisation (id),
   code          text not null,
   name          text not null,
   council_type  text check (council_type in ('CC', 'MC', 'DC', 'TC')),
-  unique (tenant_id, code)
+  unique (organisation_id, code)
 );
 
 create table fiscal_period (
   id         uuid primary key default gen_random_uuid(),
-  tenant_id  uuid not null references tenant (id),
+  organisation_id  uuid not null references organisation (id),
   starts_on  date not null,
   ends_on    date not null,
   status     text not null default 'open' check (status in ('open', 'closed')),
   check (ends_on > starts_on),
-  unique (tenant_id, starts_on),
-  unique (id, tenant_id)
+  unique (organisation_id, starts_on),
+  unique (id, organisation_id)
 );
 
 create table gl_account (
   id              uuid primary key default gen_random_uuid(),
-  tenant_id       uuid not null references tenant (id),
+  organisation_id       uuid not null references organisation (id),
   code            text not null,
   name            text not null,
   type            text not null check (type in ('asset', 'liability', 'equity', 'income', 'expense')),
   normal_balance  text not null check (normal_balance in ('debit', 'credit')),
   is_postable     boolean not null default true,
   is_assumption   boolean not null default false,
-  unique (tenant_id, code),
-  unique (id, tenant_id)
+  unique (organisation_id, code),
+  unique (id, organisation_id)
 );
 
 create table posting_policy (
   id             uuid primary key default gen_random_uuid(),
-  tenant_id      uuid not null references tenant (id),
+  organisation_id      uuid not null references organisation (id),
   event_code     text not null,
   version        integer not null default 1 check (version > 0),
   lines          jsonb not null,
   is_assumption  boolean not null default false,
   note           text not null default '',
-  unique (tenant_id, event_code, version),
+  unique (organisation_id, event_code, version),
   check (jsonb_typeof(lines) = 'array'),
   check (jsonb_array_length(lines) >= 2)
 );
 
 create table journal_entry (
   id               uuid primary key default gen_random_uuid(),
-  tenant_id        uuid not null references tenant (id),
+  organisation_id        uuid not null references organisation (id),
   entry_no         bigint generated always as identity unique,
   entry_date       date not null,
   period_id        uuid not null,
@@ -87,14 +87,14 @@ create table journal_entry (
   created_at       timestamptz not null default now(),
 
   check ((status = 'posted') = (posted_at is not null)),
-  unique (tenant_id, idempotency_key),
-  unique (id, tenant_id),
-  foreign key (period_id, tenant_id) references fiscal_period (id, tenant_id)
+  unique (organisation_id, idempotency_key),
+  unique (id, organisation_id),
+  foreign key (period_id, organisation_id) references fiscal_period (id, organisation_id)
 );
 
 create table journal_line (
   id            uuid primary key default gen_random_uuid(),
-  tenant_id     uuid not null references tenant (id),
+  organisation_id     uuid not null references organisation (id),
   entry_id      uuid not null,
   line_no       integer not null check (line_no > 0),
   account_id    uuid not null,
@@ -104,11 +104,11 @@ create table journal_line (
 
   check ((debit_minor = 0) <> (credit_minor = 0)),
   unique (entry_id, line_no),
-  foreign key (entry_id, tenant_id) references journal_entry (id, tenant_id) on delete cascade,
-  foreign key (account_id, tenant_id) references gl_account (id, tenant_id)
+  foreign key (entry_id, organisation_id) references journal_entry (id, organisation_id) on delete cascade,
+  foreign key (account_id, organisation_id) references gl_account (id, organisation_id)
 );
 
-create index journal_entry_tenant_date_idx on journal_entry (tenant_id, entry_date);
+create index journal_entry_tenant_date_idx on journal_entry (organisation_id, entry_date);
 create index journal_line_entry_idx on journal_line (entry_id);
 create index journal_line_account_idx on journal_line (account_id);
 
@@ -118,7 +118,7 @@ create index journal_line_account_idx on journal_line (account_id);
 
 create or replace function current_tenant_id() returns uuid
 language sql stable
-as $$ select nullif(current_setting('app.tenant_id', true), '')::uuid $$;
+as $$ select nullif(current_setting('app.organisation_id', true), '')::uuid $$;
 
 create or replace function assert_entry_balanced(target uuid) returns void
 language plpgsql
@@ -183,8 +183,8 @@ begin
     return old;
   end if;
 
-  if new.tenant_id <> old.tenant_id then
-    raise exception 'journal entry % cannot change tenant', old.id;
+  if new.organisation_id <> old.organisation_id then
+    raise exception 'journal entry % cannot change organisation', old.id;
   end if;
 
   if old.status = 'posted' then
@@ -257,7 +257,7 @@ create trigger journal_entry_period
   for each row execute function enforce_open_period();
 
 -- ---------------------------------------------------------------------------
--- Tenant isolation
+-- organisation isolation
 -- ---------------------------------------------------------------------------
 
 alter table branch          enable row level security;
@@ -275,25 +275,26 @@ alter table journal_entry   force row level security;
 alter table journal_line    force row level security;
 
 create policy tenant_isolation on branch
-  using (tenant_id = current_tenant_id())
-  with check (tenant_id = current_tenant_id());
+  using (organisation_id = current_tenant_id())
+  with check (organisation_id = current_tenant_id());
 
 create policy tenant_isolation on fiscal_period
-  using (tenant_id = current_tenant_id())
-  with check (tenant_id = current_tenant_id());
+  using (organisation_id = current_tenant_id())
+  with check (organisation_id = current_tenant_id());
 
 create policy tenant_isolation on gl_account
-  using (tenant_id = current_tenant_id())
-  with check (tenant_id = current_tenant_id());
+  using (organisation_id = current_tenant_id())
+  with check (organisation_id = current_tenant_id());
 
 create policy tenant_isolation on posting_policy
-  using (tenant_id = current_tenant_id())
-  with check (tenant_id = current_tenant_id());
+  using (organisation_id = current_tenant_id())
+  with check (organisation_id = current_tenant_id());
 
 create policy tenant_isolation on journal_entry
-  using (tenant_id = current_tenant_id())
-  with check (tenant_id = current_tenant_id());
+  using (organisation_id = current_tenant_id())
+  with check (organisation_id = current_tenant_id());
 
 create policy tenant_isolation on journal_line
-  using (tenant_id = current_tenant_id())
-  with check (tenant_id = current_tenant_id());
+  using (organisation_id = current_tenant_id())
+  with check (organisation_id = current_tenant_id());
+
