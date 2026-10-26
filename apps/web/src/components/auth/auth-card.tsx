@@ -14,7 +14,7 @@ export function AuthCard({ title, description, children, footer, className }: Au
   return (
     <div
       className={cn(
-        "rounded-[8px] border border-[#e2e8f0] bg-white px-[23px] pt-[30px] pb-[45px] shadow-[0_2px_8px_rgba(0,0,0,0.15)]",
+        "mx-auto w-full max-w-[600px] rounded-[8px] border border-[#e2e8f0] bg-white px-[23px] pt-[30px] pb-[45px] shadow-[0_2px_8px_rgba(0,0,0,0.15)]",
         className,
       )}
     >
