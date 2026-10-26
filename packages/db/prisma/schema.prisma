@@ -21,3 +21,223 @@ model AppMeta {
 
   @@map("app_meta")
 }
+
+// Phase 2 identity, tenancy and access.
+
+enum InstitutionDialect {
+  TCDC
+  BOT
+}
+
+enum BranchStatus {
+  OPEN
+  CLOSED
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  LOCKED
+}
+
+model Organisation {
+  id        String             @id @default(uuid()) @db.Uuid
+  code      String             @unique
+  name      String
+  dialect   InstitutionDialect
+  timezone  String             @default("Africa/Dar_es_Salaam")
+  locale    String             @default("en-TZ")
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  branches      Branch[]
+  users         User[]
+  roles         Role[]
+  auditEvents   AuditEvent[]
+  loginAttempts LoginAttempt[]
+
+  @@map("organisation")
+}
+
+model Branch {
+  id             String       @id @default(uuid()) @db.Uuid
+  organisationId String       @db.Uuid
+  code           String
+  name           String
+  region         String
+  district       String?
+  councilType    String?
+  status         BranchStatus @default(OPEN)
+  isDefault      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  users        User[]
+  sessions     Session[]
+  auditEvents  AuditEvent[]
+
+  @@unique([organisationId, code])
+  @@index([organisationId, status])
+  @@map("branch")
+}
+
+model User {
+  id               String     @id @default(uuid()) @db.Uuid
+  organisationId   String     @db.Uuid
+  branchId         String?    @db.Uuid
+  email            String
+  fullName         String
+  phone            String?
+  passwordHash     String
+  status           UserStatus @default(ACTIVE)
+  mfaEnabled       Boolean    @default(false)
+  failedLoginCount Int        @default(0)
+  lockedUntil      DateTime?
+  lastLoginAt      DateTime?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  organisation  Organisation   @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch        Branch?        @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  roles         UserRole[]
+  sessions      Session[]
+  mfaSecret     MfaSecret?
+  loginAttempts LoginAttempt[]
+  auditEvents   AuditEvent[]
+
+  @@unique([organisationId, email])
+  @@index([organisationId, status])
+  @@index([branchId])
+  @@map("app_user")
+}
+
+model Role {
+  id             String   @id @default(uuid()) @db.Uuid
+  organisationId String   @db.Uuid
+  code           String
+  name           String
+  description    String?
+  isSystem       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organisation Organisation     @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  permissions  RolePermission[]
+  users        UserRole[]
+
+  @@unique([organisationId, code])
+  @@map("role")
+}
+
+model Permission {
+  key         String  @id
+  entity      String
+  action      String
+  description String?
+
+  roles RolePermission[]
+
+  @@index([entity, action])
+  @@map("permission")
+}
+
+model RolePermission {
+  roleId       String @db.Uuid
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [key], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permission")
+}
+
+model UserRole {
+  userId     String   @db.Uuid
+  roleId     String   @db.Uuid
+  assignedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_role")
+}
+
+model Session {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  branchId   String?   @db.Uuid
+  tokenHash  String    @unique
+  ipAddress  String?
+  userAgent  String?
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  lastSeenAt DateTime  @default(now())
+  createdAt  DateTime  @default(now())
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branch Branch? @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+  @@map("session")
+}
+
+model MfaSecret {
+  userId             String   @id @db.Uuid
+  encryptedSecret    String
+  recoveryCodeHashes String[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("mfa_secret")
+}
+
+model LoginAttempt {
+  id             String   @id @default(uuid()) @db.Uuid
+  organisationId String?  @db.Uuid
+  userId         String?  @db.Uuid
+  email          String
+  succeeded      Boolean
+  reason         String?
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+
+  organisation Organisation? @relation(fields: [organisationId], references: [id], onDelete: SetNull)
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([email, createdAt])
+  @@index([organisationId, createdAt])
+  @@map("login_attempt")
+}
+
+model AuditEvent {
+  id             String   @id @default(uuid()) @db.Uuid
+  organisationId String   @db.Uuid
+  branchId       String?  @db.Uuid
+  actorUserId    String?  @db.Uuid
+  actorLabel     String?
+  action         String
+  entityType     String
+  entityId       String?
+  before         Json?
+  after          Json?
+  ipAddress      String?
+  userAgent      String?
+  correlationId  String?
+  createdAt      DateTime @default(now())
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  actor        User?        @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([organisationId, createdAt])
+  @@index([entityType, entityId])
+  @@index([correlationId])
+  @@map("audit_event")
+}

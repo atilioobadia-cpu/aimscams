@@ -25,6 +25,7 @@
     "db:validate": "npm run validate -w @aimscams/db",
     "db:migrate": "npm run migrate -w @aimscams/db",
     "db:deploy": "npm run migrate:deploy -w @aimscams/db",
+    "db:seed": "npm run seed -w @aimscams/db",
     "db:studio": "npm run studio -w @aimscams/db"
   },
   "devDependencies": {
