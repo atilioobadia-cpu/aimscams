@@ -7,13 +7,12 @@
 /* Central UI scale. Tune this single value (e.g. 0.75 or 0.8) to resize the whole
    desktop UI without touching component styles. Mobile/narrow screens are unaffected. */
 :root {
-  --ui-scale: 0.667;
+  --ui-scale: 1;
 }
 
-@media (min-width: 1024px) {
-  html {
-    zoom: var(--ui-scale);
-  }
+/* Wakandi uses a 12.8px root font size for denser typography. */
+html {
+  font-size: 12.8px;
 }
 
 /* AIMSCAMS design tokens. Source: docs/11-ui-contract.md §1.

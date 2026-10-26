@@ -117,7 +117,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               aria-invalid={Boolean(fieldErrors.email)}
               aria-describedby={fieldErrors.email ? "email-error" : undefined}
               disabled={submitting}
-              className="h-10 px-3 text-[14px]"
+              className="h-[46px] px-[14px] text-[14px] rounded-[4px]"
               placeholder="name@institution.co.tz"
             />
             {fieldErrors.email ? (
@@ -154,7 +154,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
               aria-describedby={fieldErrors.password ? "password-error" : undefined}
               disabled={submitting}
               placeholder="Enter your password"
-              className="h-10 text-[14px]"
+              className="h-[46px] text-[14px]"
             />
             {fieldErrors.password ? (
               <p id="password-error" className={fieldErrorClass}>
@@ -174,7 +174,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           type="submit"
           disabled={submitting}
           aria-busy={submitting}
-          className="mt-5 h-10 w-full gap-2 text-[14px] font-semibold"
+          className="mt-5 h-[50px] w-full gap-2 text-[16px] font-semibold"
         >
           {submitting ? (
             <>

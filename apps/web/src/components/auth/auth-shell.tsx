@@ -5,7 +5,7 @@ import { AimscamsMark } from "@/components/brand/aimscams-mark";
 export function AuthShell({ children }: { children: ReactNode }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-page px-4 py-6">
-      <div className="w-full max-w-[360px]">
+      <div className="w-full max-w-[400px]">
         <div className="mb-5 flex items-center justify-center gap-2.5">
           <span className="grid size-10 place-items-center rounded-lg bg-brand text-on-primary">
             <AimscamsMark className="size-6" />
