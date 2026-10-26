@@ -107,6 +107,7 @@ Fixed header across the full width, fixed left sidebar, scrollable main area on 
 | Element | Value |
 |---|---|
 | Width | about **300px** |
+| Collapsed width | **76px** — measured icon axis x=38 (left padding 28 + 20px icon), doubled so the icon does not move when collapsed |
 | Background | `--bg-surface` |
 | Right border | 1px `--border-chrome` |
 | Scrollbar | own thin scrollbar, `--border-chrome` |

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -17,7 +18,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${roboto.variable} h-full antialiased`}>
-      <body className="min-h-full bg-page font-sans text-body">{children}</body>
+      <body className="min-h-full bg-page font-sans text-body">
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   );
 }

@@ -45,6 +45,12 @@
   /* Chart */
   --chart-bar: #c75a43;
 
+  /* National flag. External symbol, not part of the product palette. */
+  --flag-green: #1eb53a;
+  --flag-yellow: #fcd116;
+  --flag-black: #000000;
+  --flag-blue: #00a3dd;
+
   /* shadcn/ui semantic surface, mapped to the measured tokens above. */
   --background: var(--bg-page);
   --foreground: var(--text-body);
@@ -114,6 +120,11 @@
   --color-accent-yellow-bg: var(--accent-yellow-bg);
   --color-chart-bar: var(--chart-bar);
 
+  --color-flag-green: var(--flag-green);
+  --color-flag-yellow: var(--flag-yellow);
+  --color-flag-black: var(--flag-black);
+  --color-flag-blue: var(--flag-blue);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -175,4 +186,28 @@
   html {
     @apply font-sans;
   }
+
+  ::selection {
+    background-color: var(--accent-teal-bg);
+    color: var(--brand-primary);
+  }
+}
+
+/* The sidebar owns its scrollbar; keep it thin and chrome-coloured. */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-chrome) transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--border-chrome);
+  border-radius: 9999px;
 }
