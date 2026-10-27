@@ -116,6 +116,37 @@ export class SettingsController {
     return this.settings.updateClient(auth, id, body, requestContext(request));
   }
 
+  @Patch('savings-accounts/:id')
+  @RequirePermissions('Savings Account : Edit')
+  async updateSavingsAccount(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateSavingsAccount(auth, id, body, requestContext(request));
+  }
+
+  @Get('savings-accounts')
+  @RequirePermissions('Savings Account : View')
+  async listSavingsAccounts(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listSavingsAccounts(auth, { q, status });
+  }
+
+  @Post('savings-accounts')
+  @RequirePermissions('Savings Account : Create')
+  async createSavingsAccount(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createSavingsAccount(auth, body, requestContext(request));
+  }
+
   @Get('branches')
   @RequirePermissions('Settings Branch : View')
   async listBranches(

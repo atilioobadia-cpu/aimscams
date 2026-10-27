@@ -823,3 +823,9 @@ export async function createSavingsAccount(payload: {
     body: payload,
   });
 }
+export async function updateSavingsAccount(id: string, payload: { status?: string }): Promise<SavingsAccountResponse> {
+  return apiRequest<SavingsAccountResponse>(`/settings/savings-accounts/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

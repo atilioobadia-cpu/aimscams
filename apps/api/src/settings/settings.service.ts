@@ -1510,6 +1510,127 @@ export class SettingsService {
     };
   }
 
+  async listSavingsAccounts(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.SavingsAccountWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'ACTIVE' || status === 'INACTIVE' || status === 'CLOSED') where.status = status as 'ACTIVE' | 'INACTIVE' | 'CLOSED';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { accountNumber: { contains: query, mode: 'insensitive' } },
+        { client: { fullName: { contains: query, mode: 'insensitive' } } },
+      ];
+    }
+    const items = await this.prisma.savingsAccount.findMany({
+      where,
+      include: { client: { select: { fullName: true, referenceNo: true } }, product: { select: { name: true, code: true } } },
+      orderBy: [{ createdAt: 'desc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeSavingsAccount(item)),
+      canView: this.can(auth, 'Savings Account : View'),
+      canCreate: this.can(auth, 'Savings Account : Create'),
+      canEdit: this.can(auth, 'Savings Account : Edit'),
+    };
+  }
+
+  async createSavingsAccount(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const clientId = String(body.clientId ?? '').trim();
+    if (!clientId) throw new BadRequestException('Client is required.');
+
+    const client = await this.prisma.client.findFirst({ where: { id: clientId, organisationId } });
+    if (!client) throw new NotFoundException('Client not found.');
+
+    const accountNumber = String(body.accountNumber ?? '').trim() || `SA-${Date.now()}`;
+    const existing = await this.prisma.savingsAccount.findUnique({
+      where: { organisationId_accountNumber: { organisationId, accountNumber } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A savings account with that number already exists.');
+
+    const item = await this.prisma.savingsAccount.create({
+      data: {
+        organisationId,
+        branchId: body.branchId ? String(body.branchId) : client.branchId,
+        clientId,
+        productId: body.productId ? String(body.productId) : null,
+        accountNumber,
+        accountType: String(body.accountType ?? 'PRIMARY').trim() || 'PRIMARY',
+        status: 'ACTIVE',
+      },
+      include: { client: { select: { fullName: true, referenceNo: true } }, product: { select: { name: true, code: true } } },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Savings account created',
+      entityType: 'SavingsAccount',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeSavingsAccount(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { account: this.serializeSavingsAccount(item), canEdit: this.can(auth, 'Savings Account : Edit') };
+  }
+
+  async updateSavingsAccount(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.savingsAccount.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Savings account not found.');
+
+    const data: Prisma.SavingsAccountUpdateInput = {};
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE' && status !== 'CLOSED') {
+        throw new BadRequestException('Status must be ACTIVE, INACTIVE or CLOSED.');
+      }
+      data.status = status as 'ACTIVE' | 'INACTIVE' | 'CLOSED';
+    }
+
+    const updated = await this.prisma.savingsAccount.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Savings account updated',
+      entityType: 'SavingsAccount',
+      entityId: id,
+      before: this.serializeSavingsAccount(before),
+      after: this.serializeSavingsAccount(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { account: this.serializeSavingsAccount(updated), canEdit: this.can(auth, 'Savings Account : Edit') };
+  }
+
+  private serializeSavingsAccount(item: any) {
+    return {
+      id: item.id,
+      accountNumber: item.accountNumber,
+      accountType: item.accountType,
+      status: item.status,
+      balanceMinor: item.balanceMinor.toString(),
+      clientName: item.client?.fullName ?? null,
+      clientReference: item.client?.referenceNo ?? null,
+      productName: item.product?.name ?? null,
+      productCode: item.product?.code ?? null,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,

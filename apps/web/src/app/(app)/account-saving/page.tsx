@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Building2 } from "lucide-react";
+import { Plus, Search, Building2, UserCheck, UserX } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
-import { listClients, listSavingsAccounts, listSavingsProducts, createSavingsAccount, type Client, type SavingsAccount, type SavingsAccountStatus } from "@/lib/settings";
+import { listClients, listSavingsAccounts, listSavingsProducts, createSavingsAccount, updateSavingsAccount, type Client, type SavingsAccount, type SavingsAccountStatus } from "@/lib/settings";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -202,6 +203,7 @@ export default function SavingsAccountsPage() {
                   <th className="px-4 py-3">Type</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Balance</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -215,6 +217,29 @@ export default function SavingsAccountsPage() {
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
                     </td>
                     <td className="px-4 py-3 tabular-nums text-body">{item.balanceMinor}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <RowActionsMenu
+                          label={item.accountNumber}
+                          actions={
+                            data?.canEdit
+                              ? [
+                                  {
+                                    label: item.status === "ACTIVE" ? "Deactivate" : "Activate",
+                                    icon: item.status === "ACTIVE" ? UserX : UserCheck,
+                                    onSelect: async () => {
+                                      const next = item.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+                                      await updateSavingsAccount(item.id, { status: next });
+                                      pushToast(`Savings account ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
+                                      setReloadKey((value) => value + 1);
+                                    },
+                                  },
+                                ]
+                              : []
+                          }
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
