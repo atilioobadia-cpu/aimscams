@@ -461,16 +461,16 @@ button; a role without Create gets the shared forbidden panel on `/settings/bran
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | ST-18 | `/settings-policies-membership-policy` | Membership policies | T1 | M |
-| [ ] | ST-19 | `/settings-policies-membership-policy-create` | Create membership policy | T6 | M |
-| [ ] | ST-20 | `/settings-policies-membership-policy-1` | Membership policy 1 | T3 | M |
-| [ ] | ST-21 | `/settings-policies-membership-policy-1-edit` | Edit membership policy 1 | T6 | M |
-| [ ] | ST-22 | `/settings-policies-membership-policy-2` | Membership policy 2 | T3 | M |
-| [ ] | ST-23 | `/settings-policies-membership-policy-2-edit` | Edit membership policy 2 | T6 | M |
-| [ ] | ST-24 | `/settings-policies-credit-product-policy` | Credit product policies | T1 | M |
-| [ ] | ST-25 | `/settings-policies-credit-product-policy-5` | Credit policy 5 | T3 | H |
-| [ ] | ST-26 | `/settings-policies-credit-product-policy-5-edit` | Edit credit policy 5 | T6 | H |
-| [ ] | ST-27 | `/settings-policies-holidays` | Holiday calendar | T1/T6 | L |
+| [x] | ST-18 | `/settings-policies-membership-policy` | Membership policies | T1 | M |
+| [x] | ST-19 | `/settings-policies-membership-policy-create` | Create membership policy | T6 | M |
+| [x] | ST-20 | `/settings-policies-membership-policy-1` | Membership policy 1 | T3 | M |
+| [x] | ST-21 | `/settings-policies-membership-policy-1-edit` | Edit membership policy 1 | T6 | M |
+| [x] | ST-22 | `/settings-policies-membership-policy-2` | Membership policy 2 | T3 | M |
+| [x] | ST-23 | `/settings-policies-membership-policy-2-edit` | Edit membership policy 2 | T6 | M |
+| [x] | ST-24 | `/settings-policies-credit-product-policy` | Credit product policies | T1 | M |
+| [x] | ST-25 | `/settings-policies-credit-product-policy-5` | Credit policy 5 | T3 | H |
+| [x] | ST-26 | `/settings-policies-credit-product-policy-5-edit` | Edit credit policy 5 | T6 | H |
+| [x] | ST-27 | `/settings-policies-holidays` | Holiday calendar | T1/T6 | L |
 
 **Work**
 
