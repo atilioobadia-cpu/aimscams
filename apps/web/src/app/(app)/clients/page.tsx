@@ -83,10 +83,10 @@ export default function ClientsPage() {
         <PageHeader title="Clients" description="Members, borrowers and groups registered at this branch." />
         {data?.canCreate ? (
           <div className="flex gap-2">
-            <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               <Link href="/clients/create">Add client</Link>
             </Button>
-            <Button asChild variant="outline" className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button asChild variant="outline" className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               <Link href="/clients/create-group">Add group</Link>
             </Button>
           </div>
@@ -96,7 +96,7 @@ export default function ClientsPage() {
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <div className="flex-1">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-search">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="client-search">
               Search
             </label>
             <div className="relative">
@@ -111,14 +111,14 @@ export default function ClientsPage() {
             </div>
           </div>
           <div className="w-full md:w-[180px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-type">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="client-type">
               Type
             </label>
             <select
               id="client-type"
               value={clientType}
               onChange={(event) => setClientType(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All types</option>
               <option value="INDIVIDUAL">Individual</option>
@@ -126,14 +126,14 @@ export default function ClientsPage() {
             </select>
           </div>
           <div className="w-full md:w-[180px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="client-status">
               Status
             </label>
             <select
               id="client-status"
               value={status}
               onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All statuses</option>
               <option value="ACTIVE">Active</option>
@@ -161,8 +161,8 @@ export default function ClientsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold tracking-wide text-label">
+            <table className="w-full min-w-[900px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Member ID</th>
                   <th className="px-4 py-3">Full name</th>
@@ -238,44 +238,44 @@ export default function ClientsPage() {
         {viewing ? (
           <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2">
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Member ID</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.memberNo ?? viewing.referenceNo}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Member ID</dt>
+              <dd className="mt-1 fs-text text-strong">{viewing.memberNo ?? viewing.referenceNo}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Reference number</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.referenceNo}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Reference number</dt>
+              <dd className="mt-1 fs-text text-strong">{viewing.referenceNo}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">National ID</dt>
-              <dd className="mt-1 text-fs text-strong">{maskNationalId(viewing.nationalId)}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">National ID</dt>
+              <dd className="mt-1 fs-text text-strong">{maskNationalId(viewing.nationalId)}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Type</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.clientType}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Type</dt>
+              <dd className="mt-1 fs-text text-strong">{viewing.clientType}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Phone</dt>
-              <dd className="mt-1 text-fs text-strong">{maskPhone(viewing.phone)}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Phone</dt>
+              <dd className="mt-1 fs-text text-strong">{maskPhone(viewing.phone)}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Email</dt>
-              <dd className="mt-1 text-fs text-strong">{maskEmail(viewing.email)}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Email</dt>
+              <dd className="mt-1 fs-text text-strong">{maskEmail(viewing.email)}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Status</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.status}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Status</dt>
+              <dd className="mt-1 fs-text text-strong">{viewing.status}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">KYC status</dt>
-              <dd className="mt-1 text-fs text-strong">{titleCase(viewing.kycStatus)}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">KYC status</dt>
+              <dd className="mt-1 fs-text text-strong">{titleCase(viewing.kycStatus)}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">DOJ</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.joinedAt ? new Date(viewing.joinedAt).toLocaleDateString() : "—"}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">DOJ</dt>
+              <dd className="mt-1 fs-text text-strong">{viewing.joinedAt ? new Date(viewing.joinedAt).toLocaleDateString() : "—"}</dd>
             </div>
             <div>
-              <dt className="text-fs font-medium text-muted-foreground">Group</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.groupName ?? "N/A"}</dd>
+              <dt className="fs-text font-medium text-muted-foreground">Group</dt>
+              <dd className="mt-1 fs-text text-strong">{viewing.groupName ?? "N/A"}</dd>
             </div>
           </dl>
         ) : null}

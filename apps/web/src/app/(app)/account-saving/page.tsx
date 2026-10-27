@@ -134,7 +134,7 @@ export default function SavingsAccountsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader title="Savings accounts" description="Savings accounts opened from eligible products." />
         {data?.canCreate ? (
-          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />
             New savings account
           </Button>
@@ -144,7 +144,7 @@ export default function SavingsAccountsPage() {
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <div className="flex-1">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="savings-account-search">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="savings-account-search">
               Search
             </label>
             <div className="relative">
@@ -159,14 +159,14 @@ export default function SavingsAccountsPage() {
             </div>
           </div>
           <div className="w-full md:w-[220px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="savings-account-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="savings-account-status">
               Status
             </label>
             <select
               id="savings-account-status"
               value={status}
               onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All statuses</option>
               <option value="ACTIVE">Active</option>
@@ -194,8 +194,8 @@ export default function SavingsAccountsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[900px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Account number</th>
                   <th className="px-4 py-3">Client</th>
@@ -252,14 +252,14 @@ export default function SavingsAccountsPage() {
         <form className="space-y-5" onSubmit={(event) => void save(event)}>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sa-client">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sa-client">
                 Client
               </label>
               <select
                 id="sa-client"
                 value={clientId}
                 onChange={(event) => setClientId(event.target.value)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="">Select client</option>
                 {clients.map((client) => (
@@ -270,14 +270,14 @@ export default function SavingsAccountsPage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sa-product">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sa-product">
                 Savings product
               </label>
               <select
                 id="sa-product"
                 value={productId}
                 onChange={(event) => setProductId(event.target.value)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="">Primary (no product)</option>
                 {products.map((product) => (
@@ -288,13 +288,13 @@ export default function SavingsAccountsPage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sa-type">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sa-type">
                 Account type
               </label>
               <Input id="sa-type" value={accountType} onChange={(event) => setAccountType(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sa-number">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sa-number">
                 Account number
               </label>
               <Input id="sa-number" value={accountNumber} onChange={(event) => setAccountNumber(event.target.value)} placeholder="Auto-generated if blank" className="h-[var(--control-height)]" />
@@ -308,7 +308,7 @@ export default function SavingsAccountsPage() {
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               {saving ? "Saving..." : "Create"}
             </Button>
           </div>

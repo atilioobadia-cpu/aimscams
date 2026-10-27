@@ -62,7 +62,7 @@ export function ClientProfile({ id }: { id: string }) {
       <div className="space-y-5">
         <PageHeader title="Client profile" description="Client details." />
         <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-24)] text-center">
-          <p className="text-fs font-bold text-strong">Client not found</p>
+          <p className="fs-text font-bold text-strong">Client not found</p>
           <Button asChild variant="outline" className="mt-4">
             <Link href="/clients">Back to clients</Link>
           </Button>
@@ -97,52 +97,52 @@ export function ClientProfile({ id }: { id: string }) {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
             <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2 lg:grid-cols-3">
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Member ID</dt>
-                <dd className="mt-1 text-fs text-strong">{client.memberNo ?? client.referenceNo}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Member ID</dt>
+                <dd className="mt-1 fs-text text-strong">{client.memberNo ?? client.referenceNo}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Reference number</dt>
-                <dd className="mt-1 text-fs text-strong">{client.referenceNo}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Reference number</dt>
+                <dd className="mt-1 fs-text text-strong">{client.referenceNo}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Full name</dt>
-                <dd className="mt-1 text-fs text-strong">{client.fullName}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Full name</dt>
+                <dd className="mt-1 fs-text text-strong">{client.fullName}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Type</dt>
-                <dd className="mt-1 text-fs text-strong">{titleCase(client.clientType)}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Type</dt>
+                <dd className="mt-1 fs-text text-strong">{titleCase(client.clientType)}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Phone</dt>
-                <dd className="mt-1 text-fs text-strong">{maskPhone(client.phone)}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Phone</dt>
+                <dd className="mt-1 fs-text text-strong">{maskPhone(client.phone)}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Email</dt>
-                <dd className="mt-1 text-fs text-strong">{maskEmail(client.email)}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Email</dt>
+                <dd className="mt-1 fs-text text-strong">{maskEmail(client.email)}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">National ID</dt>
-                <dd className="mt-1 text-fs text-strong">{maskNationalId(client.nationalId)}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">National ID</dt>
+                <dd className="mt-1 fs-text text-strong">{maskNationalId(client.nationalId)}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Status</dt>
-                <dd className="mt-1 text-fs text-strong">{titleCase(client.status)}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Status</dt>
+                <dd className="mt-1 fs-text text-strong">{titleCase(client.status)}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">KYC status</dt>
-                <dd className="mt-1 text-fs text-strong">{titleCase(client.kycStatus)}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">KYC status</dt>
+                <dd className="mt-1 fs-text text-strong">{titleCase(client.kycStatus)}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">DOJ</dt>
-                <dd className="mt-1 text-fs text-strong">{client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">DOJ</dt>
+                <dd className="mt-1 fs-text text-strong">{client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Group</dt>
-                <dd className="mt-1 text-fs text-strong">{client.groupName ?? "N/A"}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Group</dt>
+                <dd className="mt-1 fs-text text-strong">{client.groupName ?? "N/A"}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Branch</dt>
-                <dd className="mt-1 text-fs text-strong">{client.branchName ?? "N/A"}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Branch</dt>
+                <dd className="mt-1 fs-text text-strong">{client.branchName ?? "N/A"}</dd>
               </div>
             </dl>
           </section>
@@ -166,7 +166,7 @@ export function ClientProfile({ id }: { id: string }) {
 
             <TabsContent value="details">
               <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-                <pre className="overflow-auto text-fs text-body">{JSON.stringify(profile, null, 2)}</pre>
+                <pre className="overflow-auto fs-text text-body">{JSON.stringify(profile, null, 2)}</pre>
               </div>
             </TabsContent>
 

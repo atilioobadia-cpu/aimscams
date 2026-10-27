@@ -90,7 +90,7 @@ export default function CreateGroupPage() {
       <PageHeader title="Add group" description="Three-step group registration." />
 
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <p className="text-fs font-medium text-strong">
+        <p className="fs-text font-medium text-strong">
           Step {step} of {STEPS.length}: {STEPS[step - 1]}
         </p>
         <div className="mt-3 h-2 rounded-full bg-subtle">
@@ -102,31 +102,31 @@ export default function CreateGroupPage() {
         {step === 1 ? (
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-reference">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-reference">
                 Reference number
               </label>
               <Input id="group-reference" value={referenceNo} onChange={(event) => setReferenceNo(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-name">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-name">
                 Group name
               </label>
               <Input id="group-name" value={groupName} onChange={(event) => setGroupName(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-branch">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-branch">
                 Branch ID
               </label>
               <Input id="group-branch" value={branchId} onChange={(event) => setBranchId(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-policy">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-policy">
                 Membership policy
               </label>
               <Input id="group-policy" value={membershipPolicy} onChange={(event) => setMembershipPolicy(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-joining-date">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-joining-date">
                 Joining date
               </label>
               <Input id="group-joining-date" type="date" value={joiningDate} onChange={(event) => setJoiningDate(event.target.value)} className="h-[var(--control-height)]" />
@@ -137,19 +137,19 @@ export default function CreateGroupPage() {
         {step === 2 ? (
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-meeting-day">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-meeting-day">
                 Meeting day
               </label>
               <Input id="group-meeting-day" value={meetingDay} onChange={(event) => setMeetingDay(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-meeting-time">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-meeting-time">
                 Meeting time
               </label>
               <Input id="group-meeting-time" value={meetingTime} onChange={(event) => setMeetingTime(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="group-meeting-place">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-meeting-place">
                 Meeting place
               </label>
               <Input id="group-meeting-place" value={meetingPlace} onChange={(event) => setMeetingPlace(event.target.value)} className="h-[var(--control-height)]" />
@@ -158,22 +158,22 @@ export default function CreateGroupPage() {
         ) : null}
 
         {step === 3 ? (
-          <p className="text-fs text-muted-foreground">Review and submit the group.</p>
+          <p className="fs-text text-muted-foreground">Review and submit the group.</p>
         ) : null}
 
-        {error ? <p role="alert" className="text-fs text-accent-red">{error}</p> : null}
+        {error ? <p role="alert" className="fs-text text-accent-red">{error}</p> : null}
 
         <div className="flex items-center justify-between gap-3">
           <Button type="button" variant="outline" onClick={back} disabled={step === 1 || saving}>
             Back
           </Button>
           {step < STEPS.length ? (
-            <Button type="button" onClick={next} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="button" onClick={next} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               Next
               <ArrowRight className="size-4" aria-hidden="true" />
             </Button>
           ) : (
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               {saving ? "Saving..." : "Create group"}
             </Button>
           )}
