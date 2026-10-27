@@ -38,7 +38,7 @@ export default function CreateGroupPage() {
   const [meetingPlace, setMeetingPlace] = useState("");
 
   function next() {
-    if (step === 1 && (!referenceNo.trim() || !groupName.trim())) {
+    if (step === 1 && !groupName.trim()) {
       setError("Reference number and group name are required.");
       return;
     }
@@ -56,7 +56,7 @@ export default function CreateGroupPage() {
     setSaving(true);
     try {
       await createClient({
-        referenceNo: referenceNo.trim().toUpperCase(),
+        referenceNo: referenceNo.trim() ? referenceNo.trim().toUpperCase() : undefined,
         fullName: groupName.trim(),
         clientType: "GROUP",
         branchId: branchId || null,

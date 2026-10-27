@@ -1359,6 +1359,7 @@ export class SettingsService {
     }
     const items = await this.prisma.client.findMany({
       where,
+      include: { group: { select: { fullName: true } } },
       orderBy: [{ status: 'asc' }, { fullName: 'asc' }],
     });
     return {
@@ -1371,7 +1372,18 @@ export class SettingsService {
 
   async createClient(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
     const organisationId = auth.user.organisation.id;
-    const referenceNo = String(body.referenceNo ?? '').trim().toUpperCase();
+    let referenceNo = String(body.referenceNo ?? '').trim().toUpperCase();
+    if (!referenceNo) {
+      const existing = await this.prisma.client.findMany({
+        where: { organisationId },
+        select: { referenceNo: true },
+      });
+      const max = existing.reduce((current, item) => {
+        const value = Number.parseInt(item.referenceNo, 10);
+        return Number.isFinite(value) && value > current ? value : current;
+      }, 0);
+      referenceNo = String(max + 1).padStart(6, '0');
+    }
     const fullName = String(body.fullName ?? '').trim();
     if (!referenceNo) throw new BadRequestException('Reference number is required.');
     if (!fullName) throw new BadRequestException('Full name is required.');
@@ -1386,6 +1398,9 @@ export class SettingsService {
       data: {
         organisationId,
         branchId: body.branchId ? String(body.branchId) : null,
+        membershipPolicyId: body.membershipPolicyId ? String(body.membershipPolicyId) : null,
+        groupId: body.groupId ? String(body.groupId) : null,
+        memberNo: referenceNo,
         referenceNo,
         fullName,
         clientType: String(body.clientType ?? 'INDIVIDUAL').trim().toUpperCase() === 'GROUP' ? 'GROUP' : 'INDIVIDUAL',
@@ -1393,6 +1408,8 @@ export class SettingsService {
         email: body.email ? String(body.email).trim() : null,
         nationalId: body.nationalId ? String(body.nationalId).trim() : null,
         status: 'ACTIVE',
+        kycStatus: 'PENDING',
+        joinedAt: body.joinedAt ? new Date(String(body.joinedAt)) : new Date(),
         profile: body.profile ?? undefined,
       },
     });
@@ -1414,9 +1431,10 @@ export class SettingsService {
     return { client: this.serializeClient(item), canEdit: this.can(auth, 'Client : Edit') };
   }
 
-  private serializeClient(item: Prisma.ClientGetPayload<Record<string, never>>) {
+  private serializeClient(item: any) {
     return {
       id: item.id,
+      memberNo: item.memberNo,
       referenceNo: item.referenceNo,
       fullName: item.fullName,
       clientType: item.clientType,
@@ -1424,6 +1442,9 @@ export class SettingsService {
       email: item.email,
       nationalId: item.nationalId,
       status: item.status,
+      kycStatus: item.kycStatus,
+      joinedAt: item.joinedAt?.toISOString() ?? null,
+      groupName: item.group?.fullName ?? null,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };

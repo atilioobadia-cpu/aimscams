@@ -561,12 +561,18 @@ model Client {
   email             String?
   nationalId        String?
   status            ClientStatus @default(ACTIVE)
+  kycStatus         KycStatus    @default(PENDING)
+  memberNo          String?
+  groupId           String?      @db.Uuid
+  joinedAt          DateTime     @default(now())
   profile           Json?
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
 
   organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
   branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  group        Client?      @relation("ClientGroup", fields: [groupId], references: [id], onDelete: SetNull)
+  members      Client[]     @relation("ClientGroup")
 
   @@unique([organisationId, referenceNo])
   @@index([organisationId, status])
@@ -583,4 +589,10 @@ enum ClientStatus {
   ACTIVE
   INACTIVE
   PENDING
+}
+
+enum KycStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

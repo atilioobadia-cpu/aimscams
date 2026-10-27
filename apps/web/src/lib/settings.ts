@@ -713,6 +713,7 @@ export type ClientType = "INDIVIDUAL" | "GROUP";
 
 export type Client = {
   id: string;
+  memberNo: string | null;
   referenceNo: string;
   fullName: string;
   clientType: ClientType;
@@ -720,6 +721,9 @@ export type Client = {
   email: string | null;
   nationalId: string | null;
   status: ClientStatus;
+  kycStatus: string;
+  joinedAt: string | null;
+  groupName: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -746,7 +750,7 @@ export async function listClients(filter: { q?: string; status?: string; type?: 
 }
 
 export async function createClient(payload: {
-  referenceNo: string;
+  referenceNo?: string;
   fullName: string;
   clientType?: ClientType;
   phone?: string | null;

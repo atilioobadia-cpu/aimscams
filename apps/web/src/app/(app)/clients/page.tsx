@@ -1,17 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Plus, Search } from "lucide-react";
+import { Building2, Eye, Plus, Search } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { ApiError } from "@/lib/api";
 import { listClients, type Client, type ClientStatus, type ClientType } from "@/lib/settings";
+import { maskEmail, maskNationalId, maskPhone, nationalIdPattern } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -29,6 +32,7 @@ export default function ClientsPage() {
   const [clientType, setClientType] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
+  const [viewing, setViewing] = useState<Client | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -157,24 +161,43 @@ export default function ClientsPage() {
             <table className="w-full min-w-[900px] text-left text-fs">
               <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
                 <tr>
-                  <th className="px-4 py-3">Reference</th>
-                  <th className="px-4 py-3">Name</th>
+                  <th className="px-4 py-3">Member ID</th>
+                  <th className="px-4 py-3">Full name</th>
+                  <th className="px-4 py-3">Ref number</th>
+                  <th className="px-4 py-3">National ID</th>
                   <th className="px-4 py-3">Type</th>
                   <th className="px-4 py-3">Phone</th>
-                  <th className="px-4 py-3">National ID</th>
+                  <th className="px-4 py-3">Email</th>
                   <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">KYC status</th>
+                  <th className="px-4 py-3">DOJ</th>
+                  <th className="px-4 py-3">Group</th>
+                  <th className="px-4 py-3 text-right">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map((item: Client) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="px-4 py-3 font-medium text-strong">{item.referenceNo}</td>
+                    <td className="px-4 py-3 font-medium text-strong">{item.memberNo ?? item.referenceNo}</td>
                     <td className="px-4 py-3 text-body">{item.fullName}</td>
+                    <td className="px-4 py-3 text-body">{item.referenceNo}</td>
+                    <td className="px-4 py-3 text-body">{maskNationalId(item.nationalId)}</td>
                     <td className="px-4 py-3 text-body">{item.clientType}</td>
-                    <td className="px-4 py-3 text-body">{item.phone ?? "—"}</td>
-                    <td className="px-4 py-3 text-body">{item.nationalId ?? "—"}</td>
+                    <td className="px-4 py-3 text-body">{maskPhone(item.phone)}</td>
+                    <td className="px-4 py-3 text-body">{maskEmail(item.email)}</td>
                     <td className="px-4 py-3">
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-body">{item.kycStatus}</td>
+                    <td className="px-4 py-3 text-body">{item.joinedAt ? new Date(item.joinedAt).toLocaleDateString() : "—"}</td>
+                    <td className="px-4 py-3 text-body">{item.groupName ?? "—"}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <RowActionsMenu
+                          label={`${item.referenceNo} ${item.fullName}`}
+                          actions={[{ label: "View client", icon: Eye, onSelect: () => setViewing(item) }]}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -183,6 +206,61 @@ export default function ClientsPage() {
           </div>
         </section>
       )}
+      <Modal
+        open={Boolean(viewing)}
+        onClose={() => setViewing(null)}
+        title={viewing ? `${viewing.fullName}` : "Client details"}
+        footer={
+          <Button variant="outline" onClick={() => setViewing(null)}>
+            Close
+          </Button>
+        }
+      >
+        {viewing ? (
+          <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2">
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Member ID</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.memberNo ?? viewing.referenceNo}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Reference number</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.referenceNo}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">National ID</dt>
+              <dd className="mt-1 text-fs text-strong">{maskNationalId(viewing.nationalId)}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Type</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.clientType}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Phone</dt>
+              <dd className="mt-1 text-fs text-strong">{maskPhone(viewing.phone)}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Email</dt>
+              <dd className="mt-1 text-fs text-strong">{maskEmail(viewing.email)}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Status</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.status}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">KYC status</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.kycStatus}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">DOJ</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.joinedAt ? new Date(viewing.joinedAt).toLocaleDateString() : "—"}</dd>
+            </div>
+            <div>
+              <dt className="text-fs font-medium text-muted-foreground">Group</dt>
+              <dd className="mt-1 text-fs text-strong">{viewing.groupName ?? "—"}</dd>
+            </div>
+          </dl>
+        ) : null}
+      </Modal>
     </div>
   );
 }

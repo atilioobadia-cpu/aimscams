@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import { createClient } from "@/lib/settings";
+import { listBranches, listMembershipPolicies } from "@/lib/settings";
+import { nationalIdPattern } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -26,6 +28,26 @@ export default function CreateClientPage() {
   const [step, setStep] = useState(1);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [branches, setBranches] = useState<{ id: string; name: string; code: string }[]>([]);
+  const [policies, setPolicies] = useState<{ id: string; name: string; code: string }[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    void (async () => {
+      try {
+        const [branchResult, policyResult] = await Promise.all([listBranches(), listMembershipPolicies()]);
+        if (!active) return;
+        setBranches(branchResult.items.map((item) => ({ id: item.id, name: item.name, code: item.code })));
+        setPolicies(policyResult.items.map((item) => ({ id: item.id, name: item.name, code: item.code })));
+      } catch {
+        // keep manual entry
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const [referenceNo, setReferenceNo] = useState("");
   const [branchId, setBranchId] = useState("");
@@ -59,11 +81,11 @@ export default function CreateClientPage() {
 
   function validateStep(): string | null {
     if (step === 1) {
-      if (!referenceNo.trim()) return "Reference number is required.";
       if (!fullName.trim()) return "Full name is required.";
     }
     if (step === 4) {
       if (!nationalId.trim()) return "National ID is required.";
+      if (!nationalIdPattern(nationalId)) return "National ID must be in format 19900101-12345-00001-01.";
     }
     if (step === 6) {
       const percent = Number(nextOfKinPercent);
@@ -97,7 +119,7 @@ export default function CreateClientPage() {
     setSaving(true);
     try {
       await createClient({
-        referenceNo: referenceNo.trim().toUpperCase(),
+        referenceNo: referenceNo.trim() ? referenceNo.trim().toUpperCase() : undefined,
         fullName: fullName.trim(),
         clientType: "INDIVIDUAL",
         phone: phone.trim() || null,
@@ -165,13 +187,23 @@ export default function CreateClientPage() {
               <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-branch">
                 Branch ID
               </label>
-              <Input id="client-branch" value={branchId} onChange={(event) => setBranchId(event.target.value)} className="h-[var(--control-height)]" />
+              <Input id="client-branch" list="branch-options" value={branchId} onChange={(event) => setBranchId(event.target.value)} className="h-[var(--control-height)]" />
+              <datalist id="branch-options">
+                {branches.map((branch) => (
+                  <option key={branch.id} value={branch.id} label={`${branch.name} (${branch.code})`} />
+                ))}
+              </datalist>
             </div>
             <div>
               <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-policy">
                 Membership policy
               </label>
-              <Input id="client-policy" value={membershipPolicy} onChange={(event) => setMembershipPolicy(event.target.value)} className="h-[var(--control-height)]" />
+              <Input id="client-policy" list="policy-options" value={membershipPolicy} onChange={(event) => setMembershipPolicy(event.target.value)} className="h-[var(--control-height)]" />
+              <datalist id="policy-options">
+                {policies.map((policy) => (
+                  <option key={policy.id} value={policy.id} label={`${policy.name} (${policy.code})`} />
+                ))}
+              </datalist>
             </div>
             <div>
               <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-joining-date">
