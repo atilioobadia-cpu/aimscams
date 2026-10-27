@@ -54,7 +54,7 @@ export default function ChartOfAccountsPage() {
 
       <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-[var(--font-size-secondary)]">
+          <table className="w-full text-left text-[var(--font-size-micro)]">
             <thead className="border-b border-card-border bg-subtle text-[var(--font-size-micro)] font-semibold uppercase tracking-wide text-label">
               <tr>
                 <th className="px-[var(--space-16)] py-[var(--space-8)]">Code</th>
