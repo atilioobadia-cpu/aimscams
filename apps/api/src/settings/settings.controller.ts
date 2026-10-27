@@ -165,6 +165,26 @@ export class SettingsController {
     return this.settings.createProvisioningRule(auth, body, requestContext(request));
   }
 
+  @Get('policies/credit-product')
+  @RequirePermissions('Settings Policy : View')
+  async listCreditProductPolicies(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listCreditProductPolicies(auth, { q, status });
+  }
+
+  @Post('policies/credit-product')
+  @RequirePermissions('Settings Policy : Create')
+  async createCreditProductPolicy(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createCreditProductPolicy(auth, body, requestContext(request));
+  }
+
   @Get('policies/membership')
   @RequirePermissions('Settings Policy : View')
   async listMembershipPolicies(
@@ -183,6 +203,22 @@ export class SettingsController {
     @Req() request: Request,
   ) {
     return this.settings.createMembershipPolicy(auth, body, requestContext(request));
+  }
+
+  @Get('policies/holidays')
+  @RequirePermissions('Settings Policy : View')
+  async listHolidays(@CurrentAuth() auth: AuthContext) {
+    return this.settings.listHolidays(auth);
+  }
+
+  @Post('policies/holidays')
+  @RequirePermissions('Settings Policy : Create')
+  async createHoliday(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createHoliday(auth, body, requestContext(request));
   }
 
   @Get('products/interest-rates')

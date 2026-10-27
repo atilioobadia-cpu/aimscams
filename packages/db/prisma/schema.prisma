@@ -67,6 +67,8 @@ model Organisation {
   feePenalties  FeePenalty[]
   provisioningRules ProvisioningRule[]
   membershipPolicies MembershipPolicy[]
+  creditProductPolicies CreditProductPolicy[]
+  holidays Holiday[]
 
   @@map("organisation")
 }
@@ -92,6 +94,7 @@ model Branch {
   sessions     Session[]
   auditEvents  AuditEvent[]
   hours        BranchHour[]
+  holidays     Holiday[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
@@ -502,4 +505,44 @@ enum MembershipPolicyStatus {
   DRAFT
   ACTIVE
   INACTIVE
+}
+
+model CreditProductPolicy {
+  id             String                    @id @default(uuid()) @db.Uuid
+  organisationId String                    @db.Uuid
+  code           String
+  name           String
+  status         CreditProductPolicyStatus @default(DRAFT)
+  description    String?
+  content        Json?
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, code])
+  @@index([organisationId, status])
+  @@map("credit_product_policy")
+}
+
+enum CreditProductPolicyStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+}
+
+model Holiday {
+  id             String   @id @default(uuid()) @db.Uuid
+  organisationId String   @db.Uuid
+  branchId       String?  @db.Uuid
+  name           String
+  holidayDate    DateTime @db.Date
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([organisationId, holidayDate])
+  @@map("holiday")
 }

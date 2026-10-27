@@ -949,6 +949,88 @@ export class SettingsService {
     return { item: this.serializeMembershipPolicy(item), canEdit: this.can(auth, 'Settings Policy : Create') };
   }
 
+  async listCreditProductPolicies(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.CreditProductPolicyWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'DRAFT' || status === 'ACTIVE' || status === 'INACTIVE') where.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const items = await this.prisma.creditProductPolicy.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeCreditProductPolicy(item)),
+      canView: this.can(auth, 'Settings Policy : View'),
+      canEdit: this.can(auth, 'Settings Policy : Create'),
+    };
+  }
+
+  async createCreditProductPolicy(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+
+    const existing = await this.prisma.creditProductPolicy.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A credit product policy with that code already exists.');
+
+    const status = String(body.status ?? 'DRAFT').trim().toUpperCase();
+    if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+
+    const item = await this.prisma.creditProductPolicy.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        status: status as 'DRAFT' | 'ACTIVE' | 'INACTIVE',
+        description: body.description ? String(body.description).trim() : null,
+        content: body.content ?? undefined,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Credit product policy created',
+      entityType: 'CreditProductPolicy',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeCreditProductPolicy(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeCreditProductPolicy(item), canEdit: this.can(auth, 'Settings Policy : Create') };
+  }
+
+  private serializeCreditProductPolicy(item: Prisma.CreditProductPolicyGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      status: item.status,
+      description: item.description,
+      content: item.content,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   private serializeMembershipPolicy(item: Prisma.MembershipPolicyGetPayload<Record<string, never>>) {
     return {
       id: item.id,
@@ -965,6 +1047,64 @@ export class SettingsService {
       enableMemberVerification: item.enableMemberVerification,
       verificationType: item.verificationType,
       boardApproval: item.boardApproval,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
+  async listHolidays(auth: AuthContext) {
+    const organisationId = auth.user.organisation.id;
+    const items = await this.prisma.holiday.findMany({
+      where: { organisationId },
+      orderBy: { holidayDate: 'asc' },
+    });
+    return {
+      items: items.map((item) => this.serializeHoliday(item)),
+      canView: this.can(auth, 'Settings Policy : View'),
+      canEdit: this.can(auth, 'Settings Policy : Create'),
+    };
+  }
+
+  async createHoliday(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const name = String(body.name ?? '').trim();
+    if (!name) throw new BadRequestException('Name is required.');
+    if (!body.holidayDate) throw new BadRequestException('Holiday date is required.');
+    const date = new Date(String(body.holidayDate));
+    if (Number.isNaN(date.getTime())) throw new BadRequestException('Holiday date must be valid.');
+
+    const item = await this.prisma.holiday.create({
+      data: {
+        organisationId,
+        name,
+        holidayDate: date,
+        branchId: body.branchId ? String(body.branchId) : null,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Holiday created',
+      entityType: 'Holiday',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeHoliday(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeHoliday(item), canEdit: this.can(auth, 'Settings Policy : Create') };
+  }
+
+  private serializeHoliday(item: Prisma.HolidayGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      name: item.name,
+      holidayDate: item.holidayDate.toISOString().slice(0, 10),
+      branchId: item.branchId,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };

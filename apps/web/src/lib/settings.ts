@@ -573,3 +573,81 @@ export async function createMembershipPolicy(payload: {
     body: payload,
   });
 }
+export type CreditProductPolicyStatus = "DRAFT" | "ACTIVE" | "INACTIVE";
+
+export type CreditProductPolicy = {
+  id: string;
+  code: string;
+  name: string;
+  status: CreditProductPolicyStatus;
+  description: string | null;
+  content: unknown;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreditProductPolicyListResponse = {
+  items: CreditProductPolicy[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type CreditProductPolicyResponse = {
+  item: CreditProductPolicy;
+  canEdit: boolean;
+};
+
+export async function listCreditProductPolicies(filter: { q?: string; status?: string } = {}): Promise<CreditProductPolicyListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<CreditProductPolicyListResponse>(`/settings/policies/credit-product${suffix}`);
+}
+
+export async function createCreditProductPolicy(payload: {
+  code: string;
+  name: string;
+  status?: string;
+  description?: string | null;
+  content?: unknown;
+}): Promise<CreditProductPolicyResponse> {
+  return apiRequest<CreditProductPolicyResponse>("/settings/policies/credit-product", {
+    method: "POST",
+    body: payload,
+  });
+}
+export type Holiday = {
+  id: string;
+  name: string;
+  holidayDate: string;
+  branchId: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type HolidayListResponse = {
+  items: Holiday[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type HolidayResponse = {
+  item: Holiday;
+  canEdit: boolean;
+};
+
+export async function listHolidays(): Promise<HolidayListResponse> {
+  return apiRequest<HolidayListResponse>("/settings/policies/holidays");
+}
+
+export async function createHoliday(payload: {
+  name: string;
+  holidayDate: string;
+  branchId?: string | null;
+}): Promise<HolidayResponse> {
+  return apiRequest<HolidayResponse>("/settings/policies/holidays", {
+    method: "POST",
+    body: payload,
+  });
+}
