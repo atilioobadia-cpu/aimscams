@@ -66,6 +66,7 @@ model Organisation {
   interestRates InterestRate[]
   feePenalties  FeePenalty[]
   provisioningRules ProvisioningRule[]
+  membershipPolicies MembershipPolicy[]
 
   @@map("organisation")
 }
@@ -467,6 +468,38 @@ model ProvisioningRule {
 }
 
 enum ProvisioningRuleStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MembershipPolicy {
+  id                     String                  @id @default(uuid()) @db.Uuid
+  organisationId         String                  @db.Uuid
+  code                   String
+  name                   String
+  status                 MembershipPolicyStatus  @default(DRAFT)
+  description            String?
+  memberType             String                  @default("INDIVIDUAL")
+  minNextOfKin           Int                     @default(1)
+  maxNextOfKin           Int                     @default(2)
+  dormantDays            Int                     @default(365)
+  allowWithdraw          Boolean                 @default(true)
+  autoActiveUponDeposit  Boolean                 @default(false)
+  enableMemberVerification Boolean               @default(false)
+  verificationType       String?
+  boardApproval          Json?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, code])
+  @@index([organisationId, status])
+  @@map("membership_policy")
+}
+
+enum MembershipPolicyStatus {
+  DRAFT
   ACTIVE
   INACTIVE
 }

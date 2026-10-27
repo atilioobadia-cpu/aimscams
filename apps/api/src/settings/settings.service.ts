@@ -872,6 +872,104 @@ export class SettingsService {
     };
   }
 
+  async listMembershipPolicies(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.MembershipPolicyWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'DRAFT' || status === 'ACTIVE' || status === 'INACTIVE') where.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const items = await this.prisma.membershipPolicy.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeMembershipPolicy(item)),
+      canView: this.can(auth, 'Settings Policy : View'),
+      canEdit: this.can(auth, 'Settings Policy : Create'),
+    };
+  }
+
+  async createMembershipPolicy(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+
+    const existing = await this.prisma.membershipPolicy.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A membership policy with that code already exists.');
+
+    const status = String(body.status ?? 'DRAFT').trim().toUpperCase();
+    if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+
+    const item = await this.prisma.membershipPolicy.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        status: status as 'DRAFT' | 'ACTIVE' | 'INACTIVE',
+        description: body.description ? String(body.description).trim() : null,
+        memberType: String(body.memberType ?? 'INDIVIDUAL').trim() || 'INDIVIDUAL',
+        minNextOfKin: Number(body.minNextOfKin ?? 1),
+        maxNextOfKin: Number(body.maxNextOfKin ?? 2),
+        dormantDays: Number(body.dormantDays ?? 365),
+        allowWithdraw: body.allowWithdraw !== false,
+        autoActiveUponDeposit: body.autoActiveUponDeposit === true,
+        enableMemberVerification: body.enableMemberVerification === true,
+        verificationType: body.verificationType ? String(body.verificationType).trim() : null,
+        boardApproval: body.boardApproval ?? undefined,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Membership policy created',
+      entityType: 'MembershipPolicy',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeMembershipPolicy(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeMembershipPolicy(item), canEdit: this.can(auth, 'Settings Policy : Create') };
+  }
+
+  private serializeMembershipPolicy(item: Prisma.MembershipPolicyGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      status: item.status,
+      description: item.description,
+      memberType: item.memberType,
+      minNextOfKin: item.minNextOfKin,
+      maxNextOfKin: item.maxNextOfKin,
+      dormantDays: item.dormantDays,
+      allowWithdraw: item.allowWithdraw,
+      autoActiveUponDeposit: item.autoActiveUponDeposit,
+      enableMemberVerification: item.enableMemberVerification,
+      verificationType: item.verificationType,
+      boardApproval: item.boardApproval,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,

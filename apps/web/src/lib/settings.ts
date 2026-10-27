@@ -513,3 +513,63 @@ export async function createProvisioningRule(payload: {
     body: payload,
   });
 }
+export type MembershipPolicyStatus = "DRAFT" | "ACTIVE" | "INACTIVE";
+
+export type MembershipPolicy = {
+  id: string;
+  code: string;
+  name: string;
+  status: MembershipPolicyStatus;
+  description: string | null;
+  memberType: string;
+  minNextOfKin: number;
+  maxNextOfKin: number;
+  dormantDays: number;
+  allowWithdraw: boolean;
+  autoActiveUponDeposit: boolean;
+  enableMemberVerification: boolean;
+  verificationType: string | null;
+  boardApproval: unknown;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type MembershipPolicyListResponse = {
+  items: MembershipPolicy[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type MembershipPolicyResponse = {
+  item: MembershipPolicy;
+  canEdit: boolean;
+};
+
+export async function listMembershipPolicies(filter: { q?: string; status?: string } = {}): Promise<MembershipPolicyListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<MembershipPolicyListResponse>(`/settings/policies/membership${suffix}`);
+}
+
+export async function createMembershipPolicy(payload: {
+  code: string;
+  name: string;
+  status?: string;
+  description?: string | null;
+  memberType?: string;
+  minNextOfKin?: number;
+  maxNextOfKin?: number;
+  dormantDays?: number;
+  allowWithdraw?: boolean;
+  autoActiveUponDeposit?: boolean;
+  enableMemberVerification?: boolean;
+  verificationType?: string | null;
+  boardApproval?: unknown;
+}): Promise<MembershipPolicyResponse> {
+  return apiRequest<MembershipPolicyResponse>("/settings/policies/membership", {
+    method: "POST",
+    body: payload,
+  });
+}

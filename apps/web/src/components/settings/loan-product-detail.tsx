@@ -34,10 +34,6 @@ export function LoanProductDetail({ id }: { id: string }) {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(null);
-    setForbidden(false);
-    setNotFound(false);
 
     void getLoanProduct(id)
       .then((response) => {

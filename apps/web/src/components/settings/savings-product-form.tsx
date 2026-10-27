@@ -52,11 +52,9 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
 
   useEffect(() => {
     if (!editing || !productId) {
-      setLoading(false);
       return;
     }
     let active = true;
-    setLoading(true);
     void getSavingsProduct(productId)
       .then((response) => {
         if (!active) return;
