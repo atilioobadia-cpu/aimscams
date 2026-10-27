@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
+import { UserForm } from "@/components/settings/user-form";
 import {
   listBranches,
   listRoles,
@@ -28,6 +30,7 @@ export default function UsersPage() {
   const [status, setStatus] = useState("");
   const [role, setRole] = useState("");
   const [branchId, setBranchId] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const filters = useMemo(
     () => ({ q, status: status || undefined, role: role || undefined, branchId: branchId || undefined }),
@@ -106,8 +109,11 @@ export default function UsersPage() {
             Institution accounts, roles and branch access.
           </p>
         </div>
-        <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold">
-          <Link href="/settings-administrator-add">Add user</Link>
+        <Button
+          className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold"
+          onClick={() => setModalOpen(true)}
+        >
+          Add user
         </Button>
       </div>
 
@@ -240,6 +246,9 @@ export default function UsersPage() {
           </table>
         </div>
       </div>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Add user">
+        <UserForm id={undefined} />
+      </Modal>
     </div>
   );
 }
