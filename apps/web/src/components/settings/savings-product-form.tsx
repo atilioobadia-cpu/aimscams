@@ -194,17 +194,17 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           <PanelSkeleton rows={8} />
         </section>
       ) : (
-        <form className="space-y-[var(--space-14)]" onSubmit={(event) => void save(event)}>
+        <form onSubmit={(event) => void save(event)} className="space-y-5 rounded-xl border border-card-border bg-surface p-5">
           {!editing ? (
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-code">
+                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-code">
                   Code
                 </label>
                 <Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
               </div>
               <div>
-                <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-name">
+                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-name">
                   Name
                 </label>
                 <Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
@@ -213,13 +213,13 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-code">
+                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-code">
                   Code
                 </label>
                 <Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
               </div>
               <div>
-                <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-name">
+                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-name">
                   Name
                 </label>
                 <Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
@@ -229,7 +229,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
 
           <div className="grid gap-4 md:grid-cols-3">
             <div>
-              <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-status">
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-status">
                 Status
               </label>
               <select
@@ -244,13 +244,13 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-min-balance">
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-min-balance">
                 Minimum balance
               </label>
               <Input id="sp-min-balance" value={minBalance} onChange={(event) => setMinBalance(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-rate">
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-rate">
                 Interest rate (%)
               </label>
               <Input id="sp-rate" value={interestRate} onChange={(event) => setInterestRate(event.target.value)} className="h-[var(--control-height)]" />
@@ -258,14 +258,14 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           </div>
 
           <div>
-            <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-frequency">
+            <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-frequency">
               Interest payout frequency
             </label>
             <Input id="sp-frequency" value={frequency} onChange={(event) => setFrequency(event.target.value)} className="h-[var(--control-height)]" />
           </div>
 
           <div>
-            <label className="mb-1 block text-fs font-medium text-strong" htmlFor="sp-description">
+            <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-description">
               Description
             </label>
             <textarea
