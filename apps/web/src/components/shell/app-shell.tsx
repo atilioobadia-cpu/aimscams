@@ -9,7 +9,7 @@ import { ChatFab } from "@/components/shell/chat-fab";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
-  expanded: 182,
+  expanded: 204,
   collapsed: 56,
 } as const;
 
@@ -58,7 +58,7 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
         style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
         className="min-h-screen transition-[padding-left] duration-200"
       >
-        <div className="px-[var(--content-padding)] pb-12 pt-[var(--content-padding)]">
+        <div className="px-[var(--content-padding)] pb-[76px] pt-[var(--content-padding)]">
           {children}
         </div>
       </main>
