@@ -535,6 +535,32 @@ cleanup.
 
 ---
 
+### D-032 - Auth screens use a typographic AIMSCAMS wordmark; MFA challenge is authenticator-only; table row actions use a shared three-dot menu
+
+**Status:** Accepted 2026-10-27 A� implements the Phase 2 auth screens and Phase 4 list pages A� `docs/11 A7`, `docs/13 A2`, `docs/13 A4`
+
+The auth screens (`/login`, `/login/mfa`, `/login/mfa/enroll`, `/forgot-password`) render the
+product name as a typographic `AIMSCAMS` wordmark: white, bold, tracked, with a short white
+underline accent, and no monogram. The MFA challenge is a single six-digit authenticator-code
+flow; the recovery-code toggle and the enrollment recovery-code display/copy/acknowledgement
+phase are removed from the UI. Backend recovery endpoints and stored recovery-code hashes remain
+for compatibility. OTP inputs have no native `maxLength`; mixed pasted text is filtered to six
+digits before truncation.
+
+Table row actions on branch, user, accounting-period, posting-policy and journal-entry lists use
+the shared `RowActionsMenu`: a `MoreHorizontal` trigger, `align="end"`, about 192px wide, with
+`aria-label="Open actions for ..."`. Branch and user lists add read-only View modals built from
+existing list data; no delete actions are invented.
+
+**Consequences.**
+- Recovery-code UI and challenge mode are gone; authenticator enrollment activates directly to
+  `/dashboard`.
+- Row action cells contain only the three-dot trigger; existing actions remain behind it.
+- Auth and MFA screens were verified at 1280x800 and 1837x1080 with zero console errors or
+  warnings and no horizontal overflow.
+
+---
+
 ## Open
 
 > Resolved items are ruled on in **D-015**; the entries below are kept for their problem statements.

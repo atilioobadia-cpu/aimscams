@@ -16,6 +16,7 @@ import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import {
   COUNCIL_TYPES,
@@ -129,6 +130,7 @@ function validate(form: BranchFormState): Record<string, string> {
 
 export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branchId?: string }) {
   const router = useRouter();
+  const { pushToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
@@ -252,6 +254,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
     try {
       if (mode === "create") {
         const response = await createBranch(payload);
+        pushToast("Branch created.");
         router.push(`/settings/branches/${response.branch.id}`);
         router.refresh();
         return;
@@ -261,6 +264,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
       setForm(formFromBranch(response.branch));
       setCanEdit(response.canEdit);
       setSaved("Branch saved.");
+      pushToast("Branch saved.");
       router.refresh();
     } catch (failure) {
       setSaveError(message(failure, "Could not save this branch."));

@@ -17,8 +17,6 @@ import {
   type PendingMfaChallenge,
 } from "@/lib/auth-challenge";
 
-type MfaMode = "totp" | "recovery";
-
 function formatRemaining(totalSeconds: number): string {
   const seconds = Math.max(0, totalSeconds);
   const minutes = Math.floor(seconds / 60);
@@ -63,7 +61,6 @@ export function MfaChallengeForm() {
     [rawChallenge],
   );
   const [nowMs, setNowMs] = useState<number | null>(null);
-  const [mode, setMode] = useState<MfaMode>("totp");
   const [code, setCode] = useState("");
   const [fieldError, setFieldError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
@@ -87,10 +84,8 @@ export function MfaChallengeForm() {
     if (!challenge || submitting || expired) return;
 
     const trimmed = code.trim();
-    if (!trimmed) {
-      setFieldError(
-        mode === "totp" ? "Enter your authentication code." : "Enter one recovery code.",
-      );
+    if (!/^\d{6}$/.test(trimmed)) {
+      setFieldError("Enter the 6-digit code shown in your authenticator app.");
       return;
     }
 
@@ -164,11 +159,8 @@ export function MfaChallengeForm() {
     >
       <form onSubmit={handleSubmit} noValidate>
         <div>
-          <label
-            htmlFor="mfa-code"
-            className="sr-only"
-          >
-            {mode === "totp" ? "Authenticator code" : "Recovery code"}
+          <label htmlFor="mfa-code" className="sr-only">
+            Authenticator code
           </label>
           <div className="relative">
             <KeyRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
@@ -177,16 +169,14 @@ export function MfaChallengeForm() {
               name="code"
               value={code}
               onChange={(event) => {
-                setCode(event.target.value);
+                setCode(event.target.value.replace(/\D/g, "").slice(0, 6));
                 if (fieldError) setFieldError(null);
               }}
               autoFocus
               autoComplete="one-time-code"
-              inputMode={mode === "totp" ? "numeric" : "text"}
-              autoCapitalize={mode === "recovery" ? "characters" : "none"}
+              inputMode="numeric"
               spellCheck={false}
-              maxLength={32}
-              placeholder={mode === "totp" ? "000000" : "XXXX-XXXX-XXXX-XXXX"}
+              placeholder="000000"
               aria-invalid={Boolean(fieldError)}
               aria-describedby={fieldError ? "mfa-code-error" : "mfa-code-hint"}
               disabled={submitting}
@@ -199,9 +189,7 @@ export function MfaChallengeForm() {
             </p>
           ) : (
             <p id="mfa-code-hint" className="mt-1 text-fs leading-4 text-label">
-              {mode === "totp"
-                ? "Enter the 6-digit code shown in your authenticator app."
-                : "Enter one of the single-use recovery codes you saved."}
+              Enter the 6-digit code shown in your authenticator app.
             </p>
           )}
         </div>
@@ -231,20 +219,6 @@ export function MfaChallengeForm() {
           )}
         </Button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setMode((current) => (current === "totp" ? "recovery" : "totp"));
-            setCode("");
-            setFieldError(null);
-            setFormError(null);
-          }}
-          className="mt-2 w-full rounded-md py-1 text-center text-fs font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
-        >
-          {mode === "totp"
-            ? "Use a recovery code instead"
-            : "Use an authenticator code instead"}
-        </button>
       </form>
 
       <div className="mt-3 flex items-center justify-between gap-3 border-t border-card-border pt-3 text-fs text-label">

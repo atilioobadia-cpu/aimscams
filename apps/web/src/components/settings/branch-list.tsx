@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, LoaderCircle, Plus, RotateCcw, Search } from "lucide-react";
+import { Building2, Eye, LoaderCircle, Pencil, Plus, RotateCcw, Search } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   Table,
   TableBody,
@@ -20,7 +22,10 @@ import {
 } from "@/components/ui/table";
 import { ApiError } from "@/lib/api";
 import {
+  councilLabel,
   listBranches,
+  minutesToTime,
+  WEEKDAYS,
   type Branch,
   type BranchListResponse,
   type BranchStatus,
@@ -47,6 +52,7 @@ export function BranchListPage() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<"" | BranchStatus>("");
   const [reloadKey, setReloadKey] = useState(0);
+  const [viewing, setViewing] = useState<Branch | null>(null);
   const firstLoad = useRef(true);
 
   useEffect(() => {
@@ -95,6 +101,21 @@ export function BranchListPage() {
   function clearFilters() {
     setQuery("");
     setStatus("");
+  }
+
+  function actionsFor(branch: Branch): RowAction[] {
+    const actions: RowAction[] = [
+      { label: "View branch", icon: Eye, onSelect: () => setViewing(branch) },
+    ];
+    if (data?.canEdit) {
+      actions.push({
+        label: "Edit branch",
+        icon: Pencil,
+        href: `/settings/branches/${branch.id}`,
+        separatorBefore: true,
+      });
+    }
+    return actions;
   }
 
   return (
@@ -255,9 +276,7 @@ export function BranchListPage() {
                     )}
                   </TableCell>
                   <TableCell className="px-[var(--space-14)] py-[var(--space-10)] text-right">
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={`/settings/branches/${branch.id}`}>Edit</Link>
-                    </Button>
+                    <RowActionsMenu label={branch.name} actions={actionsFor(branch)} />
                   </TableCell>
                 </TableRow>
               ))}
@@ -265,6 +284,68 @@ export function BranchListPage() {
           </Table>
         </section>
       )}
+
+      <Modal
+        open={Boolean(viewing)}
+        onClose={() => setViewing(null)}
+        title={viewing?.name ?? "Branch details"}
+        footer={
+          <Button variant="outline" onClick={() => setViewing(null)}>
+            Close
+          </Button>
+        }
+      >
+        {viewing ? (
+          <div className="space-y-5">
+            <dl className="grid gap-4 sm:grid-cols-2">
+              <Detail label="Branch code" value={viewing.code} />
+              <Detail
+                label="Status"
+                value={viewing.status === "OPEN" ? "Open" : "Closed"}
+              />
+              <Detail label="Region" value={viewing.region} />
+              <Detail label="District" value={viewing.district || "—"} />
+              <Detail label="Ward" value={viewing.ward || "—"} />
+              <Detail label="Council" value={councilLabel(viewing.councilType)} />
+              <Detail label="Address" value={viewing.addressLine || "No address recorded"} />
+              <Detail label="Default branch" value={viewing.isDefault ? "Yes" : "No"} />
+              <Detail label="Staff" value={String(viewing.employeeCount)} />
+              <Detail label="User accounts" value={String(viewing.userCount)} />
+            </dl>
+
+            <div>
+              <h3 className="text-fs font-semibold text-strong">Opening hours</h3>
+              <ul className="mt-2 divide-y divide-card-border rounded-lg border border-card-border">
+                {WEEKDAYS.map((day) => {
+                  const hours = viewing.hours.find((item) => item.weekday === day.value);
+                  return (
+                    <li
+                      key={day.value}
+                      className="flex items-center justify-between gap-4 px-3 py-2 text-fs"
+                    >
+                      <span className="text-label">{day.label}</span>
+                      <span className="font-medium text-body">
+                        {!hours || hours.isClosed
+                          ? "Closed"
+                          : `${minutesToTime(hours.opensMinute)} – ${minutesToTime(hours.closesMinute)}`}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        ) : null}
+      </Modal>
+    </div>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-fs font-medium uppercase tracking-wide text-label">{label}</dt>
+      <dd className="mt-0.5 text-fs text-body">{value}</dd>
     </div>
   );
 }

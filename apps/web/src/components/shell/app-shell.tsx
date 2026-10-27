@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AppHeader } from "@/components/shell/app-header";
 import { AppSidebar } from "@/components/shell/app-sidebar";
 import { ChatFab } from "@/components/shell/chat-fab";
+import { ToastProvider } from "@/components/ui/toast";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
@@ -39,31 +40,33 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
   }
 
   return (
-    <div
-      data-sidebar-state={collapsed ? "collapsed" : "expanded"}
-      style={{ "--sidebar-width": `${width}px` } as CSSProperties}
-    >
-      <a
-        href="#main-content"
-        className="sr-only z-[60] rounded-lg bg-brand px-4 py-3 text-on-primary focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+    <ToastProvider>
+      <div
+        data-sidebar-state={collapsed ? "collapsed" : "expanded"}
+        style={{ "--sidebar-width": `${width}px` } as CSSProperties}
       >
-        Skip to content
-      </a>
+        <a
+          href="#main-content"
+          className="sr-only z-[60] rounded-lg bg-brand px-4 py-3 text-on-primary focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Skip to content
+        </a>
 
-      <AppHeader institution={institution} branch={branch} user={user} />
-      <AppSidebar collapsed={collapsed} onToggle={toggleSidebar} />
+        <AppHeader institution={institution} branch={branch} user={user} />
+        <AppSidebar collapsed={collapsed} onToggle={toggleSidebar} />
 
-      <main
-        id="main-content"
-        style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
-        className="min-h-screen transition-[padding-left] duration-200"
-      >
-        <div className="content-fade px-[var(--content-padding)] pb-[76px] pt-[var(--content-padding)]">
-          {children}
-        </div>
-      </main>
+        <main
+          id="main-content"
+          style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
+          className="min-h-screen transition-[padding-left] duration-200"
+        >
+          <div className="content-fade px-[var(--content-padding)] pb-[76px] pt-[var(--content-padding)]">
+            {children}
+          </div>
+        </main>
 
-      <ChatFab />
-    </div>
+        <ChatFab />
+      </div>
+    </ToastProvider>
   );
 }

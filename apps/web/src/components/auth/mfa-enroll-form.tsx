@@ -6,7 +6,6 @@ import {
   Check,
   CheckCircle2,
   Copy,
-  KeyRound,
   LoaderCircle,
   ShieldCheck,
   Smartphone,
@@ -21,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { ApiError, apiRequest } from "@/lib/api";
 import type { MfaEnrollment, MfaStatus } from "@/lib/auth-types";
 
-type Phase = "loading" | "intro" | "setup" | "recovery";
+type Phase = "loading" | "intro" | "setup";
 
 function formatSecret(secret: string): string {
   return secret.match(/.{1,4}/g)?.join(" ") ?? secret;
@@ -42,8 +41,7 @@ export function MfaEnrollForm({
   const [fieldError, setFieldError] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [copied, setCopied] = useState<"secret" | "codes" | null>(null);
-  const [codesSaved, setCodesSaved] = useState(false);
+  const [copied, setCopied] = useState<"secret" | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -73,10 +71,10 @@ export function MfaEnrollForm({
     };
   }, [router]);
 
-  async function copyValue(value: string, key: "secret" | "codes") {
+  async function copySecret(value: string) {
     try {
       await navigator.clipboard.writeText(value);
-      setCopied(key);
+      setCopied("secret");
     } catch {
       setFormError("Copy failed. Select the text and copy it manually.");
     }
@@ -87,7 +85,6 @@ export function MfaEnrollForm({
     setFieldError(null);
     setFormError(null);
     setCopied(null);
-    setCodesSaved(false);
 
     try {
       const result = await apiRequest<MfaEnrollment>("/auth/mfa/enroll", {
@@ -133,7 +130,8 @@ export function MfaEnrollForm({
         method: "POST",
         body: { code: trimmed },
       });
-      setPhase("recovery");
+      router.replace("/dashboard");
+      router.refresh();
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) {
         setFieldError(error.message);
@@ -161,79 +159,6 @@ export function MfaEnrollForm({
           <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
           Checking your verification settings
         </div>
-      </AuthCard>
-    );
-  }
-
-  if (phase === "recovery") {
-    const recoveryCodes = enrollment?.recoveryCodes ?? [];
-    return (
-      <AuthCard
-        title="Save your recovery codes"
-        description="These are the only codes that can get you back in if you lose your authenticator."
-        footer={
-          <p className="text-fs leading-5 text-label">
-            Store them somewhere safe and separate from your phone. Each code works once.
-          </p>
-        }
-      >
-        <div className="mb-4 flex items-start gap-3 rounded-lg border border-card-border bg-accent-yellow-bg px-4 py-3.5">
-          <KeyRound className="mt-0.5 size-4 shrink-0 text-accent-yellow" aria-hidden="true" />
-          <p className="text-fs leading-5 text-body">
-            This is the only time these codes are shown. We cannot recover them for you.
-          </p>
-        </div>
-
-        <div className="rounded-lg border border-card-border bg-subtle p-4">
-          <ol className="grid grid-cols-2 gap-x-5 gap-y-2 font-mono text-fs font-medium tracking-wide text-strong">
-            {recoveryCodes.map((recoveryCode) => (
-              <li key={recoveryCode}>{recoveryCode}</li>
-            ))}
-          </ol>
-        </div>
-
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => void copyValue(recoveryCodes.join("\n"), "codes")}
-          className="mt-3 h-10 w-full gap-2 text-fs"
-        >
-          {copied === "codes" ? (
-            <Check className="size-4" aria-hidden="true" />
-          ) : (
-            <Copy className="size-4" aria-hidden="true" />
-          )}
-          {copied === "codes" ? "Copied all codes" : "Copy all codes"}
-        </Button>
-
-        {formError ? (
-          <div className="mt-4">
-            <FormError message={formError} />
-          </div>
-        ) : null}
-
-        <label className="mt-5 flex cursor-pointer items-start gap-3 text-fs leading-5 text-body">
-          <input
-            type="checkbox"
-            checked={codesSaved}
-            onChange={(event) => setCodesSaved(event.target.checked)}
-            className="mt-0.5 size-4 shrink-0 rounded border-input accent-[var(--brand-primary)]"
-          />
-          I have saved these recovery codes somewhere safe.
-        </label>
-
-        <Button
-          type="button"
-          disabled={!codesSaved}
-          onClick={() => {
-            router.replace("/dashboard");
-            router.refresh();
-          }}
-          className="mt-6 h-11 w-full gap-2 text-fs font-semibold"
-        >
-          Continue to dashboard
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </Button>
       </AuthCard>
     );
   }
@@ -276,7 +201,7 @@ export function MfaEnrollForm({
             </code>
             <button
               type="button"
-              onClick={() => void copyValue(enrollment.secret, "secret")}
+              onClick={() => void copySecret(enrollment.secret)}
               className="grid size-8 shrink-0 place-items-center rounded-md text-brand outline-none transition-colors hover:bg-accent-teal-bg focus-visible:ring-3 focus-visible:ring-ring/30"
               aria-label="Copy setup key"
             >
@@ -308,7 +233,6 @@ export function MfaEnrollForm({
             autoFocus
             autoComplete="one-time-code"
             inputMode="numeric"
-            maxLength={6}
             placeholder="000000"
             aria-invalid={Boolean(fieldError)}
             aria-describedby={fieldError ? "enroll-code-error" : undefined}
@@ -391,9 +315,9 @@ export function MfaEnrollForm({
             body: "We will show a QR code and a setup key you can enter by hand.",
           },
           {
-            icon: KeyRound,
-            title: "Keep your recovery codes",
-            body: "You will get ten single-use codes in case you lose your phone.",
+            icon: ShieldCheck,
+            title: "Confirm the six-digit code",
+            body: "Enter the code from the app to turn on two-step verification.",
           },
         ].map(({ icon: Icon, title, body }) => (
           <li key={title} className="flex gap-3">
@@ -412,7 +336,7 @@ export function MfaEnrollForm({
         <div className="mt-5 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
           <p className="text-fs leading-5 text-body">
             You started setup earlier but did not finish. Starting again replaces the previous
-            QR code and recovery codes.
+            QR code.
           </p>
         </div>
       ) : null}

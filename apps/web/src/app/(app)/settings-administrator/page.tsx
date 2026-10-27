@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Eye, LockOpen, Pencil, UserCheck, UserX } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
+import { useToast } from "@/components/ui/toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { UserForm } from "@/components/settings/user-form";
+import { ApiError } from "@/lib/api";
 import {
   listBranches,
   listRoles,
@@ -26,6 +31,7 @@ export default function UsersPage() {
   const [roles, setRoles] = useState<RoleSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [forbidden, setForbidden] = useState(false);
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
   const [role, setRole] = useState("");
@@ -33,6 +39,8 @@ export default function UsersPage() {
   const queryModal = searchParams.get("modal");
   const queryId = searchParams.get("id") ?? undefined;
   const [manualModal, setManualModal] = useState<{ id?: string } | null>(null);
+  const [viewingUser, setViewingUser] = useState<UserSummary | null>(null);
+  const { pushToast } = useToast();
 
   // Old create/edit URLs redirect here with ?modal=create|edit, so the query is a
   // second source of truth for the dialog. No effect, so no cascading render.
@@ -54,6 +62,7 @@ export default function UsersPage() {
 
   async function load() {
     setError(null);
+    setForbidden(false);
     try {
       const [userList, branchList, roleList] = await Promise.all([
         listUsers(filters),
@@ -64,7 +73,12 @@ export default function UsersPage() {
       setBranches(branchList);
       setRoles(roleList);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not load users.");
+      if (err instanceof ApiError && err.status === 403) {
+        setForbidden(true);
+        setUsers([]);
+      } else {
+        setError(err instanceof Error ? err.message : "Could not load users.");
+      }
     } finally {
       setLoading(false);
     }
@@ -82,11 +96,18 @@ export default function UsersPage() {
         setUsers(userList);
         setBranches(branchList);
         setRoles(roleList);
+        setError(null);
+        setForbidden(false);
         setLoading(false);
       })
       .catch((err) => {
         if (!active) return;
-        setError(err instanceof Error ? err.message : "Could not load users.");
+        if (err instanceof ApiError && err.status === 403) {
+          setForbidden(true);
+          setUsers([]);
+        } else {
+          setError(err instanceof Error ? err.message : "Could not load users.");
+        }
         setLoading(false);
       });
 
@@ -101,6 +122,7 @@ export default function UsersPage() {
     try {
       await updateUser(user.id, { status: next });
       await load();
+      pushToast(`${user.fullName} ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not update user.");
     }
@@ -110,9 +132,40 @@ export default function UsersPage() {
     try {
       await unlockUser(id);
       await load();
+      pushToast("User unlocked.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not unlock user.");
     }
+  }
+
+  function actionsFor(user: UserSummary): RowAction[] {
+    const actions: RowAction[] = [
+      { label: "View user", icon: Eye, onSelect: () => setViewingUser(user) },
+      {
+        label: "Edit user",
+        icon: Pencil,
+        onSelect: () => setManualModal({ id: user.id }),
+      },
+    ];
+
+    if (user.status === "LOCKED") {
+      actions.push({
+        label: "Unlock user",
+        icon: LockOpen,
+        onSelect: () => void unlock(user.id),
+        separatorBefore: true,
+      });
+    }
+
+    actions.push({
+      label: user.status === "ACTIVE" ? "Deactivate user" : "Activate user",
+      icon: user.status === "ACTIVE" ? UserX : UserCheck,
+      onSelect: () => void toggleStatus(user),
+      variant: user.status === "ACTIVE" ? "destructive" : "default",
+      separatorBefore: true,
+    });
+
+    return actions;
   }
 
   return (
@@ -124,14 +177,16 @@ export default function UsersPage() {
             Institution accounts, roles and branch access.
           </p>
         </div>
-        <Button
-          className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold"
-          onClick={() => {
-            setManualModal({});
-          }}
-        >
-          Add user
-        </Button>
+        {!forbidden ? (
+          <Button
+            className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold"
+            onClick={() => {
+              setManualModal({});
+            }}
+          >
+            Add user
+          </Button>
+        ) : null}
       </div>
 
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
@@ -179,95 +234,119 @@ export default function UsersPage() {
         </div>
       </div>
 
-      {error ? (
-        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-fs text-accent-red">
-          {error}
-        </div>
-      ) : null}
-
-      <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[920px] text-left text-fs">
-            <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
-              <tr>
-                <th className="px-4 py-3">Full name</th>
-                <th className="px-4 py-3">Email</th>
-                <th className="px-4 py-3">Branch</th>
-                <th className="px-4 py-3">Roles</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
+      {forbidden ? (
+        <ForbiddenPanel message="Your role cannot view users. Ask an administrator for Settings User : View." />
+      ) : error ? (
+        <ErrorPanel message={error} onRetry={() => void load()} />
+      ) : loading ? (
+        <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <PanelSkeleton rows={6} />
+        </section>
+      ) : (
+        <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[920px] text-left text-fs">
+              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
-                    Loading users...
-                  </td>
+                  <th className="px-4 py-3">Full name</th>
+                  <th className="px-4 py-3">Email</th>
+                  <th className="px-4 py-3">Branch</th>
+                  <th className="px-4 py-3">Roles</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
-              ) : users.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
-                    No users match these filters.
-                  </td>
-                </tr>
-              ) : (
-                users.map((user) => (
-                  <tr key={user.id} className="border-b border-card-border last:border-0">
-                    <td className="px-4 py-3 font-medium text-strong">{user.fullName}</td>
-                    <td className="px-4 py-3 text-body">{user.email}</td>
-                    <td className="px-4 py-3 text-body">{user.branch?.name ?? "Institution"}</td>
-                    <td className="px-4 py-3 text-body">
-                      {user.roles.map((role) => role.name).join(", ") || "No role"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`rounded-full px-2.5 py-1 text-fs font-semibold ${
-                          user.status === "ACTIVE"
-                            ? "bg-accent-teal-bg text-brand"
-                            : user.status === "LOCKED"
-                              ? "bg-accent-red-bg text-accent-red"
-                              : "bg-subtle text-label"
-                        }`}
-                      >
-                        {user.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setManualModal({ id: user.id });
-                          }}
-                        >
-                          Edit
-                        </Button>
-                        {user.status === "LOCKED" ? (
-                          <Button variant="outline" size="sm" onClick={() => void unlock(user.id)}>
-                            Unlock
-                          </Button>
-                        ) : null}
-                        <Button
-                          variant={user.status === "ACTIVE" ? "destructive" : "default"}
-                          size="sm"
-                          onClick={() => void toggleStatus(user)}
-                        >
-                          {user.status === "ACTIVE" ? "Deactivate" : "Activate"}
-                        </Button>
-                      </div>
+              </thead>
+              <tbody>
+                {users.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
+                      No users match these filters.
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  users.map((user) => (
+                    <tr key={user.id} className="border-b border-card-border last:border-0">
+                      <td className="px-4 py-3 font-medium text-strong">{user.fullName}</td>
+                      <td className="px-4 py-3 text-body">{user.email}</td>
+                      <td className="px-4 py-3 text-body">{user.branch?.name ?? "Institution"}</td>
+                      <td className="px-4 py-3 text-body">
+                        {user.roles.map((role) => role.name).join(", ") || "No role"}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`rounded-full px-2.5 py-1 text-fs font-normal ${
+                            user.status === "ACTIVE"
+                              ? "bg-accent-teal-bg text-brand"
+                              : user.status === "LOCKED"
+                                ? "bg-accent-red-bg text-accent-red"
+                                : "bg-subtle text-label"
+                          }`}
+                        >
+                          {user.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex justify-end">
+                          <RowActionsMenu label={user.fullName} actions={actionsFor(user)} />
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
       <Modal open={modalOpen} onClose={closeModal} title={editingId ? "Edit user" : "Add user"}>
         <UserForm id={editingId} />
       </Modal>
+
+      <Modal
+        open={Boolean(viewingUser)}
+        onClose={() => setViewingUser(null)}
+        title="User details"
+        footer={
+          <Button variant="outline" onClick={() => setViewingUser(null)}>
+            Close
+          </Button>
+        }
+      >
+        {viewingUser ? (
+          <dl className="grid gap-4 sm:grid-cols-2">
+            <Detail label="Full name" value={viewingUser.fullName} />
+            <Detail label="Email" value={viewingUser.email} />
+            <Detail label="Phone" value={viewingUser.phone || "—"} />
+            <Detail label="Branch" value={viewingUser.branch?.name ?? "Institution"} />
+            <Detail label="Status" value={viewingUser.status} />
+            <Detail
+              label="Roles"
+              value={viewingUser.roles.map((role) => role.name).join(", ") || "No role"}
+            />
+            <Detail label="Created" value={formatDate(viewingUser.createdAt)} />
+            <Detail label="Last updated" value={formatDate(viewingUser.updatedAt)} />
+          </dl>
+        ) : null}
+      </Modal>
+    </div>
+  );
+}
+
+const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+
+function formatDate(value: string): string {
+  return dateFormat.format(new Date(value));
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-fs font-medium uppercase tracking-wide text-label">{label}</dt>
+      <dd className="mt-0.5 text-fs text-body">{value}</dd>
     </div>
   );
 }

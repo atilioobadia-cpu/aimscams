@@ -15,6 +15,7 @@ import {
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { ApiError, apiAssetUrl } from "@/lib/api";
 import {
   COMMON_TIMEZONES,
@@ -82,6 +83,7 @@ function updatedLabel(iso: string, timezone: string): string {
 }
 
 export function OrganisationSettingsPage() {
+  const { pushToast } = useToast();
   const router = useRouter();
   const [data, setData] = useState<OrganisationSettings | null>(null);
   const [form, setForm] = useState<OrganisationForm | null>(null);
@@ -166,6 +168,7 @@ export function OrganisationSettingsPage() {
       });
       applyData(next);
       setSaved("Organisation settings saved.");
+      pushToast("Organisation settings saved.");
     } catch (failure) {
       setSaveError(message(failure, "Could not save organisation settings."));
     } finally {
@@ -193,6 +196,7 @@ export function OrganisationSettingsPage() {
       const next = await uploadOrganisationLogo(dataUrl);
       applyData(next);
       setLogoNote("Logo uploaded.");
+      pushToast("Logo uploaded.");
     } catch (failure) {
       setLogoError(message(failure, "Could not upload the logo."));
     } finally {
@@ -226,6 +230,7 @@ export function OrganisationSettingsPage() {
       const next = await updateOrganisation({ logoUrl: value });
       applyData(next);
       setLogoNote("External logo URL saved.");
+      pushToast("External logo URL saved.");
     } catch (failure) {
       setLogoError(message(failure, "Could not save the logo URL."));
     } finally {
@@ -242,6 +247,7 @@ export function OrganisationSettingsPage() {
       const next = await deleteOrganisationLogo();
       applyData(next);
       setLogoNote("Logo removed. The header uses the default institution mark.");
+      pushToast("Logo removed.");
     } catch (failure) {
       setLogoError(message(failure, "Could not remove the logo."));
     } finally {

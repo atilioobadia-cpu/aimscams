@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { AimscamsMark } from "@/components/brand/aimscams-mark";
+import { AimscamsWordmark } from "@/components/brand/aimscams-wordmark";
 
 export function AuthShell({ children, title }: { children: ReactNode; title: string }) {
   return (
@@ -8,7 +8,7 @@ export function AuthShell({ children, title }: { children: ReactNode; title: str
       <div className="w-full max-w-[420px]">
         <div className="h-[190px] rounded-[10px] bg-[#63a094] pt-6">
           <div className="flex justify-center">
-            <AimscamsMark className="h-10 w-auto text-white" />
+            <AimscamsWordmark />
           </div>
           <h1 className="mx-auto mt-4 w-full px-5 text-center text-fs font-semibold leading-6 text-white">
             {title}

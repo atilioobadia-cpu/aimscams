@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { Input } from "@/components/ui/input";
 import {
   createUser,
@@ -17,6 +18,7 @@ import {
 
 export function UserForm({ id }: { id?: string }) {
   const router = useRouter();
+  const { pushToast } = useToast();
   const editing = Boolean(id);
   const [branches, setBranches] = useState<BranchSummary[]>([]);
   const [roles, setRoles] = useState<RoleSummary[]>([]);
@@ -94,9 +96,11 @@ export function UserForm({ id }: { id?: string }) {
         body.email = email.trim();
         body.password = password;
         await createUser(body);
+        pushToast("User created.");
       } else {
         if (password.trim()) body.password = password;
         await updateUser(id!, body);
+        pushToast("User updated.");
       }
 
       router.push("/settings-administrator");

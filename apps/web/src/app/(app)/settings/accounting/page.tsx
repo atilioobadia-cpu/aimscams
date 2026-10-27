@@ -1,7 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CalendarRange, Pencil, Plus, Scale, SlidersHorizontal } from "lucide-react";
+import {
+  CalendarCheck,
+  CalendarRange,
+  CalendarX,
+  Pencil,
+  Plus,
+  Scale,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import { AccountingNav } from "@/components/accounting/accounting-nav";
 import {
@@ -13,9 +21,11 @@ import {
 } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { Modal } from "@/components/ui/modal";
 import {
   Table,
@@ -84,6 +94,7 @@ function nextYearPeriod() {
 }
 
 export default function AccountingSettingsPage() {
+  const { pushToast } = useToast();
   const [data, setData] = useState<AccountingSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [forbidden, setForbidden] = useState(false);
@@ -159,6 +170,7 @@ export default function AccountingSettingsPage() {
         interBranchEnabled: interBranch,
       });
       setSettingsSaved("Statutory settings saved.");
+      pushToast("Statutory settings saved.");
       await load(false);
     } catch (failure) {
       setSettingsError(message(failure, "Could not save the statutory settings."));
@@ -185,6 +197,7 @@ export default function AccountingSettingsPage() {
       });
       setPeriodOpen(false);
       setPeriodForm(nextYearPeriod());
+      pushToast("Fiscal period created.");
       await load(false);
     } catch (failure) {
       setPeriodError(message(failure, "Could not create the fiscal period."));
@@ -201,6 +214,7 @@ export default function AccountingSettingsPage() {
     try {
       await updateFiscalPeriod(statusTarget.id, { status: target });
       setStatusTarget(null);
+      pushToast(`Period ${target === "open" ? "reopened" : "closed"}.`);
       await load(false);
     } catch (failure) {
       setStatusError(message(failure, "Could not change the period status."));
@@ -245,6 +259,7 @@ export default function AccountingSettingsPage() {
     try {
       await updatePostingPolicy(policyTarget.eventCode, { lines: policyLines });
       setPolicyTarget(null);
+      pushToast("Posting policy saved.");
       await load(false);
     } catch (failure) {
       setPolicyError(message(failure, "Could not save the posting policy."));
@@ -409,16 +424,22 @@ export default function AccountingSettingsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="pr-[var(--space-16)] text-right">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setStatusTarget(period);
-                            setStatusError(null);
-                          }}
-                        >
-                          {period.status === "open" ? "Close period" : "Reopen"}
-                        </Button>
+                        <RowActionsMenu
+                          label={`fiscal period ${period.startsOn.slice(0, 4)}`}
+                          actions={
+                            [
+                              {
+                                label:
+                                  period.status === "open" ? "Close period" : "Reopen period",
+                                icon: period.status === "open" ? CalendarX : CalendarCheck,
+                                onSelect: () => {
+                                  setStatusTarget(period);
+                                  setStatusError(null);
+                                },
+                              },
+                            ] satisfies RowAction[]
+                          }
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -478,15 +499,18 @@ export default function AccountingSettingsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="pr-[var(--space-16)] text-right">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="gap-1.5"
-                          onClick={() => openPolicy(policy)}
-                        >
-                          <Pencil className="size-3.5" aria-hidden="true" />
-                          Edit
-                        </Button>
+                        <RowActionsMenu
+                          label={`posting policy ${policy.eventCode}`}
+                          actions={
+                            [
+                              {
+                                label: "Edit posting policy",
+                                icon: Pencil,
+                                onSelect: () => openPolicy(policy),
+                              },
+                            ] satisfies RowAction[]
+                          }
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

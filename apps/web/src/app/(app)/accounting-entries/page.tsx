@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeftRight,
   BookOpen,
+  Eye,
   Plus,
   Search,
   Trash2,
@@ -21,9 +22,11 @@ import {
 import { EmptyState } from "@/components/data/empty-state";
 import { FilterBar } from "@/components/data/filter-bar";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { Modal } from "@/components/ui/modal";
 import {
   Table,
@@ -97,6 +100,7 @@ type DraftLine = {
 
 export default function JournalEntriesPage() {
   const router = useRouter();
+  const { pushToast } = useToast();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   // URLSearchParams lags behind router.replace, so filters changed in quick
@@ -354,6 +358,7 @@ export default function JournalEntriesPage() {
       setComposeOpen(false);
       setRefresh((value) => value + 1);
       setEntryParam(created.id);
+      pushToast("Journal entry created.");
     } catch (failure) {
       setComposeError(message(failure, "Could not save the journal entry."));
     } finally {
@@ -368,6 +373,7 @@ export default function JournalEntriesPage() {
     try {
       await postJournalEntry(detail.id);
       setRefresh((value) => value + 1);
+      pushToast("Journal entry posted.");
     } catch (failure) {
       setPostError(message(failure, "Could not post the journal entry."));
     } finally {
@@ -396,6 +402,7 @@ export default function JournalEntriesPage() {
       setReverseTarget(null);
       setRefresh((value) => value + 1);
       setEntryParam(reversal.id);
+      pushToast("Journal entry reversed.");
     } catch (failure) {
       setReverseError(message(failure, "Could not reverse the journal entry."));
     } finally {
@@ -627,13 +634,16 @@ export default function JournalEntriesPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="pr-[var(--space-16)] text-right">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setEntryParam(entry.id)}
-                        >
-                          Open
-                        </Button>
+                        <RowActionsMenu
+                          label={`journal entry ${entry.entryNo}`}
+                          actions={[
+                            {
+                              label: "View entry",
+                              icon: Eye,
+                              onSelect: () => setEntryParam(entry.id),
+                            },
+                          ]}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
