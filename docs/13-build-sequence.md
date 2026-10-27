@@ -548,7 +548,7 @@ on them.
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | AC-13 | `/account-saving` | Savings list + new account | T1 | M |
+| [x] | AC-13 | `/account-saving` | Savings list + new account | T1 | M |
 
 ### 6b â€” Loan applications
 
