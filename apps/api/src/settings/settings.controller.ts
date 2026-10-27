@@ -113,6 +113,26 @@ export class SettingsController {
     return this.settings.getLoanProduct(auth, id);
   }
 
+  @Get('products/interest-rates')
+  @RequirePermissions('Settings Product : View')
+  async listInterestRates(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listInterestRates(auth, { q, status });
+  }
+
+  @Post('products/interest-rates')
+  @RequirePermissions('Settings Product : Create')
+  async createInterestRate(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createInterestRate(auth, body, requestContext(request));
+  }
+
   @Get('products/savings')
   @RequirePermissions('Settings Product : View')
   async listSavingsProducts(

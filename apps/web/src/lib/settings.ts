@@ -264,6 +264,55 @@ export async function getLoanProduct(id: string): Promise<LoanProductResponse> {
   return apiRequest<LoanProductResponse>(`/settings/products/loans/${encodeURIComponent(id)}`);
 }
 
+export type InterestRateStatus = "ACTIVE" | "INACTIVE";
+
+export type InterestRate = {
+  id: string;
+  code: string;
+  name: string;
+  status: InterestRateStatus;
+  rateBp: number;
+  period: string;
+  effectiveFrom: string | null;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type InterestRateListResponse = {
+  items: InterestRate[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type InterestRateResponse = {
+  rate: InterestRate;
+  canEdit: boolean;
+};
+
+export async function listInterestRates(filter: { q?: string; status?: string } = {}): Promise<InterestRateListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<InterestRateListResponse>(`/settings/products/interest-rates${suffix}`);
+}
+
+export async function createInterestRate(payload: {
+  code: string;
+  name: string;
+  status?: string;
+  rateBp: number;
+  period?: string;
+  description?: string | null;
+  effectiveFrom?: string | null;
+}): Promise<InterestRateResponse> {
+  return apiRequest<InterestRateResponse>("/settings/products/interest-rates", {
+    method: "POST",
+    body: payload,
+  });
+}
+
 export type SavingsProductStatus = "DRAFT" | "ACTIVE" | "INACTIVE";
 
 export type SavingsProduct = {

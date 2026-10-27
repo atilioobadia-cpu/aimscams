@@ -540,6 +540,94 @@ export class SettingsService {
     };
   }
 
+  async listInterestRates(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.InterestRateWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'ACTIVE' || status === 'INACTIVE') where.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const rates = await this.prisma.interestRate.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: rates.map((rate) => this.serializeInterestRate(rate)),
+      canView: this.can(auth, 'Settings Product : View'),
+      canEdit: this.can(auth, 'Settings Product : Create'),
+    };
+  }
+
+  async createInterestRate(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+    const rateBp = Number(body.rateBp ?? 0);
+    if (!Number.isFinite(rateBp) || rateBp < 0) throw new BadRequestException('Rate must be a valid number.');
+
+    const existing = await this.prisma.interestRate.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('An interest rate with that code already exists.');
+
+    const status = String(body.status ?? 'ACTIVE').trim().toUpperCase();
+    if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+
+    const rate = await this.prisma.interestRate.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        status: status as 'ACTIVE' | 'INACTIVE',
+        rateBp: Math.round(rateBp),
+        period: String(body.period ?? 'ANNUAL').trim() || 'ANNUAL',
+        description: body.description ? String(body.description).trim() : null,
+        effectiveFrom: body.effectiveFrom ? new Date(String(body.effectiveFrom)) : null,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Interest rate created',
+      entityType: 'InterestRate',
+      entityId: rate.id,
+      before: undefined,
+      after: this.serializeInterestRate(rate),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { rate: this.serializeInterestRate(rate), canEdit: this.can(auth, 'Settings Product : Create') };
+  }
+
+  private serializeInterestRate(rate: Prisma.InterestRateGetPayload<Record<string, never>>) {
+    return {
+      id: rate.id,
+      code: rate.code,
+      name: rate.name,
+      status: rate.status,
+      rateBp: rate.rateBp,
+      period: rate.period,
+      effectiveFrom: rate.effectiveFrom?.toISOString() ?? null,
+      description: rate.description,
+      createdAt: rate.createdAt.toISOString(),
+      updatedAt: rate.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,
