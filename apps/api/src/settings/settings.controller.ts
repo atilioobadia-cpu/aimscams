@@ -113,6 +113,17 @@ export class SettingsController {
     return this.settings.getLoanProduct(auth, id);
   }
 
+  @Patch('products/loans/:id')
+  @RequirePermissions('Settings Product : Edit')
+  async updateLoanProduct(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateLoanProduct(auth, id, body, requestContext(request));
+  }
+
   @Get('products/fee-penalties')
   @RequirePermissions('Settings Product : View')
   async listFeePenalties(

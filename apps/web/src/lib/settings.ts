@@ -689,3 +689,9 @@ export async function updateCreditProductPolicy(id: string, payload: Partial<{
     body: payload,
   });
 }
+export async function updateLoanProduct(id: string, payload: { status?: string; name?: string }): Promise<LoanProductResponse> {
+  return apiRequest<LoanProductResponse>(`/settings/products/loans/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

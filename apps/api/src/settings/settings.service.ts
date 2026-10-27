@@ -1227,6 +1227,44 @@ export class SettingsService {
     };
   }
 
+  async updateLoanProduct(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.loanProduct.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Loan product not found.');
+
+    const data: Prisma.LoanProductUpdateInput = {};
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') {
+        throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+      }
+      data.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+
+    const updated = await this.prisma.loanProduct.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Loan product updated',
+      entityType: 'LoanProduct',
+      entityId: id,
+      before: this.serializeLoanProduct(before),
+      after: this.serializeLoanProduct(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { product: this.serializeLoanProduct(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,
