@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Eye, Plus, Search } from "lucide-react";
+import { Building2, Eye, Plus, Search, UserCheck, UserX } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
@@ -12,8 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
-import { listClients, type Client, type ClientStatus, type ClientType } from "@/lib/settings";
+import { listClients, updateClient, type Client, type ClientStatus, type ClientType } from "@/lib/settings";
 import { maskEmail, maskNationalId, maskPhone, nationalIdPattern } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
@@ -32,6 +33,7 @@ export default function ClientsPage() {
   const [clientType, setClientType] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
+  const { pushToast } = useToast();
   const [viewing, setViewing] = useState<Client | null>(null);
 
   useEffect(() => {
@@ -195,7 +197,23 @@ export default function ClientsPage() {
                       <div className="flex justify-end">
                         <RowActionsMenu
                           label={`${item.referenceNo} ${item.fullName}`}
-                          actions={[{ label: "View client", icon: Eye, onSelect: () => setViewing(item) }]}
+                          actions={[
+                            { label: "View client", icon: Eye, onSelect: () => setViewing(item) },
+                            ...(data?.canEdit
+                              ? [
+                                  {
+                                    label: item.status === "ACTIVE" ? "Deactivate client" : "Activate client",
+                                    icon: item.status === "ACTIVE" ? UserX : UserCheck,
+                                    onSelect: async () => {
+                                      const next = item.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+                                      await updateClient(item.id, { status: next });
+                                      pushToast(`Client ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
+                                      setReloadKey((value) => value + 1);
+                                    },
+                                  },
+                                ]
+                              : []),
+                          ]}
                         />
                       </div>
                     </td>

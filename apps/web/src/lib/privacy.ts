@@ -1,8 +1,8 @@
 export function maskNationalId(value: string | null | undefined): string {
   if (!value) return "N/A";
   const parts = value.split("-");
-  if (parts.length !== 4) return "XXXX-XXXXX-XXXXX-XX";
-  return `${parts[0].slice(0, 4)}XXXX-XXXXX-XXXXX-${parts[3]}`;
+  if (parts.length !== 4) return "****-*****-*****-**";
+  return `${parts[0].slice(0, 4)}****-*****-*****-${parts[3]}`;
 }
 
 export function maskPhone(value: string | null | undefined): string {

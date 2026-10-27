@@ -1394,13 +1394,26 @@ export class SettingsService {
     });
     if (existing) throw new ConflictException('A client with that reference number already exists.');
 
+    let memberNo = String(body.memberNo ?? '').trim();
+    if (!memberNo) {
+      const existingMembers = await this.prisma.client.findMany({
+        where: { organisationId },
+        select: { memberNo: true },
+      });
+      const maxMember = existingMembers.reduce((current, item) => {
+        const value = Number.parseInt(item.memberNo ?? '', 10);
+        return Number.isFinite(value) && value > current ? value : current;
+      }, 0);
+      memberNo = String(maxMember + 1).padStart(10, '0');
+    }
+
     const item = await this.prisma.client.create({
       data: {
         organisationId,
         branchId: body.branchId ? String(body.branchId) : null,
         membershipPolicyId: body.membershipPolicyId ? String(body.membershipPolicyId) : null,
         groupId: body.groupId ? String(body.groupId) : null,
-        memberNo: referenceNo,
+        memberNo,
         referenceNo,
         fullName,
         clientType: String(body.clientType ?? 'INDIVIDUAL').trim().toUpperCase() === 'GROUP' ? 'GROUP' : 'INDIVIDUAL',
@@ -1429,6 +1442,39 @@ export class SettingsService {
     });
 
     return { client: this.serializeClient(item), canEdit: this.can(auth, 'Client : Edit') };
+  }
+
+  async updateClient(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.client.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Client not found.');
+
+    const data: Prisma.ClientUpdateInput = {};
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE' && status !== 'PENDING') {
+        throw new BadRequestException('Status must be ACTIVE, INACTIVE or PENDING.');
+      }
+      data.status = status as 'ACTIVE' | 'INACTIVE' | 'PENDING';
+    }
+
+    const updated = await this.prisma.client.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Client updated',
+      entityType: 'Client',
+      entityId: id,
+      before: this.serializeClient(before),
+      after: this.serializeClient(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { client: this.serializeClient(updated), canEdit: this.can(auth, 'Client : Edit') };
   }
 
   private serializeClient(item: any) {
