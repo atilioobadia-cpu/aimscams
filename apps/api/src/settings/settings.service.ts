@@ -778,6 +778,100 @@ export class SettingsService {
     };
   }
 
+  async listProvisioningRules(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.ProvisioningRuleWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'ACTIVE' || status === 'INACTIVE') where.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const items = await this.prisma.provisioningRule.findMany({
+      where,
+      orderBy: [{ daysFrom: 'asc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeProvisioningRule(item)),
+      canView: this.can(auth, 'Settings Product : View'),
+      canEdit: this.can(auth, 'Settings Product : Create'),
+    };
+  }
+
+  async createProvisioningRule(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+    const daysFrom = Number(body.daysFrom ?? 0);
+    const daysTo = body.daysTo === null || body.daysTo === undefined || body.daysTo === '' ? null : Number(body.daysTo);
+    const rateBp = Number(body.rateBp ?? 0);
+    if (!Number.isFinite(daysFrom) || daysFrom < 0) throw new BadRequestException('Days from must be a valid number.');
+    if (daysTo !== null && (!Number.isFinite(daysTo) || daysTo < daysFrom)) throw new BadRequestException('Days to must be greater than or equal to days from.');
+    if (!Number.isFinite(rateBp) || rateBp < 0) throw new BadRequestException('Rate must be a valid number.');
+
+    const existing = await this.prisma.provisioningRule.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A provisioning rule with that code already exists.');
+
+    const status = String(body.status ?? 'ACTIVE').trim().toUpperCase();
+    if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+
+    const item = await this.prisma.provisioningRule.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        status: status as 'ACTIVE' | 'INACTIVE',
+        daysFrom,
+        daysTo,
+        rateBp: Math.round(rateBp),
+        glAccountId: body.glAccountId ? String(body.glAccountId).trim() : null,
+        description: body.description ? String(body.description).trim() : null,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Provisioning rule created',
+      entityType: 'ProvisioningRule',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeProvisioningRule(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeProvisioningRule(item), canEdit: this.can(auth, 'Settings Product : Create') };
+  }
+
+  private serializeProvisioningRule(item: Prisma.ProvisioningRuleGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      status: item.status,
+      daysFrom: item.daysFrom,
+      daysTo: item.daysTo,
+      rateBp: item.rateBp,
+      glAccountId: item.glAccountId,
+      description: item.description,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,

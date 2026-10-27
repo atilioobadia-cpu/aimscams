@@ -145,6 +145,26 @@ export class SettingsController {
     return this.settings.updateFeePenalty(auth, id, body, requestContext(request));
   }
 
+  @Get('products/provisioning-rules')
+  @RequirePermissions('Settings Product : View')
+  async listProvisioningRules(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listProvisioningRules(auth, { q, status });
+  }
+
+  @Post('products/provisioning-rules')
+  @RequirePermissions('Settings Product : Create')
+  async createProvisioningRule(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createProvisioningRule(auth, body, requestContext(request));
+  }
+
   @Get('products/interest-rates')
   @RequirePermissions('Settings Product : View')
   async listInterestRates(

@@ -463,3 +463,53 @@ export async function updateFeePenalty(id: string, payload: Partial<{
     body: payload,
   });
 }
+export type ProvisioningRuleStatus = "ACTIVE" | "INACTIVE";
+
+export type ProvisioningRule = {
+  id: string;
+  code: string;
+  name: string;
+  status: ProvisioningRuleStatus;
+  daysFrom: number;
+  daysTo: number | null;
+  rateBp: number;
+  glAccountId: string | null;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ProvisioningRuleListResponse = {
+  items: ProvisioningRule[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type ProvisioningRuleResponse = {
+  item: ProvisioningRule;
+  canEdit: boolean;
+};
+
+export async function listProvisioningRules(filter: { q?: string; status?: string } = {}): Promise<ProvisioningRuleListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<ProvisioningRuleListResponse>(`/settings/products/provisioning-rules${suffix}`);
+}
+
+export async function createProvisioningRule(payload: {
+  code: string;
+  name: string;
+  status?: string;
+  daysFrom: number;
+  daysTo?: number | null;
+  rateBp: number;
+  glAccountId?: string | null;
+  description?: string | null;
+}): Promise<ProvisioningRuleResponse> {
+  return apiRequest<ProvisioningRuleResponse>("/settings/products/provisioning-rules", {
+    method: "POST",
+    body: payload,
+  });
+}

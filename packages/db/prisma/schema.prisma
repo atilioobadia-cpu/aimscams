@@ -65,6 +65,7 @@ model Organisation {
   savingsProducts SavingsProduct[]
   interestRates InterestRate[]
   feePenalties  FeePenalty[]
+  provisioningRules ProvisioningRule[]
 
   @@map("organisation")
 }
@@ -440,6 +441,32 @@ enum FeeAmountType {
 }
 
 enum FeePenaltyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model ProvisioningRule {
+  id            String                 @id @default(uuid()) @db.Uuid
+  organisationId String                @db.Uuid
+  code          String
+  name          String
+  status        ProvisioningRuleStatus @default(ACTIVE)
+  daysFrom      Int
+  daysTo        Int?
+  rateBp        Int
+  glAccountId   String?
+  description   String?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, code])
+  @@index([organisationId, status])
+  @@map("provisioning_rule")
+}
+
+enum ProvisioningRuleStatus {
   ACTIVE
   INACTIVE
 }
