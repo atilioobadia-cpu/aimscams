@@ -775,3 +775,51 @@ export async function updateClient(id: string, payload: { status?: string }): Pr
 export async function getClient(id: string): Promise<ClientResponse> {
   return apiRequest<ClientResponse>(`/settings/clients/${encodeURIComponent(id)}`);
 }
+export type SavingsAccountStatus = "ACTIVE" | "INACTIVE" | "CLOSED";
+
+export type SavingsAccount = {
+  id: string;
+  accountNumber: string;
+  accountType: string;
+  status: SavingsAccountStatus;
+  balanceMinor: string;
+  clientName: string | null;
+  clientReference: string | null;
+  productName: string | null;
+  productCode: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SavingsAccountListResponse = {
+  items: SavingsAccount[];
+  canView: boolean;
+  canCreate: boolean;
+  canEdit: boolean;
+};
+
+export type SavingsAccountResponse = {
+  account: SavingsAccount;
+  canEdit: boolean;
+};
+
+export async function listSavingsAccounts(filter: { q?: string; status?: string } = {}): Promise<SavingsAccountListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<SavingsAccountListResponse>(`/settings/savings-accounts${suffix}`);
+}
+
+export async function createSavingsAccount(payload: {
+  clientId: string;
+  productId?: string | null;
+  accountNumber?: string;
+  accountType?: string;
+  branchId?: string | null;
+}): Promise<SavingsAccountResponse> {
+  return apiRequest<SavingsAccountResponse>("/settings/savings-accounts", {
+    method: "POST",
+    body: payload,
+  });
+}
