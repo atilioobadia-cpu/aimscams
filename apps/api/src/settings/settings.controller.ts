@@ -75,6 +75,27 @@ export class SettingsController {
     return this.settings.deleteLogo(auth, requestContext(request));
   }
 
+  @Get('clients')
+  @RequirePermissions('Client : View')
+  async listClients(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+    @Query('type') type?: string,
+  ) {
+    return this.settings.listClients(auth, { q, status, clientType: type });
+  }
+
+  @Post('clients')
+  @RequirePermissions('Client : Create')
+  async createClient(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createClient(auth, body, requestContext(request));
+  }
+
   @Get('branches')
   @RequirePermissions('Settings Branch : View')
   async listBranches(

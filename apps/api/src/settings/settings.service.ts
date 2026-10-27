@@ -1337,6 +1337,98 @@ export class SettingsService {
     return { product: this.serializeLoanProduct(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
   }
 
+  async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.ClientWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'ACTIVE' || status === 'INACTIVE' || status === 'PENDING') where.status = status as 'ACTIVE' | 'INACTIVE' | 'PENDING';
+    }
+    if (filter.clientType) {
+      const type = filter.clientType.trim().toUpperCase();
+      if (type === 'INDIVIDUAL' || type === 'GROUP') where.clientType = type as 'INDIVIDUAL' | 'GROUP';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { referenceNo: { contains: query, mode: 'insensitive' } },
+        { fullName: { contains: query, mode: 'insensitive' } },
+        { phone: { contains: query, mode: 'insensitive' } },
+        { nationalId: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const items = await this.prisma.client.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { fullName: 'asc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeClient(item)),
+      canView: this.can(auth, 'Client : View'),
+      canCreate: this.can(auth, 'Client : Create'),
+      canEdit: this.can(auth, 'Client : Edit'),
+    };
+  }
+
+  async createClient(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const referenceNo = String(body.referenceNo ?? '').trim().toUpperCase();
+    const fullName = String(body.fullName ?? '').trim();
+    if (!referenceNo) throw new BadRequestException('Reference number is required.');
+    if (!fullName) throw new BadRequestException('Full name is required.');
+
+    const existing = await this.prisma.client.findUnique({
+      where: { organisationId_referenceNo: { organisationId, referenceNo } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A client with that reference number already exists.');
+
+    const item = await this.prisma.client.create({
+      data: {
+        organisationId,
+        branchId: body.branchId ? String(body.branchId) : null,
+        referenceNo,
+        fullName,
+        clientType: String(body.clientType ?? 'INDIVIDUAL').trim().toUpperCase() === 'GROUP' ? 'GROUP' : 'INDIVIDUAL',
+        phone: body.phone ? String(body.phone).trim() : null,
+        email: body.email ? String(body.email).trim() : null,
+        nationalId: body.nationalId ? String(body.nationalId).trim() : null,
+        status: 'ACTIVE',
+        profile: body.profile ?? undefined,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Client created',
+      entityType: 'Client',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeClient(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { client: this.serializeClient(item), canEdit: this.can(auth, 'Client : Edit') };
+  }
+
+  private serializeClient(item: Prisma.ClientGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      referenceNo: item.referenceNo,
+      fullName: item.fullName,
+      clientType: item.clientType,
+      phone: item.phone,
+      email: item.email,
+      nationalId: item.nationalId,
+      status: item.status,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,

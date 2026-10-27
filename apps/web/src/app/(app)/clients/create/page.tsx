@@ -1,0 +1,348 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+
+import { PageHeader } from "@/components/data/page-header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
+import { ApiError } from "@/lib/api";
+import { createClient } from "@/lib/settings";
+
+function message(failure: unknown, fallback: string): string {
+  if (failure instanceof ApiError) return failure.message;
+  if (failure instanceof Error && failure.message) return failure.message;
+  return fallback;
+}
+
+const STEPS = ["Membership", "Personal", "Contact", "Identity", "Residence", "Employment & next of kin"];
+
+export default function CreateClientPage() {
+  const router = useRouter();
+  const { pushToast } = useToast();
+  const [step, setStep] = useState(1);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [referenceNo, setReferenceNo] = useState("");
+  const [branchId, setBranchId] = useState("");
+  const [membershipPolicy, setMembershipPolicy] = useState("");
+  const [joiningDate, setJoiningDate] = useState("");
+  const [manager, setManager] = useState("");
+
+  const [fullName, setFullName] = useState("");
+  const [gender, setGender] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dependents, setDependents] = useState("");
+  const [disability, setDisability] = useState("");
+
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [region, setRegion] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
+
+  const [nationalId, setNationalId] = useState("");
+  const [tin, setTin] = useState("");
+
+  const [residence, setResidence] = useState("");
+
+  const [occupation, setOccupation] = useState("");
+  const [income, setIncome] = useState("");
+  const [nextOfKinName, setNextOfKinName] = useState("");
+  const [nextOfKinPhone, setNextOfKinPhone] = useState("");
+  const [nextOfKinPercent, setNextOfKinPercent] = useState("100");
+
+  function validateStep(): string | null {
+    if (step === 1) {
+      if (!referenceNo.trim()) return "Reference number is required.";
+      if (!fullName.trim()) return "Full name is required.";
+    }
+    if (step === 4) {
+      if (!nationalId.trim()) return "National ID is required.";
+    }
+    if (step === 6) {
+      const percent = Number(nextOfKinPercent);
+      if (!Number.isFinite(percent) || percent < 0 || percent > 100) return "Next of kin percentage must be between 0 and 100.";
+    }
+    return null;
+  }
+
+  function next() {
+    const validationError = validateStep();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setError(null);
+    setStep((value) => Math.min(STEPS.length, value + 1));
+  }
+
+  function back() {
+    setError(null);
+    setStep((value) => Math.max(1, value - 1));
+  }
+
+  async function submit() {
+    const validationError = validateStep();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    setError(null);
+    setSaving(true);
+    try {
+      await createClient({
+        referenceNo: referenceNo.trim().toUpperCase(),
+        fullName: fullName.trim(),
+        clientType: "INDIVIDUAL",
+        phone: phone.trim() || null,
+        email: email.trim() || null,
+        nationalId: nationalId.trim() || null,
+        branchId: branchId || null,
+        profile: {
+          membership: { branchId, membershipPolicy, joiningDate, manager },
+          personal: { gender, dateOfBirth, dependents, disability },
+          contact: { address, region, district, ward },
+          identity: { nationalId, tin },
+          residence,
+          employment: { occupation, income },
+          nextOfKin: { name: nextOfKinName, phone: nextOfKinPhone, percentage: Number(nextOfKinPercent) },
+        },
+      });
+      pushToast("Client created.");
+      router.push("/clients");
+      router.refresh();
+    } catch (failure) {
+      setError(message(failure, "Could not create this client."));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-3">
+        <Button asChild variant="outline" size="sm">
+          <Link href="/clients">
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            Clients
+          </Link>
+        </Button>
+      </div>
+
+      <PageHeader title="Add client" description="Six-step client registration." />
+
+      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+        <p className="text-fs font-medium text-strong">
+          Step {step} of {STEPS.length}: {STEPS[step - 1]}
+        </p>
+        <div className="mt-3 h-2 rounded-full bg-subtle">
+          <div className="h-2 rounded-full bg-primary" style={{ width: `${(step / STEPS.length) * 100}%` }} />
+        </div>
+      </div>
+
+      <form className="space-y-5 rounded-xl border border-card-border bg-surface p-5" onSubmit={(event) => { event.preventDefault(); if (step < STEPS.length) next(); else void submit(); }}>
+        {step === 1 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-reference">
+                Reference number
+              </label>
+              <Input id="client-reference" value={referenceNo} onChange={(event) => setReferenceNo(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-full-name">
+                Full name
+              </label>
+              <Input id="client-full-name" value={fullName} onChange={(event) => setFullName(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-branch">
+                Branch ID
+              </label>
+              <Input id="client-branch" value={branchId} onChange={(event) => setBranchId(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-policy">
+                Membership policy
+              </label>
+              <Input id="client-policy" value={membershipPolicy} onChange={(event) => setMembershipPolicy(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-joining-date">
+                Joining date
+              </label>
+              <Input id="client-joining-date" type="date" value={joiningDate} onChange={(event) => setJoiningDate(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-manager">
+                Relationship manager
+              </label>
+              <Input id="client-manager" value={manager} onChange={(event) => setManager(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+          </div>
+        ) : null}
+
+        {step === 2 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-gender">
+                Gender
+              </label>
+              <Input id="client-gender" value={gender} onChange={(event) => setGender(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-dob">
+                Date of birth
+              </label>
+              <Input id="client-dob" type="date" value={dateOfBirth} onChange={(event) => setDateOfBirth(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-dependents">
+                Dependents
+              </label>
+              <Input id="client-dependents" value={dependents} onChange={(event) => setDependents(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-disability">
+                Disability
+              </label>
+              <Input id="client-disability" value={disability} onChange={(event) => setDisability(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+          </div>
+        ) : null}
+
+        {step === 3 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-phone">
+                Phone
+              </label>
+              <Input id="client-phone" value={phone} onChange={(event) => setPhone(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-email">
+                Email
+              </label>
+              <Input id="client-email" value={email} onChange={(event) => setEmail(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-address">
+                Address
+              </label>
+              <Input id="client-address" value={address} onChange={(event) => setAddress(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-region">
+                Region
+              </label>
+              <Input id="client-region" value={region} onChange={(event) => setRegion(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-district">
+                District
+              </label>
+              <Input id="client-district" value={district} onChange={(event) => setDistrict(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-ward">
+                Ward
+              </label>
+              <Input id="client-ward" value={ward} onChange={(event) => setWard(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+          </div>
+        ) : null}
+
+        {step === 4 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-national-id">
+                National ID
+              </label>
+              <Input id="client-national-id" value={nationalId} onChange={(event) => setNationalId(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-tin">
+                TIN
+              </label>
+              <Input id="client-tin" value={tin} onChange={(event) => setTin(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+          </div>
+        ) : null}
+
+        {step === 5 ? (
+          <div>
+            <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-residence">
+              Residence
+            </label>
+            <textarea
+              id="client-residence"
+              value={residence}
+              onChange={(event) => setResidence(event.target.value)}
+              rows={4}
+              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] text-fs"
+            />
+          </div>
+        ) : null}
+
+        {step === 6 ? (
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-occupation">
+                Occupation
+              </label>
+              <Input id="client-occupation" value={occupation} onChange={(event) => setOccupation(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-income">
+                Income
+              </label>
+              <Input id="client-income" value={income} onChange={(event) => setIncome(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-nok-name">
+                Next of kin name
+              </label>
+              <Input id="client-nok-name" value={nextOfKinName} onChange={(event) => setNextOfKinName(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-nok-phone">
+                Next of kin phone
+              </label>
+              <Input id="client-nok-phone" value={nextOfKinPhone} onChange={(event) => setNextOfKinPhone(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label className="mb-1 block text-fs font-medium text-body" htmlFor="client-nok-percent">
+                Next of kin percentage
+              </label>
+              <Input id="client-nok-percent" value={nextOfKinPercent} onChange={(event) => setNextOfKinPercent(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+          </div>
+        ) : null}
+
+        {error ? <p role="alert" className="text-fs text-accent-red">{error}</p> : null}
+
+        <div className="flex items-center justify-between gap-3">
+          <Button type="button" variant="outline" onClick={back} disabled={step === 1 || saving}>
+            Back
+          </Button>
+          {step < STEPS.length ? (
+            <Button type="button" onClick={next} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+              Next
+              <ArrowRight className="size-4" aria-hidden="true" />
+            </Button>
+          ) : (
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+              {saving ? "Saving..." : "Create client"}
+            </Button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+}

@@ -708,3 +708,55 @@ export async function updateProvisioningRule(id: string, payload: { status?: str
     body: payload,
   });
 }
+export type ClientStatus = "ACTIVE" | "INACTIVE" | "PENDING";
+export type ClientType = "INDIVIDUAL" | "GROUP";
+
+export type Client = {
+  id: string;
+  referenceNo: string;
+  fullName: string;
+  clientType: ClientType;
+  phone: string | null;
+  email: string | null;
+  nationalId: string | null;
+  status: ClientStatus;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ClientListResponse = {
+  items: Client[];
+  canView: boolean;
+  canCreate: boolean;
+  canEdit: boolean;
+};
+
+export type ClientResponse = {
+  client: Client;
+  canEdit: boolean;
+};
+
+export async function listClients(filter: { q?: string; status?: string; type?: string } = {}): Promise<ClientListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  if (filter.type) params.set("type", filter.type);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<ClientListResponse>(`/settings/clients${suffix}`);
+}
+
+export async function createClient(payload: {
+  referenceNo: string;
+  fullName: string;
+  clientType?: ClientType;
+  phone?: string | null;
+  email?: string | null;
+  nationalId?: string | null;
+  branchId?: string | null;
+  profile?: unknown;
+}): Promise<ClientResponse> {
+  return apiRequest<ClientResponse>("/settings/clients", {
+    method: "POST",
+    body: payload,
+  });
+}
