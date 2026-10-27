@@ -136,7 +136,7 @@ export default function InterestRatesPage() {
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-left fs-text">
-              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Code</th>
                   <th className="px-4 py-3">Name</th>

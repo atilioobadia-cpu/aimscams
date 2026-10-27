@@ -159,14 +159,14 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             <DropdownMenuItem disabled>
               <UserRound aria-hidden="true" />
               Profile
-              <span className="ml-auto fs-text uppercase tracking-wide text-muted-foreground">
+              <span className="ml-auto fs-text tracking-wide text-muted-foreground">
                 Soon
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem disabled>
               <Settings aria-hidden="true" />
               Settings
-              <span className="ml-auto fs-text uppercase tracking-wide text-muted-foreground">
+              <span className="ml-auto fs-text tracking-wide text-muted-foreground">
                 Phase 4
               </span>
             </DropdownMenuItem>

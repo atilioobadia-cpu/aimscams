@@ -174,7 +174,7 @@ export function MfaEnrollForm({
           </p>
         }
       >
-        <div className="flex items-center gap-2 fs-text font-medium uppercase tracking-[0.12em] text-label">
+        <div className="flex items-center gap-2 fs-text font-medium tracking-[0.12em] text-label">
           <Smartphone className="size-4 text-brand" aria-hidden="true" />
           Step 1 of 2
         </div>
@@ -192,7 +192,7 @@ export function MfaEnrollForm({
         </div>
 
         <div className="mt-4 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
-          <p className="fs-text font-medium uppercase tracking-[0.12em] text-label">
+          <p className="fs-text font-medium tracking-[0.12em] text-label">
             Cannot scan? Enter this key
           </p>
           <div className="mt-1.5 flex items-center gap-2">
@@ -215,7 +215,7 @@ export function MfaEnrollForm({
         </div>
 
         <form onSubmit={activate} noValidate className="mt-5">
-          <div className="mb-2 flex items-center gap-2 fs-text font-medium uppercase tracking-[0.12em] text-label">
+          <div className="mb-2 flex items-center gap-2 fs-text font-medium tracking-[0.12em] text-label">
             <ShieldCheck className="size-4 text-brand" aria-hidden="true" />
             Step 2 of 2
           </div>

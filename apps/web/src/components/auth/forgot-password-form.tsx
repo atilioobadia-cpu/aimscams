@@ -27,7 +27,7 @@ const PASSWORD_MAX_LENGTH = 200;
 
 const PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
   { label: "At least 12 characters", met: (value) => value.length >= PASSWORD_MIN_LENGTH },
-  { label: "An uppercase letter", met: (value) => /[A-Z]/.test(value) },
+  { label: "An letter", met: (value) => /[A-Z]/.test(value) },
   { label: "A lowercase letter", met: (value) => /[a-z]/.test(value) },
   { label: "A number", met: (value) => /\d/.test(value) },
   { label: "A symbol", met: (value) => /[^A-Za-z0-9]/.test(value) },
@@ -154,7 +154,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             data-testid="dev-reset-panel"
             className="mt-3 rounded-lg border border-accent-yellow/40 bg-accent-yellow-bg px-4 py-3"
           >
-            <p className="fs-text font-semibold uppercase tracking-[0.08em] text-strong">
+            <p className="fs-text font-semibold tracking-[0.08em] text-strong">
               Local development delivery
             </p>
             <p className="mt-1 fs-text leading-5 text-body">

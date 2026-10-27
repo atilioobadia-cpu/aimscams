@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { UserForm } from "@/components/settings/user-form";
 import { ApiError } from "@/lib/api";
+import { maskEmail, maskPhone } from "@/lib/privacy";
 import {
   listBranches,
   listRoles,
@@ -246,7 +247,7 @@ export default function UsersPage() {
         <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[920px] text-left fs-text">
-              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Full name</th>
                   <th className="px-4 py-3">Email</th>
@@ -267,7 +268,7 @@ export default function UsersPage() {
                   users.map((user) => (
                     <tr key={user.id} className="border-b border-card-border last:border-0">
                       <td className="px-4 py-3 font-medium text-strong">{user.fullName}</td>
-                      <td className="px-4 py-3 text-body">{user.email}</td>
+                      <td className="px-4 py-3 text-body">{maskEmail(user.email)}</td>
                       <td className="px-4 py-3 text-body">{user.branch?.name ?? "Institution"}</td>
                       <td className="px-4 py-3 text-body">
                         {user.roles.map((role) => role.name).join(", ") || "No role"}
@@ -315,8 +316,8 @@ export default function UsersPage() {
         {viewingUser ? (
           <dl className="grid gap-4 sm:grid-cols-2">
             <Detail label="Full name" value={viewingUser.fullName} />
-            <Detail label="Email" value={viewingUser.email} />
-            <Detail label="Phone" value={viewingUser.phone || "—"} />
+            <Detail label="Email" value={maskEmail(viewingUser.email)} />
+            <Detail label="Phone" value={maskPhone(viewingUser.phone)} />
             <Detail label="Branch" value={viewingUser.branch?.name ?? "Institution"} />
             <Detail label="Status" value={viewingUser.status} />
             <Detail
@@ -345,7 +346,7 @@ function formatDate(value: string): string {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="fs-text font-medium uppercase tracking-wide text-label">{label}</dt>
+      <dt className="fs-text font-medium tracking-wide text-label">{label}</dt>
       <dd className="mt-0.5 fs-text text-body">{value}</dd>
     </div>
   );

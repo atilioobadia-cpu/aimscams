@@ -572,7 +572,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
             <div className="overflow-x-auto px-[var(--space-16)] py-[var(--space-14)]">
               <table className="w-full min-w-[520px] fs-text">
                 <thead>
-                  <tr className="border-b border-card-border text-left fs-text font-semibold uppercase tracking-wide text-label">
+                  <tr className="border-b border-card-border text-left fs-text font-semibold tracking-wide text-label">
                     <th className="py-[var(--space-8)] pr-[var(--space-10)]">Day</th>
                     <th className="px-[var(--space-10)] py-[var(--space-8)]">Closed</th>
                     <th className="px-[var(--space-10)] py-[var(--space-8)]">Opens</th>

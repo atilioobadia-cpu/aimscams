@@ -68,13 +68,13 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
             <Table>
               <TableHeader>
                 <TableRow className="bg-subtle hover:bg-subtle">
-                  <TableHead className="h-10 px-3 fs-text uppercase tracking-wide text-muted-foreground">
+                  <TableHead className="h-10 px-3 fs-text tracking-wide text-muted-foreground">
                     Item
                   </TableHead>
-                  <TableHead className="h-10 px-3 text-right fs-text uppercase tracking-wide text-muted-foreground">
+                  <TableHead className="h-10 px-3 text-right fs-text tracking-wide text-muted-foreground">
                     Amount
                   </TableHead>
-                  <TableHead className="h-10 px-3 text-right fs-text uppercase tracking-wide text-muted-foreground">
+                  <TableHead className="h-10 px-3 text-right fs-text tracking-wide text-muted-foreground">
                     Age
                   </TableHead>
                 </TableRow>

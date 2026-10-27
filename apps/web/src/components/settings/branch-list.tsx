@@ -213,7 +213,7 @@ export function BranchListPage() {
             </p>
           </header>
           <Table className="min-w-[960px]">
-            <TableHeader className="bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
+            <TableHeader className="bg-subtle fs-text font-semibold tracking-wide text-label">
               <TableRow>
                 <TableHead className="px-[var(--space-14)] py-[var(--space-10)]">Branch</TableHead>
                 <TableHead className="px-[var(--space-14)] py-[var(--space-10)]">Code</TableHead>
@@ -344,7 +344,7 @@ export function BranchListPage() {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="fs-text font-medium uppercase tracking-wide text-label">{label}</dt>
+      <dt className="fs-text font-medium tracking-wide text-label">{label}</dt>
       <dd className="mt-0.5 fs-text text-body">{value}</dd>
     </div>
   );
