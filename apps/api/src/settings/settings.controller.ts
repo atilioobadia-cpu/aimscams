@@ -174,6 +174,17 @@ export class SettingsController {
     return this.settings.getCreditProductPolicy(auth, id);
   }
 
+  @Patch('policies/credit-product/:id')
+  @RequirePermissions('Settings Policy : Edit')
+  async updateCreditProductPolicy(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateCreditProductPolicy(auth, id, body, requestContext(request));
+  }
+
   @Get('policies/credit-product')
   @RequirePermissions('Settings Policy : View')
   async listCreditProductPolicies(

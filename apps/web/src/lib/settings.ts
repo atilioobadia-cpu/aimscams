@@ -677,3 +677,15 @@ export async function updateMembershipPolicy(id: string, payload: Partial<{
 export async function getCreditProductPolicy(id: string): Promise<CreditProductPolicyResponse> {
   return apiRequest<CreditProductPolicyResponse>(`/settings/policies/credit-product/${encodeURIComponent(id)}`);
 }
+export async function updateCreditProductPolicy(id: string, payload: Partial<{
+  code: string;
+  name: string;
+  status: string;
+  description: string | null;
+  content: unknown;
+}>): Promise<CreditProductPolicyResponse> {
+  return apiRequest<CreditProductPolicyResponse>(`/settings/policies/credit-product/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

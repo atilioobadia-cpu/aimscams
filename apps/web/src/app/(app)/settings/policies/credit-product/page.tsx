@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Eye, Plus, Search } from "lucide-react";
+import { Building2, Eye, Pencil, Plus, Search } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
@@ -163,6 +163,9 @@ export default function CreditProductPoliciesPage() {
                           label={`${item.code} ${item.name}`}
                           actions={[
                             { label: "View policy", icon: Eye, href: `/settings/policies/credit-product/${item.id}` },
+                            ...(data?.canEdit
+                              ? [{ label: "Edit policy", icon: Pencil, href: `/settings/policies/credit-product/${item.id}/edit` }]
+                              : []),
                           ]}
                         />
                       </div>

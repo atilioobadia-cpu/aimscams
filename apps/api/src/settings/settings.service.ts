@@ -1029,6 +1029,49 @@ export class SettingsService {
     };
   }
 
+  async updateCreditProductPolicy(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.creditProductPolicy.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Credit product policy not found.');
+
+    const data: Prisma.CreditProductPolicyUpdateInput = {};
+    if (body.code !== undefined) {
+      const code = String(body.code).trim().toUpperCase();
+      if (!code) throw new BadRequestException('Code is required.');
+      data.code = code;
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+      data.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.description !== undefined) data.description = body.description ? String(body.description).trim() : null;
+    if (body.content !== undefined) data.content = body.content ?? undefined;
+
+    const updated = await this.prisma.creditProductPolicy.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Credit product policy updated',
+      entityType: 'CreditProductPolicy',
+      entityId: id,
+      before: this.serializeCreditProductPolicy(before),
+      after: this.serializeCreditProductPolicy(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeCreditProductPolicy(updated), canEdit: this.can(auth, 'Settings Policy : Edit') };
+  }
+
   private serializeCreditProductPolicy(item: Prisma.CreditProductPolicyGetPayload<Record<string, never>>) {
     return {
       id: item.id,
