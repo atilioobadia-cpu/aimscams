@@ -121,10 +121,10 @@ export function LoanProductDetail({ id }: { id: string }) {
               <Field label="Arrears classification (days)" value={String(product.arrearsClassificationDays)} />
               <Field label="Management fee" value={`${(product.managementFeeBp / 100).toFixed(2)}%`} />
               <Field label="Penalty" value={`${(product.penaltyBp / 100).toFixed(2)}%`} />
-              <Field label="Principal account" value={product.principalAccountId ?? "—"} />
-              <Field label="Interest income account" value={product.interestIncomeAccountId ?? "—"} />
-              <Field label="Charges income account" value={product.chargesIncomeAccountId ?? "—"} />
-              <Field label="Penalty income account" value={product.penaltyIncomeAccountId ?? "—"} />
+              <Field label="Principal account" value={product.principalAccountId ?? "N/A"} />
+              <Field label="Interest income account" value={product.interestIncomeAccountId ?? "N/A"} />
+              <Field label="Charges income account" value={product.chargesIncomeAccountId ?? "N/A"} />
+              <Field label="Penalty income account" value={product.penaltyIncomeAccountId ?? "N/A"} />
             </dl>
           </section>
 

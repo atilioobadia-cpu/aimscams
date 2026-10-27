@@ -620,13 +620,13 @@ export default function JournalEntriesPage() {
                         <Badge variant="outline">{entry.eventCode}</Badge>
                       </TableCell>
                       <TableCell className="max-w-[360px] truncate" title={entry.description}>
-                        {entry.description || "—"}
+                        {entry.description || "N/A"}
                       </TableCell>
                       <TableCell className="text-right tabular-nums">
-                        {entry.debitMinor === "0" ? "—" : formatTzsExact(entry.debitMinor)}
+                        {entry.debitMinor === "0" ? "N/A" : formatTzsExact(entry.debitMinor)}
                       </TableCell>
                       <TableCell className="text-right tabular-nums">
-                        {entry.creditMinor === "0" ? "—" : formatTzsExact(entry.creditMinor)}
+                        {entry.creditMinor === "0" ? "N/A" : formatTzsExact(entry.creditMinor)}
                       </TableCell>
                       <TableCell>
                         <Badge variant={entry.status === "posted" ? "default" : "outline"}>
@@ -758,12 +758,12 @@ export default function JournalEntriesPage() {
                       <span className="font-medium text-strong">{line.accountCode}</span>{" "}
                       <span className="ml-2 text-muted-foreground">{line.accountName}</span>
                     </TableCell>
-                    <TableCell>{line.memo || "—"}</TableCell>
+                    <TableCell>{line.memo || "N/A"}</TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {line.debitMinor === "0" ? "—" : formatTzsExact(line.debitMinor)}
+                      {line.debitMinor === "0" ? "N/A" : formatTzsExact(line.debitMinor)}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {line.creditMinor === "0" ? "—" : formatTzsExact(line.creditMinor)}
+                      {line.creditMinor === "0" ? "N/A" : formatTzsExact(line.creditMinor)}
                     </TableCell>
                   </TableRow>
                 ))}

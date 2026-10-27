@@ -30,7 +30,7 @@ export function formatMinorUnitsExact(value: string | bigint): string {
   const absolute = negative ? -minor : minor;
   const whole = absolute / 100n;
   const cents = absolute % 100n;
-  return `${negative ? "-" : ""}${decimal.format(whole)}.${cents.toString().padStart(2, "0")}`;
+  return `${negative ? "N/A" : ""}${decimal.format(whole)}.${cents.toString().padStart(2, "0")}`;
 }
 
 export function formatTzsExact(value: string | bigint): string {

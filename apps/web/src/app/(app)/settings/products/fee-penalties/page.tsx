@@ -308,10 +308,10 @@ export default function FeePenaltiesPage() {
                       <td className="px-4 py-3 text-body">{item.kind}</td>
                       <td className="px-4 py-3 tabular-nums text-body">
                         {item.amountType === "FIXED"
-                          ? item.amountMinor ?? "—"
+                          ? item.amountMinor ?? "N/A"
                           : `${((item.rateBp ?? 0) / 100).toFixed(2)}%`}
                       </td>
-                      <td className="px-4 py-3 text-body">{item.glAccountId ?? "—"}</td>
+                      <td className="px-4 py-3 text-body">{item.glAccountId ?? "N/A"}</td>
                       <td className="px-4 py-3">
                         <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                       </td>

@@ -199,7 +199,7 @@ export default function SavingsProductsPage() {
                           product.allowInterestPayout ? "Payout" : null,
                         ]
                           .filter(Boolean)
-                          .join(", ") || "—"}
+                          .join(", ") || "N/A"}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex justify-end">

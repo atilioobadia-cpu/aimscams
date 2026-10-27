@@ -191,9 +191,9 @@ export default function ClientsPage() {
                     <td className="px-4 py-3">
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                     </td>
-                    <td className="px-4 py-3 text-body">{item.kycStatus}</td>
+                    <td className="px-4 py-3 text-body">{titleCase(item.kycStatus)}</td>
                     <td className="px-4 py-3 text-body">{item.joinedAt ? new Date(item.joinedAt).toLocaleDateString() : "—"}</td>
-                    <td className="px-4 py-3 text-body">{item.groupName ?? "—"}</td>
+                    <td className="px-4 py-3 text-body">{item.groupName ?? "N/A"}</td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end">
                         <RowActionsMenu
@@ -267,7 +267,7 @@ export default function ClientsPage() {
             </div>
             <div>
               <dt className="text-fs font-medium text-muted-foreground">KYC status</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.kycStatus}</dd>
+              <dd className="mt-1 text-fs text-strong">{titleCase(viewing.kycStatus)}</dd>
             </div>
             <div>
               <dt className="text-fs font-medium text-muted-foreground">DOJ</dt>
@@ -275,7 +275,7 @@ export default function ClientsPage() {
             </div>
             <div>
               <dt className="text-fs font-medium text-muted-foreground">Group</dt>
-              <dd className="mt-1 text-fs text-strong">{viewing.groupName ?? "—"}</dd>
+              <dd className="mt-1 text-fs text-strong">{viewing.groupName ?? "N/A"}</dd>
             </div>
           </dl>
         ) : null}

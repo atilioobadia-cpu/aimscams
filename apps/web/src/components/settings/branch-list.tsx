@@ -304,8 +304,8 @@ export function BranchListPage() {
                 value={viewing.status === "OPEN" ? "Open" : "Closed"}
               />
               <Detail label="Region" value={viewing.region} />
-              <Detail label="District" value={viewing.district || "—"} />
-              <Detail label="Ward" value={viewing.ward || "—"} />
+              <Detail label="District" value={viewing.district || "N/A"} />
+              <Detail label="Ward" value={viewing.ward || "N/A"} />
               <Detail label="Council" value={councilLabel(viewing.councilType)} />
               <Detail label="Address" value={viewing.addressLine || "No address recorded"} />
               <Detail label="Default branch" value={viewing.isDefault ? "Yes" : "No"} />

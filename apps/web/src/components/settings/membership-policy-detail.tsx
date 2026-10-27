@@ -113,7 +113,7 @@ export function MembershipPolicyDetail({ id }: { id: string }) {
               <Field label="Allow withdraw" value={policy.allowWithdraw ? "Yes" : "No"} />
               <Field label="Auto active upon deposit" value={policy.autoActiveUponDeposit ? "Yes" : "No"} />
               <Field label="Enable member verification" value={policy.enableMemberVerification ? "Yes" : "No"} />
-              <Field label="Verification type" value={policy.verificationType ?? "—"} />
+              <Field label="Verification type" value={policy.verificationType ?? "N/A"} />
             </dl>
           </section>
         </>

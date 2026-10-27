@@ -352,16 +352,16 @@ export default function LedgerEntriesPage() {
                           </Link>
                         </TableCell>
                         <TableCell className="max-w-[300px] truncate" title={row.description}>
-                          {row.description || "—"}
+                          {row.description || "N/A"}
                         </TableCell>
                         <TableCell className="max-w-[200px] truncate" title={row.memo}>
-                          {row.memo || "—"}
+                          {row.memo || "N/A"}
                         </TableCell>
                         <TableCell className="text-right tabular-nums">
-                          {row.debitMinor === "0" ? "—" : formatTzsExact(row.debitMinor)}
+                          {row.debitMinor === "0" ? "N/A" : formatTzsExact(row.debitMinor)}
                         </TableCell>
                         <TableCell className="text-right tabular-nums">
-                          {row.creditMinor === "0" ? "—" : formatTzsExact(row.creditMinor)}
+                          {row.creditMinor === "0" ? "N/A" : formatTzsExact(row.creditMinor)}
                         </TableCell>
                         <TableCell className="pr-[var(--space-16)] text-right font-medium tabular-nums text-strong">
                           {formatTzsExact(row.runningMinor)}

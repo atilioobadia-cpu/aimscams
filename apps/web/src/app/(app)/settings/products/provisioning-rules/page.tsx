@@ -240,9 +240,9 @@ export default function ProvisioningRulesPage() {
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                     </td>
                     <td className="px-4 py-3 tabular-nums text-body">{item.daysFrom}</td>
-                    <td className="px-4 py-3 tabular-nums text-body">{item.daysTo ?? "—"}</td>
+                    <td className="px-4 py-3 tabular-nums text-body">{item.daysTo ?? "N/A"}</td>
                     <td className="px-4 py-3 tabular-nums text-body">{(item.rateBp / 100).toFixed(2)}%</td>
-                    <td className="px-4 py-3 text-body">{item.glAccountId ?? "—"}</td>
+                    <td className="px-4 py-3 text-body">{item.glAccountId ?? "N/A"}</td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end">
                         <RowActionsMenu
