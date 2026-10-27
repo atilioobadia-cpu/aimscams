@@ -349,3 +349,10 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 .app-header {
   box-shadow: 0 1px 0 var(--border-header);
 }
+
+/* Keep table content on one line; horizontal scroll handles overflow. */
+table th,
+table td {
+  white-space: nowrap;
+}
+
