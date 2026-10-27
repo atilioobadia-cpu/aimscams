@@ -199,7 +199,7 @@ export default function ClientsPage() {
                         <RowActionsMenu
                           label={`${item.referenceNo} ${item.fullName}`}
                           actions={[
-                            { label: "View client", icon: Eye, onSelect: () => setViewing(item) },
+                            { label: "View client", icon: Eye, href: `/clients/${item.id}` },
                             ...(data?.canEdit
                               ? [
                                   {

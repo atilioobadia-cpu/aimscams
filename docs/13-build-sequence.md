@@ -509,7 +509,7 @@ button; a role without Create gets the shared forbidden panel on `/settings/bran
 | [x] | CL-01 | `/clients` | Client list | T1 | M |
 | [x] | CL-02 | `/clients-create` | Add client (6 steps) | T2 | H |
 | [x] | CL-03 | `/clients-create-group` | Add group (3 steps) | T2 | M |
-| [ ] | CL-04 | `/clients-group-1789` | Member / group 360 | T3 | H |
+| [x] | CL-04 | `/clients-group-1789` | Member / group 360 | T3 | H |
 
 **Work**
 
