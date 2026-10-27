@@ -3,7 +3,7 @@
 -- The database, not the application, enforces the rules that must never be
 -- broken:
 --
---   1. every entry balances ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â checked at commit by a deferred constraint
+--   1. every entry balances ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â checked at commit by a deferred constraint
 --      trigger, so an entry and its lines can be written in any order;
 --   2. an entry has at least two lines, and every line carries exactly one
 --      side: a debit or a credit, never both, never neither;
@@ -20,7 +20,7 @@ create table organisation (
   id          uuid primary key default gen_random_uuid(),
   code        text not null unique,
   name        text not null,
-  dialect     text not null check (dialect in ('SACCOS', 'MFI')),
+  dialect     text not null check (dialect in ('TCDC', 'BOT')),
   created_at  timestamptz not null default now()
 );
 

@@ -32,8 +32,8 @@ async function bootstrap(): Promise<Db> {
 
   await db.exec(`
     insert into organisation (id, code, name, dialect) values
-      ('${organisation}', 'T1', 'Test SACCO', 'SACCOS'),
-      ('${OTHER}', 'T2', 'Other SACCO', 'SACCOS');
+      ('${organisation}', 'T1', 'Test SACCO', 'TCDC'),
+      ('${OTHER}', 'T2', 'Other SACCO', 'TCDC');
 
     insert into fiscal_period (organisation_id, starts_on, ends_on) values
       ('${organisation}', '2026-10-01', '2026-10-31'),
@@ -279,7 +279,7 @@ describe('provisioning', () => {
     const input = {
       code: 'DEMO1',
       name: 'AIMS Demo SACCO',
-      dialect: 'SACCOS' as const,
+      dialect: 'TCDC' as const,
       branch: { code: 'HQ', name: 'Head office', councilType: 'MC' as const },
       periods: [{ startsOn: '2026-01-01', endsOn: '2026-12-31' }],
     };
@@ -330,7 +330,7 @@ describe('provisioning', () => {
       provisionTenant(db, {
         code: 'DEMO2',
         name: 'AIMS Demo Two',
-        dialect: 'MFI',
+        dialect: 'BOT',
         periods: [
           { startsOn: '2026-01-01', endsOn: '2026-12-31' },
           { startsOn: '2026-06-01', endsOn: '2027-05-31' },
