@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Building2, CheckCircle2, ChevronDown, LoaderCircle, LogOut, Settings, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -130,8 +130,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-64">
             <DropdownMenuLabel>
-              <span className="block text-sm font-semibold text-strong">{user.name}</span>
-              <span className="mt-0.5 block text-xs font-normal text-muted-foreground">
+              <span className="block text-[var(--fs)] font-semibold text-strong">{user.name}</span>
+              <span className="mt-0.5 block text-[var(--fs)] font-normal text-muted-foreground">
                 {user.role}
               </span>
             </DropdownMenuLabel>
@@ -139,20 +139,20 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             <DropdownMenuItem disabled>
               <UserRound aria-hidden="true" />
               Profile
-              <span className="ml-auto text-[10px] uppercase tracking-wide text-muted-foreground">
+              <span className="ml-auto text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
                 Soon
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem disabled>
               <Settings aria-hidden="true" />
               Settings
-              <span className="ml-auto text-[10px] uppercase tracking-wide text-muted-foreground">
+              <span className="ml-auto text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
                 Phase 4
               </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {signOutError ? (
-              <p className="px-1.5 py-1 text-[11px] leading-4 text-accent-red" role="alert">
+              <p className="px-1.5 py-1 text-[var(--fs)] leading-4 text-accent-red" role="alert">
                 {signOutError}
               </p>
             ) : null}
@@ -174,3 +174,4 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
     </header>
   );
 }
+
