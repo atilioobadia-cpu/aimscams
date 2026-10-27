@@ -64,6 +64,7 @@ model Organisation {
   loanProducts  LoanProduct[]
   savingsProducts SavingsProduct[]
   interestRates InterestRate[]
+  feePenalties  FeePenalty[]
 
   @@map("organisation")
 }
@@ -402,6 +403,43 @@ model InterestRate {
 }
 
 enum InterestRateStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model FeePenalty {
+  id            String             @id @default(uuid()) @db.Uuid
+  organisationId String            @db.Uuid
+  code          String
+  name          String
+  kind          FeePenaltyKind
+  amountType    FeeAmountType
+  amountMinor   BigInt?
+  rateBp        Int?
+  glAccountId   String?
+  status        FeePenaltyStatus   @default(ACTIVE)
+  description   String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, code])
+  @@index([organisationId, status])
+  @@map("fee_penalty")
+}
+
+enum FeePenaltyKind {
+  FEE
+  PENALTY
+}
+
+enum FeeAmountType {
+  FIXED
+  PERCENTAGE
+}
+
+enum FeePenaltyStatus {
   ACTIVE
   INACTIVE
 }

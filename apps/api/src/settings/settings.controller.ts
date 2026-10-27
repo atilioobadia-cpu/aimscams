@@ -113,6 +113,38 @@ export class SettingsController {
     return this.settings.getLoanProduct(auth, id);
   }
 
+  @Get('products/fee-penalties')
+  @RequirePermissions('Settings Product : View')
+  async listFeePenalties(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+    @Query('kind') kind?: string,
+  ) {
+    return this.settings.listFeePenalties(auth, { q, status, kind });
+  }
+
+  @Post('products/fee-penalties')
+  @RequirePermissions('Settings Product : Create')
+  async createFeePenalty(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createFeePenalty(auth, body, requestContext(request));
+  }
+
+  @Patch('products/fee-penalties/:id')
+  @RequirePermissions('Settings Product : Edit')
+  async updateFeePenalty(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateFeePenalty(auth, id, body, requestContext(request));
+  }
+
   @Get('products/interest-rates')
   @RequirePermissions('Settings Product : View')
   async listInterestRates(

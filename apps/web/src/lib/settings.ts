@@ -392,3 +392,74 @@ export async function updateSavingsProduct(id: string, payload: Partial<{
     body: payload,
   });
 }
+export type FeePenaltyKind = "FEE" | "PENALTY";
+export type FeeAmountType = "FIXED" | "PERCENTAGE";
+export type FeePenaltyStatus = "ACTIVE" | "INACTIVE";
+
+export type FeePenalty = {
+  id: string;
+  code: string;
+  name: string;
+  kind: FeePenaltyKind;
+  amountType: FeeAmountType;
+  amountMinor: string | null;
+  rateBp: number | null;
+  glAccountId: string | null;
+  status: FeePenaltyStatus;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type FeePenaltyListResponse = {
+  items: FeePenalty[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type FeePenaltyResponse = {
+  item: FeePenalty;
+  canEdit: boolean;
+};
+
+export async function listFeePenalties(filter: { q?: string; status?: string; kind?: string } = {}): Promise<FeePenaltyListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  if (filter.kind) params.set("kind", filter.kind);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<FeePenaltyListResponse>(`/settings/products/fee-penalties${suffix}`);
+}
+
+export async function createFeePenalty(payload: {
+  code: string;
+  name: string;
+  kind: FeePenaltyKind;
+  amountType: FeeAmountType;
+  amountMinor?: string | null;
+  rateBp?: number | null;
+  glAccountId?: string | null;
+  description?: string | null;
+}): Promise<FeePenaltyResponse> {
+  return apiRequest<FeePenaltyResponse>("/settings/products/fee-penalties", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function updateFeePenalty(id: string, payload: Partial<{
+  code: string;
+  name: string;
+  kind: FeePenaltyKind;
+  amountType: FeeAmountType;
+  amountMinor: string | null;
+  rateBp: number | null;
+  glAccountId: string | null;
+  status: FeePenaltyStatus;
+  description: string | null;
+}>): Promise<FeePenaltyResponse> {
+  return apiRequest<FeePenaltyResponse>(`/settings/products/fee-penalties/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

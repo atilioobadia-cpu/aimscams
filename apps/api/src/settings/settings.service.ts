@@ -628,6 +628,156 @@ export class SettingsService {
     };
   }
 
+  async listFeePenalties(auth: AuthContext, filter: { q?: string; status?: string; kind?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.FeePenaltyWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'ACTIVE' || status === 'INACTIVE') where.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    if (filter.kind) {
+      const kind = filter.kind.trim().toUpperCase();
+      if (kind === 'FEE' || kind === 'PENALTY') where.kind = kind as 'FEE' | 'PENALTY';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const items = await this.prisma.feePenalty.findMany({
+      where,
+      orderBy: [{ kind: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeFeePenalty(item)),
+      canView: this.can(auth, 'Settings Product : View'),
+      canEdit: this.can(auth, 'Settings Product : Edit'),
+    };
+  }
+
+  async createFeePenalty(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+    const kind = String(body.kind ?? '').trim().toUpperCase();
+    if (kind !== 'FEE' && kind !== 'PENALTY') throw new BadRequestException('Kind must be FEE or PENALTY.');
+    const amountType = String(body.amountType ?? '').trim().toUpperCase();
+    if (amountType !== 'FIXED' && amountType !== 'PERCENTAGE') throw new BadRequestException('Amount type must be FIXED or PERCENTAGE.');
+
+    const existing = await this.prisma.feePenalty.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A fee or penalty with that code already exists.');
+
+    const item = await this.prisma.feePenalty.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        kind: kind as 'FEE' | 'PENALTY',
+        amountType: amountType as 'FIXED' | 'PERCENTAGE',
+        amountMinor: body.amountMinor ? BigInt(String(body.amountMinor)) : null,
+        rateBp: body.rateBp !== undefined && body.rateBp !== null ? Number(body.rateBp) : null,
+        glAccountId: body.glAccountId ? String(body.glAccountId).trim() : null,
+        status: 'ACTIVE',
+        description: body.description ? String(body.description).trim() : null,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Fee or penalty created',
+      entityType: 'FeePenalty',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeFeePenalty(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeFeePenalty(item), canEdit: this.can(auth, 'Settings Product : Edit') };
+  }
+
+  async updateFeePenalty(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.feePenalty.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Fee or penalty not found.');
+
+    const data: Prisma.FeePenaltyUpdateInput = {};
+    if (body.code !== undefined) {
+      const code = String(body.code).trim().toUpperCase();
+      if (!code) throw new BadRequestException('Code is required.');
+      data.code = code;
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+    if (body.kind !== undefined) {
+      const kind = String(body.kind).trim().toUpperCase();
+      if (kind !== 'FEE' && kind !== 'PENALTY') throw new BadRequestException('Kind must be FEE or PENALTY.');
+      data.kind = kind as 'FEE' | 'PENALTY';
+    }
+    if (body.amountType !== undefined) {
+      const amountType = String(body.amountType).trim().toUpperCase();
+      if (amountType !== 'FIXED' && amountType !== 'PERCENTAGE') throw new BadRequestException('Amount type must be FIXED or PERCENTAGE.');
+      data.amountType = amountType as 'FIXED' | 'PERCENTAGE';
+    }
+    if (body.amountMinor !== undefined) data.amountMinor = body.amountMinor ? BigInt(String(body.amountMinor)) : null;
+    if (body.rateBp !== undefined) data.rateBp = body.rateBp !== null ? Number(body.rateBp) : null;
+    if (body.glAccountId !== undefined) data.glAccountId = body.glAccountId ? String(body.glAccountId).trim() : null;
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+      data.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.description !== undefined) data.description = body.description ? String(body.description).trim() : null;
+
+    const updated = await this.prisma.feePenalty.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Fee or penalty updated',
+      entityType: 'FeePenalty',
+      entityId: id,
+      before: this.serializeFeePenalty(before),
+      after: this.serializeFeePenalty(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeFeePenalty(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
+  }
+
+  private serializeFeePenalty(item: Prisma.FeePenaltyGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      kind: item.kind,
+      amountType: item.amountType,
+      amountMinor: item.amountMinor?.toString() ?? null,
+      rateBp: item.rateBp,
+      glAccountId: item.glAccountId,
+      status: item.status,
+      description: item.description,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,
