@@ -67,6 +67,9 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
       <div className="absolute inset-0 bg-black/45" />
       <div
         ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
         className={cn(
           "relative z-10 flex max-h-[90vh] flex-col rounded-[11px] bg-surface shadow-xl transition-transform duration-150",
           open ? "scale-100" : "scale-95",
@@ -74,7 +77,7 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
         )}
       >
         <div className="flex items-center justify-between border-b border-chrome px-5 py-3">
-          <h2 className="text-[var(--fs)] font-bold text-strong">{title}</h2>
+          <h2 id="modal-title" className="text-[var(--fs)] font-bold text-strong">{title}</h2>
           <button
             type="button"
             onClick={onClose}
