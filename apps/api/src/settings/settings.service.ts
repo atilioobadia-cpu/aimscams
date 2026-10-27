@@ -379,6 +379,167 @@ export class SettingsService {
     };
   }
 
+  async listSavingsProducts(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.SavingsProductWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'DRAFT' || status === 'ACTIVE' || status === 'INACTIVE') {
+        where.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+      }
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const products = await this.prisma.savingsProduct.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: products.map((product) => this.serializeSavingsProduct(product)),
+      canView: this.can(auth, 'Settings Product : View'),
+      canEdit: this.can(auth, 'Settings Product : Edit'),
+    };
+  }
+
+  async getSavingsProduct(auth: AuthContext, id: string) {
+    const product = await this.prisma.savingsProduct.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+    });
+    if (!product) throw new NotFoundException('Savings product not found.');
+    return {
+      product: this.serializeSavingsProduct(product),
+      canEdit: this.can(auth, 'Settings Product : Edit'),
+    };
+  }
+
+  async createSavingsProduct(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+    const status = String(body.status ?? 'DRAFT').trim().toUpperCase();
+    if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') {
+      throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+    }
+
+    const existing = await this.prisma.savingsProduct.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('A savings product with that code already exists.');
+
+    const product = await this.prisma.savingsProduct.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        status: status as 'DRAFT' | 'ACTIVE' | 'INACTIVE',
+        description: body.description ? String(body.description).trim() : null,
+        allowedAsGuarantor: body.allowedAsGuarantor === true,
+        allowedAsCollateral: body.allowedAsCollateral === true,
+        allowedMultipleAccounts: body.allowedMultipleAccounts === true,
+        allowInterestPayout: body.allowInterestPayout === true,
+        minBalanceMinor: BigInt(String(body.minBalanceMinor ?? '0')),
+        interestRateBp: Number(body.interestRateBp ?? 0),
+        interestPayoutFrequency: String(body.interestPayoutFrequency ?? 'MONTHLY').trim() || 'MONTHLY',
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Savings product created',
+      entityType: 'SavingsProduct',
+      entityId: product.id,
+      before: undefined,
+      after: this.serializeSavingsProduct(product),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { product: this.serializeSavingsProduct(product), canEdit: this.can(auth, 'Settings Product : Edit') };
+  }
+
+  async updateSavingsProduct(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.savingsProduct.findFirst({
+      where: { id, organisationId },
+    });
+    if (!before) throw new NotFoundException('Savings product not found.');
+
+    const data: Prisma.SavingsProductUpdateInput = {};
+    if (body.code !== undefined) {
+      const code = String(body.code).trim().toUpperCase();
+      if (!code) throw new BadRequestException('Code is required.');
+      data.code = code;
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') {
+        throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+      }
+      data.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.description !== undefined) data.description = body.description ? String(body.description).trim() : null;
+    if (body.allowedAsGuarantor !== undefined) data.allowedAsGuarantor = body.allowedAsGuarantor === true;
+    if (body.allowedAsCollateral !== undefined) data.allowedAsCollateral = body.allowedAsCollateral === true;
+    if (body.allowedMultipleAccounts !== undefined) data.allowedMultipleAccounts = body.allowedMultipleAccounts === true;
+    if (body.allowInterestPayout !== undefined) data.allowInterestPayout = body.allowInterestPayout === true;
+    if (body.minBalanceMinor !== undefined) data.minBalanceMinor = BigInt(String(body.minBalanceMinor));
+    if (body.interestRateBp !== undefined) data.interestRateBp = Number(body.interestRateBp);
+    if (body.interestPayoutFrequency !== undefined) data.interestPayoutFrequency = String(body.interestPayoutFrequency).trim() || 'MONTHLY';
+
+    const updated = await this.prisma.savingsProduct.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Savings product updated',
+      entityType: 'SavingsProduct',
+      entityId: id,
+      before: this.serializeSavingsProduct(before),
+      after: this.serializeSavingsProduct(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { product: this.serializeSavingsProduct(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
+  }
+
+  private serializeSavingsProduct(product: Prisma.SavingsProductGetPayload<Record<string, never>>) {
+    return {
+      id: product.id,
+      code: product.code,
+      name: product.name,
+      status: product.status,
+      description: product.description,
+      allowedAsGuarantor: product.allowedAsGuarantor,
+      allowedAsCollateral: product.allowedAsCollateral,
+      allowedMultipleAccounts: product.allowedMultipleAccounts,
+      allowInterestPayout: product.allowInterestPayout,
+      minBalanceMinor: product.minBalanceMinor.toString(),
+      interestRateBp: product.interestRateBp,
+      interestPayoutFrequency: product.interestPayoutFrequency,
+      createdAt: product.createdAt.toISOString(),
+      updatedAt: product.updatedAt.toISOString(),
+    };
+  }
+
   private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
     return {
       id: product.id,

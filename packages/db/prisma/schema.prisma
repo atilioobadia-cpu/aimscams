@@ -62,6 +62,7 @@ model Organisation {
   auditEvents   AuditEvent[]
   loginAttempts LoginAttempt[]
   loanProducts  LoanProduct[]
+  savingsProducts SavingsProduct[]
 
   @@map("organisation")
 }
@@ -348,3 +349,33 @@ enum LoanProductStatus {
   INACTIVE
 }
 
+
+model SavingsProduct {
+  id                      String               @id @default(uuid()) @db.Uuid
+  organisationId          String               @db.Uuid
+  code                    String
+  name                    String
+  status                  SavingsProductStatus @default(DRAFT)
+  description             String?
+  allowedAsGuarantor      Boolean              @default(false)
+  allowedAsCollateral     Boolean              @default(false)
+  allowedMultipleAccounts Boolean              @default(false)
+  allowInterestPayout     Boolean              @default(false)
+  minBalanceMinor         BigInt               @default(0)
+  interestRateBp          Int                  @default(0)
+  interestPayoutFrequency String               @default("MONTHLY")
+  createdAt               DateTime             @default(now())
+  updatedAt               DateTime             @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+
+  @@unique([organisationId, code])
+  @@index([organisationId, status])
+  @@map("savings_product")
+}
+
+enum SavingsProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+}

@@ -113,6 +113,46 @@ export class SettingsController {
     return this.settings.getLoanProduct(auth, id);
   }
 
+  @Get('products/savings')
+  @RequirePermissions('Settings Product : View')
+  async listSavingsProducts(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listSavingsProducts(auth, { q, status });
+  }
+
+  @Get('products/savings/:id')
+  @RequirePermissions('Settings Product : View')
+  async getSavingsProduct(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.getSavingsProduct(auth, id);
+  }
+
+  @Post('products/savings')
+  @RequirePermissions('Settings Product : Create')
+  async createSavingsProduct(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createSavingsProduct(auth, body, requestContext(request));
+  }
+
+  @Patch('products/savings/:id')
+  @RequirePermissions('Settings Product : Edit')
+  async updateSavingsProduct(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateSavingsProduct(auth, id, body, requestContext(request));
+  }
+
   @Post('branches')
   @RequirePermissions('Settings Branch : Create')
   async createBranch(

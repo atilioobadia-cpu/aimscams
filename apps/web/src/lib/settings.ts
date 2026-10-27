@@ -263,3 +263,83 @@ export async function listLoanProducts(filter: { q?: string; status?: string } =
 export async function getLoanProduct(id: string): Promise<LoanProductResponse> {
   return apiRequest<LoanProductResponse>(`/settings/products/loans/${encodeURIComponent(id)}`);
 }
+
+export type SavingsProductStatus = "DRAFT" | "ACTIVE" | "INACTIVE";
+
+export type SavingsProduct = {
+  id: string;
+  code: string;
+  name: string;
+  status: SavingsProductStatus;
+  description: string | null;
+  allowedAsGuarantor: boolean;
+  allowedAsCollateral: boolean;
+  allowedMultipleAccounts: boolean;
+  allowInterestPayout: boolean;
+  minBalanceMinor: string;
+  interestRateBp: number;
+  interestPayoutFrequency: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SavingsProductListResponse = {
+  items: SavingsProduct[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type SavingsProductResponse = {
+  product: SavingsProduct;
+  canEdit: boolean;
+};
+
+export async function listSavingsProducts(filter: { q?: string; status?: string } = {}): Promise<SavingsProductListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<SavingsProductListResponse>(`/settings/products/savings${suffix}`);
+}
+
+export async function getSavingsProduct(id: string): Promise<SavingsProductResponse> {
+  return apiRequest<SavingsProductResponse>(`/settings/products/savings/${encodeURIComponent(id)}`);
+}
+
+export async function createSavingsProduct(payload: {
+  code: string;
+  name: string;
+  status?: string;
+  description?: string | null;
+  allowedAsGuarantor?: boolean;
+  allowedAsCollateral?: boolean;
+  allowedMultipleAccounts?: boolean;
+  allowInterestPayout?: boolean;
+  minBalanceMinor?: string;
+  interestRateBp?: number;
+  interestPayoutFrequency?: string;
+}): Promise<SavingsProductResponse> {
+  return apiRequest<SavingsProductResponse>("/settings/products/savings", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function updateSavingsProduct(id: string, payload: Partial<{
+  code: string;
+  name: string;
+  status: string;
+  description: string | null;
+  allowedAsGuarantor: boolean;
+  allowedAsCollateral: boolean;
+  allowedMultipleAccounts: boolean;
+  allowInterestPayout: boolean;
+  minBalanceMinor: string;
+  interestRateBp: number;
+  interestPayoutFrequency: string;
+}>): Promise<SavingsProductResponse> {
+  return apiRequest<SavingsProductResponse>(`/settings/products/savings/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
