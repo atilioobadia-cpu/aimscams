@@ -1,7 +1,7 @@
 "use client";
 
 
-import { useRouter } from "next/navigation";
+
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ import {
 } from "@/lib/users";
 
 export default function UsersPage() {
-  const router = useRouter();
+
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [branches, setBranches] = useState<BranchSummary[]>([]);
   const [roles, setRoles] = useState<RoleSummary[]>([]);
@@ -31,6 +31,7 @@ export default function UsersPage() {
   const [role, setRole] = useState("");
   const [branchId, setBranchId] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | undefined>(undefined);
 
   const filters = useMemo(
     () => ({ q, status: status || undefined, role: role || undefined, branchId: branchId || undefined }),
@@ -111,7 +112,10 @@ export default function UsersPage() {
         </div>
         <Button
           className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold"
-          onClick={() => setModalOpen(true)}
+          onClick={() => {
+            setEditingId(undefined);
+            setModalOpen(true);
+          }}
         >
           Add user
         </Button>
@@ -221,7 +225,10 @@ export default function UsersPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => router.push(`/settings-administrator-add?id=${user.id}`)}
+                          onClick={() => {
+                            setEditingId(user.id);
+                            setModalOpen(true);
+                          }}
                         >
                           Edit
                         </Button>
@@ -246,8 +253,8 @@ export default function UsersPage() {
           </table>
         </div>
       </div>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Add user">
-        <UserForm id={undefined} />
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editingId ? "Edit user" : "Add user"}>
+        <UserForm id={editingId} />
       </Modal>
     </div>
   );
