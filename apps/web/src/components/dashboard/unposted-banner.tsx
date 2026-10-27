@@ -30,10 +30,10 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
     <section
       data-testid="unposted-banner"
       aria-label="Unposted transactions"
-      className="flex flex-wrap items-center gap-4 rounded-xl border border-accent-yellow/50 bg-accent-yellow-bg px-5 py-4"
+      className="flex flex-wrap items-center gap-4 rounded-[var(--card-radius)] border border-accent-yellow/50 bg-accent-yellow-bg px-[var(--space-14)] py-[var(--space-8)]"
     >
-      <span className="grid size-11 shrink-0 place-items-center rounded-full border border-accent-yellow/40 bg-surface text-accent-yellow">
-        <Clock3 className="size-5" strokeWidth={2} aria-hidden="true" />
+      <span className="grid size-8 shrink-0 place-items-center rounded-full border border-accent-yellow/40 bg-surface text-accent-yellow">
+        <Clock3 className="size-4" strokeWidth={2} aria-hidden="true" />
       </span>
 
       <div className="min-w-0 flex-1">
@@ -48,7 +48,7 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
 
       <Sheet>
         <SheetTrigger asChild>
-          <Button type="button" data-testid="unposted-review" className="h-11 px-5">
+          <Button type="button" data-testid="unposted-review" className="h-8 px-[var(--space-14)]">
             Review queue
           </Button>
         </SheetTrigger>

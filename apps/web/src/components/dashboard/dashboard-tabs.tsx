@@ -29,9 +29,9 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     <Tabs value={tab} onValueChange={setTab} className="gap-0">
       <div
         data-testid="dashboard-tab-card"
-        className="flex h-[var(--header-height)] items-center justify-between gap-6 rounded-[var(--card-radius)] border border-card-border bg-surface px-[var(--space-18)]"
+        className="flex h-[54px] items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-[var(--space-14)]"
       >
-        <TabsList aria-label="Dashboard views" className="h-auto gap-[var(--space-24)] bg-transparent p-0">
+        <TabsList aria-label="Dashboard views" className="h-auto gap-[var(--space-6)] bg-transparent p-0">
           {tabs.map((item) => {
             const Icon = item.icon;
             const active = tab === item.value;

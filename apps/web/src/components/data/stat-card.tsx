@@ -52,20 +52,20 @@ export function StatCard({ kpi, className }: { kpi: KpiFixture; className?: stri
       data-testid="kpi-card"
       data-kpi-id={kpi.id}
       className={cn(
-        "relative flex min-h-[185px] flex-col justify-between rounded-xl border border-card-border bg-surface p-[30px]",
+        "relative flex min-h-[92px] flex-col justify-between rounded-[var(--card-radius)] border border-card-border bg-surface p-3.5",
         className,
       )}
     >
-      <div className="flex items-start justify-between gap-4">
-        <h3 className="max-w-[180px] text-[var(--fs)] font-medium leading-6 text-label">{kpi.label}</h3>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="max-w-[160px] text-[var(--fs)] font-medium leading-[1.3] text-label">{kpi.label}</h3>
         <span
           className={cn(
-            "grid size-[66px] shrink-0 place-items-center rounded-full border",
+            "grid size-[34px] shrink-0 place-items-center rounded-full border",
             accentClasses[kpi.accent],
           )}
           data-testid="kpi-badge"
         >
-          <Icon className="size-7" strokeWidth={1.8} aria-hidden="true" />
+          <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
         </span>
       </div>
 
@@ -74,7 +74,7 @@ export function StatCard({ kpi, className }: { kpi: KpiFixture; className?: stri
           {displayValue(kpi)}
         </p>
         {kpi.hint ? (
-          <p className="mt-2 text-[var(--fs)] leading-5 text-muted-foreground">{kpi.hint}</p>
+          <p className="mt-0.5 text-[var(--fs)] leading-[1.3] text-muted-foreground">{kpi.hint}</p>
         ) : null}
       </div>
     </article>
