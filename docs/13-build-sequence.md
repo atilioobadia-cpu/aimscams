@@ -427,9 +427,20 @@ configuration; they never hard-code a rate, a fee or an approval stage.
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | ST-01 | `/settings-account` | General settings | T6 | M |
-| [ ] | ST-06 | `/settings-branch` | Branches | T1 | L |
-| [ ] | ST-07 | `/settings-branch-add` | Add / edit branch | T6 | M |
+| [x] | ST-01 | `/settings/general` | General settings | T6 | M |
+| [x] | ST-06 | `/settings/branches` | Branches | T1 | L |
+| [x] | ST-07 | `/settings/branches/new`, `/settings/branches/[id]` | Add / edit branch | T6 | M |
+
+ST-01 owns the institution profile: legal name, registration number, dialect, IANA time zone,
+default branch and logo. ST-06 is the branch network with server-side search and status filter.
+ST-07 is a create page and an edit page rather than a modal, so opening hours and the address have
+room. Weekly hours are seven integer minute fields per branch (`opensMinute`, `closesMinute`);
+public holidays stay in ST-27 under 4c (`D-030`). The tenant logo is stored in the tenant database
+as bytes with an optional external URL (`D-031`).
+
+Permissions are `Settings Organisation : View/Edit` for ST-01 and `Settings Branch : View/Create/Edit`
+for ST-06/ST-07. A View-only role gets the branch form with every control disabled and no Save
+button; a role without Create gets the shared forbidden panel on `/settings/branches/new`.
 
 ### 4b — Products
 
@@ -463,7 +474,8 @@ configuration; they never hard-code a rate, a fee or an approval stage.
 
 **Work**
 
-- Branch: address, council type (CC/MC/DC/TC), opening hours, holidays, default flag.
+- Branch: address, council type (CC/MC/DC/TC), weekly opening hours and default flag in 4a;
+  the holiday calendar is ST-27 in 4c.
 - Loan product editor: ~60 fields in seven groups, four workflow stages with default role and
   assignee, six GL mappings to concrete codes.
 - Savings product: limits, guarantor/collateral flags, multiple accounts, interest payout.
@@ -477,6 +489,8 @@ configuration; they never hard-code a rate, a fee or an approval stage.
 - A product cannot be saved with a GL mapping to a non-existent ledger.
 - A policy version cannot be edited after approval; a correction creates a new version.
 - A change is visible in the audit trail with the actor and the before/after values.
+- Organisation identity, time zone and default branch persist; a View-only role cannot edit them.
+- A branch writes all seven weekdays, and promoting a branch to default demotes the previous one.
 - The holiday calendar affects due-date calculation in a unit test.
 - Every page passes §3.
 

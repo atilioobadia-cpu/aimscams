@@ -53,9 +53,9 @@ codebase, one installation and one database **per institution**. Reconstructed f
 - `docs/01`–`docs/13` — specification complete through stack, UI contract, deployment and build sequence.
 - `apps/web/aimscams-web` — Angular shell, **legacy** under D-018. Do not extend it (`O-012`).
 - `apps/web` (Next.js) — measured shell, dashboard, users/roles, accounting settings, journal
-  entries, ledger drilldown and the accounting hub.
+  entries, ledger drilldown, the accounting hub, organisation settings and the branch network.
 - `apps/api` (NestJS) — auth, users/roles, accounting settings, journal posting/reversal, ledger
-  reads and read-only outbox status.
+  reads, read-only outbox status, organisation settings and branch writes.
 - `apps/worker` (BullMQ) — claims the transactional outbox, publishes with idempotency keys,
   leases expired claims and dead-letters exhausted events.
 - `packages/db` (Prisma 7 + PostgreSQL 16), `packages/contracts` (Zod) — schema and migration stream.

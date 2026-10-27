@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 
 import { cn } from "cn";
@@ -46,12 +45,14 @@ export function InstitutionLogo({
   }
 
   return (
-    <Image
+    // A plain <img> preserves an uploaded logo's intrinsic ratio. next/image needs every
+    // allowed remote host at build time, and institution logos are arbitrary URLs.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
       src={src}
       alt={alt}
       width={width}
       height={height}
-      unoptimized
       loading="eager"
       onError={() => setFailed(true)}
       className={cn("w-auto object-contain", className)}

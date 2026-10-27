@@ -146,15 +146,15 @@ AIMSCAMS runs the back office; the tenant is the SACCO whose name and mark sit i
 
 | Concern | Ruling |
 |---|---|
-| Demo asset | `apps/web/public/brand/mafanikio-logo.png` (300 × 43), declared once in `apps/web/src/lib/brand.ts` |
+| Demo asset | `apps/web/public/brand/mafanikio-logo.png` (300 × 43), declared once in `apps/web/src/lib/brand.ts`; it is the fallback when the tenant has no logo |
 | Component | `InstitutionLogo` renders the image at its ratio; a failed load degrades to a 40px tenant-blue monogram |
 | Fallback trigger | `onError` on the image, so a missing file costs one silently handled request and no layout shift |
-| Production | The slot reads `organisation.logoUrl`; the demo build pins the Mafanikio lockup until ST-01 ships the field |
+| Production | The slot reads the organisation logo (uploaded bytes served by the authenticated API, or an external `logoUrl`), cache-busted by `logoUpdatedAt`; no logo falls back to the demo lockup |
 | Not the tenant's | Sidebar footer wordmark, auth screens, app icon |
 
-Placements still open: a logo URL plus upload in **Settings → General** (ST-01), the **sign-in
-card** for white-label installs, a **136 × 136 app icon** derived from the emblem, and a
-**compact emblem** for the collapsed sidebar.
+Placements still open: the **sign-in card** for white-label installs, a **136 × 136 app icon**
+derived from the emblem, and a **compact emblem** for the collapsed sidebar. The logo URL plus
+upload shipped with ST-01 (`D-031`).
 
 ---
 

@@ -1,6 +1,14 @@
 "use client";
 
-import { Building2, CheckCircle2, ChevronDown, LoaderCircle, LogOut, Settings, UserRound } from "lucide-react";
+import {
+  Building2,
+  CheckCircle2,
+  ChevronDown,
+  LoaderCircle,
+  LogOut,
+  Settings,
+  UserRound,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,7 +24,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { apiRequest } from "@/lib/api";
+import { apiAssetUrl, apiRequest } from "@/lib/api";
 import { tenantLogo } from "@/lib/brand";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
@@ -31,6 +39,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   const [language, setLanguage] = useState("English");
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
+  const logoUrl = apiAssetUrl(institution.logoUrl) ?? tenantLogo.src;
 
   async function signOut() {
     if (signingOut) return;
@@ -54,9 +63,9 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
       <div className="flex min-w-0 items-center gap-2.5">
         <div data-testid="tenant-logo" className="flex shrink-0 items-center">
           <InstitutionLogo
-            src={tenantLogo.src}
-            alt={tenantLogo.name}
-            monogram={tenantLogo.monogram}
+            src={logoUrl}
+            alt={institution.name}
+            monogram={initialsFor(institution.name)}
             width={tenantLogo.width}
             height={tenantLogo.height}
             className="h-7 max-w-[190px]"
@@ -120,7 +129,13 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-[34px] shrink-0 place-items-center rounded-full text-fs font-bold text-on-primary" style={{background: 'linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', outline: '2px solid #f7f7f7', outlineOffset: '-2px'}}
+                className="grid size-[34px] shrink-0 place-items-center rounded-full text-fs font-bold text-on-primary"
+                style={{
+                  background: "linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+                  outline: "2px solid #f7f7f7",
+                  outlineOffset: "-2px",
+                }}
               >
                 {user.initials}
               </span>
@@ -180,3 +195,9 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   );
 }
 
+function initialsFor(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+}

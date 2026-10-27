@@ -1,7 +1,16 @@
-const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(
-  /\/$/,
-  "",
-);
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/$/, "");
+
+/**
+ * Resolve an asset path returned by the API. Uploaded tenant logos are served from an
+ * authenticated API route, not from the Next.js origin, so a relative path needs the API
+ * base. Absolute URLs are returned untouched.
+ */
+export function apiAssetUrl(path: string | null | undefined): string | null {
+  if (!path) return null;
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path.startsWith("/")) return `${API_BASE}${path}`;
+  return path;
+}
 
 export class ApiError extends Error {
   readonly status: number;
@@ -48,10 +57,7 @@ function messageFromPayload(payload: unknown, fallback: string): string {
   return fallback;
 }
 
-export async function apiRequest<T>(
-  path: string,
-  options: ApiRequestOptions = {},
-): Promise<T> {
+export async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
   const method = options.method ?? "GET";
   const headers = new Headers(options.headers);
   headers.set("accept", "application/json");
@@ -84,10 +90,7 @@ export async function apiRequest<T>(
   }
 
   if (!response.ok) {
-    const record =
-      payload && typeof payload === "object"
-        ? (payload as { code?: unknown })
-        : null;
+    const record = payload && typeof payload === "object" ? (payload as { code?: unknown }) : null;
     throw new ApiError(
       messageFromPayload(payload, `Request failed with status ${response.status}.`),
       response.status,

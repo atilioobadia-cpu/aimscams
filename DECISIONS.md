@@ -494,6 +494,45 @@ work that the Accounting phase owns.
 - The chart API and page stay read-only; there is no account create/edit UI in Phase 3.
 - The 347-category seed is a Phase 8 fixture, not a Phase 3 requirement.
 
+### D-030 — Weekly branch hours ship in 4a; public holidays stay in ST-27
+
+**Status:** Accepted 2026-10-27 · scopes ST-07 for the Phase 4a gate · `docs/13 §11`
+
+Phase 4a stores one row per weekday per branch. Each row records `isClosed` and, when open,
+`opensMinute` and `closesMinute` as integer minutes from midnight. Special dates, holiday calendars
+and due-date adjustments remain ST-27 in Phase 4c.
+
+**Why.** Weekday hours cover the operating default that the profile page and branch list need. A
+holiday calendar needs its own entity, year-by-year maintenance and a due-date consumer; shipping a
+partial version now would produce a schedule that looks complete but is not. Integer minutes also
+remove daylight-saving and time-string parsing from the storage layer.
+
+**Consequences.**
+- All seven weekdays must be present in a branch write; a closed day stores zeroes.
+- An open day requires `closesMinute > opensMinute`; the API and the form both refuse otherwise.
+- ST-27 extends the calendar without changing the weekday schema.
+
+### D-031 — The tenant logo lives in the tenant database
+
+**Status:** Accepted 2026-10-27 · implements the ST-01 logo slot · `docs/13 §11`
+
+The organisation row stores an uploaded logo as `logoMime`, `logoData` (bytes) and `logoUpdatedAt`,
+with an optional external `logoUrl`. Uploads are capped at 48 KB and validated as PNG, JPEG or WebP
+by data URL and magic bytes. The API serves the bytes only to an authenticated session, with the
+header URL cache-busted by `logoUpdatedAt`.
+
+**Why.** The header mark is one small image, and the identity slot must work on a fresh installation
+before object storage or a public bucket exists. Keeping the bytes on the tenant row preserves the
+one-database-per-institution isolation and makes removal a single update rather than a storage
+cleanup.
+
+**Consequences.**
+- Uploading a file clears `logoUrl`; saving an external URL clears the uploaded bytes; `DELETE`
+  clears both and restores the shipped fallback mark.
+- The header renders a plain `<img>` (28px tall, max 190px wide, `object-contain`) so an arbitrary
+  aspect ratio is not cropped and no Next image-domain entry is needed for external URLs.
+- The logo endpoint is authenticated; it is not a public asset path.
+
 ---
 
 ## Open

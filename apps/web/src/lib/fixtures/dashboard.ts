@@ -35,6 +35,8 @@ export type DashboardFixture = {
     name: string;
     code: string;
     dialect: string;
+    /** Tenant logo from the organisation record; falls back to the shipped demo mark. */
+    logoUrl?: string | null;
   };
   branch: {
     name: string;

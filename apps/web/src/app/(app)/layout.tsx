@@ -23,6 +23,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         name: user.organisation.name,
         code: user.organisation.code,
         dialect: user.organisation.dialect,
+        logoUrl: user.organisation.logoUrl,
       }}
       branch={branch}
       user={{
