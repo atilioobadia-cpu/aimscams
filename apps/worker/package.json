@@ -12,11 +12,15 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@aimscams/ledger": "*",
     "bullmq": "^6.4.2",
-    "dotenv": "^18.0.9"
+    "dotenv": "^18.0.9",
+    "ioredis": "^5.11.1",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
     "tsx": "^4.23.15",
     "typescript": "^6.0.0",
     "vitest": "^4.0.0"

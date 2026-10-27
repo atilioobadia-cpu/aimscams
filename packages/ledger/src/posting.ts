@@ -13,6 +13,7 @@
 import type { Money } from '@aimscams/domain';
 
 import type { Db } from './db.js';
+import { enqueueOutbox } from './outbox.js';
 import type { AmountKey, PolicyLine } from './seed.js';
 
 export interface EntryLineInput {
@@ -52,7 +53,22 @@ export interface PostEventInput {
 }
 
 export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEntry> {
-  validate(input.lines);
+  return writeEntry(db, input, 'posted');
+}
+
+/**
+ * Write an entry either as a draft or as a posted entry.
+ *
+ * A draft is still balanced and still inside an open period — the database
+ * checks both at commit. Posting a draft later is a status change; the entry
+ * and its lines are never rewritten in place.
+ */
+export async function writeEntry(
+  db: Db,
+  input: PostEntryInput,
+  status: 'draft' | 'posted',
+): Promise<PostedEntry> {
+  validateEntryLines(input.lines);
 
   if (input.idempotencyKey) {
     const existing = await db.query<{ id: string; entry_no: unknown }>(
@@ -88,8 +104,8 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
     const entry = await tx.query<{ id: string; entry_no: unknown }>(
       `insert into journal_entry
          (organisation_id, entry_date, period_id, event_code, source_type, source_id,
-          description, idempotency_key, reversal_of)
-       values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          description, idempotency_key, reversal_of, status, posted_at)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
        returning id, entry_no`,
       [
         input.tenantId,
@@ -101,6 +117,8 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
         input.description ?? '',
         input.idempotencyKey ?? null,
         input.reversalOf ?? null,
+        status,
+        status === 'posted' ? new Date().toISOString() : null,
       ],
     );
 
@@ -126,12 +144,39 @@ export async function postEntry(db: Db, input: PostEntryInput): Promise<PostedEn
       );
     }
 
-    await tx.query(
-      `update journal_entry set status = 'posted', posted_at = now() where id = $1`,
-      [entryRow.id],
-    );
+    const entryNo = String(entryRow.entry_no);
+    if (status === 'posted') {
+      await publishJournalEntry(tx, input, entryRow.id, entryNo);
+    }
 
-    return { id: entryRow.id, entryNo: String(entryRow.entry_no), reused: false };
+    return { id: entryRow.id, entryNo, reused: false };
+  });
+}
+
+/**
+ * The outbox row that belongs to a posted entry. Written in the same
+ * transaction as the entry, so commit and event are atomic.
+ */
+export async function publishJournalEntry(
+  tx: Db,
+  input: Pick<PostEntryInput, 'tenantId' | 'entryDate' | 'eventCode' | 'sourceType' | 'sourceId'>,
+  entryId: string,
+  entryNo: string,
+): Promise<void> {
+  await enqueueOutbox(tx, {
+    tenantId: input.tenantId,
+    eventType: 'journal.posted',
+    aggregateType: 'journal_entry',
+    aggregateId: entryId,
+    idempotencyKey: `journal.posted:${entryId}`,
+    payload: {
+      entryId,
+      entryNo,
+      entryDate: input.entryDate,
+      eventCode: input.eventCode,
+      sourceType: input.sourceType,
+      sourceId: input.sourceId,
+    },
   });
 }
 
@@ -161,7 +206,7 @@ export async function postEvent(db: Db, input: PostEventInput): Promise<PostedEn
   return postEntry(db, { ...input, lines });
 }
 
-function validate(lines: readonly EntryLineInput[]): void {
+export function validateEntryLines(lines: readonly EntryLineInput[]): void {
   if (lines.length < 2) {
     throw new Error('an entry needs at least two lines');
   }

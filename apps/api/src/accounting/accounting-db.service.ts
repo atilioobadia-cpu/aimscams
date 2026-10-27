@@ -10,8 +10,11 @@ export class AccountingDbService implements OnApplicationShutdown {
     this.pool = new Pool({ connectionString: process.env.DATABASE_URL });
   }
 
-  async getDb(): Promise<Db> {
+  async getDb(organisationId?: string): Promise<Db> {
     const client = await this.pool.connect();
+    if (organisationId) {
+      await client.query(`select set_config('app.organisation_id', $1, false)`, [organisationId]);
+    }
     return {
       query: async <T = Record<string, unknown>>(sql: string, params?: readonly unknown[]) => {
         const result = await client.query(sql, params ? [...params] : undefined);
@@ -43,6 +46,9 @@ export class AccountingDbService implements OnApplicationShutdown {
         }
       },
       close: async () => {
+        if (organisationId) {
+          await client.query(`select set_config('app.organisation_id', '', false)`);
+        }
         client.release();
       },
     };

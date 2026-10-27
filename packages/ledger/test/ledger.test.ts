@@ -6,10 +6,17 @@ import {
   accountBalance,
   CHART_OF_ACCOUNTS,
   createDatabase,
+  createDraft,
+  createPostedEntry,
+  getEntry,
+  ledgerEntries,
+  listEntries,
   POSTING_POLICIES,
+  postDraft,
   postEntry,
   postEvent,
   provisionTenant,
+  reverseEntry,
   seedChartOfAccounts,
   seedPostingPolicies,
   trialBalance,
@@ -456,6 +463,165 @@ describe('tenants are isolated', () => {
 
     const all = await db.query<{ count: unknown }>(`select count(*) as count from journal_entry`);
     expect(Number(all.rows[0]?.count)).toBe(2);
+  });
+});
+
+describe('the operator surface writes through the same rules', () => {
+  const lines = [
+    { account: '1002', debitMinor: fromMajor('500.00').minor },
+    { account: '2101', creditMinor: fromMajor('500.00').minor },
+  ];
+
+  it('keeps a draft out of the outbox until it is posted', async () => {
+    const db = await bootstrap();
+
+    const draft = await createDraft(db, {
+      tenantId: organisation,
+      entryDate: '2026-10-05',
+      description: 'Draft deposit',
+      lines,
+    });
+
+    const before = await db.query<{ count: unknown }>(
+      `select count(*) as count from outbox_event where aggregate_id = $1`,
+      [draft.id],
+    );
+    expect(Number(before.rows[0]?.count)).toBe(0);
+
+    const detail = await getEntry(db, organisation, draft.id);
+    expect(detail?.status).toBe('draft');
+    expect(detail?.lines).toHaveLength(2);
+
+    await postDraft(db, organisation, draft.id);
+
+    const after = await db.query<{ count: unknown; event_type: string }>(
+      `select count(*) as count, min(event_type) as event_type
+         from outbox_event where aggregate_id = $1`,
+      [draft.id],
+    );
+    expect(Number(after.rows[0]?.count)).toBe(1);
+    expect(after.rows[0]?.event_type).toBe('journal.posted');
+
+    const reposted = await postDraft(db, organisation, draft.id);
+    expect(reposted.reused).toBe(true);
+  });
+
+  it('refuses an unbalanced manual entry before it is written', async () => {
+    const db = await bootstrap();
+
+    await expect(
+      createPostedEntry(db, {
+        tenantId: organisation,
+        entryDate: '2026-10-05',
+        lines: [
+          { account: '1002', debitMinor: fromMajor('500.00').minor },
+          { account: '2101', creditMinor: fromMajor('400.00').minor },
+        ],
+      }),
+    ).rejects.toThrow(/unbalanced/);
+
+    const count = await db.query<{ count: unknown }>(`select count(*) as count from journal_entry`);
+    expect(Number(count.rows[0]?.count)).toBe(0);
+  });
+
+  it('reverses a posted entry with a new entry, not an edit', async () => {
+    const db = await bootstrap();
+    const original = await createPostedEntry(db, {
+      tenantId: organisation,
+      entryDate: '2026-10-05',
+      description: 'Cash deposit',
+      lines,
+    });
+
+    const reversal = await reverseEntry(db, original.id, {
+      tenantId: organisation,
+      entryDate: '2026-10-06',
+    });
+
+    expect(reversal.id).not.toBe(original.id);
+    const reversalDetail = await getEntry(db, organisation, reversal.id);
+    expect(reversalDetail?.reversalOf).toBe(original.id);
+    expect(reversalDetail?.lines.find((line) => line.accountCode === '1002')?.creditMinor).toBe(
+      fromMajor('500.00').minor,
+    );
+
+    const balance = await accountBalance(db, organisation, '1002', '2026-10-31');
+    expect(balance).toBe(0n);
+
+    const again = await reverseEntry(db, original.id, {
+      tenantId: organisation,
+      entryDate: '2026-10-07',
+    });
+    expect(again.reused).toBe(true);
+  });
+
+  it('reconciles an account ledger to its trial balance line', async () => {
+    const db = await bootstrap();
+    await deposit(db, organisation, '1000.00', 'late');
+    await postEvent(db, {
+      tenantId: organisation,
+      entryDate: '2026-10-20',
+      eventCode: 'SAVINGS_DEPOSIT',
+      sourceType: 'savings',
+      sourceId: 'later',
+      amounts: { total: fromMajor('250.00') },
+    });
+
+    const savings = await accountId(db, organisation, '2101');
+    const ledger = await ledgerEntries(db, organisation, {
+      accountId: savings,
+      from: '2026-10-01',
+      to: '2026-10-31',
+    });
+
+    const report = await trialBalance(db, organisation, '2026-10-31');
+    const line = report.rows.find((row) => row.code === '2101');
+    expect(ledger.rows).toHaveLength(2);
+    expect(ledger.closingMinor).toBe(line?.balanceMinor);
+    expect(ledger.openingMinor).toBe(0n);
+  });
+
+  it('publishes one event per posted entry, even when posting is retried', async () => {
+    const db = await bootstrap();
+
+    await postEntry(db, {
+      tenantId: organisation,
+      entryDate: '2026-10-05',
+      eventCode: 'TEST',
+      sourceType: 'test',
+      sourceId: 'once',
+      idempotencyKey: 'outbox-once',
+      lines,
+    });
+    await postEntry(db, {
+      tenantId: organisation,
+      entryDate: '2026-10-05',
+      eventCode: 'TEST',
+      sourceType: 'test',
+      sourceId: 'once',
+      idempotencyKey: 'outbox-once',
+      lines,
+    });
+
+    const events = await db.query<{ count: unknown }>(
+      `select count(*) as count from outbox_event where event_type = 'journal.posted'`,
+    );
+    expect(Number(events.rows[0]?.count)).toBe(1);
+  });
+
+  it('lists entries with filters and pagination', async () => {
+    const db = await bootstrap();
+    await deposit(db, organisation, '1000.00', 'listed');
+
+    const all = await listEntries(db, organisation, {});
+    expect(all.total).toBe(1);
+    expect(all.entries[0]?.entryNo).toBe('1');
+
+    const drafts = await listEntries(db, organisation, { status: 'draft' });
+    expect(drafts.total).toBe(0);
+
+    const outside = await listEntries(db, organisation, { from: '2026-11-01' });
+    expect(outside.total).toBe(0);
   });
 });
 
