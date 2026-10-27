@@ -19,8 +19,8 @@ function message(failure: unknown, fallback: string): string {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-fs font-medium text-muted-foreground">{label}</dt>
-      <dd className="mt-1 text-fs text-strong">{value}</dd>
+      <dt className="fs-text font-medium text-muted-foreground">{label}</dt>
+      <dd className="mt-1 fs-text text-strong">{value}</dd>
     </div>
   );
 }
@@ -74,8 +74,8 @@ export function LoanProductDetail({ id }: { id: string }) {
       <div className="space-y-5">
         <PageHeader title="Loan product" description="Loan product terms." />
         <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-24)] text-center">
-          <p className="text-fs font-bold text-strong">Loan product not found</p>
-          <p className="mt-1 text-fs text-muted-foreground">It may have been removed or the link is stale.</p>
+          <p className="fs-text font-bold text-strong">Loan product not found</p>
+          <p className="mt-1 fs-text text-muted-foreground">It may have been removed or the link is stale.</p>
           <Button asChild variant="outline" className="mt-4">
             <Link href="/settings/products/loan">Back to loan products</Link>
           </Button>
@@ -129,8 +129,8 @@ export function LoanProductDetail({ id }: { id: string }) {
 
           {product.workflowStages ? (
             <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
-              <h2 className="text-fs font-bold text-strong">Workflow stages</h2>
-              <pre className="mt-3 overflow-auto rounded-[var(--card-radius)] bg-subtle p-[var(--space-12)] text-fs text-body">
+              <h2 className="fs-text font-bold text-strong">Workflow stages</h2>
+              <pre className="mt-3 overflow-auto rounded-[var(--card-radius)] bg-subtle p-[var(--space-12)] fs-text text-body">
                 {JSON.stringify(product.workflowStages, null, 2)}
               </pre>
             </section>

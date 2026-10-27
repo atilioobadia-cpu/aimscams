@@ -56,13 +56,13 @@ export default function AccountingPage() {
               <span className="grid size-10 place-items-center rounded-full bg-accent-teal-bg text-brand">
                 <Icon className="size-5" strokeWidth={1.8} aria-hidden="true" />
               </span>
-              <h2 className="mt-[var(--space-14)] text-fs font-bold text-strong">
+              <h2 className="mt-[var(--space-14)] fs-text font-bold text-strong">
                 {section.title}
               </h2>
-              <p className="mt-1 flex-1 text-fs leading-[1.45] text-muted-foreground">
+              <p className="mt-1 flex-1 fs-text leading-[1.45] text-muted-foreground">
                 {section.description}
               </p>
-              <span className="mt-[var(--space-14)] flex items-center gap-1.5 text-fs font-semibold text-brand">
+              <span className="mt-[var(--space-14)] flex items-center gap-1.5 fs-text font-semibold text-brand">
                 Open
                 <ArrowRight
                   className="size-4 transition-transform group-hover:translate-x-0.5"
@@ -75,8 +75,8 @@ export default function AccountingPage() {
       </div>
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface px-[var(--space-18)] py-[var(--space-14)]">
-        <h2 className="text-fs font-bold text-strong">How the ledger behaves</h2>
-        <ul className="mt-2 space-y-1 text-fs leading-[1.45] text-muted-foreground">
+        <h2 className="fs-text font-bold text-strong">How the ledger behaves</h2>
+        <ul className="mt-2 space-y-1 fs-text leading-[1.45] text-muted-foreground">
           <li>Posted entries never change. A correction is a reversal that swaps every debit and credit.</li>
           <li>An entry posts only into an open fiscal period, and drafts can wait inside it.</li>
           <li>Every posting writes its outbox event in the same transaction, so downstream work never misses one.</li>

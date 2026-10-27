@@ -120,7 +120,7 @@ export function MfaChallengeForm() {
   if (!isHydrated) {
     return (
       <AuthCard title="Two-step verification" description="Checking your sign-in…">
-        <div className="flex items-center gap-2.5 text-fs text-label">
+        <div className="flex items-center gap-2.5 fs-text text-label">
           <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
           Loading your verification challenge
         </div>
@@ -140,11 +140,11 @@ export function MfaChallengeForm() {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-subtle px-4 py-3.5">
           <Clock3 className="mt-0.5 size-4 shrink-0 text-label" aria-hidden="true" />
-          <p className="text-fs leading-5 text-body">
+          <p className="fs-text leading-5 text-body">
             For security, a challenge is valid for five minutes and only once.
           </p>
         </div>
-        <Button asChild className="mt-3 h-[42px] w-full rounded-[4px] text-fs font-medium">
+        <Button asChild className="mt-3 h-[42px] w-full rounded-[4px] fs-text font-medium">
           <Link href="/login" onClick={clearPendingMfaChallenge}>
             Return to sign in
           </Link>
@@ -180,15 +180,15 @@ export function MfaChallengeForm() {
               aria-invalid={Boolean(fieldError)}
               aria-describedby={fieldError ? "mfa-code-error" : "mfa-code-hint"}
               disabled={submitting}
-              className="h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-3 text-fs placeholder:text-muted-foreground md:text-fs"
+              className="h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-3 fs-text placeholder:text-muted-foreground md:fs-text"
             />
           </div>
           {fieldError ? (
-            <p id="mfa-code-error" className="mt-1 text-fs leading-4 text-accent-red">
+            <p id="mfa-code-error" className="mt-1 fs-text leading-4 text-accent-red">
               {fieldError}
             </p>
           ) : (
-            <p id="mfa-code-hint" className="mt-1 text-fs leading-4 text-label">
+            <p id="mfa-code-hint" className="mt-1 fs-text leading-4 text-label">
               Enter the 6-digit code shown in your authenticator app.
             </p>
           )}
@@ -204,7 +204,7 @@ export function MfaChallengeForm() {
           type="submit"
           disabled={submitting}
           aria-busy={submitting}
-          className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-fs font-medium"
+          className="mt-3 h-[42px] w-full gap-2 rounded-[4px] fs-text font-medium"
         >
           {submitting ? (
             <>
@@ -221,7 +221,7 @@ export function MfaChallengeForm() {
 
       </form>
 
-      <div className="mt-3 flex items-center justify-between gap-3 border-t border-card-border pt-3 text-fs text-label">
+      <div className="mt-3 flex items-center justify-between gap-3 border-t border-card-border pt-3 fs-text text-label">
         <span className="flex items-center gap-1.5">
           <Clock3 className="size-3.5" aria-hidden="true" />
           Expires in {remaining === null ? "5:00" : formatRemaining(remaining)}

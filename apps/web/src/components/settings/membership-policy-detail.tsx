@@ -19,8 +19,8 @@ function message(failure: unknown, fallback: string): string {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-fs font-medium text-muted-foreground">{label}</dt>
-      <dd className="mt-1 text-fs text-strong">{value}</dd>
+      <dt className="fs-text font-medium text-muted-foreground">{label}</dt>
+      <dd className="mt-1 fs-text text-strong">{value}</dd>
     </div>
   );
 }
@@ -68,7 +68,7 @@ export function MembershipPolicyDetail({ id }: { id: string }) {
       <div className="space-y-5">
         <PageHeader title="Membership policy" description="Membership policy definitions." />
         <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-24)] text-center">
-          <p className="text-fs font-bold text-strong">Membership policy not found</p>
+          <p className="fs-text font-bold text-strong">Membership policy not found</p>
           <Button asChild variant="outline" className="mt-4">
             <Link href="/settings/policies/membership">Back to membership policies</Link>
           </Button>

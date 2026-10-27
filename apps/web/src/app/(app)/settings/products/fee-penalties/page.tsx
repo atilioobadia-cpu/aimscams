@@ -197,7 +197,7 @@ export default function FeePenaltiesPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader title="Fees and penalties" description="Fee and penalty definitions used by products and transactions." />
         {data?.canEdit ? (
-          <Button onClick={openCreate} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button onClick={openCreate} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />
             Create fee or penalty
           </Button>
@@ -207,7 +207,7 @@ export default function FeePenaltiesPage() {
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <div className="flex-1">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-search">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-search">
               Search
             </label>
             <div className="relative">
@@ -222,14 +222,14 @@ export default function FeePenaltiesPage() {
             </div>
           </div>
           <div className="w-full md:w-[180px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-kind">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-kind">
               Kind
             </label>
             <select
               id="fee-kind"
               value={kind}
               onChange={(event) => setKind(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All kinds</option>
               <option value="FEE">Fee</option>
@@ -237,14 +237,14 @@ export default function FeePenaltiesPage() {
             </select>
           </div>
           <div className="w-full md:w-[180px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-status">
               Status
             </label>
             <select
               id="fee-status"
               value={status}
               onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All statuses</option>
               <option value="ACTIVE">Active</option>
@@ -271,8 +271,8 @@ export default function FeePenaltiesPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[900px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Code</th>
                   <th className="px-4 py-3">Name</th>
@@ -320,40 +320,40 @@ export default function FeePenaltiesPage() {
         <form className="space-y-5" onSubmit={(event) => void save(event)}>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-code">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-code">
                 Code
               </label>
               <Input id="fee-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-name">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-name">
                 Name
               </label>
               <Input id="fee-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-kind">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-kind">
                 Kind
               </label>
               <select
                 id="fee-kind"
                 value={itemKind}
                 onChange={(event) => setItemKind(event.target.value as FeePenaltyKind)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="FEE">Fee</option>
                 <option value="PENALTY">Penalty</option>
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-amount-type">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-amount-type">
                 Amount type
               </label>
               <select
                 id="fee-amount-type"
                 value={amountType}
                 onChange={(event) => setAmountType(event.target.value as FeeAmountType)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="FIXED">Fixed</option>
                 <option value="PERCENTAGE">Percentage</option>
@@ -361,34 +361,34 @@ export default function FeePenaltiesPage() {
             </div>
             {amountType === "FIXED" ? (
               <div>
-                <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-amount">
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-amount">
                   Amount
                 </label>
                 <Input id="fee-amount" value={amount} onChange={(event) => setAmount(event.target.value)} className="h-[var(--control-height)]" />
               </div>
             ) : (
               <div>
-                <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-rate">
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-rate">
                   Rate (%)
                 </label>
                 <Input id="fee-rate" value={rate} onChange={(event) => setRate(event.target.value)} className="h-[var(--control-height)]" />
               </div>
             )}
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-gl">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-gl">
                 GL account
               </label>
               <Input id="fee-gl" value={glAccount} onChange={(event) => setGlAccount(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-status">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-status">
                 Status
               </label>
               <select
                 id="fee-status"
                 value={itemStatus}
                 onChange={(event) => setItemStatus(event.target.value as FeePenaltyStatus)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
@@ -397,7 +397,7 @@ export default function FeePenaltiesPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="fee-description">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-description">
               Description
             </label>
             <textarea
@@ -405,7 +405,7 @@ export default function FeePenaltiesPage() {
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               rows={3}
-              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] text-fs"
+              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
             />
           </div>
 
@@ -416,7 +416,7 @@ export default function FeePenaltiesPage() {
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               {saving ? "Saving..." : editing ? "Save changes" : "Create"}
             </Button>
           </div>

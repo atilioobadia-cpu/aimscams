@@ -23,7 +23,7 @@ export function ComingSoon({ title, description, detail, actions }: ComingSoonPr
         description={description}
         actions={
           <>
-            <span className="rounded-[6px] bg-primary-tint px-[var(--space-8)] py-[var(--space-4)] text-fs font-semibold text-primary">
+            <span className="rounded-[6px] bg-primary-tint px-[var(--space-8)] py-[var(--space-4)] fs-text font-semibold text-primary">
               In build
             </span>
             {actions}

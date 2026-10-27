@@ -194,11 +194,11 @@ export function OrganisationSettingsPage() {
           >
             <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
               <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-                <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+                <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <Building2 className="size-4 text-brand" aria-hidden="true" />
                   Institution identity
                 </h2>
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   One installation serves one institution. These values identify the tenant in
                   reports, receipts and the application header.
                 </p>
@@ -206,7 +206,7 @@ export function OrganisationSettingsPage() {
 
               <div className="grid gap-[var(--space-12)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2">
                 <div className="sm:col-span-2">
-                  <label htmlFor="org-name" className="mb-1 block text-fs font-medium text-strong">
+                  <label htmlFor="org-name" className="mb-1 block fs-text font-medium text-strong">
                     Legal name
                   </label>
                   <Input
@@ -224,7 +224,7 @@ export function OrganisationSettingsPage() {
                 <div>
                   <label
                     htmlFor="org-registration"
-                    className="mb-1 block text-fs font-medium text-strong"
+                    className="mb-1 block fs-text font-medium text-strong"
                   >
                     Registration number
                   </label>
@@ -243,7 +243,7 @@ export function OrganisationSettingsPage() {
                 <div>
                   <label
                     htmlFor="org-dialect"
-                    className="mb-1 block text-fs font-medium text-strong"
+                    className="mb-1 block fs-text font-medium text-strong"
                   >
                     Board dialect
                   </label>
@@ -255,7 +255,7 @@ export function OrganisationSettingsPage() {
                       setForm({ ...form, dialect: event.target.value as InstitutionDialect });
                       setSaved(null);
                     }}
-                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     <option value="TCDC">
                       TCDC — Tanzania Co-operative Development Commission
@@ -267,7 +267,7 @@ export function OrganisationSettingsPage() {
                 <div>
                   <label
                     htmlFor="org-timezone"
-                    className="mb-1 block text-fs font-medium text-strong"
+                    className="mb-1 block fs-text font-medium text-strong"
                   >
                     Time zone
                   </label>
@@ -287,7 +287,7 @@ export function OrganisationSettingsPage() {
                       <option key={zone} value={zone} />
                     ))}
                   </datalist>
-                  <p className="mt-1 text-fs text-muted-foreground">
+                  <p className="mt-1 fs-text text-muted-foreground">
                     IANA zone used for dates on reports and schedules.
                   </p>
                 </div>
@@ -295,7 +295,7 @@ export function OrganisationSettingsPage() {
                 <div>
                   <label
                     htmlFor="org-default-branch"
-                    className="mb-1 block text-fs font-medium text-strong"
+                    className="mb-1 block fs-text font-medium text-strong"
                   >
                     Default branch
                   </label>
@@ -307,7 +307,7 @@ export function OrganisationSettingsPage() {
                       setForm({ ...form, defaultBranchId: event.target.value });
                       setSaved(null);
                     }}
-                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {data.branches.length === 0 ? <option value="">No branches yet</option> : null}
                     {data.branches.map((branch) => (
@@ -316,7 +316,7 @@ export function OrganisationSettingsPage() {
                       </option>
                     ))}
                   </select>
-                  <p className="mt-1 text-fs text-muted-foreground">
+                  <p className="mt-1 fs-text text-muted-foreground">
                     The default branch must stay open. Change it here, not in the branch form.
                   </p>
                 </div>
@@ -327,7 +327,7 @@ export function OrganisationSettingsPage() {
                   <FormError message={saveError} />
                   <SuccessNote message={saved} />
                   {!data.canEdit ? (
-                    <p className="text-fs text-muted-foreground">
+                    <p className="fs-text text-muted-foreground">
                       Your role can view these settings but not change them.
                     </p>
                   ) : null}
@@ -346,27 +346,27 @@ export function OrganisationSettingsPage() {
           <aside className="space-y-[var(--space-14)]">
             <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
               <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-                <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+                <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <Globe2 className="size-4 text-brand" aria-hidden="true" />
                   Installation
                 </h2>
               </header>
               <dl className="grid gap-[var(--space-10)] px-[var(--space-16)] py-[var(--space-14)]">
                 <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="text-fs text-muted-foreground">Institution code</dt>
-                  <dd className="text-fs font-semibold text-strong">{data.code}</dd>
+                  <dt className="fs-text text-muted-foreground">Institution code</dt>
+                  <dd className="fs-text font-semibold text-strong">{data.code}</dd>
                 </div>
                 <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="text-fs text-muted-foreground">Locale</dt>
-                  <dd className="text-fs font-semibold text-strong">{data.locale}</dd>
+                  <dt className="fs-text text-muted-foreground">Locale</dt>
+                  <dd className="fs-text font-semibold text-strong">{data.locale}</dd>
                 </div>
                 <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="text-fs text-muted-foreground">Branches</dt>
-                  <dd className="text-fs font-semibold text-strong">{data.branches.length}</dd>
+                  <dt className="fs-text text-muted-foreground">Branches</dt>
+                  <dd className="fs-text font-semibold text-strong">{data.branches.length}</dd>
                 </div>
                 <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="text-fs text-muted-foreground">Last updated</dt>
-                  <dd className="text-right text-fs font-semibold text-strong">
+                  <dt className="fs-text text-muted-foreground">Last updated</dt>
+                  <dd className="text-right fs-text font-semibold text-strong">
                     {updatedLabel(data.updatedAt, data.timezone)}
                   </dd>
                 </div>
@@ -377,8 +377,8 @@ export function OrganisationSettingsPage() {
               <div className="flex gap-[var(--space-10)] px-[var(--space-16)] py-[var(--space-14)]">
                 <Info className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
                 <div>
-                  <h2 className="text-fs font-bold text-strong">One tenant per installation</h2>
-                  <p className="mt-1 text-fs leading-[1.45] text-muted-foreground">
+                  <h2 className="fs-text font-bold text-strong">One tenant per installation</h2>
+                  <p className="mt-1 fs-text leading-[1.45] text-muted-foreground">
                     The legal name, registration number and time zone apply to every branch.
                     Branch-specific addresses and hours live under Branches.
                   </p>

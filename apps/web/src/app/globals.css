@@ -256,7 +256,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 
 /* The single text size. Tailwind's `text-[var(--fs)]` is ambiguous (it resolves
    as a colour), so the type scale is expressed as a real utility instead. */
-.text-fs {
+.fs-text {
   font-size: var(--fs);
 }
 

@@ -35,7 +35,7 @@ export function InstitutionLogo({
         role="img"
         aria-label={alt}
         data-testid="tenant-logo-fallback"
-        className="grid size-10 shrink-0 place-items-center rounded-full bg-tenant text-fs font-bold text-on-primary ring-2 ring-primary"
+        className="grid size-10 shrink-0 place-items-center rounded-full bg-tenant fs-text font-bold text-on-primary ring-2 ring-primary"
       >
         {monogram}
       </span>

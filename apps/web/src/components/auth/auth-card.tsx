@@ -20,7 +20,7 @@ export function AuthCard({ title, description, children, footer, className }: Au
           className,
         )}
       >
-        {description ? <p className="text-fs leading-5 text-label">{description}</p> : null}
+        {description ? <p className="fs-text leading-5 text-label">{description}</p> : null}
         <div className={description ? "mt-3" : undefined}>{children}</div>
         {footer ? (
           <div className="mt-4 border-t border-card-border pt-3">{footer}</div>

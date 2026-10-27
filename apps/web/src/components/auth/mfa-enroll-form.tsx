@@ -155,7 +155,7 @@ export function MfaEnrollForm({
         title="Set up two-step verification"
         description="Protecting your account with an authenticator app."
       >
-        <div className="flex items-center gap-2.5 text-fs text-label">
+        <div className="flex items-center gap-2.5 fs-text text-label">
           <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
           Checking your verification settings
         </div>
@@ -169,12 +169,12 @@ export function MfaEnrollForm({
         title="Scan and verify"
         description="Add AIMSCAMS to your authenticator app, then enter the six-digit code it shows."
         footer={
-          <p className="text-fs leading-5 text-label">
+          <p className="fs-text leading-5 text-label">
             Setting up for <span className="font-medium text-body">{email}</span>
           </p>
         }
       >
-        <div className="flex items-center gap-2 text-fs font-medium uppercase tracking-[0.12em] text-label">
+        <div className="flex items-center gap-2 fs-text font-medium uppercase tracking-[0.12em] text-label">
           <Smartphone className="size-4 text-brand" aria-hidden="true" />
           Step 1 of 2
         </div>
@@ -192,11 +192,11 @@ export function MfaEnrollForm({
         </div>
 
         <div className="mt-4 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
-          <p className="text-fs font-medium uppercase tracking-[0.12em] text-label">
+          <p className="fs-text font-medium uppercase tracking-[0.12em] text-label">
             Cannot scan? Enter this key
           </p>
           <div className="mt-1.5 flex items-center gap-2">
-            <code className="min-w-0 flex-1 break-all font-mono text-fs font-semibold tracking-wide text-strong">
+            <code className="min-w-0 flex-1 break-all font-mono fs-text font-semibold tracking-wide text-strong">
               {formatSecret(enrollment.secret)}
             </code>
             <button
@@ -215,11 +215,11 @@ export function MfaEnrollForm({
         </div>
 
         <form onSubmit={activate} noValidate className="mt-5">
-          <div className="mb-2 flex items-center gap-2 text-fs font-medium uppercase tracking-[0.12em] text-label">
+          <div className="mb-2 flex items-center gap-2 fs-text font-medium uppercase tracking-[0.12em] text-label">
             <ShieldCheck className="size-4 text-brand" aria-hidden="true" />
             Step 2 of 2
           </div>
-          <label htmlFor="enroll-code" className="mb-1.5 block text-fs font-medium text-body">
+          <label htmlFor="enroll-code" className="mb-1.5 block fs-text font-medium text-body">
             Authentication code
           </label>
           <Input
@@ -237,10 +237,10 @@ export function MfaEnrollForm({
             aria-invalid={Boolean(fieldError)}
             aria-describedby={fieldError ? "enroll-code-error" : undefined}
             disabled={busy}
-            className="h-12 px-3.5 text-center text-fs font-semibold tracking-[0.2em]"
+            className="h-12 px-3.5 text-center fs-text font-semibold tracking-[0.2em]"
           />
           {fieldError ? (
-            <p id="enroll-code-error" className="mt-1.5 text-fs leading-5 text-accent-red">
+            <p id="enroll-code-error" className="mt-1.5 fs-text leading-5 text-accent-red">
               {fieldError}
             </p>
           ) : null}
@@ -255,7 +255,7 @@ export function MfaEnrollForm({
             type="submit"
             disabled={busy}
             aria-busy={busy}
-            className="mt-5 h-11 w-full gap-2 text-fs font-semibold"
+            className="mt-5 h-11 w-full gap-2 fs-text font-semibold"
           >
             {busy ? (
               <>
@@ -275,7 +275,7 @@ export function MfaEnrollForm({
           type="button"
           onClick={() => void startEnrollment()}
           disabled={busy}
-          className="mt-3 w-full rounded-md py-1 text-center text-fs font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30 disabled:opacity-50"
+          className="mt-3 w-full rounded-md py-1 text-center fs-text font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30 disabled:opacity-50"
         >
           Restart setup
         </button>
@@ -288,7 +288,7 @@ export function MfaEnrollForm({
       title="Set up two-step verification"
       description="Use an authenticator app to confirm it is you when you sign in."
       footer={
-        <p className="text-fs leading-5 text-label">
+        <p className="fs-text leading-5 text-label">
           Setting up for <span className="font-medium text-body">{email}</span>
         </p>
       }
@@ -296,7 +296,7 @@ export function MfaEnrollForm({
       {requiresEnrollment ? (
         <div className="mb-5 flex items-center gap-2.5 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
           <ShieldCheck className="size-4 shrink-0 text-brand" aria-hidden="true" />
-          <p className="text-fs leading-5 text-body">
+          <p className="fs-text leading-5 text-body">
             Required for your role before you can open the back office.
           </p>
         </div>
@@ -325,8 +325,8 @@ export function MfaEnrollForm({
               <Icon className="size-4" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-fs font-semibold leading-5 text-strong">{title}</p>
-              <p className="mt-0.5 text-fs leading-5 text-muted-foreground">{body}</p>
+              <p className="fs-text font-semibold leading-5 text-strong">{title}</p>
+              <p className="mt-0.5 fs-text leading-5 text-muted-foreground">{body}</p>
             </div>
           </li>
         ))}
@@ -334,7 +334,7 @@ export function MfaEnrollForm({
 
       {pendingEnrollment ? (
         <div className="mt-5 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
-          <p className="text-fs leading-5 text-body">
+          <p className="fs-text leading-5 text-body">
             You started setup earlier but did not finish. Starting again replaces the previous
             QR code.
           </p>
@@ -352,7 +352,7 @@ export function MfaEnrollForm({
         onClick={() => void startEnrollment()}
         disabled={busy}
         aria-busy={busy}
-        className="mt-6 h-11 w-full gap-2 text-fs font-semibold"
+        className="mt-6 h-11 w-full gap-2 fs-text font-semibold"
       >
         {busy ? (
           <>

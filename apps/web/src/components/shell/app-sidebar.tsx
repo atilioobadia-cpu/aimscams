@@ -94,7 +94,7 @@ function SidebarItem({
           <span className="min-w-0 whitespace-nowrap">{item.label}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2">
             {item.badge ? (
-              <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 text-fs font-semibold text-primary">
+              <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 fs-text font-semibold text-primary">
                 {item.badge}
               </span>
             ) : null}
@@ -112,7 +112,7 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-5 text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-5 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
     collapsed && "mx-3 justify-start pl-4",
     active
@@ -155,7 +155,7 @@ function SidebarItem({
   if (item.children && !collapsed && item.href) {
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
-      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-5 pr-1 text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-5 pr-1 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
       isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
     );
 
@@ -243,7 +243,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 text-fs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-heading hover:bg-white/60",
@@ -328,7 +328,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </p>
         ) : (
           <>
-            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo text-fs">
+            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo fs-text">
               AIMSCAMS
             </p>
             <p

@@ -10,7 +10,7 @@ export function AuthShell({ children, title }: { children: ReactNode; title: str
           <div className="flex justify-center">
             <AimscamsWordmark />
           </div>
-          <h1 className="mx-auto mt-4 w-full px-5 text-center text-fs font-semibold leading-6 text-white">
+          <h1 className="mx-auto mt-4 w-full px-5 text-center fs-text font-semibold leading-6 text-white">
             {title}
           </h1>
         </div>

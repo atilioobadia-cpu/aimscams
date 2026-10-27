@@ -85,7 +85,7 @@ export default function LoanProductsPage() {
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <div className="flex-1">
-            <label className="mb-1 block text-fs font-medium text-strong" htmlFor="loan-product-search">
+            <label className="mb-1 block fs-text font-medium text-strong" htmlFor="loan-product-search">
               Search
             </label>
             <div className="relative">
@@ -100,14 +100,14 @@ export default function LoanProductsPage() {
             </div>
           </div>
           <div className="w-full md:w-[220px]">
-            <label className="mb-1 block text-fs font-medium text-strong" htmlFor="loan-product-status">
+            <label className="mb-1 block fs-text font-medium text-strong" htmlFor="loan-product-status">
               Status
             </label>
             <select
               id="loan-product-status"
               value={status}
               onChange={(event) => setStatus(event.target.value as "" | LoanProductStatus)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All statuses</option>
               <option value="DRAFT">Draft</option>
@@ -139,8 +139,8 @@ export default function LoanProductsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[900px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Code</th>
                   <th className="px-4 py-3">Name</th>

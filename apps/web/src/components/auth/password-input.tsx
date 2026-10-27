@@ -18,7 +18,7 @@ export function PasswordInput({
         {...props}
         type={visible ? "text" : "password"}
         className={cn(
-          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-10 text-fs placeholder:text-muted-foreground md:text-fs",
+          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-10 fs-text placeholder:text-muted-foreground md:fs-text",
           className,
         )}
       />

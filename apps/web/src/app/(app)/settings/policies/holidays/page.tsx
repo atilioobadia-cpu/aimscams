@@ -111,7 +111,7 @@ export default function HolidaysPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader title="Holiday calendar" description="Public holidays that affect due-date calculation." />
         {data?.canEdit ? (
-          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />
             Create holiday
           </Button>
@@ -135,8 +135,8 @@ export default function HolidaysPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[640px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[640px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Name</th>
                   <th className="px-4 py-3">Date</th>
@@ -158,13 +158,13 @@ export default function HolidaysPage() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Create holiday">
         <form className="space-y-5" onSubmit={(event) => void save(event)}>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="holiday-name">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="holiday-name">
               Name
             </label>
             <Input id="holiday-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="holiday-date">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="holiday-date">
               Date
             </label>
             <Input id="holiday-date" type="date" value={date} onChange={(event) => setDate(event.target.value)} className="h-[var(--control-height)]" />
@@ -177,7 +177,7 @@ export default function HolidaysPage() {
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               {saving ? "Saving..." : "Create"}
             </Button>
           </div>

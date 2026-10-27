@@ -59,7 +59,7 @@ export function CreditProductPolicyDetail({ id }: { id: string }) {
       <div className="space-y-5">
         <PageHeader title="Credit product policy" description="Credit product policy definitions." />
         <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-24)] text-center">
-          <p className="text-fs font-bold text-strong">Credit product policy not found</p>
+          <p className="fs-text font-bold text-strong">Credit product policy not found</p>
           <Button asChild variant="outline" className="mt-4">
             <Link href="/settings/policies/credit-product">Back to credit product policies</Link>
           </Button>
@@ -96,13 +96,13 @@ export function CreditProductPolicyDetail({ id }: { id: string }) {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
             <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2">
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Status</dt>
-                <dd className="mt-1 text-fs text-strong">{policy.status}</dd>
+                <dt className="fs-text font-medium text-muted-foreground">Status</dt>
+                <dd className="mt-1 fs-text text-strong">{policy.status}</dd>
               </div>
               <div>
-                <dt className="text-fs font-medium text-muted-foreground">Content</dt>
+                <dt className="fs-text font-medium text-muted-foreground">Content</dt>
                 <dd className="mt-1">
-                  <pre className="overflow-auto rounded-[var(--card-radius)] bg-subtle p-[var(--space-12)] text-fs text-body">
+                  <pre className="overflow-auto rounded-[var(--card-radius)] bg-subtle p-[var(--space-12)] fs-text text-body">
                     {JSON.stringify(policy.content, null, 2)}
                   </pre>
                 </dd>

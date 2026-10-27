@@ -93,45 +93,45 @@ export default function CreateInterestRatePage() {
       <form className="space-y-5 rounded-xl border border-card-border bg-surface p-5" onSubmit={(event) => void save(event)}>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-code">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-code">
               Code
             </label>
             <Input id="ir-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-name">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-name">
               Name
             </label>
             <Input id="ir-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-status">
               Status
             </label>
             <select
               id="ir-status"
               value={status}
               onChange={(event) => setStatus(event.target.value as InterestRateStatus)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Inactive</option>
             </select>
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-rate">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-rate">
               Rate (%)
             </label>
             <Input id="ir-rate" value={rate} onChange={(event) => setRate(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-period">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-period">
               Period
             </label>
             <Input id="ir-period" value={period} onChange={(event) => setPeriod(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-effective">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-effective">
               Effective from
             </label>
             <Input id="ir-effective" type="date" value={effectiveFrom} onChange={(event) => setEffectiveFrom(event.target.value)} className="h-[var(--control-height)]" />
@@ -139,7 +139,7 @@ export default function CreateInterestRatePage() {
         </div>
 
         <div>
-          <label className="mb-1 block text-fs font-medium text-body" htmlFor="ir-description">
+          <label className="mb-1 block fs-text font-medium text-body" htmlFor="ir-description">
             Description
           </label>
           <textarea
@@ -147,7 +147,7 @@ export default function CreateInterestRatePage() {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             rows={3}
-            className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] text-fs"
+            className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
           />
         </div>
 
@@ -155,7 +155,7 @@ export default function CreateInterestRatePage() {
         <SuccessNote message={saved} />
 
         <div className="flex items-center gap-3">
-          <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             {saving ? "Saving..." : "Create interest rate"}
           </Button>
           <Button asChild variant="outline">

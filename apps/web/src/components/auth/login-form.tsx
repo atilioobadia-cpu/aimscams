@@ -24,8 +24,8 @@ type FieldErrors = {
 };
 
 const fieldClass =
-  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-fs text-strong placeholder:text-muted-foreground focus:border-[#057573] focus:outline-none focus:ring-0 md:text-fs";
-const fieldErrorClass = "mt-1 text-fs leading-4 text-accent-red";
+  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 fs-text text-strong placeholder:text-muted-foreground focus:border-[#057573] focus:outline-none focus:ring-0 md:fs-text";
+const fieldErrorClass = "mt-1 fs-text leading-4 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
   if (!candidate?.startsWith("/") || candidate.startsWith("//")) return "/dashboard";
@@ -164,7 +164,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
       <div className="mt-3 flex justify-end">
         <Link
           href="/forgot-password"
-          className="text-fs font-medium text-primary outline-none hover:underline focus-visible:underline"
+          className="fs-text font-medium text-primary outline-none hover:underline focus-visible:underline"
         >
           Forgot password
         </Link>
@@ -180,7 +180,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
         type="submit"
         disabled={submitting}
         aria-busy={submitting}
-        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] text-fs font-semibold text-white hover:bg-[#046664]"
+        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] fs-text font-semibold text-white hover:bg-[#046664]"
       >
         {submitting ? (
           <>

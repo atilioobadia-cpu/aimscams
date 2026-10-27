@@ -52,7 +52,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={item.id}
             role="status"
             className={
-              "rounded-[var(--card-radius)] border px-4 py-3 text-fs shadow-lg " +
+              "rounded-[var(--card-radius)] border px-4 py-3 fs-text shadow-lg " +
               (item.variant === "error"
                 ? "border-accent-red/30 bg-accent-red-bg text-accent-red"
                 : item.variant === "info"

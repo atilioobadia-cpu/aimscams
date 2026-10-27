@@ -172,14 +172,14 @@ export default function UsersPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-fs font-bold leading-tight text-strong">Users</h1>
-          <p className="mt-1 max-w-3xl text-fs text-muted-foreground">
+          <h1 className="fs-text font-bold leading-tight text-strong">Users</h1>
+          <p className="mt-1 max-w-3xl fs-text text-muted-foreground">
             Institution accounts, roles and branch access.
           </p>
         </div>
         {!forbidden ? (
           <Button
-            className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold"
+            className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
             onClick={() => {
               setManualModal({});
             }}
@@ -200,7 +200,7 @@ export default function UsersPage() {
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value)}
-            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
           >
             <option value="">All statuses</option>
             <option value="ACTIVE">Active</option>
@@ -210,7 +210,7 @@ export default function UsersPage() {
           <select
             value={role}
             onChange={(event) => setRole(event.target.value)}
-            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
           >
             <option value="">All roles</option>
             {roles.map((item) => (
@@ -222,7 +222,7 @@ export default function UsersPage() {
           <select
             value={branchId}
             onChange={(event) => setBranchId(event.target.value)}
-            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
           >
             <option value="">All branches</option>
             {branches.map((item) => (
@@ -245,8 +245,8 @@ export default function UsersPage() {
       ) : (
         <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[920px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[920px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Full name</th>
                   <th className="px-4 py-3">Email</th>
@@ -274,7 +274,7 @@ export default function UsersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <span
-                          className={`rounded-full px-2.5 py-1 text-fs font-normal ${
+                          className={`rounded-full px-2.5 py-1 fs-text font-normal ${
                             user.status === "ACTIVE"
                               ? "bg-accent-teal-bg text-brand"
                               : user.status === "LOCKED"
@@ -345,8 +345,8 @@ function formatDate(value: string): string {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-fs font-medium uppercase tracking-wide text-label">{label}</dt>
-      <dd className="mt-0.5 text-fs text-body">{value}</dd>
+      <dt className="fs-text font-medium uppercase tracking-wide text-label">{label}</dt>
+      <dd className="mt-0.5 fs-text text-body">{value}</dd>
     </div>
   );
 }

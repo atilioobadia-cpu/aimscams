@@ -340,7 +340,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
           {!canEdit ? (
             <div className="flex items-start gap-[var(--space-10)] rounded-[var(--card-radius)] border border-card-border bg-subtle px-[var(--space-14)] py-[var(--space-10)]">
               <Lock className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-              <p className="text-fs text-muted-foreground">
+              <p className="fs-text text-muted-foreground">
                 Your role can view this branch but not change it. Ask an administrator for Settings
                 Branch : Edit.
               </p>
@@ -349,18 +349,18 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-              <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+              <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                 <Building2 className="size-4 text-brand" aria-hidden="true" />
                 Branch details
               </h2>
-              <p className="mt-1 text-fs text-muted-foreground">
+              <p className="mt-1 fs-text text-muted-foreground">
                 The code is the short identifier printed on receipts and used in reports.
               </p>
             </header>
 
             <div className="grid gap-[var(--space-12)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2 xl:grid-cols-3">
               <div className="sm:col-span-2 xl:col-span-1">
-                <label htmlFor="branch-name" className="mb-1 block text-fs font-medium text-strong">
+                <label htmlFor="branch-name" className="mb-1 block fs-text font-medium text-strong">
                   Branch name
                 </label>
                 <Input
@@ -374,7 +374,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               </div>
 
               <div>
-                <label htmlFor="branch-code" className="mb-1 block text-fs font-medium text-strong">
+                <label htmlFor="branch-code" className="mb-1 block fs-text font-medium text-strong">
                   Branch code
                 </label>
                 <Input
@@ -386,7 +386,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                   disabled={!canEdit || saving}
                   onChange={(event) => update({ code: event.target.value.toUpperCase() })}
                 />
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   2–10 letters, digits or hyphens.
                 </p>
               </div>
@@ -394,7 +394,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               <div>
                 <label
                   htmlFor="branch-status"
-                  className="mb-1 block text-fs font-medium text-strong"
+                  className="mb-1 block fs-text font-medium text-strong"
                 >
                   Status
                 </label>
@@ -404,7 +404,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                   aria-invalid={Boolean(fieldErrors.status)}
                   disabled={!canEdit || saving}
                   onChange={(event) => update({ status: event.target.value as BranchStatus })}
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="OPEN">Open</option>
                   <option value="CLOSED">Closed</option>
@@ -412,7 +412,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               </div>
 
               <div className="sm:col-span-2 xl:col-span-3">
-                <label className="flex items-start gap-2 text-fs">
+                <label className="flex items-start gap-2 fs-text">
                   <input
                     type="checkbox"
                     checked={form.isDefault}
@@ -437,11 +437,11 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-              <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+              <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                 <MapPin className="size-4 text-brand" aria-hidden="true" />
                 Location and council
               </h2>
-              <p className="mt-1 text-fs text-muted-foreground">
+              <p className="mt-1 fs-text text-muted-foreground">
                 The ward and council type describe the local government area the branch serves.
               </p>
             </header>
@@ -450,7 +450,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               <div className="sm:col-span-2 xl:col-span-3">
                 <label
                   htmlFor="branch-address"
-                  className="mb-1 block text-fs font-medium text-strong"
+                  className="mb-1 block fs-text font-medium text-strong"
                 >
                   Street address
                 </label>
@@ -465,7 +465,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               <div>
                 <label
                   htmlFor="branch-region"
-                  className="mb-1 block text-fs font-medium text-strong"
+                  className="mb-1 block fs-text font-medium text-strong"
                 >
                   Region
                 </label>
@@ -482,7 +482,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               <div>
                 <label
                   htmlFor="branch-district"
-                  className="mb-1 block text-fs font-medium text-strong"
+                  className="mb-1 block fs-text font-medium text-strong"
                 >
                   District
                 </label>
@@ -495,7 +495,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               </div>
 
               <div>
-                <label htmlFor="branch-ward" className="mb-1 block text-fs font-medium text-strong">
+                <label htmlFor="branch-ward" className="mb-1 block fs-text font-medium text-strong">
                   Ward
                 </label>
                 <Input
@@ -509,7 +509,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               <div>
                 <label
                   htmlFor="branch-council"
-                  className="mb-1 block text-fs font-medium text-strong"
+                  className="mb-1 block fs-text font-medium text-strong"
                 >
                   Council type
                 </label>
@@ -520,7 +520,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                   onChange={(event) =>
                     update({ councilType: event.target.value as "" | CouncilType })
                   }
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <option value="">Not recorded</option>
                   {COUNCIL_TYPES.map((item) => (
@@ -534,7 +534,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
               <div>
                 <label
                   htmlFor="branch-employees"
-                  className="mb-1 block text-fs font-medium text-strong"
+                  className="mb-1 block fs-text font-medium text-strong"
                 >
                   Employees
                 </label>
@@ -549,7 +549,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                   disabled={!canEdit || saving}
                   onChange={(event) => update({ employeeCount: event.target.value })}
                 />
-                <p className="mt-1 flex items-center gap-1 text-fs text-muted-foreground">
+                <p className="mt-1 flex items-center gap-1 fs-text text-muted-foreground">
                   <Users className="size-3.5" aria-hidden="true" />
                   Headcount at this branch, not user accounts.
                 </p>
@@ -559,20 +559,20 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-              <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+              <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                 <Clock3 className="size-4 text-brand" aria-hidden="true" />
                 Opening hours
               </h2>
-              <p className="mt-1 text-fs text-muted-foreground">
+              <p className="mt-1 fs-text text-muted-foreground">
                 One row per weekday. Closed days store no times; closing time must be after opening
                 time.
               </p>
             </header>
 
             <div className="overflow-x-auto px-[var(--space-16)] py-[var(--space-14)]">
-              <table className="w-full min-w-[520px] text-fs">
+              <table className="w-full min-w-[520px] fs-text">
                 <thead>
-                  <tr className="border-b border-card-border text-left text-fs font-semibold uppercase tracking-wide text-label">
+                  <tr className="border-b border-card-border text-left fs-text font-semibold uppercase tracking-wide text-label">
                     <th className="py-[var(--space-8)] pr-[var(--space-10)]">Day</th>
                     <th className="px-[var(--space-10)] py-[var(--space-8)]">Closed</th>
                     <th className="px-[var(--space-10)] py-[var(--space-8)]">Opens</th>
@@ -643,14 +643,14 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                 <FormError message={saveError} />
                 <SuccessNote message={saved} />
                 {errorList.length > 0 ? (
-                  <ul role="alert" className="space-y-1 text-fs text-accent-red">
+                  <ul role="alert" className="space-y-1 fs-text text-accent-red">
                     {errorList.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
                   </ul>
                 ) : null}
                 {saveError || errorList.length > 0 ? null : (
-                  <p className="text-fs text-muted-foreground">
+                  <p className="fs-text text-muted-foreground">
                     {mode === "create"
                       ? "The branch is created immediately and can be edited afterwards."
                       : branch?.updatedAt

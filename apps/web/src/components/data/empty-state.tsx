@@ -22,8 +22,8 @@ export function EmptyState({ icon: Icon, title, description, action, className }
       <span className="grid size-10 place-items-center rounded-full bg-accent-teal-bg text-brand">
         <Icon className="size-6" strokeWidth={1.8} aria-hidden="true" />
       </span>
-      <h2 className="mt-[var(--space-14)] text-fs font-bold text-strong">{title}</h2>
-      <p className="mt-1 max-w-[420px] text-fs leading-[1.4] text-muted-foreground">
+      <h2 className="mt-[var(--space-14)] fs-text font-bold text-strong">{title}</h2>
+      <p className="mt-1 max-w-[420px] fs-text leading-[1.4] text-muted-foreground">
         {description}
       </p>
       {action ? <div className="mt-[var(--space-18)]">{action}</div> : null}

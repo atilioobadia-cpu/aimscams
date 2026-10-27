@@ -74,7 +74,7 @@ export default function InterestRatesPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader title="Interest rates" description="Interest rate definitions used by products." />
         {data?.canEdit ? (
-          <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Link href="/settings/products/interest-rates/new">Create interest rate</Link>
           </Button>
         ) : null}
@@ -83,7 +83,7 @@ export default function InterestRatesPage() {
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <div className="flex-1">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="interest-rate-search">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="interest-rate-search">
               Search
             </label>
             <div className="relative">
@@ -98,14 +98,14 @@ export default function InterestRatesPage() {
             </div>
           </div>
           <div className="w-full md:w-[220px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="interest-rate-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="interest-rate-status">
               Status
             </label>
             <select
               id="interest-rate-status"
               value={status}
               onChange={(event) => setStatus(event.target.value as "" | InterestRateStatus)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All statuses</option>
               <option value="ACTIVE">Active</option>
@@ -132,8 +132,8 @@ export default function InterestRatesPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[760px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Code</th>
                   <th className="px-4 py-3">Name</th>

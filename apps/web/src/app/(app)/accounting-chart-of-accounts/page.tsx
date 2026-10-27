@@ -102,11 +102,11 @@ export default function ChartOfAccountsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-[var(--space-16)] py-[var(--space-10)]">
-            <p className="text-fs text-muted-foreground">
+            <p className="fs-text text-muted-foreground">
               {accounts.length} {accounts.length === 1 ? "account" : "accounts"} ·{" "}
               {accounts.filter((account) => account.is_postable).length} postable
             </p>
-            <p className="text-fs text-muted-foreground">
+            <p className="fs-text text-muted-foreground">
               Normal side follows the account, not the last posting.
             </p>
           </div>

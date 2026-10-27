@@ -156,7 +156,7 @@ export default function ProvisioningRulesPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader title="Loan provisioning rules" description="Provisioning rules applied to loan assets." />
         {data?.canEdit ? (
-          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />
             Create provisioning rule
           </Button>
@@ -166,7 +166,7 @@ export default function ProvisioningRulesPage() {
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
           <div className="flex-1">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="provisioning-search">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="provisioning-search">
               Search
             </label>
             <div className="relative">
@@ -181,14 +181,14 @@ export default function ProvisioningRulesPage() {
             </div>
           </div>
           <div className="w-full md:w-[220px]">
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="provisioning-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="provisioning-status">
               Status
             </label>
             <select
               id="provisioning-status"
               value={status}
               onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="">All statuses</option>
               <option value="ACTIVE">Active</option>
@@ -215,8 +215,8 @@ export default function ProvisioningRulesPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[840px] text-left text-fs">
-              <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <table className="w-full min-w-[840px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Code</th>
                   <th className="px-4 py-3">Name</th>
@@ -251,51 +251,51 @@ export default function ProvisioningRulesPage() {
         <form className="space-y-5" onSubmit={(event) => void save(event)}>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-code">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-code">
                 Code
               </label>
               <Input id="pr-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-name">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-name">
                 Name
               </label>
               <Input id="pr-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-status">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-status">
                 Status
               </label>
               <select
                 id="pr-status"
                 value={itemStatus}
                 onChange={(event) => setItemStatus(event.target.value as ProvisioningRuleStatus)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-days-from">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-days-from">
                 Days from
               </label>
               <Input id="pr-days-from" value={daysFrom} onChange={(event) => setDaysFrom(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-days-to">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-days-to">
                 Days to
               </label>
               <Input id="pr-days-to" value={daysTo} onChange={(event) => setDaysTo(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-rate">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-rate">
                 Rate (%)
               </label>
               <Input id="pr-rate" value={rate} onChange={(event) => setRate(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-gl">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-gl">
                 GL account
               </label>
               <Input id="pr-gl" value={glAccount} onChange={(event) => setGlAccount(event.target.value)} className="h-[var(--control-height)]" />
@@ -303,7 +303,7 @@ export default function ProvisioningRulesPage() {
           </div>
 
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="pr-description">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-description">
               Description
             </label>
             <textarea
@@ -311,7 +311,7 @@ export default function ProvisioningRulesPage() {
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               rows={3}
-              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] text-fs"
+              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
             />
           </div>
 
@@ -322,7 +322,7 @@ export default function ProvisioningRulesPage() {
             <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               {saving ? "Saving..." : "Create"}
             </Button>
           </div>

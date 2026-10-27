@@ -137,12 +137,12 @@ export function ChatFab() {
         }}
       >
         <DialogHeader>
-          <DialogTitle className="text-fs font-bold text-strong">Support chat</DialogTitle>
+          <DialogTitle className="fs-text font-bold text-strong">Support chat</DialogTitle>
           <DialogDescription>
             This is a local demonstration. Live chat connects when the Messages module ships.
           </DialogDescription>
         </DialogHeader>
-        <div className="rounded-lg bg-accent-teal-bg p-4 text-fs text-brand">
+        <div className="rounded-lg bg-accent-teal-bg p-4 fs-text text-brand">
           <p className="font-semibold">AIMSCAMS support</p>
           <p className="mt-1 text-body">
             Ask about posting, balances or a member account. No message leaves this browser.

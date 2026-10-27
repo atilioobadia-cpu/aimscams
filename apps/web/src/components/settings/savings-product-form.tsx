@@ -161,8 +161,8 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
       <div className="space-y-5">
         <PageHeader title="Savings product" description="Savings product terms." />
         <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-24)] text-center">
-          <p className="text-fs font-bold text-strong">Savings product not found</p>
-          <p className="mt-1 text-fs text-muted-foreground">It may have been removed or the link is stale.</p>
+          <p className="fs-text font-bold text-strong">Savings product not found</p>
+          <p className="mt-1 fs-text text-muted-foreground">It may have been removed or the link is stale.</p>
           <Button asChild variant="outline" className="mt-4">
             <Link href="/settings/products/savings">Back to savings products</Link>
           </Button>
@@ -196,13 +196,13 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           {!editing ? (
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-code">
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-code">
                   Code
                 </label>
                 <Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
               </div>
               <div>
-                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-name">
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-name">
                   Name
                 </label>
                 <Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
@@ -211,13 +211,13 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-code">
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-code">
                   Code
                 </label>
                 <Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
               </div>
               <div>
-                <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-name">
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-name">
                   Name
                 </label>
                 <Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
@@ -227,14 +227,14 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
 
           <div className="grid gap-4 md:grid-cols-3">
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-status">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-status">
                 Status
               </label>
               <select
                 id="sp-status"
                 value={status}
                 onChange={(event) => setStatus(event.target.value as SavingsProductStatus)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
               >
                 <option value="DRAFT">Draft</option>
                 <option value="ACTIVE">Active</option>
@@ -242,13 +242,13 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-min-balance">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-min-balance">
                 Minimum balance
               </label>
               <Input id="sp-min-balance" value={minBalance} onChange={(event) => setMinBalance(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
-              <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-rate">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-rate">
                 Interest rate (%)
               </label>
               <Input id="sp-rate" value={interestRate} onChange={(event) => setInterestRate(event.target.value)} className="h-[var(--control-height)]" />
@@ -256,14 +256,14 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           </div>
 
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-frequency">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-frequency">
               Interest payout frequency
             </label>
             <Input id="sp-frequency" value={frequency} onChange={(event) => setFrequency(event.target.value)} className="h-[var(--control-height)]" />
           </div>
 
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="sp-description">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-description">
               Description
             </label>
             <textarea
@@ -271,24 +271,24 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
               value={description}
               onChange={(event) => setDescription(event.target.value)}
               rows={3}
-              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] text-fs"
+              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
             />
           </div>
 
           <div className="grid gap-2 md:grid-cols-2">
-            <label className="flex items-center gap-2 text-fs text-strong">
+            <label className="flex items-center gap-2 fs-text text-strong">
               <input type="checkbox" checked={allowedAsGuarantor} onChange={(event) => setAllowedAsGuarantor(event.target.checked)} />
               Allowed as guarantor
             </label>
-            <label className="flex items-center gap-2 text-fs text-strong">
+            <label className="flex items-center gap-2 fs-text text-strong">
               <input type="checkbox" checked={allowedAsCollateral} onChange={(event) => setAllowedAsCollateral(event.target.checked)} />
               Allowed as collateral
             </label>
-            <label className="flex items-center gap-2 text-fs text-strong">
+            <label className="flex items-center gap-2 fs-text text-strong">
               <input type="checkbox" checked={allowedMultipleAccounts} onChange={(event) => setAllowedMultipleAccounts(event.target.checked)} />
               Allowed multiple accounts
             </label>
-            <label className="flex items-center gap-2 text-fs text-strong">
+            <label className="flex items-center gap-2 fs-text text-strong">
               <input type="checkbox" checked={allowInterestPayout} onChange={(event) => setAllowInterestPayout(event.target.checked)} />
               Allow interest payout
             </label>
@@ -298,7 +298,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
           <SuccessNote message={saved} />
 
           <div className="flex items-center gap-3">
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
               {saving ? "Saving..." : editing ? "Save changes" : "Create savings product"}
             </Button>
             <Button asChild variant="outline">

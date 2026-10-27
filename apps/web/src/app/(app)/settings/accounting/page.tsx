@@ -289,15 +289,15 @@ export default function AccountingSettingsPage() {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
             <header className="flex flex-wrap items-start justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div>
-                <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+                <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <SlidersHorizontal className="size-4 text-brand" aria-hidden="true" />
                   Statutory settings
                 </h2>
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   Applies to every branch of {data.organisation?.name ?? "this institution"}.
                 </p>
               </div>
-              <span className="text-fs text-muted-foreground">
+              <span className="fs-text text-muted-foreground">
                 {data.settings.updatedAt
                   ? `Updated ${displayDay(data.settings.updatedAt.slice(0, 10))}`
                   : "Never updated"}
@@ -306,7 +306,7 @@ export default function AccountingSettingsPage() {
 
             <div className="grid gap-[var(--space-18)] px-[var(--space-16)] py-[var(--space-14)] lg:grid-cols-2">
               <div>
-                <label htmlFor="tax-rate" className="mb-1 block text-fs font-medium text-strong">
+                <label htmlFor="tax-rate" className="mb-1 block fs-text font-medium text-strong">
                   Tax rate (%)
                 </label>
                 <Input
@@ -319,13 +319,13 @@ export default function AccountingSettingsPage() {
                     setSettingsSaved(null);
                   }}
                 />
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   Whole or two-decimal percentage applied to taxable charges. Set 0 to disable.
                 </p>
               </div>
 
               <div>
-                <span className="mb-1 block text-fs font-medium text-strong">
+                <span className="mb-1 block fs-text font-medium text-strong">
                   Inter-branch ledger
                 </span>
                 <div className="flex items-center gap-[var(--space-10)]">
@@ -350,11 +350,11 @@ export default function AccountingSettingsPage() {
                       )}
                     />
                   </button>
-                  <span className="text-fs text-muted-foreground">
+                  <span className="fs-text text-muted-foreground">
                     {interBranch ? "On — branch transfers post both sides." : "Off — branch transfers do not post."}
                   </span>
                 </div>
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   Keep this on only when each branch keeps its own due-to and due-from ledger.
                 </p>
               </div>
@@ -372,11 +372,11 @@ export default function AccountingSettingsPage() {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
             <header className="flex flex-wrap items-center justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div>
-                <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+                <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <CalendarRange className="size-4 text-brand" aria-hidden="true" />
                   Fiscal periods
                 </h2>
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   Entries post only into an open period. Closing blocks on unposted drafts.
                 </p>
               </div>
@@ -451,15 +451,15 @@ export default function AccountingSettingsPage() {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
             <header className="flex flex-wrap items-center justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div>
-                <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
+                <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <Scale className="size-4 text-brand" aria-hidden="true" />
                   Posting policies
                 </h2>
-                <p className="mt-1 text-fs text-muted-foreground">
+                <p className="mt-1 fs-text text-muted-foreground">
                   Every edit adds a new version. Posted entries keep the version they used.
                 </p>
               </div>
-              <span className="text-fs text-muted-foreground">
+              <span className="fs-text text-muted-foreground">
                 {data.policies.length} event{data.policies.length === 1 ? "" : "s"}
               </span>
             </header>
@@ -539,7 +539,7 @@ export default function AccountingSettingsPage() {
         <div className="space-y-[var(--space-14)]">
           <div className="grid gap-[var(--space-14)] sm:grid-cols-2">
             <label className="block">
-              <span className="mb-1 block text-fs font-medium text-strong">Starts on</span>
+              <span className="mb-1 block fs-text font-medium text-strong">Starts on</span>
               <Input
                 type="date"
                 value={periodForm.startsOn}
@@ -549,7 +549,7 @@ export default function AccountingSettingsPage() {
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-fs font-medium text-strong">Ends on</span>
+              <span className="mb-1 block fs-text font-medium text-strong">Ends on</span>
               <Input
                 type="date"
                 value={periodForm.endsOn}
@@ -559,7 +559,7 @@ export default function AccountingSettingsPage() {
               />
             </label>
           </div>
-          <p className="text-fs text-muted-foreground">
+          <p className="fs-text text-muted-foreground">
             Periods cannot overlap. A closing blocks any draft entry inside the range.
           </p>
           <FormError message={periodError} />
@@ -587,10 +587,10 @@ export default function AccountingSettingsPage() {
       >
         {statusTarget ? (
           <div className="space-y-[var(--space-14)]">
-            <p className="text-fs text-strong">
+            <p className="fs-text text-strong">
               {displayDay(statusTarget.startsOn)} — {displayDay(statusTarget.endsOn)}
             </p>
-            <p className="text-fs text-muted-foreground">
+            <p className="fs-text text-muted-foreground">
               {statusTarget.status === "open"
                 ? "Closing stops new postings into this period. Any draft entry in the range must be posted or removed first."
                 : "Reopening lets the period accept postings again. Closed books can still be audited."}
@@ -618,7 +618,7 @@ export default function AccountingSettingsPage() {
       >
         {policyTarget ? (
           <div className="space-y-[var(--space-14)]">
-            <div className="flex flex-wrap items-center gap-2 text-fs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-2 fs-text text-muted-foreground">
               <span>
                 Current version v{policyTarget.version} · saving creates v{policyTarget.version + 1}
               </span>
@@ -630,13 +630,13 @@ export default function AccountingSettingsPage() {
             </div>
 
             {policyTarget.note ? (
-              <p className="rounded-[6px] bg-muted/60 px-[var(--space-10)] py-[var(--space-8)] text-fs leading-[1.45] text-muted-foreground">
+              <p className="rounded-[6px] bg-muted/60 px-[var(--space-10)] py-[var(--space-8)] fs-text leading-[1.45] text-muted-foreground">
                 {policyTarget.note}
               </p>
             ) : null}
 
             <div className="space-y-2">
-              <div className="grid grid-cols-[1fr_110px_130px_32px] gap-2 text-fs font-medium text-muted-foreground">
+              <div className="grid grid-cols-[1fr_110px_130px_32px] gap-2 fs-text font-medium text-muted-foreground">
                 <span>Ledger account</span>
                 <span>Side</span>
                 <span>Amount key</span>
@@ -651,7 +651,7 @@ export default function AccountingSettingsPage() {
                     aria-label={`Line ${index + 1} account`}
                     value={line.account}
                     onChange={(event) => updateLine(index, { account: event.target.value })}
-                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-transparent px-[var(--space-8)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-transparent px-[var(--space-8)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
                   >
                     {postableAccounts.map((account: GlAccount) => (
                       <option key={account.code} value={account.code}>
@@ -665,7 +665,7 @@ export default function AccountingSettingsPage() {
                     onChange={(event) =>
                       updateLine(index, { side: event.target.value as PolicyLine["side"] })
                     }
-                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-transparent px-[var(--space-8)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-transparent px-[var(--space-8)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
                   >
                     <option value="debit">Debit</option>
                     <option value="credit">Credit</option>
@@ -676,7 +676,7 @@ export default function AccountingSettingsPage() {
                     onChange={(event) =>
                       updateLine(index, { amount: event.target.value as PolicyAmount })
                     }
-                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-transparent px-[var(--space-8)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-transparent px-[var(--space-8)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
                   >
                     {AMOUNT_KEYS.map((key) => (
                       <option key={key} value={key}>

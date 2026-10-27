@@ -195,7 +195,7 @@ export default function LedgerEntriesPage() {
 
       <FilterBar label="Ledger filters">
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">Ledger account</span>
+          <span className="fs-text text-muted-foreground">Ledger account</span>
           <NativeSelect
             value={selectedAccountId}
             onChange={(event) => setParams({ accountId: event.target.value || null })}
@@ -212,7 +212,7 @@ export default function LedgerEntriesPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">From</span>
+          <span className="fs-text text-muted-foreground">From</span>
           <Input
             type="date"
             value={fromValue}
@@ -223,7 +223,7 @@ export default function LedgerEntriesPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">To</span>
+          <span className="fs-text text-muted-foreground">To</span>
           <Input
             type="date"
             value={toValue}
@@ -264,43 +264,43 @@ export default function LedgerEntriesPage() {
             <header className="flex flex-wrap items-center justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div className="flex min-w-0 items-center gap-2">
                 <BookOpen className="size-4 shrink-0 text-brand" aria-hidden="true" />
-                <h2 className="truncate text-fs font-bold text-strong">
+                <h2 className="truncate fs-text font-bold text-strong">
                   {page.account.code} · {page.account.name}
                 </h2>
                 <Badge variant="outline">
                   {page.account.normalBalance === "debit" ? "Debit-normal" : "Credit-normal"}
                 </Badge>
               </div>
-              <span className="text-fs text-muted-foreground">
+              <span className="fs-text text-muted-foreground">
                 {displayDay(fromValue)} — {displayDay(toValue)}
               </span>
             </header>
 
             <dl className="grid gap-[var(--space-10)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2 xl:grid-cols-4">
               <div className="rounded-[6px] bg-muted/50 px-[var(--space-12)] py-[var(--space-10)]">
-                <dt className="text-fs text-muted-foreground">Opening balance</dt>
-                <dd className="mt-1 truncate text-fs font-bold tabular-nums text-strong" title={formatTzsExact(opening)}>
+                <dt className="fs-text text-muted-foreground">Opening balance</dt>
+                <dd className="mt-1 truncate fs-text font-bold tabular-nums text-strong" title={formatTzsExact(opening)}>
                   {formatTzsExact(opening)}
                 </dd>
               </div>
               <div className="rounded-[6px] bg-muted/50 px-[var(--space-12)] py-[var(--space-10)]">
-                <dt className="text-fs text-muted-foreground">Closing balance</dt>
-                <dd className="mt-1 truncate text-fs font-bold tabular-nums text-strong" title={formatTzsExact(closing)}>
+                <dt className="fs-text text-muted-foreground">Closing balance</dt>
+                <dd className="mt-1 truncate fs-text font-bold tabular-nums text-strong" title={formatTzsExact(closing)}>
                   {formatTzsExact(closing)}
                 </dd>
               </div>
               <div className="rounded-[6px] bg-muted/50 px-[var(--space-12)] py-[var(--space-10)]">
-                <dt className="text-fs text-muted-foreground">Net movement</dt>
-                <dd className="mt-1 truncate text-fs font-bold tabular-nums text-strong" title={formatTzsExact(netMovement)}>
+                <dt className="fs-text text-muted-foreground">Net movement</dt>
+                <dd className="mt-1 truncate fs-text font-bold tabular-nums text-strong" title={formatTzsExact(netMovement)}>
                   {formatTzsExact(netMovement)}
                 </dd>
               </div>
               <div className="rounded-[6px] bg-muted/50 px-[var(--space-12)] py-[var(--space-10)]">
-                <dt className="text-fs text-muted-foreground">Posted movements</dt>
-                <dd className="mt-1 text-fs font-bold tabular-nums text-strong">{total}</dd>
+                <dt className="fs-text text-muted-foreground">Posted movements</dt>
+                <dd className="mt-1 fs-text font-bold tabular-nums text-strong">{total}</dd>
               </div>
             </dl>
-            <p className="px-[var(--space-16)] pb-[var(--space-12)] text-fs text-muted-foreground">
+            <p className="px-[var(--space-16)] pb-[var(--space-12)] fs-text text-muted-foreground">
               Balances show on the account&apos;s{" "}
               {page.account.normalBalance === "debit" ? "debit" : "credit"} side; debit and credit
               columns keep the posted direction.
@@ -381,7 +381,7 @@ export default function LedgerEntriesPage() {
                   </TableFooter>
                 </Table>
 
-                <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chrome px-[var(--space-16)] py-[var(--space-10)] text-fs text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chrome px-[var(--space-16)] py-[var(--space-10)] fs-text text-muted-foreground">
                   <span>
                     Showing {pageStart}–{pageEnd} of {total}
                   </span>
@@ -419,7 +419,7 @@ function NativeSelect({ className, ...props }: ComponentProps<"select">) {
   return (
     <select
       className={cn(
-        "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-10)] text-fs text-foreground transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-10)] fs-text text-foreground transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}

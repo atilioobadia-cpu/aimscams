@@ -33,7 +33,7 @@ export function ErrorPanel({
     <div
       role="alert"
       className={cn(
-        "flex flex-wrap items-center justify-between gap-3 rounded-[var(--card-radius)] border border-accent-red/30 bg-accent-red-bg px-[var(--space-14)] py-[var(--space-12)] text-fs text-strong",
+        "flex flex-wrap items-center justify-between gap-3 rounded-[var(--card-radius)] border border-accent-red/30 bg-accent-red-bg px-[var(--space-14)] py-[var(--space-12)] fs-text text-strong",
         className,
       )}
     >
@@ -68,8 +68,8 @@ export function ForbiddenPanel({
       <span className="grid size-10 place-items-center rounded-full bg-accent-yellow-bg text-accent-yellow">
         <Lock className="size-5" aria-hidden="true" />
       </span>
-      <h2 className="mt-[var(--space-14)] text-fs font-bold text-strong">Access restricted</h2>
-      <p className="mt-1 max-w-[420px] text-fs leading-[1.4] text-muted-foreground">{message}</p>
+      <h2 className="mt-[var(--space-14)] fs-text font-bold text-strong">Access restricted</h2>
+      <p className="mt-1 max-w-[420px] fs-text leading-[1.4] text-muted-foreground">{message}</p>
     </div>
   );
 }
@@ -77,7 +77,7 @@ export function ForbiddenPanel({
 export function FormError({ message }: { message: string | null }) {
   if (!message) return null;
   return (
-    <p role="alert" className="text-fs text-accent-red">
+    <p role="alert" className="fs-text text-accent-red">
       {message}
     </p>
   );
@@ -86,7 +86,7 @@ export function FormError({ message }: { message: string | null }) {
 export function SuccessNote({ message }: { message: string | null }) {
   if (!message) return null;
   return (
-    <p role="status" className="text-fs text-accent-teal">
+    <p role="status" className="fs-text text-accent-teal">
       {message}
     </p>
   );

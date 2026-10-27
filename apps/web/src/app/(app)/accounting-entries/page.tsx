@@ -447,7 +447,7 @@ export default function JournalEntriesPage() {
       <AccountingNav />
 
       {accountsBlocked ? (
-        <p className="text-fs text-muted-foreground">
+        <p className="fs-text text-muted-foreground">
           Your role can read entries but cannot list ledger accounts, so new entries are disabled.
         </p>
       ) : null}
@@ -462,7 +462,7 @@ export default function JournalEntriesPage() {
           }}
         >
           <label className="flex flex-col gap-1">
-            <span className="text-fs text-muted-foreground">Search</span>
+            <span className="fs-text text-muted-foreground">Search</span>
             <Input
               key={q}
               name="q"
@@ -477,7 +477,7 @@ export default function JournalEntriesPage() {
         </form>
 
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">Status</span>
+          <span className="fs-text text-muted-foreground">Status</span>
           <NativeSelect
             value={status}
             onChange={(event) => setParams({ status: event.target.value || null })}
@@ -491,7 +491,7 @@ export default function JournalEntriesPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">Event</span>
+          <span className="fs-text text-muted-foreground">Event</span>
           <NativeSelect
             value={eventCode}
             onChange={(event) => setParams({ eventCode: event.target.value || null })}
@@ -508,7 +508,7 @@ export default function JournalEntriesPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">From</span>
+          <span className="fs-text text-muted-foreground">From</span>
           <Input
             type="date"
             value={from}
@@ -519,7 +519,7 @@ export default function JournalEntriesPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="text-fs text-muted-foreground">To</span>
+          <span className="fs-text text-muted-foreground">To</span>
           <Input
             type="date"
             value={to}
@@ -650,7 +650,7 @@ export default function JournalEntriesPage() {
                 </TableBody>
               </Table>
 
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chrome px-[var(--space-16)] py-[var(--space-10)] text-fs text-muted-foreground">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chrome px-[var(--space-16)] py-[var(--space-10)] fs-text text-muted-foreground">
                 <span>
                   Showing {pageStart}–{pageEnd} of {total}
                 </span>
@@ -719,15 +719,15 @@ export default function JournalEntriesPage() {
               </Badge>
               <Badge variant="outline">{detail.eventCode}</Badge>
               {detail.reversalOf ? <Badge variant="secondary">Reversal</Badge> : null}
-              <span className="text-fs text-muted-foreground">
+              <span className="fs-text text-muted-foreground">
                 {displayDay(detail.entryDate)} · {postingWhen(detail.postedAt)}
               </span>
             </div>
 
-            <p className="text-fs text-strong">{detail.description || "No narration"}</p>
+            <p className="fs-text text-strong">{detail.description || "No narration"}</p>
 
             {detail.reversalOf ? (
-              <p className="text-fs text-muted-foreground">
+              <p className="fs-text text-muted-foreground">
                 This entry reverses{" "}
                 <button
                   type="button"
@@ -783,7 +783,7 @@ export default function JournalEntriesPage() {
               </TableFooter>
             </Table>
 
-            <dl className="grid gap-[var(--space-8)] text-fs sm:grid-cols-2">
+            <dl className="grid gap-[var(--space-8)] fs-text sm:grid-cols-2">
               <div>
                 <dt className="text-muted-foreground">Source</dt>
                 <dd className="text-strong">
@@ -831,7 +831,7 @@ export default function JournalEntriesPage() {
         <div className="space-y-[var(--space-14)]">
           <div className="grid gap-[var(--space-14)] sm:grid-cols-[180px_1fr]">
             <label className="block">
-              <span className="mb-1 block text-fs font-medium text-strong">Entry date</span>
+              <span className="mb-1 block fs-text font-medium text-strong">Entry date</span>
               <Input
                 type="date"
                 value={entryDate}
@@ -839,7 +839,7 @@ export default function JournalEntriesPage() {
               />
             </label>
             <label className="block">
-              <span className="mb-1 block text-fs font-medium text-strong">Narration</span>
+              <span className="mb-1 block fs-text font-medium text-strong">Narration</span>
               <Input
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
@@ -850,7 +850,7 @@ export default function JournalEntriesPage() {
 
           <div className="overflow-x-auto">
             <div className="min-w-[720px] space-y-2">
-              <div className="grid grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_110px_110px_32px] gap-2 text-fs font-medium text-muted-foreground">
+              <div className="grid grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_110px_110px_32px] gap-2 fs-text font-medium text-muted-foreground">
                 <span>Ledger account</span>
                 <span>Memo</span>
                 <span className="text-right">Debit</span>
@@ -923,7 +923,7 @@ export default function JournalEntriesPage() {
               Add line
             </Button>
 
-            <div className="flex flex-wrap items-center gap-[var(--space-14)] text-fs">
+            <div className="flex flex-wrap items-center gap-[var(--space-14)] fs-text">
               <span>
                 <span className="text-muted-foreground">Debits </span>
                 <strong className="tabular-nums text-strong">{formatTzsExact(totals.debit)}</strong>
@@ -944,7 +944,7 @@ export default function JournalEntriesPage() {
             </div>
           </div>
 
-          <p className="text-fs text-muted-foreground">
+          <p className="fs-text text-muted-foreground">
             Manual entries post with event code MANUAL. Each line carries one side only; the debit
             total must equal the credit total.
           </p>
@@ -970,16 +970,16 @@ export default function JournalEntriesPage() {
       >
         {reverseTarget ? (
           <div className="space-y-[var(--space-14)]">
-            <p className="text-fs text-muted-foreground">
+            <p className="fs-text text-muted-foreground">
               The reversal is a new posted entry that swaps every debit and credit. The original
               entry stays untouched.
             </p>
-            <p className="text-fs text-strong">
+            <p className="fs-text text-strong">
               {displayDay(reverseTarget.entryDate)} · {formatTzsExact(reverseTarget.debitMinor)}
             </p>
             <div className="grid gap-[var(--space-14)] sm:grid-cols-[180px_1fr]">
               <label className="block">
-                <span className="mb-1 block text-fs font-medium text-strong">Reversal date</span>
+                <span className="mb-1 block fs-text font-medium text-strong">Reversal date</span>
                 <Input
                   type="date"
                   value={reverseDate}
@@ -987,7 +987,7 @@ export default function JournalEntriesPage() {
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-fs font-medium text-strong">
+                <span className="mb-1 block fs-text font-medium text-strong">
                   Description (optional)
                 </span>
                 <Input
@@ -1012,7 +1012,7 @@ function NativeSelect({
   return (
     <select
       className={cn(
-        "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-10)] text-fs text-foreground transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+        "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-10)] fs-text text-foreground transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}

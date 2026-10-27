@@ -99,7 +99,7 @@ export function CreditProductPolicyEditForm({ id }: { id: string }) {
   }
 
   if (loading) {
-    return <p className="text-fs text-muted-foreground">Loading...</p>;
+    return <p className="fs-text text-muted-foreground">Loading...</p>;
   }
 
   return (
@@ -118,26 +118,26 @@ export function CreditProductPolicyEditForm({ id }: { id: string }) {
       <form className="space-y-5 rounded-xl border border-card-border bg-surface p-5" onSubmit={(event) => void save(event)}>
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="cpp-code">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="cpp-code">
               Code
             </label>
             <Input id="cpp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="cpp-name">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="cpp-name">
               Name
             </label>
             <Input id="cpp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
           </div>
           <div>
-            <label className="mb-1 block text-fs font-medium text-body" htmlFor="cpp-status">
+            <label className="mb-1 block fs-text font-medium text-body" htmlFor="cpp-status">
               Status
             </label>
             <select
               id="cpp-status"
               value={status}
               onChange={(event) => setStatus(event.target.value as CreditProductPolicyStatus)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
             >
               <option value="DRAFT">Draft</option>
               <option value="ACTIVE">Active</option>
@@ -147,7 +147,7 @@ export function CreditProductPolicyEditForm({ id }: { id: string }) {
         </div>
 
         <div>
-          <label className="mb-1 block text-fs font-medium text-body" htmlFor="cpp-description">
+          <label className="mb-1 block fs-text font-medium text-body" htmlFor="cpp-description">
             Description
           </label>
           <textarea
@@ -155,12 +155,12 @@ export function CreditProductPolicyEditForm({ id }: { id: string }) {
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             rows={3}
-            className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] text-fs"
+            className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-fs font-medium text-body" htmlFor="cpp-content">
+          <label className="mb-1 block fs-text font-medium text-body" htmlFor="cpp-content">
             Policy content (JSON)
           </label>
           <textarea
@@ -168,14 +168,14 @@ export function CreditProductPolicyEditForm({ id }: { id: string }) {
             value={content}
             onChange={(event) => setContent(event.target.value)}
             rows={8}
-            className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] font-mono text-fs"
+            className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] font-mono fs-text"
           />
         </div>
 
-        {saveError ? <p role="alert" className="text-fs text-accent-red">{saveError}</p> : null}
+        {saveError ? <p role="alert" className="fs-text text-accent-red">{saveError}</p> : null}
 
         <div className="flex items-center gap-3">
-          <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+          <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             {saving ? "Saving..." : "Save changes"}
           </Button>
           <Button asChild variant="outline">

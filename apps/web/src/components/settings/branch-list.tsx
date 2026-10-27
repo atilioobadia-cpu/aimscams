@@ -155,7 +155,7 @@ export function BranchListPage() {
             value={status}
             onChange={(event) => setStatus(event.target.value as "" | BranchStatus)}
             aria-label="Filter by status"
-            className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+            className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
           >
             <option value="">All statuses</option>
             <option value="OPEN">Open</option>
@@ -203,8 +203,8 @@ export function BranchListPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
           <header className="flex flex-wrap items-center justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-14)] py-[var(--space-10)]">
-            <h2 className="text-fs font-bold text-strong">Branch network</h2>
-            <p className="flex items-center gap-2 text-fs text-muted-foreground" role="status">
+            <h2 className="fs-text font-bold text-strong">Branch network</h2>
+            <p className="flex items-center gap-2 fs-text text-muted-foreground" role="status">
               {refreshing ? (
                 <LoaderCircle className="size-4 animate-spin text-brand" aria-hidden="true" />
               ) : null}
@@ -213,7 +213,7 @@ export function BranchListPage() {
             </p>
           </header>
           <Table className="min-w-[960px]">
-            <TableHeader className="bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
+            <TableHeader className="bg-subtle fs-text font-semibold uppercase tracking-wide text-label">
               <TableRow>
                 <TableHead className="px-[var(--space-14)] py-[var(--space-10)]">Branch</TableHead>
                 <TableHead className="px-[var(--space-14)] py-[var(--space-10)]">Code</TableHead>
@@ -237,7 +237,7 @@ export function BranchListPage() {
                     >
                       {branch.name}
                     </Link>
-                    <p className="mt-0.5 max-w-[300px] truncate text-fs text-muted-foreground">
+                    <p className="mt-0.5 max-w-[300px] truncate fs-text text-muted-foreground">
                       {addressLine(branch) || "No address recorded"}
                     </p>
                   </TableCell>
@@ -261,8 +261,8 @@ export function BranchListPage() {
                     <span
                       className={
                         branch.status === "OPEN"
-                          ? "inline-flex rounded-[6px] bg-accent-teal-bg px-2 py-0.5 text-fs font-semibold text-brand"
-                          : "inline-flex rounded-[6px] bg-subtle px-2 py-0.5 text-fs font-semibold text-label"
+                          ? "inline-flex rounded-[6px] bg-accent-teal-bg px-2 py-0.5 fs-text font-semibold text-brand"
+                          : "inline-flex rounded-[6px] bg-subtle px-2 py-0.5 fs-text font-semibold text-label"
                       }
                     >
                       {branch.status === "OPEN" ? "Open" : "Closed"}
@@ -314,14 +314,14 @@ export function BranchListPage() {
             </dl>
 
             <div>
-              <h3 className="text-fs font-semibold text-strong">Opening hours</h3>
+              <h3 className="fs-text font-semibold text-strong">Opening hours</h3>
               <ul className="mt-2 divide-y divide-card-border rounded-lg border border-card-border">
                 {WEEKDAYS.map((day) => {
                   const hours = viewing.hours.find((item) => item.weekday === day.value);
                   return (
                     <li
                       key={day.value}
-                      className="flex items-center justify-between gap-4 px-3 py-2 text-fs"
+                      className="flex items-center justify-between gap-4 px-3 py-2 fs-text"
                     >
                       <span className="text-label">{day.label}</span>
                       <span className="font-medium text-body">
@@ -344,8 +344,8 @@ export function BranchListPage() {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-fs font-medium uppercase tracking-wide text-label">{label}</dt>
-      <dd className="mt-0.5 text-fs text-body">{value}</dd>
+      <dt className="fs-text font-medium uppercase tracking-wide text-label">{label}</dt>
+      <dd className="mt-0.5 fs-text text-body">{value}</dd>
     </div>
   );
 }

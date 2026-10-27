@@ -93,14 +93,14 @@ export default function RolesPage() {
   }, [grouped, search]);
 
   if (loading) {
-    return <p className="text-fs text-muted-foreground">Loading roles...</p>;
+    return <p className="fs-text text-muted-foreground">Loading roles...</p>;
   }
 
   return (
     <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
       <div className="space-y-3">
-        <h1 className="text-fs font-bold leading-tight text-strong">Roles</h1>
-        <p className="text-fs text-muted-foreground">
+        <h1 className="fs-text font-bold leading-tight text-strong">Roles</h1>
+        <p className="fs-text text-muted-foreground">
           Permission matrix for the 17 institution roles.
         </p>
         <div className="space-y-2">
@@ -113,14 +113,14 @@ export default function RolesPage() {
                 const found = roles.find((item) => item.id === role.id);
                 if (found) setDraftPermissions(found.permissionKeys);
               }}
-              className={`w-full rounded-lg border px-3 py-2 text-left text-fs transition-colors ${
+              className={`w-full rounded-lg border px-3 py-2 text-left fs-text transition-colors ${
                 role.id === selectedRoleId
                   ? "border-brand bg-accent-teal-bg"
                   : "border-card-border bg-surface hover:bg-subtle"
               }`}
             >
               <span className="block font-semibold text-strong">{role.name}</span>
-              <span className="block text-fs text-muted-foreground">
+              <span className="block fs-text text-muted-foreground">
                 {role.code} · {role.userCount} users
               </span>
             </button>
@@ -130,7 +130,7 @@ export default function RolesPage() {
 
       <div className="space-y-4">
         {error ? (
-          <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-fs text-accent-red">
+          <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 fs-text text-accent-red">
             {error}
           </div>
         ) : null}
@@ -139,10 +139,10 @@ export default function RolesPage() {
           <>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-fs font-bold text-strong">{selectedRole.name}</h2>
-                <p className="text-fs text-muted-foreground">{selectedRole.description}</p>
+                <h2 className="fs-text font-bold text-strong">{selectedRole.name}</h2>
+                <p className="fs-text text-muted-foreground">{selectedRole.description}</p>
               </div>
-              <Button onClick={() => void save()} disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
+              <Button onClick={() => void save()} disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
                 {saving ? "Saving..." : "Save permissions"}
               </Button>
             </div>
@@ -157,12 +157,12 @@ export default function RolesPage() {
             <div className="space-y-4">
               {Object.entries(filteredGroups).map(([entity, keys]) => (
                 <div key={entity} className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-                  <p className="mb-[var(--space-8)] text-fs font-semibold text-strong">{entity}</p>
+                  <p className="mb-[var(--space-8)] fs-text font-semibold text-strong">{entity}</p>
                   <div className="grid gap-2 md:grid-cols-2 xl:grid-cols-3">
                     {keys.map((key) => {
                       const action = key.split(" : ")[1] ?? key;
                       return (
-                        <label key={key} className="flex items-center gap-2 text-fs text-body">
+                        <label key={key} className="flex items-center gap-2 fs-text text-body">
                           <input
                             type="checkbox"
                             checked={draftPermissions.includes(key)}
@@ -179,7 +179,7 @@ export default function RolesPage() {
             </div>
           </>
         ) : (
-          <p className="text-fs text-muted-foreground">Select a role to edit its permissions.</p>
+          <p className="fs-text text-muted-foreground">Select a role to edit its permissions.</p>
         )}
       </div>
     </div>
