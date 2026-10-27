@@ -724,6 +724,8 @@ export type Client = {
   kycStatus: string;
   joinedAt: string | null;
   groupName: string | null;
+  branchName: string | null;
+  profile: unknown;
   createdAt: string;
   updatedAt: string;
 };
@@ -769,4 +771,7 @@ export async function updateClient(id: string, payload: { status?: string }): Pr
     method: "PATCH",
     body: payload,
   });
+}
+export async function getClient(id: string): Promise<ClientResponse> {
+  return apiRequest<ClientResponse>(`/settings/clients/${encodeURIComponent(id)}`);
 }

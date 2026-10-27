@@ -96,6 +96,26 @@ export class SettingsController {
     return this.settings.createClient(auth, body, requestContext(request));
   }
 
+  @Get('clients/:id')
+  @RequirePermissions('Client : View')
+  async getClient(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.getClient(auth, id);
+  }
+
+  @Patch('clients/:id')
+  @RequirePermissions('Client : Edit')
+  async updateClient(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateClient(auth, id, body, requestContext(request));
+  }
+
   @Get('branches')
   @RequirePermissions('Settings Branch : View')
   async listBranches(

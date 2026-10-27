@@ -1477,6 +1477,18 @@ export class SettingsService {
     return { client: this.serializeClient(updated), canEdit: this.can(auth, 'Client : Edit') };
   }
 
+  async getClient(auth: AuthContext, id: string) {
+    const item = await this.prisma.client.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+      include: { group: { select: { fullName: true } }, branch: { select: { name: true, code: true } } },
+    });
+    if (!item) throw new NotFoundException('Client not found.');
+    return {
+      client: this.serializeClient(item),
+      canEdit: this.can(auth, 'Client : Edit'),
+    };
+  }
+
   private serializeClient(item: any) {
     return {
       id: item.id,
@@ -1490,7 +1502,9 @@ export class SettingsService {
       status: item.status,
       kycStatus: item.kycStatus,
       joinedAt: item.joinedAt?.toISOString() ?? null,
-      groupName: item.group?.fullName ?? null,
+      groupName: item.group?.fullName ?? item.groupName ?? null,
+      branchName: item.branch?.name ?? item.branchName ?? null,
+      profile: item.profile ?? null,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };
