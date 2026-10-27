@@ -1,8 +1,8 @@
-# 13 — Build sequence, page by page
+# 13 â€” Build sequence, page by page
 
 **Status:** Accepted 2026-10-26
 **Depends on:** `docs/09` (what the pages are), `docs/10` (how it is built), `docs/11` (how it must
-look), `docs/12` (how it ships), `DECISIONS.md` (D-018…D-026)
+look), `docs/12` (how it ships), `DECISIONS.md` (D-018â€¦D-026)
 
 This is the execution order. One page at a time, verified in a real browser, committed to GitHub,
 then the next. There are **no time estimates** here on purpose: progress is counted in pages closed,
@@ -16,9 +16,9 @@ not in days.
    and tests exist. A static mock is a prototype, not a page.
 2. **Never start a page whose data does not exist.** Settings and products precede the accounts
    that consume them; the ledger precedes every money movement; audit events precede System Logs.
-3. **Templates before instances.** The six page templates in `docs/09 §5` are built once in
+3. **Templates before instances.** The six page templates in `docs/09 Â§5` are built once in
    Phase 1 and reused. A new page is configuration of a template, not a new design.
-4. **Verify, then commit, then continue.** No page is followed by another page until its gate in §3
+4. **Verify, then commit, then continue.** No page is followed by another page until its gate in Â§3
    passes.
 5. **One page, one commit.** Exceptions are the scaffold and the design system, which land as a
    small series of commits.
@@ -31,7 +31,7 @@ not in days.
 
 ## 2. The per-page protocol
 
-1. Read **only** that page's row in `docs/09 §6`, plus the relevant entity in `docs/05`, report spec
+1. Read **only** that page's row in `docs/09 Â§6`, plus the relevant entity in `docs/05`, report spec
    in `docs/06`, or flow in `docs/03`. Grep, do not re-read whole documents.
 2. Add or change the schema and migration if the page needs new data. Separate commit.
 3. Implement the API endpoint with validation, permission guard, audit event and idempotency where
@@ -43,14 +43,14 @@ not in days.
    not done.
 7. Write the tests: unit for logic, integration for the endpoint, one Playwright smoke for the
    route.
-8. Run the browser gate in §3. Fix what it finds.
+8. Run the browser gate in Â§3. Fix what it finds.
 9. Commit and push. Tick the page in this document.
 
 ---
 
 ## 3. The verification gate
 
-Every page is measured at **1837×1080** and **1280×800**, in a real browser, with the console open.
+Every page is measured at **1837Ã—1080** and **1280Ã—800**, in a real browser, with the console open.
 
 ### 3.1 Automated assertions
 
@@ -62,21 +62,21 @@ run only when the route ends in `/dashboard`.
 | Check | Expected |
 |---|---|
 | Header height | 68px |
-| Tenant logo | image, 28px tall, ≤190px wide, 40px monogram fallback |
+| Tenant logo | image, 28px tall, â‰¤190px wide, 40px monogram fallback |
 | Sidebar width, expanded | 204px |
 | Sidebar width, collapsed | 76px |
-| Active nav pill | 36px tall, x=8→195.3, radius 6px, background `#057573` |
+| Active nav pill | 36px tall, x=8â†’195.3, radius 6px, background `#057573` |
 | Sidebar row / sub-item | 36px (Settings link 34px) / 28px; icon 20px on x=28 |
-| Sidebar item count | exactly 12, in the order in `docs/11 §4` |
+| Sidebar item count | exactly 12, in the order in `docs/11 Â§4` |
 | Sidebar footer | 73px; collapse control 44px on the rail edge |
-| Tab card / tabs | 54px, radius 8px / 154×44, radius 6px |
+| Tab card / tabs | 54px, radius 8px / 154Ã—44, radius 6px |
 | KPI grid | 8 cards, fixed 4 per row, 94.8px tall, 12px gap |
 | Page background | `#ebe9e9` |
 | Card radius / padding | 8px; KPI 14px, chart and portfolio 30px |
 | Card border | 1px, `#dee2e6`, no heavy shadow |
 | Floating chat button | 60px circle, `#037674`, right 20 / bottom 16 |
 | Text | every rendered node is 12.8px |
-| Horizontal scrollbar | none at 1837×1080 and none at 1280×800 |
+| Horizontal scrollbar | none at 1837Ã—1080 and none at 1280Ã—800 |
 | Console | zero errors, zero warnings, zero unhandled rejections |
 | Requests | zero failed same-origin requests, zero HTTP 5xx |
 | Fonts | loaded, no fallback flash in the screenshot |
@@ -128,7 +128,7 @@ Route: /<route>
 **Cadence**
 
 - One commit per page, pushed immediately. Main must always build.
-- Schema changes land as `feat(db): …` before the page that uses them.
+- Schema changes land as `feat(db): â€¦` before the page that uses them.
 - A phase ends with a tag: `phase-03-ledger`, `phase-07-teller`, and so on.
 - The ticked tracker in this file is committed with the last page of the phase.
 
@@ -189,7 +189,7 @@ at once. A typo, a colour value or a one-line fix gets no skill: fix it, verify 
   rewrite browser checks per page; add route-specific assertions only where the page has content
   beyond the shell.
 - **One seed** with deterministic synthetic data, extended as modules land. No hand-typed fixtures.
-- **Six templates** (T1–T6). Build the template, then configure it.
+- **Six templates** (T1â€“T6). Build the template, then configure it.
 - **One report engine.** A report is a definition: parameters, SQL, columns, totals, export. The
   viewer is built once.
 - **One settings CRUD factory** for the many list/edit pairs in Settings and Messages.
@@ -207,7 +207,7 @@ at once. A typo, a colour value or a one-line fix gets no skill: fix it, verify 
 ### 5.4 Questions
 
 Collect ambiguities and ask them at the **start** of a phase, in one batch. Do not stop the build
-mid-page for something that can wait, and do not invent a business rule to keep moving — record it
+mid-page for something that can wait, and do not invent a business rule to keep moving â€” record it
 as an assumption row or an open item.
 
 ---
@@ -258,7 +258,7 @@ required but are **outside the 147-page inventory**; they are listed in Phase 2 
 
 ---
 
-## 7. Phase 0 — Scaffold and toolchain
+## 7. Phase 0 â€” Scaffold and toolchain
 
 **Goal.** A repository that builds, tests, runs and ships before a single business page exists.
 
@@ -272,7 +272,7 @@ required but are **outside the 147-page inventory**; they are listed in Phase 2 
   defaults.
 - `Dockerfile` producing one image with three commands (web, api, worker), built on Linux.
 - `deploy/compose.yml` for local infrastructure and a production-shaped stack.
-- `.env.example` with every variable in `docs/12 §4`; startup fails on a missing required value.
+- `.env.example` with every variable in `docs/12 Â§4`; startup fails on a missing required value.
 - GitHub Actions: install, lint, typecheck, unit, integration against PostgreSQL, build. Image
   build and Trivy scan on `main`.
 - `tools/ui-audit` skeleton and `tools/seed` skeleton.
@@ -288,7 +288,7 @@ required but are **outside the 147-page inventory**; they are listed in Phase 2 
 
 ---
 
-## 8. Phase 1 — Design system, shell and Dashboard
+## 8. Phase 1 â€” Design system, shell and Dashboard
 
 **Goal.** The visual contract becomes real and testable. From here, every page is assembled from
 proven parts.
@@ -308,7 +308,7 @@ proven parts.
 - Header (68px), sidebar (204px, 12 items, exact order, chevrons as specified), collapse control,
   footer wordmark, floating chat button (60px), content grid.
 - The collapsed sidebar is **76px** and keeps the icon axis at x=28; the value is recorded in
-  `docs/11 §4` and enforced by the audit.
+  `docs/11 Â§4` and enforced by the audit.
 - Dashboard from typed fixtures: 8 KPI tiles, funds in/out, portfolio composition, unposted
   transactions banner, branch context.
 - Campaigns is a real link with a plain `Soon` note; every sidebar destination resolves to a page
@@ -317,8 +317,8 @@ proven parts.
 
 **Gate**
 
-- Every automated assertion in §3.1 passes on `/dashboard`.
-- Collapse, all dropdowns, all modals and the chart tooltip behave per §3.2.
+- Every automated assertion in Â§3.1 passes on `/dashboard`.
+- Collapse, all dropdowns, all modals and the chart tooltip behave per Â§3.2.
 - The 12 items are in the exact order; Campaigns is focusable and resolves to a page.
 - Production build renders identically.
 
@@ -326,7 +326,7 @@ proven parts.
 
 ---
 
-## 9. Phase 2 — Identity, tenancy and access
+## 9. Phase 2 â€” Identity, tenancy and access
 
 **Goal.** Real users, real sessions, real permissions. Everything after this is gated by them.
 
@@ -346,7 +346,7 @@ Plus three screens outside the inventory: sign in, MFA challenge/enrolment, pass
   MFA challenge, password reset token, login attempt, audit event.
 - Argon2id password hashing; TOTP enrolment and recovery codes; lockout and throttling; secure,
   httpOnly, same-site session cookie; CSRF defence.
-- Permission model from `docs/09 §3` — `Entity : Action`, 17 roles, segregation-of-duties rules.
+- Permission model from `docs/09 Â§3` â€” `Entity : Action`, 17 roles, segregation-of-duties rules.
 - Server-side guard on every endpoint, UI hides what the user cannot do.
 - Branch context in the session; switching branch re-scopes data.
 - Audit events for login, logout, failed login, role change, user status change.
@@ -358,13 +358,13 @@ Plus three screens outside the inventory: sign in, MFA challenge/enrolment, pass
 - A role change takes effect on the next request; a revoked session is rejected immediately.
 - A user without permission gets 403 from the API and no visible action.
 - Segregation-of-duties violations are rejected server-side.
-- Auth screens match the shell and pass §3.
+- Auth screens match the shell and pass Â§3.
 
-**Branch.** `feat/auth` → PR → merge commit.
+**Branch.** `feat/auth` â†’ PR â†’ merge commit.
 
 ---
 
-## 10. Phase 3 — Ledger and accounting foundation
+## 10. Phase 3 â€” Ledger and accounting foundation
 
 **Goal.** The books exist before any money moves.
 
@@ -412,18 +412,18 @@ Plus three screens outside the inventory: sign in, MFA challenge/enrolment, pass
   `/accounting-ledger-entries` and `/settings/accounting` pass the route audit at both widths with
   all four states.
 
-**Branch.** `feat/ledger-core` → PR → merge commit. This is the highest-risk phase in the build.
+**Branch.** `feat/ledger-core` â†’ PR â†’ merge commit. This is the highest-risk phase in the build.
 
 ---
 
-## 11. Phase 4 — Configuration: branches, products, policies
+## 11. Phase 4 â€” Configuration: branches, products, policies
 
 **Goal.** The institution can describe itself and its products. Accounts and loans read this
 configuration; they never hard-code a rate, a fee or an approval stage.
 
 **Pages**
 
-### 4a — Organisation
+### 4a â€” Organisation
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
@@ -442,22 +442,22 @@ Permissions are `Settings Organisation : View/Edit` for ST-01 and `Settings Bran
 for ST-06/ST-07. A View-only role gets the branch form with every control disabled and no Save
 button; a role without Create gets the shared forbidden panel on `/settings/branches/new`.
 
-### 4b — Products
+### 4b â€” Products
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | ST-08 | `/settings-products-loan` | Loan products | T1 | M |
-| [ ] | ST-09 | `/settings-products-loan-5` | Loan product detail | T3 | H |
-| [ ] | ST-10 | `/settings-products-savings` | Savings products | T1 | M |
-| [ ] | ST-11 | `/settings-products-savings-create` | Create savings product | T6 | M |
-| [ ] | ST-12 | `/settings-products-savings-edit-1` | Edit savings product | T6 | M |
-| [ ] | ST-13 | `/settings-products-interest-rate` | Interest rates | T1 | L |
-| [ ] | ST-14 | `/settings-products-interest-rate-create` | Create interest rate | T6 | L |
-| [ ] | ST-15 | `/settings-products-fee-penalties` | Fees and penalties | T1/T6 | M |
-| [ ] | ST-16 | `/settings-products-loan-provisioning` | Provisioning rules | T1 | M |
-| [ ] | ST-17 | `/settings-products-loan-provisioning-create` | Create provisioning rule | T6 | M |
+| [x] | ST-08 | `/settings-products-loan` | Loan products | T1 | M |
+| [x] | ST-09 | `/settings-products-loan-5` | Loan product detail | T3 | H |
+| [x] | ST-10 | `/settings-products-savings` | Savings products | T1 | M |
+| [x] | ST-11 | `/settings-products-savings-create` | Create savings product | T6 | M |
+| [x] | ST-12 | `/settings-products-savings-edit-1` | Edit savings product | T6 | M |
+| [x] | ST-13 | `/settings-products-interest-rate` | Interest rates | T1 | L |
+| [x] | ST-14 | `/settings-products-interest-rate-create` | Create interest rate | T6 | L |
+| [x] | ST-15 | `/settings-products-fee-penalties` | Fees and penalties | T1/T6 | M |
+| [x] | ST-16 | `/settings-products-loan-provisioning` | Provisioning rules | T1 | M |
+| [x] | ST-17 | `/settings-products-loan-provisioning-create` | Create provisioning rule | T6 | M |
 
-### 4c — Policies and calendar
+### 4c â€” Policies and calendar
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
@@ -492,13 +492,13 @@ button; a role without Create gets the shared forbidden panel on `/settings/bran
 - Organisation identity, time zone and default branch persist; a View-only role cannot edit them.
 - A branch writes all seven weekdays, and promoting a branch to default demotes the previous one.
 - The holiday calendar affects due-date calculation in a unit test.
-- Every page passes §3.
+- Every page passes Â§3.
 
 **Commit.** Per page; tag `phase-04a`, `phase-04b`, `phase-04c`.
 
 ---
 
-## 12. Phase 5 — Client / Members
+## 12. Phase 5 â€” Client / Members
 
 **Goal.** A member or group exists, is verified, and can hold accounts.
 
@@ -523,7 +523,7 @@ button; a role without Create gets the shared forbidden panel on `/settings/bran
 - Duplicate detection on national ID, TIN, phone and name.
 - Member activation link; status transitions with audit events.
 - Statement and transaction tabs read from the ledger once accounts exist; until then, an honest
-  empty state — not fabricated numbers.
+  empty state â€” not fabricated numbers.
 
 **Gate**
 
@@ -532,11 +532,11 @@ button; a role without Create gets the shared forbidden panel on `/settings/bran
 - A duplicate national ID is blocked with a clear message.
 - KYC upload rejects oversized and wrong-type files; the document is not publicly reachable.
 - All 13 tabs render, including empty and forbidden states.
-- Every page passes §3.
+- Every page passes Â§3.
 
 ---
 
-## 13. Phase 6 — Accounts: savings first, then loans
+## 13. Phase 6 â€” Accounts: savings first, then loans
 
 **Goal.** Savings accounts and the full loan lifecycle, from application to a live account with a
 correct schedule.
@@ -544,13 +544,13 @@ correct schedule.
 **Order.** Savings before loans: they are simpler, and guarantor funds and collateral checks depend
 on them.
 
-### 6a — Savings
+### 6a â€” Savings
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
 | [ ] | AC-13 | `/account-saving` | Savings list + new account | T1 | M |
 
-### 6b — Loan applications
+### 6b â€” Loan applications
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
@@ -560,7 +560,7 @@ on them.
 | [ ] | AC-04 | `/account-loan-application-details-124` | Application detail (second sample) | T3 | M |
 | [ ] | AC-05 | `/account-loan-application-edit-39` | Edit application | T2 | H |
 
-### 6c — Loan accounts
+### 6c â€” Loan accounts
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
@@ -594,14 +594,14 @@ on them.
 - Guarantor blocks cannot exceed available funds; releasing a guarantee is audited.
 - An application cannot be edited after first approval.
 - Approval creates exactly one account and one schedule, even on retry.
-- The loan list tabs and every detail tab pass §3.
+- The loan list tabs and every detail tab pass Â§3.
 
 **Branch.** `feat/loans` if the schedule or allocation logic needs review; otherwise per-page on
 main.
 
 ---
 
-## 14. Phase 7 — Transactions and the request centre
+## 14. Phase 7 â€” Transactions and the request centre
 
 **Goal.** Money moves correctly, once, with two status axes and a human approval trail.
 
@@ -641,13 +641,13 @@ main.
 - Till close with a variance is blocked until approved, and the variance is recorded.
 - Reversal restores balances and never edits the original.
 - The unposted banner appears when the worker is stopped, and clears on resubmit.
-- Every page passes §3.
+- Every page passes Â§3.
 
-**Branch.** `feat/teller` → PR → merge commit. This phase can lose real money if it is wrong.
+**Branch.** `feat/teller` â†’ PR â†’ merge commit. This phase can lose real money if it is wrong.
 
 ---
 
-## 15. Phase 8 — Accounting completion
+## 15. Phase 8 â€” Accounting completion
 
 **Goal.** The remaining books: assets, fixed assets, the financial statements and reconciliation.
 
@@ -691,24 +691,24 @@ main.
 - Cash flow reconciles to the movement in cash and bank ledgers.
 - Drilling from a statement line reaches the underlying entries.
 - Reconciliation cannot sign off with unmatched lines unless a reason is recorded.
-- Every page passes §3.
+- Every page passes Â§3.
 
 ---
 
-## 16. Phase 9 — Reports (55 routes)
+## 16. Phase 9 â€” Reports (55 routes)
 
 **Goal.** Every operational and statutory report, from one engine, with exports and validation.
 
 **Order and pages**
 
-### 9a — Engine and hubs (2)
+### 9a â€” Engine and hubs (2)
 
 | Done | ID | Route | Page | Risk |
 |---|---|---|---|---|
 | [ ] | RP-01 | `/reports-loan` | Loan report hub | L |
 | [ ] | RP-32 | `/reports-statement` | Statement hub | L |
 
-### 9b — Loan reports (25)
+### 9b â€” Loan reports (25)
 
 | Done | ID | Route | Report | Risk |
 |---|---|---|---|---|
@@ -738,7 +738,7 @@ main.
 | [ ] | RP-25 | `/reports-loan-TransactionReport` | Loan transactions | M |
 | [ ] | RP-26 | `/reports-loan-WrittenOffLoanReport` | Written-off loans | M |
 
-### 9c — Savings, client and transaction reports (9)
+### 9c â€” Savings, client and transaction reports (9)
 
 | Done | ID | Route | Report | Risk |
 |---|---|---|---|---|
@@ -752,14 +752,14 @@ main.
 | [ ] | RP-37 | `/reports-transaction-FeesIncomeReport` | Fee income | L |
 | [ ] | RP-38 | `/reports-transaction-ReversedTransactionReport` | Reversals | M |
 
-### 9d — Statements (2)
+### 9d â€” Statements (2)
 
 | Done | ID | Route | Report | Risk |
 |---|---|---|---|---|
 | [ ] | RP-33 | `/reports-statement-AccountStatementReport` | Account statement | M |
 | [ ] | RP-34 | `/reports-statement-MemberStatementReport` | Member statement | M |
 
-### 9e — Statutory returns (17)
+### 9e â€” Statutory returns (17)
 
 | Done | ID | Route | Return | Risk |
 |---|---|---|---|---|
@@ -801,13 +801,13 @@ main.
 - Export opens correctly in Excel and PDF and matches the grid.
 - A statutory return fails validation on deliberately incomplete data and passes on complete data.
 - Pagination and large-result behaviour are tested with a synthetic volume set.
-- Every route passes §3; the first page of each family gets a manual visual review.
+- Every route passes Â§3; the first page of each family gets a manual visual review.
 
 **Branch.** `feat/statutory` for 9e only.
 
 ---
 
-## 17. Phase 10 — Import
+## 17. Phase 10 â€” Import
 
 **Goal.** A 1,000-row file imports correctly, or fails per row with a reason.
 
@@ -824,7 +824,7 @@ main.
 
 **Work**
 
-- Four-step wizard: upload (`.csv`, `.xlsx`, `.xls`, 10 MB) → field mapping → validate and preview →
+- Four-step wizard: upload (`.csv`, `.xlsx`, `.xls`, 10 MB) â†’ field mapping â†’ validate and preview â†’
   result.
 - Streaming parse, per-row validation, duplicate handling, partial success with a downloadable error
   file.
@@ -839,13 +839,13 @@ main.
 - Re-uploading the same file does not duplicate records.
 - A transaction import produces a balanced posting or none.
 - A malicious file (formula injection, wrong MIME, oversized) is rejected.
-- Every page passes §3.
+- Every page passes Â§3.
 
-**Branch.** `feat/import` → PR.
+**Branch.** `feat/import` â†’ PR.
 
 ---
 
-## 18. Phase 11 — Messages and service providers
+## 18. Phase 11 â€” Messages and service providers
 
 **Goal.** Transactional messages work; marketing is consent-gated and separate.
 
@@ -883,11 +883,11 @@ the SMS/email provider configuration is not handled inside Messages.
 - A marketing send to a non-consenting member is refused.
 - Opt-out takes effect on the next send.
 - Template version used for a send is recorded.
-- Every page passes §3.
+- Every page passes Â§3.
 
 ---
 
-## 19. Phase 12 — Business account (scope check first)
+## 19. Phase 12 â€” Business account (scope check first)
 
 **Goal.** The tenant billing wallet, if AIMSCAMS bills institutions through the product.
 
@@ -905,11 +905,11 @@ member ledger, and its three ledger codes (`1001`, `5501`, `2002`) are tenant-bi
 member accounts.
 
 **Gate.** Wallet movements reconcile; a top-up produces an invoice or a credit, never both; the page
-passes §3.
+passes Â§3.
 
 ---
 
-## 20. Phase 13 — System Logs
+## 20. Phase 13 â€” System Logs
 
 **Goal.** One place to answer "who did this" and "what is broken".
 
@@ -921,7 +921,7 @@ passes §3.
 
 - Append-only event store fed by every mutation since Phase 2: actor, role, branch, IP, user agent,
   entity, entity ID, before/after, correlation ID, timestamp.
-- Six tabs per `docs/09 §7`: Activity, Security, Accounting, Integrations, Errors, Data changes.
+- Six tabs per `docs/09 Â§7`: Activity, Security, Accounting, Integrations, Errors, Data changes.
 - Filters by date, actor, module, severity, correlation ID; saved views.
 - Retention policy and export; access restricted to auditor and administrator roles.
 - No sensitive values in the log: amounts are allowed, passwords, tokens and full account numbers
@@ -933,11 +933,11 @@ passes §3.
 - An auditor can trace one transaction from UI action to posting to message to log.
 - A user without the role cannot read the security tab.
 - Retention and export work on a large fixture set.
-- The page passes §3.
+- The page passes Â§3.
 
 ---
 
-## 21. Phase 14 — Hardening, parity and release
+## 21. Phase 14 â€” Hardening, parity and release
 
 **Goal.** Remove the legacy shell, prove the whole surface, and ship `v1.0.0`.
 
@@ -952,7 +952,7 @@ passes §3.
   re-test, rate limits, file-upload review.
 - Backup and restore drill on staging, timed and recorded; DR runbook exercised.
 - Load test the teller and the heaviest reports with synthetic volume.
-- Staging deploy of the release image; smoke test per `docs/12 §5`.
+- Staging deploy of the release image; smoke test per `docs/12 Â§5`.
 - Documentation: runbook, support matrix, known assumptions, `AGENTS.md` current state.
 - Tag `v1.0.0`.
 
@@ -961,7 +961,7 @@ passes §3.
 - No Angular code remains; every route in the tracker is served by Next.js.
 - Full route audit passes at both widths with a clean console.
 - No critical or high vulnerability in the image scan or dependency audit.
-- Restore drill meets RPO ≤ 15 min and RTO ≤ 4 h.
+- Restore drill meets RPO â‰¤ 15 min and RTO â‰¤ 4 h.
 - A new institution can be bootstrapped from the runbook without engineering help.
 - `v1.0.0` is deployed to staging and smoke-tested.
 
