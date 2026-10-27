@@ -3,18 +3,11 @@ import { cn } from "cn";
 /** Tanzanian flag, drawn from the official green/yellow/black/blue geometry. */
 export function TanzaniaFlag({ className }: { className?: string }) {
   return (
-    <span
-      role="img"
-      aria-label="Tanzania"
-      data-testid="tanzania-flag"
-      className={cn("inline-flex h-5 w-8 shrink-0 overflow-hidden rounded-[2px]", className)}
-    >
-      <svg viewBox="0 0 38 24" className="size-full" aria-hidden="true">
-        <rect width="38" height="24" className="fill-flag-green" />
-        <path d="M0 24 38 0v24H0Z" className="fill-flag-blue" />
-        <path d="M0 24 38 0h-7L0 18.2V24Z" className="fill-flag-yellow" />
-        <path d="M0 24 38 0h-4L0 21.2V24Z" className="fill-flag-black" />
-      </svg>
-    </span>
+    <svg width="23" height="15" viewBox="0 0 30 20" role="img" aria-label="Tanzania" className={cn("shrink-0 rounded-[2px]", className)} style={{display:"block"}} data-testid="tanzania-flag">
+      <rect width="30" height="20" fill="#00A3DD"/>
+      <path d="M0 0H30L0 20Z" fill="#1EB53A"/>
+      <path d="M-2 21.33L32 -1.33" stroke="#FCD116" stroke-width="8"/>
+      <path d="M-2 21.33L32 -1.33" stroke="#000" stroke-width="5.4"/>
+    </svg>
   );
 }

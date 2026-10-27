@@ -9,8 +9,8 @@ import { ChatFab } from "@/components/shell/chat-fab";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
-  expanded: 239,
-  collapsed: 76,
+  expanded: 182,
+  collapsed: 56,
 } as const;
 
 type AppShellProps = {

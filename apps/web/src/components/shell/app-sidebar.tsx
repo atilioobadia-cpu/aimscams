@@ -101,7 +101,7 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[8px] px-3 text-left text-[13px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] px-3 text-left text-[var(--fs)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
     collapsed && "mx-3 justify-center px-0",
     active
@@ -144,7 +144,7 @@ function SidebarItem({
   if (item.children && !collapsed && item.href) {
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
-      "flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[8px] pl-3 pr-1 text-left text-[13px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-[17px] pr-1 text-left text-[var(--fs)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
       isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
     );
 
@@ -232,7 +232,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-2 rounded-[6px] pl-3 pr-2 text-[12px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 text-[var(--fs)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-heading hover:bg-white/60",
