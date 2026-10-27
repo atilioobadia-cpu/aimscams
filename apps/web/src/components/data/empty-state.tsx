@@ -1,4 +1,4 @@
-﻿import type { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { cn } from "cn";
@@ -15,17 +15,18 @@ export function EmptyState({ icon: Icon, title, description, action, className }
   return (
     <section
       className={cn(
-        "flex flex-col items-center justify-center rounded-xl border border-dashed border-card-border bg-surface px-6 py-14 text-center",
+        "flex flex-col items-center justify-center rounded-[var(--card-radius)] border border-dashed border-card-border bg-surface px-[var(--space-24)] py-[var(--space-24)] text-center",
         className,
       )}
     >
-      <span className="grid size-16 place-items-center rounded-full bg-accent-teal-bg text-brand">
-        <Icon className="size-7" strokeWidth={1.8} aria-hidden="true" />
+      <span className="grid size-10 place-items-center rounded-full bg-accent-teal-bg text-brand">
+        <Icon className="size-6" strokeWidth={1.8} aria-hidden="true" />
       </span>
-      <h2 className="mt-5 text-[var(--fs)] font-bold text-strong">{title}</h2>
-      <p className="mt-2 max-w-lg text-[var(--fs)] leading-6 text-muted-foreground">{description}</p>
-      {action ? <div className="mt-6">{action}</div> : null}
+      <h2 className="mt-[var(--space-14)] text-fs font-bold text-strong">{title}</h2>
+      <p className="mt-1 max-w-[420px] text-fs leading-[1.4] text-muted-foreground">
+        {description}
+      </p>
+      {action ? <div className="mt-[var(--space-18)]">{action}</div> : null}
     </section>
   );
 }
-

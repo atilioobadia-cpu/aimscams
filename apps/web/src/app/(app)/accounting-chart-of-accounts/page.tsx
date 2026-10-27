@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -40,22 +40,22 @@ export default function ChartOfAccountsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">Chart of accounts</h1>
-        <p className="mt-1 text-[var(--font-size-secondary)] text-muted-foreground">
+        <h1 className="text-fs font-bold leading-tight text-strong">Chart of accounts</h1>
+        <p className="mt-1 text-fs text-muted-foreground">
           Institution chart of accounts.
         </p>
       </div>
 
       {error ? (
-        <div className="rounded-[var(--card-radius)] border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[var(--font-size-secondary)] text-accent-red">
+        <div className="rounded-[var(--card-radius)] border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-fs text-accent-red">
           {error}
         </div>
       ) : null}
 
       <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-[var(--font-size-micro)]">
-            <thead className="border-b border-card-border bg-subtle text-[var(--font-size-micro)] font-semibold uppercase tracking-wide text-label">
+          <table className="w-full text-left text-fs">
+            <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
               <tr>
                 <th className="px-[var(--space-16)] py-[var(--space-8)]">Code</th>
                 <th className="px-[var(--space-16)] py-[var(--space-8)]">Name</th>
@@ -84,7 +84,7 @@ export default function ChartOfAccountsPage() {
                     <td className="px-[var(--space-16)] py-[var(--space-8)] text-body">
                       {account.name}
                       {account.is_assumption ? (
-                        <span className="ml-2 rounded-full bg-accent-yellow-bg px-2 py-0.5 text-[var(--font-size-micro)] font-semibold text-accent-yellow">
+                        <span className="ml-2 rounded-full bg-accent-yellow-bg px-2 py-0.5 text-fs font-semibold text-accent-yellow">
                           assumption
                         </span>
                       ) : null}

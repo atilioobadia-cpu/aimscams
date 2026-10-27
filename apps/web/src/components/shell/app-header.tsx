@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { Building2, CheckCircle2, ChevronDown, LoaderCircle, LogOut, Settings, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -58,10 +58,10 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           <AimscamsMark className="size-5" />
         </div>
         <div className="min-w-0">
-          <p className="truncate text-[var(--fs)] font-semibold leading-tight text-body">
+          <p className="truncate text-fs font-semibold leading-tight text-body">
             {institution.name}
           </p>
-          <p className="truncate text-[var(--fs)] leading-tight text-muted-foreground">
+          <p className="truncate text-fs leading-tight text-muted-foreground">
             {institution.dialect} SACCOS · {institution.code}
           </p>
         </div>
@@ -74,7 +74,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               type="button"
               data-testid="language-trigger"
               aria-label={`Language: ${language}`}
-              className="flex items-center gap-1.5 rounded-md px-1.5 py-1.5 text-[var(--fs)] text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex items-center gap-1.5 rounded-md px-1.5 py-1.5 text-fs text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <TanzaniaFlag className="h-4 w-6" />
               <span>{language}</span>
@@ -97,8 +97,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
         >
           <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
-            <p className="text-[var(--fs)] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className="mt-0.5 flex items-center gap-1 text-[var(--fs)] leading-none text-brand">
+            <p className="text-fs font-semibold leading-tight text-brand">{branch.name}</p>
+            <p className="mt-0.5 flex items-center gap-1 text-fs leading-none text-brand">
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
               {branch.status}
             </p>
@@ -115,13 +115,13 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-[34px] shrink-0 place-items-center rounded-full text-[var(--fs)] font-bold text-on-primary" style={{background: 'linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', outline: '2px solid #f7f7f7', outlineOffset: '-2px'}}
+                className="grid size-[34px] shrink-0 place-items-center rounded-full text-fs font-bold text-on-primary" style={{background: 'linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', outline: '2px solid #f7f7f7', outlineOffset: '-2px'}}
               >
                 {user.initials}
               </span>
               <span
                 data-testid="header-user-name"
-                className="hidden text-[var(--fs)] font-semibold leading-none text-body xl:block"
+                className="hidden text-fs font-semibold leading-none text-body xl:block"
               >
                 {user.name}
               </span>
@@ -130,8 +130,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-64">
             <DropdownMenuLabel>
-              <span className="block text-[var(--fs)] font-semibold text-strong">{user.name}</span>
-              <span className="mt-0.5 block text-[var(--fs)] font-normal text-muted-foreground">
+              <span className="block text-fs font-semibold text-strong">{user.name}</span>
+              <span className="mt-0.5 block text-fs font-normal text-muted-foreground">
                 {user.role}
               </span>
             </DropdownMenuLabel>
@@ -139,20 +139,20 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             <DropdownMenuItem disabled>
               <UserRound aria-hidden="true" />
               Profile
-              <span className="ml-auto text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
+              <span className="ml-auto text-fs uppercase tracking-wide text-muted-foreground">
                 Soon
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem disabled>
               <Settings aria-hidden="true" />
               Settings
-              <span className="ml-auto text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
+              <span className="ml-auto text-fs uppercase tracking-wide text-muted-foreground">
                 Phase 4
               </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {signOutError ? (
-              <p className="px-1.5 py-1 text-[var(--fs)] leading-4 text-accent-red" role="alert">
+              <p className="px-1.5 py-1 text-fs leading-4 text-accent-red" role="alert">
                 {signOutError}
               </p>
             ) : null}

@@ -1,4 +1,4 @@
-﻿import type { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import { cn } from "cn";
 
@@ -22,10 +22,10 @@ export function PageHeader({
       className={cn("flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", className)}
     >
       <div className="min-w-0">
-        {breadcrumb ? <div className="mb-2 text-[var(--fs)] text-muted-foreground">{breadcrumb}</div> : null}
-        <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">{title}</h1>
+        {breadcrumb ? <div className="mb-2 text-fs text-muted-foreground">{breadcrumb}</div> : null}
+        <h1 className="text-fs font-bold leading-tight text-strong">{title}</h1>
         {description ? (
-          <p className="mt-1 max-w-3xl text-[var(--fs)] text-muted-foreground">{description}</p>
+          <p className="mt-1 max-w-3xl text-fs text-muted-foreground">{description}</p>
         ) : null}
       </div>
       {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}

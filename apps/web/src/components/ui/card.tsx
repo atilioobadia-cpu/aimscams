@@ -1,4 +1,4 @@
-﻿import * as React from "react";
+import * as React from "react";
 import { cn } from "cn";
 
 function Card({
@@ -11,7 +11,7 @@ function Card({
       data-slot="card"
       data-size={size}
       className={cn(
-        "group/card flex flex-col gap-[var(--space-16)] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card py-[var(--space-16)] text-[var(--font-size-secondary)] text-card-foreground has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-[var(--space-12)] data-[size=sm]:py-[var(--space-12)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+        "group/card flex flex-col gap-[var(--space-16)] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card py-[var(--space-16)] text-fs text-card-foreground has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-[var(--space-12)] data-[size=sm]:py-[var(--space-12)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
         className,
       )}
       {...props}
@@ -37,7 +37,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-title"
       className={cn(
-        "font-heading text-[var(--font-size-section)] leading-snug font-medium group-data-[size=sm]/card:text-[var(--font-size-secondary)]",
+        "font-heading text-fs leading-snug font-medium group-data-[size=sm]/card:text-fs",
         className,
       )}
       {...props}
@@ -49,7 +49,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-[var(--font-size-helper)] text-muted-foreground", className)}
+      className={cn("text-fs text-muted-foreground", className)}
       {...props}
     />
   );

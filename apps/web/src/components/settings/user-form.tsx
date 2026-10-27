@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -109,22 +109,22 @@ export function UserForm({ id }: { id?: string }) {
   }
 
   if (loading) {
-    return <p className="text-[var(--font-size-secondary)] text-muted-foreground">Loading user...</p>;
+    return <p className="text-fs text-muted-foreground">Loading user...</p>;
   }
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
       <div>
-        <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">
+        <h1 className="text-fs font-bold leading-tight text-strong">
           {editing ? "Edit user" : "Add user"}
         </h1>
-        <p className="mt-1 text-[var(--fs)] text-muted-foreground">
+        <p className="mt-1 text-fs text-muted-foreground">
           {editing ? "Update account details, roles and access." : "Create an institution account."}
         </p>
       </div>
 
       {error ? (
-        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[var(--font-size-secondary)] text-accent-red">
+        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-fs text-accent-red">
           {error}
         </div>
       ) : null}
@@ -132,7 +132,7 @@ export function UserForm({ id }: { id?: string }) {
       <form onSubmit={handleSubmit} className="space-y-5 rounded-xl border border-card-border bg-surface p-5">
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-[var(--font-size-secondary)] font-medium text-body">Email</label>
+            <label className="mb-1.5 block text-fs font-medium text-body">Email</label>
             <Input
               type="email"
               value={email}
@@ -143,7 +143,7 @@ export function UserForm({ id }: { id?: string }) {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-[var(--font-size-secondary)] font-medium text-body">Full name</label>
+            <label className="mb-1.5 block text-fs font-medium text-body">Full name</label>
             <Input
               value={fullName}
               onChange={(event) => setFullName(event.target.value)}
@@ -152,7 +152,7 @@ export function UserForm({ id }: { id?: string }) {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-[var(--font-size-secondary)] font-medium text-body">Phone</label>
+            <label className="mb-1.5 block text-fs font-medium text-body">Phone</label>
             <Input
               value={phone}
               onChange={(event) => setPhone(event.target.value)}
@@ -160,11 +160,11 @@ export function UserForm({ id }: { id?: string }) {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-[var(--font-size-secondary)] font-medium text-body">Branch</label>
+            <label className="mb-1.5 block text-fs font-medium text-body">Branch</label>
             <select
               value={branchId}
               onChange={(event) => setBranchId(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
             >
               <option value="">Institution (no branch)</option>
               {branches.map((branch) => (
@@ -175,11 +175,11 @@ export function UserForm({ id }: { id?: string }) {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-[var(--font-size-secondary)] font-medium text-body">Status</label>
+            <label className="mb-1.5 block text-fs font-medium text-body">Status</label>
             <select
               value={status}
               onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
+              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
             >
               <option value="ACTIVE">Active</option>
               <option value="INACTIVE">Inactive</option>
@@ -187,7 +187,7 @@ export function UserForm({ id }: { id?: string }) {
             </select>
           </div>
           <div>
-            <label className="mb-1.5 block text-[var(--font-size-secondary)] font-medium text-body">
+            <label className="mb-1.5 block text-fs font-medium text-body">
               {editing ? "New password (optional)" : "Password"}
             </label>
             <Input
@@ -201,10 +201,10 @@ export function UserForm({ id }: { id?: string }) {
         </div>
 
         <div>
-          <p className="mb-2 text-[var(--font-size-secondary)] font-medium text-body">Roles</p>
+          <p className="mb-2 text-fs font-medium text-body">Roles</p>
           <div className="grid gap-2 md:grid-cols-2">
             {roles.map((role) => (
-              <label key={role.code} className="flex items-start gap-2 rounded-lg border border-card-border px-3 py-2 text-[var(--font-size-secondary)]">
+              <label key={role.code} className="flex items-start gap-2 rounded-lg border border-card-border px-3 py-2 text-fs">
                 <input
                   type="checkbox"
                   checked={selectedRoles.includes(role.code)}
@@ -213,7 +213,7 @@ export function UserForm({ id }: { id?: string }) {
                 />
                 <span>
                   <span className="font-medium text-strong">{role.name}</span>
-                  <span className="block text-[var(--font-size-micro)] text-muted-foreground">{role.code}</span>
+                  <span className="block text-fs text-muted-foreground">{role.code}</span>
                 </span>
               </label>
             ))}
@@ -224,7 +224,7 @@ export function UserForm({ id }: { id?: string }) {
           <Button type="button" variant="outline" onClick={() => router.push("/settings-administrator")}>
             Cancel
           </Button>
-          <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold">
+          <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold">
             {saving ? "Saving..." : editing ? "Save changes" : "Create user"}
           </Button>
         </div>

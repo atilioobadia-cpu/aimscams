@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { ArrowLeft, Check, CheckCircle2, LoaderCircle, Mail, User } from "lucide-react";
@@ -34,7 +34,7 @@ const PASSWORD_REQUIREMENTS: PasswordRequirement[] = [
 ];
 
 const labelClass = "sr-only";
-const fieldErrorClass = "mt-1 text-[var(--fs)] leading-4 text-accent-red";
+const fieldErrorClass = "mt-1 text-fs leading-4 text-accent-red";
 
 export function ForgotPasswordForm({ token }: { token?: string }) {
   const [email, setEmail] = useState("");
@@ -140,7 +140,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-subtle px-4 py-3.5">
           <Mail className="mt-0.5 size-4 shrink-0 text-label" aria-hidden="true" />
-          <div className="text-[var(--fs)] leading-5 text-body">
+          <div className="text-fs leading-5 text-body">
             <p>
               The link is valid for 30 minutes and can be used once. Check your spam folder
               if it does not arrive.
@@ -154,23 +154,23 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             data-testid="dev-reset-panel"
             className="mt-3 rounded-lg border border-accent-yellow/40 bg-accent-yellow-bg px-4 py-3"
           >
-            <p className="text-[var(--fs)] font-semibold uppercase tracking-[0.08em] text-strong">
+            <p className="text-fs font-semibold uppercase tracking-[0.08em] text-strong">
               Local development delivery
             </p>
-            <p className="mt-1 text-[var(--fs)] leading-5 text-body">
+            <p className="mt-1 text-fs leading-5 text-body">
               SMTP is not configured. This link appears only in local development.
             </p>
             <a
               href={devResetUrl}
               data-testid="dev-reset-link"
-              className="mt-2 inline-flex text-[var(--fs)] font-semibold text-brand outline-none hover:underline focus-visible:underline"
+              className="mt-2 inline-flex text-fs font-semibold text-brand outline-none hover:underline focus-visible:underline"
             >
               Open password reset screen
             </a>
           </div>
         ) : null}
 
-        <Button asChild variant="outline" className="mt-3 h-[42px] w-full rounded-[4px] text-[var(--fs)]">
+        <Button asChild variant="outline" className="mt-3 h-[42px] w-full rounded-[4px] text-fs">
           <Link href="/login">Back to sign in</Link>
         </Button>
 
@@ -181,7 +181,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             setDevResetUrl(null);
             setEmail("");
           }}
-          className="mt-2 w-full rounded-md py-1 text-center text-[var(--fs)] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+          className="mt-2 w-full rounded-md py-1 text-center text-fs font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
         >
           Use a different email address
         </button>
@@ -197,12 +197,12 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
       >
         <div className="flex items-start gap-3 rounded-lg border border-card-border bg-accent-teal-bg px-4 py-4">
           <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-brand" aria-hidden="true" />
-          <p className="text-[var(--fs)] leading-5 text-body">
+          <p className="text-fs leading-5 text-body">
             Sign in with your new password. If you did not make this change, contact your
             institution administrator immediately.
           </p>
         </div>
-        <Button asChild className="mt-3 h-[42px] w-full rounded-[4px] text-[var(--fs)] font-medium">
+        <Button asChild className="mt-3 h-[42px] w-full rounded-[4px] text-fs font-medium">
           <Link href="/login">Continue to sign in</Link>
         </Button>
       </AuthCard>
@@ -215,7 +215,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
         title="Choose a new password"
         description="Use a password you have not used for this account before."
         footer={
-          <p className="text-[var(--fs)] leading-5 text-label">
+          <p className="text-fs leading-5 text-label">
             This link is valid for 30 minutes and can only be used once.
           </p>
         }
@@ -243,7 +243,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                 }
                 disabled={resetting}
                 placeholder="Enter a new password"
-                className="h-[42px] text-[var(--fs)] md:text-[var(--fs)]"
+                className="h-[42px] text-fs md:text-fs"
               />
               {passwordError ? (
                 <p id="new-password-error" className={fieldErrorClass}>
@@ -269,7 +269,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                 aria-describedby={confirmationError ? "confirm-password-error" : undefined}
                 disabled={resetting}
                 placeholder="Repeat the new password"
-                className="h-[42px] text-[var(--fs)] md:text-[var(--fs)]"
+                className="h-[42px] text-fs md:text-fs"
               />
               {confirmationError ? (
                 <p id="confirm-password-error" className={fieldErrorClass}>
@@ -280,7 +280,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
           </div>
 
           <div className="mt-4 rounded-lg border border-card-border bg-subtle px-3.5 py-3">
-            <p id="password-requirements" className="text-[var(--fs)] font-semibold text-body">
+            <p id="password-requirements" className="text-fs font-semibold text-body">
               Password requirements
             </p>
             <ul className="mt-2 grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
@@ -291,8 +291,8 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
                     key={requirement.label}
                     className={
                       met
-                        ? "flex items-center gap-1.5 text-[var(--fs)] leading-5 text-brand"
-                        : "flex items-center gap-1.5 text-[var(--fs)] leading-5 text-label"
+                        ? "flex items-center gap-1.5 text-fs leading-5 text-brand"
+                        : "flex items-center gap-1.5 text-fs leading-5 text-label"
                     }
                   >
                     <span
@@ -321,7 +321,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             type="submit"
             disabled={resetting}
             aria-busy={resetting}
-            className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-[var(--fs)] font-medium"
+            className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-fs font-medium"
           >
             {resetting ? (
               <>
@@ -335,7 +335,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
 
           <Link
             href="/forgot-password"
-            className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-1 text-[var(--fs)] font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
+            className="mt-2 flex items-center justify-center gap-1.5 rounded-md py-1 text-fs font-medium text-brand outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/30"
           >
             <ArrowLeft className="size-3.5" aria-hidden="true" />
             Request a new link
@@ -349,7 +349,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
     <AuthCard
       title="Enter your registered email address"
       footer={
-        <p className="text-[var(--fs)] leading-5 text-label">
+        <p className="text-fs leading-5 text-label">
           Remembered your password?{" "}
           <Link
             href="/login"
@@ -366,7 +366,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
             Email address
           </label>
           <div className="relative">
-            <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]" aria-hidden="true" />
+            <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               id="reset-email"
               name="email"
@@ -384,7 +384,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
               aria-invalid={Boolean(emailError)}
               aria-describedby={emailError ? "reset-email-error" : undefined}
               disabled={requesting}
-              className="h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-3 text-[var(--fs)] placeholder:text-[#9e9e9e] md:text-[var(--fs)]"
+              className="h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-3 text-fs placeholder:text-muted-foreground md:text-fs"
               placeholder="Email"
             />
           </div>
@@ -405,7 +405,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
           type="submit"
           disabled={requesting}
           aria-busy={requesting}
-          className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-[var(--fs)] font-medium"
+          className="mt-3 h-[42px] w-full gap-2 rounded-[4px] text-fs font-medium"
         >
           {requesting ? (
             <>

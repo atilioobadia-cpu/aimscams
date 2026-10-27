@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -83,7 +83,7 @@ function SidebarItem({
           <span className="min-w-0 whitespace-nowrap">{item.label}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2">
             {item.badge ? (
-              <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 text-[var(--fs)] font-semibold text-primary">
+              <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 text-fs font-semibold text-primary">
                 {item.badge}
               </span>
             ) : null}
@@ -101,7 +101,7 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-[17px] text-left text-[var(--fs)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-[17px] text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
     collapsed && "mx-3 justify-center px-0",
     active
@@ -144,7 +144,7 @@ function SidebarItem({
   if (item.children && !collapsed && item.href) {
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
-      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-[17px] pr-1 text-left text-[var(--fs)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-[17px] pr-1 text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
       isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
     );
 
@@ -154,8 +154,8 @@ function SidebarItem({
         data-nav-label={item.label}
         data-expanded={expanded ? "true" : "false"}
         className={cn(
-          "mx-1.5 shrink-0 overflow-hidden rounded-[8px]",
-          expanded || isGroupActive ? "bg-primary-tint" : "",
+          "mx-1.5 shrink-0 overflow-hidden rounded-[var(--card-radius)]",
+          isGroupActive ? "bg-primary-tint" : "",
         )}
       >
         <div className="flex h-[var(--sidebar-row-height)] items-center">
@@ -185,7 +185,7 @@ function SidebarItem({
           </button>
         </div>
         {expanded ? (
-          <ul className="m-0 flex list-none flex-col p-0">
+          <ul className="m-0 flex list-none flex-col gap-[2px] p-0">
             {item.children.map((child) => (
               <SidebarChild
                 key={child.href}
@@ -232,7 +232,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 text-[var(--fs)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 text-fs outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-heading hover:bg-white/60",
@@ -266,7 +266,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         aria-label="Primary"
         className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-2"
       >
-        <ul className="m-0 flex list-none flex-col p-0">
+        <ul className="m-0 flex list-none flex-col gap-[var(--space-4)] p-0">
           {navItems.map((item) => {
             const active = item.href ? isActivePath(pathname, item.href) : false;
             const expanded = expandedGroup === item.label;
@@ -317,7 +317,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </p>
         ) : (
           <>
-            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo text-[var(--fs)]">
+            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo text-fs">
               AIMSCAMS
             </p>
             <p

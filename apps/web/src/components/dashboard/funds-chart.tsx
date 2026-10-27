@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -40,7 +40,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
       title={funds.title}
       description={`${funds.period} Â· TZS`}
       action={
-        <span className="rounded-full bg-accent-teal-bg px-3 py-1.5 text-[var(--fs)] font-medium text-brand">
+        <span className="rounded-full bg-accent-teal-bg px-3 py-1.5 text-fs font-medium text-brand">
           Net in {formatCompactTzs(net)}
         </span>
       }
@@ -56,7 +56,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
             >
               <span
                 data-testid="funds-axis-tick"
-                className="absolute -left-[96px] w-[88px] -translate-y-1/2 text-right text-[var(--fs)] leading-none text-axis"
+                className="absolute -left-[96px] w-[88px] -translate-y-1/2 text-right text-fs leading-none text-axis"
               >
                 {formatAxisTzs(tick)}
               </span>
@@ -90,7 +90,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
                   {isActive ? (
                     <span
                       role="tooltip"
-                      className="absolute left-1/2 top-3 -translate-x-1/2 whitespace-nowrap rounded-md bg-strong px-3 py-1.5 text-[var(--fs)] font-medium text-surface shadow-sm"
+                      className="absolute left-1/2 top-3 -translate-x-1/2 whitespace-nowrap rounded-md bg-strong px-3 py-1.5 text-fs font-medium text-surface shadow-sm"
                     >
                       {series.label}: {formatTzs(series.value)}
                     </span>
@@ -100,7 +100,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
                 <span
                   aria-hidden="true"
                   data-testid="funds-value-label"
-                  className="pointer-events-none absolute left-0 w-full text-center text-[var(--fs)] font-medium leading-none text-strong"
+                  className="pointer-events-none absolute left-0 w-full text-center text-fs font-medium leading-none text-strong"
                   style={{ bottom: `calc(${Math.max(height, 1)}% + 10px)` }}
                 >
                   {formatCompactTzs(series.value)}
@@ -113,7 +113,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
 
       <ul className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-card-border pt-5">
         {funds.series.map((series) => (
-          <li key={series.id} className="flex items-center gap-2.5 text-[var(--fs)] text-body">
+          <li key={series.id} className="flex items-center gap-2.5 text-fs text-body">
             <span
               className={cn("size-3 shrink-0 rounded-sm", toneClasses[series.tone])}
               aria-hidden="true"

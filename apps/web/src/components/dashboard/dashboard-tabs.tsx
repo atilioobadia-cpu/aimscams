@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { BarChart3, Landmark, MapPin, Users, Wallet } from "lucide-react";
 import { useState } from "react";
@@ -42,7 +42,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                 value={item.value}
                 data-testid={`dashboard-tab-${item.value}`}
                 className={cn(
-                  "flex-none shrink-0 gap-[var(--space-8)] rounded-[var(--pill-radius)] border-0 px-0 text-[var(--font-size-body)] font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
+                  "flex-none shrink-0 gap-[var(--space-8)] rounded-[var(--pill-radius)] border-0 px-0 text-fs font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
                   active ? "font-semibold" : "text-strong",
                 )}
                 style={{
@@ -65,8 +65,8 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         >
           <MapPin className="size-5 shrink-0 text-brand" aria-hidden="true" />
           <div>
-            <p className="text-[var(--fs)] font-semibold leading-tight text-brand">{data.branch.name}</p>
-            <p className="mt-1 text-[var(--fs)] leading-none text-muted-foreground">{data.asOf}</p>
+            <p className="text-fs font-semibold leading-tight text-brand">{data.branch.name}</p>
+            <p className="mt-1 text-fs leading-none text-muted-foreground">{data.asOf}</p>
           </div>
         </div>
       </div>

@@ -6,8 +6,7 @@ export function KpiGrid({ kpis }: { kpis: KpiFixture[] }) {
     <section
       aria-label="Key performance indicators"
       data-testid="kpi-grid"
-      className="grid gap-3"
-      style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+      className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4"
     >
       {kpis.map((kpi) => (
         <StatCard key={kpi.id} kpi={kpi} />

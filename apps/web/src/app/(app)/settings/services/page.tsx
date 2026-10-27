@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 
+import { ComingSoon } from "@/components/shell/coming-soon";
+
 export const metadata: Metadata = {
   title: "Services · AIMSCAMS",
 };
 
 export default function ServicesSettingsPage() {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-      <p className="text-[var(--fs)] font-semibold text-muted-foreground">This section is coming soon</p>
-    </div>
+    <ComingSoon
+      title="Services"
+      description="Value-added services offered to clients."
+      detail="Service catalogue, pricing and eligibility land here once the client and accounts modules exist. The entry stays for navigation parity with the reference."
+    />
   );
 }

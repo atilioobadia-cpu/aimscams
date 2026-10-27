@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,8 +24,8 @@ type FieldErrors = {
 };
 
 const fieldClass =
-  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-[var(--fs)] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[var(--fs)]";
-const fieldErrorClass = "mt-1 text-[var(--fs)] leading-4 text-accent-red";
+  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-fs text-strong placeholder:text-muted-foreground focus:border-[#057573] focus:outline-none focus:ring-0 md:text-fs";
+const fieldErrorClass = "mt-1 text-fs leading-4 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
   if (!candidate?.startsWith("/") || candidate.startsWith("//")) return "/dashboard";
@@ -93,7 +93,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-0">
       <div className="relative">
-        <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]" aria-hidden="true" />
+        <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         <Input
           id="login-email"
           name="email"
@@ -125,7 +125,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
       ) : null}
 
       <div className="relative mt-3">
-        <KeyRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#666666]" aria-hidden="true" />
+        <KeyRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         <Input
           id="login-password"
           name="password"
@@ -150,7 +150,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           onClick={() => setShowPassword((current) => !current)}
           aria-label={showPassword ? "Hide password" : "Show password"}
           aria-pressed={showPassword}
-          className="absolute inset-y-0 right-0 grid w-10 place-items-center text-[#212121] outline-none"
+          className="absolute inset-y-0 right-0 grid w-10 place-items-center text-strong outline-none"
         >
           {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
         </button>
@@ -164,7 +164,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
       <div className="mt-3 flex justify-end">
         <Link
           href="/forgot-password"
-          className="text-[var(--fs)] font-medium text-[#057573] outline-none hover:underline focus-visible:underline"
+          className="text-fs font-medium text-primary outline-none hover:underline focus-visible:underline"
         >
           Forgot password
         </Link>
@@ -180,7 +180,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
         type="submit"
         disabled={submitting}
         aria-busy={submitting}
-        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] text-[var(--fs)] font-semibold text-white hover:bg-[#046664]"
+        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] text-fs font-semibold text-white hover:bg-[#046664]"
       >
         {submitting ? (
           <>

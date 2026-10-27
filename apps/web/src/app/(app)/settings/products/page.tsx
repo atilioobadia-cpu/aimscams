@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 
+import { ComingSoon } from "@/components/shell/coming-soon";
+
 export const metadata: Metadata = {
   title: "Products · AIMSCAMS",
 };
 
 export default function ProductsSettingsPage() {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-      <p className="text-[var(--fs)] font-semibold text-muted-foreground">This section is coming soon</p>
-    </div>
+    <ComingSoon
+      title="Products"
+      description="Savings and loan product terms."
+      detail="Interest method, term limits, fees and repayment frequency land here. Accounts snapshot their product terms at opening, so a later change never rewrites history."
+    />
   );
 }

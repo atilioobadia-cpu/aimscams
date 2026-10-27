@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 
+import { ComingSoon } from "@/components/shell/coming-soon";
+
 export const metadata: Metadata = {
   title: "Accounting settings · AIMSCAMS",
 };
 
 export default function AccountingSettingsPage() {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-      <p className="text-[var(--fs)] font-semibold text-muted-foreground">This section is coming soon</p>
-    </div>
+    <ComingSoon
+      title="Accounting"
+      description="Financial year, posting rules and account mapping."
+      detail="Period locks, the repayment policy row and account mapping for fees, penalties and provisioning land here. Posted entries stay immutable; corrections are reversing entries."
+    />
   );
 }

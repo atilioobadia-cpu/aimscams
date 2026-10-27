@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 
+import { ComingSoon } from "@/components/shell/coming-soon";
+
 export const metadata: Metadata = {
   title: "Branches · AIMSCAMS",
 };
 
 export default function BranchesSettingsPage() {
   return (
-    <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
-      <p className="text-[var(--fs)] font-semibold text-muted-foreground">This section is coming soon</p>
-    </div>
+    <ComingSoon
+      title="Branches"
+      description="The branch network and each branch's council type."
+      detail="Branch codes, addresses, council type (CC, MC, DC, TC) and opening dates land here. Business rows carry the branch id, and row-level security enforces the scope."
+    />
   );
 }

@@ -11,6 +11,12 @@
 }
 
 html {
+  /* Root stays at the browser default so rem-based spacing utilities render at
+     their nominal pixel values. All text is sized from --fs (12.8px) instead. */
+  font-size: 16px;
+}
+
+body {
   font-size: var(--fs);
 }
 
@@ -42,8 +48,11 @@ html {
 
   /* Spacing scale, in rendered pixels */
   --space-4: 4px;
+  --space-6: 6px;
   --space-8: 8px;
+  --space-10: 10px;
   --space-12: 12px;
+  --space-14: 14px;
   --space-16: 16px;
   --space-18: 18px;
   --space-24: 24px;
@@ -53,19 +62,19 @@ html {
   --header-height: 68px;
   --sidebar-width: 204px;
   --sidebar-collapsed-width: 76px;
-  --sidebar-footer-height: 72px;
-  --sidebar-subitem-height: 38px;
-  --sidebar-row-height: 38px;
+  --sidebar-footer-height: 73px;
+  --sidebar-subitem-height: 28px;
+  --sidebar-row-height: 36px;
   --content-padding: 18px;
-  --control-height: 44px;
-  --control-compact-height: 36px;
+  --control-height: 32px;
+  --control-compact-height: 28px;
   --icon-size: 20px;
-  --icon-box-size: 44px;
-  --active-pill-height: 38px;
-  --tab-strip-height: 52px;
-  --card-radius: 10px;
-  --control-radius: 6px;
-  --pill-radius: 8px;
+  --icon-box-size: 34px;
+  --active-pill-height: 32px;
+  --tab-strip-height: 32px;
+  --card-radius: 8px;
+  --control-radius: 5px;
+  --pill-radius: 6px;
 
   /* Existing component aliases retained while components move onto the scale. */
   --brand-primary: var(--primary);
@@ -127,14 +136,6 @@ html {
   --sidebar-accent-foreground: var(--brand-primary);
   --sidebar-border: var(--border-chrome);
   --sidebar-ring: var(--brand-primary);
-}
-
-@media (max-height: 799px) {
-  :root {
-    --sidebar-footer-height: 52px;
-    --sidebar-subitem-height: 32px;
-    --sidebar-row-height: 38px;
-  }
 }
 
 @theme inline {
@@ -237,6 +238,11 @@ html {
   animation: content-fade-in 180ms ease-out;
 }
 
+/* A modal owns the screen; the floating chat button would sit on top of it. */
+body[data-modal-open="true"] [data-chat-fab-root] {
+  display: none;
+}
+
 @keyframes content-fade-in {
   from {
     opacity: 0;
@@ -246,6 +252,12 @@ html {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* The single text size. Tailwind's `text-[var(--fs)]` is ambiguous (it resolves
+   as a colour), so the type scale is expressed as a real utility instead. */
+.text-fs {
+  font-size: var(--fs);
 }
 
 @layer base {
@@ -290,12 +302,9 @@ html {
   }
 }
 
-/* The sidebar owns its scrollbar; keep it thin and chrome-coloured. */
-.sidebar-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-chrome) transparent;
-}
-
+/* The sidebar owns its scrollbar; keep it thin and chrome-coloured. Chrome ignores
+   ::-webkit-scrollbar as soon as a standard scrollbar property is set, so the
+   standard properties are only declared for engines without the pseudo-element. */
 .sidebar-scroll::-webkit-scrollbar {
   width: 6px;
 }
@@ -309,11 +318,18 @@ html {
   border-radius: 9999px;
 }
 
+@supports not selector(::-webkit-scrollbar) {
+  .sidebar-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-chrome) transparent;
+  }
+}
+
 .sidebar-footer {
-  height: 70px;
+  height: var(--sidebar-footer-height);
   flex-direction: column;
-  gap: 4px;
-  padding: 6px 8px;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-8);
 }
 
 .sidebar-footer-wordmark {
@@ -328,44 +344,6 @@ html {
 
 .sidebar-footer-copyright-short {
   display: none;
-}
-
-@media (max-height: 799px) {
-  .sidebar-footer {
-    flex-direction: row;
-    gap: 8px;
-    padding: 0 6px;
-    height: 40px;
-  }
-
-  .sidebar-footer-wordmark {
-    font-size: var(--fs);
-    line-height: 1.4;
-  }
-
-  .sidebar-footer-copyright {
-    font-size: var(--fs);
-    line-height: 1.4;
-    white-space: nowrap;
-  }
-
-  .sidebar-footer-copyright-full {
-    display: none;
-  }
-
-  .sidebar-footer-copyright-short {
-    display: inline;
-  }
-}
-
-@media (max-height: 699px) {
-  .sidebar-scroll {
-    scrollbar-width: none;
-  }
-
-  .sidebar-scroll::-webkit-scrollbar {
-    display: none;
-  }
 }
 
 .app-header {
