@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { cn } from "cn";
-
 type InstitutionLogoProps = {
   src: string;
   alt: string;
@@ -48,14 +46,18 @@ export function InstitutionLogo({
     // A plain <img> preserves an uploaded logo's intrinsic ratio. next/image needs every
     // allowed remote host at build time, and institution logos are arbitrary URLs.
     // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      loading="eager"
-      onError={() => setFailed(true)}
-      className={cn("w-auto object-contain", className)}
-    />
+    <span
+      className="grid size-[34px] shrink-0 place-items-center overflow-hidden rounded-full bg-surface ring-1 ring-card-border"
+    >
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading="eager"
+        onError={() => setFailed(true)}
+        className="h-full w-full object-contain"
+      />
+    </span>
   );
 }
