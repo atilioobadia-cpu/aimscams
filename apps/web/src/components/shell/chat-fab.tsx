@@ -22,7 +22,7 @@ export function ChatFab() {
           type="button"
           data-testid="chat-fab"
           aria-label="Open support chat"
-          className="fixed bottom-8 right-8 z-50 grid size-[90px] place-items-center rounded-full bg-brand-fab text-on-primary shadow-lg outline-none transition-transform hover:scale-[1.03] focus-visible:ring-4 focus-visible:ring-ring/40"
+          className="fixed bottom-4 right-4 z-50 grid size-12 place-items-center rounded-full bg-brand-fab text-on-primary shadow-lg outline-none transition-transform hover:scale-[1.03] focus-visible:ring-4 focus-visible:ring-ring/40"
         >
           <MessageCircle className="size-10" strokeWidth={1.8} aria-hidden="true" />
         </button>

@@ -2,9 +2,9 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* One rendered-pixel scale: 1rem is 16px at Chrome's 100% zoom. */
+/* Compact scale: 1rem is 12px at Chrome's 100% zoom. */
 html {
-  font-size: 16px;
+  font-size: 12px;
 }
 
 :root {
@@ -43,12 +43,12 @@ html {
   --space-32: 32px;
 
   /* Shared geometry */
-  --header-height: 77px;
+  --header-height: 60px;
   --sidebar-width: 239px;
   --sidebar-collapsed-width: 76px;
   --sidebar-footer-height: 72px;
   --sidebar-subitem-height: 38px;
-  --sidebar-row-height: clamp(38px, calc(8.3333vh - 22.25px), 54px);
+  --sidebar-row-height: 32px;
   --content-padding: 18px;
   --control-height: 44px;
   --control-compact-height: 36px;
@@ -126,7 +126,7 @@ html {
   :root {
     --sidebar-footer-height: 52px;
     --sidebar-subitem-height: 32px;
-    --sidebar-row-height: clamp(38px, calc(8.3333vh - 19px), 54px);
+    --sidebar-row-height: 32px;
   }
 }
 

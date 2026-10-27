@@ -48,20 +48,20 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   return (
     <header
       data-testid="app-header"
-      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-[18px]"
+      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-3"
     >
       <div className="flex min-w-0 items-center gap-2">
         <div
           data-testid="tenant-logo"
-          className="grid size-[52px] shrink-0 place-items-center rounded-full bg-tenant text-on-primary"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-tenant text-on-primary"
         >
-          <AimscamsMark className="size-7" />
+          <AimscamsMark className="size-5" />
         </div>
         <div className="min-w-0">
-          <p className="truncate text-[16px] font-semibold leading-tight text-body">
+          <p className="truncate text-[14px] font-semibold leading-tight text-body">
             {institution.name}
           </p>
-          <p className="truncate text-[14px] leading-tight text-muted-foreground">
+          <p className="truncate text-[12px] leading-tight text-muted-foreground">
             {institution.dialect} SACCOS · {institution.code}
           </p>
         </div>
@@ -74,11 +74,11 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               type="button"
               data-testid="language-trigger"
               aria-label={`Language: ${language}`}
-              className="flex items-center gap-2 rounded-md px-2 py-2 text-[16px] text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex items-center gap-1.5 rounded-md px-1.5 py-1.5 text-[13px] text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
-              <TanzaniaFlag />
+              <TanzaniaFlag className="h-4 w-6" />
               <span>{language}</span>
-              <ChevronDown className="size-5" aria-hidden="true" />
+              <ChevronDown className="size-4" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-44">
@@ -95,10 +95,10 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           data-testid="branch-context"
           aria-label={`Branch: ${branch.name}, ${branch.status}`}
         >
-          <Building2 className="size-5 shrink-0 text-brand" aria-hidden="true" />
+          <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
-            <p className="text-[16px] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className="mt-1 flex items-center gap-1.5 text-[12px] leading-none text-brand">
+            <p className="text-[13px] font-semibold leading-tight text-brand">{branch.name}</p>
+            <p className="mt-0.5 flex items-center gap-1 text-[11px] leading-none text-brand">
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
               {branch.status}
             </p>
@@ -115,17 +115,17 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-[44px] shrink-0 place-items-center rounded-full bg-avatar text-[14px] font-bold text-on-primary"
+                className="grid size-8 shrink-0 place-items-center rounded-full bg-avatar text-[12px] font-bold text-on-primary"
               >
                 {user.initials}
               </span>
               <span
                 data-testid="header-user-name"
-                className="hidden text-[16px] font-semibold leading-none text-body xl:block"
+                className="hidden text-[13px] font-semibold leading-none text-body xl:block"
               >
                 {user.name}
               </span>
-              <ChevronDown className="size-5 text-body" aria-hidden="true" />
+              <ChevronDown className="size-4 text-body" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-64">

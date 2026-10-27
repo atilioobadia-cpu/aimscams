@@ -101,7 +101,7 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-[38px] min-w-0 flex-1 items-center gap-[7px] rounded-[8px] px-[14px] text-left text-[16px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[8px] px-3 text-left text-[13px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
     collapsed && "mx-3 justify-center px-0",
     active
@@ -144,7 +144,7 @@ function SidebarItem({
   if (item.children && !collapsed && item.href) {
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
-      "flex h-[var(--sidebar-row-height)] min-w-0 flex-1 items-center gap-[7px] rounded-[8px] pl-[14px] pr-1 text-left text-[16px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      "flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[8px] pl-3 pr-1 text-left text-[13px] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
       isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
     );
 
@@ -176,7 +176,7 @@ function SidebarItem({
             aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
             aria-expanded={expanded}
             onClick={onToggleExpand}
-            className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[8px] text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-[8px] text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           >
             <ChevronDown
               className={cn("size-4 transition-transform", expanded && "rotate-180")}
@@ -232,13 +232,13 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-[7px] rounded-[6px] pl-[14px] pr-2 text-[16px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-2 rounded-[6px] pl-3 pr-2 text-[12px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-heading hover:bg-white/60",
         )}
       >
-        <Icon className="size-5 shrink-0" aria-hidden="true" />
+        <Icon className="size-4 shrink-0" aria-hidden="true" />
         <span className="min-w-0 truncate">{child.label}</span>
       </Link>
     </li>
@@ -264,7 +264,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       <nav
         id="app-sidebar-nav"
         aria-label="Primary"
-        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-hidden max-[699px]:overflow-y-auto"
+        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-hidden max-[699px]:overflow-y-auto pt-2"
       >
         <ul className="m-0 flex list-none flex-col p-0">
           {navItems.map((item) => {
@@ -317,7 +317,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </p>
         ) : (
           <>
-            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo">
+            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo text-[14px]">
               AIMSCAMS
             </p>
             <p
