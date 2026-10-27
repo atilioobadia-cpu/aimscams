@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { BarChart3, Landmark, MapPin, Users, Wallet } from "lucide-react";
 import { useState } from "react";
@@ -65,8 +65,8 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         >
           <MapPin className="size-5 shrink-0 text-brand" aria-hidden="true" />
           <div>
-            <p className="text-[16px] font-semibold leading-tight text-brand">{data.branch.name}</p>
-            <p className="mt-1 text-[13px] leading-none text-muted-foreground">{data.asOf}</p>
+            <p className="text-[var(--fs)] font-semibold leading-tight text-brand">{data.branch.name}</p>
+            <p className="mt-1 text-[var(--fs)] leading-none text-muted-foreground">{data.asOf}</p>
           </div>
         </div>
       </div>
@@ -98,3 +98,4 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     </Tabs>
   );
 }
+

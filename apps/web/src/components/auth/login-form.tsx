@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,8 +24,8 @@ type FieldErrors = {
 };
 
 const fieldClass =
-  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-[14px] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[14px]";
-const fieldErrorClass = "mt-1 text-[13px] leading-4 text-accent-red";
+  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 text-[var(--fs)] text-[#212121] placeholder:text-[#9e9e9e] focus:border-[#057573] focus:outline-none focus:ring-0 md:text-[var(--fs)]";
+const fieldErrorClass = "mt-1 text-[var(--fs)] leading-4 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
   if (!candidate?.startsWith("/") || candidate.startsWith("//")) return "/dashboard";
@@ -164,7 +164,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
       <div className="mt-3 flex justify-end">
         <Link
           href="/forgot-password"
-          className="text-[14px] font-medium text-[#057573] outline-none hover:underline focus-visible:underline"
+          className="text-[var(--fs)] font-medium text-[#057573] outline-none hover:underline focus-visible:underline"
         >
           Forgot password
         </Link>
@@ -180,7 +180,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
         type="submit"
         disabled={submitting}
         aria-busy={submitting}
-        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] text-[14px] font-semibold text-white hover:bg-[#046664]"
+        className="mt-3 h-[42px] w-full rounded-[4px] bg-[#057573] text-[var(--fs)] font-semibold text-white hover:bg-[#046664]"
       >
         {submitting ? (
           <>
@@ -194,3 +194,4 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
     </form>
   );
 }
+

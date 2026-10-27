@@ -101,7 +101,7 @@ export default function UsersPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[26px] font-bold leading-tight text-strong">Users</h1>
+          <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">Users</h1>
           <p className="mt-1 max-w-3xl text-[var(--font-size-secondary)] text-muted-foreground">
             Institution accounts, roles and branch access.
           </p>
@@ -157,7 +157,7 @@ export default function UsersPage() {
       </div>
 
       {error ? (
-        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[13px] text-accent-red">
+        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[var(--fs)] text-accent-red">
           {error}
         </div>
       ) : null}

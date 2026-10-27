@@ -99,7 +99,7 @@ export default function RolesPage() {
   return (
     <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
       <div className="space-y-3">
-        <h1 className="text-[26px] font-bold leading-tight text-strong">Roles</h1>
+        <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">Roles</h1>
         <p className="text-[var(--font-size-secondary)] text-muted-foreground">
           Permission matrix for the 17 institution roles.
         </p>
@@ -113,7 +113,7 @@ export default function RolesPage() {
                 const found = roles.find((item) => item.id === role.id);
                 if (found) setDraftPermissions(found.permissionKeys);
               }}
-              className={`w-full rounded-lg border px-3 py-2 text-left text-[13px] transition-colors ${
+              className={`w-full rounded-lg border px-3 py-2 text-left text-[var(--fs)] transition-colors ${
                 role.id === selectedRoleId
                   ? "border-brand bg-accent-teal-bg"
                   : "border-card-border bg-surface hover:bg-subtle"
@@ -130,7 +130,7 @@ export default function RolesPage() {
 
       <div className="space-y-4">
         {error ? (
-          <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[13px] text-accent-red">
+          <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[var(--fs)] text-accent-red">
             {error}
           </div>
         ) : null}

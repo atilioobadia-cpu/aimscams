@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Clock3, TriangleAlert } from "lucide-react";
 
@@ -37,10 +37,10 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
       </span>
 
       <div className="min-w-0 flex-1">
-        <p className="text-[16px] font-semibold leading-tight text-strong">
+        <p className="text-[var(--fs)] font-semibold leading-tight text-strong">
           {unposted.count} transactions are waiting to be posted
         </p>
-        <p className="mt-1 text-sm text-body">
+        <p className="mt-1 text-[var(--fs)] text-body">
           Oldest item: {unposted.oldestAge}. Post before the branch close to keep the till
           reconciled.
         </p>
@@ -57,7 +57,7 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
           className="p-6 data-[side=right]:w-[448px] data-[side=right]:max-w-[100vw] data-[side=right]:sm:max-w-[448px]"
         >
           <SheetHeader className="p-0 pr-10">
-            <SheetTitle className="text-xl font-bold text-strong">Unposted transactions</SheetTitle>
+            <SheetTitle className="text-[var(--fs)] font-bold text-strong">Unposted transactions</SheetTitle>
             <SheetDescription>
               {unposted.count} items are staged at this branch. Posting is enabled with the
               Transactions module.
@@ -68,13 +68,13 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
             <Table>
               <TableHeader>
                 <TableRow className="bg-subtle hover:bg-subtle">
-                  <TableHead className="h-10 px-3 text-xs uppercase tracking-wide text-muted-foreground">
+                  <TableHead className="h-10 px-3 text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
                     Item
                   </TableHead>
-                  <TableHead className="h-10 px-3 text-right text-xs uppercase tracking-wide text-muted-foreground">
+                  <TableHead className="h-10 px-3 text-right text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
                     Amount
                   </TableHead>
-                  <TableHead className="h-10 px-3 text-right text-xs uppercase tracking-wide text-muted-foreground">
+                  <TableHead className="h-10 px-3 text-right text-[var(--fs)] uppercase tracking-wide text-muted-foreground">
                     Age
                   </TableHead>
                 </TableRow>
@@ -84,7 +84,7 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
                   <TableRow key={item.reference}>
                     <TableCell className="px-3 py-3">
                       <span className="block font-medium text-strong">{item.kind}</span>
-                      <span className="mt-0.5 block text-xs text-muted-foreground">
+                      <span className="mt-0.5 block text-[var(--fs)] text-muted-foreground">
                         {item.reference}
                       </span>
                     </TableCell>
@@ -102,7 +102,7 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
             </Table>
           </div>
 
-          <div className="mt-4 flex items-start gap-2 rounded-lg bg-subtle p-3 text-sm text-body">
+          <div className="mt-4 flex items-start gap-2 rounded-lg bg-subtle p-3 text-[var(--fs)] text-body">
             <TriangleAlert
               className="mt-0.5 size-4 shrink-0 text-accent-yellow"
               aria-hidden="true"
@@ -122,3 +122,4 @@ export function UnpostedBanner({ unposted }: { unposted: DashboardFixture["unpos
     </section>
   );
 }
+

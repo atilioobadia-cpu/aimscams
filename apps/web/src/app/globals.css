@@ -50,8 +50,8 @@ html {
   --space-32: 32px;
 
   /* Shared geometry */
-  --header-height: 59px;
-  --sidebar-width: 182px;
+  --header-height: 68px;
+  --sidebar-width: 204px;
   --sidebar-collapsed-width: 76px;
   --sidebar-footer-height: 72px;
   --sidebar-subitem-height: 38px;

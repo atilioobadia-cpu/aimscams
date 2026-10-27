@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 
 import { AimscamsMark } from "@/components/brand/aimscams-mark";
 
@@ -10,7 +10,7 @@ export function AuthShell({ children, title }: { children: ReactNode; title: str
           <div className="flex justify-center">
             <AimscamsMark className="h-10 w-auto text-white" />
           </div>
-          <h1 className="mx-auto mt-4 w-full px-5 text-center text-[18px] font-semibold leading-6 text-white">
+          <h1 className="mx-auto mt-4 w-full px-5 text-center text-[var(--fs)] font-semibold leading-6 text-white">
             {title}
           </h1>
         </div>
@@ -21,3 +21,4 @@ export function AuthShell({ children, title }: { children: ReactNode; title: str
     </main>
   );
 }
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -115,10 +115,10 @@ export function UserForm({ id }: { id?: string }) {
   return (
     <div className="mx-auto max-w-3xl space-y-5">
       <div>
-        <h1 className="text-[26px] font-bold leading-tight text-strong">
+        <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">
           {editing ? "Edit user" : "Add user"}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-[var(--fs)] text-muted-foreground">
           {editing ? "Update account details, roles and access." : "Create an institution account."}
         </p>
       </div>
@@ -232,3 +232,4 @@ export function UserForm({ id }: { id?: string }) {
     </div>
   );
 }
+

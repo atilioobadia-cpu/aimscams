@@ -48,12 +48,12 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   return (
     <header
       data-testid="app-header"
-      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-[13px]"
+      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-[14px]"
     >
       <div className="flex min-w-0 items-center gap-2">
         <div
           data-testid="tenant-logo"
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-tenant text-on-primary"
+          className="grid size-10 shrink-0 place-items-center rounded-full bg-tenant text-on-primary ring-2 ring-primary"
         >
           <AimscamsMark className="size-5" />
         </div>
@@ -115,7 +115,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-8 shrink-0 place-items-center rounded-full bg-avatar text-[var(--fs)] font-bold text-on-primary"
+                className="grid size-[34px] shrink-0 place-items-center rounded-full text-[var(--fs)] font-bold text-on-primary" style={{background: 'linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)', boxShadow: '0 1px 3px rgba(0,0,0,0.2)', outline: '2px solid #f7f7f7', outlineOffset: '-2px'}}
               >
                 {user.initials}
               </span>

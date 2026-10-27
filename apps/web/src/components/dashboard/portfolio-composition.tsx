@@ -1,4 +1,4 @@
-import { ChartCard } from "@/components/data/chart-card";
+﻿import { ChartCard } from "@/components/data/chart-card";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 import { formatPercent, formatTzs, sharePercent } from "@/lib/format";
 import { cn } from "cn";
@@ -49,12 +49,12 @@ export function PortfolioComposition({ portfolio }: { portfolio: DashboardFixtur
               aria-hidden="true"
             />
             <div className="min-w-0">
-              <p className="truncate text-sm text-muted-foreground">{segment.label}</p>
-              <p className="mt-0.5 text-[16px] font-semibold leading-tight text-strong">
+              <p className="truncate text-[var(--fs)] text-muted-foreground">{segment.label}</p>
+              <p className="mt-0.5 text-[var(--fs)] font-semibold leading-tight text-strong">
                 {formatTzs(segment.value)}
               </p>
             </div>
-            <span className="ml-auto shrink-0 text-sm font-medium text-body">
+            <span className="ml-auto shrink-0 text-[var(--fs)] font-medium text-body">
               {formatPercent(sharePercent(segment.value, portfolio.total))}
             </span>
           </li>
@@ -62,9 +62,10 @@ export function PortfolioComposition({ portfolio }: { portfolio: DashboardFixtur
       </ul>
 
       <div className="mt-6 flex items-center justify-between border-t border-card-border pt-5">
-        <span className="text-sm font-medium text-muted-foreground">Total portfolio</span>
-        <span className="text-[18px] font-bold text-strong">{formatTzs(portfolio.total)}</span>
+        <span className="text-[var(--fs)] font-medium text-muted-foreground">Total portfolio</span>
+        <span className="text-[var(--fs)] font-bold text-strong">{formatTzs(portfolio.total)}</span>
       </div>
     </ChartCard>
   );
 }
+

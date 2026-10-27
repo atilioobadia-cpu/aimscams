@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Eye, EyeOff, LockKeyhole } from "lucide-react";
 import * as React from "react";
@@ -18,7 +18,7 @@ export function PasswordInput({
         {...props}
         type={visible ? "text" : "password"}
         className={cn(
-          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-10 text-[14px] placeholder:text-[#9e9e9e] md:text-[14px]",
+          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-10 text-[var(--fs)] placeholder:text-[#9e9e9e] md:text-[var(--fs)]",
           className,
         )}
       />
@@ -42,3 +42,4 @@ export function PasswordInput({
     </div>
   );
 }
+

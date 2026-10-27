@@ -101,7 +101,7 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] px-3 text-left text-[var(--fs)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-[17px] text-left text-[var(--fs)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
     collapsed && "mx-3 justify-center px-0",
     active
@@ -154,7 +154,7 @@ function SidebarItem({
         data-nav-label={item.label}
         data-expanded={expanded ? "true" : "false"}
         className={cn(
-          "mx-2 shrink-0 overflow-hidden rounded-[10px]",
+          "mx-1.5 shrink-0 overflow-hidden rounded-[8px]",
           expanded || isGroupActive ? "bg-primary-tint" : "",
         )}
       >
@@ -201,14 +201,14 @@ function SidebarItem({
 
   if (!collapsed) {
     return (
-      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center">
+      <li className="flex h-9 shrink-0 items-center">
         {control}
       </li>
     );
   }
 
   return (
-    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center">
+    <li className="flex h-9 shrink-0 items-center">
       <Tooltip>
         <TooltipTrigger asChild>{control}</TooltipTrigger>
         <TooltipContent side="right" sideOffset={12}>
@@ -223,7 +223,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
   const Icon = navIcons[child.icon];
 
   return (
-    <li className="h-[var(--sidebar-subitem-height)] shrink-0">
+    <li className="h-7 shrink-0">
       <Link
         href={child.href}
         prefetch={false}

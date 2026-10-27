@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -40,7 +40,7 @@ export default function ChartOfAccountsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-[26px] font-bold leading-tight text-strong">Chart of accounts</h1>
+        <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">Chart of accounts</h1>
         <p className="mt-1 text-[var(--font-size-secondary)] text-muted-foreground">
           Institution chart of accounts.
         </p>
@@ -102,3 +102,4 @@ export default function ChartOfAccountsPage() {
     </div>
   );
 }
+

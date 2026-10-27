@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 
 import { cn } from "cn";
 
@@ -26,8 +26,8 @@ export function ChartCard({
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-[18px] font-bold leading-tight text-strong">{title}</h2>
-          {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
+          <h2 className="text-[var(--fs)] font-bold leading-tight text-strong">{title}</h2>
+          {description ? <p className="mt-1 text-[var(--fs)] text-muted-foreground">{description}</p> : null}
         </div>
         {action}
       </div>
@@ -35,3 +35,4 @@ export function ChartCard({
     </section>
   );
 }
+
