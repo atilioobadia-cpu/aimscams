@@ -31,14 +31,14 @@ html {
   --danger: #dc3545;
   --tab-inactive-bg: #f8fafc;
 
-  /* Type scale, in rendered pixels */
-  --font-size-micro: 12px;
-  --font-size-helper: 13px;
-  --font-size-secondary: 14px;
-  --font-size-body: 16px;
-  --font-size-section: 18px;
-  --font-size-page-title: 26px;
-  --font-size-kpi: 28px;
+  /* Type scale: everything is 12.8px */
+  --font-size-micro: var(--fs);
+  --font-size-helper: var(--fs);
+  --font-size-secondary: var(--fs);
+  --font-size-body: var(--fs);
+  --font-size-section: var(--fs);
+  --font-size-page-title: var(--fs);
+  --font-size-kpi: var(--fs);
 
   /* Spacing scale, in rendered pixels */
   --space-4: 4px;
@@ -287,13 +287,13 @@ html {
 }
 
 .sidebar-footer-wordmark {
-  font-size: 18px;
-  line-height: 22px;
+  font-size: var(--fs);
+  line-height: 1.4;
 }
 
 .sidebar-footer-copyright {
-  font-size: 13px;
-  line-height: 16px;
+  font-size: var(--fs);
+  line-height: 1.4;
 }
 
 .sidebar-footer-copyright-short {
@@ -308,13 +308,13 @@ html {
   }
 
   .sidebar-footer-wordmark {
-    font-size: 16px;
-    line-height: 20px;
+    font-size: var(--fs);
+    line-height: 1.4;
   }
 
   .sidebar-footer-copyright {
-    font-size: 12px;
-    line-height: 16px;
+    font-size: var(--fs);
+    line-height: 1.4;
     white-space: nowrap;
   }
 
