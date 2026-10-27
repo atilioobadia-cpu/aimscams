@@ -443,6 +443,31 @@ information as a nav entry plus a sentence, and costs one shared component.
 - `docs/02-modules.md` §8 and §12.8 no longer gate the nav; they gate what the placeholder says.
 - A placeholder is not "done" work — the module status in `docs/09` is unchanged.
 
+### D-028 — The tenant mark in the header is an image, not a letter badge
+
+**Status:** Accepted 2026-10-27 → `docs/11-ui-contract.md` §3
+
+The demo institution's mark is its own lockup, rendered at its intrinsic ratio and capped to
+the sidebar column. The round "A" stand-in is retired. The slot is a component
+(`InstitutionLogo`) fed by one declaration (`src/lib/brand.ts`), so the asset, its ratio and
+its alt text live in a single place.
+
+| Concern | Ruling |
+|---|---|
+| Header mark | Institution lockup, 28px tall, max 190px wide, `object-contain`, no circle or ring |
+| Fallback | 40px `--brand-tenant-blue` circle with the institution monogram, only if the image fails |
+| Product mark | Unchanged: AIMSCAMS wordmark in the sidebar footer and the mark on auth screens |
+| Production | The slot resolves from `organisation.logoUrl`; the demo build pins the Mafanikio lockup |
+
+**Why.** A letter in a circle is a placeholder, and the header already carries the
+institution's name in text. A wide lockup also removes the square-mark assumption that the
+old circle imposed on every future tenant.
+
+**Consequences.**
+- The header supports 7:1 lockups as well as square marks; nothing is cropped.
+- `tools/ui-audit/audit.mjs` still asserts the old 60px circle and needs the same update
+  before it is run again.
+
 ---
 
 ## Open

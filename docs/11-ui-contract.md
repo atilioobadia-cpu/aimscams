@@ -21,7 +21,7 @@ a near-match.
   --brand-primary: #057573;        /* active sidebar pill, active tab, branch name, primary buttons */
   --brand-primary-fab: #037674;    /* floating chat button */
   --brand-logo-teal: #479b92;      /* sidebar footer wordmark */
-  --brand-tenant-blue: #29aae3;    /* tenant logo circle */
+  --brand-tenant-blue: #29aae3;    /* tenant blue: logo fallback monogram, chart series */
   --avatar-blue: #377ab1;          /* user avatar circle */
 
   /* Surfaces */
@@ -79,26 +79,47 @@ Fixed header across the full width, fixed left sidebar, scrollable main area on 
 
 | Element | Value |
 |---|---|
-| Height | about 97px |
+| Height | 68px |
 | Background | `--bg-surface` |
 | Bottom border | 1px `--border-chrome` |
-| Position | fixed, full width |
+| Position | fixed, full width, `14px` side padding |
 
-**Left group**
+**Left group**, 10px gap:
 
-- Tenant logo: **60px circle**, background `--brand-tenant-blue`, a small white logo centred.
-- Stacked lines beside it: institution name, about **18px**, weight 500–600, `--text-body`;
-  tenant code beneath, about **16px**, `--text-muted`.
+- Tenant logo: the institution's own lockup, **28px tall, max 190px wide**, `object-contain`.
+  No circle and no ring: the mark keeps its intrinsic ratio. It starts on the 14px header
+  padding and ends on the sidebar's right edge (190 + 14 = 204).
+- Stacked lines beside it: institution name, `--fs`, weight 600, `--text-body`; dialect and
+  code beneath at `--fs`, `--text-muted`.
 
-**Right group**, in order, gaps of about **30–40px**:
+**Right group**, in order, 24px gaps:
 
-1. Tanzania flag icon, about **38 × 24**, plus "English" (`--text-body`) and a down chevron
+1. Tanzania flag, **24 × 16**, plus "English" (`--text-body`) and a down chevron
    (`--text-body`).
-2. Building icon (outline, `--brand-primary`), then two stacked lines: branch name,
-   `--brand-primary`, weight 600, about **17px**; beneath it a small check-circle icon plus
-   "Open", `--brand-primary`, about **13px**.
-3. User avatar: **50px circle**, background `--avatar-blue`, white bold initials; name,
-   `--text-body`, weight 600; then a down chevron.
+2. Building icon, 16px `--brand-primary`, then two stacked lines: branch name,
+   `--brand-primary`, weight 600, `--fs`; beneath it a check-circle plus "Open",
+   `--brand-primary`, `--fs`.
+3. User avatar: **34px circle**, gradient, white bold initials, `--fs`; name, `--fs`, weight
+   600, `--text-body`; then a down chevron.
+
+### 3.1 Tenant branding
+
+The header mark belongs to the **institution**, the sidebar wordmark belongs to the
+**product**. Keep them apart: AIMSCAMS is the thing that runs the back office, the tenant is
+the SACCO whose name and mark sit in the header.
+
+| Concern | Ruling |
+|---|---|
+| Asset | `apps/web/public/brand/mafanikio-logo.png` (300 × 43), declared once in `apps/web/src/lib/brand.ts` |
+| Component | `InstitutionLogo` renders the image at its ratio; a failed load degrades to a 40px tenant-blue monogram, never a broken image |
+| Fallback trigger | `onError` on the image, so a missing file costs one silently handled request and no layout shift |
+| Production | The slot reads `organisation.logoUrl`; the demo build pins the Mafanikio lockup |
+| Not the tenant's | Sidebar footer wordmark, auth screens, app icon |
+
+Placements still open, in order of value: a logo URL plus upload in **Settings → General**
+(the header then reads it per tenant), the **sign-in card** for white-label installs, a
+**136 × 136 app icon** derived from the emblem, and a **compact emblem** for the collapsed
+sidebar.
 
 ---
 

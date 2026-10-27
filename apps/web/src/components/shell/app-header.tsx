@@ -4,7 +4,7 @@ import { Building2, CheckCircle2, ChevronDown, LoaderCircle, LogOut, Settings, U
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { AimscamsMark } from "@/components/brand/aimscams-mark";
+import { InstitutionLogo } from "@/components/brand/institution-logo";
 import { TanzaniaFlag } from "@/components/brand/tanzania-flag";
 import {
   DropdownMenu,
@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { apiRequest } from "@/lib/api";
+import { tenantLogo } from "@/lib/brand";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 type AppHeaderProps = {
@@ -50,12 +51,16 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
       data-testid="app-header"
       className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-[14px]"
     >
-      <div className="flex min-w-0 items-center gap-2">
-        <div
-          data-testid="tenant-logo"
-          className="grid size-10 shrink-0 place-items-center rounded-full bg-tenant text-on-primary ring-2 ring-primary"
-        >
-          <AimscamsMark className="size-5" />
+      <div className="flex min-w-0 items-center gap-2.5">
+        <div data-testid="tenant-logo" className="flex shrink-0 items-center">
+          <InstitutionLogo
+            src={tenantLogo.src}
+            alt={tenantLogo.name}
+            monogram={tenantLogo.monogram}
+            width={tenantLogo.width}
+            height={tenantLogo.height}
+            className="h-7 max-w-[190px]"
+          />
         </div>
         <div className="min-w-0">
           <p className="truncate text-fs font-semibold leading-tight text-body">
