@@ -613,6 +613,42 @@ export class SettingsService {
     return { rate: this.serializeInterestRate(rate), canEdit: this.can(auth, 'Settings Product : Create') };
   }
 
+  async updateInterestRate(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.interestRate.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Interest rate not found.');
+
+    const data: Prisma.InterestRateUpdateInput = {};
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+      data.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+
+    const updated = await this.prisma.interestRate.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Interest rate updated',
+      entityType: 'InterestRate',
+      entityId: id,
+      before: this.serializeInterestRate(before),
+      after: this.serializeInterestRate(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { rate: this.serializeInterestRate(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
+  }
+
   private serializeInterestRate(rate: Prisma.InterestRateGetPayload<Record<string, never>>) {
     return {
       id: rate.id,
@@ -854,6 +890,42 @@ export class SettingsService {
     });
 
     return { item: this.serializeProvisioningRule(item), canEdit: this.can(auth, 'Settings Product : Create') };
+  }
+
+  async updateProvisioningRule(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.provisioningRule.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Provisioning rule not found.');
+
+    const data: Prisma.ProvisioningRuleUpdateInput = {};
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+      data.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+
+    const updated = await this.prisma.provisioningRule.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Provisioning rule updated',
+      entityType: 'ProvisioningRule',
+      entityId: id,
+      before: this.serializeProvisioningRule(before),
+      after: this.serializeProvisioningRule(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeProvisioningRule(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
   }
 
   private serializeProvisioningRule(item: Prisma.ProvisioningRuleGetPayload<Record<string, never>>) {

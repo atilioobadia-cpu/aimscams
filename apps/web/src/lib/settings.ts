@@ -695,3 +695,16 @@ export async function updateLoanProduct(id: string, payload: { status?: string; 
     body: payload,
   });
 }
+export async function updateInterestRate(id: string, payload: { status?: string }): Promise<InterestRateResponse> {
+  return apiRequest<InterestRateResponse>(`/settings/products/interest-rates/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+
+export async function updateProvisioningRule(id: string, payload: { status?: string }): Promise<ProvisioningRuleResponse> {
+  return apiRequest<ProvisioningRuleResponse>(`/settings/products/provisioning-rules/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}

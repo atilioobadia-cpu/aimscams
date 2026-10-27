@@ -272,6 +272,28 @@ export class SettingsController {
     return this.settings.createHoliday(auth, body, requestContext(request));
   }
 
+  @Patch('products/interest-rates/:id')
+  @RequirePermissions('Settings Product : Edit')
+  async updateInterestRate(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateInterestRate(auth, id, body, requestContext(request));
+  }
+
+  @Patch('products/provisioning-rules/:id')
+  @RequirePermissions('Settings Product : Edit')
+  async updateProvisioningRule(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateProvisioningRule(auth, id, body, requestContext(request));
+  }
+
   @Get('products/interest-rates')
   @RequirePermissions('Settings Product : View')
   async listInterestRates(

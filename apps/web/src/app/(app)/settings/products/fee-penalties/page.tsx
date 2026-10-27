@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Pencil, Building2 } from "lucide-react";
+import { Plus, Search, Pencil, Building2, UserCheck, UserX } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
@@ -286,7 +286,19 @@ export default function FeePenaltiesPage() {
               <tbody>
                 {items.map((item) => {
                   const actions: RowAction[] = data?.canEdit
-                    ? [{ label: "Edit", icon: Pencil, onSelect: () => openEdit(item) }]
+                    ? [
+                        { label: "Edit", icon: Pencil, onSelect: () => openEdit(item) },
+                        {
+                          label: item.status === "ACTIVE" ? "Deactivate" : "Activate",
+                          icon: item.status === "ACTIVE" ? UserX : UserCheck,
+                          onSelect: async () => {
+                            const next = item.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+                            await updateFeePenalty(item.id, { status: next });
+                            pushToast(`Fee or penalty ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
+                            setReloadKey((value) => value + 1);
+                          },
+                        },
+                      ]
                     : [];
                   return (
                     <tr key={item.id} className="border-b border-card-border last:border-0">

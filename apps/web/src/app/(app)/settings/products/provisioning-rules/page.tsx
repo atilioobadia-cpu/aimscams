@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Building2 } from "lucide-react";
+import { Plus, Search, Building2, UserCheck, UserX } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ import { ApiError } from "@/lib/api";
 import {
   createProvisioningRule,
   listProvisioningRules,
+  updateProvisioningRule,
   type ProvisioningRule,
   type ProvisioningRuleStatus,
 } from "@/lib/settings";
@@ -225,6 +227,7 @@ export default function ProvisioningRulesPage() {
                   <th className="px-4 py-3">Days to</th>
                   <th className="px-4 py-3">Rate</th>
                   <th className="px-4 py-3">GL account</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -239,6 +242,29 @@ export default function ProvisioningRulesPage() {
                     <td className="px-4 py-3 tabular-nums text-body">{item.daysTo ?? "—"}</td>
                     <td className="px-4 py-3 tabular-nums text-body">{(item.rateBp / 100).toFixed(2)}%</td>
                     <td className="px-4 py-3 text-body">{item.glAccountId ?? "—"}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <RowActionsMenu
+                          label={`${item.code} ${item.name}`}
+                          actions={
+                            data?.canEdit
+                              ? [
+                                  {
+                                    label: item.status === "ACTIVE" ? "Deactivate" : "Activate",
+                                    icon: item.status === "ACTIVE" ? UserX : UserCheck,
+                                    onSelect: async () => {
+                                      const next = item.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+                                      await updateProvisioningRule(item.id, { status: next });
+                                      pushToast(`Provisioning rule ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
+                                      setReloadKey((value) => value + 1);
+                                    },
+                                  },
+                                ]
+                              : []
+                          }
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

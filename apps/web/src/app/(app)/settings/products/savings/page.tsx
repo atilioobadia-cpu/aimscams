@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Eye, Pencil, Plus, Search } from "lucide-react";
+import { Building2, Eye, Pencil, Plus, Search, UserCheck, UserX } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
@@ -11,9 +11,11 @@ import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-me
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import {
   listSavingsProducts,
+  updateSavingsProduct,
   type SavingsProduct,
   type SavingsProductStatus,
 } from "@/lib/settings";
@@ -33,6 +35,7 @@ export default function SavingsProductsPage() {
   const [status, setStatus] = useState<"" | SavingsProductStatus>("");
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
+  const { pushToast } = useToast();
 
   useEffect(() => {
     let cancelled = false;
@@ -165,6 +168,16 @@ export default function SavingsProductsPage() {
                           label: "Edit product",
                           icon: Pencil,
                           href: `/settings/products/savings/${product.id}`,
+                        },
+                        {
+                          label: product.status === "ACTIVE" ? "Deactivate product" : "Activate product",
+                          icon: product.status === "ACTIVE" ? UserX : UserCheck,
+                          onSelect: async () => {
+                            const next = product.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+                            await updateSavingsProduct(product.id, { status: next });
+                            pushToast(`Savings product ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
+                            setReloadKey((value) => value + 1);
+                          },
                         },
                       ]
                     : [];

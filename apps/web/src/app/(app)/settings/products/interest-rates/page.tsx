@@ -1,17 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Plus, Search } from "lucide-react";
+import { Building2, Plus, Search, UserCheck, UserX } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
-import { listInterestRates, type InterestRate, type InterestRateStatus } from "@/lib/settings";
+import { listInterestRates, updateInterestRate, type InterestRate, type InterestRateStatus } from "@/lib/settings";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -28,6 +30,7 @@ export default function InterestRatesPage() {
   const [status, setStatus] = useState<"" | InterestRateStatus>("");
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
+  const { pushToast } = useToast();
 
   useEffect(() => {
     let cancelled = false;
@@ -141,6 +144,7 @@ export default function InterestRatesPage() {
                   <th className="px-4 py-3">Rate</th>
                   <th className="px-4 py-3">Period</th>
                   <th className="px-4 py-3">Effective from</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,6 +158,29 @@ export default function InterestRatesPage() {
                     <td className="px-4 py-3 tabular-nums text-body">{(rate.rateBp / 100).toFixed(2)}%</td>
                     <td className="px-4 py-3 text-body">{rate.period}</td>
                     <td className="px-4 py-3 text-body">{rate.effectiveFrom ? new Date(rate.effectiveFrom).toLocaleDateString() : "—"}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <RowActionsMenu
+                          label={`${rate.code} ${rate.name}`}
+                          actions={
+                            data?.canEdit
+                              ? [
+                                  {
+                                    label: rate.status === "ACTIVE" ? "Deactivate" : "Activate",
+                                    icon: rate.status === "ACTIVE" ? UserX : UserCheck,
+                                    onSelect: async () => {
+                                      const next = rate.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+                                      await updateInterestRate(rate.id, { status: next });
+                                      pushToast(`Interest rate ${next === "ACTIVE" ? "activated" : "deactivated"}.`);
+                                      setReloadKey((value) => value + 1);
+                                    },
+                                  },
+                                ]
+                              : []
+                          }
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
