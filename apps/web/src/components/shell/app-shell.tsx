@@ -58,7 +58,7 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
         style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
         className="min-h-screen transition-[padding-left] duration-200"
       >
-        <div className="px-[var(--content-padding)] pb-[76px] pt-[var(--content-padding)]">
+        <div className="content-fade px-[var(--content-padding)] pb-[76px] pt-[var(--content-padding)]">
           {children}
         </div>
       </main>
