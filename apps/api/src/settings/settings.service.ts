@@ -1018,6 +1018,17 @@ export class SettingsService {
     return { item: this.serializeCreditProductPolicy(item), canEdit: this.can(auth, 'Settings Policy : Create') };
   }
 
+  async getCreditProductPolicy(auth: AuthContext, id: string) {
+    const item = await this.prisma.creditProductPolicy.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+    });
+    if (!item) throw new NotFoundException('Credit product policy not found.');
+    return {
+      item: this.serializeCreditProductPolicy(item),
+      canEdit: this.can(auth, 'Settings Policy : Edit'),
+    };
+  }
+
   private serializeCreditProductPolicy(item: Prisma.CreditProductPolicyGetPayload<Record<string, never>>) {
     return {
       id: item.id,
@@ -1029,6 +1040,69 @@ export class SettingsService {
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };
+  }
+
+  async getMembershipPolicy(auth: AuthContext, id: string) {
+    const item = await this.prisma.membershipPolicy.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+    });
+    if (!item) throw new NotFoundException('Membership policy not found.');
+    return {
+      item: this.serializeMembershipPolicy(item),
+      canEdit: this.can(auth, 'Settings Policy : Edit'),
+    };
+  }
+
+  async updateMembershipPolicy(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.membershipPolicy.findFirst({
+      where: { id, organisationId },
+    });
+    if (!before) throw new NotFoundException('Membership policy not found.');
+
+    const data: Prisma.MembershipPolicyUpdateInput = {};
+    if (body.code !== undefined) {
+      const code = String(body.code).trim().toUpperCase();
+      if (!code) throw new BadRequestException('Code is required.');
+      data.code = code;
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'DRAFT' && status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+      data.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.description !== undefined) data.description = body.description ? String(body.description).trim() : null;
+    if (body.memberType !== undefined) data.memberType = String(body.memberType).trim() || 'INDIVIDUAL';
+    if (body.minNextOfKin !== undefined) data.minNextOfKin = Number(body.minNextOfKin);
+    if (body.maxNextOfKin !== undefined) data.maxNextOfKin = Number(body.maxNextOfKin);
+    if (body.dormantDays !== undefined) data.dormantDays = Number(body.dormantDays);
+    if (body.allowWithdraw !== undefined) data.allowWithdraw = body.allowWithdraw === true;
+    if (body.autoActiveUponDeposit !== undefined) data.autoActiveUponDeposit = body.autoActiveUponDeposit === true;
+    if (body.enableMemberVerification !== undefined) data.enableMemberVerification = body.enableMemberVerification === true;
+    if (body.verificationType !== undefined) data.verificationType = body.verificationType ? String(body.verificationType).trim() : null;
+
+    const updated = await this.prisma.membershipPolicy.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Membership policy updated',
+      entityType: 'MembershipPolicy',
+      entityId: id,
+      before: this.serializeMembershipPolicy(before),
+      after: this.serializeMembershipPolicy(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeMembershipPolicy(updated), canEdit: this.can(auth, 'Settings Policy : Edit') };
   }
 
   private serializeMembershipPolicy(item: Prisma.MembershipPolicyGetPayload<Record<string, never>>) {

@@ -165,6 +165,15 @@ export class SettingsController {
     return this.settings.createProvisioningRule(auth, body, requestContext(request));
   }
 
+  @Get('policies/credit-product/:id')
+  @RequirePermissions('Settings Policy : View')
+  async getCreditProductPolicy(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.getCreditProductPolicy(auth, id);
+  }
+
   @Get('policies/credit-product')
   @RequirePermissions('Settings Policy : View')
   async listCreditProductPolicies(
@@ -183,6 +192,26 @@ export class SettingsController {
     @Req() request: Request,
   ) {
     return this.settings.createCreditProductPolicy(auth, body, requestContext(request));
+  }
+
+  @Get('policies/membership/:id')
+  @RequirePermissions('Settings Policy : View')
+  async getMembershipPolicy(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.getMembershipPolicy(auth, id);
+  }
+
+  @Patch('policies/membership/:id')
+  @RequirePermissions('Settings Policy : Edit')
+  async updateMembershipPolicy(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateMembershipPolicy(auth, id, body, requestContext(request));
   }
 
   @Get('policies/membership')

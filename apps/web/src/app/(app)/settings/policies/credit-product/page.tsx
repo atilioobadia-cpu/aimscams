@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Plus, Search } from "lucide-react";
+import { Building2, Eye, Plus, Search } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -144,6 +145,7 @@ export default function CreditProductPoliciesPage() {
                   <th className="px-4 py-3">Name</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Created</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -155,6 +157,16 @@ export default function CreditProductPoliciesPage() {
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
                     </td>
                     <td className="px-4 py-3 text-body">{new Date(item.createdAt).toLocaleDateString()}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <RowActionsMenu
+                          label={`${item.code} ${item.name}`}
+                          actions={[
+                            { label: "View policy", icon: Eye, href: `/settings/policies/credit-product/${item.id}` },
+                          ]}
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>

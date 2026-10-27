@@ -651,3 +651,29 @@ export async function createHoliday(payload: {
     body: payload,
   });
 }
+export async function getMembershipPolicy(id: string): Promise<MembershipPolicyResponse> {
+  return apiRequest<MembershipPolicyResponse>(`/settings/policies/membership/${encodeURIComponent(id)}`);
+}
+
+export async function updateMembershipPolicy(id: string, payload: Partial<{
+  code: string;
+  name: string;
+  status: string;
+  description: string | null;
+  memberType: string;
+  minNextOfKin: number;
+  maxNextOfKin: number;
+  dormantDays: number;
+  allowWithdraw: boolean;
+  autoActiveUponDeposit: boolean;
+  enableMemberVerification: boolean;
+  verificationType: string | null;
+}>): Promise<MembershipPolicyResponse> {
+  return apiRequest<MembershipPolicyResponse>(`/settings/policies/membership/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+export async function getCreditProductPolicy(id: string): Promise<CreditProductPolicyResponse> {
+  return apiRequest<CreditProductPolicyResponse>(`/settings/policies/credit-product/${encodeURIComponent(id)}`);
+}
