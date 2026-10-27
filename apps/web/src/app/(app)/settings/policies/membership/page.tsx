@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Plus, Search } from "lucide-react";
+import { Building2, Eye, Pencil, Plus, Search } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -146,6 +147,7 @@ export default function MembershipPoliciesPage() {
                   <th className="px-4 py-3">Member type</th>
                   <th className="px-4 py-3">Next of kin</th>
                   <th className="px-4 py-3">Dormant days</th>
+                  <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -161,6 +163,19 @@ export default function MembershipPoliciesPage() {
                       {item.minNextOfKin}–{item.maxNextOfKin}
                     </td>
                     <td className="px-4 py-3 text-body">{item.dormantDays}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex justify-end">
+                        <RowActionsMenu
+                          label={`${item.code} ${item.name}`}
+                          actions={[
+                            { label: "View policy", icon: Eye, href: `/settings/policies/membership/${item.id}` },
+                            ...(data?.canEdit
+                              ? [{ label: "Edit policy", icon: Pencil, href: `/settings/policies/membership/${item.id}/edit` }]
+                              : []),
+                          ]}
+                        />
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
