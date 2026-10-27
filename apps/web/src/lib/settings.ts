@@ -212,3 +212,54 @@ export async function updateBranch(id: string, payload: BranchPayload): Promise<
     body: payload,
   });
 }
+
+export type LoanProductStatus = "DRAFT" | "ACTIVE" | "INACTIVE";
+
+export type LoanProduct = {
+  id: string;
+  code: string;
+  name: string;
+  status: LoanProductStatus;
+  description: string | null;
+  minPrincipalMinor: string;
+  maxPrincipalMinor: string;
+  minTenureMonths: number;
+  maxTenureMonths: number;
+  interestRateBp: number;
+  interestMethod: string;
+  repaymentFrequency: string;
+  gracePeriodDays: number;
+  arrearsClassificationDays: number;
+  managementFeeBp: number;
+  penaltyBp: number;
+  principalAccountId: string | null;
+  interestIncomeAccountId: string | null;
+  chargesIncomeAccountId: string | null;
+  penaltyIncomeAccountId: string | null;
+  workflowStages: unknown;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LoanProductListResponse = {
+  items: LoanProduct[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type LoanProductResponse = {
+  product: LoanProduct;
+  canEdit: boolean;
+};
+
+export async function listLoanProducts(filter: { q?: string; status?: string } = {}): Promise<LoanProductListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<LoanProductListResponse>(`/settings/products/loans${suffix}`);
+}
+
+export async function getLoanProduct(id: string): Promise<LoanProductResponse> {
+  return apiRequest<LoanProductResponse>(`/settings/products/loans/${encodeURIComponent(id)}`);
+}

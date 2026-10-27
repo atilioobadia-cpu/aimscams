@@ -341,6 +341,72 @@ export class SettingsService {
     };
   }
 
+  async listLoanProducts(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.LoanProductWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'DRAFT' || status === 'ACTIVE' || status === 'INACTIVE') {
+        where.status = status as 'DRAFT' | 'ACTIVE' | 'INACTIVE';
+      }
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const products = await this.prisma.loanProduct.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: products.map((product) => this.serializeLoanProduct(product)),
+      canView: this.can(auth, 'Settings Product : View'),
+      canEdit: this.can(auth, 'Settings Product : Edit'),
+    };
+  }
+
+  async getLoanProduct(auth: AuthContext, id: string) {
+    const product = await this.prisma.loanProduct.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+    });
+    if (!product) throw new NotFoundException('Loan product not found.');
+    return {
+      product: this.serializeLoanProduct(product),
+      canEdit: this.can(auth, 'Settings Product : Edit'),
+    };
+  }
+
+  private serializeLoanProduct(product: Prisma.LoanProductGetPayload<Record<string, never>>) {
+    return {
+      id: product.id,
+      code: product.code,
+      name: product.name,
+      status: product.status,
+      description: product.description,
+      minPrincipalMinor: product.minPrincipalMinor.toString(),
+      maxPrincipalMinor: product.maxPrincipalMinor.toString(),
+      minTenureMonths: product.minTenureMonths,
+      maxTenureMonths: product.maxTenureMonths,
+      interestRateBp: product.interestRateBp,
+      interestMethod: product.interestMethod,
+      repaymentFrequency: product.repaymentFrequency,
+      gracePeriodDays: product.gracePeriodDays,
+      arrearsClassificationDays: product.arrearsClassificationDays,
+      managementFeeBp: product.managementFeeBp,
+      penaltyBp: product.penaltyBp,
+      principalAccountId: product.principalAccountId,
+      interestIncomeAccountId: product.interestIncomeAccountId,
+      chargesIncomeAccountId: product.chargesIncomeAccountId,
+      penaltyIncomeAccountId: product.penaltyIncomeAccountId,
+      workflowStages: product.workflowStages,
+      createdAt: product.createdAt.toISOString(),
+      updatedAt: product.updatedAt.toISOString(),
+    };
+  }
+
   async createBranch(auth: AuthContext, body: BranchInput, context: MutationContext) {
     const organisationId = auth.user.organisation.id;
     const code = normaliseBranchCode(body.code);

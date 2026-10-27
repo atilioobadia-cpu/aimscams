@@ -94,6 +94,25 @@ export class SettingsController {
     return this.settings.getBranch(auth, id);
   }
 
+  @Get('products/loans')
+  @RequirePermissions('Settings Product : View')
+  async listLoanProducts(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listLoanProducts(auth, { q, status });
+  }
+
+  @Get('products/loans/:id')
+  @RequirePermissions('Settings Product : View')
+  async getLoanProduct(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.getLoanProduct(auth, id);
+  }
+
   @Post('branches')
   @RequirePermissions('Settings Branch : Create')
   async createBranch(
