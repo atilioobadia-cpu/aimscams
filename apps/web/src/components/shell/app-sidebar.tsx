@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -80,10 +80,10 @@ function SidebarItem({
       />
       {!collapsed ? (
         <>
-          <span className="min-w-0 truncate">{item.label}</span>
+          <span className="min-w-0 whitespace-nowrap">{item.label}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2">
             {item.badge ? (
-              <span className="rounded-full bg-subtle px-2 py-1 text-micro font-semibold uppercase tracking-wide text-muted-foreground">
+              <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 text-[var(--fs)] font-semibold text-primary">
                 {item.badge}
               </span>
             ) : null}
@@ -264,7 +264,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       <nav
         id="app-sidebar-nav"
         aria-label="Primary"
-        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-hidden max-[699px]:overflow-y-auto pt-2"
+        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-2"
       >
         <ul className="m-0 flex list-none flex-col p-0">
           {navItems.map((item) => {
@@ -317,7 +317,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
           </p>
         ) : (
           <>
-            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo text-[14px]">
+            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo text-[var(--fs)]">
               AIMSCAMS
             </p>
             <p
@@ -337,3 +337,4 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
     </aside>
   );
 }
+

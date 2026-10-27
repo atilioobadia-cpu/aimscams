@@ -280,7 +280,7 @@ html {
 }
 
 .sidebar-footer {
-  height: var(--sidebar-footer-height);
+  height: 70px;
   flex-direction: column;
   gap: 4px;
   padding: 6px 8px;
@@ -305,6 +305,7 @@ html {
     flex-direction: row;
     gap: 8px;
     padding: 0 6px;
+    height: 40px;
   }
 
   .sidebar-footer-wordmark {
