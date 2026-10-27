@@ -9,6 +9,7 @@ import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api";
 import { getMembershipPolicy, type MembershipPolicy } from "@/lib/settings";
+import { titleCase } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -104,7 +105,7 @@ export function MembershipPolicyDetail({ id }: { id: string }) {
           <PageHeader title={`${policy.code} — ${policy.name}`} description={policy.description ?? "Membership policy definitions."} />
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
             <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2 lg:grid-cols-3">
-              <Field label="Status" value={policy.status} />
+              <Field label="Status" value={titleCase(policy.status)} />
               <Field label="Member type" value={policy.memberType} />
               <Field label="Minimum next of kin" value={String(policy.minNextOfKin)} />
               <Field label="Maximum next of kin" value={String(policy.maxNextOfKin)} />

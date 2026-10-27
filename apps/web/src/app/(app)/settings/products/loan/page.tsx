@@ -19,6 +19,7 @@ import {
   type LoanProduct,
   type LoanProductStatus,
 } from "@/lib/settings";
+import { titleCase } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -159,7 +160,7 @@ export default function LoanProductsPage() {
                     <td className="px-4 py-3 font-medium text-strong">{product.code}</td>
                     <td className="px-4 py-3 text-body">{product.name}</td>
                     <td className="px-4 py-3">
-                      <Badge variant={product.status === "ACTIVE" ? "default" : "outline"}>{product.status}</Badge>
+                      <Badge variant={product.status === "ACTIVE" ? "default" : "outline"}>{titleCase(product.status)}</Badge>
                     </td>
                     <td className="px-4 py-3 tabular-nums text-body">{(product.interestRateBp / 100).toFixed(2)}%</td>
                     <td className="px-4 py-3 tabular-nums text-body">

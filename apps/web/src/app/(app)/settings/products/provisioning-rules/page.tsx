@@ -20,6 +20,7 @@ import {
   type ProvisioningRule,
   type ProvisioningRuleStatus,
 } from "@/lib/settings";
+import { titleCase } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -236,7 +237,7 @@ export default function ProvisioningRulesPage() {
                     <td className="px-4 py-3 font-medium text-strong">{item.code}</td>
                     <td className="px-4 py-3 text-body">{item.name}</td>
                     <td className="px-4 py-3">
-                      <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
+                      <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                     </td>
                     <td className="px-4 py-3 tabular-nums text-body">{item.daysFrom}</td>
                     <td className="px-4 py-3 tabular-nums text-body">{item.daysTo ?? "—"}</td>

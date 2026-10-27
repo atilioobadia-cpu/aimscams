@@ -16,6 +16,7 @@ import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import { listClients, updateClient, type Client, type ClientStatus, type ClientType } from "@/lib/settings";
 import { maskEmail, maskNationalId, maskPhone, nationalIdPattern } from "@/lib/privacy";
+import { titleCase } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -188,7 +189,7 @@ export default function ClientsPage() {
                     <td className="px-4 py-3 text-body">{maskPhone(item.phone)}</td>
                     <td className="px-4 py-3 text-body">{maskEmail(item.email)}</td>
                     <td className="px-4 py-3">
-                      <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
+                      <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                     </td>
                     <td className="px-4 py-3 text-body">{item.kycStatus}</td>
                     <td className="px-4 py-3 text-body">{item.joinedAt ? new Date(item.joinedAt).toLocaleDateString() : "—"}</td>

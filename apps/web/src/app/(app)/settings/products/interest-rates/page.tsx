@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import { listInterestRates, updateInterestRate, type InterestRate, type InterestRateStatus } from "@/lib/settings";
+import { titleCase } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -153,7 +154,7 @@ export default function InterestRatesPage() {
                     <td className="px-4 py-3 font-medium text-strong">{rate.code}</td>
                     <td className="px-4 py-3 text-body">{rate.name}</td>
                     <td className="px-4 py-3">
-                      <Badge variant={rate.status === "ACTIVE" ? "default" : "outline"}>{rate.status}</Badge>
+                      <Badge variant={rate.status === "ACTIVE" ? "default" : "outline"}>{titleCase(rate.status)}</Badge>
                     </td>
                     <td className="px-4 py-3 tabular-nums text-body">{(rate.rateBp / 100).toFixed(2)}%</td>
                     <td className="px-4 py-3 text-body">{rate.period}</td>

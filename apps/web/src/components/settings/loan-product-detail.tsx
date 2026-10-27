@@ -9,6 +9,7 @@ import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api";
 import { getLoanProduct, type LoanProduct } from "@/lib/settings";
+import { titleCase } from "@/lib/privacy";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -110,7 +111,7 @@ export function LoanProductDetail({ id }: { id: string }) {
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
             <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2 lg:grid-cols-3">
-              <Field label="Status" value={product.status} />
+              <Field label="Status" value={titleCase(product.status)} />
               <Field label="Interest method" value={product.interestMethod} />
               <Field label="Repayment frequency" value={product.repaymentFrequency} />
               <Field label="Interest rate" value={`${(product.interestRateBp / 100).toFixed(2)}%`} />

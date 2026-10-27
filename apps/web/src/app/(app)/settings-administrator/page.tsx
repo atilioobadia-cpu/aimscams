@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { UserForm } from "@/components/settings/user-form";
 import { ApiError } from "@/lib/api";
+import { titleCase } from "@/lib/privacy";
 import { maskEmail, maskPhone } from "@/lib/privacy";
 import {
   listBranches,
@@ -283,7 +284,7 @@ export default function UsersPage() {
                                 : "bg-subtle text-label"
                           }`}
                         >
-                          {user.status}
+                          {titleCase(user.status)}
                         </span>
                       </td>
                       <td className="px-4 py-3">
@@ -319,7 +320,7 @@ export default function UsersPage() {
             <Detail label="Email" value={maskEmail(viewingUser.email)} />
             <Detail label="Phone" value={maskPhone(viewingUser.phone)} />
             <Detail label="Branch" value={viewingUser.branch?.name ?? "Institution"} />
-            <Detail label="Status" value={viewingUser.status} />
+            <Detail label="Status" value={titleCase(viewingUser.status)} />
             <Detail
               label="Roles"
               value={viewingUser.roles.map((role) => role.name).join(", ") || "No role"}

@@ -27,6 +27,7 @@ import {
 import { apiAssetUrl, apiRequest } from "@/lib/api";
 import { tenantLogo } from "@/lib/brand";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
+import { titleCase } from "@/lib/privacy";
 
 type AppHeaderProps = {
   institution: DashboardFixture["institution"];
@@ -107,14 +108,14 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
         <div
           className="hidden items-center gap-3 lg:flex"
           data-testid="branch-context"
-          aria-label={`Branch: ${branch.name}, ${branch.status}`}
+          aria-label={`Branch: ${branch.name}, ${titleCase(branch.status)}`}
         >
           <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
             <p className="fs-text font-semibold leading-tight text-brand">{branch.name}</p>
             <p className="mt-0.5 flex items-center gap-1 fs-text leading-none text-brand">
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
-              {branch.status}
+              {titleCase(branch.status)}
             </p>
           </div>
         </div>

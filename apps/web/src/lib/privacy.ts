@@ -23,3 +23,10 @@ export function maskEmail(value: string | null | undefined): string {
 export function nationalIdPattern(value: string): boolean {
   return /^\d{8}-\d{5}-\d{5}-\d{2}$/.test(value.trim());
 }
+
+export function titleCase(value: string | null | undefined): string {
+  if (!value) return "N/A";
+  return value
+    .toLowerCase()
+    .replace(/(^|\s|[-_])([a-z])/g, (_, separator, letter) => `${separator}${letter.toUpperCase()}`);
+}
