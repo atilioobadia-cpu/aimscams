@@ -1,8 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
 
-import { apiRequest } from "@/lib/api";
+import { AccountingNav } from "@/components/accounting/accounting-nav";
+import {
+  ErrorPanel,
+  ForbiddenPanel,
+  PanelSkeleton,
+} from "@/components/accounting/states";
+import { EmptyState } from "@/components/data/empty-state";
+import { PageHeader } from "@/components/data/page-header";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ApiError, apiRequest } from "@/lib/api";
 
 type Account = {
   id: string;
@@ -14,92 +33,123 @@ type Account = {
   is_assumption: boolean;
 };
 
+function display(value: string): string {
+  return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+}
+
 export default function ChartOfAccountsPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
+  const [forbidden, setForbidden] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     let active = true;
+    setLoading(true);
+    setForbidden(false);
+    setError(null);
     apiRequest<Account[]>("/accounting/chart-of-accounts")
       .then((data) => {
         if (!active) return;
         setAccounts(data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch((failure) => {
         if (!active) return;
-        setError(err instanceof Error ? err.message : "Could not load chart of accounts.");
+        if (failure instanceof ApiError && failure.status === 403) {
+          setForbidden(true);
+        } else {
+          setError(
+            failure instanceof Error && failure.message
+              ? failure.message
+              : "Could not load the chart of accounts.",
+          );
+        }
         setLoading(false);
       });
     return () => {
       active = false;
     };
-  }, []);
+  }, [refresh]);
 
   return (
-    <div className="space-y-5">
-      <div>
-        <h1 className="text-fs font-bold leading-tight text-strong">Chart of accounts</h1>
-        <p className="mt-1 text-fs text-muted-foreground">
-          Institution chart of accounts.
-        </p>
-      </div>
+    <div className="space-y-[var(--space-14)]">
+      <PageHeader
+        title="Chart of accounts"
+        description="The institution's ledger accounts and their normal side. Only postable accounts accept journal lines."
+        breadcrumb={
+          <Link href="/accounting" className="hover:text-brand">
+            Accounting
+          </Link>
+        }
+      />
 
-      {error ? (
-        <div className="rounded-[var(--card-radius)] border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-fs text-accent-red">
-          {error}
-        </div>
-      ) : null}
+      <AccountingNav />
 
-      <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-fs">
-            <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
-              <tr>
-                <th className="px-[var(--space-16)] py-[var(--space-8)]">Code</th>
-                <th className="px-[var(--space-16)] py-[var(--space-8)]">Name</th>
-                <th className="px-[var(--space-16)] py-[var(--space-8)]">Type</th>
-                <th className="px-[var(--space-16)] py-[var(--space-8)]">Normal balance</th>
-                <th className="px-[var(--space-16)] py-[var(--space-8)]">Postable</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan={5} className="px-[var(--space-16)] py-[var(--space-16)] text-center text-muted-foreground">
-                    Loading accounts...
-                  </td>
-                </tr>
-              ) : accounts.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-[var(--space-16)] py-[var(--space-16)] text-center text-muted-foreground">
-                    No accounts found.
-                  </td>
-                </tr>
-              ) : (
-                accounts.map((account) => (
-                  <tr key={account.id} className="border-b border-card-border last:border-0">
-                    <td className="px-[var(--space-16)] py-[var(--space-8)] font-medium text-strong">{account.code}</td>
-                    <td className="px-[var(--space-16)] py-[var(--space-8)] text-body">
-                      {account.name}
-                      {account.is_assumption ? (
-                        <span className="ml-2 rounded-full bg-accent-yellow-bg px-2 py-0.5 text-fs font-semibold text-accent-yellow">
-                          assumption
-                        </span>
-                      ) : null}
-                    </td>
-                    <td className="px-[var(--space-16)] py-[var(--space-8)] text-body">{account.type}</td>
-                    <td className="px-[var(--space-16)] py-[var(--space-8)] text-body">{account.normal_balance}</td>
-                    <td className="px-[var(--space-16)] py-[var(--space-8)] text-body">{account.is_postable ? "Yes" : "No"}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {forbidden ? (
+        <ForbiddenPanel message="Your role cannot view the chart of accounts. Ask an administrator for Settings Accounting : View." />
+      ) : loading ? (
+        <PanelSkeleton rows={8} />
+      ) : error ? (
+        <ErrorPanel message={error} onRetry={() => setRefresh((value) => value + 1)} />
+      ) : accounts.length === 0 ? (
+        <EmptyState
+          icon={BookOpen}
+          title="No ledger account yet"
+          description="Seed the institution's chart of accounts before posting any entry."
+        />
+      ) : (
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-[var(--space-16)] py-[var(--space-10)]">
+            <p className="text-fs text-muted-foreground">
+              {accounts.length} {accounts.length === 1 ? "account" : "accounts"} ·{" "}
+              {accounts.filter((account) => account.is_postable).length} postable
+            </p>
+            <p className="text-fs text-muted-foreground">
+              Normal side follows the account, not the last posting.
+            </p>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="pl-[var(--space-16)]">Code</TableHead>
+                <TableHead>Account</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Normal side</TableHead>
+                <TableHead className="pr-[var(--space-16)] text-right">Postable</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {accounts.map((account) => (
+                <TableRow key={account.id}>
+                  <TableCell className="pl-[var(--space-16)] font-medium text-strong">
+                    {account.code}
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-body">{account.name}</span>
+                    {account.is_assumption ? (
+                      <Badge
+                        variant="outline"
+                        className="ml-2 border-accent-yellow/40 bg-accent-yellow-bg text-accent-yellow"
+                      >
+                        Assumption
+                      </Badge>
+                    ) : null}
+                  </TableCell>
+                  <TableCell className="text-body">{display(account.type)}</TableCell>
+                  <TableCell className="text-body">{display(account.normal_balance)}</TableCell>
+                  <TableCell className="pr-[var(--space-16)] text-right">
+                    <Badge variant={account.is_postable ? "secondary" : "outline"}>
+                      {account.is_postable ? "Yes" : "No"}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </section>
+      )}
     </div>
   );
 }
-

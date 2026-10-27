@@ -38,7 +38,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
     <ChartCard
       testId="funds-chart"
       title={funds.title}
-      description={`${funds.period} Â· TZS`}
+      description={`${funds.period} · TZS`}
       action={
         <span className="rounded-full bg-accent-teal-bg px-3 py-1.5 text-fs font-medium text-brand">
           Net in {formatCompactTzs(net)}

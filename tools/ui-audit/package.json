@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Measure rendered pages against docs/11 and fail on console errors.",
   "scripts": {
+    "login": "node login.mjs",
     "audit": "node audit.mjs"
   },
   "dependencies": {

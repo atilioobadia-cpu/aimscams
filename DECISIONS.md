@@ -281,6 +281,12 @@ D-013, so the mark changes and the geometry does not.
 - A UI change is not done until the rendered result has been measured in a real browser against
   the checklist in `docs/11 §8`.
 
+**Implementation note (2026-10-27).** The shipped build keeps the reference's anatomy but at a
+denser scale: **12.8px text, 68px header, 204px sidebar (76 collapsed), 36px rows, 8px cards,
+60px chat button**. The 97 / 300 / 44 / 12 numbers above are the reference measurements that
+established the anatomy, not the current gate. `docs/11` records the shipped values and the
+browser audit asserts them.
+
 ### D-021 — Money is integer minor units at rest
 **Status:** Accepted 2026-10-26 · clarifies the "decimal monetary types" requirement · `docs/10 §7`
 
@@ -465,8 +471,28 @@ old circle imposed on every future tenant.
 
 **Consequences.**
 - The header supports 7:1 lockups as well as square marks; nothing is cropped.
-- `tools/ui-audit/audit.mjs` still asserts the old 60px circle and needs the same update
-  before it is run again.
+- `tools/ui-audit/audit.mjs` asserts the 28px image, its cap, and the 40px monogram fallback;
+  the old 60px circle assertion is gone.
+
+### D-029 — Phase 3 ships a read-only chart of accounts; tree detail lands with Accounting
+
+**Status:** Accepted 2026-10-27 · narrows GL-01 for the Phase 3 gate · `docs/13 §10`
+
+Phase 3 ships GL-01 as a read-only list of the seeded chart (code, name, type, normal balance,
+postable, assumption). The tree grouping, opening balances, bank/cash and reconciliation flags,
+and the opening-balance import path move to the Accounting phase (Phase 8), where the chart
+becomes editable and the 347-category seed is exercised.
+
+**Why.** The books must exist before money moves: Phase 3's operator surface needs accounts to
+post to, not a chart editor. The list is sufficient to verify posting, reversal, period guards,
+ledger drilldown and the outbox. Building the editor now would delay the ledger gate and duplicate
+work that the Accounting phase owns.
+
+**Consequences.**
+- GL-01 is ticked with the scope note in `docs/13`; it is not a claim that `docs/09`'s tree plus
+  per-account detail is finished.
+- The chart API and page stay read-only; there is no account create/edit UI in Phase 3.
+- The 347-category seed is a Phase 8 fixture, not a Phase 3 requirement.
 
 ---
 

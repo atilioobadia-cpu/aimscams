@@ -33,6 +33,7 @@ export function ChatFab() {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [dragging, setDragging] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const fabRef = useRef<HTMLButtonElement>(null);
   const dragStart = useRef<{ x: number; y: number; btnX: number; btnY: number } | null>(null);
 
   useEffect(() => {
@@ -114,6 +115,7 @@ export function ChatFab() {
             </span>
           </button>
           <button
+            ref={fabRef}
             type="button"
             data-testid="chat-fab"
             aria-label="Open chat"
@@ -127,7 +129,13 @@ export function ChatFab() {
           </button>
         </div>
       </DialogTrigger>
-      <DialogContent className="border border-card-border sm:max-w-md">
+      <DialogContent
+        className="border border-card-border sm:max-w-md"
+        onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          fabRef.current?.focus();
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="text-fs font-bold text-strong">Support chat</DialogTitle>
           <DialogDescription>

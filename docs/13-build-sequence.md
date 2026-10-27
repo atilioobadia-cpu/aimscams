@@ -54,22 +54,31 @@ Every page is measured at **1837×1080** and **1280×800**, in a real browser, w
 
 ### 3.1 Automated assertions
 
-One reusable script, `tools/ui-audit`, is built in Phase 1 and run per page and per phase. It takes a
-route list and asserts:
+One reusable script, `tools/ui-audit`, is built in Phase 1 and run per route and per phase. It takes
+one authenticated route per invocation (`AUDIT_URL`), runs both viewports and the collapsed state,
+and asserts shell, typography, overflow and console checks everywhere. Dashboard content checks
+run only when the route ends in `/dashboard`.
 
 | Check | Expected |
 |---|---|
-| Header height | 97px ±1 |
-| Sidebar width, expanded | 300px ±1 |
-| Sidebar width, collapsed | the value recorded in `docs/11` during Phase 1 |
-| Active nav pill | 44px tall, x≈12→276, radius 8px, background `#057573` |
+| Header height | 68px |
+| Tenant logo | image, 28px tall, ≤190px wide, 40px monogram fallback |
+| Sidebar width, expanded | 204px |
+| Sidebar width, collapsed | 76px |
+| Active nav pill | 36px tall, x=8→195.3, radius 6px, background `#057573` |
+| Sidebar row / sub-item | 36px (Settings link 34px) / 28px; icon 20px on x=28 |
 | Sidebar item count | exactly 12, in the order in `docs/11 §4` |
+| Sidebar footer | 73px; collapse control 44px on the rail edge |
+| Tab card / tabs | 54px, radius 8px / 154×44, radius 6px |
+| KPI grid | 8 cards, fixed 4 per row, 94.8px tall, 12px gap |
 | Page background | `#ebe9e9` |
-| Card radius / padding | 12px / 30px |
-| Card border | 1px, `--border-card`, no heavy shadow |
-| Floating chat button | 90px circle, `#037674` |
-| Horizontal scrollbar | none at 1837px and none at 1280px |
-| Console | zero errors, zero unhandled rejections |
+| Card radius / padding | 8px; KPI 14px, chart and portfolio 30px |
+| Card border | 1px, `#dee2e6`, no heavy shadow |
+| Floating chat button | 60px circle, `#037674`, right 20 / bottom 16 |
+| Text | every rendered node is 12.8px |
+| Horizontal scrollbar | none at 1837×1080 and none at 1280×800 |
+| Console | zero errors, zero warnings, zero unhandled rejections |
+| Requests | zero failed same-origin requests, zero HTTP 5xx |
 | Fonts | loaded, no fallback flash in the screenshot |
 
 ### 3.2 Interaction assertions
@@ -96,8 +105,10 @@ route list and asserts:
 
 ### 3.5 Screenshots
 
-Saved to `artifacts/ui/<phase>/<route>-<viewport>.png` (gitignored). The commit message records the
-measured values that matter, not a link to an image the reviewer cannot see.
+Saved to `artifacts/ui/audit/<route>-<viewport>.png` with `report.json` in the same directory
+(gitignored); the scripts resolve this from the repository root regardless of the working directory.
+The commit message records the measured values that matter, not a link to an image the reviewer
+cannot see.
 
 ---
 
@@ -111,7 +122,7 @@ feat(<module>): <page name>
 Route: /<route>
 - what was built
 - tests added
-- measured: header 97, sidebar 300, pill 44, bg #ebe9e9, console clean
+- measured: header 68, sidebar 204, pill 36, bg #ebe9e9, no overflow, console clean
 ```
 
 **Cadence**
@@ -174,7 +185,9 @@ at once. A typo, a colour value or a one-line fix gets no skill: fix it, verify 
 
 ### 5.2 Reuse
 
-- **One audit script**, parameterised by route list. Do not rewrite browser checks per page.
+- **One audit script**, parameterised by one authenticated route per run (`AUDIT_URL`). Do not
+  rewrite browser checks per page; add route-specific assertions only where the page has content
+  beyond the shell.
 - **One seed** with deterministic synthetic data, extended as modules land. No hand-typed fixtures.
 - **Six templates** (T1–T6). Build the template, then configure it.
 - **One report engine.** A report is a definition: parameters, SQL, columns, totals, export. The
@@ -292,22 +305,21 @@ proven parts.
   components.
 - Primitives: Button, Input, Select, Checkbox, Radio, Textarea, Card, Table, Badge, Tabs, Dropdown,
   Dialog, Sheet, Tooltip, Pagination, EmptyState, StatCard, ChartCard, PageHeader, FilterBar.
-- Header (97px), sidebar (300px, 12 items, exact order, chevrons as specified), collapse control,
-  footer wordmark, floating chat button (90px), content grid.
-- **Resolve the one gap in the contract:** the collapsed sidebar width is not stated in `docs/11`.
-  Measure the reference corpus, choose the value that keeps the icon axis, record it in `docs/11`,
-  then implement it.
+- Header (68px), sidebar (204px, 12 items, exact order, chevrons as specified), collapse control,
+  footer wordmark, floating chat button (60px), content grid.
+- The collapsed sidebar is **76px** and keeps the icon axis at x=28; the value is recorded in
+  `docs/11 §4` and enforced by the audit.
 - Dashboard from typed fixtures: 8 KPI tiles, funds in/out, portfolio composition, unposted
   transactions banner, branch context.
-- Campaigns renders as a disabled "Soon" item with a muted chevron — present for geometry, never a
-  dead link.
+- Campaigns is a real link with a plain `Soon` note; every sidebar destination resolves to a page
+  or the shared `ComingSoon` placeholder (`D-027`).
 - `tools/ui-audit` complete; baseline screenshots at both widths, expanded and collapsed.
 
 **Gate**
 
 - Every automated assertion in §3.1 passes on `/dashboard`.
 - Collapse, all dropdowns, all modals and the chart tooltip behave per §3.2.
-- The 12 items are in the exact order; Campaigns is disabled and not focusable as a link.
+- The 12 items are in the exact order; Campaigns is focusable and resolves to a page.
 - Production build renders identically.
 
 **Commit.** One per component group, then `feat(dashboard): dashboard shell with fixtures`
@@ -360,33 +372,45 @@ Plus three screens outside the inventory: sign in, MFA challenge/enrolment, pass
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | GL-01 | `/accounting-chart-of-accounts` | Chart of accounts | T1/T3 | H |
-| [ ] | GL-02 | `/accounting-entries` | Journal entries | T1 | H |
-| [ ] | GL-03 | `/accounting-ledger-entries` | Ledger entries | T1 | M |
-| [ ] | ST-02 | `/settings-accounting-settings` | Accounting settings | T6 | H |
+| [x] | GL-01 | `/accounting-chart-of-accounts` | Chart of accounts (read-only list; tree detail deferred, `D-029`) | T1/T3 | H |
+| [x] | GL-02 | `/accounting-entries` | Journal entries | T1 | H |
+| [x] | GL-03 | `/accounting-ledger-entries` | Ledger entries | T1 | M |
+| [x] | ST-02 | `/settings/accounting` | Accounting settings | T6 | H |
+
+`/accounting` is the module hub; it links only to the four pages above.
 
 **Work**
 
 - Bring `packages/ledger/src/schema.sql` into the migration stream without weakening a single
   invariant: balance trigger, immutability, period guard, composite tenant keys, RLS.
-- Chart of accounts tree with 347 categories, opening balances, bank/cash and reconciliation flags.
+- Chart of accounts read-only list, seeded from the ledger chart (18 accounts in the demo). The tree
+  grouping, opening balances and bank/cash/reconciliation flags move to the full Accounting phase
+  (`D-029`).
 - Journal entry create/post/reverse; balanced-line editor; period selection; status `Posted` /
-  `Archived`.
-- Ledger drilldown with running balance.
-- Financial year, periods, open/close, tax rates, inter-branch ledger, GL mappings.
+  `Archived`; reversal idempotent per original entry.
+- Ledger drilldown with account and date filters, opening/closing/running balance on the account's
+  normal side, and an entry link back to the journal detail.
+- Financial year, periods, open/close/reopen, tax rates, inter-branch ledger, posting-policy
+  versions (edits append a version; never overwrite history).
 - Posting service used by every later module; **outbox table** written in the same transaction.
-- Worker consumes the outbox into BullMQ with idempotency keys; dead-letter queue visible.
-- Opening-balance import path for a new institution (greenfield, so it is an explicit action, not a
-  migration).
+- Worker consumes the outbox into BullMQ with idempotency keys, leases expired claims, copies
+  exhausted events to a dead-letter queue, and refuses unregistered event types. Read-only
+  `GET /accounting/outbox` exposes counts and the oldest due event.
+- Opening-balance import path for a new institution is deferred to the Accounting phase
+  (`D-029`); it is an explicit action, never a migration.
 
 **Gate**
 
 - An unbalanced entry is rejected by the database, not only by the service.
 - Posted entries and lines cannot be updated or deleted; a reversal posts a new entry.
-- A posting outside an open period is refused.
-- Killing the worker after commit does not lose the event; replay is idempotent.
+- A posting outside an open period is refused; closing a period with a draft entry is refused.
+- Killing the worker after commit does not lose the event; replay is idempotent, an expired lease
+  is recovered, and the dead-letter queue is empty after a clean run.
 - Trial balance balances after a scripted sequence of entries.
 - Cross-tenant lines are impossible; RLS is exercised by a test.
+- `/dashboard`, `/accounting`, `/accounting-chart-of-accounts`, `/accounting-entries`,
+  `/accounting-ledger-entries` and `/settings/accounting` pass the route audit at both widths with
+  all four states.
 
 **Branch.** `feat/ledger-core` → PR → merge commit. This is the highest-risk phase in the build.
 

@@ -20,6 +20,23 @@ export function formatTzs(value: string | bigint): string {
   return `TZS ${formatMinorUnits(value)}`;
 }
 
+/**
+ * Ledger money keeps both decimals. Integer arithmetic builds the cents, so a
+ * TZS 2,500,000.05 posting never turns into a float on the way to the screen.
+ */
+export function formatMinorUnitsExact(value: string | bigint): string {
+  const minor = toBigInt(value);
+  const negative = minor < 0n;
+  const absolute = negative ? -minor : minor;
+  const whole = absolute / 100n;
+  const cents = absolute % 100n;
+  return `${negative ? "-" : ""}${decimal.format(whole)}.${cents.toString().padStart(2, "0")}`;
+}
+
+export function formatTzsExact(value: string | bigint): string {
+  return `TZS ${formatMinorUnitsExact(value)}`;
+}
+
 export function formatInteger(value: string | number): string {
   return decimal.format(typeof value === "bigint" ? value : BigInt(value));
 }

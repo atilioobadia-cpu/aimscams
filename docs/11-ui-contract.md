@@ -1,12 +1,18 @@
 # 11 — UI Contract
 
-**Status:** Authoritative visual contract · Accepted 2026-10-26 (`D-020`)
+**Status:** Authoritative visual contract · Accepted 2026-10-26 (`D-020`) · shipped values recorded 2026-10-27
 **Supersedes:** the earlier styling targets (`#0F4D3A` brand, `#ECEBEC` page background,
 10px card radius, 96px header). Those values are historical.
 
-Every value below was measured on the reference at a **1837px viewport at 100% zoom**. Treat the
-numbers as a contract: implement, then measure the rendered result in a real browser and compare.
-A value marked *about* has a **±2px tolerance**; a hex value has none.
+Every value below is the **shipped contract**, measured on the running app at **1837×1080** and
+**1280×800**, 100% zoom, with Roboto loaded. It is the gate: implement, then measure the rendered
+result in a real browser and compare. A value marked *about* has a **±2px tolerance**; a hex value
+has none.
+
+**Geometry note.** `D-020` adopted the reference's anatomy. The shipped build implements that
+anatomy at a denser scale: **12.8px text, a 68px header, a 204px rail and 36px rows**. `D-020`'s
+97px / 300px / 44px / 12px numbers describe the reference measurements, not this gate. Every
+rendered text node is **12.8px**; a node at any other size is a defect.
 
 ---
 
@@ -17,61 +23,90 @@ a near-match.
 
 ```css
 :root {
+  /* Type: one size, everywhere */
+  --fs: 12.8px;
+  --fs-title: var(--fs);
+  --fs-kpi: var(--fs);
+  --fs-body: var(--fs);
+
   /* Brand */
-  --brand-primary: #057573;        /* active sidebar pill, active tab, branch name, primary buttons */
-  --brand-primary-fab: #037674;    /* floating chat button */
+  --primary: #057573;              /* active sidebar pill, active tab, branch name, primary buttons */
+  --primary-tint: #e6f1f1;         /* teal icon badge, net-in pill, hover fills */
+  --primary-fab: #037674;          /* floating chat button */
   --brand-logo-teal: #479b92;      /* sidebar footer wordmark */
-  --brand-tenant-blue: #29aae3;    /* tenant blue: logo fallback monogram, chart series */
+  --brand-tenant-blue: #29aae3;    /* portfolio savings segment */
   --avatar-blue: #377ab1;          /* user avatar circle */
 
   /* Surfaces */
-  --bg-page: #ebe9e9;              /* canvas behind the cards, gaps between cards */
-  --bg-surface: #ffffff;           /* header, sidebar, cards, chart card */
-  --bg-subtle: #f8f9fa;            /* hairline gaps and subtle fills */
+  --page-bg: #ebe9e9;              /* canvas behind the cards */
+  --surface: #ffffff;              /* header, sidebar, cards, chart card */
+  --tab-inactive-bg: #f8fafc;      /* subtle fills and hover */
 
-  /* Borders */
-  --border-card: #e2e8f0;          /* 1px border on cards */
-  --border-chrome: #dee2e6;        /* header bottom, sidebar right, scrollbar */
+  /* Borders and chrome */
+  --border: #dee2e6;               /* cards, header bottom, sidebar right */
+  --border-header: #c3c6ca;        /* 1px header shadow line */
   --grid-line: #e5e5e5;            /* chart gridlines */
 
   /* Text */
-  --text-strong: #000000;          /* KPI values, chart title, inactive tab labels */
-  --text-body: #495057;            /* sidebar labels, icons, header title, user name, language */
-  --text-muted: #6c757d;           /* header sub-label, chevrons */
-  --text-label: #64748b;           /* KPI card labels */
+  --text-strong: #111827;          /* KPI values, chart title, inactive tab labels */
+  --text-heading: #495057;         /* sidebar labels, header title, user name */
+  --text-muted: #6c757d;           /* header detail, KPI labels, chevrons */
   --text-axis: #666666;            /* chart axis labels */
-  --text-on-primary: #ffffff;      /* text and icon on teal */
+  --text-on-primary: #ffffff;
 
-  /* Semantic accents: icon/stroke + tinted background */
-  --accent-teal: #057573;          --accent-teal-bg: #e0eeed;    /* Total Members */
-  --accent-red: #c75a43;           --accent-red-bg: #f8eae7;     /* money out, risk, chart bars */
-  --accent-yellow: #e6c120;        --accent-yellow-bg: #fcf7e3;  /* warnings */
+  /* Semantics: icon/stroke + tinted background */
+  --danger: #dc3545;               --danger-bg: #f8eae7;
+  --accent-yellow: #e6c120;        --accent-yellow-bg: #fcf7e3;
+  --chart-out: #c75a43;            /* funds-out bar */
 
-  /* Chart */
-  --chart-bar: #c75a43;
+  /* Shared geometry */
+  --header-height: 68px;
+  --sidebar-width: 204px;
+  --sidebar-collapsed-width: 76px;
+  --sidebar-footer-height: 73px;
+  --sidebar-row-height: 36px;
+  --sidebar-subitem-height: 28px;
+  --content-padding: 18px;
+  --icon-size: 20px;
+  --icon-box-size: 34px;
+  --card-radius: 8px;
+  --control-radius: 5px;
+  --pill-radius: 6px;
+
+  /* Spacing, in rendered pixels */
+  --space-4: 4px;   --space-6: 6px;   --space-8: 8px;
+  --space-10: 10px; --space-12: 12px; --space-14: 14px;
+  --space-16: 16px; --space-18: 18px; --space-24: 24px;
+  --space-32: 32px;
 }
 ```
 
-Both Bootstrap grays (`#495057`, `#6c757d`, `#dee2e6`, `#f8f9fa`) and Tailwind slate
-(`#64748b`, `#e2e8f0`) appear in the reference. Define both exactly as listed; do not normalise
-one into the other.
+**Type:** Roboto, weights 400 / 500 / 600 / 700, sans-serif fallback. Every text node renders at
+`--fs`; the old 18px labels, 30px KPI values and 20px chart titles are not part of this build.
 
-**Type:** Roboto, weights 400 / 500 / 600 / 700, sans-serif fallback.
+**Colour rules.** `#057573` is the only primary/active colour. `#dc3545` marks money-out and risk
+icons; `#c75a43` is the funds-out chart series. `#e6c120` marks warnings. `#29aae3` is the tenant
+blue in the portfolio bar. Do not normalise Bootstrap (`#495057`, `#6c757d`, `#dee2e6`) into
+Tailwind slate; use the values above.
 
 ---
 
 ## 2. Shell structure
 
-Fixed header across the full width, fixed left sidebar, scrollable main area on `--bg-page`.
+Fixed header across the full width, fixed left sidebar, scrollable main area on `--page-bg`.
 
 ```
-┌──────────────────────────── header (about 97px, fixed) ────────────────────────────┐
-├──────────────┬──────────────────────────────────────────────────────────────────────┤
-│  sidebar     │  main content (--bg-page)                                            │
-│  about 300px │  tab card → 4 KPI cards → chart card                                 │
-│  fixed       │  about 22px from sidebar, 20px between cards                         │
-└──────────────┴──────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────── header 68px, fixed ────────────────────────────┐
+├──────────────┬──────────────────────────────────────────────────────────────┤
+│  sidebar     │  main content (--page-bg)                                    │
+│  204px fixed │  18px inset; tab card 54px; 20px gap; 8 KPI cards (4/row);  │
+│  76px closed │  chart + portfolio; 76px bottom reserve for the chat button  │
+└──────────────┴──────────────────────────────────────────────────────────────┘
 ```
+
+The content box starts at **x = 204 + 18 = 222**. The tab card starts at
+**y = 68 + 18 = 86**. The sidebar and header are fixed; the main area scrolls. The bottom padding
+is **76px** so the floating chat button never covers the last card.
 
 ---
 
@@ -79,47 +114,47 @@ Fixed header across the full width, fixed left sidebar, scrollable main area on 
 
 | Element | Value |
 |---|---|
-| Height | 68px |
-| Background | `--bg-surface` |
-| Bottom border | 1px `--border-chrome` |
+| Height | **68px** |
+| Background | `--surface` |
+| Bottom border | 1px `--border` |
+| Shadow | 1px `0 1px 0 0 --border-header` (`#c3c6ca`) |
 | Position | fixed, full width, `14px` side padding |
 
 **Left group**, 10px gap:
 
 - Tenant logo: the institution's own lockup, **28px tall, max 190px wide**, `object-contain`.
-  No circle and no ring: the mark keeps its intrinsic ratio. It starts on the 14px header
-  padding and ends on the sidebar's right edge (190 + 14 = 204).
-- Stacked lines beside it: institution name, `--fs`, weight 600, `--text-body`; dialect and
-  code beneath at `--fs`, `--text-muted`.
+  It starts on the 14px header padding and ends on the sidebar's right edge (190 + 14 = 204).
+  No circle and no ring. A missing image degrades to a **40px** tenant-blue monogram, never a
+  broken image.
+- Stacked lines beside it: institution name, `--fs`, weight 600, `--text-heading`; dialect and
+  code beneath at `--fs`, weight 400, `--text-muted`.
 
 **Right group**, in order, 24px gaps:
 
-1. Tanzania flag, **24 × 16**, plus "English" (`--text-body`) and a down chevron
-   (`--text-body`).
-2. Building icon, 16px `--brand-primary`, then two stacked lines: branch name,
-   `--brand-primary`, weight 600, `--fs`; beneath it a check-circle plus "Open",
-   `--brand-primary`, `--fs`.
-3. User avatar: **34px circle**, gradient, white bold initials, `--fs`; name, `--fs`, weight
-   600, `--text-body`; then a down chevron.
+1. Tanzania flag, **24 × 16**, plus "English" (`--fs`, `--text-heading`) and a down chevron.
+   The trigger measures **105.4 × 31.2**.
+2. Building icon, 16px `--primary`, then two stacked lines: branch name, `--primary`, weight 600,
+   `--fs`; beneath it a check-circle plus "Open", `--primary`, `--fs`. The block measures
+   **119.6 × 32**.
+3. User avatar: **34px circle**, gradient, white bold initials, `--fs`; name, `--fs`, weight 600,
+   `--text-heading`; then a down chevron. The trigger measures **209.2 × 46**.
 
 ### 3.1 Tenant branding
 
-The header mark belongs to the **institution**, the sidebar wordmark belongs to the
-**product**. Keep them apart: AIMSCAMS is the thing that runs the back office, the tenant is
-the SACCO whose name and mark sit in the header.
+The header mark belongs to the **institution**; the sidebar wordmark belongs to the **product**.
+AIMSCAMS runs the back office; the tenant is the SACCO whose name and mark sit in the header.
 
 | Concern | Ruling |
 |---|---|
-| Asset | `apps/web/public/brand/mafanikio-logo.png` (300 × 43), declared once in `apps/web/src/lib/brand.ts` |
-| Component | `InstitutionLogo` renders the image at its ratio; a failed load degrades to a 40px tenant-blue monogram, never a broken image |
+| Demo asset | `apps/web/public/brand/mafanikio-logo.png` (300 × 43), declared once in `apps/web/src/lib/brand.ts` |
+| Component | `InstitutionLogo` renders the image at its ratio; a failed load degrades to a 40px tenant-blue monogram |
 | Fallback trigger | `onError` on the image, so a missing file costs one silently handled request and no layout shift |
-| Production | The slot reads `organisation.logoUrl`; the demo build pins the Mafanikio lockup |
+| Production | The slot reads `organisation.logoUrl`; the demo build pins the Mafanikio lockup until ST-01 ships the field |
 | Not the tenant's | Sidebar footer wordmark, auth screens, app icon |
 
-Placements still open, in order of value: a logo URL plus upload in **Settings → General**
-(the header then reads it per tenant), the **sign-in card** for white-label installs, a
-**136 × 136 app icon** derived from the emblem, and a **compact emblem** for the collapsed
-sidebar.
+Placements still open: a logo URL plus upload in **Settings → General** (ST-01), the **sign-in
+card** for white-label installs, a **136 × 136 app icon** derived from the emblem, and a
+**compact emblem** for the collapsed sidebar.
 
 ---
 
@@ -127,92 +162,146 @@ sidebar.
 
 | Element | Value |
 |---|---|
-| Width | about **300px** |
-| Collapsed width | **76px** — measured icon axis x=38 (left padding 28 + 20px icon), doubled so the icon does not move when collapsed |
-| Background | `--bg-surface` |
-| Right border | 1px `--border-chrome` |
-| Scrollbar | own thin scrollbar, `--border-chrome` |
-| Item pitch | about **60px** vertically |
-| Icon | 20px outline |
-| Label | about **18px**, `--text-body` |
-| Icon-to-label gap | about **12px** |
-| Left padding | about **28px** |
+| Width | **204px** |
+| Collapsed width | **76px** |
+| Background | `--surface` |
+| Right border | 1px `--border` |
+| Scrollbar | own thin scrollbar, `--border` |
+| Item pitch | **40px** vertically |
+| Row | **36px** tall, **187.3px** wide at x=8 (Settings link is 34px tall) |
+| Sub-item | **28px** tall, 187.3px wide at x=8, text starts at x=45 |
+| Icon | **20px** outline, on axis **x=28** expanded *and* collapsed |
+| Label | **12.8px**, weight 400, `--text-heading` |
+| Icon-to-label gap | **8px** |
+| Left padding | **20px** inside the row (row x=8 + padding 20 = icon x=28) |
 
-**Active item** — full-width pill from x≈12 to x≈276, **44px** tall, radius about **8px**,
-background `--brand-primary`, white label at weight 600 and a white icon.
+**Active item** — pill from x=8 to x=195.3, **36px** tall, radius **6px**, background `--primary`,
+white label at weight 600 and a white icon. Inactive rows are transparent with a `--text-heading`
+label and icon; hover uses `--tab-inactive-bg`.
 
 **Item order** (exactly):
 
-| # | Item | Chevron |
-|---|---|---|
-| 1 | Dashboard (active in the reference) | — |
-| 2 | Client | — |
-| 3 | Accounts | yes |
-| 4 | Transactions | yes |
-| 5 | Accounting | yes |
-| 6 | Requests | — |
-| 7 | Messages | — |
-| 8 | Campaigns | yes |
-| 9 | Reports | yes |
-| 10 | Import | yes |
-| 11 | Business Account | — |
-| 12 | Settings | yes |
+| # | Item | Chevron | Destination |
+|---|---|---|---|
+| 1 | Dashboard (active) | — | `/dashboard` |
+| 2 | Client | — | `/clients` |
+| 3 | Accounts | yes | `/accounts` |
+| 4 | Transactions | yes | `/transactions` |
+| 5 | Accounting | yes | `/accounting` |
+| 6 | Requests | — | `/requests` |
+| 7 | Messages | — | `/messages` |
+| 8 | Campaigns | — | `/campaigns` |
+| 9 | Reports | yes | `/reports` |
+| 10 | Import | yes | `/import` |
+| 11 | Business Account | — | `/business-account` |
+| 12 | Settings | group chevron | `/settings/general` |
 
-Chevrons are `--text-muted`, right-aligned at about **x=250**.
+Every row is an `<a href>` and resolves to a page or the shared `ComingSoon` placeholder
+(`D-027`). Campaigns is **not disabled**: it carries a plain `Soon` note at `--fs`, weight 400,
+`--text-heading`, and still links. Chevrons mark Accounts, Transactions, Accounting, Reports and
+Import; Settings has a separate group-chevron button in the remaining width of its row.
 
-**Collapse control** — a **44px** white circle with a 1px `--border-chrome` border, chevron-left
-in `--brand-primary`, straddling the sidebar's right edge near the bottom (about **y=813**).
+**Settings submenu** — nine links at 28px pitch: General, Accounting, Branches, Products, Policies,
+Users, Roles, Services. The parent link is 155.3 × 34; the chevron button sits in the rest of the
+187.3px row. Clicking a sub-link navigates; clicking the chevron toggles.
 
-**Footer**, fixed to the bottom above a thin top line: centred wordmark in `--brand-logo-teal`,
-bold; copyright beneath it, about **14px**, `--text-muted`, wrapping to two lines.
+**Collapse control** — a **44px** white circle with a 1px `--border` border, chevron-left in
+`--primary`, straddling the sidebar's right edge. Its centre is **x=203.3** expanded and **x=75.3**
+collapsed; it sits **6px above the footer**.
+
+**Footer**, fixed to the bottom above a 1px top line, **73px** tall, padding **6px 8px**, 4px row
+gap: centred wordmark **AIMSCAMS**, 12.8px, weight 700, `--brand-logo-teal`; copyright beneath it,
+12.8px, `--text-muted`, wrapping to two lines (`© 2026 AIMSCAMS.` / `All rights reserved.`).
+
+**Collapsed rail** — 76px. Rows are 51.3px wide at x=12; icons stay on x=28, labels are removed,
+the active pill stays teal at radius 6, and hover/focus shows a tooltip with the item name. The
+footer stays visible.
 
 ---
 
 ## 5. Main content
 
-Background `--bg-page`. About **22px** from the sidebar, about **20px** between cards.
+Background `--page-bg`. Content starts **18px** after the sidebar, **18px** below the header, and
+ends **18px** from the right edge. Cards are separated by **20px** vertically; the KPI grid uses
+**12px** horizontal and vertical gaps.
 
 ### 5.1 Tab card
 
 | Element | Value |
 |---|---|
-| Height | about **104px** |
-| Background / border / radius | `--bg-surface` / 1px `--border-card` / about **12px** |
+| Height | **54px** |
+| Background / border / radius | `--surface` / 1px `--border` / **8px** |
+| Padding | `0 14px` |
 | Tabs | Overview (active), Members, Loans |
-| Active tab | **44px** tall pill, about **154px** wide, background `--brand-primary`, white text and bar-chart icon, radius about **8px** |
-| Inactive tab | no background, text `--text-strong` (the reference shows `#000029` or black), 20px outline icon, label about **19px** |
-| Gap between tabs | about **30px** |
+| Tab | **154 × 44**, radius **6px**, **12.8px** label, one 20px chart icon |
+| Active tab | `--primary`, white text, weight 600 |
+| Inactive tab | transparent, `--text-strong` (`#111827`), weight 500 |
+| Gap between tabs | **6px** |
+
+The tab card spans the content width: **1582px** at 1837, **1024.7px** at 1280. Its top edge is
+**86px**. Members and Loans replace the KPI/chart area with their empty-state panels; the tab card
+itself does not change height.
 
 ### 5.2 KPI row
 
-Four cards, **equal width**, about **352px** each, about **185px** tall, gap about **22px**.
-Each: `--bg-surface`, 1px `--border-card`, radius about **12px**, padding about **30px**.
+**Eight cards, always 4 per row**, equal width: **386.5px** at 1837, **247.2px** at 1280. Height
+**94.8px**; horizontal gap **12px**; vertical gap **12px**. Each card: `--surface`, 1px
+`--border`, radius **8px**, padding **14px**.
 
-- Label top-left: about **18px**, weight 500, `--text-label`; may wrap to two lines.
-- Badge top-right: **66px** circle, tinted background, 1px ring and icon in the accent colour.
-- Value bottom-left: about **30px**, weight 700, `--text-strong`.
+- Label top-left: **12.8px**, weight 500, `--text-muted`; may wrap to two lines.
+- Badge top-right: **34px** circle, tinted background, 1px accent ring, **16px** icon.
+- Value bottom-left: **12.8px**, weight 700, `--text-strong`.
 
-| # | Label | Value | Icon | Accent / tint |
+| # | Label | Value (demo) | Icon | Accent / tint |
 |---|---|---|---|---|
-| 1 | Total Members | 1,111 | users | `--accent-teal` / `--accent-teal-bg` |
-| 2 | Outstanding Loan Principal | TZS 93,715,396 | wallet | `--accent-red` / `--accent-red-bg` |
+| 1 | Total Members | 1,111 | users | `--primary` / `--primary-tint` |
+| 2 | Outstanding Loan Principal | TZS 93,715,396 | wallet | `--danger` / `--danger-bg` |
 | 3 | Principal in Arrears | TZS 16,180,416 | warning triangle | `--accent-yellow` / `--accent-yellow-bg` |
-| 4 | Clients in Arrears | 23 | user-minus | `--accent-red` / `--accent-red-bg` |
+| 4 | Clients in Arrears | 23 | user-minus | `--danger` / `--danger-bg` |
+| 5 | Portfolio at Risk | 17.3% | shield-alert | `--danger` / `--danger-bg` |
+| 6 | Savings & Shares Balance | TZS 41,208,900 | piggy-bank | `--primary` / `--primary-tint` |
+| 7 | Till Status | Open | vault | `--primary` / `--primary-tint` |
+| 8 | Unposted Transactions | 3 | receipt | `--accent-yellow` / `--accent-yellow-bg` |
+
+Values are live demo data, not fixtures in the component. The unposted KPI must equal the count in
+the banner ("3 transactions are waiting to be posted").
 
 ### 5.3 Chart card
 
-`--bg-surface`, 1px `--border-card`, radius about **12px**, padding about **30px**.
+`--surface`, 1px `--border`, radius **8px**, padding **30px**.
 
-- Title "FundsInVsFundsOut": about **20px**, weight 700, `--text-strong`.
-- Bars: solid `--chart-bar`, about **77px** wide, **square corners**.
-- Y axis: labels "TZS 50M … TZS 15M" in **5M steps**, about 16px, `--text-axis`.
+- Title "Funds In vs Funds Out": **12.8px**, weight 700, `--text-strong`.
+- Subtitle "October 2026 · TZS": **12.8px**, `--text-muted`.
+- Net pill: tinted `--primary-tint`, teal text, eg "Net in 9.3M".
+- Two bars, **77px** wide at both measured widths, **square corners**: funds-in `--primary`,
+  funds-out `--chart-out` (`#c75a43`). Heights are proportional to the data.
+- Value label above each bar, eg "47.5M": **12.8px**, weight 500, `--text-strong`.
+- Y axis: labels "TZS 50M … TZS 15M" in **5M steps**, **12.8px**, `--text-axis`.
 - Gridlines: horizontal only, 1px `--grid-line`. No vertical gridlines.
-- Value label above each bar, e.g. "47.5M", about 16px, `#111111`.
+- Tooltip on hover **and** keyboard focus: "Funds in: TZS …" / "Funds out: TZS …", closes on blur
+  or pointer leave.
 
-### 5.4 Floating elements
+At 1837 the chart is **949.4 × 500.4** and sits beside the portfolio card (**612.6 × 500.4**,
+20px gap). At 1280 it is **1024.7 × 500.4** and the portfolio stacks below it, full width and
+326.8px high.
 
-- Chat button: bottom-right, **90px** circle, background `--brand-primary-fab`, white outlined
-  chat-bubble icon, soft shadow.
+### 5.4 Portfolio composition
+
+`--surface`, 1px `--border`, radius **8px**, padding **30px**.
+
+- Title "Portfolio composition": **12.8px**, weight 700.
+- Subtitle "Share of the branch portfolio": **12.8px**, `--text-muted`.
+- One 20px stacked bar, square ends, four segments in order: loan principal `--primary`,
+  savings `--brand-tenant-blue`, shares `--brand-logo-teal`, cash & bank `--accent-yellow`.
+- Rows: Loan principal, Savings, Shares, Cash & bank — each TZS amount and percentage, **12.8px**.
+- Total row: "Total portfolio" + TZS amount, **12.8px**, weight 700.
+
+### 5.5 Floating elements
+
+- Chat button: bottom-right, **60px** circle, background `--primary-fab`, white outlined
+  chat-bubble icon (**22px**), soft shadow. Right inset **20px**, bottom inset **16px**.
+  It is draggable by its 24px six-dot handle; double-click resets the corner position.
+- Opening the chat dialog moves focus into it; Escape closes it and returns focus to the FAB.
 - Ignore the dark vertical toolbar (`#1c1c1c`) at the right edge and the browser scrollbar. They
   are screen-recorder and browser overlays, not part of the application.
 
@@ -220,28 +309,38 @@ Each: `--bg-surface`, 1px `--border-card`, radius about **12px**, padding about 
 
 ## 6. Rules
 
-1. Tokens only. **No new colours, no near-matches.**
-2. Cards: white, 1px `--border-card`, about 12px radius, **no heavy shadow**.
-3. `--brand-primary` is the only primary-action and active-state colour.
-4. Red `--accent-red` marks money-out and risk. Yellow `--accent-yellow` marks warnings.
-5. Measurements were taken at 1837px / 100% zoom. Keep proportions and stay responsive instead
-   of hard-coding fixed pixel widths that break below the measured viewport.
+1. Tokens only. **No new colours, no near-matches.** Component padding and gaps use the spacing
+   scale; the dashboard composition's 20px card gap and 30px chart padding are measured values.
+2. Every rendered text node is **12.8px**. No 10px helper text, no 18px section titles, no 30px
+   KPI values.
+3. Cards: white, 1px `--border`, **8px** radius, **no heavy shadow**. Controls use 5px radius;
+   pills use 6px; modals use 11px.
+4. `--primary` is the only primary-action and active-state colour. Red marks money-out and risk;
+   yellow marks warnings.
+5. **KPI cards stay 4 per row at 1837 and 1280**; do not reflow to 2. The chart and portfolio are
+   side by side at wide widths and stack below 1500px. Bars stay 77px. There is no horizontal
+   scrollbar at either width.
+6. No layout shift. Fonts load before the page is measured; the logo reserves its 28px height.
+7. Every page implements loading, empty, error and forbidden states. Hiding a forbidden action in
+   the UI is not a control; the API must also return 403.
+8. Every sidebar destination resolves (`D-027`). An unbuilt module renders the shared `ComingSoon`
+   page; it is never a dead link.
 
 ---
 
 ## 7. AIMSCAMS substitutions
 
 The reference is another company's product. Measurements, colours, spacing and component anatomy
-are adopted exactly; **identity is ours** (`D-013`, `D-020`). Until `O-010` is ruled on, apply
-these substitutions:
+are adopted; **identity is ours** (`D-013`, `D-020`).
 
 | Reference text / mark | AIMSCAMS value |
 |---|---|
 | Sidebar wordmark "WAKANDI" | **AIMSCAMS** — same position, size, weight and `--brand-logo-teal` colour |
 | Footer "© 2026 Wakandi. All rights reserved." | **© 2026 AIMSCAMS. All rights reserved.** |
-| Tenant "MFSL MFI" / "101457" | Synthetic demo institution, clearly fictional |
-| Branch "MFSL MWANZA" | Synthetic branch for the same demo institution |
-| User "Ally Juma Ally" / "AA" | Synthetic demo user; initials must match the chosen name |
+| Tenant "MFSL MFI" / "101457" | **AIMSCAMS Demo SACCO** / **TCDC SACCOS · AIM-DEMO** (synthetic) |
+| Branch "MFSL MWANZA" | **Mwanza Branch** (synthetic) |
+| User "Ally Juma Ally" / "AA" | **Amina Hassan Mwinyi** / **AM** (synthetic) |
+| Tenant header mark | Mafanikio lockup in the demo; `organisation.logoUrl` in production |
 
 No real member data, no observed tenant's staff names, no observed tenant's branding in shipped
 UI. Demo data is generated, never copied (`D-014`).
@@ -250,25 +349,48 @@ UI. Demo data is generated, never copied (`D-014`).
 
 ## 8. Verification checklist
 
-Before reporting any UI work as done, load it in a real browser and record:
+Before reporting any UI work as done, run the browser gate and record the measurements:
 
-- [ ] Header height, background, bottom border; no duplicate user block.
-- [ ] Tenant circle 60px, name and code sizes/colours.
-- [ ] Flag, language, branch block, avatar 50px, name and chevrons.
-- [ ] Sidebar width, pitch, icon size, label size, left padding.
-- [ ] Active pill geometry (x 12→276, height 44, radius 8) and colours.
-- [ ] All 12 items in the stated order; chevrons present exactly where listed.
-- [ ] Collapse control 44px, straddling the edge, chevron in `--brand-primary`.
-- [ ] Footer wordmark and copyright, two-line wrap.
-- [ ] Tab card height, active pill 44px / about 154px / radius 8.
-- [ ] Four KPI cards: width, height, gap, padding, label/value sizes, badge 66px, accent pairs.
-- [ ] Chart title, bar colour and width, square corners, horizontal-only gridlines, axis steps.
-- [ ] Chat button 90px, colour, shadow.
-- [ ] **Collapsed sidebar**: icons centred on the same axis as expanded, no clipped labels,
-      active state still visible, tooltip or accessible name on each icon.
-- [ ] **Every dropdown**: opens, closes on outside click and Escape, keyboard navigable, focus
-      returns to the trigger, no clipped menu inside a scrolling container.
-- [ ] Console free of errors on every page visited.
-- [ ] No horizontal scrollbar at 1837px, and none at 1280px.
+```powershell
+cd tools/ui-audit
+npm run login    # once per session; needs AUDIT_EMAIL, AUDIT_PASSWORD, AUDIT_MFA_SECRET
+npm run audit    # AUDIT_URL defaults to http://localhost:3000/dashboard
+```
+
+`audit.mjs` runs shell checks on any authenticated route and dashboard checks only on
+`/dashboard`. It saves screenshots and `report.json` under `artifacts/ui/audit/` (gitignored), and
+exits non-zero on any failed check.
+
+- [ ] Header: 68px, white, 1px `#dee2e6` border + `#c3c6ca` shadow, 14px padding, no duplicate
+      user block.
+- [ ] Tenant logo: image, 28px tall, ≤190px wide, `object-contain`, x=14; 40px monogram fallback.
+- [ ] Institution name 12.8/600 `#495057`; detail 12.8/400 `#6c757d`.
+- [ ] Flag 24×16; language 105.4×31.2; branch 119.6×32; avatar 34; user trigger 209.2×46.
+- [ ] Sidebar 204 expanded / 76 collapsed; 12 items in the order above; pitch 40; rows 36
+      (Settings 34); sub-items 28; icons 20 on x=28; labels 12.8.
+- [ ] Active pill x=8→195.3, 36px tall, radius 6, `#057573`, white 600.
+- [ ] Chevrons exactly on Accounts, Transactions, Accounting, Reports, Import; Settings group
+      chevron; Campaigns "Soon" and still a link.
+- [ ] Collapse control 44px, centred on the rail edge, 6px above the footer.
+- [ ] Footer 73px, wordmark 12.8/700 `#479b92`, copyright two lines at 12.8 `#6c757d`.
+- [ ] Tab card 54px, radius 8, padding 0 14; tabs 154×44, radius 6, 12.8; active teal, inactive
+      `#111827` at weight 500; gap 6.
+- [ ] Eight KPI cards, 4 per row at both widths, 94.8px tall, gap 12, padding 14, radius 8;
+      labels 12.8/500 `#6c757d`, values 12.8/700 `#111827`, badges 34 with 16px icons.
+- [ ] KPI values live; unposted KPI equals the banner count.
+- [ ] Chart title/subtitle/axis/value labels at 12.8; two 77px square bars in `#057573` and
+      `#c75a43`; 8 horizontal gridlines only; tooltip on hover and focus.
+- [ ] Portfolio bar 20px with four correct colours; rows and total at 12.8.
+- [ ] Chat 60px, `#037674`, right 20 / bottom 16, focus returns to the FAB.
+- [ ] **Collapsed sidebar**: labels removed, icons on the same x=28 axis, active state visible,
+      tooltip on hover/focus, no overflow.
+- [ ] **Every dropdown and modal**: opens, closes on outside click and Escape, keyboard navigable,
+      focus returns to the trigger; no clipping inside a scrolling container.
+- [ ] Every page: loading, empty, error and forbidden states.
+- [ ] All rendered text is 12.8px.
+- [ ] Zero console errors, zero console warnings, zero unhandled page errors, zero failed
+      same-origin requests, zero HTTP 5xx.
+- [ ] No horizontal scrollbar at 1837×1080 or 1280×800.
+- [ ] Production build (`npm run build && npm start`) renders identically.
 
 Report the measured values, not an impression. "Looks right" is not evidence.

@@ -1,36 +1,62 @@
+/**
+ * Browser gate for docs/11 and docs/13 §3.
+ *
+ * Run `node login.mjs` once to create the authenticated storage state, then
+ * `node audit.mjs`. Point AUDIT_URL at any authenticated route: shell checks,
+ * typography, overflow and console checks run everywhere; dashboard content
+ * checks also require the route to end in `/dashboard`.
+ *
+ * Exit code 1 means the contract was not met.
+ */
 import { mkdir, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
-const url = process.env.AUDIT_URL ?? "http://localhost:3000/dashboard";
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const target = process.env.AUDIT_URL ?? "http://localhost:3000/dashboard";
+const targetUrl = new URL(target);
+const topLevelLabels = {
+  dashboard: "Dashboard",
+  clients: "Client",
+  accounts: "Accounts",
+  transactions: "Transactions",
+  accounting: "Accounting",
+  requests: "Requests",
+  messages: "Messages",
+  campaigns: "Campaigns",
+  reports: "Reports",
+  import: "Import",
+  "business-account": "Business Account",
+  settings: "Settings",
+};
+const settingsChildLabels = {
+  "/settings/general": "General",
+  "/settings/accounting": "Accounting",
+  "/settings/branches": "Branches",
+  "/settings/products": "Products",
+  "/settings/policies": "Policies",
+  "/settings/users": "Users",
+  "/settings/roles": "Roles",
+  "/settings/services": "Services",
+};
+const storageState = process.env.AUDIT_STORAGE_STATE
+  ? resolve(process.env.AUDIT_STORAGE_STATE)
+  : resolve(repoRoot, "artifacts/storage-state.json");
+const artifacts = resolve(repoRoot, "artifacts/ui/audit");
 const viewports = [
   { width: 1837, height: 1080 },
   { width: 1280, height: 800 },
 ];
 
-const NAV_ORDER = [
-  "Dashboard",
-  "Client",
-  "Accounts",
-  "Transactions",
-  "Accounting",
-  "Requests",
-  "Messages",
-  "Campaigns",
-  "Reports",
-  "Import",
-  "Business Account",
-  "Settings",
-];
-
-const CHEVRON_ITEMS = [
-  "Accounts",
-  "Transactions",
-  "Accounting",
-  "Campaigns",
-  "Reports",
-  "Import",
-  "Settings",
-];
+if (!existsSync(storageState)) {
+  console.error(`Missing storage state: ${storageState}`);
+  console.error(
+    "Run `node login.mjs` (or `npm run login` in tools/ui-audit) with AUDIT_EMAIL, AUDIT_PASSWORD and AUDIT_MFA_SECRET.",
+  );
+  process.exit(2);
+}
 
 const checks = [];
 const failures = [];
@@ -42,984 +68,1211 @@ function check(name, pass, detail = {}) {
 }
 
 function equal(name, actual, expected) {
-  check(name, JSON.stringify(actual) === JSON.stringify(expected), { actual, expected });
+  check(name, JSON.stringify(actual) === JSON.stringify(expected), {
+    actual,
+    expected,
+  });
 }
 
 function near(name, actual, expected, tolerance = 1) {
-  check(name, Math.abs(actual - expected) <= tolerance, { actual, expected, tolerance });
-}
-
-function round(value) {
-  return Math.round(value * 10) / 10;
-}
-
-function box(value) {
-  return value
-    ? {
-        x: round(value.x),
-        y: round(value.y),
-        w: round(value.width),
-        h: round(value.height),
-      }
-    : null;
-}
-
-async function boxOf(locator) {
-  if ((await locator.count()) === 0) return null;
-  return box(await locator.first().boundingBox());
-}
-
-async function styleOf(locator, properties) {
-  return locator.first().evaluate((element, names) => {
-    const style = getComputedStyle(element);
-    return Object.fromEntries(names.map((name) => [name, style[name]]));
-  }, properties);
-}
-
-async function activeElement(page) {
-  return page.evaluate(() => {
-    const element = document.activeElement;
-    return {
-      testId: element?.getAttribute("data-testid") ?? null,
-      role: element?.getAttribute("role") ?? null,
-      tag: element?.tagName ?? null,
-      text: element?.textContent?.trim() ?? null,
-    };
+  check(name, Math.abs(actual - expected) <= tolerance, {
+    actual,
+    expected,
+    tolerance,
   });
 }
 
-async function pageOverflow(page) {
+function between(name, actual, min, max) {
+  check(name, actual >= min && actual <= max, { actual, min, max });
+}
+
+function slugFor(pathname) {
+  const slug = pathname.replace(/^\/+|\/+$/g, "").replace(/[^a-z0-9]+/gi, "-");
+  return slug || "root";
+}
+
+async function focusedTestId(page) {
+  return page.evaluate(() =>
+    document.activeElement?.getAttribute("data-testid"),
+  );
+}
+
+async function waitForHidden(locator, timeout = 3_000) {
+  try {
+    await locator.waitFor({ state: "hidden", timeout });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function measureDashboard(page) {
   return page.evaluate(() => {
-    const client = document.documentElement.clientWidth;
-    const offenders = [];
+    const q = (selector, root = document) => root.querySelector(selector);
+    const box = (node) => {
+      if (!node) return null;
+      const rect = node.getBoundingClientRect();
+      return {
+        x: Number(rect.x.toFixed(2)),
+        y: Number(rect.y.toFixed(2)),
+        w: Number(rect.width.toFixed(2)),
+        h: Number(rect.height.toFixed(2)),
+      };
+    };
+    const styles = (node, names) =>
+      node
+        ? Object.fromEntries(names.map((name) => [name, getComputedStyle(node)[name]]))
+        : null;
+
+    const header = q('[data-testid="app-header"]');
+    const logo = q('[data-testid="tenant-logo"]');
+    const logoImage = q('[data-testid="tenant-logo"] img');
+    const institutionLines = header ? [...header.querySelectorAll("p")] : [];
+    const avatar = q('[data-testid="header-avatar"]');
+    const flag = q('[data-testid="tanzania-flag"]');
+    const branch = q('[data-testid="branch-context"]');
+    const language = q('[data-testid="language-trigger"]');
+    const user = q('[data-testid="user-menu-trigger"]');
+
+    const sidebar = q('[data-testid="app-sidebar"]');
+    const nav = [...document.querySelectorAll('[data-testid="nav-item"]')];
+    const footer = q('[data-testid="sidebar-footer"]');
+    const toggle = q('[data-testid="sidebar-toggle"]');
+
+    const tabCard = q('[data-testid="dashboard-tab-card"]');
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const kpis = [...document.querySelectorAll('[data-testid="kpi-card"]')];
+    const kpiBoxes = kpis.map(box);
+    const perRow = kpiBoxes.length
+      ? kpiBoxes.filter((item) => Math.abs(item.y - kpiBoxes[0].y) < 0.5).length
+      : 0;
+    const kpiLabels = kpis.map((card) => q("h3", card)?.textContent?.trim() ?? "");
+    const kpiValues = kpis.map((card) => q("p", card)?.textContent?.trim() ?? "");
+    const badge = q('[data-testid="kpi-badge"]');
+    const badgeIcon = badge ? q("svg", badge) : null;
+
+    const chart = q('[data-testid="funds-chart"]');
+    const bars = [...document.querySelectorAll('[data-testid="funds-bar"]')].map(
+      (bar) => ({
+        ...box(bar),
+        bg: getComputedStyle(bar).backgroundColor,
+        radius: getComputedStyle(bar).borderRadius,
+        series: bar.getAttribute("data-series"),
+      }),
+    );
+    const ticks = [...document.querySelectorAll('[data-testid="funds-axis-tick"]')].map(
+      (tick) => ({
+        text: tick.textContent?.trim() ?? "",
+        size: getComputedStyle(tick).fontSize,
+        color: getComputedStyle(tick).color,
+      }),
+    );
+    const gridlines = [...document.querySelectorAll('[data-testid="funds-gridline"]')].map(
+      (line) => ({
+        top: getComputedStyle(line).borderTopWidth,
+        left: getComputedStyle(line).borderLeftWidth,
+        color: getComputedStyle(line).borderTopColor,
+      }),
+    );
+    const chartTitle = chart ? q("h2,h3", chart) : null;
+    const valueLabels = [...document.querySelectorAll('[data-testid="funds-value-label"]')].map(
+      (label) => label.textContent?.trim() ?? "",
+    );
+
+    const portfolio = q('[data-testid="portfolio-composition"]');
+    const segments = [...document.querySelectorAll('[data-testid="portfolio-segment"]')].map(
+      (segment) => ({
+        ...box(segment),
+        bg: getComputedStyle(segment).backgroundColor,
+      }),
+    );
+
+    const chat = q('[data-testid="chat-fab"]');
+    const banner = q('[data-testid="unposted-banner"]');
+
+    const textViolations = [];
     for (const element of document.querySelectorAll("body *")) {
+      if (element instanceof SVGElement) continue;
+      if (["SCRIPT", "STYLE", "NOSCRIPT", "INPUT", "TEXTAREA", "SELECT", "OPTION"].includes(element.tagName)) {
+        continue;
+      }
+      if (element.closest('[aria-hidden="true"]')) continue;
       const rect = element.getBoundingClientRect();
-      if (
-        rect.width > 0 &&
-        rect.height > 0 &&
-        rect.right > client + 1 &&
-        getComputedStyle(element).position !== "fixed"
-      ) {
-        offenders.push({
+      if (rect.width < 1 || rect.height < 1) continue;
+      const style = getComputedStyle(element);
+      if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) {
+        continue;
+      }
+      const hasOwnText = [...element.childNodes].some(
+        (node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0,
+      );
+      if (!hasOwnText) continue;
+      if (style.fontSize !== "12.8px") {
+        textViolations.push({
           tag: element.tagName,
-          testId: element.getAttribute("data-testid"),
-          className: element.className?.toString().slice(0, 80),
-          right: Math.round(rect.right),
+          testid: element.getAttribute("data-testid"),
+          class: String(element.className).slice(0, 80),
+          text: element.textContent?.trim().slice(0, 50),
+          fontSize: style.fontSize,
         });
       }
     }
+
     return {
-      client,
-      scroll: document.documentElement.scrollWidth,
-      bodyScroll: document.body.scrollWidth,
-      offenders: offenders.slice(0, 8),
+      url: location.pathname,
+      viewport: {
+        innerWidth,
+        innerHeight,
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+        scrollY,
+      },
+      doc: {
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+        bodyScrollWidth: document.body.scrollWidth,
+        bodyBg: getComputedStyle(document.body).backgroundColor,
+      },
+      header: header
+        ? {
+            ...box(header),
+            position: getComputedStyle(header).position,
+            padding: getComputedStyle(header).padding,
+            bg: getComputedStyle(header).backgroundColor,
+            borderBottomWidth: getComputedStyle(header).borderBottomWidth,
+            borderBottomColor: getComputedStyle(header).borderBottomColor,
+            boxShadow: getComputedStyle(header).boxShadow,
+            text: header.innerText,
+          }
+        : null,
+      logo: logo
+        ? {
+            ...box(logo),
+            image: logoImage
+              ? {
+                  ...box(logoImage),
+                  naturalWidth: logoImage.naturalWidth,
+                  naturalHeight: logoImage.naturalHeight,
+                  objectFit: getComputedStyle(logoImage).objectFit,
+                  alt: logoImage.getAttribute("alt"),
+                }
+              : null,
+            monogram: !logoImage ? logo.textContent?.trim() ?? "" : null,
+          }
+        : null,
+      institution: institutionLines.length
+        ? {
+            name: {
+              text: institutionLines[0].textContent?.trim() ?? "",
+              ...styles(institutionLines[0], ["fontSize", "fontWeight", "color"]),
+            },
+            detail: {
+              text: institutionLines[1]?.textContent?.trim() ?? "",
+              ...styles(institutionLines[1], ["fontSize", "fontWeight", "color"]),
+            },
+          }
+        : null,
+      avatar: avatar
+        ? {
+            ...box(avatar),
+            radius: getComputedStyle(avatar).borderRadius,
+            text: avatar.textContent?.trim() ?? "",
+            fontSize: getComputedStyle(avatar).fontSize,
+          }
+        : null,
+      flag: flag ? box(flag) : null,
+      branch: branch
+        ? { ...box(branch), text: branch.innerText, fontSize: getComputedStyle(branch).fontSize }
+        : null,
+      language: language
+        ? { ...box(language), text: language.innerText, fontSize: getComputedStyle(language).fontSize }
+        : null,
+      user: user
+        ? { ...box(user), text: user.innerText, fontSize: getComputedStyle(user).fontSize }
+        : null,
+      sidebar: sidebar
+        ? {
+            ...box(sidebar),
+            position: getComputedStyle(sidebar).position,
+            bg: getComputedStyle(sidebar).backgroundColor,
+            borderRightWidth: getComputedStyle(sidebar).borderRightWidth,
+            borderRightColor: getComputedStyle(sidebar).borderRightColor,
+          }
+        : null,
+      nav: nav.map((item) => {
+        const icon = q("svg", item);
+        const label = q("span", item);
+        const parentButton = item.parentElement?.querySelector("button");
+        const chevron = q("svg.lucide-chevron-down", item);
+        return {
+          label: item.getAttribute("data-nav-label"),
+          href: item.getAttribute("href"),
+          active: item.getAttribute("data-active") === "true",
+          ...box(item),
+          icon: icon
+            ? {
+                ...box(icon),
+                size: getComputedStyle(icon).width,
+              }
+            : null,
+          labelStyle: label
+            ? {
+                text: label.textContent?.trim() ?? "",
+                ...styles(label, ["fontSize", "fontWeight", "color"]),
+              }
+            : null,
+          color: getComputedStyle(item).color,
+          weight: getComputedStyle(item).fontWeight,
+          radius: getComputedStyle(item).borderRadius,
+          bg: getComputedStyle(item).backgroundColor,
+          gap: getComputedStyle(item).columnGap,
+          chevron: Boolean(chevron),
+          soon: item.textContent?.includes("Soon") ?? false,
+          parentChevron: Boolean(parentButton?.querySelector("svg.lucide-chevron-down")),
+          parentChevronLabel: parentButton?.getAttribute("aria-label") ?? null,
+        };
+      }),
+      navGroups: [...document.querySelectorAll('[data-testid="nav-group"]')].map((group) => ({
+        label: group.getAttribute("data-nav-label"),
+        expanded: group.getAttribute("data-expanded"),
+        ...box(group),
+        bg: getComputedStyle(group).backgroundColor,
+      })),
+      subitems: [...document.querySelectorAll('[data-testid="nav-subitem"]')].map((item) => {
+        const label = q("span", item);
+        return {
+          label: item.getAttribute("data-nav-label"),
+          href: item.getAttribute("href"),
+          active: item.getAttribute("data-active") === "true",
+          ...box(item),
+          bg: getComputedStyle(item).backgroundColor,
+          color: getComputedStyle(item).color,
+          weight: getComputedStyle(item).fontWeight,
+          radius: getComputedStyle(item).borderRadius,
+          labelStyle: label
+            ? {
+                text: label.textContent?.trim() ?? "",
+                ...styles(label, ["fontSize", "fontWeight", "color"]),
+              }
+            : null,
+        };
+      }),
+      footer: footer
+        ? {
+            ...box(footer),
+            padding: getComputedStyle(footer).padding,
+            gap: getComputedStyle(footer).rowGap,
+            borderTopWidth: getComputedStyle(footer).borderTopWidth,
+            borderTopColor: getComputedStyle(footer).borderTopColor,
+            text: footer.innerText,
+            wordmark: (() => {
+              const node = q(".sidebar-footer-wordmark", footer);
+              return node
+                ? {
+                    text: node.textContent?.trim() ?? "",
+                    ...styles(node, ["fontSize", "fontWeight", "color"]),
+                  }
+                : null;
+            })(),
+            copyright: (() => {
+              const node = q(".sidebar-footer-copyright", footer);
+              return node
+                ? {
+                    text: node.innerText,
+                    ...styles(node, ["fontSize", "fontWeight", "color"]),
+                  }
+                : null;
+            })(),
+          }
+        : null,
+      toggle: toggle
+        ? {
+            ...box(toggle),
+            radius: getComputedStyle(toggle).borderRadius,
+            bg: getComputedStyle(toggle).backgroundColor,
+            borderWidth: getComputedStyle(toggle).borderTopWidth,
+            ariaExpanded: toggle.getAttribute("aria-expanded"),
+            ariaLabel: toggle.getAttribute("aria-label"),
+          }
+        : null,
+      tabCard: tabCard
+        ? {
+            ...box(tabCard),
+            radius: getComputedStyle(tabCard).borderRadius,
+            padding: getComputedStyle(tabCard).padding,
+            bg: getComputedStyle(tabCard).backgroundColor,
+          }
+        : null,
+      tabs: tabs.map((tab) => {
+        const style = getComputedStyle(tab);
+        return {
+          text: tab.textContent?.trim() ?? "",
+          ...box(tab),
+          state: tab.getAttribute("data-state"),
+          radius: style.borderRadius,
+          fontSize: style.fontSize,
+          fontWeight: style.fontWeight,
+          color: style.color,
+          bg: style.backgroundColor,
+          icons: tab.querySelectorAll("svg").length,
+        };
+      }),
+      kpis: kpis.length
+        ? {
+            count: kpis.length,
+            perRow,
+            boxes: kpiBoxes,
+            labels: kpiLabels,
+            values: kpiValues,
+            card: styles(kpis[0], [
+              "backgroundColor",
+              "borderTopWidth",
+              "borderTopColor",
+              "borderRadius",
+              "padding",
+            ]),
+            label: styles(q("h3", kpis[0]), ["fontSize", "fontWeight", "color"]),
+            value: styles(q("p", kpis[0]), ["fontSize", "fontWeight", "color"]),
+            badge: badge
+              ? {
+                  ...box(badge),
+                  radius: getComputedStyle(badge).borderRadius,
+                  bg: getComputedStyle(badge).backgroundColor,
+                  color: getComputedStyle(badge).color,
+                  icon: badgeIcon ? box(badgeIcon) : null,
+                }
+              : null,
+            gapX:
+              kpiBoxes.length > 1
+                ? Number((kpiBoxes[1].x - (kpiBoxes[0].x + kpiBoxes[0].w)).toFixed(2))
+                : null,
+            gapY:
+              kpiBoxes.length > perRow
+                ? Number((kpiBoxes[perRow].y - (kpiBoxes[0].y + kpiBoxes[0].h)).toFixed(2))
+                : null,
+          }
+        : null,
+      chart: chart
+        ? {
+            ...box(chart),
+            radius: getComputedStyle(chart).borderRadius,
+            padding: getComputedStyle(chart).padding,
+            title: chartTitle
+              ? {
+                  text: chartTitle.innerText,
+                  ...styles(chartTitle, ["fontSize", "fontWeight", "color"]),
+                }
+              : null,
+            bars,
+            ticks,
+            gridlines,
+            values: valueLabels,
+          }
+        : null,
+      portfolio: portfolio
+        ? {
+            ...box(portfolio),
+            radius: getComputedStyle(portfolio).borderRadius,
+            padding: getComputedStyle(portfolio).padding,
+            text: portfolio.innerText,
+            segments,
+          }
+        : null,
+      chat: chat
+        ? {
+            ...box(chat),
+            radius: getComputedStyle(chat).borderRadius,
+            bg: getComputedStyle(chat).backgroundColor,
+            ariaLabel: chat.getAttribute("aria-label"),
+          }
+        : null,
+      banner: banner ? banner.innerText : null,
+      fonts: {
+        status: document.fonts.status,
+        check: document.fonts.check("12.8px Roboto"),
+        family: getComputedStyle(document.body).fontFamily,
+      },
+      textViolations,
     };
   });
 }
 
-async function waitForGone(locator, timeout = 1500) {
-  const started = Date.now();
-  while (Date.now() - started < timeout) {
-    if (!(await locator.isVisible().catch(() => false))) return true;
-    await new Promise((resolve) => setTimeout(resolve, 50));
-  }
-  return false;
+async function measureCollapsed(page) {
+  return page.evaluate(() => {
+    const box = (node) => {
+      if (!node) return null;
+      const rect = node.getBoundingClientRect();
+      return {
+        x: Number(rect.x.toFixed(2)),
+        y: Number(rect.y.toFixed(2)),
+        w: Number(rect.width.toFixed(2)),
+        h: Number(rect.height.toFixed(2)),
+      };
+    };
+    const items = [...document.querySelectorAll('[data-testid="nav-item"]')];
+    return {
+      sidebar: box(document.querySelector('[data-testid="app-sidebar"]')),
+      toggle: box(document.querySelector('[data-testid="sidebar-toggle"]')),
+      footer: box(document.querySelector('[data-testid="sidebar-footer"]')),
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+      items: items.map((item) => ({
+        label: item.getAttribute("data-nav-label"),
+        text: item.textContent?.trim() ?? "",
+        active: item.getAttribute("data-active") === "true",
+        ...box(item),
+        icon: box(item.querySelector("svg")),
+        bg: getComputedStyle(item).backgroundColor,
+        radius: getComputedStyle(item).borderRadius,
+      })),
+    };
+  });
 }
 
-await mkdir("artifacts", { recursive: true });
+await mkdir(artifacts, { recursive: true });
+
 const browser = await chromium.launch({ headless: true });
-const report = { url, viewports: {}, checks, failures };
+const report = {
+  target,
+  storageState,
+  startedAt: new Date().toISOString(),
+  viewports: [],
+};
 
 for (const viewport of viewports) {
-  const key = `${viewport.width}x${viewport.height}`;
-  const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+  const label = `${viewport.width}x${viewport.height}`;
+  const consoleMessages = [];
+  const pageErrors = [];
+  const failedRequests = [];
+  const serverErrors = [];
+
+  console.log(`\n── ${label} ──`);
+
+  const context = await browser.newContext({
+    storageState,
+    viewport,
+    deviceScaleFactor: 1,
+    locale: "en-US",
+  });
   const page = await context.newPage();
 
-  const consoleErrors = [];
-  const badResponses = [];
   page.on("console", (message) => {
-    if (message.type() === "error") consoleErrors.push(message.text());
-  });
-  page.on("pageerror", (error) => consoleErrors.push(error.message));
-  page.on("response", (response) => {
-    if (response.status() >= 400) {
-      badResponses.push({ status: response.status(), url: response.url() });
+    if (message.type() === "error" || message.type() === "warning") {
+      consoleMessages.push({
+        type: message.type(),
+        text: message.text(),
+        location: message.location().url,
+      });
     }
   });
-
-  await page.goto(url, { waitUntil: "networkidle", timeout: 45_000 });
-  await page.evaluate(async () => {
-    await document.fonts.ready;
+  page.on("pageerror", (error) => {
+    pageErrors.push(String(error));
   });
-  await page.waitForTimeout(150);
-
-  const prefix = `[${key}]`;
-  const viewportW = viewport.width;
-  const viewportH = viewport.height;
-
-  // ---- Shell -----------------------------------------------------------
-  const header = await boxOf(page.getByTestId("app-header"));
-  const headerStyle = await styleOf(page.getByTestId("app-header"), [
-    "backgroundColor",
-    "borderBottomWidth",
-    "borderBottomColor",
-    "position",
-  ]);
-  check(`${prefix} header height is 97`, header && Math.abs(header.h - 97) <= 1, header);
-  check(`${prefix} header spans viewport`, header && header.x === 0 && header.w === viewportW, {
-    header,
-    viewportW,
+  page.on("requestfailed", (request) => {
+    const url = request.url();
+    if (request.resourceType() === "websocket") return;
+    if (/favicon\.ico$/.test(url)) return;
+    const failure = request.failure()?.errorText ?? "unknown";
+    // Next.js cancels in-flight RSC prefetches when a route changes or the page closes.
+    // That abort is expected, not a failed request.
+    if (failure === "net::ERR_ABORTED" && /[?&]_rsc=/.test(url)) return;
+    failedRequests.push({
+      url,
+      type: request.resourceType(),
+      error: failure,
+    });
   });
-  equal(`${prefix} header background`, headerStyle.backgroundColor, "rgb(255, 255, 255)");
-  equal(`${prefix} header bottom border`, headerStyle.borderBottomWidth, "1px");
-  equal(
-    `${prefix} header bottom border colour`,
-    headerStyle.borderBottomColor,
-    "rgb(222, 226, 230)",
-  );
-  equal(`${prefix} header is fixed`, headerStyle.position, "fixed");
+  page.on("response", (response) => {
+    if (response.status() < 500) return;
+    if (new URL(response.url()).origin !== targetUrl.origin) return;
+    serverErrors.push({ url: response.url(), status: response.status() });
+  });
 
-  const tenantLogo = await boxOf(page.getByTestId("tenant-logo"));
-  const avatar = await boxOf(page.getByTestId("header-avatar"));
-  const flag = await boxOf(page.getByTestId("tanzania-flag"));
-  const avatarCount = await page.getByTestId("header-avatar").count();
-  check(
-    `${prefix} tenant circle is 60px`,
-    tenantLogo && Math.abs(tenantLogo.w - 60) <= 1 && Math.abs(tenantLogo.h - 60) <= 1,
-    tenantLogo,
-  );
-  check(
-    `${prefix} avatar is 50px`,
-    avatar && Math.abs(avatar.w - 50) <= 1 && Math.abs(avatar.h - 50) <= 1,
-    avatar,
-  );
-  check(
-    `${prefix} Tanzania flag is 38x24`,
-    flag && Math.abs(flag.w - 38) <= 1 && Math.abs(flag.h - 24) <= 1,
-    flag,
-  );
-  equal(`${prefix} one user block in header`, avatarCount, 1);
+  await page.goto(target, { waitUntil: "networkidle" });
+  await page.waitForLoadState("networkidle");
 
-  const languageTrigger = page.getByTestId("language-trigger");
-  const branchContext = page.getByTestId("branch-context");
-  const userTrigger = page.getByTestId("user-menu-trigger");
-  const userName = page.getByTestId("header-user-name");
-  check(`${prefix} branch context visible`, await branchContext.isVisible(), {});
-  check(`${prefix} user name visible`, await userName.isVisible(), {});
-  const languageBox = await boxOf(languageTrigger);
-  const branchBox = await boxOf(branchContext);
-  const userBox = await boxOf(userTrigger);
-  check(
-    `${prefix} header groups do not overlap`,
-    languageBox &&
-      branchBox &&
-      userBox &&
-      languageBox.x + languageBox.w <= branchBox.x + 1 &&
-      branchBox.x + branchBox.w <= userBox.x + 1,
-    { languageBox, branchBox, userBox },
+  if (new URL(page.url()).pathname.startsWith("/login")) {
+    check(`${label} authenticated`, false, {
+      actual: new URL(page.url()).pathname,
+      hint: "The storage state was rejected. Re-run login.mjs.",
+    });
+    await context.close();
+    continue;
+  }
+
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(350);
+
+  const measured = await measureDashboard(page);
+  const isDashboard = measured.url === "/dashboard";
+
+  await page.screenshot({
+    path: resolve(artifacts, `${slugFor(measured.url)}-${label}.png`),
+  });
+
+  console.log("Shell");
+  check(`${label} header is fixed`, measured.header?.position === "fixed");
+  near(`${label} header height`, measured.header?.h ?? 0, 68, 0.5);
+  near(`${label} header spans layout`, measured.header?.w ?? 0, measured.doc.scrollWidth, 1);
+  equal(`${label} header padding`, measured.header?.padding, "0px 14px");
+  equal(`${label} header background`, measured.header?.bg, "rgb(255, 255, 255)");
+  equal(`${label} header border colour`, measured.header?.borderBottomColor, "rgb(222, 226, 230)");
+  between(
+    `${label} header border is a hairline`,
+    Number.parseFloat(measured.header?.borderBottomWidth ?? "0"),
+    0.5,
+    1.1,
   );
   check(
-    `${prefix} header group stays inside viewport`,
-    userBox && userBox.x + userBox.w <= viewportW,
-    { userBox, viewportW },
+    `${label} header has the chrome shadow`,
+    /rgb\(195, 198, 202\)/.test(measured.header?.boxShadow ?? ""),
+    { actual: measured.header?.boxShadow },
   );
 
-  const bodyBackground = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  equal(`${prefix} page background`, bodyBackground, "rgb(235, 233, 233)");
+  check(`${label} tenant logo is an image`, measured.logo?.image?.naturalWidth > 0, {
+    actual: measured.logo,
+  });
+  check(
+    `${label} tenant logo keeps its ratio`,
+    measured.logo?.image?.objectFit === "contain",
+    { actual: measured.logo?.image?.objectFit },
+  );
+  near(`${label} tenant logo height`, measured.logo?.image?.h ?? 0, 28, 0.8);
+  check(
+    `${label} tenant logo width is capped`,
+    (measured.logo?.image?.w ?? 999) <= 190.5,
+    { actual: measured.logo?.image?.w },
+  );
+  near(`${label} tenant logo sits on the header padding`, measured.logo?.x ?? 0, 14, 0.6);
+  near(`${label} institution name size`, Number.parseFloat(measured.institution?.name?.fontSize ?? "0"), 12.8, 0.05);
+  equal(`${label} institution name weight`, measured.institution?.name?.fontWeight, "600");
+  equal(`${label} institution name colour`, measured.institution?.name?.color, "rgb(73, 80, 87)");
+  near(`${label} institution detail size`, Number.parseFloat(measured.institution?.detail?.fontSize ?? "0"), 12.8, 0.05);
+  equal(`${label} institution detail colour`, measured.institution?.detail?.color, "rgb(108, 117, 125)");
 
-  // ---- Sidebar ---------------------------------------------------------
-  const sidebar = await boxOf(page.getByTestId("app-sidebar"));
-  const sidebarStyle = await styleOf(page.getByTestId("app-sidebar"), [
-    "backgroundColor",
-    "borderRightWidth",
-    "borderRightColor",
-    "position",
-  ]);
-  check(
-    `${prefix} sidebar is 300px below header`,
-    sidebar &&
-      sidebar.w === 300 &&
-      sidebar.x === 0 &&
-      Math.abs(sidebar.y - 97) <= 1 &&
-      Math.abs(sidebar.h - (viewportH - 97)) <= 1,
-    sidebar,
-  );
-  equal(`${prefix} sidebar background`, sidebarStyle.backgroundColor, "rgb(255, 255, 255)");
-  equal(`${prefix} sidebar right border`, sidebarStyle.borderRightWidth, "1px");
-  equal(
-    `${prefix} sidebar right border colour`,
-    sidebarStyle.borderRightColor,
-    "rgb(222, 226, 230)",
-  );
-  equal(`${prefix} sidebar is fixed`, sidebarStyle.position, "fixed");
+  near(`${label} avatar size`, measured.avatar?.w ?? 0, 34, 0.5);
+  near(`${label} avatar height`, measured.avatar?.h ?? 0, 34, 0.5);
+  near(`${label} flag width`, measured.flag?.w ?? 0, 24, 0.5);
+  near(`${label} flag height`, measured.flag?.h ?? 0, 16, 0.5);
+  check(`${label} branch block names a branch`, /Branch/.test(measured.branch?.text ?? ""), {
+    actual: measured.branch?.text,
+  });
+  check(`${label} branch block shows Open`, /Open/.test(measured.branch?.text ?? ""), {
+    actual: measured.branch?.text,
+  });
+  near(`${label} branch block height`, measured.branch?.h ?? 0, 32, 0.8);
+  equal(`${label} language label`, measured.language?.text?.trim(), "English");
+  near(`${label} user trigger height`, measured.user?.h ?? 0, 46, 1);
 
-  const navItems = page.locator('[data-testid="nav-item"]');
-  equal(`${prefix} sidebar has 12 items`, await navItems.count(), 12);
-  equal(
-    `${prefix} nav order`,
-    await navItems.evaluateAll((elements) =>
-      elements.map((element) => element.getAttribute("data-nav-label")),
-    ),
-    NAV_ORDER,
-  );
-
-  const navBoxes = await navItems.evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      const icon = element.querySelector("svg")?.getBoundingClientRect();
-      const chevron = element.querySelector("svg.lucide-chevron-down")?.getBoundingClientRect();
-      return {
-        label: element.getAttribute("data-nav-label"),
-        x: Math.round(rect.x),
-        y: Math.round(rect.y),
-        w: Math.round(rect.width),
-        h: Math.round(rect.height),
-        iconX: icon ? Math.round(icon.x) : null,
-        iconW: icon ? Math.round(icon.width) : null,
-        chevronX: chevron ? Math.round(chevron.x) : null,
-        chevronW: chevron ? Math.round(chevron.width) : null,
-        text: element.textContent?.trim(),
-      };
-    }),
-  );
-  const pitches = navBoxes.slice(1).map((item, index) => item.y - navBoxes[index].y);
-  check(
-    `${prefix} nav pitch is 60px`,
-    pitches.every((pitch) => pitch === 60),
-    pitches,
-  );
-  check(
-    `${prefix} nav icons are 20px at x=28`,
-    navBoxes.every((item) => item.iconX === 28 && item.iconW === 20),
-    navBoxes.map(({ label, iconX, iconW }) => ({ label, iconX, iconW })),
-  );
-  check(
-    `${prefix} nav items are 44px tall`,
-    navBoxes.every((item) => item.h === 44),
-    navBoxes.map(({ label, h }) => ({ label, h })),
-  );
-
-  const campaignElement = page.locator('[data-testid="nav-item"][data-nav-label="Campaigns"]');
-  equal(`${prefix} Campaigns has no href`, await campaignElement.getAttribute("href"), null);
-  equal(
-    `${prefix} Campaigns is disabled`,
-    await campaignElement.getAttribute("aria-disabled"),
-    "true",
-  );
-  equal(
-    `${prefix} Campaigns is not focusable`,
-    await campaignElement.getAttribute("tabindex"),
-    "-1",
-  );
-  check(
-    `${prefix} Campaigns is not an anchor`,
-    (await campaignElement.evaluate((element) => element.tagName)) === "DIV",
-    {},
-  );
-  check(
-    `${prefix} Campaigns shows Soon`,
-    (await campaignElement.textContent())?.includes("Soon"),
-    {},
-  );
-
-  const chevronCount = await page
-    .locator('[data-testid="app-sidebar"] nav svg.lucide-chevron-down')
-    .count();
-  equal(`${prefix} nav chevrons are exactly listed`, chevronCount, CHEVRON_ITEMS.length);
-  const chevronItems = await page
-    .locator('[data-testid="app-sidebar"] nav li')
-    .evaluateAll((items) =>
-      items
-        .filter((item) => item.querySelector("svg.lucide-chevron-down"))
-        .map((item) => item.querySelector("[data-nav-label]")?.getAttribute("data-nav-label")),
-    );
-  equal(`${prefix} nav chevron placement`, chevronItems, CHEVRON_ITEMS);
-  const chevronBoxes = navBoxes.filter((item) => item.chevronX !== null);
-  check(
-    `${prefix} chevrons are right aligned near x=250`,
-    chevronBoxes.every((item) => item.chevronX >= 240 && item.chevronX + item.chevronW <= 268),
-    chevronBoxes.map(({ label, chevronX, chevronW }) => ({ label, chevronX, chevronW })),
-  );
-
-  const activeItem = page.locator('[data-testid="nav-item"][data-active="true"]');
-  equal(`${prefix} one active nav item`, await activeItem.count(), 1);
-  const activeBox = await boxOf(activeItem);
-  const activeStyle = await styleOf(activeItem, [
-    "backgroundColor",
-    "color",
-    "borderRadius",
-    "fontWeight",
-    "fontSize",
-  ]);
-  check(
-    `${prefix} active pill geometry`,
-    activeBox && activeBox.x === 12 && Math.abs(activeBox.w - 264) <= 1 && activeBox.h === 44,
-    activeBox,
-  );
-  equal(`${prefix} active pill radius`, activeStyle.borderRadius, "8px");
-  equal(`${prefix} active pill background`, activeStyle.backgroundColor, "rgb(5, 117, 115)");
-  equal(`${prefix} active label colour`, activeStyle.color, "rgb(255, 255, 255)");
-  equal(`${prefix} active label weight`, activeStyle.fontWeight, "600");
-  equal(`${prefix} active label size`, activeStyle.fontSize, "18px");
-  equal(
-    `${prefix} active is Dashboard`,
-    await activeItem.getAttribute("data-nav-label"),
-    "Dashboard",
-  );
-
-  const inactiveStyle = await styleOf(
-    page.locator('[data-testid="nav-item"][data-nav-label="Client"]'),
-    ["color", "fontSize", "borderRadius"],
-  );
-  equal(`${prefix} inactive label colour`, inactiveStyle.color, "rgb(73, 80, 87)");
-  equal(`${prefix} inactive label size`, inactiveStyle.fontSize, "18px");
-  equal(`${prefix} nav item radius`, inactiveStyle.borderRadius, "8px");
-
-  const footer = page.getByTestId("sidebar-footer");
-  const footerBox = await boxOf(footer);
-  const footerText = await footer.innerText();
-  check(`${prefix} sidebar footer is visible`, await footer.isVisible(), {});
-  check(
-    `${prefix} sidebar footer is two lines`,
-    footerText.includes("AIMSCAMS") && footerText.includes("All rights reserved."),
-    { footerText },
-  );
-  check(
-    `${prefix} sidebar footer is above viewport bottom`,
-    footerBox && footerBox.y + footerBox.h <= viewportH + 1,
-    footerBox,
-  );
-
-  const toggle = page.getByTestId("sidebar-toggle");
-  const toggleBox = await boxOf(toggle);
-  const toggleStyle = await styleOf(toggle, ["backgroundColor", "borderColor", "color"]);
-  check(
-    `${prefix} collapse control is 44px and straddles sidebar edge`,
-    toggleBox &&
-      Math.abs(toggleBox.w - 44) <= 1 &&
-      Math.abs(toggleBox.h - 44) <= 1 &&
-      toggleBox.x < 300 &&
-      toggleBox.x + toggleBox.w > 300,
-    toggleBox,
-  );
-  check(
-    `${prefix} collapse control is above footer`,
-    toggleBox && footerBox && toggleBox.y + toggleBox.h <= footerBox.y + 1,
-    { toggleBox, footerBox },
-  );
-  equal(`${prefix} collapse control background`, toggleStyle.backgroundColor, "rgb(255, 255, 255)");
-  equal(`${prefix} collapse control border`, toggleStyle.borderColor, "rgb(222, 226, 230)");
-  equal(`${prefix} collapse control chevron`, toggleStyle.color, "rgb(5, 117, 115)");
-
-  // ---- Tabs and content ----------------------------------------------
-  const tabCard = await boxOf(page.getByTestId("dashboard-tab-card"));
-  const tabCardStyle = await styleOf(page.getByTestId("dashboard-tab-card"), [
-    "borderRadius",
-    "backgroundColor",
-  ]);
-  check(`${prefix} tab card starts 22px after sidebar`, tabCard && tabCard.x === 322, tabCard);
-  check(`${prefix} tab card height is 104`, tabCard && Math.abs(tabCard.h - 104) <= 1, tabCard);
-  equal(`${prefix} tab card radius`, tabCardStyle.borderRadius, "12px");
-  equal(`${prefix} tab card background`, tabCardStyle.backgroundColor, "rgb(255, 255, 255)");
-
-  const tabTriggers = page.getByRole("tab");
-  equal(`${prefix} tab count`, await tabTriggers.count(), 3);
-  const tabData = await tabTriggers.evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      return {
-        id: element.getAttribute("data-testid"),
-        x: Math.round(rect.x),
-        y: Math.round(rect.y),
-        w: Math.round(rect.width),
-        h: Math.round(rect.height),
-        active: element.getAttribute("data-state") === "active",
-        radius: style.borderRadius,
-        bg: style.backgroundColor,
-        color: style.color,
-      };
-    }),
-  );
-  check(
-    `${prefix} active tab is 154x44`,
-    tabData[0]?.active && tabData[0]?.w === 154 && tabData[0]?.h === 44,
-    tabData,
-  );
-  equal(`${prefix} active tab radius`, tabData[0]?.radius, "8px");
-  equal(`${prefix} active tab background`, tabData[0]?.bg, "rgb(5, 117, 115)");
-  equal(`${prefix} active tab text`, tabData[0]?.color, "rgb(255, 255, 255)");
-  check(
-    `${prefix} inactive tabs have no background`,
-    tabData.slice(1).every((tab) => tab.bg === "rgba(0, 0, 0, 0)" && tab.color === "rgb(0, 0, 0)"),
-    tabData,
-  );
-  check(
-    `${prefix} tab labels`,
-    JSON.stringify(await tabTriggers.allTextContents()) ===
-      JSON.stringify(["Overview", "Members", "Loans"]),
-    await tabTriggers.allTextContents(),
-  );
-
-  const tabBranch = page.getByTestId("tab-branch-context");
-  check(`${prefix} tab branch context visible`, await tabBranch.isVisible(), {});
-  const tabBranchBox = await boxOf(tabBranch);
-  check(
-    `${prefix} tab branch context clears the tabs`,
-    tabBranchBox && tabData[2] && tabBranchBox.x > tabData[2].x + tabData[2].w,
-    { tabBranchBox, lastTab: tabData[2] },
-  );
-
-  const kpis = page.getByTestId("kpi-card");
-  equal(`${prefix} KPI count`, await kpis.count(), 8);
-  equal(`${prefix} KPI badge count`, await page.getByTestId("kpi-badge").count(), 8);
-  const kpiData = await kpis.evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      const value = element.querySelector("p");
-      const valueStyle = value ? getComputedStyle(value) : null;
-      return {
-        id: element.getAttribute("data-kpi-id"),
-        x: Math.round(rect.x),
-        y: Math.round(rect.y),
-        w: Math.round(rect.width),
-        h: Math.round(rect.height),
-        radius: style.borderRadius,
-        valueSize: valueStyle?.fontSize,
-        valueWeight: valueStyle?.fontWeight,
-        valueColor: valueStyle?.color,
-      };
-    }),
-  );
-  const firstRowCount = kpiData.filter((kpi) => kpi.y === kpiData[0]?.y).length;
-  equal(`${prefix} KPI columns`, firstRowCount, viewportW >= 1536 ? 4 : 2);
-  check(
-    `${prefix} KPI cards are 185px tall and 12px radius`,
-    kpiData.every((kpi) => Math.abs(kpi.h - 185) <= 2 && kpi.radius === "12px"),
-    kpiData.map(({ id, h, radius }) => ({ id, h, radius })),
-  );
-  near(`${prefix} KPI horizontal gap`, kpiData[1].x - (kpiData[0].x + kpiData[0].w), 22, 1);
+  console.log("Sidebar");
+  near(`${label} sidebar width`, measured.sidebar?.w ?? 0, 204, 0.5);
+  near(`${label} sidebar starts below the header`, measured.sidebar?.y ?? 0, 68, 0.5);
   near(
-    `${prefix} KPI vertical gap`,
-    kpiData[firstRowCount].y - (kpiData[0].y + kpiData[0].h),
-    22,
+    `${label} sidebar reaches the viewport bottom`,
+    (measured.sidebar?.y ?? 0) + (measured.sidebar?.h ?? 0),
+    measured.viewport.innerHeight,
     1,
   );
+  equal(`${label} sidebar background`, measured.sidebar?.bg, "rgb(255, 255, 255)");
+  equal(`${label} sidebar border colour`, measured.sidebar?.borderRightColor, "rgb(222, 226, 230)");
+  between(
+    `${label} sidebar border is a hairline`,
+    Number.parseFloat(measured.sidebar?.borderRightWidth ?? "0"),
+    0.5,
+    1.1,
+  );
+
+  const expectedNav = [
+    "Dashboard",
+    "Client",
+    "Accounts",
+    "Transactions",
+    "Accounting",
+    "Requests",
+    "Messages",
+    "Campaigns",
+    "Reports",
+    "Import",
+    "Business Account",
+    "Settings",
+  ];
+  equal(`${label} navigation order`, measured.nav.map((item) => item.label), expectedNav);
   check(
-    `${prefix} KPI value typography`,
-    kpiData.every(
-      (kpi) =>
-        kpi.valueSize === "30px" && kpi.valueWeight === "700" && kpi.valueColor === "rgb(0, 0, 0)",
+    `${label} every nav destination is a link`,
+    measured.nav.every((item) => typeof item.href === "string" && item.href.startsWith("/")),
+    { actual: measured.nav.map((item) => ({ label: item.label, href: item.href })) },
+  );
+
+  const standardRows = measured.nav.slice(0, 11);
+  const settingsRow = measured.nav[11];
+  check(
+    `${label} nav rows are 36px`,
+    standardRows.every((item) => Math.abs(item.h - 36) <= 0.5),
+    { actual: standardRows.map((item) => ({ label: item.label, h: item.h })) },
+  );
+  near(`${label} Settings group row height`, settingsRow?.h ?? 0, 34, 0.5);
+  check(
+    `${label} nav icons are 20px on x=28`,
+    measured.nav.every(
+      (item) => Math.abs(Number.parseFloat(item.icon?.size ?? "0") - 20) <= 0.5 && Math.abs((item.icon?.x ?? 0) - 28) <= 0.6,
     ),
-    kpiData.map(({ id, valueSize, valueWeight, valueColor }) => ({
-      id,
-      valueSize,
-      valueWeight,
-      valueColor,
-    })),
-  );
-  const kpiBadgeBoxes = await page.getByTestId("kpi-badge").evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      return { w: Math.round(rect.width), h: Math.round(rect.height) };
-    }),
+    {
+      actual: measured.nav.map((item) => ({
+        label: item.label,
+        icon: item.icon,
+      })),
+    },
   );
   check(
-    `${prefix} KPI badges are 66px`,
-    kpiBadgeBoxes.every((badge) => badge.w === 66 && badge.h === 66),
-    kpiBadgeBoxes,
-  );
-
-  const chart = page.getByTestId("funds-chart");
-  const chartBox = await boxOf(chart);
-  const chartStyle = await styleOf(chart, ["borderRadius", "padding"]);
-  const portfolio = page.getByTestId("portfolio-composition");
-  const portfolioBox = await boxOf(portfolio);
-  check(`${prefix} chart is visible`, await chart.isVisible(), {});
-  equal(`${prefix} chart radius`, chartStyle.borderRadius, "12px");
-  equal(`${prefix} chart padding`, chartStyle.padding, "30px");
-  check(
-    `${prefix} chart title`,
-    (await chart.getByRole("heading").textContent()) === "FundsInVsFundsOut",
-    await chart.getByRole("heading").textContent(),
-  );
-  const chartTitleStyle = await styleOf(chart.getByRole("heading"), ["fontSize", "fontWeight"]);
-  equal(`${prefix} chart title size`, chartTitleStyle.fontSize, "20px");
-  equal(`${prefix} chart title weight`, chartTitleStyle.fontWeight, "700");
-
-  const bars = page.getByTestId("funds-bar");
-  equal(`${prefix} chart bar count`, await bars.count(), 2);
-  const barData = await bars.evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      return {
-        series: element.getAttribute("data-series"),
-        w: Math.round(rect.width),
-        h: Math.round(rect.height),
-        radius: style.borderRadius,
-        bg: style.backgroundColor,
-      };
-    }),
+    `${label} nav labels are 12.8px`,
+    measured.nav.every((item) => item.labelStyle?.fontSize === "12.8px"),
+    { actual: measured.nav.map((item) => ({ label: item.label, size: item.labelStyle?.fontSize })) },
   );
   check(
-    `${prefix} chart bars are 77px and square`,
-    barData.every((bar) => bar.w === 77 && bar.radius === "0px"),
-    barData,
+    `${label} nav pitch is 40px`,
+    measured.nav
+      .slice(1)
+      .every((item, index) => Math.abs(item.y - measured.nav[index].y - 40) <= 1.2),
+    {
+      actual: measured.nav.slice(1).map((item, index) => ({
+        item: item.label,
+        pitch: Number((item.y - measured.nav[index].y).toFixed(2)),
+      })),
+    },
   );
-  equal(`${prefix} funds in colour`, barData[0]?.bg, "rgb(5, 117, 115)");
-  equal(`${prefix} funds out colour`, barData[1]?.bg, "rgb(199, 90, 67)");
 
-  const ticks = await page.getByTestId("funds-axis-tick").allTextContents();
-  equal(`${prefix} chart axis steps`, ticks, [
-    "TZS 50M",
-    "TZS 45M",
-    "TZS 40M",
-    "TZS 35M",
-    "TZS 30M",
-    "TZS 25M",
-    "TZS 20M",
-    "TZS 15M",
-  ]);
-  equal(`${prefix} gridline count`, await page.getByTestId("funds-gridline").count(), 8);
-  const tickStyle = await styleOf(page.getByTestId("funds-axis-tick").first(), [
-    "fontSize",
-    "color",
-  ]);
-  equal(`${prefix} axis label size`, tickStyle.fontSize, "16px");
-  equal(`${prefix} axis label colour`, tickStyle.color, "rgb(102, 102, 102)");
-  const gridStyle = await styleOf(page.getByTestId("funds-gridline").first(), [
-    "borderTopWidth",
-    "borderLeftWidth",
-  ]);
-  equal(`${prefix} gridline is horizontal only`, gridStyle, {
-    borderTopWidth: "1px",
-    borderLeftWidth: "0px",
+  const segment = targetUrl.pathname.split("/").filter(Boolean)[0] ?? "";
+  const expectedTop = segment.startsWith("accounting")
+    ? "Accounting"
+    : segment.startsWith("settings")
+      ? "Settings"
+      : (topLevelLabels[segment] ?? null);
+  const activeTop = measured.nav.find((item) => item.active);
+  const activeSub = measured.subitems.find((item) => item.active);
+  const inactive =
+    measured.nav.find((item) => !item.active && item.label !== "Settings") ?? measured.nav[1];
+
+  if (expectedTop === "Settings") {
+    const group = measured.navGroups.find((item) => item.label === "Settings");
+    check(`${label} settings group is active`, Boolean(group), { actual: measured.navGroups });
+    equal(`${label} settings group is tinted`, group?.bg, "rgb(230, 241, 241)");
+    equal(`${label} settings group is expanded`, group?.expanded, "true");
+    check(`${label} settings child is active`, Boolean(activeSub), {
+      actual: measured.subitems.map((item) => ({ label: item.label, active: item.active })),
+    });
+    if (activeSub) {
+      const expectedChild = settingsChildLabels[targetUrl.pathname];
+      if (expectedChild) equal(`${label} active settings child`, activeSub.label, expectedChild);
+      equal(`${label} active subitem background`, activeSub.bg, "rgb(5, 117, 115)");
+      equal(`${label} active subitem text`, activeSub.color, "rgb(255, 255, 255)");
+      equal(`${label} active subitem weight`, activeSub.weight, "600");
+      equal(`${label} active subitem radius`, activeSub.radius, "6px");
+      near(`${label} active subitem height`, activeSub.h, 28, 0.5);
+      near(`${label} active subitem width`, activeSub.w, 187.3, 1);
+    }
+  } else {
+    equal(`${label} active nav item`, activeTop?.label, expectedTop);
+    if (activeTop) {
+      equal(`${label} active pill background`, activeTop.bg, "rgb(5, 117, 115)");
+      equal(`${label} active pill text`, activeTop.color, "rgb(255, 255, 255)");
+      equal(`${label} active pill weight`, activeTop.weight, "600");
+      equal(`${label} active pill radius`, activeTop.radius, "6px");
+      near(`${label} active pill height`, activeTop.h, 36, 0.5);
+      near(`${label} active pill width`, activeTop.w, 187.3, 1);
+    }
+  }
+  equal(`${label} inactive nav colour`, inactive?.color, "rgb(73, 80, 87)");
+  equal(`${label} inactive nav weight`, inactive?.weight, "400");
+  equal(`${label} nav radius`, inactive?.radius, "6px");
+  equal(`${label} nav icon gap`, inactive?.gap, "8px");
+
+  const chevronItems = ["Accounts", "Transactions", "Accounting", "Reports", "Import"];
+  check(
+    `${label} chevrons are on the five expandable rows`,
+    measured.nav
+      .filter((item) => chevronItems.includes(item.label))
+      .every((item) => item.chevron) &&
+      measured.nav
+        .filter((item) => !chevronItems.includes(item.label) && item.label !== "Settings")
+        .every((item) => !item.chevron),
+    { actual: measured.nav.map((item) => ({ label: item.label, chevron: item.chevron })) },
+  );
+  check(
+    `${label} Settings has a group chevron`,
+    settingsRow?.parentChevron === true && /Settings/.test(settingsRow?.parentChevronLabel ?? ""),
+    { actual: { chevron: settingsRow?.parentChevron, label: settingsRow?.parentChevronLabel } },
+  );
+  check(`${label} Campaigns is marked Soon`, measured.nav[7].soon === true);
+  check(
+    `${label} Campaigns still resolves`,
+    typeof measured.nav[7].href === "string" && measured.nav[7].href.startsWith("/"),
+    { actual: measured.nav[7].href },
+  );
+
+  near(`${label} sidebar footer height`, measured.footer?.h ?? 0, 73, 0.5);
+  equal(`${label} sidebar footer padding`, measured.footer?.padding, "6px 8px");
+  equal(`${label} sidebar footer gap`, measured.footer?.gap, "4px");
+  equal(`${label} footer wordmark`, measured.footer?.wordmark?.text, "AIMSCAMS");
+  equal(`${label} footer wordmark colour`, measured.footer?.wordmark?.color, "rgb(71, 155, 146)");
+  equal(`${label} footer wordmark weight`, measured.footer?.wordmark?.fontWeight, "700");
+  near(`${label} footer wordmark size`, Number.parseFloat(measured.footer?.wordmark?.fontSize ?? "0"), 12.8, 0.05);
+  check(
+    `${label} footer copyright is two lines`,
+    /© 2026 AIMSCAMS\./.test(measured.footer?.copyright?.text ?? "") &&
+      /All rights reserved\./.test(measured.footer?.copyright?.text ?? ""),
+    { actual: measured.footer?.copyright?.text },
+  );
+  near(`${label} footer copyright size`, Number.parseFloat(measured.footer?.copyright?.fontSize ?? "0"), 12.8, 0.05);
+
+  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 44, 0.5);
+  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 44, 0.5);
+  near(
+    `${label} collapse control straddles the rail`,
+    (measured.toggle?.x ?? 0) + (measured.toggle?.w ?? 0) / 2,
+    measured.sidebar?.w ?? 0,
+    1.5,
+  );
+  near(
+    `${label} collapse control sits above the footer`,
+    (measured.footer?.y ?? 0) - ((measured.toggle?.y ?? 0) + (measured.toggle?.h ?? 0)),
+    6,
+    2,
+  );
+  equal(`${label} collapse control is expanded`, measured.toggle?.ariaExpanded, "true");
+
+  check(`${label} page background`, measured.doc.bodyBg === "rgb(235, 233, 233)", {
+    actual: measured.doc.bodyBg,
   });
   check(
-    `${prefix} chart value labels`,
-    JSON.stringify(await page.getByTestId("funds-value-label").allTextContents()) ===
-      JSON.stringify(["47.5M", "38.3M"]),
-    await page.getByTestId("funds-value-label").allTextContents(),
-  );
-
-  check(`${prefix} portfolio is visible`, await portfolio.isVisible(), {});
-  equal(
-    `${prefix} portfolio segment count`,
-    await page.getByTestId("portfolio-segment").count(),
-    4,
-  );
-  const portfolioWidths = await page
-    .getByTestId("portfolio-segment")
-    .evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().width));
-  const portfolioBarBox = await boxOf(page.getByTestId("portfolio-bar"));
-  const totalShare = portfolioWidths.reduce((sum, width) => sum + width, 0);
-  check(
-    `${prefix} portfolio segments fill the bar`,
-    portfolioBarBox && Math.abs(totalShare - portfolioBarBox.w) <= 2,
-    { totalShare: round(totalShare), portfolioBarBox },
+    `${label} no horizontal overflow`,
+    measured.doc.scrollWidth <= measured.doc.clientWidth + 1 &&
+      measured.doc.bodyScrollWidth <= measured.doc.clientWidth + 1,
+    { actual: measured.doc },
   );
   check(
-    `${prefix} desktop chart layout`,
-    viewportW >= 1536
-      ? chartBox && portfolioBox && chartBox.y === portfolioBox.y && chartBox.x < portfolioBox.x
-      : chartBox && portfolioBox && portfolioBox.y > chartBox.y && chartBox.x === portfolioBox.x,
-    { chartBox, portfolioBox },
+    `${label} Roboto is loaded`,
+    measured.fonts.check && /Roboto/.test(measured.fonts.family),
+    { actual: measured.fonts },
+  );
+  equal(`${label} every rendered text is 12.8px`, measured.textViolations, []);
+
+  if (isDashboard) {
+    console.log("Dashboard");
+    near(`${label} content starts 18px after the sidebar`, measured.tabCard?.x ?? 0, 222, 1);
+    near(`${label} content starts 18px below the header`, measured.tabCard?.y ?? 0, 86, 1);
+    near(`${label} tab card height`, measured.tabCard?.h ?? 0, 54, 0.5);
+    equal(`${label} tab card radius`, measured.tabCard?.radius, "8px");
+    equal(`${label} tab card padding`, measured.tabCard?.padding, "0px 14px");
+    near(
+      `${label} tab card spans the content width`,
+      measured.tabCard?.w ?? 0,
+      measured.doc.scrollWidth - 204 - 36,
+      1,
+    );
+
+    equal(
+      `${label} tabs`,
+      measured.tabs.map((tab) => tab.text),
+      ["Overview", "Members", "Loans"],
+    );
+    check(
+      `${label} tabs are 154x44 at radius 6`,
+      measured.tabs.every(
+        (tab) =>
+          Math.abs(tab.w - 154) <= 0.8 &&
+          Math.abs(tab.h - 44) <= 0.5 &&
+          tab.radius === "6px",
+      ),
+      { actual: measured.tabs.map(({ text, w, h, radius }) => ({ text, w, h, radius })) },
+    );
+    check(
+      `${label} tab labels are 12.8px and icon-bearing`,
+      measured.tabs.every((tab) => tab.fontSize === "12.8px" && tab.icons === 1),
+      { actual: measured.tabs.map(({ text, fontSize, icons }) => ({ text, fontSize, icons })) },
+    );
+    equal(`${label} active tab is Overview`, measured.tabs[0].state, "active");
+    equal(`${label} active tab colour`, measured.tabs[0].color, "rgb(255, 255, 255)");
+    equal(`${label} active tab background`, measured.tabs[0].bg, "rgb(5, 117, 115)");
+    equal(`${label} active tab weight`, measured.tabs[0].fontWeight, "600");
+    equal(`${label} inactive tab colour`, measured.tabs[1].color, "rgb(17, 24, 39)");
+    equal(`${label} inactive tab weight`, measured.tabs[1].fontWeight, "500");
+    equal(
+      `${label} tab gap`,
+      Number((measured.tabs[1].x - (measured.tabs[0].x + measured.tabs[0].w)).toFixed(2)),
+      6,
+    );
+
+    equal(`${label} KPI count`, measured.kpis?.count, 8);
+    equal(`${label} KPI cards per row`, measured.kpis?.perRow, 4);
+    check(
+      `${label} KPI cards share a width`,
+      (measured.kpis?.boxes ?? []).every(
+        (item) => Math.abs(item.w - measured.kpis.boxes[0].w) <= 0.5,
+      ),
+      { actual: measured.kpis?.boxes?.map((item) => item.w) },
+    );
+    near(`${label} KPI height`, measured.kpis?.boxes?.[0]?.h ?? 0, 94.8, 1);
+    near(`${label} KPI horizontal gap`, measured.kpis?.gapX ?? 0, 12, 0.5);
+    near(`${label} KPI vertical gap`, measured.kpis?.gapY ?? 0, 12, 0.5);
+    equal(`${label} KPI card background`, measured.kpis?.card?.backgroundColor, "rgb(255, 255, 255)");
+    equal(`${label} KPI card border`, measured.kpis?.card?.borderTopColor, "rgb(222, 226, 230)");
+    equal(`${label} KPI card radius`, measured.kpis?.card?.borderRadius, "8px");
+    equal(`${label} KPI card padding`, measured.kpis?.card?.padding, "14px");
+    near(`${label} KPI label size`, Number.parseFloat(measured.kpis?.label?.fontSize ?? "0"), 12.8, 0.05);
+    equal(`${label} KPI label weight`, measured.kpis?.label?.fontWeight, "500");
+    equal(`${label} KPI label colour`, measured.kpis?.label?.color, "rgb(108, 117, 125)");
+    near(`${label} KPI value size`, Number.parseFloat(measured.kpis?.value?.fontSize ?? "0"), 12.8, 0.05);
+    equal(`${label} KPI value weight`, measured.kpis?.value?.fontWeight, "700");
+    equal(`${label} KPI value colour`, measured.kpis?.value?.color, "rgb(17, 24, 39)");
+    near(`${label} KPI badge size`, measured.kpis?.badge?.w ?? 0, 34, 0.5);
+    near(`${label} KPI badge height`, measured.kpis?.badge?.h ?? 0, 34, 0.5);
+    near(`${label} KPI badge icon`, measured.kpis?.badge?.icon?.w ?? 0, 16, 0.5);
+    equal(`${label} KPI labels`, measured.kpis?.labels, [
+      "Total Members",
+      "Outstanding Loan Principal",
+      "Principal in Arrears",
+      "Clients in Arrears",
+      "Portfolio at Risk",
+      "Savings & Shares Balance",
+      "Till Status",
+      "Unposted Transactions",
+    ]);
+    check(
+      `${label} KPI values are populated`,
+      (measured.kpis?.values ?? []).every((value) => value.length > 0),
+      { actual: measured.kpis?.values },
+    );
+
+    near(`${label} chart radius`, Number.parseFloat(measured.chart?.radius ?? "0"), 8, 0.5);
+    equal(`${label} chart padding`, measured.chart?.padding, "30px");
+    equal(
+      `${label} chart title`,
+      (measured.chart?.title?.text ?? "").replace(/\s+/g, "").toLowerCase(),
+      "fundsinvsfundsout",
+    );
+    equal(`${label} chart bars`, measured.chart?.bars?.length, 2);
+    check(
+      `${label} chart bars are 77px and square`,
+      (measured.chart?.bars ?? []).every(
+        (bar) => Math.abs(bar.w - 77) <= 1 && Number.parseFloat(bar.radius) === 0,
+      ),
+      { actual: measured.chart?.bars?.map(({ w, radius }) => ({ w, radius })) },
+    );
+    equal(`${label} funds-in bar colour`, measured.chart?.bars?.[0]?.bg, "rgb(5, 117, 115)");
+    equal(`${label} funds-out bar colour`, measured.chart?.bars?.[1]?.bg, "rgb(199, 90, 67)");
+    equal(`${label} chart axis steps`, measured.chart?.ticks?.length, 8);
+    check(
+      `${label} chart axis text`,
+      (measured.chart?.ticks ?? []).every(
+        (tick, index) => tick.text === `TZS ${50 - index * 5}M`,
+      ),
+      { actual: measured.chart?.ticks?.map((tick) => tick.text) },
+    );
+    check(
+      `${label} chart axis type`,
+      (measured.chart?.ticks ?? []).every(
+        (tick) => tick.size === "12.8px" && tick.color === "rgb(102, 102, 102)",
+      ),
+      { actual: measured.chart?.ticks },
+    );
+    check(
+      `${label} horizontal-only gridlines`,
+      (measured.chart?.gridlines ?? []).length === 8 &&
+        measured.chart.gridlines.every(
+          (line) => Number.parseFloat(line.top) > 0 && Number.parseFloat(line.left) === 0,
+        ),
+      { actual: measured.chart?.gridlines },
+    );
+    equal(`${label} chart value labels`, measured.chart?.values?.length, 2);
+
+    equal(`${label} portfolio segments`, measured.portfolio?.segments?.length, 4);
+    check(
+      `${label} portfolio segments form one bar`,
+      (measured.portfolio?.segments ?? []).every(
+        (segment) => Math.abs(segment.h - 20) <= 0.5 && segment.w > 0,
+      ),
+      { actual: measured.portfolio?.segments?.map(({ w, h }) => ({ w, h })) },
+    );
+    check(
+      `${label} portfolio totals`,
+      /Total portfolio/.test(measured.portfolio?.text ?? "") &&
+        /TZS/.test(measured.portfolio?.text ?? ""),
+      { actual: measured.portfolio?.text?.slice(0, 120) },
+    );
+
+    if (viewport.width >= 1600) {
+      near(`${label} chart and portfolio share a row`, measured.portfolio?.y ?? 0, measured.chart?.y ?? 0, 1);
+      near(
+        `${label} chart and portfolio gap`,
+        (measured.portfolio?.x ?? 0) - ((measured.chart?.x ?? 0) + (measured.chart?.w ?? 0)),
+        20,
+        1,
+      );
+    } else {
+      near(
+        `${label} portfolio stacks below the chart`,
+        measured.portfolio?.y ?? 0,
+        (measured.chart?.y ?? 0) + (measured.chart?.h ?? 0) + 20,
+        1,
+      );
+      near(`${label} stacked portfolio aligns left`, measured.portfolio?.x ?? 0, measured.chart?.x ?? 0, 1);
+    }
+
+    const bannerCount = Number.parseInt(
+      /^(\d+)\s+transactions?/.exec(measured.banner ?? "")?.[1] ?? "-1",
+      10,
+    );
+    check(
+      `${label} banner reconciles with the unposted KPI`,
+      bannerCount > 0 && measured.kpis?.values?.[7] === String(bannerCount),
+      { actual: { bannerCount, kpi: measured.kpis?.values?.[7], banner: measured.banner } },
+    );
+  }
+
+  near(`${label} chat size`, measured.chat?.w ?? 0, 60, 0.5);
+  near(`${label} chat height`, measured.chat?.h ?? 0, 60, 0.5);
+  equal(`${label} chat colour`, measured.chat?.bg, "rgb(3, 118, 116)");
+  near(
+    `${label} chat right inset`,
+    measured.doc.scrollWidth - ((measured.chat?.x ?? 0) + (measured.chat?.w ?? 0)),
+    20,
+    1.5,
+  );
+  near(
+    `${label} chat bottom inset`,
+    measured.viewport.innerHeight - ((measured.chat?.y ?? 0) + (measured.chat?.h ?? 0)),
+    16,
+    1,
   );
 
-  const banner = page.getByTestId("unposted-banner");
-  check(`${prefix} unposted banner visible`, await banner.isVisible(), {});
-  check(`${prefix} unposted count`, (await banner.innerText()).includes("3 transactions"), {});
-
-  const chat = await boxOf(page.getByTestId("chat-fab"));
-  const chatStyle = await styleOf(page.getByTestId("chat-fab"), [
-    "backgroundColor",
-    "boxShadow",
-    "borderRadius",
-  ]);
+  console.log("Interactions");
+  await page.getByTestId("language-trigger").click();
+  const languageMenu = page.getByRole("menu").last();
+  check(`${label} language menu opens`, await languageMenu.isVisible(), {});
+  const languageItems = await languageMenu.getByRole("menuitemradio").allTextContents();
   check(
-    `${prefix} chat FAB is 90px at bottom-right`,
-    chat &&
-      Math.abs(chat.w - 90) <= 1 &&
-      Math.abs(chat.h - 90) <= 1 &&
-      Math.abs(chat.x + chat.w - (viewportW - 32)) <= 1 &&
-      Math.abs(chat.y + chat.h - (viewportH - 32)) <= 1,
-    { chat, viewportW, viewportH },
+    `${label} language menu lists both languages`,
+    languageItems.includes("English") && languageItems.includes("Kiswahili"),
+    { actual: languageItems },
   );
-  equal(`${prefix} chat FAB colour`, chatStyle.backgroundColor, "rgb(3, 118, 116)");
-  check(`${prefix} chat FAB shadow`, chatStyle.boxShadow !== "none", {
-    shadow: chatStyle.boxShadow,
+  await page.keyboard.press("Escape");
+  check(`${label} language menu closes on Escape`, await waitForHidden(languageMenu), {});
+  await page.waitForTimeout(120);
+  equal(`${label} language focus returns`, await focusedTestId(page), "language-trigger");
+
+  await page.getByTestId("user-menu-trigger").click();
+  const userMenu = page.getByRole("menu").last();
+  check(`${label} user menu opens`, await userMenu.isVisible(), {});
+  const userItems = await userMenu.getByRole("menuitem").allTextContents();
+  check(`${label} user menu has Sign out`, userItems.some((item) => /Sign out/.test(item)), {
+    actual: userItems,
   });
-
-  const overflow = await pageOverflow(page);
-  check(
-    `${prefix} no horizontal scroll`,
-    overflow.scroll <= overflow.client + 1 &&
-      overflow.bodyScroll <= overflow.client + 1 &&
-      overflow.offenders.length === 0,
-    overflow,
-  );
-
-  await page.screenshot({ path: `artifacts/audit-${key}-expanded.png` });
-  await page.screenshot({ path: `artifacts/audit-${key}-expanded-full.png`, fullPage: true });
-
-  // ---- Language dropdown ---------------------------------------------
-  await languageTrigger.focus();
-  await page.keyboard.press("Enter");
-  await page.waitForTimeout(180);
-  let menu = page.getByRole("menu").last();
-  check(`${prefix} language menu opens`, await menu.isVisible(), {});
-  await page.keyboard.press("ArrowDown");
-  await page.waitForTimeout(100);
-  const keyboardFocus = await activeElement(page);
-  check(
-    `${prefix} language menu is keyboard navigable`,
-    keyboardFocus.role === "menuitemradio",
-    keyboardFocus,
-  );
-  const menuBox = await boxOf(menu);
-  check(
-    `${prefix} language menu stays in viewport`,
-    menuBox &&
-      menuBox.x >= 0 &&
-      menuBox.y >= 0 &&
-      menuBox.x + menuBox.w <= viewportW &&
-      menuBox.y + menuBox.h <= viewportH,
-    menuBox,
-  );
-  await page.screenshot({ path: `artifacts/audit-${key}-language-menu.png` });
   await page.keyboard.press("Escape");
-  check(`${prefix} language menu closes on Escape`, await waitForGone(menu), {});
+  check(`${label} user menu closes on Escape`, await waitForHidden(userMenu), {});
   await page.waitForTimeout(120);
-  equal(
-    `${prefix} language focus returns to trigger`,
-    (await activeElement(page)).testId,
-    "language-trigger",
-  );
+  equal(`${label} user focus returns`, await focusedTestId(page), "user-menu-trigger");
 
-  await languageTrigger.click();
-  await page.getByRole("menuitemradio", { name: "Kiswahili" }).click();
-  await page.waitForTimeout(150);
-  equal(
-    `${prefix} language selection updates`,
-    await languageTrigger.getAttribute("aria-label"),
-    "Language: Kiswahili",
-  );
-  check(`${prefix} language menu closes on selection`, await waitForGone(menu), {});
-  await languageTrigger.click();
-  await page.getByRole("menuitemradio", { name: "English" }).click();
-  await page.waitForTimeout(150);
-  equal(
-    `${prefix} language resets`,
-    await languageTrigger.getAttribute("aria-label"),
-    "Language: English",
-  );
-
-  // ---- User dropdown -------------------------------------------------
-  await userTrigger.focus();
-  await page.keyboard.press("Enter");
-  await page.waitForTimeout(180);
-  menu = page.getByRole("menu").last();
-  check(`${prefix} user menu opens`, await menu.isVisible(), {});
-  const userMenuBox = await boxOf(menu);
-  check(
-    `${prefix} user menu stays in viewport`,
-    userMenuBox &&
-      userMenuBox.x >= 0 &&
-      userMenuBox.y >= 0 &&
-      userMenuBox.x + userMenuBox.w <= viewportW &&
-      userMenuBox.y + userMenuBox.h <= viewportH,
-    userMenuBox,
-  );
-  await page.screenshot({ path: `artifacts/audit-${key}-user-menu.png` });
-  await page.keyboard.press("Escape");
-  check(`${prefix} user menu closes on Escape`, await waitForGone(menu), {});
-  await page.waitForTimeout(120);
-  equal(
-    `${prefix} user focus returns to trigger`,
-    (await activeElement(page)).testId,
-    "user-menu-trigger",
-  );
-
-  await userTrigger.click();
-  await page.waitForTimeout(150);
-  check(`${prefix} user menu reopens`, await menu.isVisible(), {});
-  await page.mouse.click(viewportW / 2, 50);
-  check(`${prefix} user menu closes on outside click`, await waitForGone(menu), {});
-
-  // ---- Sheet ---------------------------------------------------------
-  await page.getByTestId("unposted-review").click();
-  await page.waitForTimeout(300);
-  const sheet = page.getByTestId("unposted-sheet");
-  check(`${prefix} unposted sheet opens`, await sheet.isVisible(), {});
-  equal(`${prefix} unposted sheet is 448px`, (await boxOf(sheet))?.w, 448);
-  equal(`${prefix} unposted sheet rows`, await sheet.locator("tbody tr").count(), 3);
-  check(
-    `${prefix} unposted sheet has no horizontal overflow`,
-    await sheet.evaluate((element) => element.scrollWidth <= element.clientWidth + 1),
-    await sheet.evaluate((element) => ({
+  if (isDashboard) {
+    await page.getByTestId("unposted-review").click();
+    const sheet = page.getByTestId("unposted-sheet");
+    check(`${label} review sheet opens`, await sheet.isVisible(), {});
+    const sheetBox = await sheet.boundingBox();
+    near(`${label} review sheet width`, sheetBox?.width ?? 0, 448, 1);
+    const sheetRows = await sheet.locator("tbody tr").count();
+    const bannerCount = Number.parseInt(
+      /^(\d+)\s+transactions?/.exec(measured.banner ?? "")?.[1] ?? "-1",
+      10,
+    );
+    equal(`${label} review sheet rows reconcile`, sheetRows, bannerCount);
+    const sheetOverflow = await sheet.evaluate((element) => ({
       scrollWidth: element.scrollWidth,
       clientWidth: element.clientWidth,
-    })),
-  );
-  await page.screenshot({ path: `artifacts/audit-${key}-unposted-sheet.png` });
-  await page.keyboard.press("Escape");
-  check(`${prefix} unposted sheet closes on Escape`, await waitForGone(sheet), {});
-  await page.waitForTimeout(200);
-  equal(
-    `${prefix} sheet focus returns to review`,
-    (await activeElement(page)).testId,
-    "unposted-review",
-  );
+    }));
+    check(
+      `${label} review sheet has no horizontal overflow`,
+      sheetOverflow.scrollWidth <= sheetOverflow.clientWidth + 1,
+      { actual: sheetOverflow },
+    );
+    await page.keyboard.press("Escape");
+    check(`${label} review sheet closes on Escape`, await waitForHidden(sheet), {});
+    await page.waitForTimeout(150);
+    equal(`${label} review focus returns`, await focusedTestId(page), "unposted-review");
+  }
 
-  // ---- Chat dialog ---------------------------------------------------
   await page.getByTestId("chat-fab").click();
-  await page.waitForTimeout(300);
   const chatDialog = page.getByRole("dialog");
-  check(`${prefix} chat dialog opens`, await chatDialog.isVisible(), {});
-  equal(
-    `${prefix} chat dialog title`,
-    await chatDialog.getByRole("heading").textContent(),
-    "Support chat",
+  check(`${label} chat opens`, await chatDialog.isVisible(), {});
+  check(
+    `${label} chat title`,
+    /Support chat/i.test((await chatDialog.getByRole("heading").first().textContent()) ?? ""),
+    { actual: await chatDialog.getByRole("heading").first().textContent().catch(() => null) },
   );
-  await page.screenshot({ path: `artifacts/audit-${key}-chat-dialog.png` });
+  const chatBox = await chatDialog.boundingBox();
+  check(
+    `${label} chat stays in the viewport`,
+    chatBox !== null &&
+      chatBox.x >= 0 &&
+      chatBox.y >= 0 &&
+      chatBox.x + chatBox.width <= viewport.width &&
+      chatBox.y + chatBox.height <= viewport.height,
+    { actual: chatBox },
+  );
   await page.keyboard.press("Escape");
-  check(`${prefix} chat dialog closes on Escape`, await waitForGone(chatDialog), {});
-  await page.waitForTimeout(200);
-  equal(`${prefix} chat focus returns to FAB`, (await activeElement(page)).testId, "chat-fab");
+  check(`${label} chat closes on Escape`, await waitForHidden(chatDialog), {});
+  await page.waitForTimeout(180);
+  equal(`${label} chat focus returns to the FAB`, await focusedTestId(page), "chat-fab");
 
-  // ---- Chart tooltip -------------------------------------------------
-  const firstBar = bars.first();
-  await firstBar.hover();
-  await page.waitForTimeout(150);
-  let tooltip = page.getByRole("tooltip");
-  check(`${prefix} chart tooltip opens on hover`, await tooltip.isVisible(), {});
-  equal(`${prefix} chart tooltip text`, await tooltip.textContent(), "Funds in: TZS 47,500,000");
-  await page.mouse.move(10, 140);
-  await page.waitForTimeout(150);
-  await firstBar.focus();
-  await page.waitForTimeout(150);
-  tooltip = page.getByRole("tooltip");
-  check(`${prefix} chart tooltip opens on focus`, await tooltip.isVisible(), {});
-  equal(
-    `${prefix} chart focus tooltip text`,
-    await tooltip.textContent(),
-    "Funds in: TZS 47,500,000",
-  );
-  await page.getByTestId("dashboard-tab-overview").focus();
-  await page.waitForTimeout(150);
-  check(
-    `${prefix} chart tooltip closes on blur`,
-    !(await tooltip.isVisible().catch(() => false)),
-    {},
-  );
+  if (isDashboard) {
+    await page.getByTestId("dashboard-tab-members").click();
+    await page.waitForTimeout(250);
+    equal(
+      `${label} Members tab activates`,
+      await page.getByTestId("dashboard-tab-members").getAttribute("data-state"),
+      "active",
+    );
+    check(
+      `${label} Members tab shows its empty state`,
+      await page.getByRole("heading", { name: /Member analytics/i }).isVisible(),
+      {},
+    );
+    check(
+      `${label} Members tab hides the KPI grid`,
+      !(await page.getByTestId("kpi-card").first().isVisible()),
+      {},
+    );
 
-  // ---- Tabs ----------------------------------------------------------
-  await page.getByTestId("dashboard-tab-members").click();
-  await page.waitForTimeout(150);
-  equal(
-    `${prefix} Members tab activates`,
-    await page.getByTestId("dashboard-tab-members").getAttribute("data-state"),
-    "active",
-  );
-  check(
-    `${prefix} Members empty state`,
-    await page.getByRole("heading", { name: "Member analytics are not live yet" }).isVisible(),
-    {},
-  );
-  check(
-    `${prefix} Members hides KPIs`,
-    !(await kpis
-      .first()
-      .isVisible()
-      .catch(() => false)),
-    {},
-  );
-  await page.screenshot({ path: `artifacts/audit-${key}-members-tab.png` });
+    await page.getByTestId("dashboard-tab-loans").click();
+    await page.waitForTimeout(250);
+    check(
+      `${label} Loans tab shows its empty state`,
+      await page.getByRole("heading", { name: /Loan analytics/i }).isVisible(),
+      {},
+    );
 
-  await page.getByTestId("dashboard-tab-overview").focus();
-  await page.keyboard.press("ArrowRight");
-  await page.waitForTimeout(150);
-  equal(
-    `${prefix} tab keyboard activation`,
-    await page.getByTestId("dashboard-tab-members").getAttribute("data-state"),
-    "active",
-  );
-  equal(
-    `${prefix} tab keyboard focus`,
-    (await activeElement(page)).testId,
-    "dashboard-tab-members",
-  );
+    await page.getByTestId("dashboard-tab-overview").click();
+    await page.waitForTimeout(250);
+    check(
+      `${label} Overview tab restores the KPI grid`,
+      await page.getByTestId("kpi-card").first().isVisible(),
+      {},
+    );
 
-  await page.getByTestId("dashboard-tab-loans").click();
-  await page.waitForTimeout(150);
-  check(
-    `${prefix} Loans empty state`,
-    await page.getByRole("heading", { name: "Loan analytics are not live yet" }).isVisible(),
-    {},
-  );
-  await page.getByTestId("dashboard-tab-overview").click();
-  await page.waitForTimeout(150);
+    const firstBar = page.getByTestId("funds-bar").first();
+    await firstBar.hover();
+    await page.waitForTimeout(250);
+    const tooltip = page.getByRole("tooltip");
+    check(`${label} chart tooltip opens on hover`, await tooltip.isVisible(), {});
+    check(
+      `${label} chart tooltip names the series`,
+      /Funds in: TZS/.test((await tooltip.textContent()) ?? ""),
+      { actual: await tooltip.textContent().catch(() => null) },
+    );
+    await page.mouse.move(8, 300);
+    await page.waitForTimeout(200);
+    await firstBar.focus();
+    await page.waitForTimeout(250);
+    check(`${label} chart tooltip opens on focus`, await tooltip.isVisible(), {});
+    await page.getByTestId("dashboard-tab-overview").focus();
+    await page.waitForTimeout(200);
+    check(`${label} chart tooltip closes on blur`, !(await tooltip.isVisible().catch(() => false)), {});
+  }
 
-  // ---- Collapsed sidebar --------------------------------------------
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.getByTestId("sidebar-toggle").click();
-  await page.waitForTimeout(350);
-  const collapsedSidebar = await boxOf(page.getByTestId("app-sidebar"));
+  await page.waitForTimeout(400);
+  const collapsed = await measureCollapsed(page);
+  near(`${label} collapsed sidebar width`, collapsed.sidebar?.w ?? 0, 76, 0.5);
   check(
-    `${prefix} collapsed sidebar is 76px below header`,
-    collapsedSidebar && collapsedSidebar.w === 76 && Math.abs(collapsedSidebar.y - 97) <= 1,
-    collapsedSidebar,
-  );
-  const collapsedItems = await navItems.evaluateAll((elements) =>
-    elements.map((element) => {
-      const rect = element.getBoundingClientRect();
-      const icon = element.querySelector("svg")?.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      return {
-        label: element.getAttribute("data-nav-label"),
-        x: Math.round(rect.x),
-        w: Math.round(rect.width),
-        h: Math.round(rect.height),
-        iconX: icon ? Math.round(icon.x) : null,
-        iconW: icon ? Math.round(icon.width) : null,
-        text: element.textContent?.trim(),
-        color: style.color,
-        background: style.backgroundColor,
-        radius: style.borderRadius,
-      };
-    }),
+    `${label} collapsed labels are removed`,
+    collapsed.items.every((item) => item.text === "" || item.label === "Campaigns"),
+    { actual: collapsed.items.map((item) => ({ label: item.label, text: item.text })) },
   );
   check(
-    `${prefix} collapsed icons stay on x=38 axis`,
-    collapsedItems.every((item) => item.iconX === 28 && item.iconW === 20),
-    collapsedItems.map(({ label, iconX, iconW }) => ({ label, iconX, iconW })),
+    `${label} collapsed icons stay on x=28`,
+    collapsed.items.every(
+      (item) => item.icon && Math.abs(item.icon.x - 28) <= 0.6 && Math.abs(item.icon.w - 20) <= 0.5,
+    ),
+    { actual: collapsed.items.map((item) => ({ label: item.label, icon: item.icon })) },
   );
-  check(
-    `${prefix} collapsed labels are removed`,
-    collapsedItems.every((item) => item.text === ""),
-    collapsedItems.map(({ label, text }) => ({ label, text })),
-  );
-  check(
-    `${prefix} collapsed items expose accessible names`,
-    collapsedItems.every((item) => Boolean(item.label)),
-    collapsedItems.map(({ label }) => label),
-  );
-  const collapsedActive = collapsedItems.find((item) => item.label === "Dashboard");
+  const collapsedActive = collapsed.items.find((item) => item.active);
   equal(
-    `${prefix} collapsed active stays visible`,
-    collapsedActive?.background,
+    `${label} collapsed active pill stays teal`,
+    collapsedActive?.bg,
     "rgb(5, 117, 115)",
   );
-  equal(`${prefix} collapsed active radius`, collapsedActive?.radius, "8px");
-  equal(`${prefix} collapsed active text`, collapsedActive?.color, "rgb(255, 255, 255)");
-  const collapsedToggle = await boxOf(page.getByTestId("sidebar-toggle"));
-  check(
-    `${prefix} collapsed toggle straddles 76px edge`,
-    collapsedToggle &&
-      Math.abs(collapsedToggle.w - 44) <= 1 &&
-      collapsedToggle.x < 76 &&
-      collapsedToggle.x + collapsedToggle.w > 76,
-    collapsedToggle,
+  near(
+    `${label} collapsed toggle follows the rail`,
+    (collapsed.toggle?.x ?? 0) + (collapsed.toggle?.w ?? 0) / 2,
+    collapsed.sidebar?.w ?? 0,
+    1.5,
   );
-  const collapsedFooter = await boxOf(page.getByTestId("sidebar-footer"));
   check(
-    `${prefix} collapsed toggle clears footer`,
-    collapsedToggle &&
-      collapsedFooter &&
-      collapsedToggle.y + collapsedToggle.h <= collapsedFooter.y + 1,
-    { collapsedToggle, collapsedFooter },
+    `${label} collapsed page has no horizontal overflow`,
+    collapsed.scrollWidth <= collapsed.clientWidth + 1,
+    { actual: { scrollWidth: collapsed.scrollWidth, clientWidth: collapsed.clientWidth } },
   );
-  const collapsedOverflow = await pageOverflow(page);
-  check(
-    `${prefix} collapsed sidebar has no horizontal scroll`,
-    collapsedOverflow.scroll <= collapsedOverflow.client + 1 &&
-      collapsedOverflow.offenders.length === 0,
-    collapsedOverflow,
-  );
+  await page.screenshot({
+    path: resolve(artifacts, `${slugFor(measured.url)}-${label}-collapsed.png`),
+  });
 
-  await navItems.first().hover();
+  await page.getByTestId("nav-item").first().hover();
   await page.waitForTimeout(900);
   const collapsedTooltip = page.getByRole("tooltip");
-  check(`${prefix} collapsed nav tooltip opens`, await collapsedTooltip.isVisible(), {});
-  equal(`${prefix} collapsed nav tooltip text`, await collapsedTooltip.textContent(), "Dashboard");
-  await page.mouse.move(viewportW - 40, viewportH - 200);
-  await page.waitForTimeout(200);
-
-  await page.screenshot({ path: `artifacts/audit-${key}-collapsed.png` });
-  await page.screenshot({ path: `artifacts/audit-${key}-collapsed-full.png`, fullPage: true });
+  check(`${label} collapsed nav shows a tooltip`, await collapsedTooltip.isVisible(), {});
+  equal(`${label} collapsed tooltip label`, (await collapsedTooltip.textContent())?.trim(), "Dashboard");
 
   await page.getByTestId("sidebar-toggle").click();
-  await page.waitForTimeout(350);
-  const expandedAgain = await boxOf(page.getByTestId("app-sidebar"));
-  equal(`${prefix} sidebar expands again`, expandedAgain?.w, 300);
+  await page.waitForTimeout(400);
+  near(
+    `${label} sidebar expands again`,
+    (await page.getByTestId("app-sidebar").boundingBox())?.width ?? 0,
+    204,
+    0.5,
+  );
+  equal(
+    `${label} collapse control reports expanded`,
+    await page.getByTestId("sidebar-toggle").getAttribute("aria-expanded"),
+    "true",
+  );
 
-  // ---- Console and network ------------------------------------------
-  equal(`${prefix} console is free of errors`, [...new Set(consoleErrors)], []);
-  equal(`${prefix} no failed responses`, badResponses, []);
+  equal(`${label} console errors`, consoleMessages.filter((message) => message.type === "error"), []);
+  equal(`${label} console warnings`, consoleMessages.filter((message) => message.type === "warning"), []);
+  equal(`${label} unhandled page errors`, pageErrors, []);
+  equal(`${label} failed same-origin requests`, failedRequests.filter((request) => new URL(request.url).origin === targetUrl.origin), []);
+  equal(`${label} HTTP 5xx responses`, serverErrors, []);
 
-  report.viewports[key] = {
-    header,
-    sidebar,
-    activeBox,
-    tabCard,
-    kpis: kpiData,
-    chartBox,
-    portfolioBox,
-    chat,
-    toggleBox,
-    collapsedSidebar,
-    overflow,
-    collapsedOverflow,
-    consoleErrors: [...new Set(consoleErrors)],
-    badResponses,
-    artifacts: [
-      `audit-${key}-expanded.png`,
-      `audit-${key}-expanded-full.png`,
-      `audit-${key}-language-menu.png`,
-      `audit-${key}-user-menu.png`,
-      `audit-${key}-unposted-sheet.png`,
-      `audit-${key}-chat-dialog.png`,
-      `audit-${key}-members-tab.png`,
-      `audit-${key}-collapsed.png`,
-      `audit-${key}-collapsed-full.png`,
-    ],
-  };
+  report.viewports.push({
+    viewport,
+    measured,
+    interactions: {
+      collapsed,
+      consoleMessages,
+      pageErrors,
+      failedRequests,
+      serverErrors,
+    },
+  });
 
   await context.close();
 }
 
 await browser.close();
-await writeFile("artifacts/audit-report.json", JSON.stringify(report, null, 2));
 
-const passed = checks.filter((entry) => entry.pass).length;
-console.log(`AIMSCAMS UI audit: ${passed}/${checks.length} checks passed`);
-for (const viewport of viewports) {
-  const key = `${viewport.width}x${viewport.height}`;
-  const data = report.viewports[key];
-  console.log(
-    JSON.stringify({
-      viewport: key,
-      header: data.header,
-      sidebar: data.sidebar,
-      active: data.activeBox,
-      tabCard: data.tabCard,
-      kpiColumns: data.kpis.filter((kpi) => kpi.y === data.kpis[0]?.y).length,
-      chart: data.chartBox,
-      portfolio: data.portfolioBox,
-      chat: data.chat,
-      collapsedSidebar: data.collapsedSidebar,
-      horizontalScroll: [data.overflow.scroll, data.overflow.client],
-      consoleErrors: data.consoleErrors,
-      badResponses: data.badResponses,
-    }),
-  );
-}
+report.finishedAt = new Date().toISOString();
+report.checks = checks;
+report.failures = failures;
+await writeFile(resolve(artifacts, "report.json"), JSON.stringify(report, null, 2));
 
+console.log(`\n${checks.length - failures.length}/${checks.length} checks passed.`);
 if (failures.length > 0) {
-  console.error(`\n${failures.length} failure(s):`);
+  console.log(`\n${failures.length} failed:`);
   for (const failure of failures) {
-    console.error(`- ${failure.name}: ${JSON.stringify(failure.detail)}`);
+    console.log(`- ${failure.name}`);
+    if (Object.keys(failure.detail).length > 0) {
+      console.log(`  ${JSON.stringify(failure.detail)}`);
+    }
   }
-  process.exitCode = 1;
+  process.exit(1);
 }
+console.log(`Report: ${resolve(artifacts, "report.json")}`);

@@ -124,7 +124,7 @@ export function MfaChallengeForm() {
 
   if (!isHydrated) {
     return (
-      <AuthCard title="Two-step verification" description="Checking your sign-inâ€¦">
+      <AuthCard title="Two-step verification" description="Checking your sign-in…">
         <div className="flex items-center gap-2.5 text-fs text-label">
           <LoaderCircle className="size-4 animate-spin" aria-hidden="true" />
           Loading your verification challenge

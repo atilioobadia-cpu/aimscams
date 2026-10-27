@@ -52,6 +52,17 @@ function isActivePath(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+function isItemActive(pathname: string, item: NavItem): boolean {
+  if (!item.href) return false;
+  if (item.href === "/accounting") {
+    return pathname === "/accounting" || pathname.startsWith("/accounting-");
+  }
+  return (
+    isActivePath(pathname, item.href) ||
+    Boolean(item.children?.some((child) => isActivePath(pathname, child.href)))
+  );
+}
+
 function SidebarItem({
   item,
   pathname,
@@ -268,7 +279,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
       >
         <ul className="m-0 flex list-none flex-col gap-[var(--space-4)] p-0">
           {navItems.map((item) => {
-            const active = item.href ? isActivePath(pathname, item.href) : false;
+            const active = isItemActive(pathname, item);
             const expanded = expandedGroup === item.label;
 
             return (
