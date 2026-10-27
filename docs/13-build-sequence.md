@@ -468,8 +468,8 @@ button; a role without Create gets the shared forbidden panel on `/settings/bran
 | [ ] | ST-22 | `/settings-policies-membership-policy-2` | Membership policy 2 | T3 | M |
 | [ ] | ST-23 | `/settings-policies-membership-policy-2-edit` | Edit membership policy 2 | T6 | M |
 | [x] | ST-24 | `/settings-policies-credit-product-policy` | Credit product policies | T1 | M |
-| [ ] | ST-25 | `/settings-policies-credit-product-policy-5` | Credit policy 5 | T3 | H |
-| [ ] | ST-26 | `/settings-policies-credit-product-policy-5-edit` | Edit credit policy 5 | T6 | H |
+| [x] | ST-25 | `/settings-policies-credit-product-policy-5` | Credit policy 5 | T3 | H |
+| [x] | ST-26 | `/settings-policies-credit-product-policy-5-edit` | Edit credit policy 5 | T6 | H |
 | [x] | ST-27 | `/settings-policies-holidays` | Holiday calendar | T1/T6 | L |
 
 **Work**
