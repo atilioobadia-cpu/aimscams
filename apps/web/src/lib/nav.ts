@@ -43,8 +43,7 @@ export const navItems: NavItem[] = [
   {
     label: "Campaigns",
     icon: "campaigns",
-    chevron: true,
-    disabled: true,
+    href: "/campaigns",
     badge: "Soon",
   },
   { label: "Reports", icon: "reports", href: "/reports", chevron: true },
@@ -56,9 +55,14 @@ export const navItems: NavItem[] = [
     href: "/settings",
     chevron: true,
     children: [
-      { label: "Users", icon: "clients", href: "/settings-administrator" },
-      { label: "Add user", icon: "settings", href: "/settings-administrator-add" },
-      { label: "Roles", icon: "settings", href: "/settings-role" },
+      { label: "General", icon: "settings", href: "/settings/general" },
+      { label: "Accounting", icon: "settings", href: "/settings/accounting" },
+      { label: "Branches", icon: "settings", href: "/settings/branches" },
+      { label: "Products", icon: "settings", href: "/settings/products" },
+      { label: "Policies", icon: "settings", href: "/settings/policies" },
+      { label: "Users", icon: "clients", href: "/settings/users" },
+      { label: "Roles", icon: "settings", href: "/settings/roles" },
+      { label: "Services", icon: "settings", href: "/settings/services" },
     ],
   },
 ];
