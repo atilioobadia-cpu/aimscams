@@ -16,11 +16,23 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 const STORAGE_KEY = "aimscams:chat-fab-position";
+const FAB_SIZE = 60;
+// The drag handle (24) sits left of the button, separated by an 8px gap.
+const FAB_STACK_WIDTH = 24 + 8 + FAB_SIZE;
+
+function clampToViewport(x: number, y: number) {
+  const maxX = window.innerWidth - FAB_STACK_WIDTH - 8;
+  const maxY = window.innerHeight - FAB_SIZE - 8;
+  return {
+    x: Math.max(8, Math.min(x, maxX)),
+    y: Math.max(8, Math.min(y, maxY)),
+  };
+}
 
 export function ChatFab() {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [dragging, setDragging] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef<{ x: number; y: number; btnX: number; btnY: number } | null>(null);
 
   useEffect(() => {
@@ -30,7 +42,7 @@ export function ChatFab() {
         const parsed = JSON.parse(stored);
         if (typeof parsed.x === "number" && typeof parsed.y === "number") {
           // eslint-disable-next-line react-hooks/set-state-in-effect
-          setPosition(parsed);
+          setPosition(clampToViewport(parsed.x, parsed.y));
         }
       }
     } catch {
@@ -38,19 +50,18 @@ export function ChatFab() {
     }
   }, []);
 
-  function clamp(x: number, y: number) {
-    const btnSize = 60;
-    const maxX = window.innerWidth - btnSize - 8;
-    const maxY = window.innerHeight - btnSize - 8;
-    return {
-      x: Math.max(8, Math.min(x, maxX)),
-      y: Math.max(8, Math.min(y, maxY)),
-    };
-  }
+  // A position saved on a larger window must not leave the button half off-screen.
+  useEffect(() => {
+    function onResize() {
+      setPosition((current) => (current ? clampToViewport(current.x, current.y) : current));
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   function onPointerDown(e: React.PointerEvent) {
-    if (!buttonRef.current) return;
-    const rect = buttonRef.current.getBoundingClientRect();
+    if (!rootRef.current) return;
+    const rect = rootRef.current.getBoundingClientRect();
     dragStart.current = { x: e.clientX, y: e.clientY, btnX: rect.left, btnY: rect.top };
     setDragging(true);
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
@@ -60,9 +71,7 @@ export function ChatFab() {
     if (!dragging || !dragStart.current) return;
     const dx = e.clientX - dragStart.current.x;
     const dy = e.clientY - dragStart.current.y;
-    const newX = dragStart.current.btnX + dx;
-    const newY = dragStart.current.btnY + dy;
-    setPosition(clamp(newX, newY));
+    setPosition(clampToViewport(dragStart.current.btnX + dx, dragStart.current.btnY + dy));
   }
 
   function onPointerUp(e: React.PointerEvent) {
@@ -87,11 +96,12 @@ export function ChatFab() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div data-chat-fab-root className="fixed z-40 flex items-center gap-2" style={style}>
+        <div ref={rootRef} data-chat-fab-root className="fixed z-40 flex items-center gap-2" style={style}>
           <button
             type="button"
             aria-label="Drag chat button"
             className="grid size-6 place-items-center cursor-grab active:cursor-grabbing rounded"
+            onClick={(e) => e.stopPropagation()}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
@@ -104,7 +114,6 @@ export function ChatFab() {
             </span>
           </button>
           <button
-            ref={buttonRef}
             type="button"
             data-testid="chat-fab"
             aria-label="Open chat"

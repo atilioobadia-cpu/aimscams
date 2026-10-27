@@ -29,8 +29,8 @@ export type NavItem = {
 };
 
 /**
- * Preserve the 12 top-level destinations. Settings exposes only its built routes.
- * Campaigns stays present for geometry but is never a link (D-015).
+ * Preserve the 12 top-level destinations. Every href resolves: unbuilt modules render
+ * the shared ComingSoon page (D-027), so no entry is a dead link.
  */
 export const navItems: NavItem[] = [
   { label: "Dashboard", icon: "dashboard", href: "/dashboard" },

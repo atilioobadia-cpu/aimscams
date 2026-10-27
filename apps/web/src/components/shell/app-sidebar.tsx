@@ -101,9 +101,9 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-[17px] text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-5 text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
-    collapsed && "mx-3 justify-center px-0",
+    collapsed && "mx-3 justify-start pl-4",
     active
       ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
       : "text-heading hover:bg-tab-inactive",
@@ -144,7 +144,7 @@ function SidebarItem({
   if (item.children && !collapsed && item.href) {
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
-      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-[17px] pr-1 text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-5 pr-1 text-left text-fs leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
       isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
     );
 
@@ -154,7 +154,7 @@ function SidebarItem({
         data-nav-label={item.label}
         data-expanded={expanded ? "true" : "false"}
         className={cn(
-          "mx-1.5 shrink-0 overflow-hidden rounded-[var(--card-radius)]",
+          "mx-2 shrink-0 overflow-hidden rounded-[var(--card-radius)]",
           isGroupActive ? "bg-primary-tint" : "",
         )}
       >
@@ -298,7 +298,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         aria-controls="app-sidebar-nav"
         onClick={onToggle}
         style={{ bottom: "calc(var(--sidebar-footer-height) + 6px)" }}
-        className="absolute -right-[18px] z-10 grid size-9 place-items-center rounded-full border border-chrome bg-surface text-brand outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
+        className="absolute -right-[22px] z-10 grid size-11 place-items-center rounded-full border border-chrome bg-surface text-brand outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
       >
         {collapsed ? (
           <ChevronRight className="size-5" aria-hidden="true" />

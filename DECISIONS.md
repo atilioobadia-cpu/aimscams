@@ -419,6 +419,30 @@ make a bad release survivable. A central control plane would add cost without re
 - Monitoring is central, but customer data stays in the institution's installation.
 - Hosting provider and per-institution domain naming remain `O-013`.
 
+### D-027 — Every sidebar destination resolves to a page
+
+**Status:** Accepted 2026-10-27 · supersedes the O-006 row of D-015 for navigation · `docs/11-ui-contract.md` §3
+
+The measured 12-item sidebar (D-024) is the product's map. A destination whose module is not
+built yet renders the shared `ComingSoon` page instead of being removed or pointing at a 404.
+Campaigns and Services stay in the sidebar for that reason, marked `Soon` where the entry has
+room for a badge.
+
+| Concern | Ruling |
+|---|---|
+| Unbuilt destination | Real route, shared placeholder: page header, one-sentence scope, empty state |
+| Dead link | Never shipped; a nav item either resolves or is disabled with an accessible reason |
+| Built module later | Replaces the placeholder body; the route never moves |
+| Settings group | Exactly 8 children; "Add user" is a button on the Users page, not a nav entry |
+
+**Why.** Removing entries to avoid dead links changes the measured navigation and hides the
+roadmap from the people evaluating the product. A named, reachable placeholder carries the same
+information as a nav entry plus a sentence, and costs one shared component.
+
+**Consequences.**
+- `docs/02-modules.md` §8 and §12.8 no longer gate the nav; they gate what the placeholder says.
+- A placeholder is not "done" work — the module status in `docs/09` is unchanged.
+
 ---
 
 ## Open

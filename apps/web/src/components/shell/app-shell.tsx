@@ -10,7 +10,7 @@ import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
   expanded: 204,
-  collapsed: 56,
+  collapsed: 76,
 } as const;
 
 type AppShellProps = {
