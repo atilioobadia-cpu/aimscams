@@ -22,6 +22,7 @@ export type AuthUser = {
     code: string;
     name: string;
     dialect: string;
+    logoUrl: string | null;
   };
   branch: AuthBranch | null;
   roles: AuthRole[];

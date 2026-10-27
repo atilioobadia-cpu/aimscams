@@ -41,14 +41,20 @@ enum UserStatus {
 }
 
 model Organisation {
-  id        String             @id @default(uuid()) @db.Uuid
-  code      String             @unique
-  name      String
-  dialect   InstitutionDialect
-  timezone  String             @default("Africa/Dar_es_Salaam")
-  locale    String             @default("en-TZ")
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  id             String             @id @default(uuid()) @db.Uuid
+  code           String             @unique
+  name           String
+  registrationNo String?
+  dialect        InstitutionDialect
+  timezone       String             @default("Africa/Dar_es_Salaam")
+  locale         String             @default("en-TZ")
+  /// External logo override. An uploaded logo is served from `logoData` instead.
+  logoUrl        String?
+  logoMime       String?
+  logoData       Bytes?
+  logoUpdatedAt  DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
   branches      Branch[]
   users         User[]
@@ -64,9 +70,12 @@ model Branch {
   organisationId String       @db.Uuid
   code           String
   name           String
+  addressLine    String?
   region         String
   district       String?
+  ward           String?
   councilType    String?
+  employeeCount  Int          @default(0)
   status         BranchStatus @default(OPEN)
   isDefault      Boolean      @default(false)
   createdAt      DateTime     @default(now())
@@ -76,10 +85,27 @@ model Branch {
   users        User[]
   sessions     Session[]
   auditEvents  AuditEvent[]
+  hours        BranchHour[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
   @@map("branch")
+}
+
+/// One row per weekday. Times are minutes from midnight so no timezone can shift them.
+model BranchHour {
+  id           String  @id @default(uuid()) @db.Uuid
+  branchId     String  @db.Uuid
+  weekday      Int
+  isClosed     Boolean @default(false)
+  opensMinute  Int     @default(0)
+  closesMinute Int     @default(0)
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, weekday])
+  @@index([branchId])
+  @@map("branch_hour")
 }
 
 model User {

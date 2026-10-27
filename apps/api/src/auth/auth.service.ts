@@ -10,6 +10,7 @@ import {
 import { verify } from '@node-rs/argon2';
 import { Prisma, type PrismaClient } from '@aimscams/db';
 import { PRISMA } from '../prisma/prisma.module.js';
+import { resolveLogoUrl } from '../settings/settings.logic.js';
 import {
   LAST_SEEN_UPDATE_MS,
   LOCKOUT_MS,
@@ -60,7 +61,16 @@ type MfaCodeVerification =
   { kind: 'totp'; counter: number } | { kind: 'recovery'; codeHash: string };
 
 const userInclude = {
-  organisation: true,
+  organisation: {
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      dialect: true,
+      logoUrl: true,
+      logoUpdatedAt: true,
+    },
+  },
   branch: true,
   roles: {
     include: {
@@ -957,6 +967,10 @@ export class AuthService {
         code: user.organisation.code,
         name: user.organisation.name,
         dialect: user.organisation.dialect,
+        logoUrl: resolveLogoUrl(
+          user.organisation.logoUrl,
+          user.organisation.logoUpdatedAt,
+        ),
       },
       branch: user.branch
         ? { id: user.branch.id, code: user.branch.code, name: user.branch.name }

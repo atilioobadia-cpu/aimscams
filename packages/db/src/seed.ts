@@ -42,11 +42,13 @@ try {
     where: { code: process.env.INSTITUTION_CODE ?? "AIM-DEMO" },
     update: {
       name: process.env.INSTITUTION_NAME ?? "AIMSCAMS Demo SACCO",
+      registrationNo: "DEMO-2019-0142",
       dialect: process.env.INSTITUTION_DIALECT === "BOT" ? "BOT" : "TCDC",
     },
     create: {
       code: process.env.INSTITUTION_CODE ?? "AIM-DEMO",
       name: process.env.INSTITUTION_NAME ?? "AIMSCAMS Demo SACCO",
+      registrationNo: "DEMO-2019-0142",
       dialect: process.env.INSTITUTION_DIALECT === "BOT" ? "BOT" : "TCDC",
     },
   });
@@ -102,17 +104,43 @@ try {
     where: {
       organisationId_code: { organisationId: organisation.id, code: "MWZ" },
     },
-    update: { name: "Mwanza Branch", region: "Mwanza", isDefault: true, status: "OPEN" },
+    update: {
+      name: "Mwanza Branch",
+      addressLine: "Kenyatta Road, Nyamagana",
+      region: "Mwanza",
+      district: "Nyamagana",
+      ward: "Nyamagana",
+      councilType: "MC",
+      employeeCount: 12,
+      isDefault: true,
+      status: "OPEN",
+    },
     create: {
       organisationId: organisation.id,
       code: "MWZ",
       name: "Mwanza Branch",
+      addressLine: "Kenyatta Road, Nyamagana",
       region: "Mwanza",
       district: "Nyamagana",
+      ward: "Nyamagana",
       councilType: "MC",
+      employeeCount: 12,
       isDefault: true,
       status: "OPEN",
     },
+  });
+
+  await prisma.branchHour.deleteMany({ where: { branchId: branch.id } });
+  await prisma.branchHour.createMany({
+    data: [
+      { weekday: 1, opensMinute: 8 * 60, closesMinute: 17 * 60 },
+      { weekday: 2, opensMinute: 8 * 60, closesMinute: 17 * 60 },
+      { weekday: 3, opensMinute: 8 * 60, closesMinute: 17 * 60 },
+      { weekday: 4, opensMinute: 8 * 60, closesMinute: 17 * 60 },
+      { weekday: 5, opensMinute: 8 * 60, closesMinute: 17 * 60 },
+      { weekday: 6, opensMinute: 8 * 60, closesMinute: 13 * 60 },
+      { weekday: 7, isClosed: true, opensMinute: 0, closesMinute: 0 },
+    ].map((hour) => ({ ...hour, branchId: branch.id })),
   });
 
   const admin = await prisma.user.upsert({
