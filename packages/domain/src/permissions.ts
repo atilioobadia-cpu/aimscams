@@ -32,6 +32,7 @@ export const PERMISSION_ENTITIES = [
   "Message",
   "Campaign",
   "Business Account",
+  "Settings Organisation",
   "Settings User",
   "Settings Role",
   "Settings Branch",
