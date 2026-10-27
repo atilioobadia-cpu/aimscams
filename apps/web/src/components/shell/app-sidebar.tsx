@@ -301,22 +301,29 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         </ul>
       </nav>
 
-      <button
-        type="button"
-        data-testid="sidebar-toggle"
-        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        aria-expanded={!collapsed}
-        aria-controls="app-sidebar-nav"
-        onClick={onToggle}
-        style={{ bottom: "calc(var(--sidebar-footer-height) + 6px)" }}
-        className="absolute -right-[22px] z-10 grid size-11 place-items-center rounded-full border border-chrome bg-surface text-brand outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
-      >
-        {collapsed ? (
-          <ChevronRight className="size-5" aria-hidden="true" />
-        ) : (
-          <ChevronLeft className="size-5" aria-hidden="true" />
-        )}
-      </button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            data-testid="sidebar-toggle"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-expanded={!collapsed}
+            aria-controls="app-sidebar-nav"
+            onClick={onToggle}
+            style={{ bottom: "calc(var(--sidebar-footer-height) + 12px)" }}
+            className="absolute -right-[14px] z-10 grid h-[28px] w-[28px] min-h-[28px] min-w-[28px] max-h-[28px] max-w-[28px] box-border place-items-center rounded-full border border-[#dee2e6] bg-white text-[#057573] shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none transition-colors duration-[120ms] hover:bg-[#f1f5f5] focus-visible:ring-2 focus-visible:ring-[#057573] focus-visible:ring-offset-1 cursor-pointer"
+          >
+            {collapsed ? (
+              <ChevronRight className="h-[14px] w-[14px]" strokeWidth={1.75} aria-hidden="true" />
+            ) : (
+              <ChevronLeft className="h-[14px] w-[14px]" strokeWidth={1.75} aria-hidden="true" />
+            )}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="right" sideOffset={8}>
+          {collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        </TooltipContent>
+      </Tooltip>
 
       <div
         data-testid="sidebar-footer"
