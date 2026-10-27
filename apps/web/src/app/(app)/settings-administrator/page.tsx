@@ -1,8 +1,7 @@
 "use client";
 
-
-
 import { useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +19,8 @@ import {
 } from "@/lib/users";
 
 export default function UsersPage() {
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [users, setUsers] = useState<UserSummary[]>([]);
   const [branches, setBranches] = useState<BranchSummary[]>([]);
   const [roles, setRoles] = useState<RoleSummary[]>([]);
@@ -30,8 +30,22 @@ export default function UsersPage() {
   const [status, setStatus] = useState("");
   const [role, setRole] = useState("");
   const [branchId, setBranchId] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [editingId, setEditingId] = useState<string | undefined>(undefined);
+  const queryModal = searchParams.get("modal");
+  const queryId = searchParams.get("id") ?? undefined;
+  const [manualModal, setManualModal] = useState<{ id?: string } | null>(null);
+
+  // Old create/edit URLs redirect here with ?modal=create|edit, so the query is a
+  // second source of truth for the dialog. No effect, so no cascading render.
+  const editingId = manualModal ? manualModal.id : queryModal === "edit" ? queryId : undefined;
+  const modalOpen =
+    manualModal !== null || queryModal === "create" || (queryModal === "edit" && Boolean(queryId));
+
+  function closeModal() {
+    setManualModal(null);
+    if (queryModal) {
+      router.replace("/settings-administrator");
+    }
+  }
 
   const filters = useMemo(
     () => ({ q, status: status || undefined, role: role || undefined, branchId: branchId || undefined }),
@@ -105,16 +119,15 @@ export default function UsersPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-[var(--fs)] font-bold leading-tight text-strong">Users</h1>
-          <p className="mt-1 max-w-3xl text-[var(--font-size-secondary)] text-muted-foreground">
+          <h1 className="text-fs font-bold leading-tight text-strong">Users</h1>
+          <p className="mt-1 max-w-3xl text-fs text-muted-foreground">
             Institution accounts, roles and branch access.
           </p>
         </div>
         <Button
-          className="h-[var(--control-height)] px-[var(--space-16)] text-[var(--font-size-secondary)] font-semibold"
+          className="h-[var(--control-height)] px-[var(--space-16)] text-fs font-semibold"
           onClick={() => {
-            setEditingId(undefined);
-            setModalOpen(true);
+            setManualModal({});
           }}
         >
           Add user
@@ -132,7 +145,7 @@ export default function UsersPage() {
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value)}
-            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
           >
             <option value="">All statuses</option>
             <option value="ACTIVE">Active</option>
@@ -142,7 +155,7 @@ export default function UsersPage() {
           <select
             value={role}
             onChange={(event) => setRole(event.target.value)}
-            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
           >
             <option value="">All roles</option>
             {roles.map((item) => (
@@ -154,7 +167,7 @@ export default function UsersPage() {
           <select
             value={branchId}
             onChange={(event) => setBranchId(event.target.value)}
-            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-[var(--font-size-secondary)]"
+            className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] text-fs"
           >
             <option value="">All branches</option>
             {branches.map((item) => (
@@ -167,15 +180,15 @@ export default function UsersPage() {
       </div>
 
       {error ? (
-        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-[var(--fs)] text-accent-red">
+        <div className="rounded-lg border border-accent-red-bg bg-accent-red-bg px-4 py-3 text-fs text-accent-red">
           {error}
         </div>
       ) : null}
 
       <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[920px] text-left text-[var(--font-size-secondary)]">
-            <thead className="border-b border-card-border bg-subtle text-[var(--font-size-micro)] font-semibold uppercase tracking-wide text-label">
+          <table className="w-full min-w-[920px] text-left text-fs">
+            <thead className="border-b border-card-border bg-subtle text-fs font-semibold uppercase tracking-wide text-label">
               <tr>
                 <th className="px-4 py-3">Full name</th>
                 <th className="px-4 py-3">Email</th>
@@ -209,7 +222,7 @@ export default function UsersPage() {
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`rounded-full px-2.5 py-1 text-[var(--font-size-micro)] font-semibold ${
+                        className={`rounded-full px-2.5 py-1 text-fs font-semibold ${
                           user.status === "ACTIVE"
                             ? "bg-accent-teal-bg text-brand"
                             : user.status === "LOCKED"
@@ -226,8 +239,7 @@ export default function UsersPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            setEditingId(user.id);
-                            setModalOpen(true);
+                            setManualModal({ id: user.id });
                           }}
                         >
                           Edit
@@ -253,7 +265,7 @@ export default function UsersPage() {
           </table>
         </div>
       </div>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editingId ? "Edit user" : "Add user"}>
+      <Modal open={modalOpen} onClose={closeModal} title={editingId ? "Edit user" : "Add user"}>
         <UserForm id={editingId} />
       </Modal>
     </div>

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { MessagesSquare, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -87,7 +87,7 @@ export function ChatFab() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="fixed z-40 flex items-center gap-2" style={style}>
+        <div data-chat-fab-root className="fixed z-40 flex items-center gap-2" style={style}>
           <button
             type="button"
             aria-label="Drag chat button"
@@ -120,12 +120,12 @@ export function ChatFab() {
       </DialogTrigger>
       <DialogContent className="border border-card-border sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[var(--fs)] font-bold text-strong">Support chat</DialogTitle>
+          <DialogTitle className="text-fs font-bold text-strong">Support chat</DialogTitle>
           <DialogDescription>
             This is a local demonstration. Live chat connects when the Messages module ships.
           </DialogDescription>
         </DialogHeader>
-        <div className="rounded-lg bg-accent-teal-bg p-4 text-[var(--fs)] text-brand">
+        <div className="rounded-lg bg-accent-teal-bg p-4 text-fs text-brand">
           <p className="font-semibold">AIMSCAMS support</p>
           <p className="mt-1 text-body">
             Ask about posting, balances or a member account. No message leaves this browser.

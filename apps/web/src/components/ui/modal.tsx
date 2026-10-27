@@ -24,9 +24,11 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
       document.body.style.overflow = "hidden";
+      document.body.dataset.modalOpen = "true";
     } else {
       const timer = setTimeout(() => setVisible(false), 150);
       document.body.style.overflow = "";
+      delete document.body.dataset.modalOpen;
       return () => clearTimeout(timer);
     }
   }, [open]);
@@ -64,7 +66,16 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
         }
       }}
     >
-      <div className="absolute inset-0 bg-black/45" />
+      <div
+        className="absolute inset-0 bg-black/45"
+        onClick={() => {
+          if (unsaved) {
+            if (confirm("You have unsaved changes. Discard them?")) onClose();
+          } else {
+            onClose();
+          }
+        }}
+      />
       <div
         ref={panelRef}
         role="dialog"
@@ -77,7 +88,7 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
         )}
       >
         <div className="flex items-center justify-between border-b border-chrome px-5 py-3">
-          <h2 id="modal-title" className="text-[var(--fs)] font-bold text-strong">{title}</h2>
+          <h2 id="modal-title" className="text-fs font-bold text-strong">{title}</h2>
           <button
             type="button"
             onClick={onClose}

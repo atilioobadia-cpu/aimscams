@@ -1,8 +1,9 @@
-﻿import {
+import {
   Body,
   Controller,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -44,7 +45,10 @@ export class UsersController {
 
   @Get(':id')
   @RequirePermissions('Settings User : View')
-  async get(@CurrentAuth() auth: AuthContext, @Param('id') id: string) {
+  async get(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
     return this.users.getUser(auth, id);
   }
 
@@ -62,7 +66,7 @@ export class UsersController {
   @RequirePermissions('Settings User : Edit')
   async update(
     @CurrentAuth() auth: AuthContext,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
     @Body() body: Record<string, unknown>,
     @Req() request: Request,
   ) {
@@ -73,7 +77,7 @@ export class UsersController {
   @RequirePermissions('Settings User : Edit')
   async unlock(
     @CurrentAuth() auth: AuthContext,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
     @Req() request: Request,
   ) {
     return this.users.unlockUser(auth, id, requestContext(request));
