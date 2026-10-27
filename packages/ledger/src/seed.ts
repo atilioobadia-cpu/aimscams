@@ -295,6 +295,12 @@ export async function provisionTenant(db: Db, input: TenantInput): Promise<Provi
     const accounts = await seedChartOfAccounts(tx, tenantId);
     const policies = await seedPostingPolicies(tx, tenantId);
 
+    await tx.query(
+      `insert into accounting_setting (organisation_id) values ($1)
+       on conflict (organisation_id) do nothing`,
+      [tenantId],
+    );
+
     return {
       tenantId,
       branchId,
