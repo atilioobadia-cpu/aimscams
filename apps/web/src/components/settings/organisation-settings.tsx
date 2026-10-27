@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Building2, Globe2, ImageUp, Info, Save, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -83,6 +83,7 @@ function updatedLabel(iso: string, timezone: string): string {
 }
 
 export function OrganisationSettingsPage() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { pushToast } = useToast();
   const router = useRouter();
   const [data, setData] = useState<OrganisationSettings | null>(null);
@@ -96,10 +97,6 @@ export function OrganisationSettingsPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
 
-  const [logoUrlDraft, setLogoUrlDraft] = useState("");
-  const [logoBusy, setLogoBusy] = useState(false);
-  const [logoError, setLogoError] = useState<string | null>(null);
-  const [logoNote, setLogoNote] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -109,7 +106,6 @@ export function OrganisationSettingsPage() {
         if (cancelled) return;
         setData(next);
         setForm(formFrom(next));
-        setLogoUrlDraft(externalLogo(next));
       })
       .catch((failure: unknown) => {
         if (cancelled) return;
@@ -138,7 +134,6 @@ export function OrganisationSettingsPage() {
   function applyData(next: OrganisationSettings) {
     setData(next);
     setForm(formFrom(next));
-    setLogoUrlDraft(externalLogo(next));
     router.refresh();
   }
 
@@ -175,92 +170,6 @@ export function OrganisationSettingsPage() {
       setSaving(false);
     }
   }
-
-  async function uploadLogo(file: File | undefined) {
-    if (!file || logoBusy) return;
-    setLogoError(null);
-    setLogoNote(null);
-
-    if (!LOGO_TYPES.includes(file.type)) {
-      setLogoError("Choose a PNG, JPEG or WebP image.");
-      return;
-    }
-    if (file.size > MAX_LOGO_BYTES) {
-      setLogoError("Logo must be 48 KB or smaller.");
-      return;
-    }
-
-    setLogoBusy(true);
-    try {
-      const dataUrl = await readFileAsDataUrl(file);
-      const next = await uploadOrganisationLogo(dataUrl);
-      applyData(next);
-      setLogoNote("Logo uploaded.");
-      pushToast("Logo uploaded.");
-    } catch (failure) {
-      setLogoError(message(failure, "Could not upload the logo."));
-    } finally {
-      setLogoBusy(false);
-    }
-  }
-
-  async function applyLogoUrl() {
-    if (logoBusy) return;
-    const value = logoUrlDraft.trim();
-    setLogoError(null);
-    setLogoNote(null);
-
-    if (!value) {
-      setLogoError("Enter an absolute http or https image URL.");
-      return;
-    }
-    try {
-      const parsed = new URL(value);
-      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-        setLogoError("Logo URL must use http or https.");
-        return;
-      }
-    } catch {
-      setLogoError("Enter an absolute http or https image URL.");
-      return;
-    }
-
-    setLogoBusy(true);
-    try {
-      const next = await updateOrganisation({ logoUrl: value });
-      applyData(next);
-      setLogoNote("External logo URL saved.");
-      pushToast("External logo URL saved.");
-    } catch (failure) {
-      setLogoError(message(failure, "Could not save the logo URL."));
-    } finally {
-      setLogoBusy(false);
-    }
-  }
-
-  async function removeLogo() {
-    if (logoBusy) return;
-    setLogoError(null);
-    setLogoNote(null);
-    setLogoBusy(true);
-    try {
-      const next = await deleteOrganisationLogo();
-      applyData(next);
-      setLogoNote("Logo removed. The header uses the default institution mark.");
-      pushToast("Logo removed.");
-    } catch (failure) {
-      setLogoError(message(failure, "Could not remove the logo."));
-    } finally {
-      setLogoBusy(false);
-    }
-  }
-
-  const preview = apiAssetUrl(data?.logoUrl);
-  const logoSource = data?.logoUpdatedAt
-    ? "Uploaded image"
-    : data?.logoUrl
-      ? "External image"
-      : "Default mark in the header";
 
   return (
     <div className="space-y-[var(--space-14)]">
@@ -432,114 +341,6 @@ export function OrganisationSettingsPage() {
               </div>
             </section>
 
-            <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
-              <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-                <h2 className="flex items-center gap-2 text-fs font-bold text-strong">
-                  <ImageUp className="size-4 text-brand" aria-hidden="true" />
-                  Institution logo
-                </h2>
-                <p className="mt-1 text-fs text-muted-foreground">
-                  The header shows this logo at 28px tall. It is never cropped into a circle, so
-                  wide lockups keep their proportions.
-                </p>
-              </header>
-
-              <div className="grid gap-[var(--space-14)] px-[var(--space-16)] py-[var(--space-14)] md:grid-cols-[190px_minmax(0,1fr)]">
-                <div>
-                  <div className="flex h-[58px] items-center justify-center rounded-[var(--control-radius)] border border-dashed border-card-border bg-subtle px-[var(--space-10)]">
-                    {preview ? (
-                      <InstitutionLogo
-                        src={preview}
-                        alt={`${data.name} logo`}
-                        monogram={data.code.slice(0, 3).toUpperCase()}
-                        width={300}
-                        height={43}
-                        className="h-7 max-w-[170px]"
-                      />
-                    ) : (
-                      <span className="text-fs text-muted-foreground">No logo</span>
-                    )}
-                  </div>
-                  <p className="mt-1 text-fs text-muted-foreground">{logoSource}</p>
-                </div>
-
-                <div className="space-y-[var(--space-10)]">
-                  <div>
-                    <label
-                      htmlFor="org-logo-file"
-                      className="mb-1 block text-fs font-medium text-strong"
-                    >
-                      Upload image
-                    </label>
-                    <Input
-                      id="org-logo-file"
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp"
-                      disabled={!data.canEdit || logoBusy}
-                      onChange={(event) => {
-                        void uploadLogo(event.target.files?.[0]);
-                        event.target.value = "";
-                      }}
-                      className="h-auto py-1.5"
-                    />
-                    <p className="mt-1 text-fs text-muted-foreground">
-                      PNG, JPEG or WebP, 48 KB or smaller. Uploading replaces any external URL.
-                    </p>
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="org-logo-url"
-                      className="mb-1 block text-fs font-medium text-strong"
-                    >
-                      External image URL
-                    </label>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Input
-                        id="org-logo-url"
-                        value={logoUrlDraft}
-                        placeholder="https://example.com/logo.png"
-                        disabled={!data.canEdit || logoBusy}
-                        onChange={(event) => {
-                          setLogoUrlDraft(event.target.value);
-                          setLogoError(null);
-                          setLogoNote(null);
-                        }}
-                        className="min-w-[180px] flex-1"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        disabled={!data.canEdit || logoBusy}
-                        onClick={() => void applyLogoUrl()}
-                      >
-                        Use URL
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        disabled={!data.canEdit || logoBusy || !data.logoUrl}
-                        onClick={() => void removeLogo()}
-                      >
-                        <Trash2 className="size-4" aria-hidden="true" />
-                        Remove
-                      </Button>
-                    </div>
-                    <p className="mt-1 text-fs text-muted-foreground">
-                      A public https URL. Saving it clears any uploaded image.
-                    </p>
-                  </div>
-
-                  <FormError message={logoError} />
-                  <SuccessNote message={logoNote} />
-                  {logoBusy ? (
-                    <p className="text-fs text-muted-foreground" role="status">
-                      Updating logo…
-                    </p>
-                  ) : null}
-                </div>
-              </div>
-            </section>
           </form>
 
           <aside className="space-y-[var(--space-14)]">

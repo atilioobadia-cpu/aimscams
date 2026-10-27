@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 type InstitutionLogoProps = {
-  src: string;
+  src?: string | null;
   alt: string;
   /** Two or three letters shown if the asset cannot be loaded. */
   monogram: string;
@@ -29,7 +29,7 @@ export function InstitutionLogo({
 }: InstitutionLogoProps) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
+  if (!src || failed) {
     return (
       <span
         role="img"

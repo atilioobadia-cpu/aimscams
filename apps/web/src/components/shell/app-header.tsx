@@ -39,7 +39,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   const [language, setLanguage] = useState("English");
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
-  const logoUrl = apiAssetUrl(institution.logoUrl) ?? tenantLogo.src;
+  const logoUrl = apiAssetUrl(institution.logoUrl);
 
   async function signOut() {
     if (signingOut) return;
@@ -198,6 +198,9 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
 function initialsFor(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+  return parts
+    .slice(0, 3)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
 }
