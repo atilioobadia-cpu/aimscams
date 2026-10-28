@@ -101,7 +101,12 @@ export default function LoanDetailPage() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader title={`Loan ${loan.loanNumber}`} description="Loan summary and repayment schedule." />
-        <Badge variant={loan.status === "ACTIVE" ? "default" : "outline"}>{titleCase(loan.status)}</Badge>
+        <div className="flex shrink-0 items-center gap-2">
+          <Badge variant={loan.status === "ACTIVE" ? "default" : "outline"}>{titleCase(loan.status)}</Badge>
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/account-loan-details/${loan.id}/repayments`}>Repayment history</Link>
+          </Button>
+        </div>
       </div>
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
