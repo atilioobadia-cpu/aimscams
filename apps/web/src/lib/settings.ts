@@ -890,9 +890,12 @@ export type LoanApplication = {
   submittedAt: string | null;
   clientName: string | null;
   clientReference: string | null;
+  clientId?: string;
   productName: string | null;
   productCode: string | null;
+  productId?: string | null;
   loanOfficerName: string | null;
+  loanOfficerId?: string | null;
   documents: LoanApplicationDocument[];
   createdAt: string;
   updatedAt: string;
@@ -998,6 +1001,16 @@ export async function updateLoanApplicationStatus(
   return apiRequest<LoanApplicationResponse>(`/settings/loan-applications/${encodeURIComponent(id)}/status`, {
     method: "PATCH",
     body: { status },
+  });
+}
+
+export async function updateLoanApplication(
+  id: string,
+  payload: LoanApplicationInput,
+): Promise<LoanApplicationResponse> {
+  return apiRequest<LoanApplicationResponse>(`/settings/loan-applications/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
   });
 }
 

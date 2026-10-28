@@ -197,6 +197,15 @@ export default function LoanApplicationsPage() {
                               icon: Eye,
                               onSelect: () => router.push(`/account-loan-application-details/${item.id}`),
                             },
+                            ...(item.status === "DRAFT" || item.status === "SUBMITTED"
+                              ? [
+                                  {
+                                    label: "Edit application",
+                                    icon: Eye,
+                                    onSelect: () => router.push(`/account-loan-application-edit/${item.id}`),
+                                  },
+                                ]
+                              : []),
                           ]}
                         />
                       </div>

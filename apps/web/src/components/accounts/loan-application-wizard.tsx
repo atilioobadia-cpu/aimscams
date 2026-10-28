@@ -26,12 +26,14 @@ import { ApiError } from "@/lib/api";
 import { formatTzs } from "@/lib/format";
 import {
   createLoanApplication,
+  updateLoanApplication,
   listClients,
   listEconomicSectors,
   listLoanOfficers,
   listLoanProducts,
   type Client,
   type EconomicSector,
+  type LoanApplication,
   type LoanApplicationDocumentInput,
   type LoanApplicationInput,
   type LoanDocumentKind,
@@ -110,7 +112,13 @@ function todayIso(): string {
   return new Date(now.getTime() - offset).toISOString().slice(0, 10);
 }
 
-export function LoanApplicationWizard() {
+export function LoanApplicationWizard({
+  initial,
+  applicationId,
+}: {
+  initial?: LoanApplication;
+  applicationId?: string;
+} = {}) {
   const router = useRouter();
   const { pushToast } = useToast();
 
@@ -170,6 +178,45 @@ export function LoanApplicationWizard() {
   const [mnoWalletNumber, setMnoWalletNumber] = useState("");
 
   const [attachments, setAttachments] = useState<Attachment[]>([]);
+
+  useEffect(() => {
+    if (!initial) return;
+    setClientId(initial.clientId ?? "");
+    setProductId(initial.productId ?? "");
+    setPrincipal((BigInt(initial.principalMinor) / 100n).toString());
+    setTenure(String(initial.tenureCount));
+    setTenurePeriod(initial.tenurePeriod);
+    setGracePeriod(String(initial.gracePeriodMonths));
+    setInterestRate((initial.interestRateBp / 100).toFixed(2));
+    setInterestMethod(initial.interestMethod);
+    setInterestOnGrace(initial.interestOnGrace);
+    setInstallmentStartDate(initial.installmentStartDate ?? todayIso());
+    setLoanOfficerId(initial.loanOfficerId ?? "");
+    setDebtCapacity(
+      initial.debtCapacityMinor ? (BigInt(initial.debtCapacityMinor) / 100n).toString() : "",
+    );
+    setEconomicSector(initial.economicSector ?? "");
+    setSubEconomicSector(initial.subEconomicSector ?? "");
+    setSubSubEconomicSector(initial.subSubEconomicSector ?? "");
+    setDescription(initial.description ?? "");
+    setPurpose(initial.purpose ?? "");
+    setHasGuarantor(initial.hasGuarantor);
+    setHasCollateral(initial.hasCollateral);
+    setDisbursementPreference(initial.disbursementPreference ?? "Cash at branch");
+    setRemarks(initial.remarks ?? "");
+    setNomineeName(initial.nomineeName ?? "");
+    setNomineeRelation(initial.nomineeRelation ?? "");
+    setNomineePhone(initial.nomineePhone ?? "");
+    setNomineeIdNumber(initial.nomineeIdNumber ?? "");
+    setNomineePercentage(initial.nomineePercentage !== null ? String(initial.nomineePercentage) : "");
+    setPaymentDestination(initial.paymentDestination ?? "CASH");
+    setBankName(initial.bankName ?? "");
+    setBankAccountName(initial.bankAccountName ?? "");
+    setBankAccountNumber(initial.bankAccountNumber ?? "");
+    setMnoProvider(initial.mnoProvider ?? "");
+    setMnoWalletNumber(initial.mnoWalletNumber ?? "");
+    void listClients({}).then((result) => setClients(result.items)).catch(() => {});
+  }, [initial]);
 
   useEffect(() => {
     let active = true;
@@ -434,11 +481,15 @@ export function LoanApplicationWizard() {
         status,
         documents,
       };
-      const response = await createLoanApplication(payload);
+      const response = applicationId
+        ? await updateLoanApplication(applicationId, payload)
+        : await createLoanApplication(payload);
       pushToast(
-        status === "SUBMITTED"
-          ? `Application ${response.application.applicationNo} submitted.`
-          : `Application ${response.application.applicationNo} saved as a draft.`,
+        applicationId
+          ? `Application ${response.application.applicationNo} updated.`
+          : status === "SUBMITTED"
+            ? `Application ${response.application.applicationNo} submitted.`
+            : `Application ${response.application.applicationNo} saved as a draft.`,
       );
       router.push("/account-loan-application");
       router.refresh();
@@ -473,7 +524,7 @@ export function LoanApplicationWizard() {
       </div>
 
       <PageHeader
-        title="New loan application"
+        title={applicationId ? "Edit loan application" : "New loan application"}
         description="Five steps. The application stays editable until the first approval."
       />
 

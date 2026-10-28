@@ -1881,6 +1881,186 @@ export class SettingsService {
     return { application: this.serializeLoanApplication(item), canEdit: this.can(auth, 'Loan Account : Edit') };
   }
 
+  async updateLoanApplication(
+    auth: AuthContext,
+    id: string,
+    body: Record<string, unknown>,
+    context: { ipAddress?: string | null; userAgent?: string | null },
+  ) {
+    const organisationId = auth.user.organisation.id;
+    const existing = await this.prisma.loanApplication.findFirst({
+      where: { id, organisationId },
+      include: LOAN_APPLICATION_INCLUDE,
+    });
+    if (!existing) throw new NotFoundException('Loan application not found.');
+    if (existing.status !== 'DRAFT' && existing.status !== 'SUBMITTED') {
+      throw new BadRequestException('This application can no longer be edited.');
+    }
+
+    const clientId = String(body.clientId ?? existing.clientId).trim();
+    if (!clientId) throw new BadRequestException('Client is required.');
+    const client = await this.prisma.client.findFirst({ where: { id: clientId, organisationId } });
+    if (!client) throw new NotFoundException('Client not found.');
+
+    const productId = body.productId ? String(body.productId).trim() : existing.productId;
+    const product = productId
+      ? await this.prisma.loanProduct.findFirst({ where: { id: productId, organisationId } })
+      : null;
+    if (productId && !product) throw new NotFoundException('Loan product not found.');
+
+    const principalValue = body.principalMinor ?? body.principal ?? existing.principalMinor.toString();
+    let principalMinor: bigint;
+    try {
+      principalMinor = BigInt(String(principalValue).trim());
+    } catch {
+      throw new BadRequestException('Principal amount must be a whole number of minor units.');
+    }
+    if (principalMinor <= 0n) throw new BadRequestException('Principal amount must be greater than zero.');
+    if (product) {
+      if (principalMinor < product.minPrincipalMinor || principalMinor > product.maxPrincipalMinor) {
+        throw new BadRequestException(
+          `Principal must be between ${product.minPrincipalMinor.toString()} and ${product.maxPrincipalMinor.toString()} minor units for ${product.name}.`,
+        );
+      }
+      if (product.status !== 'ACTIVE') throw new BadRequestException(`${product.name} is not active.`);
+    }
+
+    const tenureCount = parseInteger(
+      body.tenureCount ?? body.tenureMonths ?? body.tenure ?? existing.tenureCount,
+      'Tenure',
+      1,
+      600,
+    );
+    const tenurePeriod = parseTenurePeriod(body.tenurePeriod ?? existing.tenurePeriod);
+    if (
+      product &&
+      (tenureInMonths(tenureCount, tenurePeriod) < product.minTenureMonths ||
+        tenureInMonths(tenureCount, tenurePeriod) > product.maxTenureMonths)
+    ) {
+      throw new BadRequestException(
+        `Tenure must fall between ${product.minTenureMonths} and ${product.maxTenureMonths} months for ${product.name}.`,
+      );
+    }
+    const interestRateBp =
+      body.interestRateBp === undefined || body.interestRateBp === null || body.interestRateBp === ''
+        ? product?.interestRateBp ?? existing.interestRateBp
+        : parseInteger(body.interestRateBp, 'Interest rate', 0, 100000);
+
+    const gracePeriodMonths = parseInteger(body.gracePeriodMonths ?? existing.gracePeriodMonths, 'Grace period', 0, 60);
+    const interestMethod = parseInterestMethod(body.interestMethod ?? existing.interestMethod);
+    const interestOnGrace = body.interestOnGrace === undefined ? existing.interestOnGrace : body.interestOnGrace === true;
+    const installmentStartDate = parseIsoDate(body.installmentStartDate ?? existing.installmentStartDate, 'Installment start date');
+    if (!installmentStartDate) throw new BadRequestException('Installment start date is required.');
+    const sector = parseEconomicSector(
+      body.economicSector ?? existing.economicSector,
+      body.subEconomicSector ?? existing.subEconomicSector,
+      body.subSubEconomicSector ?? existing.subSubEconomicSector,
+    );
+
+    const loanOfficerId = body.loanOfficerId ? String(body.loanOfficerId).trim() : existing.loanOfficerId;
+    if (loanOfficerId) {
+      const officer = await this.prisma.user.findFirst({ where: { id: loanOfficerId, organisationId }, select: { id: true } });
+      if (!officer) throw new NotFoundException('Loan officer not found.');
+    } else {
+      throw new BadRequestException('Loan officer is required.');
+    }
+
+    const paymentDestination = parsePaymentDestination(body.paymentDestination ?? existing.paymentDestination);
+    const bankAccountNumber = optionalText(body.bankAccountNumber ?? existing.bankAccountNumber);
+    if (paymentDestination === 'BANK' && !bankAccountNumber) {
+      throw new BadRequestException('A bank account number is required for a bank destination.');
+    }
+    const mnoWalletNumber = optionalText(body.mnoWalletNumber ?? existing.mnoWalletNumber);
+    if (paymentDestination === 'MNO' && !mnoWalletNumber) {
+      throw new BadRequestException('A mobile money wallet is required for a wallet destination.');
+    }
+
+    const documents = parseLoanDocuments(body.documents);
+    const status = body.status === 'SUBMITTED' ? 'SUBMITTED' : existing.status === 'SUBMITTED' ? 'SUBMITTED' : 'DRAFT';
+
+    const updated = await this.prisma.loanApplication.update({
+      where: { id },
+      data: {
+        clientId,
+        productId: product?.id ?? null,
+        loanOfficerId,
+        status,
+        submittedAt: status === 'SUBMITTED' && !existing.submittedAt ? new Date() : existing.submittedAt,
+        principalMinor,
+        tenureCount,
+        tenurePeriod,
+        gracePeriodMonths,
+        interestRateBp,
+        interestMethod,
+        interestOnGrace,
+        installmentStartDate,
+        debtCapacityMinor: body.debtCapacityMinor === undefined
+          ? existing.debtCapacityMinor
+          : parseOptionalMinor(body.debtCapacityMinor, 'Debt capacity'),
+        ...sector,
+        description: body.description === undefined ? existing.description : optionalText(body.description),
+        purpose: body.purpose === undefined ? existing.purpose : optionalText(body.purpose),
+        hasGuarantor: body.hasGuarantor === undefined ? existing.hasGuarantor : body.hasGuarantor === true,
+        hasCollateral: body.hasCollateral === undefined ? existing.hasCollateral : body.hasCollateral === true,
+        disbursementPreference: body.disbursementPreference === undefined ? existing.disbursementPreference : optionalText(body.disbursementPreference),
+        remarks: body.remarks === undefined ? existing.remarks : optionalText(body.remarks),
+        nomineeName: body.nomineeName === undefined ? existing.nomineeName : optionalText(body.nomineeName),
+        nomineeRelation: body.nomineeRelation === undefined ? existing.nomineeRelation : optionalText(body.nomineeRelation),
+        nomineePhone: body.nomineePhone === undefined ? existing.nomineePhone : optionalText(body.nomineePhone),
+        nomineeIdNumber: body.nomineeIdNumber === undefined ? existing.nomineeIdNumber : optionalText(body.nomineeIdNumber),
+        nomineePercentage:
+          body.nomineePercentage === undefined
+            ? existing.nomineePercentage
+            : body.nomineePercentage === null || body.nomineePercentage === ''
+              ? null
+              : parseInteger(body.nomineePercentage, 'Nominee percentage', 1, 100),
+        paymentDestination,
+        bankName: body.bankName === undefined ? existing.bankName : optionalText(body.bankName),
+        bankAccountName: body.bankAccountName === undefined ? existing.bankAccountName : optionalText(body.bankAccountName),
+        bankAccountNumber,
+        mnoProvider: body.mnoProvider === undefined ? existing.mnoProvider : optionalText(body.mnoProvider),
+        mnoWalletNumber,
+        documents: documents.length
+          ? {
+              create: documents.map((document) => ({
+                organisation: { connect: { id: organisationId } },
+                kind: document.kind,
+                name: document.name,
+                contentType: document.contentType,
+                sizeBytes: document.data.length,
+                data: new Uint8Array(document.data),
+                uploadedByUserId: auth.user.id,
+              })),
+            }
+          : undefined,
+      },
+      include: LOAN_APPLICATION_INCLUDE,
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Loan application updated',
+      entityType: 'LoanApplication',
+      entityId: updated.id,
+      before: this.serializeLoanApplication(existing),
+      after: this.serializeLoanApplication(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return {
+      application: this.serializeLoanApplication(updated),
+      canEdit: this.can(auth, 'Loan Account : Edit'),
+      canView: this.can(auth, 'Loan Account : View'),
+      canApprove: this.can(auth, 'Loan Account : Approve'),
+      canReject: this.can(auth, 'Loan Account : Reject'),
+      canCancel: this.can(auth, 'Loan Account : Edit') || this.can(auth, 'Loan Account : Delete'),
+    };
+  }
+
   async updateLoanApplicationStatus(
     auth: AuthContext,
     id: string,
@@ -2010,9 +2190,12 @@ export class SettingsService {
       submittedAt: item.submittedAt ? item.submittedAt.toISOString() : null,
       clientName: item.client?.fullName ?? null,
       clientReference: item.client?.referenceNo ?? null,
+      clientId: item.clientId,
       productName: item.product?.name ?? null,
       productCode: item.product?.code ?? null,
+      productId: item.productId,
       loanOfficerName: item.loanOfficer?.fullName ?? null,
+      loanOfficerId: item.loanOfficerId ?? null,
       documents: (item.documents ?? []).map((document: any) => ({
         id: document.id,
         kind: document.kind,
