@@ -177,7 +177,15 @@ export class SettingsController {
     return this.settings.getLoanApplication(auth, id);
   }
 
-  @Get('loan-applications/:id/documents/:documentId')
+  @Patch('loan-applications/:id/status')
+  @RequirePermissions('Loan Account : View')
+  async updateLoanApplicationStatus(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.settings.updateLoanApplicationStatus(auth, id, String(body?.status ?? ''));
+  }
   @RequirePermissions('Loan Account : View')
   async getLoanApplicationDocument(
     @CurrentAuth() auth: AuthContext,

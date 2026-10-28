@@ -1881,6 +1881,57 @@ export class SettingsService {
     return { application: this.serializeLoanApplication(item), canEdit: this.can(auth, 'Loan Account : Edit') };
   }
 
+  async updateLoanApplicationStatus(
+    auth: AuthContext,
+    id: string,
+    status: string,
+  ) {
+    const organisationId = auth.user.organisation.id;
+    const item = await this.prisma.loanApplication.findFirst({
+      where: { id, organisationId },
+    });
+    if (!item) throw new NotFoundException('Loan application not found.');
+
+    const next = (status ?? '').trim().toUpperCase();
+    if (!['SUBMITTED', 'APPROVED', 'REJECTED', 'CANCELLED'].includes(next)) {
+      throw new BadRequestException('Status is not supported.');
+    }
+
+    const current = item.status;
+    let allowed = false;
+    if (next === 'SUBMITTED') {
+      allowed = current === 'DRAFT' && (this.can(auth, 'Loan Account : Edit') || this.can(auth, 'Loan Account : Create'));
+    } else if (next === 'APPROVED') {
+      allowed = current === 'SUBMITTED' && this.can(auth, 'Loan Account : Approve');
+    } else if (next === 'REJECTED') {
+      allowed = current === 'SUBMITTED' && this.can(auth, 'Loan Account : Reject');
+    } else if (next === 'CANCELLED') {
+      allowed =
+        (current === 'DRAFT' || current === 'SUBMITTED') &&
+        (this.can(auth, 'Loan Account : Edit') || this.can(auth, 'Loan Account : Delete'));
+    }
+    if (!allowed) {
+      throw new BadRequestException(`Cannot change status from ${current} to ${next}.`);
+    }
+
+    const updated = await this.prisma.loanApplication.update({
+      where: { id },
+      data: {
+        status: next as 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED',
+        submittedAt: next === 'SUBMITTED' ? new Date() : item.submittedAt,
+      },
+      include: LOAN_APPLICATION_INCLUDE,
+    });
+    return {
+      application: this.serializeLoanApplication(updated),
+      canEdit: this.can(auth, 'Loan Account : Edit'),
+      canView: this.can(auth, 'Loan Account : View'),
+      canApprove: this.can(auth, 'Loan Account : Approve'),
+      canReject: this.can(auth, 'Loan Account : Reject'),
+      canCancel: this.can(auth, 'Loan Account : Edit') || this.can(auth, 'Loan Account : Delete'),
+    };
+  }
+
   async getLoanApplication(auth: AuthContext, id: string) {
     const organisationId = auth.user.organisation.id;
     const item = await this.prisma.loanApplication.findFirst({
@@ -1892,6 +1943,9 @@ export class SettingsService {
       application: this.serializeLoanApplication(item),
       canEdit: this.can(auth, 'Loan Account : Edit'),
       canView: this.can(auth, 'Loan Account : View'),
+      canApprove: this.can(auth, 'Loan Account : Approve'),
+      canReject: this.can(auth, 'Loan Account : Reject'),
+      canCancel: this.can(auth, 'Loan Account : Edit') || this.can(auth, 'Loan Account : Delete'),
     };
   }
 

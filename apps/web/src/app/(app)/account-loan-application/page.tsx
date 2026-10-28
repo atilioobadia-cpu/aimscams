@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Building2, Eye, Paperclip, Plus, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Building2, Eye, Plus, Search } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
@@ -11,7 +12,6 @@ import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
 import { ApiError } from "@/lib/api";
 import { formatTzs } from "@/lib/format";
 import { listLoanApplications, type LoanApplication } from "@/lib/settings";
@@ -49,6 +49,7 @@ export default function LoanApplicationsPage() {
   const [reloadKey, setReloadKey] = useState(0);
   const [viewing, setViewing] = useState<LoanApplication | null>(null);
   const firstLoad = useRef(true);
+  const router = useRouter();
 
   useEffect(() => {
     let cancelled = false;
@@ -192,9 +193,9 @@ export default function LoanApplicationsPage() {
                           label={item.applicationNo}
                           actions={[
                             {
-                              label: "View application",
+                              label: "View details",
                               icon: Eye,
-                              onSelect: () => setViewing(item),
+                              onSelect: () => router.push(`/account-loan-application-details/${item.id}`),
                             },
                           ]}
                         />
@@ -208,81 +209,6 @@ export default function LoanApplicationsPage() {
         </section>
       )}
 
-      <Modal
-        open={Boolean(viewing)}
-        onClose={() => setViewing(null)}
-        title={viewing?.applicationNo ?? "Loan application"}
-        footer={
-          <Button variant="outline" onClick={() => setViewing(null)}>
-            Close
-          </Button>
-        }
-      >
-        {viewing ? (
-          <dl className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Application number</dt>
-              <dd className="mt-0.5 fs-text text-body">{viewing.applicationNo}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Status</dt>
-              <dd className="mt-0.5 fs-text text-body">{titleCase(viewing.status)}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Client</dt>
-              <dd className="mt-0.5 fs-text text-body">
-                {viewing.clientName ?? "N/A"}
-                {viewing.clientReference ? (
-                  <span className="ml-2 text-muted-foreground">{viewing.clientReference}</span>
-                ) : null}
-              </dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Product</dt>
-              <dd className="mt-0.5 fs-text text-body">{viewing.productName ?? viewing.productCode ?? "N/A"}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Principal</dt>
-              <dd className="mt-0.5 fs-text tabular-nums text-body">{formatTzs(viewing.principalMinor)}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Tenure</dt>
-              <dd className="mt-0.5 fs-text text-body">{tenureLabel(viewing)}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Interest rate</dt>
-              <dd className="mt-0.5 fs-text tabular-nums text-body">{(viewing.interestRateBp / 100).toFixed(2)}%</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Loan officer</dt>
-              <dd className="mt-0.5 fs-text text-body">{viewing.loanOfficerName ?? "N/A"}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Payment destination</dt>
-              <dd className="mt-0.5 fs-text text-body">
-                {destinationLabel(viewing)}
-              </dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Documents</dt>
-              <dd className="mt-0.5 flex items-center gap-1.5 fs-text text-body">
-                <Paperclip className="size-3.5 text-muted-foreground" aria-hidden="true" />
-                {viewing.documents.length}
-              </dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Created</dt>
-              <dd className="mt-0.5 fs-text text-body">{new Date(viewing.createdAt).toLocaleString()}</dd>
-            </div>
-            <div>
-              <dt className="fs-text font-medium tracking-wide text-label">Submitted</dt>
-              <dd className="mt-0.5 fs-text text-body">
-                {viewing.submittedAt ? new Date(viewing.submittedAt).toLocaleString() : "N/A"}
-              </dd>
-            </div>
-          </dl>
-        ) : null}
-      </Modal>
     </div>
   );
 }

@@ -908,6 +908,10 @@ export type LoanApplicationListResponse = {
 export type LoanApplicationResponse = {
   application: LoanApplication;
   canEdit: boolean;
+  canView?: boolean;
+  canApprove?: boolean;
+  canReject?: boolean;
+  canCancel?: boolean;
 };
 
 export type EconomicSector = {
@@ -984,6 +988,16 @@ export async function createLoanApplication(
   return apiRequest<LoanApplicationResponse>("/settings/loan-applications", {
     method: "POST",
     body: payload,
+  });
+}
+
+export async function updateLoanApplicationStatus(
+  id: string,
+  status: "SUBMITTED" | "APPROVED" | "REJECTED" | "CANCELLED",
+): Promise<LoanApplicationResponse> {
+  return apiRequest<LoanApplicationResponse>(`/settings/loan-applications/${encodeURIComponent(id)}/status`, {
+    method: "PATCH",
+    body: { status },
   });
 }
 
