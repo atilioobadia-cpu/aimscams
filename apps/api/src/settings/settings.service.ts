@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, type PrismaClient } from '@aimscams/db';
+import { generateSchedule, money, rate } from '@aimscams/domain';
 
 import { AuditService } from '../auth/audit.service.js';
 import type { AuthContext } from '../auth/auth.types.js';
@@ -82,6 +83,12 @@ const LOAN_APPLICATION_INCLUDE = {
     orderBy: { createdAt: 'asc' as const },
   },
 } satisfies Prisma.LoanApplicationInclude;
+
+const LOAN_INCLUDE = {
+  client: { select: { fullName: true, referenceNo: true } },
+  product: { select: { name: true, code: true } },
+  application: { select: { applicationNo: true } },
+} satisfies Prisma.LoanInclude;
 
 const ORGANISATION_SELECT = {
   id: true,
@@ -2102,6 +2109,79 @@ export class SettingsService {
       },
       include: LOAN_APPLICATION_INCLUDE,
     });
+
+    if (next === 'APPROVED') {
+      const existingLoan = await this.prisma.loan.findFirst({ where: { applicationId: id } });
+      if (!existingLoan) {
+        const termMonths = tenureInMonths(item.tenureCount, item.tenurePeriod);
+        const annualRatePercent = item.interestRateBp / 100; // monthly bp -> ... 
+        // interestRateBp is per month in bp; annual = monthly * 12
+        const annualRateBp = item.interestRateBp * 12;
+        const methodMap: Record<string, 'equal_instalment' | 'equal_principal' | 'flat'> = {
+          REDUCING_BALANCE_EQUAL_INSTALLMENT: 'equal_instalment',
+          REDUCING_BALANCE_EQUAL_PRINCIPAL: 'equal_principal',
+          FLAT_RATE: 'flat',
+        };
+        const scheduleMethod = methodMap[item.interestMethod] ?? 'equal_instalment';
+
+        // loan number
+        const existingLoans = await this.prisma.loan.findMany({
+          where: { organisationId },
+          select: { loanNumber: true },
+        });
+        const maxLoan = existingLoans.reduce((current, l) => {
+          const v = Number.parseInt(l.loanNumber.replace(/\D/g, ''), 10);
+          return Number.isFinite(v) && v > current ? v : current;
+        }, 0);
+        const loanNumber = String(maxLoan + 1).padStart(6, '0');
+
+        const firstDueDate = item.installmentStartDate
+          ? item.installmentStartDate.toISOString().slice(0, 10)
+          : new Date().toISOString().slice(0, 10);
+
+        const schedule = generateSchedule({
+          principal: money(item.principalMinor),
+          annualRate: rate(annualRateBp, 10000),
+          termMonths,
+          firstDueDate,
+          method: scheduleMethod,
+        });
+
+        const loan = await this.prisma.loan.create({
+          data: {
+            organisationId,
+            branchId: item.branchId,
+            clientId: item.clientId,
+            productId: item.productId,
+            applicationId: item.id,
+            loanNumber,
+            status: 'APPROVED',
+            principalMinor: item.principalMinor,
+            outstandingPrincipalMinor: item.principalMinor,
+            tenureCount: item.tenureCount,
+            tenurePeriod: item.tenurePeriod,
+            interestRateBp: item.interestRateBp,
+            interestMethod: item.interestMethod,
+            installmentStartDate: item.installmentStartDate,
+            disbursedAt: null,
+          },
+        });
+
+        await this.prisma.loanSchedule.createMany({
+          data: schedule.rows.map((row) => ({
+            organisationId,
+            loanId: loan.id,
+            installmentNo: row.no,
+            dueDate: new Date(row.dueDate),
+            openingPrincipalMinor: BigInt(row.opening.minor),
+            principalMinor: BigInt(row.principal.minor),
+            interestMinor: BigInt(row.interest.minor),
+            totalMinor: BigInt(row.total.minor),
+            closingPrincipalMinor: BigInt(row.closing.minor),
+          })),
+        });
+      }
+    }
     return {
       application: this.serializeLoanApplication(updated),
       canEdit: this.can(auth, 'Loan Account : Edit'),
@@ -2109,6 +2189,87 @@ export class SettingsService {
       canApprove: this.can(auth, 'Loan Account : Approve'),
       canReject: this.can(auth, 'Loan Account : Reject'),
       canCancel: this.can(auth, 'Loan Account : Edit') || this.can(auth, 'Loan Account : Delete'),
+    };
+  }
+
+  async listLoans(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.LoanWhereInput = { organisationId };
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { loanNumber: { contains: query, mode: 'insensitive' } },
+        { client: { fullName: { contains: query, mode: 'insensitive' } } },
+        { product: { name: { contains: query, mode: 'insensitive' } } },
+      ];
+    }
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      where.status = status as any;
+    }
+    const items = await this.prisma.loan.findMany({
+      where,
+      include: LOAN_INCLUDE,
+      orderBy: [{ createdAt: 'desc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeLoan(item)),
+      canView: this.can(auth, 'Loan Account : View'),
+    };
+  }
+
+  async getLoan(auth: AuthContext, id: string) {
+    const organisationId = auth.user.organisation.id;
+    const item = await this.prisma.loan.findFirst({
+      where: { id, organisationId },
+      include: LOAN_INCLUDE,
+    });
+    if (!item) throw new NotFoundException('Loan not found.');
+    const schedule = await this.prisma.loanSchedule.findMany({
+      where: { loanId: id },
+      orderBy: [{ installmentNo: 'asc' }],
+    });
+    return {
+      loan: this.serializeLoan(item),
+      schedule: schedule.map((row) => ({
+        id: row.id,
+        installmentNo: row.installmentNo,
+        dueDate: row.dueDate.toISOString().slice(0, 10),
+        openingPrincipalMinor: row.openingPrincipalMinor.toString(),
+        principalMinor: row.principalMinor.toString(),
+        interestMinor: row.interestMinor.toString(),
+        totalMinor: row.totalMinor.toString(),
+        closingPrincipalMinor: row.closingPrincipalMinor.toString(),
+        status: row.status,
+        paidAt: row.paidAt ? row.paidAt.toISOString() : null,
+      })),
+      canView: this.can(auth, 'Loan Account : View'),
+    };
+  }
+
+  private serializeLoan(item: any) {
+    return {
+      id: item.id,
+      loanNumber: item.loanNumber,
+      status: item.status,
+      principalMinor: item.principalMinor.toString(),
+      outstandingPrincipalMinor: item.outstandingPrincipalMinor.toString(),
+      tenureCount: item.tenureCount,
+      tenurePeriod: item.tenurePeriod,
+      interestRateBp: item.interestRateBp,
+      interestMethod: item.interestMethod,
+      installmentStartDate: item.installmentStartDate ? item.installmentStartDate.toISOString().slice(0, 10) : null,
+      classification: item.classification,
+      daysPastDue: item.daysPastDue,
+      isInsider: item.isInsider,
+      disbursedAt: item.disbursedAt ? item.disbursedAt.toISOString() : null,
+      clientName: item.client?.fullName ?? null,
+      clientReference: item.client?.referenceNo ?? null,
+      productName: item.product?.name ?? null,
+      productCode: item.product?.code ?? null,
+      applicationNo: item.application?.applicationNo ?? null,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
     };
   }
 

@@ -564,9 +564,9 @@ on them.
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | AC-06 | `/account-loan` | Loan list (Active / New / Closed) | T1 | M |
-| [ ] | AC-07 | `/account-loan-details-118-summary` | Loan summary | T3 | H |
-| [ ] | AC-08 | `/account-loan-details-118-schedule` | Repayment schedule | T3 | H |
+| [x] | AC-06 | `/account-loan` | Loan list (Active / New / Closed) | T1 | M |
+| [x] | AC-07 | `/account-loan-details-118-summary` | Loan summary | T3 | H |
+| [x] | AC-08 | `/account-loan-details-118-schedule` | Repayment schedule | T3 | H |
 | [ ] | AC-09 | `/account-loan-details-118-repayments` | Repayment history | T3 | M |
 | [ ] | AC-10 | `/account-loan-details-118-guarantors` | Guarantors and collateral | T3 | H |
 | [ ] | AC-11 | `/account-loan-details-118-documents` | Documents | T3 | L |

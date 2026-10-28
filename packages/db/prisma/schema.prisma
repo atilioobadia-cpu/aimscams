@@ -73,6 +73,8 @@ model Organisation {
   savingsAccounts SavingsAccount[]
   loanApplications LoanApplication[]
   loanApplicationDocuments LoanApplicationDocument[]
+  loans            Loan[]
+  loanSchedules    LoanSchedule[]
 
   @@map("organisation")
 }
@@ -102,6 +104,7 @@ model Branch {
   clients      Client[]
   loanApplications LoanApplication[]
   savingsAccounts SavingsAccount[]
+  loans            Loan[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
@@ -353,6 +356,7 @@ model LoanProduct {
 
   organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
   loanApplications LoanApplication[]
+  loans            Loan[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
@@ -583,6 +587,7 @@ model Client {
   members      Client[]     @relation("ClientGroup")
   savingsAccounts SavingsAccount[]
   loanApplications LoanApplication[]
+  loans            Loan[]
 
   @@unique([organisationId, referenceNo])
   @@index([organisationId, status])
@@ -685,6 +690,7 @@ model LoanApplication {
   product      LoanProduct? @relation(fields: [productId], references: [id], onDelete: SetNull)
   loanOfficer  User?        @relation(fields: [loanOfficerId], references: [id], onDelete: SetNull)
   documents    LoanApplicationDocument[]
+  loan         Loan?
 
   @@unique([organisationId, applicationNo])
   @@index([organisationId, status])
@@ -710,6 +716,82 @@ model LoanApplicationDocument {
   @@index([loanApplicationId])
   @@index([organisationId])
   @@map("loan_application_document")
+}
+
+model Loan {
+  id                    String     @id @default(uuid()) @db.Uuid
+  organisationId        String     @db.Uuid
+  branchId              String?    @db.Uuid
+  clientId              String     @db.Uuid
+  productId             String?    @db.Uuid
+  applicationId         String?    @db.Uuid @unique
+  loanNumber            String
+  status                LoanStatus @default(APPROVED)
+  principalMinor        BigInt
+  outstandingPrincipalMinor BigInt @default(0)
+  tenureCount           Int
+  tenurePeriod          LoanTenurePeriod @default(MONTHS)
+  interestRateBp        Int
+  interestMethod        LoanInterestMethod @default(REDUCING_BALANCE_EQUAL_INSTALLMENT)
+  installmentStartDate  DateTime?  @db.Date
+  policyVersionId       String?    @db.Uuid
+  isInsider             Boolean    @default(false)
+  classification        String?    @default("Performing")
+  daysPastDue           Int        @default(0)
+  disbursedAt           DateTime?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  organisation Organisation  @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?       @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  product      LoanProduct?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  application  LoanApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  schedule     LoanSchedule[]
+
+  @@unique([organisationId, loanNumber])
+  @@index([organisationId, status])
+  @@index([clientId])
+  @@map("loan")
+}
+
+model LoanSchedule {
+  id                    String   @id @default(uuid()) @db.Uuid
+  organisationId        String   @db.Uuid
+  loanId                String   @db.Uuid
+  installmentNo         Int
+  dueDate               DateTime @db.Date
+  openingPrincipalMinor BigInt
+  principalMinor        BigInt
+  interestMinor         BigInt
+  totalMinor            BigInt
+  closingPrincipalMinor BigInt
+  status                String   @default("SCHEDULED")
+  paidAt                DateTime?
+  createdAt             DateTime @default(now())
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  loan         Loan         @relation(fields: [loanId], references: [id], onDelete: Cascade)
+
+  @@unique([loanId, installmentNo])
+  @@index([loanId])
+  @@index([organisationId])
+  @@map("loan_schedule")
+}
+
+enum LoanStatus {
+  DRAFT
+  SUBMITTED
+  IN_REVIEW
+  APPROVED
+  DISBURSED
+  ACTIVE
+  DELINQUENT
+  NPA
+  RESCHEDULED
+  CLOSED
+  WRITTEN_OFF
+  REJECTED
 }
 
 enum LoanTenurePeriod {

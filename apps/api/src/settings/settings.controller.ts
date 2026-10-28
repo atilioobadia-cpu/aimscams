@@ -222,7 +222,17 @@ export class SettingsController {
     return this.settings.listLoanOfficers(auth);
   }
 
-  @Get('economic-sectors')
+  @Get('loans')
+  @RequirePermissions('Loan Account : View')
+  async listLoans(@CurrentAuth() auth: AuthContext, @Query('q') q?: string, @Query('status') status?: string) {
+    return this.settings.listLoans(auth, { q, status });
+  }
+
+  @Get('loans/:id')
+  @RequirePermissions('Loan Account : View')
+  async getLoan(@CurrentAuth() auth: AuthContext, @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string) {
+    return this.settings.getLoan(auth, id);
+  }
   @RequirePermissions('Loan Account : View')
   listEconomicSectors() {
     return { items: ECONOMIC_SECTORS };

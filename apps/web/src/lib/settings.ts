@@ -1014,6 +1014,71 @@ export async function updateLoanApplication(
   });
 }
 
+export type LoanStatus =
+  | "DRAFT" | "SUBMITTED" | "IN_REVIEW" | "APPROVED" | "DISBURSED"
+  | "ACTIVE" | "DELINQUENT" | "NPA" | "RESCHEDULED" | "CLOSED"
+  | "WRITTEN_OFF" | "REJECTED";
+
+export type Loan = {
+  id: string;
+  loanNumber: string;
+  status: LoanStatus;
+  principalMinor: string;
+  outstandingPrincipalMinor: string;
+  tenureCount: number;
+  tenurePeriod: LoanTenurePeriod;
+  interestRateBp: number;
+  interestMethod: LoanInterestMethod;
+  installmentStartDate: string | null;
+  classification: string | null;
+  daysPastDue: number;
+  isInsider: boolean;
+  disbursedAt: string | null;
+  clientName: string | null;
+  clientReference: string | null;
+  productName: string | null;
+  productCode: string | null;
+  applicationNo: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LoanScheduleRow = {
+  id: string;
+  installmentNo: number;
+  dueDate: string;
+  openingPrincipalMinor: string;
+  principalMinor: string;
+  interestMinor: string;
+  totalMinor: string;
+  closingPrincipalMinor: string;
+  status: string;
+  paidAt: string | null;
+};
+
+export type LoanResponse = {
+  loan: Loan;
+  schedule: LoanScheduleRow[];
+  canView: boolean;
+};
+
+export type LoanListResponse = {
+  items: Loan[];
+  canView: boolean;
+};
+
+export async function listLoans(filter: { q?: string; status?: string } = {}): Promise<LoanListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<LoanListResponse>(`/settings/loans${suffix}`);
+}
+
+export async function getLoan(id: string): Promise<LoanResponse> {
+  return apiRequest<LoanResponse>(`/settings/loans/${encodeURIComponent(id)}`);
+}
+
 export async function listEconomicSectors(): Promise<{ items: EconomicSector[] }> {
   return apiRequest<{ items: EconomicSector[] }>("/settings/economic-sectors");
 }
