@@ -514,14 +514,16 @@ export function LoanApplicationWizard({
 
   return (
     <div className="space-y-5">
-      <div>
-        <Button asChild variant="outline" size="sm">
-          <Link href="/account-loan-application">
-            <ArrowLeft className="size-4" aria-hidden="true" />
-            Loan applications
-          </Link>
-        </Button>
-      </div>
+      {applicationId ? null : (
+        <div>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/account-loan-application">
+              <ArrowLeft className="size-4" aria-hidden="true" />
+              Loan applications
+            </Link>
+          </Button>
+        </div>
+      )}
 
       <PageHeader
         title={applicationId ? "Edit loan application" : "New loan application"}
@@ -530,7 +532,7 @@ export function LoanApplicationWizard({
 
       <section
         data-testid="wizard-steps"
-        className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]"
+        className="rounded-[var(--card-radius)] border border-card-border bg-surface py-[14px] px-[20px]"
       >
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-3">
           {STEPS.map((item, index) => {
@@ -586,7 +588,7 @@ export function LoanApplicationWizard({
       ) : null}
 
       <form
-        className="space-y-5 rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-20)]"
+        className="space-y-5 rounded-[var(--card-radius)] border border-card-border bg-surface py-[18px] px-[20px]"
         onSubmit={(event) => {
           event.preventDefault();
           if (step === STEPS.length - 1) void submit("SUBMITTED");
@@ -601,9 +603,11 @@ export function LoanApplicationWizard({
                   Client
                 </label>
                 {selectedClient ? (
-                  <div className="flex items-center justify-between gap-3 rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-2">
+                  <div className="flex items-center justify-between gap-3 rounded-[6px] border border-[#dee2e6] bg-[#f8fafc] px-[12px] py-[8px]">
                     <span className="flex min-w-0 items-center gap-2 fs-text text-strong">
-                      <UserRound className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                      <span className="grid size-7 shrink-0 place-items-center rounded-full bg-[#29aae3] fs-text font-bold text-white">
+                        {selectedClient.fullName.charAt(0).toUpperCase()}
+                      </span>
                       <span className="truncate">
                         {selectedClient.fullName}
                         <span className="ml-2 text-muted-foreground">{selectedClient.referenceNo}</span>
@@ -716,7 +720,7 @@ export function LoanApplicationWizard({
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-tenure">
                   Tenure
                 </label>
-                <div className="flex items-center gap-2">
+                <div className="grid items-center gap-2" style={{ gridTemplateColumns: "minmax(0, 1fr) 110px" }}>
                   <Input
                     id="la-tenure"
                     value={tenure}
@@ -1307,7 +1311,7 @@ export function LoanApplicationWizard({
         <FormError message={stepError} />
         <FormError message={saveError} />
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="sticky bottom-0 -mx-[20px] -mb-[18px] flex flex-wrap items-center gap-3 border-t border-[#dee2e6] bg-white px-[20px] py-[10px] pr-[90px]">
           {step > 0 ? (
             <Button type="button" variant="outline" onClick={goBack} disabled={saving !== null}>
               <ArrowLeft className="size-4" aria-hidden="true" />

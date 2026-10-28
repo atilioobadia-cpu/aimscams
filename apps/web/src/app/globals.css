@@ -66,7 +66,7 @@ body {
   --sidebar-subitem-height: 28px;
   --sidebar-row-height: 36px;
   --content-padding: 18px;
-  --control-height: 32px;
+  --control-height: 33px;
   --control-compact-height: 28px;
   --icon-size: 20px;
   --icon-box-size: 34px;
@@ -350,9 +350,81 @@ body[data-modal-open="true"] [data-chat-fab-root] {
   box-shadow: 0 1px 0 var(--border-header);
 }
 
+/* Form controls: consistent look across the app. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
+select,
+textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  background-color: #ffffff;
+  padding: 0 10px;
+  font-size: var(--fs);
+  color: var(--body);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]) {
+  height: var(--control-height);
+}
+textarea {
+  min-height: 66px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+select {
+  height: var(--control-height);
+  padding-right: 28px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #9aa0a5;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  border-color: #057573;
+  box-shadow: 0 0 0 2px rgba(5, 117, 115, 0.15);
+}
+input:disabled,
+select:disabled,
+textarea:disabled,
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  background-color: #f8fafc;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+
+/* Chat button must not cover form content. */
+main {
+  scroll-padding-bottom: 84px;
+}
+.app-content,
+main > div {
+  padding-bottom: 84px;
+}
+
 /* Keep table content on one line; horizontal scroll handles overflow. */
 table th,
 table td {
   white-space: nowrap;
+}
+
+/* Form grids: children must be able to shrink. */
+.grid > * {
+  min-width: 0;
 }
 
