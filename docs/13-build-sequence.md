@@ -554,9 +554,9 @@ on them.
 
 | Done | ID | Route | Page | Template | Risk |
 |---|---|---|---|---|---|
-| [ ] | AC-01 | `/account-loan-application` | Application list | T1 | M |
-| [ ] | AC-02 | `/account-loan-application-create` | New application (5 steps) | T2 | H |
-| [ ] | AC-03 | `/account-loan-application-details-39` | Application detail | T3 | H |
+| [x] | AC-01 | `/account-loan-application` | Application list | T1 | M |
+| [x] | AC-02 | `/account-loan-application-create` | New application (5 steps) | T2 | H |
+| [x] | AC-03 | `/account-loan-application-details-39` | Application detail | T3 | H |
 | [ ] | AC-04 | `/account-loan-application-details-124` | Application detail (second sample) | T3 | M |
 | [ ] | AC-05 | `/account-loan-application-edit-39` | Edit application | T2 | H |
 
