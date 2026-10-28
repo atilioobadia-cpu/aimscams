@@ -233,6 +233,7 @@ export class SettingsController {
   async getLoan(@CurrentAuth() auth: AuthContext, @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string) {
     return this.settings.getLoan(auth, id);
   }
+  @Get('economic-sectors')
   @RequirePermissions('Loan Account : View')
   listEconomicSectors() {
     return { items: ECONOMIC_SECTORS };
