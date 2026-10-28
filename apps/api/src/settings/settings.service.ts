@@ -11,6 +11,16 @@ import { AuditService } from '../auth/audit.service.js';
 import type { AuthContext } from '../auth/auth.types.js';
 import { PRISMA } from '../prisma/prisma.module.js';
 import {
+  parseEconomicSector,
+  parseInterestMethod,
+  parseIsoDate,
+  parseLoanDocuments,
+  parseOptionalMinor,
+  parsePaymentDestination,
+  parseTenurePeriod,
+  tenureInMonths,
+} from './loan-applications.logic.js';
+import {
   defaultBranchHours,
   normaliseBranchCode,
   optionalText,
@@ -55,6 +65,23 @@ interface BranchInput {
 type BranchRecord = Prisma.BranchGetPayload<{
   include: { hours: true; _count: { select: { users: true } } };
 }>;
+
+const LOAN_APPLICATION_INCLUDE = {
+  client: { select: { fullName: true, referenceNo: true } },
+  product: { select: { name: true, code: true } },
+  loanOfficer: { select: { fullName: true } },
+  documents: {
+    select: {
+      id: true,
+      kind: true,
+      name: true,
+      contentType: true,
+      sizeBytes: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: 'asc' as const },
+  },
+} satisfies Prisma.LoanApplicationInclude;
 
 const ORGANISATION_SELECT = {
   id: true,
@@ -1626,6 +1653,320 @@ export class SettingsService {
       clientReference: item.client?.referenceNo ?? null,
       productName: item.product?.name ?? null,
       productCode: item.product?.code ?? null,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
+  async listLoanApplications(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.LoanApplicationWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (
+        status === 'DRAFT' ||
+        status === 'SUBMITTED' ||
+        status === 'APPROVED' ||
+        status === 'REJECTED' ||
+        status === 'CANCELLED'
+      ) {
+        where.status = status as 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+      }
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { applicationNo: { contains: query, mode: 'insensitive' } },
+        { client: { fullName: { contains: query, mode: 'insensitive' } } },
+        { product: { name: { contains: query, mode: 'insensitive' } } },
+        { product: { code: { contains: query, mode: 'insensitive' } } },
+      ];
+    }
+    const items = await this.prisma.loanApplication.findMany({
+      where,
+      include: LOAN_APPLICATION_INCLUDE,
+      orderBy: [{ createdAt: 'desc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeLoanApplication(item)),
+      canView: this.can(auth, 'Loan Account : View'),
+      canCreate: this.can(auth, 'Loan Account : Create'),
+      canEdit: this.can(auth, 'Loan Account : Edit'),
+    };
+  }
+
+  async createLoanApplication(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const clientId = String(body.clientId ?? '').trim();
+    if (!clientId) throw new BadRequestException('Client is required.');
+
+    const client = await this.prisma.client.findFirst({ where: { id: clientId, organisationId } });
+    if (!client) throw new NotFoundException('Client not found.');
+
+    let applicationNo = String(body.applicationNo ?? '').trim();
+    if (!applicationNo) {
+      const existing = await this.prisma.loanApplication.findMany({
+        where: { organisationId },
+        select: { applicationNo: true },
+      });
+      const max = existing.reduce((current, item) => {
+        const value = Number.parseInt(item.applicationNo, 10);
+        return Number.isFinite(value) && value > current ? value : current;
+      }, 0);
+      applicationNo = String(max + 1).padStart(6, '0');
+    }
+
+    const duplicate = await this.prisma.loanApplication.findUnique({
+      where: { organisationId_applicationNo: { organisationId, applicationNo } },
+      select: { id: true },
+    });
+    if (duplicate) throw new ConflictException('A loan application with that number already exists.');
+
+    const productId = body.productId ? String(body.productId).trim() : null;
+    const product = productId
+      ? await this.prisma.loanProduct.findFirst({ where: { id: productId, organisationId } })
+      : null;
+    if (productId && !product) throw new NotFoundException('Loan product not found.');
+
+    const principalValue = body.principalMinor ?? body.principal;
+    if (principalValue === undefined || principalValue === null || String(principalValue).trim() === '') {
+      throw new BadRequestException('Principal amount is required.');
+    }
+    let principalMinor: bigint;
+    try {
+      principalMinor = BigInt(String(principalValue).trim());
+    } catch {
+      throw new BadRequestException('Principal amount must be a whole number of minor units.');
+    }
+    if (principalMinor <= 0n) throw new BadRequestException('Principal amount must be greater than zero.');
+
+    if (product) {
+      if (principalMinor < product.minPrincipalMinor || principalMinor > product.maxPrincipalMinor) {
+        throw new BadRequestException(
+          `Principal must be between ${product.minPrincipalMinor.toString()} and ${product.maxPrincipalMinor.toString()} minor units for ${product.name}.`,
+        );
+      }
+      if (product.status !== 'ACTIVE') {
+        throw new BadRequestException(`${product.name} is not active.`);
+      }
+    }
+
+    const tenureCount = parseInteger(
+      body.tenureCount ?? body.tenureMonths ?? body.tenure,
+      'Tenure',
+      1,
+      600,
+    );
+    const tenurePeriod = parseTenurePeriod(body.tenurePeriod);
+    if (
+      product &&
+      (tenureInMonths(tenureCount, tenurePeriod) < product.minTenureMonths ||
+        tenureInMonths(tenureCount, tenurePeriod) > product.maxTenureMonths)
+    ) {
+      throw new BadRequestException(
+        `Tenure must fall between ${product.minTenureMonths} and ${product.maxTenureMonths} months for ${product.name}.`,
+      );
+    }
+    const interestRateBp =
+      body.interestRateBp === undefined || body.interestRateBp === null || body.interestRateBp === ''
+        ? product?.interestRateBp ?? 0
+        : parseInteger(body.interestRateBp, 'Interest rate', 0, 100000);
+
+    const gracePeriodMonths = parseInteger(body.gracePeriodMonths ?? 0, 'Grace period', 0, 60);
+    const interestMethod = parseInterestMethod(body.interestMethod);
+    const interestOnGrace = body.interestOnGrace === true;
+    const installmentStartDate = parseIsoDate(body.installmentStartDate, 'Installment start date');
+    if (!installmentStartDate) throw new BadRequestException('Installment start date is required.');
+    const sector = parseEconomicSector(
+      body.economicSector,
+      body.subEconomicSector,
+      body.subSubEconomicSector,
+    );
+
+    const loanOfficerId = body.loanOfficerId ? String(body.loanOfficerId).trim() : null;
+    if (loanOfficerId) {
+      const officer = await this.prisma.user.findFirst({
+        where: { id: loanOfficerId, organisationId },
+        select: { id: true },
+      });
+      if (!officer) throw new NotFoundException('Loan officer not found.');
+    } else {
+      throw new BadRequestException('Loan officer is required.');
+    }
+
+    const paymentDestination = parsePaymentDestination(body.paymentDestination);
+    const bankAccountNumber = optionalText(body.bankAccountNumber);
+    if (paymentDestination === 'BANK' && !bankAccountNumber) {
+      throw new BadRequestException('A bank account number is required for a bank destination.');
+    }
+    const mnoWalletNumber = optionalText(body.mnoWalletNumber);
+    if (paymentDestination === 'MNO' && !mnoWalletNumber) {
+      throw new BadRequestException('A mobile money wallet is required for a wallet destination.');
+    }
+
+    const documents = parseLoanDocuments(body.documents);
+    const status = body.status === 'SUBMITTED' ? 'SUBMITTED' : 'DRAFT';
+
+    const item = await this.prisma.loanApplication.create({
+      data: {
+        organisationId,
+        branchId: body.branchId ? String(body.branchId) : client.branchId,
+        clientId,
+        productId: product?.id ?? null,
+        loanOfficerId,
+        applicationNo,
+        status,
+        submittedAt: status === 'SUBMITTED' ? new Date() : null,
+        principalMinor,
+        tenureCount,
+        tenurePeriod,
+        gracePeriodMonths,
+        interestRateBp,
+        interestMethod,
+        interestOnGrace,
+        installmentStartDate,
+        debtCapacityMinor: parseOptionalMinor(body.debtCapacityMinor, 'Debt capacity'),
+        ...sector,
+        description: optionalText(body.description),
+        purpose: optionalText(body.purpose),
+        hasGuarantor: body.hasGuarantor === true,
+        hasCollateral: body.hasCollateral === true,
+        disbursementPreference: optionalText(body.disbursementPreference),
+        remarks: optionalText(body.remarks),
+        nomineeName: optionalText(body.nomineeName),
+        nomineeRelation: optionalText(body.nomineeRelation),
+        nomineePhone: optionalText(body.nomineePhone),
+        nomineeIdNumber: optionalText(body.nomineeIdNumber),
+        nomineePercentage:
+          body.nomineePercentage === undefined || body.nomineePercentage === null || body.nomineePercentage === ''
+            ? null
+            : parseInteger(body.nomineePercentage, 'Nominee percentage', 1, 100),
+        paymentDestination,
+        bankName: optionalText(body.bankName),
+        bankAccountName: optionalText(body.bankAccountName),
+        bankAccountNumber,
+        mnoProvider: optionalText(body.mnoProvider),
+        mnoWalletNumber,
+        documents: documents.length
+          ? {
+              create: documents.map((document) => ({
+                organisation: { connect: { id: organisationId } },
+                kind: document.kind,
+                name: document.name,
+                contentType: document.contentType,
+                sizeBytes: document.data.length,
+                data: new Uint8Array(document.data),
+                uploadedByUserId: auth.user.id,
+              })),
+            }
+          : undefined,
+      },
+      include: LOAN_APPLICATION_INCLUDE,
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: status === 'SUBMITTED' ? 'Loan application submitted' : 'Loan application created',
+      entityType: 'LoanApplication',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeLoanApplication(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { application: this.serializeLoanApplication(item), canEdit: this.can(auth, 'Loan Account : Edit') };
+  }
+
+  async getLoanApplication(auth: AuthContext, id: string) {
+    const organisationId = auth.user.organisation.id;
+    const item = await this.prisma.loanApplication.findFirst({
+      where: { id, organisationId },
+      include: LOAN_APPLICATION_INCLUDE,
+    });
+    if (!item) throw new NotFoundException('Loan application not found.');
+    return {
+      application: this.serializeLoanApplication(item),
+      canEdit: this.can(auth, 'Loan Account : Edit'),
+      canView: this.can(auth, 'Loan Account : View'),
+    };
+  }
+
+  async getLoanApplicationDocument(auth: AuthContext, id: string, documentId: string) {
+    const organisationId = auth.user.organisation.id;
+    const document = await this.prisma.loanApplicationDocument.findFirst({
+      where: { id: documentId, organisationId, loanApplicationId: id },
+    });
+    if (!document) throw new NotFoundException('Document not found.');
+    return {
+      name: document.name,
+      contentType: document.contentType,
+      data: Buffer.from(document.data),
+    };
+  }
+
+  async listLoanOfficers(auth: AuthContext) {
+    const users = await this.prisma.user.findMany({
+      where: { organisationId: auth.user.organisation.id, status: 'ACTIVE' },
+      select: { id: true, fullName: true, email: true },
+      orderBy: [{ fullName: 'asc' }],
+    });
+    return { items: users };
+  }
+
+  private serializeLoanApplication(item: any) {
+    return {
+      id: item.id,
+      applicationNo: item.applicationNo,
+      status: item.status,
+      principalMinor: item.principalMinor.toString(),
+      tenureCount: item.tenureCount,
+      tenurePeriod: item.tenurePeriod,
+      gracePeriodMonths: item.gracePeriodMonths,
+      interestRateBp: item.interestRateBp,
+      interestMethod: item.interestMethod,
+      interestOnGrace: item.interestOnGrace,
+      installmentStartDate: item.installmentStartDate
+        ? item.installmentStartDate.toISOString().slice(0, 10)
+        : null,
+      debtCapacityMinor: item.debtCapacityMinor?.toString() ?? null,
+      economicSector: item.economicSector,
+      subEconomicSector: item.subEconomicSector,
+      subSubEconomicSector: item.subSubEconomicSector,
+      description: item.description,
+      purpose: item.purpose,
+      hasGuarantor: item.hasGuarantor,
+      hasCollateral: item.hasCollateral,
+      disbursementPreference: item.disbursementPreference,
+      remarks: item.remarks,
+      nomineeName: item.nomineeName,
+      nomineeRelation: item.nomineeRelation,
+      nomineePhone: item.nomineePhone,
+      nomineeIdNumber: item.nomineeIdNumber,
+      nomineePercentage: item.nomineePercentage,
+      paymentDestination: item.paymentDestination,
+      bankName: item.bankName,
+      bankAccountName: item.bankAccountName,
+      bankAccountNumber: item.bankAccountNumber,
+      mnoProvider: item.mnoProvider,
+      mnoWalletNumber: item.mnoWalletNumber,
+      submittedAt: item.submittedAt ? item.submittedAt.toISOString() : null,
+      clientName: item.client?.fullName ?? null,
+      clientReference: item.client?.referenceNo ?? null,
+      productName: item.product?.name ?? null,
+      productCode: item.product?.code ?? null,
+      loanOfficerName: item.loanOfficer?.fullName ?? null,
+      documents: (item.documents ?? []).map((document: any) => ({
+        id: document.id,
+        kind: document.kind,
+        name: document.name,
+        contentType: document.contentType,
+        sizeBytes: document.sizeBytes,
+        createdAt: document.createdAt.toISOString(),
+      })),
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };

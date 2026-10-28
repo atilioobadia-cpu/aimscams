@@ -16,6 +16,7 @@ import type { Request, Response } from 'express';
 
 import { CurrentAuth, RequirePermissions } from '../auth/auth.decorators.js';
 import type { AuthContext } from '../auth/auth.types.js';
+import { ECONOMIC_SECTORS } from './loan-applications.logic.js';
 import { SettingsService } from './settings.service.js';
 
 function requestContext(request: Request): {
@@ -145,6 +146,67 @@ export class SettingsController {
     @Req() request: Request,
   ) {
     return this.settings.createSavingsAccount(auth, body, requestContext(request));
+  }
+
+  @Get('loan-applications')
+  @RequirePermissions('Loan Account : View')
+  async listLoanApplications(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listLoanApplications(auth, { q, status });
+  }
+
+  @Post('loan-applications')
+  @RequirePermissions('Loan Account : Create')
+  async createLoanApplication(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createLoanApplication(auth, body, requestContext(request));
+  }
+
+  @Get('loan-applications/:id')
+  @RequirePermissions('Loan Account : View')
+  async getLoanApplication(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.getLoanApplication(auth, id);
+  }
+
+  @Get('loan-applications/:id/documents/:documentId')
+  @RequirePermissions('Loan Account : View')
+  async getLoanApplicationDocument(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Param('documentId', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) documentId: string,
+    @Res() response: Response,
+  ) {
+    const document = await this.settings.getLoanApplicationDocument(auth, id, documentId);
+    response.setHeader('Content-Type', document.contentType);
+    response.setHeader('Content-Length', String(document.data.length));
+    response.setHeader('Cache-Control', 'private, max-age=60');
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${encodeURIComponent(document.name)}"`,
+    );
+    response.send(document.data);
+  }
+
+  @Get('loan-officers')
+  @RequirePermissions('Loan Account : View')
+  async listLoanOfficers(@CurrentAuth() auth: AuthContext) {
+    return this.settings.listLoanOfficers(auth);
+  }
+
+  @Get('economic-sectors')
+  @RequirePermissions('Loan Account : View')
+  listEconomicSectors() {
+    return { items: ECONOMIC_SECTORS };
   }
 
   @Get('branches')

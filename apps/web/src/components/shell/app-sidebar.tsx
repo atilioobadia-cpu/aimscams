@@ -57,6 +57,11 @@ function isItemActive(pathname: string, item: NavItem): boolean {
   if (item.href === "/accounting") {
     return pathname === "/accounting" || pathname.startsWith("/accounting-");
   }
+  // Account screens keep the flat blueprint routes (`/account-loan-application`, …),
+  // so they do not share the `/accounts` prefix with the section landing page.
+  if (item.href === "/accounts") {
+    return pathname === "/accounts" || pathname.startsWith("/account-");
+  }
   return (
     isActivePath(pathname, item.href) ||
     Boolean(item.children?.some((child) => isActivePath(pathname, child.href)))
@@ -310,8 +315,8 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
             aria-expanded={!collapsed}
             aria-controls="app-sidebar-nav"
             onClick={onToggle}
-            style={{ bottom: "calc(var(--sidebar-footer-height) + 12px)" }}
-            className="absolute -right-[14px] z-10 grid h-[28px] w-[28px] min-h-[28px] min-w-[28px] max-h-[28px] max-w-[28px] box-border place-items-center rounded-full border border-[#dee2e6] bg-white text-[#057573] shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none transition-colors duration-[120ms] hover:bg-[#f1f5f5] focus-visible:ring-2 focus-visible:ring-[#057573] focus-visible:ring-offset-1 cursor-pointer"
+            style={{ bottom: "calc(var(--sidebar-footer-height) + 12px)", left: collapsed ? "calc(var(--sidebar-collapsed-width) - 14px)" : "calc(var(--sidebar-width) - 14px)" }}
+            className="absolute z-10 grid h-[28px] w-[28px] min-h-[28px] min-w-[28px] max-h-[28px] max-w-[28px] box-border place-items-center rounded-full border border-[#dee2e6] bg-white text-[#057573] shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none transition-colors duration-[120ms] hover:bg-[#f1f5f5] focus-visible:ring-2 focus-visible:ring-[#057573] focus-visible:ring-offset-1 cursor-pointer"
           >
             {collapsed ? (
               <ChevronRight className="h-[14px] w-[14px]" strokeWidth={1.75} aria-hidden="true" />

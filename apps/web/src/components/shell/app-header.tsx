@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { apiAssetUrl, apiRequest } from "@/lib/api";
-import { tenantLogo } from "@/lib/brand";
+
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 import { titleCase } from "@/lib/privacy";
 
@@ -61,28 +61,29 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
       data-testid="app-header"
       className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-chrome bg-surface px-[14px]"
     >
-      <div className="flex min-w-0 items-center gap-2.5">
-        <div data-testid="tenant-logo" className="flex shrink-0 items-center">
-          <InstitutionLogo
-            src={logoUrl}
-            alt={institution.name}
-            monogram={initialsFor(institution.name)}
-            width={tenantLogo.width}
-            height={tenantLogo.height}
-            className="h-7 max-w-[190px]"
-          />
-        </div>
+      <div className="flex min-w-0 flex-[1_1_auto] items-center gap-3">
+        <InstitutionLogo
+          src={logoUrl}
+          alt={institution.name}
+          monogram={initialsFor(institution.name)}
+        />
         <div className="min-w-0">
-          <p className="truncate fs-text font-semibold leading-tight text-body">
+          <p
+            className="truncate fs-text font-semibold leading-tight text-[#495057]"
+            title={institution.name}
+          >
             {institution.name}
           </p>
-          <p className="truncate fs-text leading-tight text-muted-foreground">
+          <p
+            className="truncate fs-text leading-tight text-[#6c757d]"
+            title={`${institution.dialect} SACCOS · ${institution.code}`}
+          >
             {institution.dialect} SACCOS · {institution.code}
           </p>
         </div>
       </div>
 
-      <div className="ml-auto flex items-center gap-6">
+      <div className="ml-auto flex shrink-0 items-center gap-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button

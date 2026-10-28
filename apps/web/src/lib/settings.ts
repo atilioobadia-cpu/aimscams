@@ -1,4 +1,4 @@
-import { apiRequest } from "@/lib/api";
+import { apiAssetUrl, apiRequest } from "@/lib/api";
 
 export type InstitutionDialect = "TCDC" | "BOT";
 export type BranchStatus = "OPEN" | "CLOSED";
@@ -828,4 +828,177 @@ export async function updateSavingsAccount(id: string, payload: { status?: strin
     method: "PATCH",
     body: payload,
   });
+}
+
+export type LoanApplicationStatus = "DRAFT" | "SUBMITTED" | "APPROVED" | "REJECTED" | "CANCELLED";
+export type LoanTenurePeriod = "DAYS" | "WEEKS" | "MONTHS";
+export type LoanInterestMethod =
+  | "REDUCING_BALANCE_EQUAL_INSTALLMENT"
+  | "REDUCING_BALANCE_EQUAL_PRINCIPAL"
+  | "FLAT_RATE";
+export type PaymentDestination = "BANK" | "MNO" | "CASH";
+export type LoanDocumentKind =
+  | "NATIONAL_ID"
+  | "PAYSLIP"
+  | "BANK_STATEMENT"
+  | "BUSINESS_LICENSE"
+  | "COLLATERAL"
+  | "OTHER";
+
+export type LoanApplicationDocument = {
+  id: string;
+  kind: LoanDocumentKind;
+  name: string;
+  contentType: string;
+  sizeBytes: number;
+  createdAt: string;
+};
+
+export type LoanApplication = {
+  id: string;
+  applicationNo: string;
+  status: LoanApplicationStatus;
+  principalMinor: string;
+  tenureCount: number;
+  tenurePeriod: LoanTenurePeriod;
+  gracePeriodMonths: number;
+  interestRateBp: number;
+  interestMethod: LoanInterestMethod;
+  interestOnGrace: boolean;
+  installmentStartDate: string | null;
+  debtCapacityMinor: string | null;
+  economicSector: string | null;
+  subEconomicSector: string | null;
+  subSubEconomicSector: string | null;
+  description: string | null;
+  purpose: string | null;
+  hasGuarantor: boolean;
+  hasCollateral: boolean;
+  disbursementPreference: string | null;
+  remarks: string | null;
+  nomineeName: string | null;
+  nomineeRelation: string | null;
+  nomineePhone: string | null;
+  nomineeIdNumber: string | null;
+  nomineePercentage: number | null;
+  paymentDestination: PaymentDestination | null;
+  bankName: string | null;
+  bankAccountName: string | null;
+  bankAccountNumber: string | null;
+  mnoProvider: string | null;
+  mnoWalletNumber: string | null;
+  submittedAt: string | null;
+  clientName: string | null;
+  clientReference: string | null;
+  productName: string | null;
+  productCode: string | null;
+  loanOfficerName: string | null;
+  documents: LoanApplicationDocument[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type LoanApplicationListResponse = {
+  items: LoanApplication[];
+  canView: boolean;
+  canCreate: boolean;
+  canEdit: boolean;
+};
+
+export type LoanApplicationResponse = {
+  application: LoanApplication;
+  canEdit: boolean;
+};
+
+export type EconomicSector = {
+  code: string;
+  name: string;
+  children: { code: string; name: string; children: { code: string; name: string }[] }[];
+};
+
+export type LoanOfficer = {
+  id: string;
+  fullName: string;
+  email: string;
+};
+
+export type LoanApplicationDocumentInput = {
+  kind: LoanDocumentKind;
+  name: string;
+  dataUrl: string;
+};
+
+export type LoanApplicationInput = {
+  clientId: string;
+  productId?: string | null;
+  principalMinor: string | number;
+  tenureCount: number;
+  tenurePeriod: LoanTenurePeriod;
+  gracePeriodMonths: number;
+  interestRateBp: number;
+  interestMethod: LoanInterestMethod;
+  interestOnGrace: boolean;
+  installmentStartDate: string;
+  loanOfficerId: string;
+  debtCapacityMinor?: string | null;
+  economicSector: string;
+  subEconomicSector?: string | null;
+  subSubEconomicSector?: string | null;
+  description?: string | null;
+  purpose?: string | null;
+  hasGuarantor: boolean;
+  hasCollateral: boolean;
+  disbursementPreference?: string | null;
+  remarks?: string | null;
+  nomineeName?: string | null;
+  nomineeRelation?: string | null;
+  nomineePhone?: string | null;
+  nomineeIdNumber?: string | null;
+  nomineePercentage?: number | null;
+  paymentDestination: PaymentDestination;
+  bankName?: string | null;
+  bankAccountName?: string | null;
+  bankAccountNumber?: string | null;
+  mnoProvider?: string | null;
+  mnoWalletNumber?: string | null;
+  status: "DRAFT" | "SUBMITTED";
+  branchId?: string | null;
+  documents: LoanApplicationDocumentInput[];
+};
+
+export async function listLoanApplications(filter: { q?: string; status?: string } = {}): Promise<LoanApplicationListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<LoanApplicationListResponse>(`/settings/loan-applications${suffix}`);
+}
+
+export async function getLoanApplication(id: string): Promise<LoanApplicationResponse> {
+  return apiRequest<LoanApplicationResponse>(`/settings/loan-applications/${encodeURIComponent(id)}`);
+}
+
+export async function createLoanApplication(
+  payload: LoanApplicationInput,
+): Promise<LoanApplicationResponse> {
+  return apiRequest<LoanApplicationResponse>("/settings/loan-applications", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function listEconomicSectors(): Promise<{ items: EconomicSector[] }> {
+  return apiRequest<{ items: EconomicSector[] }>("/settings/economic-sectors");
+}
+
+export async function listLoanOfficers(): Promise<{ items: LoanOfficer[] }> {
+  return apiRequest<{ items: LoanOfficer[] }>("/settings/loan-officers");
+}
+
+export function loanApplicationDocumentUrl(applicationId: string, documentId: string): string {
+  return (
+    apiAssetUrl(
+      `/settings/loan-applications/${encodeURIComponent(applicationId)}/documents/${encodeURIComponent(documentId)}`,
+    ) ?? ""
+  );
 }

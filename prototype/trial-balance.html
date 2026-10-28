@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Trial balance · AIMSCAMS (prototype)</title>
+<style>
+  :root {
+    --ink: #121a17;
+    --ink-soft: #46524c;
+    --ink-faint: #6d7a73;
+    --paper: #f7f7f3;
+    --surface: #ffffff;
+    --line: #e3e3dc;
+    --line-strong: #cfd2c9;
+    --accent: #12715b;
+    --accent-soft: #e7f1ec;
+    --debit: #1d4b63;
+    --credit: #7a3f22;
+    --radius: 10px;
+    --shadow: 0 1px 2px rgba(18, 26, 23, .06), 0 8px 24px rgba(18, 26, 23, .06);
+    --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 14px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  a { color: inherit; }
+  .app { display: grid; grid-template-columns: 236px 1fr; min-height: 100vh; }
+
+  /* ---------- shell ---------- */
+  .rail {
+    background: #0e1b16;
+    color: #d9e2dc;
+    padding: 18px 14px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+  .brand { display: flex; align-items: baseline; gap: 7px; padding: 2px 8px 0; }
+  .brand b { font-size: 17px; letter-spacing: .14em; color: #fff; font-weight: 700; }
+  .brand span { font-size: 12px; letter-spacing: .22em; color: #8fb3a5; font-weight: 600; }
+  .rail nav { display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+  .rail .group { font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: #7f968c; padding: 14px 10px 6px; }
+  .rail a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 7px; text-decoration: none;
+    color: #c6d3cc; font-size: 13.5px;
+  }
+  .rail a .dot { width: 6px; height: 6px; border-radius: 50%; background: #3d5148; flex: none; }
+  .rail a:hover { background: #172a22; color: #fff; }
+  .rail a.active { background: #1b3529; color: #fff; }
+  .rail a.active .dot { background: #4fbf9b; }
+  .rail a.soon { color: #7d9188; cursor: default; }
+  .rail a.soon:hover { background: transparent; color: #7d9188; }
+  .rail .soon-tag { margin-left: auto; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: #6c8077; }
+  .rail footer { margin-top: auto; padding: 0 10px; font-size: 11px; color: #6f847a; line-height: 1.5; }
+
+  .main { min-width: 0; display: flex; flex-direction: column; }
+  .topbar {
+    height: 56px; background: var(--surface); border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 16px; padding: 0 26px;
+    position: sticky; top: 0; z-index: 20;
+  }
+  .crumb { color: var(--ink-faint); font-size: 12.5px; }
+  .crumb b { color: var(--ink); font-weight: 600; }
+  .topbar .spacer { flex: 1; }
+  .tenant { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--ink-soft); }
+  .tenant .swatch { width: 22px; height: 22px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 700; font-size: 11px; }
+  .tenant select { border: 1px solid var(--line); background: var(--surface); border-radius: 7px; padding: 5px 8px; font-size: 12.5px; }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; background: #dfe7e1; color: #2c443a; display: grid; place-items: center; font-size: 11.5px; font-weight: 700; }
+  .proto-tag { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8a6d2f; background: #f6edd8; border: 1px solid #e8d7ae; padding: 3px 7px; border-radius: 999px; }
+
+  .page { padding: 26px 30px 90px; max-width: 1240px; width: 100%; }
+  .page-head { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 20px; }
+  .page-head h1 { margin: 0 0 3px; font-size: 21px; letter-spacing: -.01em; font-weight: 650; }
+  .page-head p { margin: 0; color: var(--ink-faint); font-size: 12.5px; }
+  .page-head .right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+  .btn {
+    border: 1px solid var(--line-strong); background: var(--surface); border-radius: 7px;
+    padding: 6px 11px; font-size: 12.5px; cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { border-color: #b9bdb2; background: #fbfbf9; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:hover { background: #0e6150; }
+
+  /* ---------- shared bits ---------- */
+  .money { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+  .money.dr { color: var(--debit); }
+  .money.cr { color: var(--credit); }
+  .muted { color: var(--ink-faint); }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .toolbar label { font-size: 12px; color: var(--ink-faint); display: flex; align-items: center; gap: 6px; }
+  .toolbar select, .toolbar input[type="search"] {
+    border: 1px solid var(--line-strong); background: #fff; border-radius: 7px; padding: 5px 8px; font-size: 12.5px;
+  }
+  .toolbar input[type="search"] { min-width: 190px; }
+  .toolbar .grow { flex: 1; }
+  .checkline { display: flex; align-items: center; gap: 9px; }
+  .badge-ok { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #0f6a45; background: #e7f4ec; border: 1px solid #cbe6d6; padding: 4px 9px; border-radius: 999px; }
+  .badge-ok svg { width: 13px; height: 13px; }
+
+  /* ---------- variant A: ledger sheet ---------- */
+  .sheet { overflow: hidden; }
+  .sheet table { width: 100%; border-collapse: collapse; }
+  .sheet thead th {
+    text-align: left; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-faint); font-weight: 650; padding: 9px 14px; background: #fbfbf8;
+    border-bottom: 1px solid var(--line); position: sticky; top: 56px; z-index: 2;
+  }
+  .sheet thead th.num { text-align: right; }
+  .sheet tbody td { padding: 8px 14px; border-bottom: 1px solid #eef0ea; }
+  .sheet tbody tr:last-child td { border-bottom: none; }
+  .sheet tbody tr.group td { background: #f4f6f1; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #5d6a62; font-weight: 650; padding: 7px 14px; border-top: 1px solid var(--line); }
+  .sheet tbody tr.group:first-child td { border-top: none; }
+  .sheet td.num { text-align: right; }
+  .sheet .acct { display: flex; gap: 12px; align-items: baseline; }
+  .sheet .code { font-family: var(--mono); font-size: 11.5px; color: var(--ink-faint); width: 42px; flex: none; }
+  .sheet .name { font-size: 13.5px; }
+  .sheet tr.zero .name, .sheet tr.zero .money { color: #a4ada7; }
+  .sheet tr:hover td { background: #fcfcf9; }
+  .sheet tfoot td { padding: 11px 14px; background: #f4f6f1; border-top: 1px solid var(--line-strong); font-weight: 650; font-size: 13px; }
+  .sheet tfoot td.num { text-align: right; }
+  .sheet .empty { padding: 34px; text-align: center; color: var(--ink-faint); }
+  .tag-zero { font-size: 10px; color: var(--ink-faint); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; margin-left: 8px; }
+
+  /* ---------- variant B: t-account spine ---------- */
+  .spine { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; }
+  .spine .side { padding: 4px 26px 22px; }
+  .spine .side.right { border-left: 1px solid var(--line); }
+  .spine h2 { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin: 18px 0 4px; }
+  .spine h2:first-child { margin-top: 8px; }
+  .tl-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: baseline; padding: 9px 0 6px; border-bottom: 1px solid #eef0ea; }
+  .tl-row .who { min-width: 0; }
+  .tl-row .who .n { font-size: 13.5px; }
+  .tl-row .who .c { font-family: var(--mono); font-size: 11px; color: var(--ink-faint); }
+  .tl-row .amt { text-align: right; }
+  .bar { height: 3px; border-radius: 2px; background: #e9ece6; margin-top: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; border-radius: 2px; }
+  .bar.dr i { background: var(--debit); opacity: .55; }
+  .bar.cr i { background: var(--credit); opacity: .55; }
+  .spine-total { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 18px; border-top: 1px solid var(--line); background: #fbfbf8; }
+  .spine-total .big { font-family: var(--mono); font-size: 19px; font-weight: 600; }
+  .spine-total .eq { color: var(--ink-faint); }
+  .spine-note { padding: 0 20px 16px; text-align: center; color: var(--ink-faint); font-size: 11.5px; }
+
+  /* ---------- variant C: summary first ---------- */
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px; }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+  .kpi .k { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+  .kpi .v { font-family: var(--mono); font-size: 21px; margin-top: 6px; font-weight: 600; }
+  .kpi .s { font-size: 11.5px; color: var(--ink-faint); margin-top: 2px; }
+  .tie { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius); background: #edf6f0; border: 1px solid #cfe6d8; margin-bottom: 16px; }
+  .tie .check { width: 26px; height: 26px; border-radius: 50%; background: #cfe9da; color: #0f6a45; display: grid; place-items: center; flex: none; }
+  .tie b { font-size: 13px; }
+  .tie span { color: #40604f; font-size: 12.5px; }
+  .tie .right { margin-left: auto; font-family: var(--mono); font-size: 12.5px; color: #40604f; }
+  .acc-group { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); margin-bottom: 10px; overflow: hidden; }
+  .acc-group > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
+  .acc-group > summary::-webkit-details-marker { display: none; }
+  .acc-group > summary .chev { color: var(--ink-faint); transition: transform .15s ease; font-size: 10px; }
+  .acc-group[open] > summary .chev { transform: rotate(90deg); }
+  .acc-group > summary .t { font-weight: 600; font-size: 13.5px; }
+  .acc-group > summary .c { font-size: 11.5px; color: var(--ink-faint); }
+  .acc-group > summary .right { margin-left: auto; display: flex; gap: 18px; }
+  .acc-group .rows { border-top: 1px solid var(--line); }
+  .acc-group .r { display: grid; grid-template-columns: 1fr 130px 130px; gap: 10px; padding: 8px 16px; border-bottom: 1px solid #f0f2ec; align-items: center; }
+  .acc-group .r:last-child { border-bottom: none; }
+  .acc-group .r .who { display: flex; gap: 10px; align-items: baseline; min-width: 0; }
+  .acc-group .r .amt { text-align: right; }
+  .acc-group .r .who .bar { width: 100%; }
+  .legend { display: flex; gap: 16px; font-size: 11.5px; color: var(--ink-faint); margin: 14px 2px 0; }
+
+  /* ---------- switcher ---------- */
+  .switcher {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 60;
+    display: flex; align-items: center; gap: 6px;
+    background: #101a16; color: #e9f0eb; border-radius: 999px; padding: 5px 7px;
+    box-shadow: 0 14px 38px rgba(0,0,0,.28), 0 2px 6px rgba(0,0,0,.18);
+  }
+  .switcher button { background: transparent; border: 0; color: #d7e2db; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 15px; }
+  .switcher button:hover { background: #22332b; }
+  .switcher .label { font-size: 11.5px; letter-spacing: .05em; padding: 0 8px; min-width: 168px; text-align: center; }
+  .switcher .label b { color: #8fe0c0; font-weight: 700; letter-spacing: .1em; }
+  .switcher .hint { font-size: 10px; color: #7d9388; padding-right: 6px; }
+  @media (max-width: 980px) {
+    .app { grid-template-columns: 1fr; }
+    .rail { position: static; height: auto; flex-direction: row; align-items: center; overflow-x: auto; }
+    .rail nav { flex-direction: row; }
+    .rail .group, .rail footer, .soon-tag { display: none; }
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .spine { grid-template-columns: 1fr; }
+    .spine .side.right { border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand"><b>AIMS</b><span>CAMS</span></div>
+    <nav aria-label="Main navigation">
+      <div class="group">Overview</div>
+      <a class="soon" href="#">Dashboard <span class="soon-tag">soon</span></a>
+      <div class="group">Operations</div>
+      <a class="soon" href="#">Members <span class="soon-tag">soon</span></a>
+      <a class="soon" href="#">Savings <span class="soon-tag">soon</span></a>
+      <a class="soon" href="#">Shares <span class="soon-tag">soon</span></a>
+      <a class="soon" href="#">Loans <span class="soon-tag">soon</span></a>
+      <a class="soon" href="#">Tellers <span class="soon-tag">soon</span></a>
+      <div class="group">Accounting</div>
+      <a class="soon" href="#">Journal <span class="soon-tag">soon</span></a>
+      <a class="active" href="#" aria-current="page"><span class="dot"></span>Trial balance</a>
+      <a class="soon" href="#">Chart of accounts <span class="soon-tag">soon</span></a>
+      <div class="group">Reporting</div>
+      <a class="soon" href="#">Financial statements <span class="soon-tag">soon</span></a>
+      <a class="soon" href="#">Returns <span class="soon-tag">soon</span></a>
+      <a class="soon" href="#">Settings <span class="soon-tag">soon</span></a>
+    </nav>
+    <footer>
+      AIMSCAMS 0.0 prototype<br />
+      Synthetic data · no member records
+    </footer>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb">Accounting <span aria-hidden="true">/</span> <b>Trial balance</b></div>
+      <div class="spacer"></div>
+      <span class="proto-tag">Prototype</span>
+      <div class="tenant">
+        <span class="swatch">AD</span>
+        <select aria-label="Tenant">
+          <option>AIMS Demo SACCO</option>
+        </select>
+      </div>
+      <div class="avatar" title="Atilio Obadia">AO</div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Trial balance</h1>
+          <p>As at 31 October 2026 · Head office (MC) · TZS</p>
+        </div>
+        <div class="right">
+          <button class="btn" type="button">Export</button>
+          <button class="btn primary" type="button">New journal entry</button>
+        </div>
+      </div>
+      <div id="view"></div>
+    </main>
+  </div>
+</div>
+
+<div class="switcher" role="group" aria-label="Prototype variant">
+  <button id="prev" type="button" aria-label="Previous variant">←</button>
+  <div class="label"><b id="vkey">A</b> · <span id="vname">Ledger sheet</span></div>
+  <button id="next" type="button" aria-label="Next variant">→</button>
+  <span class="hint">← →</span>
+</div>
+
+<script>
+  // One month of synthetic postings, produced by the real ledger engine's
+  // scripted-week fixture plus share capital and bank charges. Minor units.
+  const ACCOUNTS = [
+    { code: '1002', name: 'Cash on hand',                type: 'Assets',      debit: 327500, credit: 0 },
+    { code: '1201', name: 'Loans receivable',             type: 'Assets',      debit: 200000, credit: 0 },
+    { code: '2101', name: 'Member savings',               type: 'Liabilities', debit: 0,      credit: 450000, assumption: true },
+    { code: '3404', name: 'Share capital',                type: 'Equity',      debit: 0,      credit: 50000 },
+    { code: '4001', name: 'Interest income – loans',      type: 'Income',      debit: 0,      credit: 20000 },
+    { code: '4101', name: 'Loan management fee',          type: 'Income',      debit: 0,      credit: 10000 },
+    { code: '5502', name: 'Bank charges',                 type: 'Expenses',    debit: 2500,   credit: 0 },
+  ];
+
+  const ZERO_ACCOUNTS = [
+    { code: '1003', name: 'Bank – CRDB', type: 'Assets', debit: 0, credit: 0 },
+    { code: '1005', name: 'Bank – NMB', type: 'Assets', debit: 0, credit: 0 },
+    { code: '1010', name: 'Teller cash', type: 'Assets', debit: 0, credit: 0 },
+    { code: '1205', name: 'Staff loans', type: 'Assets', debit: 0, credit: 0 },
+    { code: '1505', name: 'Interest receivable', type: 'Assets', debit: 0, credit: 0 },
+    { code: '2001', name: 'Tax payable', type: 'Liabilities', debit: 0, credit: 0 },
+    { code: '2004', name: 'Overpayments', type: 'Liabilities', debit: 0, credit: 0 },
+    { code: '2005', name: 'Accounts payable', type: 'Liabilities', debit: 0, credit: 0 },
+    { code: '4104', name: 'Loan penalty', type: 'Income', debit: 0, credit: 0 },
+    { code: '5001', name: 'Interest expense – member savings', type: 'Expenses', debit: 0, credit: 0 },
+    { code: '5004', name: 'Write-off – bad loans', type: 'Expenses', debit: 0, credit: 0 },
+  ];
+
+  const ORDER = ['Assets', 'Liabilities', 'Equity', 'Income', 'Expenses'];
+  const fmt = (minor) => (minor / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const totalDebit = (rows) => rows.reduce((t, r) => t + r.debit, 0);
+  const totalCredit = (rows) => rows.reduce((t, r) => t + r.credit, 0);
+  const sumOf = (rows, key) => rows.reduce((t, r) => t + Math.abs(r[key]), 0);
+
+  const variants = ['A', 'B', 'C'];
+  const names = { A: 'Ledger sheet', B: 'T-account spine', C: 'Summary first' };
+  const params = new URLSearchParams(location.search);
+  let current = variants.includes((params.get('variant') || '').toUpperCase())
+    ? (params.get('variant') || '').toUpperCase()
+    : 'A';
+  let showZero = false;
+  let query = '';
+
+  function toggleZero(checked) { showZero = checked; render(); }
+  function search(value) { query = value.trim().toLowerCase(); render(); }
+
+  function rowMatches(row) {
+    if (!query) return true;
+    return row.code.includes(query) || row.name.toLowerCase().includes(query);
+  }
+
+  function rowsFor(type, list) {
+    return list.filter((r) => r.type === type && rowMatches(r));
+  }
+
+  function moneyCell(value, side) {
+    return value === 0
+      ? '<span class="money muted">—</span>'
+      : '<span class="money ' + side + '">' + fmt(value) + '</span>';
+  }
+
+  /* ---------- A: one dense ledger sheet ---------- */
+  function viewA() {
+    const rows = showZero ? ACCOUNTS.concat(ZERO_ACCOUNTS) : ACCOUNTS;
+    let body = '';
+    for (const type of ORDER) {
+      const group = rowsFor(type, rows);
+      if (!group.length) continue;
+      body += '<tr class="group"><td colspan="3">' + type +
+        '<span style="float:right;font-family:var(--mono);letter-spacing:0;text-transform:none;color:#7b877f">' +
+        fmt(sumOf(group, 'debit')) + ' / ' + fmt(sumOf(group, 'credit')) + '</span></td></tr>';
+      for (const row of group) {
+        const zero = row.debit === 0 && row.credit === 0;
+        body += '<tr class="' + (zero ? 'zero' : '') + '">' +
+          '<td><div class="acct"><span class="code">' + row.code + '</span>' +
+          '<span class="name">' + row.name + (row.assumption ? '<span class="tag-zero" title="Not confirmed by a screenshot">assumption</span>' : '') + '</span></div></td>' +
+          '<td class="num">' + moneyCell(row.debit, 'dr') + '</td>' +
+          '<td class="num">' + moneyCell(row.credit, 'cr') + '</td>' +
+          '</tr>';
+      }
+    }
+    if (!body) body = '<tr><td class="empty" colspan="3">No account matches “' + query + '”.</td></tr>';
+
+    return '' +
+      '<section class="panel sheet" aria-label="Trial balance">' +
+        '<div class="toolbar">' +
+          '<label>Period <select><option>October 2026</option><option>September 2026</option></select></label>' +
+          '<label>Branch <select><option>All branches</option><option>Head office</option></select></label>' +
+          '<input type="search" placeholder="Search code or account" aria-label="Search accounts" value="' + query + '" oninput="search(this.value)" />' +
+          '<span class="grow"></span>' +
+          '<label><input type="checkbox" ' + (showZero ? 'checked' : '') + ' onchange="toggleZero(this.checked)" /> Show zero balances</label>' +
+        '</div>' +
+        '<table>' +
+          '<thead><tr><th>Account</th><th class="num" style="width:150px">Debit</th><th class="num" style="width:150px">Credit</th></tr></thead>' +
+          '<tbody>' + body + '</tbody>' +
+          '<tfoot><tr><td>Total</td>' +
+            '<td class="num"><span class="money dr">' + fmt(totalDebit(rows)) + '</span></td>' +
+            '<td class="num"><span class="money cr">' + fmt(totalCredit(rows)) + '</span></td>' +
+          '</tr></tfoot>' +
+        '</table>' +
+      '</section>';
+  }
+
+  /* ---------- B: two sides of one account ---------- */
+  function viewB() {
+    const rows = showZero ? ACCOUNTS.concat(ZERO_ACCOUNTS) : ACCOUNTS;
+    const max = Math.max.apply(null, rows.map((r) => Math.max(r.debit, r.credit)).concat([1]));
+
+    const side = (types, key, cls) => {
+      let out = '';
+      for (const type of types) {
+        const group = rowsFor(type, rows);
+        if (!group.length) continue;
+        out += '<h2>' + type + '</h2>';
+        for (const row of group) {
+          const amount = row[key];
+          const width = amount === 0 ? 0 : Math.max(3, Math.round((amount / max) * 100));
+          out += '<div class="tl-row">' +
+            '<div class="who"><div class="n">' + row.name + '</div><div class="c">' + row.code + '</div>' +
+              '<div class="bar ' + cls + '"><i style="width:' + width + '%"></i></div></div>' +
+            '<div class="amt">' + moneyCell(amount, cls) + '</div>' +
+          '</div>';
+        }
+      }
+      return out;
+    };
+
+    return '' +
+      '<section class="panel" aria-label="Trial balance, debit and credit sides">' +
+        '<div class="toolbar">' +
+          '<label>Period <select><option>October 2026</option></select></label>' +
+          '<span class="grow"></span>' +
+          '<label><input type="checkbox" ' + (showZero ? 'checked' : '') + ' onchange="toggleZero(this.checked)" /> Show zero balances</label>' +
+        '</div>' +
+        '<div class="spine">' +
+          '<div class="side">' +
+            '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 0">' +
+              '<b style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--debit)">Debit balances</b>' +
+              '<span class="money dr">' + fmt(totalDebit(rows)) + '</span>' +
+            '</div>' +
+            side(['Assets', 'Expenses'], 'debit', 'dr') +
+          '</div>' +
+          '<div></div>' +
+          '<div class="side right">' +
+            '<div style="display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 0">' +
+              '<b style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--credit)">Credit balances</b>' +
+              '<span class="money cr">' + fmt(totalCredit(rows)) + '</span>' +
+            '</div>' +
+            side(['Liabilities', 'Equity', 'Income'], 'credit', 'cr') +
+          '</div>' +
+        '</div>' +
+        '<div class="spine-total">' +
+          '<span class="big" style="color:var(--debit)">' + fmt(totalDebit(rows)) + '</span>' +
+          '<span class="eq">=</span>' +
+          '<span class="big" style="color:var(--credit)">' + fmt(totalCredit(rows)) + '</span>' +
+          '<span class="badge-ok"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3.2 3L13 5"/></svg>Balanced</span>' +
+        '</div>' +
+        '<div class="spine-note">Debits and credits at 31 October 2026. Bars are relative to the largest balance.</div>' +
+      '</section>';
+  }
+
+  /* ---------- C: answer the question first ---------- */
+  function viewC() {
+    const rows = showZero ? ACCOUNTS.concat(ZERO_ACCOUNTS) : ACCOUNTS;
+    const dr = totalDebit(rows);
+    const cr = totalCredit(rows);
+    const moved = rows.filter((r) => r.debit !== 0 || r.credit !== 0).length;
+
+    let groups = '';
+    ORDER.forEach((type, index) => {
+      const group = rowsFor(type, rows);
+      if (!group.length) return;
+      const groupDr = sumOf(group, 'debit');
+      const groupCr = sumOf(group, 'credit');
+      const open = index === 0 || query.length > 0;
+      groups += '<details class="acc-group"' + (open ? ' open' : '') + '>' +
+        '<summary><span class="chev">▶</span><span class="t">' + type + '</span>' +
+          '<span class="c">' + group.length + ' account' + (group.length === 1 ? '' : 's') + '</span>' +
+          '<span class="right">' +
+            '<span class="money dr">' + (groupDr ? fmt(groupDr) : '—') + '</span>' +
+            '<span class="money cr">' + (groupCr ? fmt(groupCr) : '—') + '</span>' +
+          '</span></summary>' +
+        '<div class="rows">';
+      for (const row of group) {
+        const amount = row.debit || row.credit;
+        const width = amount === 0 ? 0 : Math.max(2, Math.round((amount / Math.max(dr, 1)) * 100));
+        groups += '<div class="r">' +
+          '<div class="who"><div style="flex:1"><div>' + row.name +
+            (row.assumption ? ' <span class="tag-zero">assumption</span>' : '') + '</div>' +
+            '<div class="bar ' + (row.debit ? 'dr' : 'cr') + '"><i style="width:' + width + '%"></i></div></div></div>' +
+          '<div class="amt">' + moneyCell(row.debit, 'dr') + '</div>' +
+          '<div class="amt">' + moneyCell(row.credit, 'cr') + '</div>' +
+        '</div>';
+      }
+      groups += '</div></details>';
+    });
+
+    return '' +
+      '<section class="kpis" aria-label="Trial balance summary">' +
+        '<div class="kpi"><div class="k">Total debits</div><div class="v" style="color:var(--debit)">' + fmt(dr) + '</div><div class="s">All posted entries to date</div></div>' +
+        '<div class="kpi"><div class="k">Total credits</div><div class="v" style="color:var(--credit)">' + fmt(cr) + '</div><div class="s">All posted entries to date</div></div>' +
+        '<div class="kpi"><div class="k">Difference</div><div class="v">' + fmt(dr - cr) + '</div><div class="s">Must be zero</div></div>' +
+        '<div class="kpi"><div class="k">Accounts with movement</div><div class="v">' + moved + '</div><div class="s">of ' + rows.length + ' in the chart</div></div>' +
+      '</section>' +
+      '<div class="tie">' +
+        '<span class="check"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3.2 3L13 5"/></svg></span>' +
+        '<div><b>The book balances.</b><span> Debits equal credits at 31 October 2026.</span></div>' +
+        '<span class="right">' + fmt(dr) + ' = ' + fmt(cr) + '</span>' +
+      '</div>' +
+      '<div class="toolbar" style="border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:10px">' +
+        '<input type="search" placeholder="Search code or account" aria-label="Search accounts" value="' + query + '" oninput="search(this.value)" />' +
+        '<span class="grow"></span>' +
+        '<label><input type="checkbox" ' + (showZero ? 'checked' : '') + ' onchange="toggleZero(this.checked)" /> Show zero balances</label>' +
+      '</div>' +
+      groups +
+      '<div class="legend"><span>Left: debit balance</span><span>Right: credit balance</span><span>Rows scaled to the largest balance</span></div>';
+  }
+
+  function render() {
+    const view = document.getElementById('view');
+    view.innerHTML = current === 'A' ? viewA() : current === 'B' ? viewB() : viewC();
+    document.getElementById('vkey').textContent = current;
+    document.getElementById('vname').textContent = names[current];
+    const url = new URL(location.href);
+    url.searchParams.set('variant', current);
+    history.replaceState(null, '', url);
+  }
+
+  function go(step) {
+    const index = variants.indexOf(current);
+    current = variants[(index + step + variants.length) % variants.length];
+    render();
+  }
+
+  document.getElementById('prev').addEventListener('click', () => go(-1));
+  document.getElementById('next').addEventListener('click', () => go(1));
+
+  document.addEventListener('keydown', (event) => {
+    const tag = (event.target && event.target.tagName) || '';
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(tag) || (event.target && event.target.isContentEditable)) return;
+    if (event.key === 'ArrowLeft') go(-1);
+    if (event.key === 'ArrowRight') go(1);
+  });
+
+  render();
+</script>
+</body>
+</html>

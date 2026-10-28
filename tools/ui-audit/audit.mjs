@@ -248,6 +248,7 @@ async function measureDashboard(page) {
       logo: logo
         ? {
             ...box(logo),
+            radius: getComputedStyle(logo).borderRadius,
             image: logoImage
               ? {
                   ...box(logoImage),
@@ -630,21 +631,29 @@ for (const viewport of viewports) {
     { actual: measured.header?.boxShadow },
   );
 
-  check(`${label} tenant logo is an image`, measured.logo?.image?.naturalWidth > 0, {
-    actual: measured.logo,
-  });
-  check(
-    `${label} tenant logo keeps its ratio`,
-    measured.logo?.image?.objectFit === "contain",
-    { actual: measured.logo?.image?.objectFit },
-  );
-  near(`${label} tenant logo height`, measured.logo?.image?.h ?? 0, 28, 0.8);
-  check(
-    `${label} tenant logo width is capped`,
-    (measured.logo?.image?.w ?? 999) <= 190.5,
-    { actual: measured.logo?.image?.w },
-  );
+  near(`${label} tenant logo width`, measured.logo?.w ?? 0, 40, 0.8);
+  near(`${label} tenant logo height`, measured.logo?.h ?? 0, 40, 0.8);
   near(`${label} tenant logo sits on the header padding`, measured.logo?.x ?? 0, 14, 0.6);
+  if (measured.logo?.image) {
+    check(`${label} tenant logo image loads`, measured.logo.image.naturalWidth > 0, {
+      actual: measured.logo.image,
+    });
+    check(
+      `${label} tenant logo image is contained`,
+      measured.logo.image.objectFit === "contain",
+      { actual: measured.logo.image.objectFit },
+    );
+  } else {
+    const expectedInitials = (measured.institution?.name?.text ?? "")
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 3)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+    equal(`${label} tenant logo monogram`, measured.logo?.monogram, expectedInitials);
+  }
   near(`${label} institution name size`, Number.parseFloat(measured.institution?.name?.fontSize ?? "0"), 12.8, 0.05);
   equal(`${label} institution name weight`, measured.institution?.name?.fontWeight, "600");
   equal(`${label} institution name colour`, measured.institution?.name?.color, "rgb(73, 80, 87)");
@@ -745,9 +754,11 @@ for (const viewport of viewports) {
   const segment = targetUrl.pathname.split("/").filter(Boolean)[0] ?? "";
   const expectedTop = segment.startsWith("accounting")
     ? "Accounting"
-    : segment.startsWith("settings")
-      ? "Settings"
-      : (topLevelLabels[segment] ?? null);
+    : segment.startsWith("account-")
+      ? "Accounts"
+      : segment.startsWith("settings")
+        ? "Settings"
+        : (topLevelLabels[segment] ?? null);
   const activeTop = measured.nav.find((item) => item.active);
   const activeSub = measured.subitems.find((item) => item.active);
   const inactive =
@@ -825,8 +836,8 @@ for (const viewport of viewports) {
   );
   near(`${label} footer copyright size`, Number.parseFloat(measured.footer?.copyright?.fontSize ?? "0"), 12.8, 0.05);
 
-  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 44, 0.5);
-  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 44, 0.5);
+  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 28, 0.5);
+  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 28, 0.5);
   near(
     `${label} collapse control straddles the rail`,
     (measured.toggle?.x ?? 0) + (measured.toggle?.w ?? 0) / 2,
@@ -836,7 +847,7 @@ for (const viewport of viewports) {
   near(
     `${label} collapse control sits above the footer`,
     (measured.footer?.y ?? 0) - ((measured.toggle?.y ?? 0) + (measured.toggle?.h ?? 0)),
-    6,
+    12,
     2,
   );
   equal(`${label} collapse control is expanded`, measured.toggle?.ariaExpanded, "true");
