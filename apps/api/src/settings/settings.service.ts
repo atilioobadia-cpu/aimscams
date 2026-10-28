@@ -2268,6 +2268,7 @@ export class SettingsService {
       productName: item.product?.name ?? null,
       productCode: item.product?.code ?? null,
       applicationNo: item.application?.applicationNo ?? null,
+      applicationId: item.applicationId ?? null,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };
