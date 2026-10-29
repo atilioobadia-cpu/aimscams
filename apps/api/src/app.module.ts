@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { AccountingModule } from './accounting/accounting.module.js';
 import { SettingsModule } from './settings/settings.module.js';
 import { TransactionsModule } from './transactions/transactions.module.js';
+import { MessagesModule } from './messages/messages.module.js';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TransactionsModule } from './transactions/transactions.module.js';
     AccountingModule,
     SettingsModule,
     TransactionsModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -68,6 +68,9 @@ function isItemActive(pathname: string, item: NavItem): boolean {
   if (item.href === "/import") {
     return pathname === "/import" || pathname.startsWith("/import-");
   }
+  if (item.href === "/messages") {
+    return pathname === "/messages" || pathname.startsWith("/messages-");
+  }
   if (item.href === "/transactions") {
     return pathname === "/transactions" || pathname.startsWith("/transaction-");
   }

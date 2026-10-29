@@ -768,6 +768,8 @@ for (const viewport of viewports) {
         ? "Reports"
         : segment.startsWith("import-")
         ? "Import"
+        : segment.startsWith("messages-")
+        ? "Messages"
         : segment.startsWith("settings")
         ? "Settings"
         : (topLevelLabels[segment] ?? null);
