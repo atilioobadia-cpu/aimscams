@@ -45,6 +45,7 @@ const navIcons: Record<NavIcon, LucideIcon> = {
 type AppSidebarProps = {
   collapsed: boolean;
   onToggle: () => void;
+  isAdmin?: boolean;
 };
 
 function isActivePath(pathname: string, href: string): boolean {
@@ -87,6 +88,7 @@ function SidebarItem({
   active,
   expanded,
   onToggleExpand,
+  isAdmin,
 }: {
   item: NavItem;
   pathname: string;
@@ -94,6 +96,7 @@ function SidebarItem({
   active: boolean;
   expanded: boolean;
   onToggleExpand: () => void;
+  isAdmin?: boolean;
 }) {
   const Icon = navIcons[item.icon];
   const label = item.disabled ? `${item.label} (coming soon)` : item.label;
@@ -214,13 +217,15 @@ function SidebarItem({
         </div>
         {expanded ? (
           <ul className="m-0 flex list-none flex-col gap-[2px] p-0">
-            {item.children.map((child) => (
-              <SidebarChild
-                key={child.href}
-                child={child}
-                active={isActivePath(pathname, child.href)}
-              />
-            ))}
+            {item.children
+              .filter((child) => !(child.href === "/system-logs" && !isAdmin))
+              .map((child) => (
+                <SidebarChild
+                  key={child.href}
+                  child={child}
+                  active={isActivePath(pathname, child.href)}
+                />
+              ))}
           </ul>
         ) : null}
       </li>
@@ -273,7 +278,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
   );
 }
 
-export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
+export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
   const pathname = usePathname();
   const activeGroup = navItems.find((item) =>
     item.children && isItemActive(pathname, item),
@@ -318,6 +323,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                 collapsed={collapsed}
                 active={active}
                 expanded={expanded}
+                isAdmin={isAdmin}
                 onToggleExpand={() =>
                   setExpandedGroups((current) => {
                     const next = new Set(current);

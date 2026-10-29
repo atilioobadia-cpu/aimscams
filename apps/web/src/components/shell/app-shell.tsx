@@ -53,7 +53,7 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
         </a>
 
         <AppHeader institution={institution} branch={branch} user={user} />
-        <AppSidebar collapsed={collapsed} onToggle={toggleSidebar} />
+        <AppSidebar collapsed={collapsed} onToggle={toggleSidebar} isAdmin={user.role.includes("Admin")} />
 
         <main
           id="main-content"

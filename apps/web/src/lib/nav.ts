@@ -112,6 +112,7 @@ export const navItems: NavItem[] = [
       { label: "Users", icon: "clients", href: "/settings-administrator" },
       { label: "Roles", icon: "settings", href: "/settings-role" },
       { label: "Services", icon: "settings", href: "/settings/services" },
+      { label: "System logs", icon: "settings", href: "/system-logs" },
     ],
   },
 ];
