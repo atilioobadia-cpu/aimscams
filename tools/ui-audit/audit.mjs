@@ -1161,21 +1161,16 @@ for (const viewport of viewports) {
       "active",
     );
     check(
-      `${label} Members tab shows its empty state`,
-      await page.getByRole("heading", { name: /Member analytics/i }).isVisible(),
-      {},
-    );
-    check(
-      `${label} Members tab hides the KPI grid`,
-      !(await page.getByTestId("kpi-card").first().isVisible()),
+      `${label} Members tab shows member analytics`,
+      await page.getByText("Total members").isVisible(),
       {},
     );
 
     await page.getByTestId("dashboard-tab-loans").click();
     await page.waitForTimeout(250);
     check(
-      `${label} Loans tab shows its empty state`,
-      await page.getByRole("heading", { name: /Loan analytics/i }).isVisible(),
+      `${label} Loans tab shows loan analytics`,
+      await page.getByText("Total loans").isVisible(),
       {},
     );
 
