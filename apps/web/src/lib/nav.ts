@@ -83,7 +83,20 @@ export const navItems: NavItem[] = [
     badge: "Soon",
   },
   { label: "Reports", icon: "reports", href: "/reports", chevron: true },
-  { label: "Import", icon: "import", href: "/import", chevron: true },
+  {
+    label: "Import",
+    icon: "import",
+    href: "/import",
+    chevron: true,
+    children: [
+      { label: "Member batches", icon: "import", href: "/import-member" },
+      { label: "Member wizard", icon: "import", href: "/import-member-new" },
+      { label: "Account batches", icon: "import", href: "/import-account" },
+      { label: "Account wizard", icon: "import", href: "/import-account-new" },
+      { label: "Transaction batches", icon: "import", href: "/import-transaction" },
+      { label: "Transaction wizard", icon: "import", href: "/import-transaction-new" },
+    ],
+  },
   { label: "Business Account", icon: "business-account", href: "/business-account" },
   {
     label: "Settings",

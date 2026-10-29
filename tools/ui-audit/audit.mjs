@@ -713,7 +713,7 @@ for (const viewport of viewports) {
     { actual: measured.nav.map((item) => ({ label: item.label, href: item.href })) },
   );
 
-  const groupLabels = ["Accounts", "Transactions", "Accounting", "Settings"];
+  const groupLabels = ["Accounts", "Transactions", "Accounting", "Import", "Settings"];
   const standardRows = measured.nav.filter((item) => !groupLabels.includes(item.label));
   const settingsRow = measured.nav.find((item) => item.label === "Settings");
   check(
@@ -814,7 +814,7 @@ for (const viewport of viewports) {
   equal(`${label} nav radius`, inactive?.radius, "6px");
   equal(`${label} nav icon gap`, inactive?.gap, "8px");
 
-  const chevronItems = ["Reports", "Import"];
+  const chevronItems = ["Reports"];
   check(
     `${label} chevrons are on the expandable rows`,
     measured.nav
