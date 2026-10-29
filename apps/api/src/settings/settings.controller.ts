@@ -39,6 +39,12 @@ export class SettingsController {
     return this.settings.getOrganisation(auth);
   }
 
+  @Get('clients/next-reference')
+  @RequirePermissions('Client : Create')
+  async nextClientReference(@CurrentAuth() auth: AuthContext) {
+    return this.settings.nextClientReference(auth);
+  }
+
   @Get('system-logs')
   @RequirePermissions('System Log : View')
   async systemLogs(@CurrentAuth() auth: AuthContext, @Query() query: Record<string, unknown>) {

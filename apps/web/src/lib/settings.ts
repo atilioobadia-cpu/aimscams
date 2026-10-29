@@ -1088,6 +1088,10 @@ export async function listLoanOfficers(): Promise<{ items: LoanOfficer[] }> {
   return apiRequest<{ items: LoanOfficer[] }>("/settings/loan-officers");
 }
 
+export function getNextClientReference(): Promise<{ referenceNo: string }> {
+  return apiRequest<{ referenceNo: string }>("/settings/clients/next-reference");
+}
+
 export type SystemLogEntry = {
   id: string;
   actor: string;

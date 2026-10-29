@@ -1497,6 +1497,19 @@ export class SettingsService {
     return { status: String(body.status ?? 'COMPLETED') };
   }
 
+  async nextClientReference(auth: AuthContext): Promise<{ referenceNo: string }> {
+    const organisationId = auth.user.organisation.id;
+    const existing = await this.prisma.client.findMany({
+      where: { organisationId },
+      select: { referenceNo: true },
+    });
+    const max = existing.reduce((current, item) => {
+      const value = Number.parseInt(item.referenceNo, 10);
+      return Number.isFinite(value) && value > current ? value : current;
+    }, 0);
+    return { referenceNo: String(max + 1).padStart(6, '0') };
+  }
+
   async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string }) {
     const organisationId = auth.user.organisation.id;
     const where: Prisma.ClientWhereInput = { organisationId };
