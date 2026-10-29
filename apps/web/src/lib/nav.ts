@@ -35,9 +35,38 @@ export type NavItem = {
 export const navItems: NavItem[] = [
   { label: "Dashboard", icon: "dashboard", href: "/dashboard" },
   { label: "Client", icon: "clients", href: "/clients" },
-  { label: "Accounts", icon: "accounts", href: "/accounts", chevron: true },
-  { label: "Transactions", icon: "transactions", href: "/transactions", chevron: true },
-  { label: "Accounting", icon: "accounting", href: "/accounting", chevron: true },
+  {
+    label: "Accounts",
+    icon: "accounts",
+    href: "/accounts",
+    chevron: true,
+    children: [
+      { label: "Loan applications", icon: "accounts", href: "/account-loan-application" },
+      { label: "Loans", icon: "accounts", href: "/account-loan" },
+      { label: "Savings", icon: "accounts", href: "/account-saving" },
+    ],
+  },
+  {
+    label: "Transactions",
+    icon: "transactions",
+    href: "/transactions",
+    chevron: true,
+    children: [
+      { label: "All transactions", icon: "transactions", href: "/transaction-all-transaction" },
+      { label: "Teller console", icon: "transactions", href: "/transaction-teller-transaction" },
+    ],
+  },
+  {
+    label: "Accounting",
+    icon: "accounting",
+    href: "/accounting",
+    chevron: true,
+    children: [
+      { label: "Chart of accounts", icon: "accounting", href: "/accounting-chart-of-accounts" },
+      { label: "Journal entries", icon: "accounting", href: "/accounting-entries" },
+      { label: "Ledger entries", icon: "accounting", href: "/accounting-ledger-entries" },
+    ],
+  },
   { label: "Requests", icon: "requests", href: "/requests" },
   { label: "Messages", icon: "messages", href: "/messages" },
   {

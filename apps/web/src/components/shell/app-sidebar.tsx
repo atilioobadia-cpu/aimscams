@@ -267,7 +267,8 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
 export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const pathname = usePathname();
   const activeGroup = navItems.find((item) =>
-    item.children?.some((child) => isActivePath(pathname, child.href)),
+    item.children &&
+    (pathname === item.href || item.children.some((child) => isActivePath(pathname, child.href))),
   );
   const [manuallyExpandedGroup, setManuallyExpandedGroup] = useState<string | null>(null);
   const expandedGroup = activeGroup?.label ?? manuallyExpandedGroup;

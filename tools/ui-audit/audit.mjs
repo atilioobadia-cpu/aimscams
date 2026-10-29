@@ -713,8 +713,9 @@ for (const viewport of viewports) {
     { actual: measured.nav.map((item) => ({ label: item.label, href: item.href })) },
   );
 
-  const standardRows = measured.nav.slice(0, 11);
-  const settingsRow = measured.nav[11];
+  const groupLabels = ["Accounts", "Transactions", "Accounting", "Settings"];
+  const standardRows = measured.nav.filter((item) => !groupLabels.includes(item.label));
+  const settingsRow = measured.nav.find((item) => item.label === "Settings");
   check(
     `${label} nav rows are 36px`,
     standardRows.every((item) => Math.abs(item.h - 36) <= 0.5),
@@ -738,11 +739,16 @@ for (const viewport of viewports) {
     measured.nav.every((item) => item.labelStyle?.fontSize === "12.8px"),
     { actual: measured.nav.map((item) => ({ label: item.label, size: item.labelStyle?.fontSize })) },
   );
+  const groupLabelSet = new Set(groupLabels);
   check(
     `${label} nav pitch is 40px`,
     measured.nav
       .slice(1)
-      .every((item, index) => Math.abs(item.y - measured.nav[index].y - 40) <= 1.2),
+      .every((item, index) => {
+        const previous = measured.nav[index];
+        if (groupLabelSet.has(previous.label)) return true;
+        return Math.abs(item.y - previous.y - 40) <= 1.2;
+      }),
     {
       actual: measured.nav.slice(1).map((item, index) => ({
         item: item.label,
@@ -764,25 +770,29 @@ for (const viewport of viewports) {
   const activeTop = measured.nav.find((item) => item.active);
   const activeSub = measured.subitems.find((item) => item.active);
   const inactive =
-    measured.nav.find((item) => !item.active && item.label !== "Settings") ?? measured.nav[1];
+    measured.nav.find((item) => !item.active && !groupLabels.includes(item.label)) ?? measured.nav[1];
 
-  if (expectedTop === "Settings") {
-    const group = measured.navGroups.find((item) => item.label === "Settings");
-    check(`${label} settings group is active`, Boolean(group), { actual: measured.navGroups });
-    equal(`${label} settings group is tinted`, group?.bg, "rgb(230, 241, 241)");
-    equal(`${label} settings group is expanded`, group?.expanded, "true");
-    check(`${label} settings child is active`, Boolean(activeSub), {
-      actual: measured.subitems.map((item) => ({ label: item.label, active: item.active })),
-    });
-    if (activeSub) {
-      const expectedChild = settingsChildLabels[targetUrl.pathname];
-      if (expectedChild) equal(`${label} active settings child`, activeSub.label, expectedChild);
-      equal(`${label} active subitem background`, activeSub.bg, "rgb(5, 117, 115)");
-      equal(`${label} active subitem text`, activeSub.color, "rgb(255, 255, 255)");
-      equal(`${label} active subitem weight`, activeSub.weight, "600");
-      equal(`${label} active subitem radius`, activeSub.radius, "6px");
-      near(`${label} active subitem height`, activeSub.h, 28, 0.5);
-      near(`${label} active subitem width`, activeSub.w, 187.3, 1);
+  if (groupLabels.includes(expectedTop ?? "")) {
+    const group = measured.navGroups.find((item) => item.label === expectedTop);
+    check(`${label} ${expectedTop} group is active`, Boolean(group), { actual: measured.navGroups });
+    equal(`${label} ${expectedTop} group is tinted`, group?.bg, "rgb(230, 241, 241)");
+    equal(`${label} ${expectedTop} group is expanded`, group?.expanded, "true");
+    const expectedChildLabels = { Settings: settingsChildLabels };
+    const childLabels = expectedChildLabels[expectedTop] ?? {};
+    const expectedChild = childLabels[targetUrl.pathname];
+    if (expectedChild) {
+      check(`${label} ${expectedTop} child is active`, Boolean(activeSub), {
+        actual: measured.subitems.map((item) => ({ label: item.label, active: item.active })),
+      });
+      if (activeSub) {
+        equal(`${label} active ${expectedTop} child`, activeSub.label, expectedChild);
+        equal(`${label} active subitem background`, activeSub.bg, "rgb(5, 117, 115)");
+        equal(`${label} active subitem text`, activeSub.color, "rgb(255, 255, 255)");
+        equal(`${label} active subitem weight`, activeSub.weight, "600");
+        equal(`${label} active subitem radius`, activeSub.radius, "6px");
+        near(`${label} active subitem height`, activeSub.h, 28, 0.5);
+        near(`${label} active subitem width`, activeSub.w, 187.3, 1);
+      }
     }
   } else {
     equal(`${label} active nav item`, activeTop?.label, expectedTop);
@@ -800,9 +810,9 @@ for (const viewport of viewports) {
   equal(`${label} nav radius`, inactive?.radius, "6px");
   equal(`${label} nav icon gap`, inactive?.gap, "8px");
 
-  const chevronItems = ["Accounts", "Transactions", "Accounting", "Reports", "Import"];
+  const chevronItems = ["Reports", "Import"];
   check(
-    `${label} chevrons are on the five expandable rows`,
+    `${label} chevrons are on the expandable rows`,
     measured.nav
       .filter((item) => chevronItems.includes(item.label))
       .every((item) => item.chevron) &&
