@@ -75,6 +75,8 @@ model Organisation {
   loanApplicationDocuments LoanApplicationDocument[]
   loans            Loan[]
   loanSchedules    LoanSchedule[]
+  tillSessions     TillSession[]
+  transactions     Transaction[]
 
   @@map("organisation")
 }
@@ -105,6 +107,8 @@ model Branch {
   loanApplications LoanApplication[]
   savingsAccounts SavingsAccount[]
   loans            Loan[]
+  tillSessions     TillSession[]
+  transactions     Transaction[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
@@ -153,6 +157,7 @@ model User {
   loginAttempts       LoginAttempt[]
   auditEvents         AuditEvent[]
   loanApplicationsAsOfficer LoanApplication[]
+  tillSessions              TillSession[]
 
   @@unique([organisationId, email])
   @@index([organisationId, status])
@@ -588,6 +593,7 @@ model Client {
   savingsAccounts SavingsAccount[]
   loanApplications LoanApplication[]
   loans            Loan[]
+  transactions     Transaction[]
 
   @@unique([organisationId, referenceNo])
   @@index([organisationId, status])
@@ -629,6 +635,7 @@ model SavingsAccount {
   branch       Branch?       @relation(fields: [branchId], references: [id], onDelete: SetNull)
   client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
   product      SavingsProduct? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  transactions Transaction[]
 
   @@unique([organisationId, accountNumber])
   @@index([organisationId, status])
@@ -748,6 +755,7 @@ model Loan {
   product      LoanProduct?  @relation(fields: [productId], references: [id], onDelete: SetNull)
   application  LoanApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
   schedule     LoanSchedule[]
+  transactions Transaction[]
 
   @@unique([organisationId, loanNumber])
   @@index([organisationId, status])
@@ -792,6 +800,72 @@ enum LoanStatus {
   CLOSED
   WRITTEN_OFF
   REJECTED
+}
+
+model TillSession {
+  id                  String   @id @default(uuid()) @db.Uuid
+  organisationId      String   @db.Uuid
+  branchId            String?  @db.Uuid
+  tellerId            String   @db.Uuid
+  businessDate        DateTime @db.Date
+  openingFloatMinor   BigInt   @default(0)
+  closingCountedMinor BigInt?
+  systemBalanceMinor  BigInt?
+  varianceMinor       BigInt?
+  status              String   @default("OPEN")
+  openedAt            DateTime @default(now())
+  closedAt            DateTime?
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  teller       User         @relation(fields: [tellerId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@unique([tellerId, businessDate])
+  @@index([organisationId, status])
+  @@map("till_session")
+}
+
+model Transaction {
+  id                String   @id @default(uuid()) @db.Uuid
+  organisationId    String   @db.Uuid
+  branchId          String?  @db.Uuid
+  tillSessionId     String?  @db.Uuid
+  transactionNo     String
+  type              String
+  category          String
+  clientId          String?  @db.Uuid
+  savingsAccountId  String?  @db.Uuid
+  loanId            String?  @db.Uuid
+  amountMinor       BigInt
+  drCr              String
+  paymentMethod     String?
+  valueDate         DateTime? @db.Date
+  chequeNo          String?
+  receiptNo         String?
+  externalRef       String?
+  provider          String?
+  status            String   @default("SUBMITTED")
+  accountingStatus  String   @default("PENDING")
+  idempotencyKey    String?
+  createdByUserId   String?  @db.Uuid
+  approvedByUserId  String?  @db.Uuid
+  reversedByUserId  String?  @db.Uuid
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  organisation Organisation  @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?       @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  tillSession  TillSession?  @relation(fields: [tillSessionId], references: [id], onDelete: SetNull)
+  client       Client?       @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  savingsAccount SavingsAccount? @relation(fields: [savingsAccountId], references: [id], onDelete: SetNull)
+  loan         Loan?         @relation(fields: [loanId], references: [id], onDelete: SetNull)
+
+  @@unique([organisationId, transactionNo])
+  @@index([organisationId, status])
+  @@index([clientId])
+  @@index([loanId])
+  @@map("transaction")
 }
 
 enum LoanTenurePeriod {
