@@ -10,7 +10,26 @@ export type NavIcon =
   | "reports"
   | "import"
   | "business-account"
-  | "settings";
+  | "settings"
+  | "book"
+  | "building"
+  | "package"
+  | "shield"
+  | "users"
+  | "scroll"
+  | "wrench"
+  | "file"
+  | "landmark"
+  | "piggy"
+  | "receipt"
+  | "card"
+  | "clock"
+  | "check"
+  | "refresh"
+  | "box"
+  | "library"
+  | "scale"
+  | "chart";
 
 export type NavChild = {
   label: string;
@@ -28,10 +47,6 @@ export type NavItem = {
   children?: NavChild[];
 };
 
-/**
- * Preserve the 12 top-level destinations. Every href resolves: unbuilt modules render
- * the shared ComingSoon page (D-027), so no entry is a dead link.
- */
 export const navItems: NavItem[] = [
   { label: "Dashboard", icon: "dashboard", href: "/dashboard" },
   { label: "Client", icon: "clients", href: "/clients" },
@@ -41,9 +56,9 @@ export const navItems: NavItem[] = [
     href: "/accounts",
     chevron: true,
     children: [
-      { label: "Loan applications", icon: "accounts", href: "/account-loan-application" },
-      { label: "Loans", icon: "accounts", href: "/account-loan" },
-      { label: "Savings", icon: "accounts", href: "/account-saving" },
+      { label: "Loan applications", icon: "file", href: "/account-loan-application" },
+      { label: "Loans", icon: "landmark", href: "/account-loan" },
+      { label: "Savings", icon: "piggy", href: "/account-saving" },
     ],
   },
   {
@@ -52,12 +67,12 @@ export const navItems: NavItem[] = [
     href: "/transactions",
     chevron: true,
     children: [
-      { label: "All transactions", icon: "transactions", href: "/transaction-all-transaction" },
-      { label: "Teller console", icon: "transactions", href: "/transaction-teller-transaction" },
-      { label: "Teller history", icon: "transactions", href: "/transaction-teller-transaction-history" },
-      { label: "Teller approval request", icon: "transactions", href: "/transaction-teller-transaction-request" },
-      { label: "Online collections", icon: "transactions", href: "/transaction-online-transaction" },
-      { label: "Reconciliation", icon: "transactions", href: "/transaction-online-payment-reconciliation" },
+      { label: "All transactions", icon: "receipt", href: "/transaction-all-transaction" },
+      { label: "Teller console", icon: "card", href: "/transaction-teller-transaction" },
+      { label: "Teller history", icon: "clock", href: "/transaction-teller-transaction-history" },
+      { label: "Teller approval request", icon: "check", href: "/transaction-teller-transaction-request" },
+      { label: "Online collections", icon: "refresh", href: "/transaction-online-transaction" },
+      { label: "Reconciliation", icon: "box", href: "/transaction-online-payment-reconciliation" },
     ],
   },
   {
@@ -66,12 +81,12 @@ export const navItems: NavItem[] = [
     href: "/accounting",
     chevron: true,
     children: [
-      { label: "Chart of accounts", icon: "accounting", href: "/accounting-chart-of-accounts" },
-      { label: "Journal entries", icon: "accounting", href: "/accounting-entries" },
-      { label: "Ledger entries", icon: "accounting", href: "/accounting-ledger-entries" },
-      { label: "Asset types", icon: "accounting", href: "/accounting-assets" },
-      { label: "Fixed assets", icon: "accounting", href: "/accounting-fixed-asset" },
-      { label: "Financial reports", icon: "accounting", href: "/accounting-reports" },
+      { label: "Chart of accounts", icon: "library", href: "/accounting-chart-of-accounts" },
+      { label: "Journal entries", icon: "file", href: "/accounting-entries" },
+      { label: "Ledger entries", icon: "scroll", href: "/accounting-ledger-entries" },
+      { label: "Asset types", icon: "box", href: "/accounting-assets" },
+      { label: "Fixed assets", icon: "building", href: "/accounting-fixed-asset" },
+      { label: "Financial reports", icon: "chart", href: "/accounting-reports" },
     ],
   },
   { label: "Requests", icon: "requests", href: "/requests" },
@@ -89,12 +104,12 @@ export const navItems: NavItem[] = [
     href: "/import",
     chevron: true,
     children: [
-      { label: "Member batches", icon: "import", href: "/import-member" },
-      { label: "Member wizard", icon: "import", href: "/import-member-new" },
-      { label: "Account batches", icon: "import", href: "/import-account" },
-      { label: "Account wizard", icon: "import", href: "/import-account-new" },
-      { label: "Transaction batches", icon: "import", href: "/import-transaction" },
-      { label: "Transaction wizard", icon: "import", href: "/import-transaction-new" },
+      { label: "Member batches", icon: "file", href: "/import-member" },
+      { label: "Member wizard", icon: "check", href: "/import-member-new" },
+      { label: "Account batches", icon: "receipt", href: "/import-account" },
+      { label: "Account wizard", icon: "card", href: "/import-account-new" },
+      { label: "Transaction batches", icon: "scroll", href: "/import-transaction" },
+      { label: "Transaction wizard", icon: "refresh", href: "/import-transaction-new" },
     ],
   },
   { label: "Business Account", icon: "business-account", href: "/business-account" },
@@ -105,14 +120,14 @@ export const navItems: NavItem[] = [
     chevron: true,
     children: [
       { label: "General", icon: "settings", href: "/settings/general" },
-      { label: "Accounting", icon: "settings", href: "/settings/accounting" },
-      { label: "Branches", icon: "settings", href: "/settings/branches" },
-      { label: "Products", icon: "settings", href: "/settings/products" },
-      { label: "Policies", icon: "settings", href: "/settings/policies" },
-      { label: "Users", icon: "clients", href: "/settings-administrator" },
-      { label: "Roles", icon: "settings", href: "/settings-role" },
-      { label: "Services", icon: "settings", href: "/settings/services" },
-      { label: "System logs", icon: "settings", href: "/system-logs" },
+      { label: "Accounting", icon: "book", href: "/settings/accounting" },
+      { label: "Branches", icon: "building", href: "/settings/branches" },
+      { label: "Products", icon: "package", href: "/settings/products" },
+      { label: "Policies", icon: "shield", href: "/settings/policies" },
+      { label: "Users", icon: "users", href: "/settings-administrator" },
+      { label: "Roles", icon: "scroll", href: "/settings-role" },
+      { label: "Services", icon: "wrench", href: "/settings/services" },
+      { label: "System logs", icon: "file", href: "/system-logs" },
     ],
   },
 ];

@@ -61,7 +61,7 @@ export function TellerHistoryPage() {
   }, [from, to, reloadKey]);
 
   const items = data?.items ?? [];
-  const pageSize = 20;
+  const pageSize = 10;
   const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
   const paged = items.slice((page - 1) * pageSize, page * pageSize);
 

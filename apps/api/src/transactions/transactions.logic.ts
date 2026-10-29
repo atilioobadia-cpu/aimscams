@@ -138,7 +138,7 @@ export function parseTransactionFilters(
     to,
     tellerId: optionalUuid(query, 'tellerId'),
     page: paginationValue(query, 'page', 1, 1_000_000),
-    pageSize: paginationValue(query, 'pageSize', 20, MAX_PAGE_SIZE),
+    pageSize: paginationValue(query, 'pageSize', 10, MAX_PAGE_SIZE),
   };
 }
 
@@ -157,6 +157,6 @@ export function parseRequestFilters(query: FilterQuery): RequestFilters {
     requestType: optionalText(query, 'requestType'),
     assignedToMe: assignedToMeValue === 'true',
     page: paginationValue(query, 'page', 1, 1_000_000),
-    pageSize: paginationValue(query, 'pageSize', 20, MAX_PAGE_SIZE),
+    pageSize: paginationValue(query, 'pageSize', 10, MAX_PAGE_SIZE),
   };
 }

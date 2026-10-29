@@ -32,7 +32,7 @@ describe('parseTransactionFilters', () => {
       to: undefined,
       tellerId: undefined,
       page: 1,
-      pageSize: 20,
+      pageSize: 10,
     });
   });
 
@@ -83,7 +83,7 @@ describe('parseRequestFilters', () => {
       assignedToMe: true,
       status: 'PENDING',
       page: 1,
-      pageSize: 20,
+      pageSize: 10,
     });
   });
 
