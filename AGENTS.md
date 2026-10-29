@@ -51,11 +51,12 @@ codebase, one installation and one database **per institution**. Reconstructed f
 - `packages/ledger` — `schema.sql` invariants, posting engine, journal entries, ledger page, trial
   balance and the outbox writer. Tested against real PostgreSQL via PGlite.
 - `docs/01`–`docs/13` — specification complete through stack, UI contract, deployment and build sequence.
-- `apps/web/aimscams-web` — Angular shell, **legacy** under D-018. Do not extend it (`O-012`).
-- `apps/web` (Next.js) — measured shell, dashboard, users/roles, accounting settings, journal
-  entries, ledger drilldown, the accounting hub, organisation settings and the branch network.
-- `apps/api` (NestJS) — auth, users/roles, accounting settings, journal posting/reversal, ledger
-  reads, read-only outbox status, organisation settings and branch writes.
+- `apps/web/aimscams-web` - **deleted** (Phase 14). All routes served by Next.js.
+- `apps/web` (Next.js) - full back office: dashboard, clients, accounts, transactions (teller,
+  history, approval, all, online, reconciliation), requests, accounting (chart, entries, ledger,
+  assets, fixed assets, reports), reports hubs, import, messages, settings, system logs.
+- `apps/api` (NestJS) - auth, users/roles, accounting, settings, transactions, messages, ledger
+  reads, outbox status, organisation and branch writes.
 - `apps/worker` (BullMQ) — claims the transactional outbox, publishes with idempotency keys,
   leases expired claims and dead-letters exhausted events.
 - `packages/db` (Prisma 7 + PostgreSQL 16), `packages/contracts` (Zod) — schema and migration stream.
