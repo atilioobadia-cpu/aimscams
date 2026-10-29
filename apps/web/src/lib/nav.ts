@@ -70,6 +70,7 @@ export const navItems: NavItem[] = [
       { label: "Journal entries", icon: "accounting", href: "/accounting-entries" },
       { label: "Ledger entries", icon: "accounting", href: "/accounting-ledger-entries" },
       { label: "Asset types", icon: "accounting", href: "/accounting-assets" },
+      { label: "Fixed assets", icon: "accounting", href: "/accounting-fixed-asset" },
       { label: "Financial reports", icon: "accounting", href: "/accounting-reports" },
     ],
   },

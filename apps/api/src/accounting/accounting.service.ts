@@ -122,6 +122,36 @@ export class AccountingService {
     }
   }
 
+  async listFixedAssets(organisationId: string) {
+    return this.prisma.fixedAsset.findMany({
+      where: { organisationId },
+      include: { assetType: { select: { name: true, depreciationMethod: true, usefulLifeMonths: true } }, branch: { select: { name: true } } },
+      orderBy: [{ status: 'asc' }, { assetNo: 'asc' }],
+    });
+  }
+
+  async createFixedAsset(organisationId: string, body: Record<string, unknown>) {
+    const assetNo = String(body.assetNo ?? '').trim();
+    const description = String(body.description ?? '').trim();
+    if (!assetNo || !description) throw new BadRequestException('Asset number and description are required.');
+    const acquisitionDate = String(body.acquisitionDate ?? '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(acquisitionDate)) throw new BadRequestException('Acquisition date must use YYYY-MM-DD.');
+    const cost = String(body.acquisitionCostMinor ?? '').trim();
+    if (!/^\\d+$/.test(cost)) throw new BadRequestException('Acquisition cost must be a whole number of minor units.');
+    return this.prisma.fixedAsset.create({
+      data: {
+        organisationId,
+        branchId: body.branchId ? String(body.branchId) : null,
+        assetTypeId: body.assetTypeId ? String(body.assetTypeId) : null,
+        assetNo,
+        description,
+        acquisitionDate: new Date(`${acquisitionDate}T00:00:00.000Z`),
+        acquisitionCostMinor: BigInt(cost),
+        status: 'ACTIVE',
+      },
+    });
+  }
+
   async listAssetTypes(organisationId: string) {
     return this.prisma.assetType.findMany({
       where: { organisationId },

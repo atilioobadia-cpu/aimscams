@@ -79,6 +79,7 @@ model Organisation {
   transactions     Transaction[]
   requests         Request[]
   assetTypes       AssetType[]
+  fixedAssets      FixedAsset[]
 
   @@map("organisation")
 }
@@ -112,6 +113,7 @@ model Branch {
   tillSessions     TillSession[]
   transactions     Transaction[]
   requests         Request[]
+  fixedAssets      FixedAsset[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
@@ -915,10 +917,35 @@ model AssetType {
   updatedAt          DateTime @updatedAt
 
   organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  fixedAssets  FixedAsset[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
   @@map("asset_type")
+}
+model FixedAsset {
+  id                        String   @id @default(uuid()) @db.Uuid
+  organisationId            String   @db.Uuid
+  branchId                  String?  @db.Uuid
+  assetTypeId               String?  @db.Uuid
+  assetNo                   String
+  description               String
+  acquisitionDate           DateTime @db.Date
+  acquisitionCostMinor      BigInt
+  accumulatedDepreciationMinor BigInt @default(0)
+  status                    String   @default("ACTIVE")
+  disposalDate              DateTime? @db.Date
+  disposalProceedsMinor     BigInt?
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  assetType    AssetType?   @relation(fields: [assetTypeId], references: [id], onDelete: SetNull)
+
+  @@unique([organisationId, assetNo])
+  @@index([organisationId, status])
+  @@map("fixed_asset")
 }
 enum LoanTenurePeriod {
   DAYS

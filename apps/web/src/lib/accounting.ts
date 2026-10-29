@@ -281,3 +281,32 @@ export function createAssetType(body: {
 }) {
   return apiRequest<AssetType>("/accounting/asset-types", { method: "POST", body });
 }
+
+export type FixedAsset = {
+  id: string;
+  assetNo: string;
+  description: string;
+  acquisitionDate: string;
+  acquisitionCostMinor: string;
+  accumulatedDepreciationMinor: string;
+  status: string;
+  disposalDate: string | null;
+  disposalProceedsMinor: string | null;
+  assetType: { name: string; depreciationMethod: string; usefulLifeMonths: number } | null;
+  branch: { name: string } | null;
+};
+
+export function listFixedAssets() {
+  return apiRequest<FixedAsset[]>("/accounting/fixed-assets");
+}
+
+export function createFixedAsset(body: {
+  assetNo: string;
+  description: string;
+  acquisitionDate: string;
+  acquisitionCostMinor: string;
+  assetTypeId?: string;
+  branchId?: string;
+}) {
+  return apiRequest<FixedAsset>("/accounting/fixed-assets", { method: "POST", body });
+}

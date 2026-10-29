@@ -44,6 +44,23 @@ export class AccountingController {
     return this.accounting.createAssetType(organisationId, body);
   }
 
+  @Get('fixed-assets')
+  @RequirePermissions('Settings Accounting : View')
+  async fixedAssets(@CurrentAuth() auth: AuthContext) {
+    const organisationId = auth.user.organisation.id;
+    return this.accounting.listFixedAssets(organisationId);
+  }
+
+  @Post('fixed-assets')
+  @RequirePermissions('Settings Accounting : Edit')
+  async createFixedAsset(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+  ) {
+    const organisationId = auth.user.organisation.id;
+    return this.accounting.createFixedAsset(organisationId, body);
+  }
+
   @Get('trial-balance')
   @RequirePermissions('Settings Accounting : View')
   async trialBalance(@CurrentAuth() auth: AuthContext, @Query('asOf') asOf?: string) {
