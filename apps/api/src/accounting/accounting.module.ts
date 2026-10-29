@@ -10,5 +10,6 @@ import { AccountingService } from './accounting.service.js';
   imports: [PrismaModule, AuthModule],
   controllers: [AccountingController],
   providers: [AccountingDbService, AccountingService],
+  exports: [AccountingDbService],
 })
 export class AccountingModule {}
