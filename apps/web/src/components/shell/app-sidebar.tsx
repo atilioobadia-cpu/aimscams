@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeftRight,
   BarChart3,
@@ -270,8 +270,19 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
     item.children &&
     (pathname === item.href || item.children.some((child) => isActivePath(pathname, child.href))),
   );
-  const [manuallyExpandedGroup, setManuallyExpandedGroup] = useState<string | null>(null);
-  const expandedGroup = activeGroup?.label ?? manuallyExpandedGroup;
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
+  // Auto-expand the active group on navigation.
+  useEffect(() => {
+    if (activeGroup?.label) {
+      setExpandedGroups((current) => {
+        if (current.has(activeGroup.label)) return current;
+        const next = new Set(current);
+        next.add(activeGroup.label);
+        return next;
+      });
+    }
+  }, [activeGroup?.label, pathname]);
+  const isExpanded = (label: string) => expandedGroups.has(label);
 
   return (
     <aside
@@ -289,7 +300,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         <ul className="m-0 flex list-none flex-col gap-[var(--space-4)] p-0">
           {navItems.map((item) => {
             const active = isItemActive(pathname, item);
-            const expanded = expandedGroup === item.label;
+            const expanded = isExpanded(item.label);
 
             return (
               <SidebarItem
@@ -300,9 +311,12 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                 active={active}
                 expanded={expanded}
                 onToggleExpand={() =>
-                  setManuallyExpandedGroup((current) =>
-                    current === item.label ? null : item.label,
-                  )
+                  setExpandedGroups((current) => {
+                    const next = new Set(current);
+                    if (next.has(item.label)) next.delete(item.label);
+                    else next.add(item.label);
+                    return next;
+                  })
                 }
               />
             );
