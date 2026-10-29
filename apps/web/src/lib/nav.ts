@@ -69,6 +69,8 @@ export const navItems: NavItem[] = [
       { label: "Chart of accounts", icon: "accounting", href: "/accounting-chart-of-accounts" },
       { label: "Journal entries", icon: "accounting", href: "/accounting-entries" },
       { label: "Ledger entries", icon: "accounting", href: "/accounting-ledger-entries" },
+      { label: "Asset types", icon: "accounting", href: "/accounting-assets" },
+      { label: "Financial reports", icon: "accounting", href: "/accounting-reports" },
     ],
   },
   { label: "Requests", icon: "requests", href: "/requests" },

@@ -267,8 +267,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
 export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const pathname = usePathname();
   const activeGroup = navItems.find((item) =>
-    item.children &&
-    (pathname === item.href || item.children.some((child) => isActivePath(pathname, child.href))),
+    item.children && isItemActive(pathname, item),
   );
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
   // Auto-expand the active group on navigation.

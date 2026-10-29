@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Inject,
 } from '@nestjs/common';
 import { fromMajor } from '@aimscams/domain';
 import { Prisma } from '@aimscams/db';
@@ -23,6 +24,8 @@ import {
 import { AuditService } from '../auth/audit.service.js';
 import type { AuthContext } from '../auth/auth.types.js';
 import { AccountingDbService } from './accounting-db.service.js';
+import { PRISMA } from '../prisma/prisma.module.js';
+import type { PrismaClient } from '@aimscams/db';
 
 interface MutationContext {
   ipAddress?: string;
@@ -94,6 +97,7 @@ export class AccountingService {
   constructor(
     private readonly dbService: AccountingDbService,
     private readonly audit: AuditService,
+    @Inject(PRISMA) private readonly prisma: PrismaClient,
   ) {}
 
   async getChartOfAccounts(organisationId: string) {
@@ -116,6 +120,33 @@ export class AccountingService {
     } finally {
       await db.close();
     }
+  }
+
+  async listAssetTypes(organisationId: string) {
+    return this.prisma.assetType.findMany({
+      where: { organisationId },
+      orderBy: [{ status: 'asc' }, { name: 'asc' }],
+    });
+  }
+
+  async createAssetType(organisationId: string, body: Record<string, unknown>) {
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    if (!code || !name) throw new BadRequestException('Code and name are required.');
+    const method = String(body.depreciationMethod ?? 'STRAIGHT_LINE').trim().toUpperCase();
+    const life = Number(body.usefulLifeMonths ?? 0);
+    if (!Number.isInteger(life) || life < 0) throw new BadRequestException('Useful life must be a whole number.');
+    return this.prisma.assetType.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        description: body.description ? String(body.description).trim() : null,
+        depreciationMethod: method,
+        usefulLifeMonths: life,
+        status: 'ACTIVE',
+      },
+    });
   }
 
   async getTrialBalance(organisationId: string, asOf: string) {

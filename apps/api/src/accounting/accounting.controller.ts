@@ -27,6 +27,23 @@ export class AccountingController {
     return this.accounting.getChartOfAccounts(organisationId);
   }
 
+  @Get('asset-types')
+  @RequirePermissions('Settings Accounting : View')
+  async assetTypes(@CurrentAuth() auth: AuthContext) {
+    const organisationId = auth.user.organisation.id;
+    return this.accounting.listAssetTypes(organisationId);
+  }
+
+  @Post('asset-types')
+  @RequirePermissions('Settings Accounting : Edit')
+  async createAssetType(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+  ) {
+    const organisationId = auth.user.organisation.id;
+    return this.accounting.createAssetType(organisationId, body);
+  }
+
   @Get('trial-balance')
   @RequirePermissions('Settings Accounting : View')
   async trialBalance(@CurrentAuth() auth: AuthContext, @Query('asOf') asOf?: string) {

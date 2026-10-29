@@ -226,6 +226,26 @@ export function reverseJournalEntry(
   });
 }
 
+export type TrialBalanceRow = {
+  code: string;
+  name: string;
+  type: string;
+  debitMinor: string;
+  creditMinor: string;
+  balanceMinor: string;
+};
+
+export type TrialBalance = {
+  asOf: string;
+  debitMinor: string;
+  creditMinor: string;
+  rows: TrialBalanceRow[];
+};
+
+export function getTrialBalance(asOf: string) {
+  return apiRequest<TrialBalance>(`/accounting/trial-balance?asOf=${encodeURIComponent(asOf)}`);
+}
+
 export function getLedger(filters: {
   accountId?: string;
   from?: string;
@@ -234,4 +254,30 @@ export function getLedger(filters: {
   offset?: number;
 }) {
   return apiRequest<LedgerPage>(`/accounting/ledger${queryString(filters)}`);
+}
+
+export type AssetType = {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  depreciationMethod: string;
+  usefulLifeMonths: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export function listAssetTypes() {
+  return apiRequest<AssetType[]>("/accounting/asset-types");
+}
+
+export function createAssetType(body: {
+  code: string;
+  name: string;
+  description?: string;
+  depreciationMethod?: string;
+  usefulLifeMonths?: number;
+}) {
+  return apiRequest<AssetType>("/accounting/asset-types", { method: "POST", body });
 }
