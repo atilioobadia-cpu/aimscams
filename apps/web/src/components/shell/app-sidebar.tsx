@@ -62,6 +62,9 @@ function isItemActive(pathname: string, item: NavItem): boolean {
   if (item.href === "/accounts") {
     return pathname === "/accounts" || pathname.startsWith("/account-");
   }
+  if (item.href === "/transactions") {
+    return pathname === "/transactions" || pathname.startsWith("/transaction-");
+  }
   return (
     isActivePath(pathname, item.href) ||
     Boolean(item.children?.some((child) => isActivePath(pathname, child.href)))
@@ -360,4 +363,3 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
     </aside>
   );
 }
-

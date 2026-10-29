@@ -756,7 +756,9 @@ for (const viewport of viewports) {
     ? "Accounting"
     : segment.startsWith("account-")
       ? "Accounts"
-      : segment.startsWith("settings")
+      : segment.startsWith("transaction-")
+        ? "Transactions"
+        : segment.startsWith("settings")
         ? "Settings"
         : (topLevelLabels[segment] ?? null);
   const activeTop = measured.nav.find((item) => item.active);

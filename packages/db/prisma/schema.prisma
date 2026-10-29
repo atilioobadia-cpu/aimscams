@@ -77,6 +77,7 @@ model Organisation {
   loanSchedules    LoanSchedule[]
   tillSessions     TillSession[]
   transactions     Transaction[]
+  requests         Request[]
 
   @@map("organisation")
 }
@@ -109,6 +110,7 @@ model Branch {
   loans            Loan[]
   tillSessions     TillSession[]
   transactions     Transaction[]
+  requests         Request[]
 
   @@unique([organisationId, code])
   @@index([organisationId, status])
@@ -845,6 +847,7 @@ model Transaction {
   receiptNo         String?
   externalRef       String?
   provider          String?
+  narration         String?
   status            String   @default("SUBMITTED")
   accountingStatus  String   @default("PENDING")
   idempotencyKey    String?
@@ -866,6 +869,36 @@ model Transaction {
   @@index([clientId])
   @@index([loanId])
   @@map("transaction")
+}
+
+/// One polymorphic queue for anything a second pair of eyes must clear: till
+/// open/close, reversals, over-threshold GL entries, fee waivers and transfers.
+/// `payload` carries the typed request body; the amount is duplicated so the
+/// queue can be filtered and totalled without reading JSON.
+model Request {
+  id                String   @id @default(uuid()) @db.Uuid
+  organisationId    String   @db.Uuid
+  branchId          String?  @db.Uuid
+  requestNo         String
+  requestType       String
+  payload           Json     @default("{}")
+  amountMinor       BigInt?
+  status            String   @default("PENDING")
+  currentAssigneeId String?  @db.Uuid
+  requestedByUserId String?  @db.Uuid
+  approvedByUserId  String?  @db.Uuid
+  approvedAt        DateTime?
+  reason            String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  branch       Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@unique([organisationId, requestNo])
+  @@index([organisationId, status])
+  @@index([organisationId, requestType])
+  @@map("request")
 }
 
 enum LoanTenurePeriod {

@@ -2,7 +2,7 @@ CREATE TABLE "till_session" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   "organisationId" uuid NOT NULL REFERENCES "organisation"("id") ON DELETE CASCADE,
   "branchId" uuid REFERENCES "branch"("id") ON DELETE SET NULL,
-  "tellerId" uuid NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+  "tellerId" uuid NOT NULL REFERENCES "app_user"("id") ON DELETE CASCADE,
   "businessDate" date NOT NULL,
   "openingFloatMinor" bigint NOT NULL DEFAULT 0,
   "closingCountedMinor" bigint,
