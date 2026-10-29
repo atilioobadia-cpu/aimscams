@@ -1,17 +1,9 @@
 ﻿import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { IncomeStatementReportPage } from "@/components/accounting/income-statement-report-page";
 
-export const metadata: Metadata = {
-  title: "IncomeStatementReport · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "Income statement · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="IncomeStatementReport"
-      description="Financial report."
-      detail="This report arrives with the financial report engine. It will read posted ledger data only."
-    />
-  );
+export default function IncomeStatementReportRoute() {
+  return <IncomeStatementReportPage />;
 }
