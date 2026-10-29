@@ -1,17 +1,9 @@
 ﻿import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { JournalBookPage } from "@/components/accounting/journal-book-page";
 
-export const metadata: Metadata = {
-  title: "GeneralLedgerBook · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "General ledger book · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="GeneralLedgerBook"
-      description="Financial report."
-      detail="This report arrives with the financial report engine. It will read posted ledger data only."
-    />
-  );
+export default function GeneralLedgerBookRoute() {
+  return <JournalBookPage title="General ledger book" description="All postings by account over a date range." />;
 }

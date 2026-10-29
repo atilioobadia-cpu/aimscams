@@ -1,17 +1,9 @@
 ﻿import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { CashBookPage } from "@/components/accounting/cash-book-page";
 
-export const metadata: Metadata = {
-  title: "CashBook · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "Cash book · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="CashBook"
-      description="Financial report."
-      detail="This report arrives with the financial report engine. It will read posted ledger data only."
-    />
-  );
+export default function CashBookRoute() {
+  return <CashBookPage />;
 }
