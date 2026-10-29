@@ -97,7 +97,17 @@ export const navItems: NavItem[] = [
     href: "/campaigns",
     badge: "Soon",
   },
-  { label: "Reports", icon: "reports", href: "/reports", chevron: true },
+  {
+    label: "Reports",
+    icon: "reports",
+    href: "/reports",
+    chevron: true,
+    children: [
+      { label: "Loan reports", icon: "reports", href: "/reports-loan" },
+      { label: "Statements", icon: "file", href: "/reports-statement" },
+      { label: "Financial reports", icon: "chart", href: "/accounting-reports" },
+    ],
+  },
   {
     label: "Import",
     icon: "import",
