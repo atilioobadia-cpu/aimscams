@@ -1088,6 +1088,43 @@ export async function listLoanOfficers(): Promise<{ items: LoanOfficer[] }> {
   return apiRequest<{ items: LoanOfficer[] }>("/settings/loan-officers");
 }
 
+export type ImportBatch = {
+  id: string;
+  reference: string;
+  kind: string;
+  fileName: string;
+  status: string;
+  totalRows: number;
+  successRows: number;
+  failedRows: number;
+  createdAt: string;
+  completedAt: string | null;
+};
+
+export type ImportBatchList = {
+  items: ImportBatch[];
+  canView: boolean;
+};
+
+export function listImportBatches(kind?: string): Promise<ImportBatchList> {
+  const query = kind ? `?kind=${encodeURIComponent(kind)}` : "";
+  return apiRequest(`/settings/imports${query}`);
+}
+
+export function createImportBatch(body: {
+  reference: string;
+  kind: string;
+  fileName: string;
+  fileHash?: string;
+  totalRows?: number;
+}): Promise<{ id: string; reference: string; status: string }> {
+  return apiRequest("/settings/imports", { method: "POST", body });
+}
+
+export function completeImportBatch(id: string, body: { status: string; successRows: number; failedRows: number }) {
+  return apiRequest(`/settings/imports/${id}/complete`, { method: "POST", body });
+}
+
 export function loanApplicationDocumentUrl(applicationId: string, documentId: string): string {
   return (
     apiAssetUrl(

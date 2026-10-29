@@ -39,6 +39,28 @@ export class SettingsController {
     return this.settings.getOrganisation(auth);
   }
 
+  @Get('imports')
+  @RequirePermissions('Import : View')
+  async listImports(@CurrentAuth() auth: AuthContext, @Query('kind') kind?: string) {
+    return this.settings.listImportBatches(auth, kind ?? '');
+  }
+
+  @Post('imports')
+  @RequirePermissions('Import : Create')
+  async createImport(@CurrentAuth() auth: AuthContext, @Body() body: Record<string, unknown>) {
+    return this.settings.createImportBatch(auth, body);
+  }
+
+  @Post('imports/:id/complete')
+  @RequirePermissions('Import : Create')
+  async completeImport(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.settings.completeImportBatch(auth, id, body);
+  }
+
   @Patch('organisation')
   @RequirePermissions('Settings Organisation : Edit')
   async updateOrganisation(

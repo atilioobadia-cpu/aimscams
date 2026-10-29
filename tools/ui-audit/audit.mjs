@@ -766,6 +766,8 @@ for (const viewport of viewports) {
         ? "Transactions"
         : segment.startsWith("reports")
         ? "Reports"
+        : segment.startsWith("import-")
+        ? "Import"
         : segment.startsWith("settings")
         ? "Settings"
         : (topLevelLabels[segment] ?? null);

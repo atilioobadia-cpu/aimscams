@@ -1371,6 +1371,72 @@ export class SettingsService {
     return { product: this.serializeLoanProduct(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
   }
 
+  async listImportBatches(auth: AuthContext, kind: string) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.ImportBatchWhereInput = { organisationId };
+    if (kind) where.kind = kind;
+    const items = await this.prisma.importBatch.findMany({
+      where,
+      orderBy: [{ createdAt: 'desc' }],
+    });
+    return {
+      items: items.map((batch) => ({
+        id: batch.id,
+        reference: batch.reference,
+        kind: batch.kind,
+        fileName: batch.fileName,
+        status: batch.status,
+        totalRows: batch.totalRows,
+        successRows: batch.successRows,
+        failedRows: batch.failedRows,
+        createdAt: batch.createdAt.toISOString(),
+        completedAt: batch.completedAt?.toISOString() ?? null,
+      })),
+      canView: this.can(auth, 'Import : View') || this.can(auth, 'Client : View'),
+    };
+  }
+
+  async createImportBatch(auth: AuthContext, body: Record<string, unknown>) {
+    if (!this.can(auth, 'Import : Create') && !this.can(auth, 'Client : Create')) {
+      throw new Error('forbidden');
+    }
+    const organisationId = auth.user.organisation.id;
+    const reference = String(body.reference ?? '').trim();
+    const kind = String(body.kind ?? 'MEMBER').trim().toUpperCase();
+    const fileName = String(body.fileName ?? '').trim();
+    if (!reference || !fileName) throw new Error('Reference and file name are required.');
+    const batch = await this.prisma.importBatch.create({
+      data: {
+        organisationId,
+        branchId: auth.user.branch?.id ?? null,
+        reference,
+        kind,
+        fileName,
+        fileHash: body.fileHash ? String(body.fileHash) : null,
+        status: 'UPLOADED',
+        totalRows: Number(body.totalRows ?? 0),
+        uploadedByUserId: auth.user.id,
+      },
+    });
+    return { id: batch.id, reference: batch.reference, status: batch.status };
+  }
+
+  async completeImportBatch(auth: AuthContext, id: string, body: Record<string, unknown>) {
+    const organisationId = auth.user.organisation.id;
+    const batch = await this.prisma.importBatch.findFirst({ where: { id, organisationId } });
+    if (!batch) throw new Error('Import batch not found.');
+    await this.prisma.importBatch.update({
+      where: { id: batch.id },
+      data: {
+        status: String(body.status ?? 'COMPLETED'),
+        successRows: Number(body.successRows ?? 0),
+        failedRows: Number(body.failedRows ?? 0),
+        completedAt: new Date(),
+      },
+    });
+    return { status: String(body.status ?? 'COMPLETED') };
+  }
+
   async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string }) {
     const organisationId = auth.user.organisation.id;
     const where: Prisma.ClientWhereInput = { organisationId };
