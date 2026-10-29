@@ -14,6 +14,7 @@ export type Transaction = {
   paymentMethod: string;
   valueDate: string;
   receiptNo: string;
+  externalRef: string;
   status: TransactionStatus;
   accountingStatus: AccountingStatus;
   narration: string;
