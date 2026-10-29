@@ -196,7 +196,7 @@ export default function FeePenaltiesPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Fees and penalties" description="Fee and penalty definitions used by products and transactions." />
+        <PageHeader breadcrumb="Settings" title="Fees and penalties" description="Fee and penalty definitions used by products and transactions." />
         {data?.canEdit ? (
           <Button onClick={openCreate} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />

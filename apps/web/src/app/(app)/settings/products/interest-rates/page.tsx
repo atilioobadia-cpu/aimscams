@@ -76,7 +76,7 @@ export default function InterestRatesPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Interest rates" description="Interest rate definitions used by products." />
+        <PageHeader breadcrumb="Settings" title="Interest rates" description="Interest rate definitions used by products." />
         {data?.canEdit ? (
           <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Link href="/settings/products/interest-rates/new">Create interest rate</Link>

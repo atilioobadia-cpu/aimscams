@@ -81,7 +81,7 @@ export default function LoanProductsPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader
+      <PageHeader breadcrumb="Settings"
         title="Loan products"
         description="The live loan product configuration. Accounts snapshot these terms at opening."
       />

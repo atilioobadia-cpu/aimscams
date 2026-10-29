@@ -64,7 +64,7 @@ export function LoanProductDetail({ id }: { id: string }) {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Loan product" description="Loan product terms." />
+        <PageHeader breadcrumb="Settings" title="Loan product" description="Loan product terms." />
         <ForbiddenPanel message="Your role cannot view loan products. Ask an administrator for Settings Product : View." />
       </div>
     );

@@ -94,7 +94,7 @@ export default function LoanApplicationsPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Loan applications" description="Loan applications submitted by clients." />
+        <PageHeader breadcrumb="Accounts" title="Loan applications" description="Loan applications submitted by clients." />
         {data?.canCreate ? (
           <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Link href="/account-loan-application-create">

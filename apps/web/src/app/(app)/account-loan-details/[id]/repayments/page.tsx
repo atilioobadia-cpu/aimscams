@@ -62,7 +62,7 @@ export default function LoanRepaymentsPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Repayment history" description="Repayments recorded against this loan." />
+        <PageHeader breadcrumb="Accounts" title="Repayment history" description="Repayments recorded against this loan." />
         <ForbiddenPanel message="Your role cannot view loans. Ask an administrator for Loan Account : View." />
       </div>
     );

@@ -139,7 +139,7 @@ export function MembershipPolicyFormPage({ mode, policyId }: { mode: "create" | 
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Membership policy" description="Membership policy definitions." />
+        <PageHeader breadcrumb="Settings" title="Membership policy" description="Membership policy definitions." />
         <ForbiddenPanel message="Your role cannot edit membership policies. Ask an administrator for Settings Policy : Edit." />
       </div>
     );

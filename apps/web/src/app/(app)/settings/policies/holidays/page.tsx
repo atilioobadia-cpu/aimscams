@@ -109,7 +109,7 @@ export default function HolidaysPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Holiday calendar" description="Public holidays that affect due-date calculation." />
+        <PageHeader breadcrumb="Settings" title="Holiday calendar" description="Public holidays that affect due-date calculation." />
         {data?.canEdit ? (
           <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />

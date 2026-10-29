@@ -57,7 +57,7 @@ export default function EditLoanApplicationPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Edit loan application" description="Edit an application before its first approval." />
+        <PageHeader breadcrumb="Accounts" title="Edit loan application" description="Edit an application before its first approval." />
         <ForbiddenPanel message="Your role cannot edit loan applications. Ask an administrator for Loan Account : Edit." />
       </div>
     );

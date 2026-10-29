@@ -78,7 +78,7 @@ export default function CreditProductPoliciesPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Credit product policies" description="Credit product policy definitions." />
+        <PageHeader breadcrumb="Settings" title="Credit product policies" description="Credit product policy definitions." />
         {data?.canEdit ? (
           <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Link href="/settings/policies/credit-product/new">Create credit product policy</Link>

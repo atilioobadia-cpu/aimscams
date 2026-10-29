@@ -52,7 +52,7 @@ export default function LoanTransactionsPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Loan transactions" description="Transaction ledger for this loan." />
+        <PageHeader breadcrumb="Accounts" title="Loan transactions" description="Transaction ledger for this loan." />
         <ForbiddenPanel message="Your role cannot view loans. Ask an administrator for Loan Account : View." />
       </div>
     );

@@ -83,7 +83,7 @@ export default function CreateCreditProductPolicyPage() {
         </Button>
       </div>
 
-      <PageHeader title="Create credit product policy" description="Credit product policy definitions." />
+      <PageHeader breadcrumb="Settings" title="Create credit product policy" description="Credit product policy definitions." />
 
       <form className="space-y-5 rounded-xl border border-card-border bg-surface p-5" onSubmit={(event) => void save(event)}>
         <div className="grid gap-4 md:grid-cols-2">

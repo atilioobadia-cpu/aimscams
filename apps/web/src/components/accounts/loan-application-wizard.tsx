@@ -506,7 +506,7 @@ export function LoanApplicationWizard({
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="New loan application" description="Capture a client's loan request." />
+        <PageHeader breadcrumb="Accounts" title="New loan application" description="Capture a client's loan request." />
         <ForbiddenPanel message="Your role cannot create loan applications. Ask an administrator for Loan Account : Create." />
       </div>
     );

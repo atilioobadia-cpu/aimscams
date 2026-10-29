@@ -51,7 +51,7 @@ export function ClientProfile({ id }: { id: string }) {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Client profile" description="Client details." />
+        <PageHeader breadcrumb="Client" title="Client profile" description="Client details." />
         <ForbiddenPanel message="Your role cannot view clients. Ask an administrator for Client : View." />
       </div>
     );

@@ -48,7 +48,7 @@ export function CreditProductPolicyDetail({ id }: { id: string }) {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Credit product policy" description="Credit product policy definitions." />
+        <PageHeader breadcrumb="Settings" title="Credit product policy" description="Credit product policy definitions." />
         <ForbiddenPanel message="Your role cannot view credit product policies. Ask an administrator for Settings Policy : View." />
       </div>
     );

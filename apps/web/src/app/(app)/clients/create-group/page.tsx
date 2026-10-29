@@ -87,7 +87,7 @@ export default function CreateGroupPage() {
         </Button>
       </div>
 
-      <PageHeader title="Add group" description="Three-step group registration." />
+      <PageHeader breadcrumb="Client" title="Add group" description="Three-step group registration." />
 
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <p className="fs-text font-medium text-strong">

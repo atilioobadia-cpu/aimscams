@@ -88,7 +88,7 @@ export default function CreateInterestRatePage() {
         </Button>
       </div>
 
-      <PageHeader title="Create interest rate" description="Interest rate definitions used by products." />
+      <PageHeader breadcrumb="Settings" title="Create interest rate" description="Interest rate definitions used by products." />
 
       <form className="space-y-5 rounded-xl border border-card-border bg-surface p-5" onSubmit={(event) => void save(event)}>
         <div className="grid gap-4 md:grid-cols-2">

@@ -52,7 +52,7 @@ export default function LoanGuarantorsPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Guarantors and collateral" description="Guarantors and collateral for this loan." />
+        <PageHeader breadcrumb="Accounts" title="Guarantors and collateral" description="Guarantors and collateral for this loan." />
         <ForbiddenPanel message="Your role cannot view loans. Ask an administrator for Loan Account : View." />
       </div>
     );

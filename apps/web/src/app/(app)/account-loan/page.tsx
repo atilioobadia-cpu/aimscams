@@ -72,7 +72,7 @@ export default function LoansPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Loans" description="Loan accounts created from approved applications." />
+      <PageHeader breadcrumb="Accounts" title="Loans" description="Loan accounts created from approved applications." />
 
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">

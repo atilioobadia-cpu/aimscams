@@ -150,7 +150,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Savings product" description="Savings product terms." />
+        <PageHeader breadcrumb="Settings" title="Savings product" description="Savings product terms." />
         <ForbiddenPanel message="Your role cannot edit savings products. Ask an administrator for Settings Product : Edit." />
       </div>
     );

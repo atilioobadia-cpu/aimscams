@@ -81,7 +81,7 @@ export default function SavingsProductsPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader
+        <PageHeader breadcrumb="Settings"
           title="Savings products"
           description="Savings product terms. Accounts snapshot these terms at opening."
         />

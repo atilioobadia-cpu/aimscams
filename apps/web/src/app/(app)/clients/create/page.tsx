@@ -157,7 +157,7 @@ export default function CreateClientPage() {
         </Button>
       </div>
 
-      <PageHeader title="Add client" description="Six-step client registration." />
+      <PageHeader breadcrumb="Client" title="Add client" description="Six-step client registration." />
 
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <p className="fs-text font-medium text-strong">

@@ -78,7 +78,7 @@ export default function MembershipPoliciesPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Membership policies" description="Membership policy definitions." />
+        <PageHeader breadcrumb="Settings" title="Membership policies" description="Membership policy definitions." />
         {data?.canEdit ? (
           <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Link href="/settings/policies/membership/new">Create membership policy</Link>

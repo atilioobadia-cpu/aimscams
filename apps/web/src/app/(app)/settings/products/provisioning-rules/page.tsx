@@ -157,7 +157,7 @@ export default function ProvisioningRulesPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Loan provisioning rules" description="Provisioning rules applied to loan assets." />
+        <PageHeader breadcrumb="Settings" title="Loan provisioning rules" description="Provisioning rules applied to loan assets." />
         {data?.canEdit ? (
           <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />

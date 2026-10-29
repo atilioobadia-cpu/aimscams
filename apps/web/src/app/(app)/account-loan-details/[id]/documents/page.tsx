@@ -66,7 +66,7 @@ export default function LoanDocumentsPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Loan documents" description="Documents attached to this loan." />
+        <PageHeader breadcrumb="Accounts" title="Loan documents" description="Documents attached to this loan." />
         <ForbiddenPanel message="Your role cannot view loans. Ask an administrator for Loan Account : View." />
       </div>
     );

@@ -132,7 +132,7 @@ export default function SavingsAccountsPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader title="Savings accounts" description="Savings accounts opened from eligible products." />
+        <PageHeader breadcrumb="Accounts" title="Savings accounts" description="Savings accounts opened from eligible products." />
         {data?.canCreate ? (
           <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
             <Plus className="size-4" aria-hidden="true" />

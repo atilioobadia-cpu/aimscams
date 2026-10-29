@@ -138,7 +138,7 @@ export default function LoanApplicationDetailPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Loan application" description="Application details." />
+        <PageHeader breadcrumb="Accounts" title="Loan application" description="Application details." />
         <ForbiddenPanel message="Your role cannot view loan applications. Ask an administrator for Loan Account : View." />
       </div>
     );
