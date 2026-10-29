@@ -1,0 +1,19 @@
+code,name,type,parent,normal_balance,status,is_assumption
+1002,Cash on hand,Ledger,,debit,active,false
+1003,Bank - CRDB,Ledger,,debit,active,false
+1005,Bank - NMB,Ledger,,debit,active,false
+1010,Teller cash,Ledger,,debit,active,false
+1201,Loans receivable,Ledger,,debit,active,false
+1205,Staff loans,Ledger,,debit,active,false
+1505,Interest receivable,Ledger,,debit,active,false
+2001,Tax payable,Ledger,,credit,active,false
+2004,Overpayments,Ledger,,credit,active,false
+2005,Accounts payable,Ledger,,credit,active,false
+2101,Member savings,Ledger,,credit,active,true
+3404,Share capital,Ledger,,credit,active,false
+4001,Interest income - loans,Ledger,,credit,active,false
+4101,Loan management fee,Ledger,,credit,active,false
+4104,Loan penalty,Ledger,,credit,active,false
+5001,Interest expense - member savings,Ledger,,debit,active,true
+5004,Write-off - bad loans,Ledger,,debit,active,false
+5502,Bank charges,Ledger,,debit,active,false
