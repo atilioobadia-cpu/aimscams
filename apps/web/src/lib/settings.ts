@@ -1088,6 +1088,31 @@ export async function listLoanOfficers(): Promise<{ items: LoanOfficer[] }> {
   return apiRequest<{ items: LoanOfficer[] }>("/settings/loan-officers");
 }
 
+export type SystemLogEntry = {
+  id: string;
+  actor: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  ipAddress: string;
+  correlationId: string;
+  createdAt: string;
+};
+
+export type SystemLogList = {
+  items: SystemLogEntry[];
+  canView: boolean;
+};
+
+export function listSystemLogs(filters: { tab?: string; from?: string; to?: string; actor?: string; module?: string; correlationId?: string } = {}): Promise<SystemLogList> {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(filters)) {
+    if (value) params.set(key, value);
+  }
+  const query = params.toString();
+  return apiRequest(`/settings/system-logs${query ? `?${query}` : ""}`);
+}
+
 export type ImportBatch = {
   id: string;
   reference: string;

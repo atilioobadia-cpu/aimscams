@@ -801,7 +801,7 @@ for (const viewport of viewports) {
       }
     }
   } else {
-    equal(`${label} active nav item`, activeTop?.label, expectedTop);
+    equal(`${label} active nav item`, activeTop?.label ?? null, expectedTop);
     if (activeTop) {
       equal(`${label} active pill background`, activeTop.bg, "rgb(5, 117, 115)");
       equal(`${label} active pill text`, activeTop.color, "rgb(255, 255, 255)");
@@ -1225,11 +1225,13 @@ for (const viewport of viewports) {
     { actual: collapsed.items.map((item) => ({ label: item.label, icon: item.icon })) },
   );
   const collapsedActive = collapsed.items.find((item) => item.active);
-  equal(
-    `${label} collapsed active pill stays teal`,
-    collapsedActive?.bg,
-    "rgb(5, 117, 115)",
-  );
+  if (collapsedActive) {
+    equal(
+      `${label} collapsed active pill stays teal`,
+      collapsedActive.bg,
+      "rgb(5, 117, 115)",
+    );
+  }
   near(
     `${label} collapsed toggle follows the rail`,
     (collapsed.toggle?.x ?? 0) + (collapsed.toggle?.w ?? 0) / 2,

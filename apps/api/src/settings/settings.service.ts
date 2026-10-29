@@ -1371,6 +1371,66 @@ export class SettingsService {
     return { product: this.serializeLoanProduct(updated), canEdit: this.can(auth, 'Settings Product : Edit') };
   }
 
+  async listAuditEvents(auth: AuthContext, query: Record<string, unknown>) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.AuditEventWhereInput = { organisationId };
+    const tab = typeof query.tab === 'string' ? query.tab.trim() : 'Activity';
+    const moduleFilter = typeof query.module === 'string' ? query.module.trim() : undefined;
+    const actor = typeof query.actor === 'string' ? query.actor.trim() : undefined;
+    const from = typeof query.from === 'string' ? query.from.trim() : undefined;
+    const to = typeof query.to === 'string' ? query.to.trim() : undefined;
+    const correlationId = typeof query.correlationId === 'string' ? query.correlationId.trim() : undefined;
+    if (moduleFilter) where.entityType = { contains: moduleFilter, mode: 'insensitive' };
+    if (actor) where.actorLabel = { contains: actor, mode: 'insensitive' };
+    if (correlationId) where.correlationId = { contains: correlationId, mode: 'insensitive' };
+    if (from || to) {
+      where.createdAt = {
+        ...(from ? { gte: new Date(`${from}T00:00:00.000Z`) } : {}),
+        ...(to ? { lte: new Date(`${to}T23:59:59.999Z`) } : {}),
+      };
+    }
+    // Tab-based filtering
+    const securityTypes = ['User', 'Session', 'Role', 'Permission', 'UserRole'];
+    const accountingTypes = ['JournalEntry', 'AccountingPeriod', 'GlAccount', 'FiscalPeriod'];
+    const integrationTypes = ['MessageLog', 'OutboxEvent', 'MessageTemplate'];
+    if (tab === 'Security') where.entityType = { in: securityTypes };
+    else if (tab === 'Accounting') where.entityType = { in: accountingTypes };
+    else if (tab === 'Integrations') where.entityType = { in: integrationTypes };
+    else if (tab === 'Errors') where.action = { contains: 'fail', mode: 'insensitive' };
+    else if (tab === 'Data changes') where.entityType = { in: ['Client', 'Loan', 'SavingsAccount', 'Transaction', 'LoanApplication', 'Branch', 'Organisation'] };
+
+    const items = await this.prisma.auditEvent.findMany({
+      where,
+      orderBy: [{ createdAt: 'desc' }],
+      take: 200,
+      select: {
+        id: true,
+        actorLabel: true,
+        actorUserId: true,
+        action: true,
+        entityType: true,
+        entityId: true,
+        branchId: true,
+        ipAddress: true,
+        correlationId: true,
+        createdAt: true,
+      },
+    });
+    return {
+      items: items.map((e) => ({
+        id: e.id,
+        actor: e.actorLabel ?? 'System',
+        action: e.action,
+        entityType: e.entityType,
+        entityId: e.entityId ?? 'N/A',
+        ipAddress: e.ipAddress ?? 'N/A',
+        correlationId: e.correlationId ?? 'N/A',
+        createdAt: e.createdAt.toISOString(),
+      })),
+      canView: this.can(auth, 'System Log : View') || this.can(auth, 'Audit Event : View') || this.can(auth, 'Transaction : View'),
+    };
+  }
+
   async listImportBatches(auth: AuthContext, kind: string) {
     const organisationId = auth.user.organisation.id;
     const where: Prisma.ImportBatchWhereInput = { organisationId };

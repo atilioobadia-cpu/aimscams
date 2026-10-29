@@ -39,6 +39,12 @@ export class SettingsController {
     return this.settings.getOrganisation(auth);
   }
 
+  @Get('system-logs')
+  @RequirePermissions('System Log : View')
+  async systemLogs(@CurrentAuth() auth: AuthContext, @Query() query: Record<string, unknown>) {
+    return this.settings.listAuditEvents(auth, query);
+  }
+
   @Get('imports')
   @RequirePermissions('Import : View')
   async listImports(@CurrentAuth() auth: AuthContext, @Query('kind') kind?: string) {
