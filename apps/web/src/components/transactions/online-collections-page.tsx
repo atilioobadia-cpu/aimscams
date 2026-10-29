@@ -113,6 +113,7 @@ export function OnlineCollectionsPage() {
       <PageHeader
         title="Online collections"
         description="Initiate an online transaction, choose the provider and capture the reference."
+        breadcrumb="Transactions"
       />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}

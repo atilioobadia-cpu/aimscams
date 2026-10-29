@@ -70,6 +70,7 @@ export function TellerHistoryPage() {
       <PageHeader
         title="Teller history"
         description="Per-teller till sessions and transaction counts."
+        breadcrumb="Transactions"
       />
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">

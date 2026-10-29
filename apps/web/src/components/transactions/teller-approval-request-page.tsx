@@ -102,6 +102,7 @@ export function TellerApprovalRequestPage() {
       <PageHeader
         title="Teller approval request"
         description="Approve or reject a queued teller action."
+        breadcrumb="Transactions"
       />
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">

@@ -97,7 +97,7 @@ export function AssetTypesPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Asset types" description="Categories for the fixed-asset register." />
+        <PageHeader title="Asset types" description="Categories for the fixed-asset register." breadcrumb="Accounting" />
         <ForbiddenPanel message="Your role cannot view asset types. Ask an administrator for Settings Accounting : View." />
       </div>
     );
@@ -105,7 +105,7 @@ export function AssetTypesPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Asset types" description="Categories for the fixed-asset register." />
+      <PageHeader title="Asset types" description="Categories for the fixed-asset register." breadcrumb="Accounting" />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 

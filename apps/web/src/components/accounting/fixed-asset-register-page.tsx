@@ -107,7 +107,7 @@ export function FixedAssetRegisterPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Fixed asset register" description="Acquisition, valuation, depreciation and disposal of fixed assets." />
+      <PageHeader title="Fixed asset register" description="Acquisition, valuation, depreciation and disposal of fixed assets." breadcrumb="Accounting" />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 

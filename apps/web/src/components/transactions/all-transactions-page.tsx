@@ -107,6 +107,7 @@ export function AllTransactionsPage() {
       <PageHeader
         title="All transactions"
         description="Review transaction activity and its operational and accounting status."
+        breadcrumb="Transactions"
       />
 
       {(data?.summary.unposted ?? 0) > 0 ? (

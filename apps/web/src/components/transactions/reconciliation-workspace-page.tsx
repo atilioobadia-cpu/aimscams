@@ -143,6 +143,7 @@ export function ReconciliationWorkspacePage() {
       <PageHeader
         title="Reconciliation workspace"
         description="Upload a provider or bank statement, match lines to transactions and resolve unmatched items."
+        breadcrumb="Transactions"
       />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}

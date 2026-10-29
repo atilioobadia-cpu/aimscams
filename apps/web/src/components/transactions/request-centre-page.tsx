@@ -101,6 +101,7 @@ export function RequestCentrePage() {
       <PageHeader
         title="Request centre"
         description="Review requests that need a second pair of eyes."
+        breadcrumb="Requests"
       />
 
       <section className="overflow-x-auto rounded-[var(--card-radius)] border border-card-border bg-surface p-2">

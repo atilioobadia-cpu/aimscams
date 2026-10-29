@@ -155,7 +155,7 @@ export function TellerConsolePage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Teller console" description="Post client and ledger transactions from the till." />
+        <PageHeader title="Teller console" description="Post client and ledger transactions from the till." breadcrumb="Transactions" />
         <ForbiddenPanel message="Your role cannot use the teller console. Ask an administrator for Transaction : Create." />
       </div>
     );
@@ -163,7 +163,7 @@ export function TellerConsolePage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Teller console" description="Post client and ledger transactions from the till." />
+      <PageHeader title="Teller console" description="Post client and ledger transactions from the till." breadcrumb="Transactions" />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 
