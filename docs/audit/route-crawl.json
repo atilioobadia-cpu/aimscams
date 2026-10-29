@@ -1,0 +1,3273 @@
+{
+  "generatedAt": "2026-10-29T16:30:23.238Z",
+  "baseUrl": "http://localhost:3000",
+  "viewport": "1280x800",
+  "staticRoutes": 141,
+  "dynamicRoutesSkipped": [
+    "/account-loan-application-details/[id]",
+    "/account-loan-application-edit/[id]",
+    "/account-loan-details/[id]",
+    "/account-loan-details/[id]/documents",
+    "/account-loan-details/[id]/guarantors",
+    "/account-loan-details/[id]/repayments",
+    "/account-loan-details/[id]/transactions",
+    "/clients/[id]",
+    "/settings/branches/[id]",
+    "/settings/policies/credit-product/[id]",
+    "/settings/policies/credit-product/[id]/edit",
+    "/settings/policies/membership/[id]",
+    "/settings/policies/membership/[id]/edit",
+    "/settings/products/loan/[id]",
+    "/settings/products/savings/[id]"
+  ],
+  "results": [
+    {
+      "route": "/account-loan",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/account-loan",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Loans",
+        "bodyChars": 433,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/account-loan-application",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/account-loan-application",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Loan applications",
+        "bodyChars": 467,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/account-loan-application-create",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/account-loan-application-create",
+      "error": null,
+      "facts": {
+        "title": "New loan application · AIMSCAMS",
+        "h1": "New loan application",
+        "bodyChars": 1001,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 7,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/account-saving",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/account-saving",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Savings accounts",
+        "bodyChars": 582,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting",
+      "error": null,
+      "facts": {
+        "title": "Accounting · AIMSCAMS",
+        "h1": "Accounting",
+        "bodyChars": 1215,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-assets",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting-assets",
+      "error": null,
+      "facts": {
+        "title": "Asset types · AIMSCAMS",
+        "h1": "Asset types",
+        "bodyChars": 654,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-chart-of-accounts",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting-chart-of-accounts",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Chart of accounts",
+        "bodyChars": 1419,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 18,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-entries",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting-entries",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Journal entries",
+        "bodyChars": 646,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-fixed-asset",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting-fixed-asset",
+      "error": null,
+      "facts": {
+        "title": "Fixed asset register · AIMSCAMS",
+        "h1": "Fixed asset register",
+        "bodyChars": 681,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-ledger-entries",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting-ledger-entries",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Ledger entries",
+        "bodyChars": 1833,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 6,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounting-reports",
+      "error": null,
+      "facts": {
+        "title": "Financial reports · AIMSCAMS",
+        "h1": "Financial reports",
+        "bodyChars": 800,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-Assets",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-Assets",
+      "error": null,
+      "facts": {
+        "title": "Assets · AIMSCAMS",
+        "h1": "Assets",
+        "bodyChars": 534,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-CashBook",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-CashBook",
+      "error": null,
+      "facts": {
+        "title": "Cash book · AIMSCAMS",
+        "h1": "Cash book",
+        "bodyChars": 997,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 6,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-CashFlowStatement",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-CashFlowStatement",
+      "error": null,
+      "facts": {
+        "title": "Cash flow statement · AIMSCAMS",
+        "h1": "Cash flow statement",
+        "bodyChars": 988,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 9,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-ComprehensiveTrialBalance",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-ComprehensiveTrialBalance",
+      "error": null,
+      "facts": {
+        "title": "ComprehensiveTrialBalance · AIMSCAMS",
+        "h1": "ComprehensiveTrialBalance",
+        "bodyChars": 572,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-CorporateTaxStatement",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-CorporateTaxStatement",
+      "error": null,
+      "facts": {
+        "title": "CorporateTaxStatement · AIMSCAMS",
+        "h1": "CorporateTaxStatement",
+        "bodyChars": 564,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-FinancialPositionReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-FinancialPositionReport",
+      "error": null,
+      "facts": {
+        "title": "Financial position · AIMSCAMS",
+        "h1": "Financial position",
+        "bodyChars": 928,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 19,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-GeneralLedgerBook",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-GeneralLedgerBook",
+      "error": null,
+      "facts": {
+        "title": "General ledger book · AIMSCAMS",
+        "h1": "General ledger book",
+        "bodyChars": 1044,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 7,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-IncomeStatementReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-IncomeStatementReport",
+      "error": null,
+      "facts": {
+        "title": "Income statement · AIMSCAMS",
+        "h1": "Income statement",
+        "bodyChars": 768,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 11,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-JournalBook",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-JournalBook",
+      "error": null,
+      "facts": {
+        "title": "Journal book · AIMSCAMS",
+        "h1": "Journal book",
+        "bodyChars": 1029,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 7,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-LedgerStatementReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-LedgerStatementReport",
+      "error": null,
+      "facts": {
+        "title": "LedgerStatementReport · AIMSCAMS",
+        "h1": "LedgerStatementReport",
+        "bodyChars": 564,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-MonthlyTrialBalance",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-MonthlyTrialBalance",
+      "error": null,
+      "facts": {
+        "title": "MonthlyTrialBalance · AIMSCAMS",
+        "h1": "MonthlyTrialBalance",
+        "bodyChars": 560,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-OwnersEquity",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-OwnersEquity",
+      "error": null,
+      "facts": {
+        "title": "OwnersEquity · AIMSCAMS",
+        "h1": "OwnersEquity",
+        "bodyChars": 546,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-Reconciliation",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-Reconciliation",
+      "error": null,
+      "facts": {
+        "title": "Reconciliation · AIMSCAMS",
+        "h1": "Reconciliation",
+        "bodyChars": 550,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-TrialBalanceReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-TrialBalanceReport",
+      "error": null,
+      "facts": {
+        "title": "Trial balance · AIMSCAMS",
+        "h1": "Trial balance",
+        "bodyChars": 1432,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 18,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-notes-of-account",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-notes-of-account",
+      "error": null,
+      "facts": {
+        "title": "notes of account · AIMSCAMS",
+        "h1": "notes of account",
+        "bodyChars": 554,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-reconcile-statement",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-reconcile-statement",
+      "error": null,
+      "facts": {
+        "title": "reconcile statement · AIMSCAMS",
+        "h1": "reconcile statement",
+        "bodyChars": 560,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounting-reports-reconcile-statement-settings",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/accounting-reports-reconcile-statement-settings",
+      "error": null,
+      "facts": {
+        "title": "reconcile statement settings · AIMSCAMS",
+        "h1": "reconcile statement settings",
+        "bodyChars": 578,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/accounts",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/accounts",
+      "error": null,
+      "facts": {
+        "title": "Accounts · AIMSCAMS",
+        "h1": "Accounts",
+        "bodyChars": 642,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/business-account",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/business-account",
+      "error": null,
+      "facts": {
+        "title": "Business account · AIMSCAMS",
+        "h1": "Business account",
+        "bodyChars": 534,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/campaigns",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/campaigns",
+      "error": null,
+      "facts": {
+        "title": "Campaigns · AIMSCAMS",
+        "h1": "Campaigns",
+        "bodyChars": 528,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/clients",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/clients",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Clients",
+        "bodyChars": 1164,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 6,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/clients/create",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/clients/create",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Add client",
+        "bodyChars": 606,
+        "flagged": [],
+        "backControl": true,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/clients/create-group",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/clients/create-group",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Add group",
+        "bodyChars": 457,
+        "flagged": [],
+        "backControl": true,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/dashboard",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/dashboard",
+      "error": null,
+      "facts": {
+        "title": "Dashboard · AIMSCAMS",
+        "h1": null,
+        "bodyChars": 1314,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import",
+      "error": null,
+      "facts": {
+        "title": "Import · AIMSCAMS",
+        "h1": "Import",
+        "bodyChars": 621,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import-account",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import-account",
+      "error": null,
+      "facts": {
+        "title": "Account import batches · AIMSCAMS",
+        "h1": "Account import batches",
+        "bodyChars": 562,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import-account-new",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import-account-new",
+      "error": null,
+      "facts": {
+        "title": "Account import wizard · AIMSCAMS",
+        "h1": "Account import wizard",
+        "bodyChars": 595,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import-member",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import-member",
+      "error": null,
+      "facts": {
+        "title": "Member import batches · AIMSCAMS",
+        "h1": "Member import batches",
+        "bodyChars": 559,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import-member-new",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import-member-new",
+      "error": null,
+      "facts": {
+        "title": "Member import wizard · AIMSCAMS",
+        "h1": "Member import wizard",
+        "bodyChars": 595,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import-transaction",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import-transaction",
+      "error": null,
+      "facts": {
+        "title": "Transaction import batches · AIMSCAMS",
+        "h1": "Transaction import batches",
+        "bodyChars": 574,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/import-transaction-new",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/import-transaction-new",
+      "error": null,
+      "facts": {
+        "title": "Transaction import wizard · AIMSCAMS",
+        "h1": "Transaction import wizard",
+        "bodyChars": 595,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/messages",
+      "error": null,
+      "facts": {
+        "title": "Messages · AIMSCAMS",
+        "h1": "Messages",
+        "bodyChars": 532,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-message-logs",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-message-logs",
+      "error": null,
+      "facts": {
+        "title": "Delivery logs · AIMSCAMS",
+        "h1": "Delivery logs",
+        "bodyChars": 489,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-recharge-credits",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-recharge-credits",
+      "error": null,
+      "facts": {
+        "title": "Recharge credits · AIMSCAMS",
+        "h1": "Recharge credits",
+        "bodyChars": 423,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-segment-list",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-segment-list",
+      "error": null,
+      "facts": {
+        "title": "Segments · AIMSCAMS",
+        "h1": "Segments",
+        "bodyChars": 399,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-segment-list-create",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-segment-list-create",
+      "error": null,
+      "facts": {
+        "title": "Create segment · AIMSCAMS",
+        "h1": "Create segment",
+        "bodyChars": 419,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-send-message",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-send-message",
+      "error": null,
+      "facts": {
+        "title": "Send message · AIMSCAMS",
+        "h1": "Send message",
+        "bodyChars": 410,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-template-list",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-template-list",
+      "error": null,
+      "facts": {
+        "title": "Templates · AIMSCAMS",
+        "h1": "Templates",
+        "bodyChars": 468,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/messages-users-list",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/messages-users-list",
+      "error": null,
+      "facts": {
+        "title": "Message users · AIMSCAMS",
+        "h1": "Message users",
+        "bodyChars": 406,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/reports",
+      "error": null,
+      "facts": {
+        "title": "Reports · AIMSCAMS",
+        "h1": "Reports",
+        "bodyChars": 602,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-client-ClientListReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-client-ClientListReport",
+      "error": null,
+      "facts": {
+        "title": "client ClientListReport · AIMSCAMS",
+        "h1": "client ClientListReport",
+        "bodyChars": 527,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-client-MemberVerificationReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-client-MemberVerificationReport",
+      "error": null,
+      "facts": {
+        "title": "client MemberVerificationReport · AIMSCAMS",
+        "h1": "client MemberVerificationReport",
+        "bodyChars": 543,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/reports-loan",
+      "error": null,
+      "facts": {
+        "title": "Loan reports · AIMSCAMS",
+        "h1": "Loan reports",
+        "bodyChars": 784,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-AccruedInstallmentsReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-AccruedInstallmentsReport",
+      "error": null,
+      "facts": {
+        "title": "loan AccruedInstallmentsReport · AIMSCAMS",
+        "h1": "loan AccruedInstallmentsReport",
+        "bodyChars": 541,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-AccruedInterestReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-AccruedInterestReport",
+      "error": null,
+      "facts": {
+        "title": "loan AccruedInterestReport · AIMSCAMS",
+        "h1": "loan AccruedInterestReport",
+        "bodyChars": 533,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-ActiveLoanReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-ActiveLoanReport",
+      "error": null,
+      "facts": {
+        "title": "loan ActiveLoanReport · AIMSCAMS",
+        "h1": "loan ActiveLoanReport",
+        "bodyChars": 523,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-AllLoanReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-AllLoanReport",
+      "error": null,
+      "facts": {
+        "title": "loan AllLoanReport · AIMSCAMS",
+        "h1": "loan AllLoanReport",
+        "bodyChars": 517,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-DeferredInterestReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-DeferredInterestReport",
+      "error": null,
+      "facts": {
+        "title": "loan DeferredInterestReport · AIMSCAMS",
+        "h1": "loan DeferredInterestReport",
+        "bodyChars": 535,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-ExpectedLoanRepaymentsReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-ExpectedLoanRepaymentsReport",
+      "error": null,
+      "facts": {
+        "title": "loan ExpectedLoanRepaymentsReport · AIMSCAMS",
+        "h1": "loan ExpectedLoanRepaymentsReport",
+        "bodyChars": 547,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-ExpectedPaymentByDateReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-ExpectedPaymentByDateReport",
+      "error": null,
+      "facts": {
+        "title": "loan ExpectedPaymentByDateReport · AIMSCAMS",
+        "h1": "loan ExpectedPaymentByDateReport",
+        "bodyChars": 545,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-ExpectedRepaymentReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-ExpectedRepaymentReport",
+      "error": null,
+      "facts": {
+        "title": "loan ExpectedRepaymentReport · AIMSCAMS",
+        "h1": "loan ExpectedRepaymentReport",
+        "bodyChars": 537,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-FeeStatusReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-FeeStatusReport",
+      "error": null,
+      "facts": {
+        "title": "loan FeeStatusReport · AIMSCAMS",
+        "h1": "loan FeeStatusReport",
+        "bodyChars": 521,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-GuarantorsReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-GuarantorsReport",
+      "error": null,
+      "facts": {
+        "title": "loan GuarantorsReport · AIMSCAMS",
+        "h1": "loan GuarantorsReport",
+        "bodyChars": 523,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-IssuedLoansAndArrearsReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-IssuedLoansAndArrearsReport",
+      "error": null,
+      "facts": {
+        "title": "loan IssuedLoansAndArrearsReport · AIMSCAMS",
+        "h1": "loan IssuedLoansAndArrearsReport",
+        "bodyChars": 545,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanAgingReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanAgingReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanAgingReport · AIMSCAMS",
+        "h1": "loan LoanAgingReport",
+        "bodyChars": 521,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanArrearsReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanArrearsReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanArrearsReport · AIMSCAMS",
+        "h1": "loan LoanArrearsReport",
+        "bodyChars": 525,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanDisbursementReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanDisbursementReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanDisbursementReport · AIMSCAMS",
+        "h1": "loan LoanDisbursementReport",
+        "bodyChars": 535,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanInsuranceReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanInsuranceReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanInsuranceReport · AIMSCAMS",
+        "h1": "loan LoanInsuranceReport",
+        "bodyChars": 529,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanOfficerIncomeReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanOfficerIncomeReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanOfficerIncomeReport · AIMSCAMS",
+        "h1": "loan LoanOfficerIncomeReport",
+        "bodyChars": 537,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanOutstandingReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanOutstandingReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanOutstandingReport · AIMSCAMS",
+        "h1": "loan LoanOutstandingReport",
+        "bodyChars": 533,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-LoanRepaymentReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-LoanRepaymentReport",
+      "error": null,
+      "facts": {
+        "title": "loan LoanRepaymentReport · AIMSCAMS",
+        "h1": "loan LoanRepaymentReport",
+        "bodyChars": 529,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-PaidOffLoansReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-PaidOffLoansReport",
+      "error": null,
+      "facts": {
+        "title": "loan PaidOffLoansReport · AIMSCAMS",
+        "h1": "loan PaidOffLoansReport",
+        "bodyChars": 527,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-PendingLoanApplications",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-PendingLoanApplications",
+      "error": null,
+      "facts": {
+        "title": "loan PendingLoanApplications · AIMSCAMS",
+        "h1": "loan PendingLoanApplications",
+        "bodyChars": 537,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-PortfolioRiskReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-PortfolioRiskReport",
+      "error": null,
+      "facts": {
+        "title": "loan PortfolioRiskReport · AIMSCAMS",
+        "h1": "loan PortfolioRiskReport",
+        "bodyChars": 529,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-RiskClassificationOfAssets",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-RiskClassificationOfAssets",
+      "error": null,
+      "facts": {
+        "title": "loan RiskClassificationOfAssets · AIMSCAMS",
+        "h1": "loan RiskClassificationOfAssets",
+        "bodyChars": 543,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-SummarizedPortfolioAtRiskReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-SummarizedPortfolioAtRiskReport",
+      "error": null,
+      "facts": {
+        "title": "loan SummarizedPortfolioAtRiskReport · AIMSCAMS",
+        "h1": "loan SummarizedPortfolioAtRiskReport",
+        "bodyChars": 553,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-TransactionReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-TransactionReport",
+      "error": null,
+      "facts": {
+        "title": "loan TransactionReport · AIMSCAMS",
+        "h1": "loan TransactionReport",
+        "bodyChars": 525,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-loan-WrittenOffLoanReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-loan-WrittenOffLoanReport",
+      "error": null,
+      "facts": {
+        "title": "loan WrittenOffLoanReport · AIMSCAMS",
+        "h1": "loan WrittenOffLoanReport",
+        "bodyChars": 531,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP01Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP01Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP01Report · AIMSCAMS",
+        "h1": "msp MSP01Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP02Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP02Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP02Report · AIMSCAMS",
+        "h1": "msp MSP02Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP03MFIReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP03MFIReport",
+      "error": null,
+      "facts": {
+        "title": "msp MSP03MFIReport · AIMSCAMS",
+        "h1": "msp MSP03MFIReport",
+        "bodyChars": 517,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP03Type1Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP03Type1Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP03Type1Report · AIMSCAMS",
+        "h1": "msp MSP03Type1Report",
+        "bodyChars": 521,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP03Type2Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP03Type2Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP03Type2Report · AIMSCAMS",
+        "h1": "msp MSP03Type2Report",
+        "bodyChars": 521,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP04MFIReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP04MFIReport",
+      "error": null,
+      "facts": {
+        "title": "msp MSP04MFIReport · AIMSCAMS",
+        "h1": "msp MSP04MFIReport",
+        "bodyChars": 517,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP04Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP04Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP04Report · AIMSCAMS",
+        "h1": "msp MSP04Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP05MFIReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP05MFIReport",
+      "error": null,
+      "facts": {
+        "title": "msp MSP05MFIReport · AIMSCAMS",
+        "h1": "msp MSP05MFIReport",
+        "bodyChars": 517,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP05Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP05Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP05Report · AIMSCAMS",
+        "h1": "msp MSP05Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP06Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP06Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP06Report · AIMSCAMS",
+        "h1": "msp MSP06Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP07Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP07Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP07Report · AIMSCAMS",
+        "h1": "msp MSP07Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP08Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP08Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP08Report · AIMSCAMS",
+        "h1": "msp MSP08Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP09MFIReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP09MFIReport",
+      "error": null,
+      "facts": {
+        "title": "msp MSP09MFIReport · AIMSCAMS",
+        "h1": "msp MSP09MFIReport",
+        "bodyChars": 517,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP09Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP09Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP09Report · AIMSCAMS",
+        "h1": "msp MSP09Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP10MFIReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP10MFIReport",
+      "error": null,
+      "facts": {
+        "title": "msp MSP10MFIReport · AIMSCAMS",
+        "h1": "msp MSP10MFIReport",
+        "bodyChars": 517,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP10Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP10Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP10Report · AIMSCAMS",
+        "h1": "msp MSP10Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-msp-MSP11Report",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-msp-MSP11Report",
+      "error": null,
+      "facts": {
+        "title": "msp MSP11Report · AIMSCAMS",
+        "h1": "msp MSP11Report",
+        "bodyChars": 511,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-saving-SavingBeyondPolicyLimitsReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-saving-SavingBeyondPolicyLimitsReport",
+      "error": null,
+      "facts": {
+        "title": "saving SavingBeyondPolicyLimitsReport · AIMSCAMS",
+        "h1": "saving SavingBeyondPolicyLimitsReport",
+        "bodyChars": 555,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-saving-SavingReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-saving-SavingReport",
+      "error": null,
+      "facts": {
+        "title": "saving SavingReport · AIMSCAMS",
+        "h1": "saving SavingReport",
+        "bodyChars": 519,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-saving-SavingSnapshotReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-saving-SavingSnapshotReport",
+      "error": null,
+      "facts": {
+        "title": "saving SavingSnapshotReport · AIMSCAMS",
+        "h1": "saving SavingSnapshotReport",
+        "bodyChars": 535,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-statement",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/reports-statement",
+      "error": null,
+      "facts": {
+        "title": "Statement hub · AIMSCAMS",
+        "h1": "Statement hub",
+        "bodyChars": 539,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-statement-AccountStatementReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-statement-AccountStatementReport",
+      "error": null,
+      "facts": {
+        "title": "statement AccountStatementReport · AIMSCAMS",
+        "h1": "statement AccountStatementReport",
+        "bodyChars": 545,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-statement-MemberStatementReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-statement-MemberStatementReport",
+      "error": null,
+      "facts": {
+        "title": "statement MemberStatementReport · AIMSCAMS",
+        "h1": "statement MemberStatementReport",
+        "bodyChars": 543,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-transaction-DailyTransactionReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-transaction-DailyTransactionReport",
+      "error": null,
+      "facts": {
+        "title": "transaction DailyTransactionReport · AIMSCAMS",
+        "h1": "transaction DailyTransactionReport",
+        "bodyChars": 549,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-transaction-ExpenseReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-transaction-ExpenseReport",
+      "error": null,
+      "facts": {
+        "title": "transaction ExpenseReport · AIMSCAMS",
+        "h1": "transaction ExpenseReport",
+        "bodyChars": 531,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-transaction-FeesIncomeReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-transaction-FeesIncomeReport",
+      "error": null,
+      "facts": {
+        "title": "transaction FeesIncomeReport · AIMSCAMS",
+        "h1": "transaction FeesIncomeReport",
+        "bodyChars": 537,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/reports-transaction-ReversedTransactionReport",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/reports-transaction-ReversedTransactionReport",
+      "error": null,
+      "facts": {
+        "title": "transaction ReversedTransactionReport · AIMSCAMS",
+        "h1": "transaction ReversedTransactionReport",
+        "bodyChars": 555,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/requests",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/requests",
+      "error": null,
+      "facts": {
+        "title": "Request centre · AIMSCAMS",
+        "h1": "Request centre",
+        "bodyChars": 532,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/general",
+      "error": null,
+      "facts": {
+        "title": "General settings · AIMSCAMS",
+        "h1": "General",
+        "bodyChars": 1160,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings-administrator",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings-administrator",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Users",
+        "bodyChars": 891,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 2,
+        "pagination": false,
+        "nativeSelects": 3,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings-administrator-add",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings-administrator",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Users",
+        "bodyChars": 1494,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 2,
+        "pagination": false,
+        "nativeSelects": 5,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings-role",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings-role",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Roles",
+        "bodyChars": 3098,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings-service-provider",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings-service-provider",
+      "error": null,
+      "facts": {
+        "title": "Service providers · AIMSCAMS",
+        "h1": "Service providers",
+        "bodyChars": 432,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/accounting",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/accounting",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Accounting settings",
+        "bodyChars": 1717,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 9,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/branches",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/branches",
+      "error": null,
+      "facts": {
+        "title": "Branches · AIMSCAMS",
+        "h1": "Branches",
+        "bodyChars": 655,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/branches/new",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/branches/new",
+      "error": null,
+      "facts": {
+        "title": "Add branch · AIMSCAMS",
+        "h1": "Add branch",
+        "bodyChars": 1373,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 7,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/general",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/general",
+      "error": null,
+      "facts": {
+        "title": "General settings · AIMSCAMS",
+        "h1": "General",
+        "bodyChars": 1160,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/policies",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/policies",
+      "error": null,
+      "facts": {
+        "title": "Policies · AIMSCAMS",
+        "h1": "Policies",
+        "bodyChars": 626,
+        "flagged": [
+          "in build"
+        ],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/policies/credit-product",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/policies/credit-product",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Credit product policies",
+        "bodyChars": 596,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/policies/credit-product/new",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/policies/credit-product/new",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Create credit product policy",
+        "bodyChars": 574,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/policies/holidays",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/policies/holidays",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Holiday calendar",
+        "bodyChars": 492,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/policies/membership",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/policies/membership",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Membership policies",
+        "bodyChars": 617,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/policies/membership/new",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/policies/membership/new",
+      "error": null,
+      "facts": {
+        "title": "Create membership policy · AIMSCAMS",
+        "h1": "Create membership policy",
+        "bodyChars": 677,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/products/loan",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Loan products",
+        "bodyChars": 614,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/fee-penalties",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/fee-penalties",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Fees and penalties",
+        "bodyChars": 643,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/interest-rates",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/interest-rates",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Interest rates",
+        "bodyChars": 609,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/interest-rates/new",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/interest-rates/new",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Create interest rate",
+        "bodyChars": 561,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/loan",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/loan",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Loan products",
+        "bodyChars": 614,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/provisioning-rules",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/provisioning-rules",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Loan provisioning rules",
+        "bodyChars": 624,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/savings",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/savings",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Savings products",
+        "bodyChars": 678,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/products/savings/new",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings/products/savings/new",
+      "error": null,
+      "facts": {
+        "title": "Create savings product · AIMSCAMS",
+        "h1": "Create savings product",
+        "bodyChars": 705,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 1,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/roles",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings-role",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Roles",
+        "bodyChars": 3098,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/services",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/settings/services",
+      "error": null,
+      "facts": {
+        "title": "Services · AIMSCAMS",
+        "h1": "Services",
+        "bodyChars": 565,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/settings/users",
+      "linkedInSidebar": false,
+      "status": 200,
+      "finalPath": "/settings-administrator",
+      "error": null,
+      "facts": {
+        "title": "AIMSCAMS",
+        "h1": "Users",
+        "bodyChars": 891,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 2,
+        "pagination": false,
+        "nativeSelects": 3,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/system-logs",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/system-logs",
+      "error": null,
+      "facts": {
+        "title": "System logs · AIMSCAMS",
+        "h1": "System logs",
+        "bodyChars": 24891,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 200,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transaction-all-transaction",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transaction-all-transaction",
+      "error": null,
+      "facts": {
+        "title": "All transactions · AIMSCAMS",
+        "h1": "All transactions",
+        "bodyChars": 883,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": true,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transaction-online-payment-reconciliation",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transaction-online-payment-reconciliation",
+      "error": null,
+      "facts": {
+        "title": "Reconciliation workspace · AIMSCAMS",
+        "h1": "Reconciliation workspace",
+        "bodyChars": 801,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transaction-online-transaction",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transaction-online-transaction",
+      "error": null,
+      "facts": {
+        "title": "Online collections · AIMSCAMS",
+        "h1": "Online collections",
+        "bodyChars": 821,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": true,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transaction-teller-transaction",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transaction-teller-transaction",
+      "error": null,
+      "facts": {
+        "title": "Teller console · AIMSCAMS",
+        "h1": "Teller console",
+        "bodyChars": 1216,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": false,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transaction-teller-transaction-history",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transaction-teller-transaction-history",
+      "error": null,
+      "facts": {
+        "title": "Teller history · AIMSCAMS",
+        "h1": "Teller history",
+        "bodyChars": 727,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": true,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transaction-teller-transaction-request",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transaction-teller-transaction-request",
+      "error": null,
+      "facts": {
+        "title": "Teller approval request · AIMSCAMS",
+        "h1": "Teller approval request",
+        "bodyChars": 566,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 0,
+        "pagination": false,
+        "nativeSelects": 0,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    },
+    {
+      "route": "/transactions",
+      "linkedInSidebar": true,
+      "status": 200,
+      "finalPath": "/transactions",
+      "error": null,
+      "facts": {
+        "title": "All transactions · AIMSCAMS",
+        "h1": "All transactions",
+        "bodyChars": 883,
+        "flagged": [],
+        "backControl": false,
+        "emptyState": false,
+        "tableRows": 1,
+        "pagination": true,
+        "nativeSelects": 2,
+        "comboboxes": 0,
+        "overflowX": -15
+      },
+      "consoleIssues": [],
+      "failedRequests": []
+    }
+  ]
+}

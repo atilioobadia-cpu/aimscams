@@ -57,8 +57,51 @@ const context = await browser.newContext({
   viewport: { width: 1280, height: 800 },
 });
 
+const dynamicMode = process.env.AUDIT_DYNAMIC === "1";
+const idSources = {
+  "/account-loan-application-details": "/settings/loan-applications",
+  "/account-loan-application-edit": "/settings/loan-applications",
+  "/account-loan-details": "/settings/loans",
+  "/clients": "/settings/clients",
+  "/settings/branches": "/settings/branches",
+  "/settings/policies/credit-product": "/settings/policies/credit-product",
+  "/settings/policies/membership": "/settings/policies/membership",
+  "/settings/products/loan": "/settings/products/loans",
+  "/settings/products/savings": "/settings/products/savings",
+};
+const idCache = new Map();
+async function firstId(endpoint) {
+  if (!idCache.has(endpoint)) {
+    const response = await context.request.get(`http://localhost:4000${endpoint}`);
+    const body = response.ok() ? await response.json() : {};
+    const items = Array.isArray(body) ? body : body.items ?? [];
+    idCache.set(endpoint, items[0]?.id ?? null);
+  }
+  return idCache.get(endpoint);
+}
+const concreteRoutes = [];
+if (dynamicMode) {
+  for (const route of dynamicRoutes) {
+    const base = route.replace(/\/\[id\].*$/, "");
+    const suffix = route.replace(/^.*?\[id\]/, "");
+    const endpoint = Object.entries(idSources).find(([prefix]) => base === prefix)?.[1];
+    const id = endpoint ? await firstId(endpoint) : null;
+    if (!id) {
+      concreteRoutes.push({ route, skipped: "no record available to test" });
+    } else {
+      concreteRoutes.push({ route, url: `${base}/${id}${suffix}` });
+    }
+  }
+} else {
+  for (const route of routes) concreteRoutes.push({ route, url: route });
+}
+
 const results = [];
-for (const route of routes) {
+for (const { route, url, skipped } of concreteRoutes) {
+  if (skipped) {
+    results.push({ route, linkedInSidebar: false, status: null, finalPath: null, error: skipped, facts: null, consoleIssues: [], failedRequests: [] });
+    continue;
+  }
   const page = await context.newPage();
   const consoleIssues = [];
   const failedRequests = [];
@@ -79,7 +122,7 @@ for (const route of routes) {
   let error = null;
   let facts = null;
   try {
-    const response = await page.goto(`${baseUrl}${route}`, { waitUntil: "domcontentloaded", timeout: 30000 });
+    const response = await page.goto(`${baseUrl}${url}`, { waitUntil: "domcontentloaded", timeout: 30000 });
     status = response?.status() ?? null;
     await page.waitForLoadState("networkidle", { timeout: 12000 }).catch(() => {});
     await page.waitForTimeout(400);
@@ -125,6 +168,7 @@ for (const route of routes) {
 
   results.push({
     route,
+    requestedPath: url,
     linkedInSidebar: linked.has(route),
     status,
     finalPath,
@@ -144,10 +188,12 @@ const summary = {
   generatedAt: new Date().toISOString(),
   baseUrl,
   viewport: "1280x800",
+  mode: dynamicMode ? "dynamic" : "static",
   staticRoutes: routes.length,
   dynamicRoutesSkipped: dynamicRoutes,
   results,
 };
-await mkdir(dirname(outFile), { recursive: true });
-await writeFile(outFile, JSON.stringify(summary, null, 2));
-console.log(`\nWrote ${results.length} route results to ${outFile}`);
+const target = dynamicMode ? resolve(repoRoot, "docs/audit/route-crawl-dynamic.json") : outFile;
+await mkdir(dirname(target), { recursive: true });
+await writeFile(target, JSON.stringify(summary, null, 2));
+console.log(`\nWrote ${results.length} route results to ${target}`);
