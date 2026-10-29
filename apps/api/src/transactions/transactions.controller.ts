@@ -53,6 +53,34 @@ export class TransactionsController {
     return this.transactions.listRequests(auth, query);
   }
 
+  @Get('requests/:id')
+  @RequirePermissions('Transaction : View')
+  getRequest(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.transactions.getRequest(auth, id);
+  }
+
+  @Post('requests/:id/approve')
+  @RequirePermissions('Transaction : Approve')
+  approveRequest(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.transactions.approveRequest(auth, id);
+  }
+
+  @Post('requests/:id/reject')
+  @RequirePermissions('Transaction : Reject')
+  rejectRequest(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+  ) {
+    return this.transactions.rejectRequest(auth, id, String(body.reason ?? ''));
+  }
+
   @Post('requests/:id/resubmit')
   @RequirePermissions('Transaction : Edit')
   resubmitRequest(@CurrentAuth() auth: AuthContext, @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string) {

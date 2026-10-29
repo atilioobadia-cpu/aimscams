@@ -106,6 +106,36 @@ export function listRequests(filters: RequestFilters = {}): Promise<RequestList>
   return apiRequest(`/transactions/requests${query ? `?${query}` : ""}`);
 }
 
+export type RequestDetail = {
+  id: string;
+  requestNo: string;
+  requestType: string;
+  payload: unknown;
+  amountMinor: string | null;
+  status: RequestStatus;
+  currentAssignee: string;
+  requestedBy: string;
+  approvedBy: string;
+  approvedAt: string | null;
+  reason: string | null;
+  branchName: string;
+  createdAt: string;
+  canApprove: boolean;
+  canReject: boolean;
+};
+
+export function getRequest(id: string): Promise<RequestDetail> {
+  return apiRequest(`/transactions/requests/${id}`);
+}
+
+export function approveRequest(id: string): Promise<{ status: string }> {
+  return apiRequest(`/transactions/requests/${id}/approve`, { method: "POST" });
+}
+
+export function rejectRequest(id: string, reason: string): Promise<{ status: string }> {
+  return apiRequest(`/transactions/requests/${id}/reject`, { method: "POST", body: { reason } });
+}
+
 export type TillSession = {
   id: string;
   businessDate: string;

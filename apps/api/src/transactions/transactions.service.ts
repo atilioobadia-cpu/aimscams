@@ -519,6 +519,141 @@ export class TransactionsService {
     };
   }
 
+  async getRequest(auth: AuthContext, id: string) {
+    const request = await this.prisma.request.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+      select: {
+        id: true,
+        requestNo: true,
+        requestType: true,
+        payload: true,
+        amountMinor: true,
+        status: true,
+        currentAssigneeId: true,
+        requestedByUserId: true,
+        approvedByUserId: true,
+        approvedAt: true,
+        reason: true,
+        createdAt: true,
+        branch: { select: { name: true } },
+      },
+    });
+    if (!request) throw new Error("Request not found.");
+    const userIds = [request.currentAssigneeId, request.requestedByUserId, request.approvedByUserId].filter(
+      (value): value is string => value !== null,
+    );
+    const users = userIds.length
+      ? await this.prisma.user.findMany({
+          where: { organisationId: auth.user.organisation.id, id: { in: userIds } },
+          select: { id: true, fullName: true },
+        })
+      : [];
+    const names = new Map(users.map((user) => [user.id, user.fullName]));
+    return {
+      id: request.id,
+      requestNo: request.requestNo,
+      requestType: request.requestType,
+      payload: request.payload,
+      amountMinor: request.amountMinor?.toString() ?? null,
+      status: request.status,
+      currentAssignee: names.get(request.currentAssigneeId ?? "") ?? "N/A",
+      requestedBy: names.get(request.requestedByUserId ?? "") ?? "N/A",
+      approvedBy: names.get(request.approvedByUserId ?? "") ?? "N/A",
+      approvedAt: request.approvedAt?.toISOString() ?? null,
+      reason: request.reason ?? null,
+      branchName: request.branch?.name ?? "N/A",
+      createdAt: request.createdAt.toISOString(),
+      canApprove: auth.user.permissions.includes("Transaction : Approve"),
+      canReject: auth.user.permissions.includes("Transaction : Reject"),
+    };
+  }
+
+  async approveRequest(auth: AuthContext, id: string) {
+    if (!auth.user.permissions.includes("Transaction : Approve")) {
+      throw new Error("forbidden");
+    }
+    const request = await this.prisma.request.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+    });
+    if (!request) throw new Error("Request not found.");
+    if (request.status !== "PENDING") throw new Error("Request is not pending.");
+
+    if (request.requestType === "TRANSACTION_REVERSAL") {
+      const payload = request.payload as { transactionId?: string };
+      const transactionId = payload?.transactionId;
+      if (transactionId) {
+        const transaction = await this.prisma.transaction.findFirst({
+          where: { id: transactionId, organisationId: auth.user.organisation.id },
+        });
+        if (transaction && transaction.accountingStatus === "POSTED") {
+          const entry = await this.findPostedEntry(auth.user.organisation.id, transaction.id);
+          if (entry) {
+            const db = await this.accountingDb.getDb(auth.user.organisation.id);
+            try {
+              const { reverseEntry } = await import("@aimscams/ledger");
+              await reverseEntry(db, entry, {
+                tenantId: auth.user.organisation.id,
+                entryDate: todayInDarEsSalaam(),
+                description: `Reversal of transaction ${transaction.transactionNo}`,
+              });
+            } finally {
+              await db.close();
+            }
+          }
+          await this.prisma.transaction.update({
+            where: { id: transaction.id },
+            data: { status: "REVERSED", reversedByUserId: auth.user.id },
+          });
+        }
+      }
+    }
+
+    await this.prisma.request.update({
+      where: { id: request.id },
+      data: {
+        status: "APPROVED",
+        approvedByUserId: auth.user.id,
+        approvedAt: new Date(),
+      },
+    });
+    return { status: "APPROVED" };
+  }
+
+  async rejectRequest(auth: AuthContext, id: string, reason: string) {
+    if (!auth.user.permissions.includes("Transaction : Reject")) {
+      throw new Error("forbidden");
+    }
+    const request = await this.prisma.request.findFirst({
+      where: { id, organisationId: auth.user.organisation.id },
+    });
+    if (!request) throw new Error("Request not found.");
+    if (request.status !== "PENDING") throw new Error("Request is not pending.");
+    await this.prisma.request.update({
+      where: { id: request.id },
+      data: {
+        status: "REJECTED",
+        reason: reason.trim() || request.reason,
+        approvedByUserId: auth.user.id,
+        approvedAt: new Date(),
+      },
+    });
+    return { status: "REJECTED" };
+  }
+
+  private async findPostedEntry(organisationId: string, transactionId: string): Promise<string | null> {
+    const rows = await this.prisma.$queryRaw<{ id: string }[]>`
+      select id from journal_entry
+      where organisation_id = ${organisationId}::uuid
+        and source_type = 'transaction'
+        and source_id = ${transactionId}::uuid
+        and status = 'posted'
+        and reversal_of is null
+      order by posted_at desc
+      limit 1
+    `;
+    return rows[0]?.id ?? null;
+  }
+
   async resubmitTransaction(auth: AuthContext, id: string) {
     const row = await this.prisma.transaction.findFirst({
       where: { id, organisationId: auth.user.organisation.id },
