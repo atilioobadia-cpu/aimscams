@@ -365,6 +365,59 @@ export class TransactionsService {
     return { status: "CLOSED", varianceMinor: variance.toString() };
   }
 
+  async listTillSessions(auth: AuthContext, query: Readonly<Record<string, unknown>>) {
+    const organisationId = auth.user.organisation.id;
+    const branchId = auth.user.branch?.id ?? null;
+    const where: Prisma.TillSessionWhereInput = { organisationId };
+    if (branchId) where.branchId = branchId;
+    const tellerId = typeof query.tellerId === "string" ? query.tellerId.trim() : undefined;
+    if (tellerId) where.tellerId = tellerId;
+    const from = typeof query.from === "string" ? query.from.trim() : undefined;
+    const to = typeof query.to === "string" ? query.to.trim() : undefined;
+    if (from || to) {
+      where.businessDate = {
+        ...(from ? { gte: new Date(`${from}T00:00:00.000Z`) } : {}),
+        ...(to ? { lte: new Date(`${to}T00:00:00.000Z`) } : {}),
+      };
+    }
+    const sessions = await this.prisma.tillSession.findMany({
+      where,
+      select: {
+        id: true,
+        businessDate: true,
+        openingFloatMinor: true,
+        closingCountedMinor: true,
+        systemBalanceMinor: true,
+        varianceMinor: true,
+        status: true,
+        openedAt: true,
+        closedAt: true,
+        teller: { select: { fullName: true, email: true } },
+        branch: { select: { name: true } },
+        _count: { select: { transactions: true } },
+      },
+      orderBy: [{ businessDate: "desc" }, { openedAt: "desc" }],
+    });
+    return {
+      items: sessions.map((session) => ({
+        id: session.id,
+        businessDate: session.businessDate.toISOString().slice(0, 10),
+        openingFloatMinor: session.openingFloatMinor.toString(),
+        closingCountedMinor: session.closingCountedMinor?.toString() ?? null,
+        systemBalanceMinor: session.systemBalanceMinor?.toString() ?? null,
+        varianceMinor: session.varianceMinor?.toString() ?? null,
+        status: session.status,
+        openedAt: session.openedAt.toISOString(),
+        closedAt: session.closedAt?.toISOString() ?? null,
+        tellerName: session.teller.fullName,
+        tellerEmail: session.teller.email,
+        branchName: session.branch?.name ?? "N/A",
+        transactionCount: session._count.transactions,
+      })),
+      canView: auth.user.permissions.includes("Transaction : View"),
+    };
+  }
+
   async createTransaction(auth: AuthContext, body: Record<string, unknown>) {
     if (!auth.user.permissions.includes("Transaction : Create")) {
       throw new Error("forbidden");

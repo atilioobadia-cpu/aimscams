@@ -17,6 +17,15 @@ export class TransactionsController {
     return this.transactions.listTransactions(auth, query);
   }
 
+  @Get('till/sessions')
+  @RequirePermissions('Transaction : View')
+  listTillSessions(
+    @CurrentAuth() auth: AuthContext,
+    @Query() query: Readonly<Record<string, unknown>>,
+  ) {
+    return this.transactions.listTillSessions(auth, query);
+  }
+
   @Get('till')
   @RequirePermissions('Transaction : View')
   getTill(@CurrentAuth() auth: AuthContext) {

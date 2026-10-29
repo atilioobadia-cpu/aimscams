@@ -140,6 +140,32 @@ export function closeTill(payload: { countedMinor: string }): Promise<{ status: 
   return apiRequest("/transactions/till/close", { method: "POST", body: payload });
 }
 
+export type TillSessionSummary = {
+  id: string;
+  businessDate: string;
+  openingFloatMinor: string;
+  closingCountedMinor: string | null;
+  systemBalanceMinor: string | null;
+  varianceMinor: string | null;
+  status: string;
+  openedAt: string;
+  closedAt: string | null;
+  tellerName: string;
+  tellerEmail: string;
+  branchName: string;
+  transactionCount: number;
+};
+
+export type TillSessionList = {
+  items: TillSessionSummary[];
+  canView: boolean;
+};
+
+export function listTillSessions(filters: { from?: string; to?: string; tellerId?: string } = {}): Promise<TillSessionList> {
+  const query = searchParams(filters);
+  return apiRequest(`/transactions/till/sessions${query ? `?${query}` : ""}`);
+}
+
 export type CreateTransactionPayload = {
   type: string;
   amountMinor: string;

@@ -54,6 +54,7 @@ export const navItems: NavItem[] = [
     children: [
       { label: "All transactions", icon: "transactions", href: "/transaction-all-transaction" },
       { label: "Teller console", icon: "transactions", href: "/transaction-teller-transaction" },
+      { label: "Teller history", icon: "transactions", href: "/transaction-teller-transaction-history" },
     ],
   },
   {
