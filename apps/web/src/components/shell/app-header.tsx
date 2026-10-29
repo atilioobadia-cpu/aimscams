@@ -76,9 +76,9 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           </p>
           <p
             className="truncate fs-text leading-tight text-[#6c757d]"
-            title={`${institution.dialect} SACCOS · ${institution.code}`}
+            title={`${institution.dialect} SACCOS`}
           >
-            {institution.dialect} SACCOS · {institution.code}
+            {institution.dialect} SACCOS
           </p>
         </div>
       </div>
