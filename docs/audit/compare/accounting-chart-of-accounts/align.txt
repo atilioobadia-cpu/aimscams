@@ -1,0 +1,6 @@
+Page: accounting-chart-of-accounts
+ref size: 1838x1041  ours size: 1838x1368  crop: 1838x1041
+WHOLE: dx=-537 dy=-218 ssim=0.8753
+HEADER (y=0-100): dx=-552 dy=-18 ssim=0.8600
+SIDEBAR (x=0-250): dx=-36 dy=60 ssim=0.7728
+CONTENT (x=250+): dx=359 dy=-335 ssim=0.8914
