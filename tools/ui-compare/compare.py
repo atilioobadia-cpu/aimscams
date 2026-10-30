@@ -3,12 +3,38 @@
 Computes SSIM, changed-pixel ratio, and diff regions per page.
 Run: python tools/ui-compare/compare.py
 """
-import json, os, sys
+import os, sys, json
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent))
+from mask import mask_both, find_mask_regions, ocr_image
+
+
+def wakandi_boxes_map():
+    out = {}
+    for e in json.load(open(WAKANDI_OCR, encoding="utf-8")):
+        for b in e["boxes"]:
+            out.setdefault(e["slug"], []).append(
+                (b["text"], b["x"], b["y"], b["x"] + b["w"], b["y"] + b["h"]))
+    return out
+
+def cached_ocr(key, src_path, img):
+    OCR_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache = OCR_CACHE_DIR / (key + ".json")
+    stamp = os.path.getmtime(src_path)
+    if cache.exists():
+        data = json.load(open(cache, encoding="utf-8"))
+        if data.get("mtime") == stamp:
+            return [tuple(b) for b in data["boxes"]]
+    boxes = ocr_image(img)
+    json.dump({"mtime": stamp, "boxes": boxes}, open(cache, "w", encoding="utf-8"))
+    return boxes
+
 import numpy as np
 import cv2
 
 ROOT = Path(r"C:\Users\atili\microfinance_cams")
+OCR_CACHE_DIR = ROOT / "artifacts" / "ocr-cache"
+WAKANDI_OCR = ROOT / "docs" / "audit" / "wakandi-ocr.json"
 REF_DIR = Path(r"F:\Wakandi")
 OUR_DIR = ROOT / "artifacts" / "ui-screenshots"
 REPORT_DIR = ROOT / "docs" / "audit" / "compare"
@@ -80,6 +106,7 @@ def changed_pixel_ratio(ref, ours, threshold=30):
 def main():
     pages = json.load(open(PAGES_JSON, encoding="utf-8"))
     summary = []
+    wboxes = wakandi_boxes_map()
     for page in pages:
         name = page["name"]
         ref_path = page.get("reference_image")
@@ -95,16 +122,35 @@ def main():
         if ref is None or ours is None:
             continue
 
-        ours = resize_to_match(ref, ours)
-        ssim = compute_ssim(ref, ours)
-        cpr = changed_pixel_ratio(ref, ours)
-        regions, mask = find_diff_regions(ref, ours)
+        # Pad our image to match reference dimensions (don't resize/distort)
+        if ours.shape != ref.shape:
+            padded = np.full(ref.shape, 235, dtype=np.uint8)  # page bg color
+            h = min(ours.shape[0], ref.shape[0])
+            w = min(ours.shape[1], ref.shape[1])
+            padded[:h, :w] = ours[:h, :w]
+            ours = padded
+
+        # Structural masking: mask dynamic data regions in both images
+        ref_boxes = wboxes.get(name)
+        if ref_boxes is None:
+            ref_boxes = cached_ocr("ref-" + name, ref_full, ref)
+        our_boxes = cached_ocr("our-" + name, our_path, ours)
+        ref_masked, our_masked, mask_regions = mask_both(ref, ours, ref_boxes, our_boxes)
+
+        # Compute on masked images
+        ssim = compute_ssim(ref_masked, our_masked)
+        cpr = changed_pixel_ratio(ref_masked, our_masked)
+        regions, mask = find_diff_regions(ref_masked, our_masked)
+
+        # Also compute unmasked for reference
+        ssim_unmasked = compute_ssim(ref, ours)
+        cpr_unmasked = changed_pixel_ratio(ref, ours)
 
         page_dir = REPORT_DIR / name
         page_dir.mkdir(parents=True, exist_ok=True)
 
-        # Save diff image
-        diff_img = cv2.absdiff(ref, ours)
+        # Save masked diff image
+        diff_img = cv2.absdiff(ref_masked, our_masked)
         cv2.imwrite(str(page_dir / "diff.png"), cv2.cvtColor(diff_img, cv2.COLOR_RGB2BGR))
 
         report = {
@@ -112,6 +158,9 @@ def main():
             "route": page.get("route"),
             "ssim": round(ssim, 4),
             "changed_pixel_ratio": round(cpr, 4),
+            "ssim_unmasked": round(ssim_unmasked, 4),
+            "cpr_unmasked": round(cpr_unmasked, 4),
+            "mask_regions": len(mask_regions),
             "diff_regions": regions[:20],
             "pass": ssim >= 0.98 and cpr <= 0.01,
         }
@@ -120,8 +169,11 @@ def main():
         # Write markdown report
         md = f"# {name}\n\n"
         md += f"- Route: {page.get('route')}\n"
-        md += f"- SSIM: {ssim:.4f} (threshold 0.98)\n"
-        md += f"- Changed pixel ratio: {cpr:.4%} (threshold 1%)\n"
+        md += f"- SSIM (masked): {ssim:.4f} (threshold 0.98)\n"
+        md += f"- SSIM (unmasked): {ssim_unmasked:.4f}\n"
+        md += f"- Changed pixel ratio (masked): {cpr:.4%} (threshold 1%)\n"
+        md += f"- Changed pixel ratio (unmasked): {cpr_unmasked:.4%}\n"
+        md += f"- Mask regions: {len(mask_regions)}\n"
         md += f"- Diff regions: {len(regions)}\n"
         md += f"- **Pass:** {'YES' if report['pass'] else 'NO'}\n\n"
         if regions:
