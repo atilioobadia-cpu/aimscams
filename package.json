@@ -27,7 +27,8 @@
     "db:migrate": "npm run migrate -w @aimscams/db",
     "db:deploy": "npm run migrate:deploy -w @aimscams/db",
     "db:seed": "npm run seed -w @aimscams/db",
-    "db:studio": "npm run studio -w @aimscams/db"
+    "db:studio": "npm run studio -w @aimscams/db",
+    "ui:compare": "python tools/ui-compare/compare.py"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
