@@ -561,6 +561,66 @@ existing list data; no delete actions are invented.
 
 ---
 
+### D-033 - Page titles render at 20px; every other text node stays 12.8px
+
+**Status:** Accepted 2026-10-30 — settles the Phase 3 title-size conflict (reference title box ≈ 1.55× body) — `docs/11 §1`, `docs/11 §6 rule 2`, `docs/13 §5`
+
+The reference renders the page title at roughly 1.55× the body glyph height (measured ink
+heights: 19–25px at capture scale against 12–17px body labels, i.e. 16.9–22.2px against
+10.7–15.1px in CSS). `docs/11 §6 rule 2` makes 12.8px the single text size, so the two
+disagree. The reference wins on evidence: a title that is the same size as its labels is not
+a title.
+
+`--fs-title` changes from `var(--fs)` to `20px`. Weight 700, colour `--text-heading`,
+line-height 24px. All other text — KPI values, card titles, tab labels, table cells,
+buttons, breadcrumbs — stays at `--fs` (12.8px). `--fs-kpi` and `--fs-body` are unchanged.
+
+**Why.** The 12.8px rule exists to stop 18px section titles and 30px KPI values, which the
+reference does not use. A 20px page title is a different thing: it is the one element that
+identifies the screen, and the reference uses it on every page. Keeping it at 12.8px made
+every implemented screen read as a flat list of labels, which is the largest single visual
+gap in the Phase 3 comparison.
+
+**Consequences.**
+- `docs/11 §1` token `--fs-title` becomes `20px`; the rest of the token block is unchanged.
+- `docs/11 §6 rule 2` gains one sentence: the page `h1` rendered by `PageHeader` is the
+  sole exception; it is 20px, weight 700.
+- `PageHeader` is the only component that may use `--fs-title`. A text node at any size
+  other than 12.8px or 20px (title) is a defect.
+- The title is verified at 1280×800 and 1837×1080 on every page touched in Phase 5.
+
+---
+
+### D-034 - Pagination applies to list screens only; statements and the chart of accounts are whole-document
+
+**Status:** Accepted 2026-10-30 — settles the Phase 3 pagination scope conflict — `docs/11 §6`, `docs/13 §5`
+
+The standing rule (paginate after 10 rows, API default `pageSize` 10) applies to list and
+transaction screens: clients, accounts, loans, transactions, requests, imports, messages,
+users, branches, roles, products, policies, assets, fixed assets, ledger entries.
+
+It does **not** apply to financial statements (financial position, income statement, trial
+balance, cash flow, cash book, journal book, ledger statement, statement of changes in
+equity) or to the chart of accounts. Those render the complete result with a sticky header
+and group totals, because they are read as a single document and the reference paginates
+none of them. The API still accepts `pageSize` on those endpoints; the UI requests the
+full result (`pageSize` omitted or set to the row count) and shows a "showing all N rows"
+line instead of a pager.
+
+**Why.** The reference paginates clients and transactions but shows every account and every
+statement line. Paginating a statement would split a balance sheet across pages and make
+totals meaningless, and paginating the chart of accounts would hide group subtotals. The
+10-row rule exists to keep long lists usable, which is not the problem statements have.
+
+**Consequences.**
+- The `DataTable` pager is mandatory on list screens and forbidden on statement/COA screens.
+- A statement screen that grows past 200 rows must gain a search/filter, not pagination.
+- The four screens flagged `unpaged >10 rows` in Phase 3 (`/accounting-chart-of-accounts`,
+  `/accounting-reports-FinancialPositionReport`, `/accounting-reports-IncomeStatementReport`,
+  `/accounting-reports-TrialBalanceReport`) are cleared by this decision, not by a code change.
+
+---
+
 ## Open
 
 > Resolved items are ruled on in **D-015**; the entries below are kept for their problem statements.

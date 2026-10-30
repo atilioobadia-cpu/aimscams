@@ -25,7 +25,7 @@ a near-match.
 :root {
   /* Type: one size, everywhere */
   --fs: 12.8px;
-  --fs-title: var(--fs);
+  --fs-title: 20px;                 /* page h1 only; see D-033 */
   --fs-kpi: var(--fs);
   --fs-body: var(--fs);
 
@@ -312,7 +312,8 @@ At 1837 the chart is **949.4 × 500.4** and sits beside the portfolio card (**61
 1. Tokens only. **No new colours, no near-matches.** Component padding and gaps use the spacing
    scale; the dashboard composition's 20px card gap and 30px chart padding are measured values.
 2. Every rendered text node is **12.8px**. No 10px helper text, no 18px section titles, no 30px
-   KPI values.
+   KPI values. The sole exception is the page `h1` rendered by `PageHeader`, which is
+   **20px**, weight 700 (`--fs-title`, D-033).
 3. Cards: white, 1px `--border`, **8px** radius, **no heavy shadow**. Controls use 5px radius;
    pills use 6px; modals use 11px.
 4. `--primary` is the only primary-action and active-state colour. Red marks money-out and risk;
