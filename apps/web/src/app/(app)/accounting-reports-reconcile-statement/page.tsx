@@ -1,17 +1,9 @@
 ﻿import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { ReconcileStatementPage } from "@/components/accounting/reconciliation-reports-page";
 
-export const metadata: Metadata = {
-  title: "Reconcile statement · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "Reconcile statement · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Reconcile statement"
-      description="Financial report."
-      detail="This report arrives with the financial report engine. It will read posted ledger data only."
-    />
-  );
+export default function Route() {
+  return <ReconcileStatementPage />;
 }
