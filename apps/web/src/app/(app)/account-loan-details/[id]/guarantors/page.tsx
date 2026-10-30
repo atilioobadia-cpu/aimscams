@@ -90,7 +90,26 @@ export default function LoanGuarantorsPage() {
       </div>
       <PageHeader title={`Guarantors · ${loanNumber}`} description="Guarantors and collateral for this loan." />
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <EmptyState icon={Shield} title="No guarantors recorded" description="Guarantors and collateral will appear here once added." />
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-left fs-text">
+            <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
+              <tr>
+                <th className="px-4 py-3">Name</th>
+                <th className="px-4 py-3">Phone</th>
+                <th className="px-4 py-3">Relationship</th>
+                <th className="px-4 py-3 text-right">Share</th>
+                <th className="px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-4 py-6 text-center text-muted-foreground" colSpan={5}>
+                  No guarantors recorded.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );

@@ -90,7 +90,27 @@ export default function LoanTransactionsPage() {
       </div>
       <PageHeader title={`Transactions · ${loanNumber}`} description="Transaction ledger for this loan." />
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <EmptyState icon={Receipt} title="No transactions" description="Loan transactions will appear here once posted." />
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[720px] text-left fs-text">
+            <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
+              <tr>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Number</th>
+                <th className="px-4 py-3">Type</th>
+                <th className="px-4 py-3 text-right">Debit</th>
+                <th className="px-4 py-3 text-right">Credit</th>
+                <th className="px-4 py-3 text-right">Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-4 py-6 text-center text-muted-foreground" colSpan={6}>
+                  No transactions recorded for this loan.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   );
