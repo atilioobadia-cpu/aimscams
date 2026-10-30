@@ -117,8 +117,9 @@ export class SettingsController {
     @Query('q') q?: string,
     @Query('status') status?: string,
     @Query('type') type?: string,
+    @Query('groupId') groupId?: string,
   ) {
-    return this.settings.listClients(auth, { q, status, clientType: type });
+    return this.settings.listClients(auth, { q, status, clientType: type, groupId });
   }
 
   @Post('clients')

@@ -742,11 +742,12 @@ export type ClientResponse = {
   canEdit: boolean;
 };
 
-export async function listClients(filter: { q?: string; status?: string; type?: string } = {}): Promise<ClientListResponse> {
+export async function listClients(filter: { q?: string; status?: string; type?: string; groupId?: string } = {}): Promise<ClientListResponse> {
   const params = new URLSearchParams();
   if (filter.q?.trim()) params.set("q", filter.q.trim());
   if (filter.status) params.set("status", filter.status);
   if (filter.type) params.set("type", filter.type);
+  if (filter.groupId) params.set("groupId", filter.groupId);
   const suffix = params.size > 0 ? `?${params.toString()}` : "";
   return apiRequest<ClientListResponse>(`/settings/clients${suffix}`);
 }

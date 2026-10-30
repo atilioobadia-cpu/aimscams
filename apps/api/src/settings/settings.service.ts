@@ -1510,7 +1510,7 @@ export class SettingsService {
     return { referenceNo: String(max + 1).padStart(6, '0') };
   }
 
-  async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string }) {
+  async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string; groupId?: string }) {
     const organisationId = auth.user.organisation.id;
     const where: Prisma.ClientWhereInput = { organisationId };
     if (filter.status) {
@@ -1521,6 +1521,7 @@ export class SettingsService {
       const type = filter.clientType.trim().toUpperCase();
       if (type === 'INDIVIDUAL' || type === 'GROUP') where.clientType = type as 'INDIVIDUAL' | 'GROUP';
     }
+    if (filter.groupId) where.groupId = filter.groupId;
     const query = filter.q?.trim();
     if (query) {
       where.OR = [
