@@ -19,8 +19,8 @@ Pages failing: 142
 | account-loan-details-118-transactions | 0.904 | 0.0202 | 20 | NO |
 | account-saving | 0.8692 | 0.0293 | 20 | NO |
 | accounting-assets | 0.8669 | 0.0248 | 20 | NO |
-| accounting-chart-of-accounts | 0.8567 | 0.0262 | 20 | NO |
-| accounting-entries | 0.862 | 0.0219 | 20 | NO |
+| accounting-chart-of-accounts | 0.9356 | 0.0096 | 20 | NO |
+| accounting-entries | 0.9216 | 0.008 | 20 | NO |
 | accounting-fixed-asset | 0.872 | 0.0246 | 20 | NO |
 | accounting-ledger-entries | 0.8453 | 0.0297 | 20 | NO |
 | accounting-reports | 0.846 | 0.0311 | 20 | NO |
@@ -41,7 +41,7 @@ Pages failing: 142
 | accounting-reports-reconcile-statement-settings | 0.8358 | 0.0287 | 20 | NO |
 | accounting-reports-Reconciliation | 0.8367 | 0.0287 | 20 | NO |
 | accounting-reports-TrialBalanceReport | 0.8438 | 0.0188 | 20 | NO |
-| clients | 0.8335 | 0.0427 | 20 | NO |
+| clients | 0.8392 | 0.0405 | 20 | NO |
 | clients-create | 0.885 | 0.0254 | 20 | NO |
 | clients-create-group | 0.8586 | 0.0343 | 20 | NO |
 | core-wba-business-account | 0.8901 | 0.0219 | 20 | NO |
@@ -140,7 +140,7 @@ Pages failing: 142
 | settings-products-savings | 0.8852 | 0.0256 | 20 | NO |
 | settings-products-savings-create | 0.8525 | 0.0292 | 20 | NO |
 | settings-products-savings-edit-1 | 0.8672 | 0.0232 | 20 | NO |
-| settings-role | 0.8059 | 0.0381 | 20 | NO |
+| settings-role | 0.9202 | 0.0098 | 20 | NO |
 | settings-service-provider | 0.9306 | 0.018 | 20 | NO |
 | transaction-all-transaction | 0.8738 | 0.029 | 20 | NO |
 | transaction-online-payment-reconciliation | 0.8739 | 0.0287 | 20 | NO |
