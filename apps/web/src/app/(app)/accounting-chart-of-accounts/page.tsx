@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
-import { BookOpen, Search } from "lucide-react";
+import { BookOpen, Search, ChevronRight, ChevronDown } from "lucide-react";
 
 import { AccountingNav } from "@/components/accounting/accounting-nav";
 import {
@@ -57,6 +57,14 @@ export default function ChartOfAccountsPage() {
   const [error, setError] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0);
   const [query, setQuery] = useState("");
+  const [expanded, setExpanded] = useState<Set<string> | null>(null);
+
+  // Default: every group expanded.
+  useEffect(() => {
+    if (expanded === null && accounts.length > 0) {
+      setExpanded(new Set(accounts.filter((a) => a.is_group).map((a) => a.id)));
+    }
+  }, [accounts, expanded]);
 
   useEffect(() => {
     let active = true;
@@ -120,6 +128,46 @@ export default function ChartOfAccountsPage() {
         account.type.toLowerCase().includes(q),
     );
   }, [accounts, query]);
+
+  const childrenOf = useMemo(() => {
+    const map = new Map<string, Account[]>();
+    for (const account of accounts) {
+      const key = account.parent_id ?? "__root__";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(account);
+    }
+    // sort children by code
+    for (const list of map.values()) list.sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }));
+    return map;
+  }, [accounts]);
+
+  const isExpanded = (id: string) => (expanded ?? new Set()).has(id);
+
+  const toggle = (id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev ?? []);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const visibleRows = useMemo(() => {
+    if (query.trim()) return filtered; // search shows flat filtered list
+    const result: Account[] = [];
+    const walk = (parentId: string | null) => {
+      const key = parentId ?? "__root__";
+      const children = childrenOf.get(key) ?? [];
+      for (const account of children) {
+        result.push(account);
+        if (account.is_group && isExpanded(account.id)) {
+          walk(account.id);
+        }
+      }
+    };
+    walk(null);
+    return result;
+  }, [childrenOf, expanded, query, filtered]);
 
   const totalClosing = accounts.reduce((sum, a) => sum + BigInt(a.closing_balance_minor || "0"), 0n);
 
@@ -187,25 +235,43 @@ export default function ChartOfAccountsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.map((account) => {
+                {visibleRows.map((account) => {
                   const depth = depthOf.get(account.id) ?? 0;
                   return (
                     <TableRow key={account.id} className={account.is_group ? "bg-subtle/60" : undefined}>
                       <TableCell className="pl-[var(--space-16)] font-medium text-strong">
                         {account.code}
                       </TableCell>
-                      <TableCell style={{ paddingLeft: `${16 + depth * 16}px` }}>
-                        <span className={account.is_group ? "font-semibold text-strong" : "text-body"}>
-                          {account.name}
-                        </span>
-                        {account.is_assumption ? (
-                          <Badge
-                            variant="outline"
-                            className="ml-2 border-accent-yellow/40 bg-accent-yellow-bg text-accent-yellow"
-                          >
-                            Assumption
-                          </Badge>
-                        ) : null}
+                      <TableCell style={{ paddingLeft: `${16 + depth * 20}px` }}>
+                        <div className="flex items-center gap-1">
+                          {account.is_group ? (
+                            <button
+                              type="button"
+                              onClick={() => toggle(account.id)}
+                              className="flex size-5 items-center justify-center rounded text-muted-foreground hover:text-strong"
+                              aria-label={isExpanded(account.id) ? "Collapse group" : "Expand group"}
+                            >
+                              {isExpanded(account.id) ? (
+                                <ChevronDown className="size-4" />
+                              ) : (
+                                <ChevronRight className="size-4" />
+                              )}
+                            </button>
+                          ) : (
+                            <span className="size-5" />
+                          )}
+                          <span className={account.is_group ? "font-semibold text-strong" : "text-body"}>
+                            {account.name}
+                          </span>
+                          {account.is_assumption ? (
+                            <Badge
+                              variant="outline"
+                              className="ml-2 border-accent-yellow/40 bg-accent-yellow-bg text-accent-yellow"
+                            >
+                              Assumption
+                            </Badge>
+                          ) : null}
+                        </div>
                       </TableCell>
                       <TableCell className="text-body">{display(account.type)}</TableCell>
                       <TableCell className="text-body">{display(account.normal_balance)}</TableCell>
