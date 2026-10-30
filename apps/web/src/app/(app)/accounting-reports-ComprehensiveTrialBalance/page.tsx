@@ -1,17 +1,9 @@
 ﻿import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { ComprehensiveTrialBalancePage } from "@/components/accounting/comprehensive-trial-balance-page";
 
-export const metadata: Metadata = {
-  title: "Comprehensive trial balance · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "Comprehensive trial balance · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Comprehensive trial balance"
-      description="Financial report."
-      detail="This report arrives with the financial report engine. It will read posted ledger data only."
-    />
-  );
+export default function Route() {
+  return <ComprehensiveTrialBalancePage />;
 }
