@@ -211,6 +211,29 @@ export default function LoanDetailPage() {
           </div>
         )}
       </section>
+
+      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+        <h2 className="mb-3 fs-text font-semibold text-strong">Charges</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-left fs-text">
+            <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
+              <tr>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Charge</th>
+                <th className="px-4 py-3 text-right">Amount</th>
+                <th className="px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-4 py-6 text-center text-muted-foreground" colSpan={4}>
+                  No charges recorded for this loan.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
