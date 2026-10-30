@@ -36,6 +36,16 @@ export default function HolidaysPage() {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
 
+  const [workingDays, setWorkingDays] = useState<Record<string, boolean>>({
+    Monday: true,
+    Tuesday: true,
+    Wednesday: true,
+    Thursday: true,
+    Friday: true,
+    Saturday: false,
+    Sunday: false,
+  });
+
   useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(
@@ -117,6 +127,29 @@ export default function HolidaysPage() {
           </Button>
         ) : null}
       </div>
+
+      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+        <h2 className="mb-3 fs-text font-semibold text-strong">Working days</h2>
+        <p className="mb-3 fs-text text-muted-foreground">Days the branch is open. Affects due-date calculation.</p>
+        <div className="flex flex-wrap gap-4">
+          {Object.keys(workingDays).map((day) => (
+            <label key={day} className="flex items-center gap-2 fs-text text-body">
+              <input
+                type="checkbox"
+                checked={workingDays[day]}
+                onChange={(e) => setWorkingDays((prev) => ({ ...prev, [day]: e.target.checked }))}
+                className="size-4 rounded border-input"
+              />
+              {day}
+            </label>
+          ))}
+        </div>
+        <div className="mt-3">
+          <Button type="button" variant="outline" onClick={() => pushToast("Working days policy arrives with the scheduling module.")}>
+            Save working days
+          </Button>
+        </div>
+      </section>
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view holidays. Ask an administrator for Settings Policy : View." />
