@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Search, ChevronRight, ChevronDown } from "lucide-react";
+import { BookOpen, Search, ChevronRight, ChevronDown, Pencil } from "lucide-react";
 
 import { AccountingNav } from "@/components/accounting/accounting-nav";
 import {
@@ -14,7 +14,9 @@ import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   Table,
   TableBody,
@@ -24,6 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ApiError, apiRequest } from "@/lib/api";
+import { useToast } from "@/components/ui/toast";
 
 type Account = {
   id: string;
@@ -38,6 +41,8 @@ type Account = {
   opening_balance_minor: string;
   closing_balance_minor: string;
 };
+
+const TOP_LEVEL_CODES = new Set(["1", "2", "3", "4", "5"]);
 
 function display(value: string): string {
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
@@ -61,6 +66,7 @@ function formatBalance(value: string, normalBalance: string): string {
 }
 
 export default function ChartOfAccountsPage() {
+  const { pushToast } = useToast();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
   const [forbidden, setForbidden] = useState(false);
@@ -69,7 +75,17 @@ export default function ChartOfAccountsPage() {
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-  // Default: all groups collapsed. Expand on click.
+  const [editAccount, setEditAccount] = useState<Account | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editParent, setEditParent] = useState("");
+  const [editOpening, setEditOpening] = useState("0.00");
+  const [editOpeningDc, setEditOpeningDc] = useState("Dr");
+  const [editOpeningDate, setEditOpeningDate] = useState("");
+  const [editBankCash, setEditBankCash] = useState("");
+  const [editReconciliation, setEditReconciliation] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editMaturity, setEditMaturity] = useState("");
+  const [editNotes, setEditNotes] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -106,6 +122,17 @@ export default function ChartOfAccountsPage() {
     return map;
   }, [accounts]);
 
+  const childrenOf = useMemo(() => {
+    const map = new Map<string, Account[]>();
+    for (const account of accounts) {
+      const key = account.parent_id ?? "__root__";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(account);
+    }
+    for (const list of map.values()) list.sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }));
+    return map;
+  }, [accounts]);
+
   const depthOf = useMemo(() => {
     const depth = new Map<string, number>();
     const compute = (account: Account): number => {
@@ -134,38 +161,15 @@ export default function ChartOfAccountsPage() {
     );
   }, [accounts, query]);
 
-  const childrenOf = useMemo(() => {
-    const map = new Map<string, Account[]>();
-    for (const account of accounts) {
-      const key = account.parent_id ?? "__root__";
-      if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(account);
-    }
-    // sort children by code
-    for (const list of map.values()) list.sort((a, b) => a.code.localeCompare(b.code, undefined, { numeric: true }));
-    return map;
-  }, [accounts]);
-
-  const isExpanded = (id: string) => expanded.has(id);
-
-  const toggle = (id: string) => {
-    setExpanded((prev) => {
-      const next = new Set(prev ?? []);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
-
   const visibleRows = useMemo(() => {
-    if (query.trim()) return filtered; // search shows flat filtered list
+    if (query.trim()) return filtered;
     const result: Account[] = [];
     const walk = (parentId: string | null) => {
       const key = parentId ?? "__root__";
       const children = childrenOf.get(key) ?? [];
       for (const account of children) {
         result.push(account);
-        if (account.is_group && isExpanded(account.id)) {
+        if (account.is_group && expanded.has(account.id)) {
           walk(account.id);
         }
       }
@@ -175,6 +179,43 @@ export default function ChartOfAccountsPage() {
   }, [childrenOf, expanded, query, filtered]);
 
   const totalClosing = accounts.reduce((sum, a) => sum + BigInt(a.closing_balance_minor || "0"), 0n);
+
+  const isExpanded = (id: string) => expanded.has(id);
+
+  const toggle = (id: string) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  function openEdit(account: Account) {
+    setEditAccount(account);
+    setEditName(account.name);
+    setEditParent(account.parent_id ?? "");
+    setEditOpening(formatBalance(account.opening_balance_minor, account.normal_balance).replace(/^(Dr|Cr) /, ""));
+    setEditOpeningDc(account.normal_balance === "debit" ? "Dr" : "Cr");
+    setEditOpeningDate("");
+    setEditBankCash("");
+    setEditReconciliation("");
+    setEditCategory("");
+    setEditMaturity("");
+    setEditNotes("");
+  }
+
+  function closeEdit() {
+    setEditAccount(null);
+  }
+
+  function saveEdit(event: React.FormEvent) {
+    event.preventDefault();
+    pushToast("Ledger editing arrives with the Accounting phase.");
+    closeEdit();
+  }
+
+  const parentOptions = accounts.filter((a) => a.is_group);
 
   return (
     <div className="space-y-[var(--space-14)]">
@@ -209,19 +250,17 @@ export default function ChartOfAccountsPage() {
               {accounts.length} accounts · {accounts.filter((a) => a.is_postable).length} postable ·{" "}
               {accounts.filter((a) => a.is_group).length} groups
             </p>
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Search code or name"
-                  className="h-[var(--control-height)] w-64 pl-8"
-                />
-              </div>
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search code or name"
+                className="h-[var(--control-height)] w-64 pl-8"
+              />
             </div>
           </div>
-          {BigInt(totalClosing) !== 0n ? (
+          {totalClosing !== 0n ? (
             <div className="border-b border-accent-yellow/40 bg-accent-yellow-bg px-[var(--space-16)] py-[var(--space-8)] fs-text text-accent-yellow">
               Opening balances do not net to zero (closing total {formatBalance(totalClosing.toString(), "debit")}). Review before posting.
             </div>
@@ -241,6 +280,8 @@ export default function ChartOfAccountsPage() {
               <TableBody>
                 {visibleRows.map((account) => {
                   const depth = depthOf.get(account.id) ?? 0;
+                  const isTopLevel = TOP_LEVEL_CODES.has(account.code) && account.parent_id === null;
+                  const clickable = account.is_group && !isTopLevel;
                   return (
                     <TableRow key={account.id} className={account.is_group ? "bg-subtle/60" : undefined}>
                       <TableCell style={{ paddingLeft: `${16 + depth * 20}px` }}>
@@ -261,9 +302,18 @@ export default function ChartOfAccountsPage() {
                           ) : (
                             <span className="size-5" />
                           )}
-                          <span className={account.is_group ? "font-semibold text-strong" : "text-body"}>
-                            {account.name}
-                          </span>
+                          {clickable ? (
+                            <Link
+                              href={`/accounting-ledger-entries?group=${account.code}`}
+                              className="font-semibold text-strong hover:underline"
+                            >
+                              {account.name}
+                            </Link>
+                          ) : (
+                            <span className={account.is_group ? "font-semibold text-strong" : "text-body"}>
+                              {account.name}
+                            </span>
+                          )}
                           {account.is_assumption ? (
                             <Badge
                               variant="outline"
@@ -283,12 +333,14 @@ export default function ChartOfAccountsPage() {
                         {formatBalance(account.closing_balance_minor, account.normal_balance)}
                       </TableCell>
                       <TableCell className="pr-[var(--space-16)] text-right">
-                        <RowActionsMenu
-                          label={`${account.code} ${account.name}`}
-                          actions={[
-                            { label: "View ledger", href: `/accounting-ledger-entries?account=${account.code}` },
-                          ]}
-                        />
+                        {!account.is_group ? (
+                          <RowActionsMenu
+                            label={`${account.code} ${account.name}`}
+                            actions={[
+                              { label: "Edit ledger", icon: Pencil, onSelect: () => openEdit(account) },
+                            ]}
+                          />
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );
@@ -298,6 +350,77 @@ export default function ChartOfAccountsPage() {
           </div>
         </section>
       )}
+
+      <Modal open={editAccount !== null} onClose={closeEdit} title="Ledger details">
+        {editAccount ? (
+          <form className="space-y-4" onSubmit={saveEdit}>
+            <div>
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-name">Name *</label>
+              <Input id="edit-name" value={editName} onChange={(e) => setEditName(e.target.value)} className="h-[var(--control-height)]" required />
+            </div>
+            <div>
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-parent">Parent group</label>
+              <select id="edit-parent" value={editParent} onChange={(e) => setEditParent(e.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                <option value="">None</option>
+                {parentOptions.map((g) => (
+                  <option key={g.id} value={g.id}>{g.code} {g.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-code">Code</label>
+                <Input id="edit-code" value={editAccount.code} readOnly className="h-[var(--control-height)] bg-subtle" />
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-opening">Opening balance</label>
+                <Input id="edit-opening" value={editOpening} onChange={(e) => setEditOpening(e.target.value)} className="h-[var(--control-height)]" />
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-opening-dc">Opening balance DC</label>
+                <select id="edit-opening-dc" value={editOpeningDc} onChange={(e) => setEditOpeningDc(e.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                  <option value="Dr">Dr</option>
+                  <option value="Cr">Cr</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-opening-date">Opening date</label>
+                <Input id="edit-opening-date" type="date" value={editOpeningDate} onChange={(e) => setEditOpeningDate(e.target.value)} className="h-[var(--control-height)]" />
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-bank-cash">Bank or cash account</label>
+                <Input id="edit-bank-cash" value={editBankCash} onChange={(e) => setEditBankCash(e.target.value)} className="h-[var(--control-height)]" />
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-recon">Reconciliation</label>
+                <Input id="edit-recon" value={editReconciliation} onChange={(e) => setEditReconciliation(e.target.value)} className="h-[var(--control-height)]" />
+              </div>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-category">Category</label>
+                <Input id="edit-category" value={editCategory} onChange={(e) => setEditCategory(e.target.value)} className="h-[var(--control-height)]" />
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-maturity">Maturity date</label>
+                <Input id="edit-maturity" type="date" value={editMaturity} onChange={(e) => setEditMaturity(e.target.value)} className="h-[var(--control-height)]" />
+              </div>
+            </div>
+            <div>
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="edit-notes">Notes</label>
+              <textarea id="edit-notes" value={editNotes} onChange={(e) => setEditNotes(e.target.value)} rows={3} className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text" />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={closeEdit}>Cancel</Button>
+              <Button type="submit" className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">Update</Button>
+            </div>
+          </form>
+        ) : null}
+      </Modal>
     </div>
   );
 }
