@@ -433,7 +433,6 @@ table th {
   background-color: #f8fafc;
   font-weight: 600;
   color: #6c757d;
-  text-transform: uppercase;
   font-size: var(--fs);
   padding: 12px 16px;
 }
