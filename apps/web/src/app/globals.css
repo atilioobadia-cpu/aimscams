@@ -18,6 +18,8 @@ html {
 
 body {
   font-size: var(--fs);
+  background-color: var(--page-bg);
+  color: var(--text-heading);
 }
 
 :root {
