@@ -1,0 +1,1138 @@
+[
+  {
+    "name": "account-loan",
+    "route": "/account-loan",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-application",
+    "route": "/account-loan-application",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-application__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-application-create",
+    "route": "/account-loan-application-create",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-application-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-application-details-39",
+    "route": "/account-loan-application-details/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-application-details-39__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-application-details-124",
+    "route": "/account-loan-application-details/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-application-details-124__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-application-edit-39",
+    "route": "/account-loan-application-edit/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-application-edit-39__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-details-118-documents",
+    "route": "/account-loan-details/[id]/documents",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-details-118-documents__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-details-118-guarantors",
+    "route": "/account-loan-details/[id]/guarantors",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-details-118-guarantors__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-details-118-repayments",
+    "route": "/account-loan-details/[id]/repayments",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-details-118-repayments__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-details-118-summary",
+    "route": "/account-loan-details/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-details-118-summary__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-loan-details-118-transactions",
+    "route": "/account-loan-details/[id]/transactions",
+    "reference_image": "docs/audit/wakandi-stitched\\account-loan-details-118-transactions__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "account-saving",
+    "route": "/account-saving",
+    "reference_image": "docs/audit/wakandi-stitched\\account-saving__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-assets",
+    "route": "/accounting-assets",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-assets__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-chart-of-accounts",
+    "route": "/accounting-chart-of-accounts",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-chart-of-accounts__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-entries",
+    "route": "/accounting-entries",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-entries__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-fixed-asset",
+    "route": "/accounting-fixed-asset",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-fixed-asset__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-ledger-entries",
+    "route": "/accounting-ledger-entries",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-ledger-entries__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports",
+    "route": "/accounting-reports",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-Assets",
+    "route": "/accounting-reports-Assets",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-Assets__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-CashBook",
+    "route": "/accounting-reports-CashBook",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-CashBook__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-CashFlowStatement",
+    "route": "/accounting-reports-CashFlowStatement",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-CashFlowStatement__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-ComprehensiveTrialBalance",
+    "route": "/accounting-reports-ComprehensiveTrialBalance",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-ComprehensiveTrialBalance__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-CorporateTaxStatement",
+    "route": "/accounting-reports-CorporateTaxStatement",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-CorporateTaxStatement__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-FinancialPositionReport",
+    "route": "/accounting-reports-FinancialPositionReport",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-FinancialPositionReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-GeneralLedgerBook",
+    "route": "/accounting-reports-GeneralLedgerBook",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-GeneralLedgerBook__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-IncomeStatementReport",
+    "route": "/accounting-reports-IncomeStatementReport",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-IncomeStatementReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-JournalBook",
+    "route": "/accounting-reports-JournalBook",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-JournalBook__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-LedgerStatementReport",
+    "route": "/accounting-reports-LedgerStatementReport",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-LedgerStatementReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-MonthlyTrialBalance",
+    "route": "/accounting-reports-MonthlyTrialBalance",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-MonthlyTrialBalance__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-notes-of-account",
+    "route": "/accounting-reports-notes-of-account",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-notes-of-account__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-OwnersEquity",
+    "route": "/accounting-reports-OwnersEquity",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-OwnersEquity__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-reconcile-statement",
+    "route": "/accounting-reports-reconcile-statement",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-reconcile-statement__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-reconcile-statement-settings",
+    "route": "/accounting-reports-reconcile-statement-settings",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-reconcile-statement-settings__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-Reconciliation",
+    "route": "/accounting-reports-Reconciliation",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-Reconciliation__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "accounting-reports-TrialBalanceReport",
+    "route": "/accounting-reports-TrialBalanceReport",
+    "reference_image": "docs/audit/wakandi-stitched\\accounting-reports-TrialBalanceReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "clients",
+    "route": "/clients",
+    "reference_image": "docs/audit/wakandi-stitched\\clients__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "clients-create",
+    "route": "/clients/create",
+    "reference_image": "docs/audit/wakandi-stitched\\clients-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "clients-create-group",
+    "route": "/clients/create-group",
+    "reference_image": "docs/audit/wakandi-stitched\\clients-create-group__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "core-wba-business-account",
+    "route": "/business-account",
+    "reference_image": "docs/audit/wakandi-stitched\\core-wba-business-account__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "import-account",
+    "route": "/import-account",
+    "reference_image": "docs/audit/wakandi-stitched\\import-account__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "import-account-new",
+    "route": "/import-account-new",
+    "reference_image": "docs/audit/wakandi-stitched\\import-account-new__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "import-member",
+    "route": "/import-member",
+    "reference_image": "docs/audit/wakandi-stitched\\import-member__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "import-member-new",
+    "route": "/import-member-new",
+    "reference_image": "docs/audit/wakandi-stitched\\import-member-new__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "import-transaction",
+    "route": "/import-transaction",
+    "reference_image": "docs/audit/wakandi-stitched\\import-transaction__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "import-transaction-new",
+    "route": "/import-transaction-new",
+    "reference_image": "docs/audit/wakandi-stitched\\import-transaction-new__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-message-logs",
+    "route": "/messages-message-logs",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-message-logs__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-recharge-credits",
+    "route": "/messages-recharge-credits",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-recharge-credits__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-segment-list",
+    "route": "/messages-segment-list",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-segment-list__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-segment-list-create",
+    "route": "/messages-segment-list-create",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-segment-list-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-send-message",
+    "route": "/messages-send-message",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-send-message__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-template-list",
+    "route": "/messages-template-list",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-template-list__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "messages-users-list",
+    "route": "/messages-users-list",
+    "reference_image": "docs/audit/wakandi-stitched\\messages-users-list__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-client-ClientListReport",
+    "route": "/reports-client-ClientListReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-client-ClientListReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-client-MemberVerificationReport",
+    "route": "/reports-client-MemberVerificationReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-client-MemberVerificationReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan",
+    "route": "/reports-loan",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-AccruedInstallmentsReport",
+    "route": "/reports-loan-AccruedInstallmentsReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-AccruedInterestReport",
+    "route": "/reports-loan-AccruedInterestReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-AccruedInterestReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-ActiveLoanReport",
+    "route": "/reports-loan-ActiveLoanReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-ActiveLoanReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-AllLoanReport",
+    "route": "/reports-loan-AllLoanReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-AllLoanReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-DeferredInterestReport",
+    "route": "/reports-loan-DeferredInterestReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-DeferredInterestReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-ExpectedLoanRepaymentsReport",
+    "route": "/reports-loan-ExpectedLoanRepaymentsReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-ExpectedPaymentByDateReport",
+    "route": "/reports-loan-ExpectedPaymentByDateReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-ExpectedRepaymentReport",
+    "route": "/reports-loan-ExpectedRepaymentReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-FeeStatusReport",
+    "route": "/reports-loan-FeeStatusReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-FeeStatusReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-GuarantorsReport",
+    "route": "/reports-loan-GuarantorsReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-GuarantorsReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-IssuedLoansAndArrearsReport",
+    "route": "/reports-loan-IssuedLoansAndArrearsReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanAgingReport",
+    "route": "/reports-loan-LoanAgingReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanAgingReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanArrearsReport",
+    "route": "/reports-loan-LoanArrearsReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanArrearsReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanDisbursementReport",
+    "route": "/reports-loan-LoanDisbursementReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanDisbursementReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanInsuranceReport",
+    "route": "/reports-loan-LoanInsuranceReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanInsuranceReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanOfficerIncomeReport",
+    "route": "/reports-loan-LoanOfficerIncomeReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanOfficerIncomeReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanOutstandingReport",
+    "route": "/reports-loan-LoanOutstandingReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanOutstandingReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-LoanRepaymentReport",
+    "route": "/reports-loan-LoanRepaymentReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-LoanRepaymentReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-PaidOffLoansReport",
+    "route": "/reports-loan-PaidOffLoansReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-PaidOffLoansReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-PendingLoanApplications",
+    "route": "/reports-loan-PendingLoanApplications",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-PendingLoanApplications__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-PortfolioRiskReport",
+    "route": "/reports-loan-PortfolioRiskReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-PortfolioRiskReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-RiskClassificationOfAssets",
+    "route": "/reports-loan-RiskClassificationOfAssets",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-RiskClassificationOfAssets__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-SummarizedPortfolioAtRiskReport",
+    "route": "/reports-loan-SummarizedPortfolioAtRiskReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-SummarizedPortfolioAtRiskReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-TransactionReport",
+    "route": "/reports-loan-TransactionReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-TransactionReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-loan-WrittenOffLoanReport",
+    "route": "/reports-loan-WrittenOffLoanReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-loan-WrittenOffLoanReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP01Report",
+    "route": "/reports-msp-MSP01Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP01Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP02Report",
+    "route": "/reports-msp-MSP02Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP02Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP03MFIReport",
+    "route": "/reports-msp-MSP03MFIReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP03MFIReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP03Type1Report",
+    "route": "/reports-msp-MSP03Type1Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP03Type1Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP03Type2Report",
+    "route": "/reports-msp-MSP03Type2Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP03Type2Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP04MFIReport",
+    "route": "/reports-msp-MSP04MFIReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP04MFIReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP04Report",
+    "route": "/reports-msp-MSP04Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP04Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP05MFIReport",
+    "route": "/reports-msp-MSP05MFIReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP05MFIReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP05Report",
+    "route": "/reports-msp-MSP05Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP05Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP06Report",
+    "route": "/reports-msp-MSP06Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP06Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP07Report",
+    "route": "/reports-msp-MSP07Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP07Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP08Report",
+    "route": "/reports-msp-MSP08Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP08Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP09MFIReport",
+    "route": "/reports-msp-MSP09MFIReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP09MFIReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP09Report",
+    "route": "/reports-msp-MSP09Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP09Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP10MFIReport",
+    "route": "/reports-msp-MSP10MFIReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP10MFIReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP10Report",
+    "route": "/reports-msp-MSP10Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP10Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-msp-MSP11Report",
+    "route": "/reports-msp-MSP11Report",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-msp-MSP11Report__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-saving-SavingBeyondPolicyLimitsReport",
+    "route": "/reports-saving-SavingBeyondPolicyLimitsReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-saving-SavingBeyondPolicyLimitsReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-saving-SavingReport",
+    "route": "/reports-saving-SavingReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-saving-SavingReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-saving-SavingSnapshotReport",
+    "route": "/reports-saving-SavingSnapshotReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-saving-SavingSnapshotReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-statement",
+    "route": "/reports-statement",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-statement__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-statement-AccountStatementReport",
+    "route": "/reports-statement-AccountStatementReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-statement-AccountStatementReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-statement-MemberStatementReport",
+    "route": "/reports-statement-MemberStatementReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-statement-MemberStatementReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-transaction-DailyTransactionReport",
+    "route": "/reports-transaction-DailyTransactionReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-transaction-DailyTransactionReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-transaction-ExpenseReport",
+    "route": "/reports-transaction-ExpenseReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-transaction-ExpenseReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-transaction-FeesIncomeReport",
+    "route": "/reports-transaction-FeesIncomeReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-transaction-FeesIncomeReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "reports-transaction-ReversedTransactionReport",
+    "route": "/reports-transaction-ReversedTransactionReport",
+    "reference_image": "docs/audit/wakandi-stitched\\reports-transaction-ReversedTransactionReport__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "requests",
+    "route": "/requests",
+    "reference_image": "docs/audit/wakandi-stitched\\requests__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-account",
+    "route": "/settings/general",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-account__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-accounting-settings",
+    "route": "/settings/accounting",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-accounting-settings__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-administrator",
+    "route": "/settings/users",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-administrator__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-administrator-add",
+    "route": "/settings/users",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-administrator-add__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-branch",
+    "route": "/settings/branches",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-branch__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-branch-add",
+    "route": "/settings/branches/new",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-branch-add__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-credit-product-policy-5",
+    "route": "/settings/policies/credit-product/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-credit-product-policy-5__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-credit-product-policy-5-edit",
+    "route": "/settings/policies/credit-product/[id]/edit",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-credit-product-policy",
+    "route": "/settings/policies/credit-product",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-credit-product-policy__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-holidays",
+    "route": "/settings/policies/holidays",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-holidays__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-membership-policy-1",
+    "route": "/settings/policies/membership/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-membership-policy-1__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-membership-policy-1-edit",
+    "route": "/settings/policies/membership/[id]/edit",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-membership-policy-1-edit__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-membership-policy-2",
+    "route": "/settings/policies/membership/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-membership-policy-2__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-membership-policy-2-edit",
+    "route": "/settings/policies/membership/[id]/edit",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-membership-policy-2-edit__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-membership-policy",
+    "route": "/settings/policies/membership",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-membership-policy__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-policies-membership-policy-create",
+    "route": "/settings/policies/membership/new",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-policies-membership-policy-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-fee-penalties",
+    "route": "/settings/products/fee-penalties",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-fee-penalties__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-interest-rate",
+    "route": "/settings/products/interest-rates",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-interest-rate__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-interest-rate-create",
+    "route": "/settings/products/interest-rates/new",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-interest-rate-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-loan-5",
+    "route": "/settings/products/loan/[id]",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-loan-5__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-loan",
+    "route": "/settings/products/loan",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-loan__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-loan-provisioning",
+    "route": "/settings/products/provisioning-rules",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-loan-provisioning__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-loan-provisioning-create",
+    "route": "/settings/products/provisioning-rules",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-loan-provisioning-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-savings",
+    "route": "/settings/products/savings",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-savings__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-savings-create",
+    "route": "/settings/products/savings/new",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-savings-create__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-products-savings-edit-1",
+    "route": "/settings/products/savings",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-products-savings-edit-1__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-role",
+    "route": "/settings/roles",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-role__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "settings-service-provider",
+    "route": "/settings/services",
+    "reference_image": "docs/audit/wakandi-stitched\\settings-service-provider__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "transaction-all-transaction",
+    "route": "/transaction-all-transaction",
+    "reference_image": "docs/audit/wakandi-stitched\\transaction-all-transaction__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "transaction-online-payment-reconciliation",
+    "route": "/transaction-online-payment-reconciliation",
+    "reference_image": "docs/audit/wakandi-stitched\\transaction-online-payment-reconciliation__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "transaction-online-transaction",
+    "route": "/transaction-online-transaction",
+    "reference_image": "docs/audit/wakandi-stitched\\transaction-online-transaction__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "transaction-teller-transaction",
+    "route": "/transaction-teller-transaction",
+    "reference_image": "docs/audit/wakandi-stitched\\transaction-teller-transaction__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "transaction-teller-transaction-history",
+    "route": "/transaction-teller-transaction-history",
+    "reference_image": "docs/audit/wakandi-stitched\\transaction-teller-transaction-history__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  },
+  {
+    "name": "transaction-teller-transaction-request",
+    "route": "/transaction-teller-transaction-request",
+    "reference_image": "docs/audit/wakandi-stitched\\transaction-teller-transaction-request__p0.png",
+    "state": {},
+    "masks": [],
+    "controls_expected": []
+  }
+]
