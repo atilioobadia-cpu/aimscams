@@ -31,8 +31,7 @@ def resize_to_match(ref, ours):
 
 def compute_ssim(ref, ours):
     """Compute SSIM between two images."""
-    from skimage.metrics import structural_similarity if False else None
-    # Use cv2-based SSIM approximation
+    # Use cv2-based SSIM approximation (scipy/skimage not available)
     ref_gray = cv2.cvtColor(ref, cv2.COLOR_RGB2GRAY)
     ours_gray = cv2.cvtColor(ours, cv2.COLOR_RGB2GRAY)
     # Simple SSIM
