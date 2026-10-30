@@ -174,7 +174,7 @@ export default function UsersPage() {
     <div className="space-y-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="fs-text font-bold leading-tight text-strong">Users</h1>
+          <h1 className="fs-title font-bold leading-tight text-strong">Users</h1>
           <p className="mt-1 max-w-3xl fs-text text-muted-foreground">
             Institution accounts, roles and branch access.
           </p>

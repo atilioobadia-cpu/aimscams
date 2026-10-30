@@ -3,13 +3,13 @@
 import { ComingSoon } from "@/components/shell/coming-soon";
 
 export const metadata: Metadata = {
-  title: "OwnersEquity · AIMSCAMS",
+  title: "Owners equity · AIMSCAMS",
 };
 
 export default function Page() {
   return (
     <ComingSoon
-      title="OwnersEquity"
+      title="Owners equity"
       description="Financial report."
       detail="This report arrives with the financial report engine. It will read posted ledger data only."
     />

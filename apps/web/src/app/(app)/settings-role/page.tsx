@@ -99,7 +99,7 @@ export default function RolesPage() {
   return (
     <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
       <div className="space-y-3">
-        <h1 className="fs-text font-bold leading-tight text-strong">Roles</h1>
+        <h1 className="fs-title font-bold leading-tight text-strong">Roles</h1>
         <p className="fs-text text-muted-foreground">
           Permission matrix for the 17 institution roles.
         </p>

@@ -3,13 +3,13 @@
 import { ComingSoon } from "@/components/shell/coming-soon";
 
 export const metadata: Metadata = {
-  title: "reconcile statement · AIMSCAMS",
+  title: "Reconcile statement · AIMSCAMS",
 };
 
 export default function Page() {
   return (
     <ComingSoon
-      title="reconcile statement"
+      title="Reconcile statement"
       description="Financial report."
       detail="This report arrives with the financial report engine. It will read posted ledger data only."
     />

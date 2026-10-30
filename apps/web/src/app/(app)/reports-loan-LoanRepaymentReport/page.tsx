@@ -3,13 +3,13 @@
 import { ComingSoon } from "@/components/shell/coming-soon";
 
 export const metadata: Metadata = {
-  title: "loan LoanRepaymentReport · AIMSCAMS",
+  title: "Loan repayment report · AIMSCAMS",
 };
 
 export default function Page() {
   return (
     <ComingSoon
-      title="loan LoanRepaymentReport"
+      title="Loan repayment report"
       description="Operational and statutory report."
       detail="This report arrives with the reporting module. Reports read posted ledger data only."
     />
