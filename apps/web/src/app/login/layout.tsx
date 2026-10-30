@@ -5,10 +5,5 @@ export const metadata: Metadata = {
 };
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <>
-      <style>{`body { background-color: #ffffff !important; }`}</style>
-      {children}
-    </>
-  );
+  return <div className="min-h-screen bg-white">{children}</div>;
 }
