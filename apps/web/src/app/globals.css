@@ -59,8 +59,8 @@ body {
   --space-32: 32px;
 
   /* Shared geometry */
-  --header-height: 68px;
-  --sidebar-width: 204px;
+  --header-height: 76px;
+  --sidebar-width: 230px;
   --sidebar-collapsed-width: 76px;
   --sidebar-footer-height: 73px;
   --sidebar-subitem-height: 28px;
