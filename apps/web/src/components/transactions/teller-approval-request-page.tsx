@@ -15,17 +15,26 @@ import { titleCase } from "@/lib/privacy";
 import {
   approveRequest,
   getRequest,
+  listRequests,
   rejectRequest,
   type RequestDetail,
+  type RequestItem,
+  type RequestList,
 } from "@/lib/transactions";
 
-function failureMessage(failure: unknown): string {
+function failureMessage(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
   if (failure instanceof Error && failure.message) return failure.message;
-  return "Could not load the request.";
+  return fallback;
 }
 
 export function TellerApprovalRequestPage() {
+  const [queue, setQueue] = useState<RequestList | null>(null);
+  const [queueLoading, setQueueLoading] = useState(true);
+  const [queueError, setQueueError] = useState<string | null>(null);
+  const [forbidden, setForbidden] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+
   const [id, setId] = useState("");
   const [request, setRequest] = useState<RequestDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -41,7 +50,40 @@ export function TellerApprovalRequestPage() {
   }, []);
 
   useEffect(() => {
-    if (!id) return;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      setQueueLoading(true);
+      setQueueError(null);
+      void listRequests({ status: "PENDING", pageSize: 50 })
+        .then((next) => {
+          if (cancelled) return;
+          setQueue(next);
+          setForbidden(false);
+        })
+        .catch((failure: unknown) => {
+          if (cancelled) return;
+          if (failure instanceof ApiError && failure.status === 403) {
+            setForbidden(true);
+            setQueue(null);
+          } else {
+            setQueueError(failureMessage(failure, "Could not load the request queue."));
+          }
+        })
+        .finally(() => {
+          if (!cancelled) setQueueLoading(false);
+        });
+    }, 0);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [reloadKey]);
+
+  useEffect(() => {
+    if (!id) {
+      setRequest(null);
+      return;
+    }
     let cancelled = false;
     const timer = window.setTimeout(() => {
       setLoading(true);
@@ -53,10 +95,11 @@ export function TellerApprovalRequestPage() {
         })
         .catch((failure: unknown) => {
           if (cancelled) return;
-          setError(failureMessage(failure));
+          setError(failureMessage(failure, "Could not load the request."));
         })
         .finally(() => {
-          if (!cancelled) setLoading(false);
+          if (cancelled) return;
+          setLoading(false);
         });
     }, 0);
     return () => {
@@ -74,8 +117,9 @@ export function TellerApprovalRequestPage() {
       setResult("Request approved.");
       const next = await getRequest(request.id);
       setRequest(next);
+      setReloadKey((value) => value + 1);
     } catch (failure) {
-      setError(failureMessage(failure));
+      setError(failureMessage(failure, "Could not approve the request."));
     } finally {
       setSubmitting(false);
     }
@@ -90,38 +134,86 @@ export function TellerApprovalRequestPage() {
       setResult("Request rejected.");
       const next = await getRequest(request.id);
       setRequest(next);
+      setReloadKey((value) => value + 1);
     } catch (failure) {
-      setError(failureMessage(failure));
+      setError(failureMessage(failure, "Could not reject the request."));
     } finally {
       setSubmitting(false);
     }
   }
 
+  function selectRequest(item: RequestItem) {
+    setId(item.id);
+    setResult(null);
+    setError(null);
+  }
+
+  if (forbidden) {
+    return (
+      <div className="space-y-5">
+        <PageHeader title="Teller approval request" description="Approve or reject a queued teller action." breadcrumb="Transactions" />
+        <ForbiddenPanel message="Your role cannot view teller requests. Ask an administrator for Transaction : View." />
+      </div>
+    );
+  }
+
+  const items = queue?.items ?? [];
+
   return (
     <div className="space-y-5">
-      <PageHeader
-        title="Teller approval request"
-        description="Approve or reject a queued teller action."
-        breadcrumb="Transactions"
-      />
+      <PageHeader title="Teller approval request" description="Approve or reject a queued teller action." breadcrumb="Transactions" />
 
-      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
-        <label className="mb-1 block fs-text font-medium text-body" htmlFor="request-id">
-          Request ID
-        </label>
-        <div className="flex flex-wrap items-end gap-2">
-          <Input
-            id="request-id"
-            value={id}
-            onChange={(event) => setId(event.target.value)}
-            placeholder="Paste a request ID"
-            className="h-[var(--control-height)] max-w-md"
-          />
-        </div>
-      </section>
-
+      {queueError ? <ErrorPanel message={queueError} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
       {error ? <ErrorPanel message={error} onRetry={() => setId(id)} /> : null}
       {result ? <p className="fs-text text-accent-teal" role="status">{result}</p> : null}
+
+      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-[var(--space-16)] py-[var(--space-10)]">
+          <p className="fs-text text-muted-foreground">
+            {items.length} pending request{items.length === 1 ? "" : "s"}
+          </p>
+        </div>
+        {queueLoading ? (
+          <PanelSkeleton rows={6} />
+        ) : items.length === 0 ? (
+          <EmptyState icon={CheckCircle2} title="No pending requests" description="All teller requests have been reviewed." />
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[900px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
+                <tr>
+                  <th className="whitespace-nowrap px-4 py-3">Date</th>
+                  <th className="whitespace-nowrap px-4 py-3">Request</th>
+                  <th className="whitespace-nowrap px-4 py-3">Status</th>
+                  <th className="whitespace-nowrap px-4 py-3">Requester</th>
+                  <th className="whitespace-nowrap px-4 py-3">Current assignee</th>
+                  <th className="whitespace-nowrap px-4 py-3">Approved by</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.id} className="border-b border-card-border last:border-0">
+                    <td className="whitespace-nowrap px-4 py-3 text-body">{new Date(item.createdAt).toLocaleDateString()}</td>
+                    <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.requestNo}</td>
+                    <td className="whitespace-nowrap px-4 py-3">
+                      <Badge variant={item.status === "PENDING" ? "outline" : "default"}>{titleCase(item.status)}</Badge>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.requestedBy}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.currentAssignee}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.approvedBy}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-right">
+                      <Button size="sm" variant="outline" onClick={() => selectRequest(item)}>
+                        Review
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
 
       {loading ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
@@ -202,13 +294,7 @@ export function TellerApprovalRequestPage() {
             <p className="fs-text text-muted-foreground">This request has already been {request.status.toLowerCase()}.</p>
           )}
         </section>
-      ) : id ? null : (
-        <EmptyState
-          icon={CheckCircle2}
-          title="No request selected"
-          description="Paste a request ID above to review and approve or reject it."
-        />
-      )}
+      ) : id ? null : null}
     </div>
   );
 }
