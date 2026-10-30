@@ -29,8 +29,8 @@ async function main() {
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    viewport: { width: 1837, height: 1080 },
-    deviceScaleFactor: 1,
+    viewport: { width: 1470, height: 1094 },
+    deviceScaleFactor: 1.25,
   });
   const page = await context.newPage();
 
