@@ -43,11 +43,21 @@ function display(value: string): string {
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 }
 
-function minorToMajor(value: string): string {
+function formatBalance(value: string, normalBalance: string): string {
   const n = BigInt(value || "0");
-  const whole = n / 100n;
-  const frac = (n < 0n ? -n : n) % 100n;
-  return `${whole}.${frac.toString().padStart(2, "0")}`;
+  let side: string;
+  let abs: bigint;
+  if (normalBalance === "debit") {
+    side = n >= 0n ? "Dr" : "Cr";
+    abs = n >= 0n ? n : -n;
+  } else {
+    side = n >= 0n ? "Cr" : "Dr";
+    abs = n >= 0n ? n : -n;
+  }
+  const whole = abs / 100n;
+  const frac = abs % 100n;
+  const wholeStr = whole.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${side} ${wholeStr}.${frac.toString().padStart(2, "0")}`;
 }
 
 export default function ChartOfAccountsPage() {
@@ -57,14 +67,9 @@ export default function ChartOfAccountsPage() {
   const [error, setError] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0);
   const [query, setQuery] = useState("");
-  const [expanded, setExpanded] = useState<Set<string> | null>(null);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
-  // Default: every group expanded.
-  useEffect(() => {
-    if (expanded === null && accounts.length > 0) {
-      setExpanded(new Set(accounts.filter((a) => a.is_group).map((a) => a.id)));
-    }
-  }, [accounts, expanded]);
+  // Default: all groups collapsed. Expand on click.
 
   useEffect(() => {
     let active = true;
@@ -141,7 +146,7 @@ export default function ChartOfAccountsPage() {
     return map;
   }, [accounts]);
 
-  const isExpanded = (id: string) => (expanded ?? new Set()).has(id);
+  const isExpanded = (id: string) => expanded.has(id);
 
   const toggle = (id: string) => {
     setExpanded((prev) => {
@@ -218,19 +223,18 @@ export default function ChartOfAccountsPage() {
           </div>
           {BigInt(totalClosing) !== 0n ? (
             <div className="border-b border-accent-yellow/40 bg-accent-yellow-bg px-[var(--space-16)] py-[var(--space-8)] fs-text text-accent-yellow">
-              Opening balances do not net to zero (closing total {minorToMajor(totalClosing.toString())}). Review before posting.
+              Opening balances do not net to zero (closing total {formatBalance(totalClosing.toString(), "debit")}). Review before posting.
             </div>
           ) : null}
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="pl-[var(--space-16)]">Code</TableHead>
-                  <TableHead>Account</TableHead>
+                  <TableHead className="pl-[var(--space-16)]">Account name</TableHead>
+                  <TableHead>Code</TableHead>
                   <TableHead>Type</TableHead>
-                  <TableHead>Normal side</TableHead>
-                  <TableHead className="text-right">O/P balance</TableHead>
-                  <TableHead className="text-right">C/L balance</TableHead>
+                  <TableHead className="text-right">O/P balance (TSh)</TableHead>
+                  <TableHead className="text-right">C/L balance (TSh)</TableHead>
                   <TableHead className="pr-[var(--space-16)] text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -239,9 +243,6 @@ export default function ChartOfAccountsPage() {
                   const depth = depthOf.get(account.id) ?? 0;
                   return (
                     <TableRow key={account.id} className={account.is_group ? "bg-subtle/60" : undefined}>
-                      <TableCell className="pl-[var(--space-16)] font-medium text-strong">
-                        {account.code}
-                      </TableCell>
                       <TableCell style={{ paddingLeft: `${16 + depth * 20}px` }}>
                         <div className="flex items-center gap-1">
                           {account.is_group ? (
@@ -273,13 +274,13 @@ export default function ChartOfAccountsPage() {
                           ) : null}
                         </div>
                       </TableCell>
-                      <TableCell className="text-body">{display(account.type)}</TableCell>
-                      <TableCell className="text-body">{display(account.normal_balance)}</TableCell>
+                      <TableCell className="font-medium text-strong">{account.code}</TableCell>
+                      <TableCell className="text-body">{account.is_group ? "Group" : "Ledger"}</TableCell>
                       <TableCell className="text-right tabular-nums text-body">
-                        {minorToMajor(account.opening_balance_minor)}
+                        {formatBalance(account.opening_balance_minor, account.normal_balance)}
                       </TableCell>
                       <TableCell className="text-right tabular-nums text-body">
-                        {minorToMajor(account.closing_balance_minor)}
+                        {formatBalance(account.closing_balance_minor, account.normal_balance)}
                       </TableCell>
                       <TableCell className="pr-[var(--space-16)] text-right">
                         <RowActionsMenu
