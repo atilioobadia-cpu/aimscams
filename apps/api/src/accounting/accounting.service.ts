@@ -110,13 +110,51 @@ export class AccountingService {
         type: string;
         normal_balance: string;
         is_postable: boolean;
+        is_group: boolean;
         is_assumption: boolean;
+        parent_id: string | null;
+        opening_balance_minor: string;
+        debit_minor: string;
+        credit_minor: string;
       }>(
-        `select id, code, name, type, normal_balance, is_postable, is_assumption
-         from gl_account where organisation_id = $1 order by code`,
+        `select a.id, a.code, a.name, a.type, a.normal_balance, a.is_postable, a.is_group,
+                a.is_assumption, a.parent_id, a.opening_balance_minor,
+                coalesce(sum(l.debit_minor), 0)  as debit_minor,
+                coalesce(sum(l.credit_minor), 0) as credit_minor
+           from gl_account a
+           left join (
+             select line.account_id, line.debit_minor, line.credit_minor
+               from journal_line line
+               join journal_entry entry on entry.id = line.entry_id
+              where entry.organisation_id = $1
+                and entry.status = 'posted'
+           ) l on l.account_id = a.id
+          where a.organisation_id = $1
+          group by a.id, a.code, a.name, a.type, a.normal_balance, a.is_postable, a.is_group,
+                   a.is_assumption, a.parent_id, a.opening_balance_minor
+          order by a.code`,
         [organisationId],
       );
-      return result.rows;
+      return result.rows.map((row) => {
+        const opening = BigInt(row.opening_balance_minor ?? '0');
+        const debit = BigInt(row.debit_minor ?? '0');
+        const credit = BigInt(row.credit_minor ?? '0');
+        const closing =
+          row.normal_balance === 'debit' ? opening + debit - credit : opening + credit - debit;
+        return {
+          id: row.id,
+          code: row.code,
+          name: row.name,
+          type: row.type,
+          normal_balance: row.normal_balance,
+          is_postable: row.is_postable,
+          is_group: row.is_group,
+          is_assumption: row.is_assumption,
+          parent_id: row.parent_id,
+          opening_balance_minor: row.opening_balance_minor,
+          closing_balance_minor: closing.toString(),
+        };
+      });
     } finally {
       await db.close();
     }

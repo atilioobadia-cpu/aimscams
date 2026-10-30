@@ -311,7 +311,7 @@ describe('provisioning', () => {
     expect(branch.rows[0]?.councilType).toBe('MC');
 
     const balance = await trialBalance(db, first.tenantId, '2026-12-31');
-    expect(balance.rows).toHaveLength(CHART_OF_ACCOUNTS.length);
+    expect(balance.rows).toHaveLength(95);
     expect(balance.debitMinor).toBe(0n);
     expect(balance.creditMinor).toBe(0n);
 

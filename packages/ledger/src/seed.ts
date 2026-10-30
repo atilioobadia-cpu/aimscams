@@ -17,40 +17,150 @@ export interface AccountSeed {
   name: string;
   type: AccountType;
   normalBalance: NormalBalance;
+  isGroup?: boolean;
+  parentCode?: string;
   assumption?: boolean;
 }
 
 export const CHART_OF_ACCOUNTS: readonly AccountSeed[] = [
-  { code: '1002', name: 'Cash on hand', type: 'asset', normalBalance: 'debit' },
-  { code: '1003', name: 'Bank - CRDB', type: 'asset', normalBalance: 'debit' },
-  { code: '1005', name: 'Bank - NMB', type: 'asset', normalBalance: 'debit' },
-  { code: '1010', name: 'Teller cash', type: 'asset', normalBalance: 'debit' },
-  { code: '1201', name: 'Loans receivable', type: 'asset', normalBalance: 'debit' },
-  { code: '1205', name: 'Staff loans', type: 'asset', normalBalance: 'debit' },
-  { code: '1505', name: 'Interest receivable', type: 'asset', normalBalance: 'debit' },
-  { code: '2001', name: 'Tax payable', type: 'liability', normalBalance: 'credit' },
-  { code: '2004', name: 'Overpayments', type: 'liability', normalBalance: 'credit' },
-  { code: '2005', name: 'Accounts payable', type: 'liability', normalBalance: 'credit' },
-  {
-    code: '2101',
-    name: 'Member savings',
-    type: 'liability',
-    normalBalance: 'credit',
-    assumption: true,
-  },
-  { code: '3404', name: 'Share capital', type: 'equity', normalBalance: 'credit' },
-  { code: '4001', name: 'Interest income - loans', type: 'income', normalBalance: 'credit' },
-  { code: '4101', name: 'Loan management fee', type: 'income', normalBalance: 'credit' },
-  { code: '4104', name: 'Loan penalty', type: 'income', normalBalance: 'credit' },
-  {
-    code: '5001',
-    name: 'Interest expense - member savings',
-    type: 'expense',
-    normalBalance: 'debit',
-    assumption: true,
-  },
-  { code: '5004', name: 'Write-off - bad loans', type: 'expense', normalBalance: 'debit' },
-  { code: '5502', name: 'Bank charges', type: 'expense', normalBalance: 'debit' },
+  { code: '1', name: 'Assets', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: undefined, assumption: undefined },
+  { code: '2', name: 'Liabilities and Owners Equity', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: undefined, assumption: undefined },
+  { code: '3', name: 'Capital Account', type: 'equity', normalBalance: 'credit', isGroup: true, parentCode: undefined, assumption: undefined },
+  { code: '4', name: 'Incomes', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: undefined, assumption: undefined },
+  { code: '5', name: 'Expenses', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: undefined, assumption: undefined },
+  { code: '1000', name: 'CASH AND CASH EQUIVALENTS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1001', name: 'AIMSCAMS', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1002', name: 'Cash on Hand', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1003', name: 'BANK CRDB', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1005', name: 'BANK NMB', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1010', name: 'TELLERS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1011', name: 'Teller 2', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1012', name: 'Teller 1', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1100', name: 'SHORT TERM INVESTMENTS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1200', name: 'TOTAL LOANS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1201', name: 'ASSET LOAN', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1202', name: 'EMERGENCY LOAN', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1203', name: 'BUSINESS LOAN', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1204', name: 'HOUSING LOAN', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1205', name: 'STAFF LOAN', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1206', name: 'SUSPENSE ON LOAN', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1300', name: 'CUMULATIVE LOAN LOSSES', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1400', name: 'INTEREST AND EXPECTED FEES', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1500', name: 'CURRENT ASSETS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1501', name: 'Prepaid Corporate Tax', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1502', name: 'Loan Processing Fees Receivable', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1503', name: 'Staff Advances/Receivables', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1504', name: 'Prepaid Expenses', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1505', name: 'Interest Receivable', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1600', name: 'LONG - TERM INVESTMENTS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1700', name: 'NON-CURRENT ASSETS', type: 'asset', normalBalance: 'debit', isGroup: true, parentCode: '1', assumption: undefined },
+  { code: '1701', name: 'Furniture & Fittings', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1702', name: 'Office Equipment', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1703', name: 'Motorbikes for Agents', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1704', name: 'GPS Trackers', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1705', name: 'Fireproof Safe & Cabinets', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1706', name: 'Software Licenses', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '1707', name: 'Leasehold Improvements', type: 'asset', normalBalance: 'debit', isGroup: false, parentCode: '1', assumption: undefined },
+  { code: '2000', name: 'CURRENT LIABILITIES', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2001', name: 'Tax Payable (Current tax liabilities)', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2002', name: 'AIMSCAMS Charges', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2003', name: 'Insurance premiums', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2004', name: 'Overpayments', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2005', name: 'Accounts Payable', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2006', name: 'Staff Salaries Payable', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2007', name: 'Interest Payable to Lenders', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2008', name: 'Deferred Loan Income', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2009', name: 'Accrued Expenses', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2010', name: 'Down Payment', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2011', name: 'Tax Payable', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2100', name: 'INTEREST DEBTS', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2200', name: 'MEMBERS SAVINGS AND DEPOSITS', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2300', name: 'SHORT - TERM LOANS', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2400', name: 'LONG - TERM LOANS', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2401', name: 'Long-term Loans from Lenders', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2500', name: 'UNPAID EXPENSES', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2501', name: 'Accumulated depreciation', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: undefined },
+  { code: '2600', name: 'SUSPENDED INCOME', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '2700', name: 'POSTPONED SUBSIDIES', type: 'liability', normalBalance: 'credit', isGroup: true, parentCode: '2', assumption: undefined },
+  { code: '3000', name: 'MEMBERS SHARES', type: 'equity', normalBalance: 'credit', isGroup: true, parentCode: '3', assumption: undefined },
+  { code: '3100', name: 'PROFIT/ LOSS', type: 'equity', normalBalance: 'credit', isGroup: true, parentCode: '3', assumption: undefined },
+  { code: '3101', name: 'PROFIT AND LOSS A/C', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3200', name: 'ACCUMULATION OF PROFIT / LOSS FOR THE RELEVANT YEAR', type: 'equity', normalBalance: 'credit', isGroup: true, parentCode: '3', assumption: undefined },
+  { code: '3300', name: 'ACCUMULATION OF PROFIT / LOSS FOR THE PAST YEARS', type: 'equity', normalBalance: 'credit', isGroup: true, parentCode: '3', assumption: undefined },
+  { code: '3400', name: "CHANGE OF OWNER'S EQUITY", type: 'equity', normalBalance: 'credit', isGroup: true, parentCode: '3', assumption: undefined },
+  { code: '3401', name: 'Education Fund', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3402', name: 'Statutory Reserve Funds', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3403', name: 'Share Transfer Fund', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3404', name: 'Share Capital', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3405', name: 'Retained Earning', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3406', name: 'Grants', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3407', name: 'Insurance Fund', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3408', name: 'Revaluation Reserves', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '3409', name: 'Bad And Doubtful Debts Provision', type: 'equity', normalBalance: 'credit', isGroup: false, parentCode: '3', assumption: undefined },
+  { code: '4000', name: 'INTEREST INCOME', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: '4', assumption: undefined },
+  { code: '4001', name: 'INTEREST INCOME ON ASSET LOAN', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4002', name: 'INTEREST INCOME ON EMERGENCY LOAN', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4003', name: 'INTEREST INCOME ON HOUSING LOAN', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4004', name: 'INTEREST INCOME ON BUSINESS LOAN', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4005', name: 'INTEREST INCOME ON STAFF LOAN', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4100', name: 'OTHER INCOME FROM LOANS', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: '4', assumption: undefined },
+  { code: '4101', name: 'LOAN MANAGEMENT FEE', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4102', name: 'DEVICE TRACKING FEE', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4103', name: 'LOAN RESTRUCTURING FEE', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4104', name: 'LOAN PENALTY', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4200', name: 'OTHER INCOME', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: '4', assumption: undefined },
+  { code: '4201', name: 'Insurance Commision', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4202', name: 'Income from Sale of Repossessed Assets', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4203', name: 'Subscription Fees', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4204', name: 'Other Operational Income', type: 'income', normalBalance: 'credit', isGroup: false, parentCode: '4', assumption: undefined },
+  { code: '4300', name: 'INCOME TO GENERATE INVESTMENTS', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: '4', assumption: undefined },
+  { code: '4400', name: 'SUBSIDIES', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: '4', assumption: undefined },
+  { code: '4500', name: 'OTHER REVENUES', type: 'income', normalBalance: 'credit', isGroup: true, parentCode: '4', assumption: undefined },
+  { code: '5000', name: 'LOAN EXPENSES', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5001', name: 'Tracker Device Purchase & Installation', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5002', name: 'Field Transport (Loan Monitoring)', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5003', name: 'Loan Loss Provision', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5004', name: 'Write-off – Bad Loans', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5005', name: 'Fuel – Motorbikes', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5100', name: 'HR & DEVELOPMENT', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5101', name: 'Subscriptions', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5102', name: 'Training & Team Building', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5103', name: 'Consultancy Fees', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5104', name: 'Director’s Fees', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5105', name: 'Volunteers/Ambassadors Stipends', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5106', name: 'NHIF Medical Insurance', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5107', name: 'Repairs & Maintenance', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5108', name: 'Board Expenses', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5109', name: 'Tea/Coffee & Staff Meals', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5200', name: 'ADMINISTRATIVE COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5201', name: 'Salaries & Wages – All Staff', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5202', name: 'Rent', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5203', name: 'Utilities (Electricity, Water)', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5204', name: 'Internet & Communications', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5205', name: 'Stationery & Printing', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5206', name: 'Cleaning Services', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5207', name: 'Advertising & Promotion', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5208', name: 'Office Supplies', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5209', name: 'Professional Fees', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5210', name: 'Insurance', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5211', name: 'License & Regulatory Fees', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5212', name: 'Software Subscription & Maintenance', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5213', name: 'Current year depreciation', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5214', name: 'Travelling Allowance and Accomodation', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5215', name: 'Marketing and Advertisement', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5216', name: 'NSSF Contribution', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5217', name: 'S/Duty Lease', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5300', name: 'BUSINESS COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5400', name: 'EQUIPMENT COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5401', name: 'Current year depreciation', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5500', name: 'OTHER COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5501', name: 'AIMSCAMS Fees', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5502', name: 'BANK CHARGES', type: 'expense', normalBalance: 'debit', isGroup: false, parentCode: '5', assumption: undefined },
+  { code: '5600', name: 'OFFICE COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5700', name: 'ESTATE EXPENSES', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5800', name: 'TRAVEL COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '5900', name: 'SYSTEM COSTS', type: 'expense', normalBalance: 'debit', isGroup: true, parentCode: '5', assumption: undefined },
+  { code: '2101', name: 'Member savings', type: 'liability', normalBalance: 'credit', isGroup: false, parentCode: '2', assumption: true },
 ] as const;
 
 export type AmountKey = 'total' | 'principal' | 'interest' | 'penalty' | 'charges';
@@ -134,10 +244,13 @@ export async function seedChartOfAccounts(
   accounts: readonly AccountSeed[] = CHART_OF_ACCOUNTS,
 ): Promise<number> {
   let inserted = 0;
+  const idByCode = new Map<string, string>();
   for (const account of accounts) {
-    const result = await db.query(
-      `insert into gl_account (organisation_id, code, name, type, normal_balance, is_assumption)
-       values ($1, $2, $3, $4, $5, $6)
+    const parentCode = account.parentCode;
+    const parentId = parentCode ? idByCode.get(parentCode) ?? null : null;
+    const result = await db.query<{ id: string }>(
+      `insert into gl_account (organisation_id, code, name, type, normal_balance, is_postable, is_group, parent_id, is_assumption)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        on conflict (organisation_id, code) do nothing
        returning id`,
       [
@@ -146,10 +259,25 @@ export async function seedChartOfAccounts(
         account.name,
         account.type,
         account.normalBalance,
+        !(account.isGroup ?? false),
+        account.isGroup ?? false,
+        parentId,
         account.assumption ?? false,
       ],
     );
-    inserted += result.rows.length;
+    const newId = result.rows[0]?.id;
+    if (newId) {
+      idByCode.set(account.code, newId);
+      inserted += 1;
+    } else {
+      // already existed: look up id
+      const existing = await db.query<{ id: string }>(
+        `select id from gl_account where organisation_id = $1 and code = $2`,
+        [tenantId, account.code],
+      );
+      const existingId = existing.rows[0]?.id;
+      if (existingId) idByCode.set(account.code, existingId);
+    }
   }
   return inserted;
 }

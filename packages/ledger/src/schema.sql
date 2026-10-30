@@ -52,9 +52,13 @@ create table gl_account (
   type            text not null check (type in ('asset', 'liability', 'equity', 'income', 'expense')),
   normal_balance  text not null check (normal_balance in ('debit', 'credit')),
   is_postable     boolean not null default true,
+  is_group        boolean not null default false,
+  parent_id       uuid,
+  opening_balance_minor bigint not null default 0,
   is_assumption   boolean not null default false,
   unique (organisation_id, code),
-  unique (id, organisation_id)
+  unique (id, organisation_id),
+  foreign key (parent_id, organisation_id) references gl_account (id, organisation_id)
 );
 
 create table posting_policy (
