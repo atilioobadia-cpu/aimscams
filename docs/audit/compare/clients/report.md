@@ -1,10 +1,10 @@
 # clients
 
 - Route: /clients
-- SSIM (masked): 0.8402 (threshold 0.98)
-- SSIM (unmasked): 0.7432
-- Changed pixel ratio (masked): 3.9801% (threshold 1%)
-- Changed pixel ratio (unmasked): 7.4953%
+- SSIM (masked): 0.8400 (threshold 0.98)
+- SSIM (unmasked): 0.7430
+- Changed pixel ratio (masked): 3.9964% (threshold 1%)
+- Changed pixel ratio (unmasked): 7.5164%
 - Mask regions: 170
 - Diff regions: 158
 - **Pass:** NO

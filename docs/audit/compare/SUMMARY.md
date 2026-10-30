@@ -41,7 +41,7 @@ Pages failing: 142
 | accounting-reports-reconcile-statement-settings | 0.8358 | 0.0287 | 20 | NO |
 | accounting-reports-Reconciliation | 0.8367 | 0.0287 | 20 | NO |
 | accounting-reports-TrialBalanceReport | 0.8438 | 0.0188 | 20 | NO |
-| clients | 0.8402 | 0.0398 | 20 | NO |
+| clients | 0.84 | 0.04 | 20 | NO |
 | clients-create | 0.885 | 0.0254 | 20 | NO |
 | clients-create-group | 0.8586 | 0.0343 | 20 | NO |
 | core-wba-business-account | 0.8901 | 0.0219 | 20 | NO |
