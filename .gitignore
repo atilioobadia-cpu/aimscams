@@ -3,6 +3,16 @@
 ocr/
 merged/
 
+# Phase 2 reference corpus: stitched screenshots, OCR text and the generated specs
+# all contain real names, phone numbers and account balances from the observed
+# product (hard rule 6). They stay on the workstation; only metadata is committed.
+docs/audit/wakandi-stitched/
+docs/audit/wakandi-ocr.json
+docs/audit/wakandi-spec/
+
+# Python
+__pycache__/
+
 # Node
 node_modules/
 npm-debug.log*

@@ -1,0 +1,5079 @@
+[
+  {
+    "slug": "account-loan",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-2026-10-21-17_10_18.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan__p0.png",
+    "width": 1838,
+    "height": 1241
+  },
+  {
+    "slug": "account-loan",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-2026-10-21-17_10_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan__p1.png",
+    "width": 2427,
+    "height": 934
+  },
+  {
+    "slug": "account-loan",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-2026-10-21-17_10_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan__p2.png",
+    "width": 1838,
+    "height": 1241
+  },
+  {
+    "slug": "account-loan-application",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-2026-10-21-16_56_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application__p0.png",
+    "width": 2240,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-application",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-2026-10-21-16_57_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application__p1.png",
+    "width": 1838,
+    "height": 1248
+  },
+  {
+    "slug": "account-loan-application",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-2026-10-21-16_57_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application__p2.png",
+    "width": 1838,
+    "height": 1248
+  },
+  {
+    "slug": "account-loan-application",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-2026-10-21-16_58_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application__p3.png",
+    "width": 2240,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-application-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-create-2026-10-21-16_59_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-create__p0.png",
+    "width": 1838,
+    "height": 989
+  },
+  {
+    "slug": "account-loan-application-details-39",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-39-2026-10-21-17_03_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-39__p0.png",
+    "width": 1838,
+    "height": 1420
+  },
+  {
+    "slug": "account-loan-application-details-39",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-39-2026-10-21-17_04_07.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-39__p1.png",
+    "width": 1838,
+    "height": 1456
+  },
+  {
+    "slug": "account-loan-application-details-39",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-39-2026-10-21-17_04_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-39__p2.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-application-details-124",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-124-2026-10-21-17_08_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-124__p0.png",
+    "width": 1838,
+    "height": 1550
+  },
+  {
+    "slug": "account-loan-application-details-124",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-124-2026-10-21-17_08_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-124__p1.png",
+    "width": 1838,
+    "height": 1426
+  },
+  {
+    "slug": "account-loan-application-details-124",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-124-2026-10-21-17_08_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-124__p2.png",
+    "width": 1838,
+    "height": 1444
+  },
+  {
+    "slug": "account-loan-application-details-124",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-124-2026-10-21-17_09_07.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-124__p3.png",
+    "width": 1838,
+    "height": 1250
+  },
+  {
+    "slug": "account-loan-application-details-124",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-details-124-2026-10-21-17_09_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-details-124__p4.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-application-edit-39",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-edit-39-2026-10-21-17_06_26 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-edit-39__p0.png",
+    "width": 1838,
+    "height": 1444
+  },
+  {
+    "slug": "account-loan-application-edit-39",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-application-edit-39-2026-10-21-17_07_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-application-edit-39__p1.png",
+    "width": 1838,
+    "height": 1098
+  },
+  {
+    "slug": "account-loan-details-118-documents",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-documents-2026-10-21-17_18_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-documents__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-details-118-guarantors",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-guarantors-2026-10-21-17_17_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-guarantors__p0.png",
+    "width": 2006,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-details-118-guarantors",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-guarantors-2026-10-21-17_17_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-guarantors__p1.png",
+    "width": 1838,
+    "height": 1179
+  },
+  {
+    "slug": "account-loan-details-118-repayments",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-repayments-2026-10-21-17_15_52.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-repayments__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-details-118-schedule",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-schedule-2026-10-21-17_15_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-schedule__p0.png",
+    "width": 2464,
+    "height": 934
+  },
+  {
+    "slug": "account-loan-details-118-summary",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-summary-2026-10-21-17_11_31.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-summary__p0.png",
+    "width": 1838,
+    "height": 2041
+  },
+  {
+    "slug": "account-loan-details-118-transactions",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-loan-details-118-transactions-2026-10-21-17_14_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-loan-details-118-transactions__p0.png",
+    "width": 2028,
+    "height": 934
+  },
+  {
+    "slug": "account-saving",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-saving-2026-10-21-17_19_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-saving__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "account-saving",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-account-saving-2026-10-21-17_19_50.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\account-saving__p1.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "accounting-assets",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-assets-2026-10-21-17_45_52.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-assets__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-assets",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-assets-2026-10-21-17_46_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-assets__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-assets",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-assets-2026-10-21-17_46_48.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-assets__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-chart-of-accounts",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-chart-of-accounts-2026-10-21-17_38_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-chart-of-accounts__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-chart-of-accounts",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-chart-of-accounts-2026-10-21-17_40_18.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-chart-of-accounts__p1.png",
+    "width": 1838,
+    "height": 8728
+  },
+  {
+    "slug": "accounting-chart-of-accounts",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-chart-of-accounts-2026-10-21-17_40_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-chart-of-accounts__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-chart-of-accounts",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-chart-of-accounts-2026-10-21-17_41_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-chart-of-accounts__p3.png",
+    "width": 1838,
+    "height": 1557
+  },
+  {
+    "slug": "accounting-entries",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-entries-2026-10-21-17_41_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-entries__p0.png",
+    "width": 1838,
+    "height": 1750
+  },
+  {
+    "slug": "accounting-entries",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-entries-2026-10-21-17_44_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-entries__p1.png",
+    "width": 1838,
+    "height": 1750
+  },
+  {
+    "slug": "accounting-fixed-asset",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-fixed-asset-2026-10-21-17_47_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-fixed-asset__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-fixed-asset",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-fixed-asset-2026-10-21-17_47_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-fixed-asset__p1.png",
+    "width": 1838,
+    "height": 2543
+  },
+  {
+    "slug": "accounting-fixed-asset",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-fixed-asset-2026-10-21-17_47_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-fixed-asset__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-ledger-entries",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-ledger-entries-2026-10-21-17_45_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-ledger-entries__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-2026-10-21-17_48_15 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-2026-10-21-17_48_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports-Assets",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-Assets-2026-10-21-17_53_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-Assets__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports-CashBook",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-CashBook-2026-10-21-17_53_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-CashBook__p0.png",
+    "width": 1838,
+    "height": 8880
+  },
+  {
+    "slug": "accounting-reports-CashFlowStatement",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-CashFlowStatement-2026-10-21-17_52_50.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-CashFlowStatement__p0.png",
+    "width": 1838,
+    "height": 2003
+  },
+  {
+    "slug": "accounting-reports-ComprehensiveTrialBalance",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-ComprehensiveTrialBalance-2026-10-21-17_50_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-ComprehensiveTrialBalance__p0.png",
+    "width": 1838,
+    "height": 2639
+  },
+  {
+    "slug": "accounting-reports-CorporateTaxStatement",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-CorporateTaxStatement-2026-10-21-17_59_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-CorporateTaxStatement__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports-FinancialPositionReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-FinancialPositionReport-2026-10-21-17_51_18.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-FinancialPositionReport__p0.png",
+    "width": 1838,
+    "height": 1470
+  },
+  {
+    "slug": "accounting-reports-GeneralLedgerBook",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-GeneralLedgerBook-2026-10-21-17_56_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-GeneralLedgerBook__p0.png",
+    "width": 1838,
+    "height": 9649
+  },
+  {
+    "slug": "accounting-reports-IncomeStatementReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-IncomeStatementReport-2026-10-21-17_50_29.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-IncomeStatementReport__p0.png",
+    "width": 1838,
+    "height": 1106
+  },
+  {
+    "slug": "accounting-reports-JournalBook",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-JournalBook-2026-10-21-17_54_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-JournalBook__p0.png",
+    "width": 1838,
+    "height": 2674
+  },
+  {
+    "slug": "accounting-reports-LedgerStatementReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-LedgerStatementReport-2026-10-21-17_50_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-LedgerStatementReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports-MonthlyTrialBalance",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-MonthlyTrialBalance-2026-10-21-17_51_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-MonthlyTrialBalance__p0.png",
+    "width": 1838,
+    "height": 1517
+  },
+  {
+    "slug": "accounting-reports-notes-of-account",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-notes-of-account-2026-10-21-17_52_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-notes-of-account__p0.png",
+    "width": 1838,
+    "height": 3824
+  },
+  {
+    "slug": "accounting-reports-OwnersEquity",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-OwnersEquity-2026-10-21-17_55_18.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-OwnersEquity__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports-reconcile-statement",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-reconcile-statement-2026-10-21-17_57_26.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-reconcile-statement__p0.png",
+    "width": 1838,
+    "height": 1276
+  },
+  {
+    "slug": "accounting-reports-reconcile-statement",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-reconcile-statement-2026-10-21-17_57_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-reconcile-statement__p1.png",
+    "width": 1838,
+    "height": 1276
+  },
+  {
+    "slug": "accounting-reports-reconcile-statement-settings",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-reconcile-statement-settings-2026-10-21-17_58_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-reconcile-statement-settings__p0.png",
+    "width": 1838,
+    "height": 1276
+  },
+  {
+    "slug": "accounting-reports-Reconciliation",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-Reconciliation-2026-10-21-17_56_41.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-Reconciliation__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "accounting-reports-TrialBalanceReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-TrialBalanceReport-2026-10-21-17_48_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-TrialBalanceReport__p0.png",
+    "width": 1838,
+    "height": 1364
+  },
+  {
+    "slug": "accounting-reports-TrialBalanceReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-accounting-reports-TrialBalanceReport-2026-10-21-17_49_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\accounting-reports-TrialBalanceReport__p1.png",
+    "width": 1838,
+    "height": 2639
+  },
+  {
+    "slug": "clients",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-2026-10-21-16_41_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients__p0.png",
+    "width": 1838,
+    "height": 1368
+  },
+  {
+    "slug": "clients-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-create-2026-10-21-16_42_01 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-create__p0.png",
+    "width": 1838,
+    "height": 1504
+  },
+  {
+    "slug": "clients-create",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-create-2026-10-21-16_42_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-create__p1.png",
+    "width": 1838,
+    "height": 1504
+  },
+  {
+    "slug": "clients-create-group",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-create-group-2026-10-21-16_43_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-create-group__p0.png",
+    "width": 1838,
+    "height": 963
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_44_31.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p0.png",
+    "width": 1838,
+    "height": 1648
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_45_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p1.png",
+    "width": 1838,
+    "height": 1161
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_45_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p2.png",
+    "width": 1838,
+    "height": 1161
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_46_12.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p3.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_46_42.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p4.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_47_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p5.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_48_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p6.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_49_58.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p7.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_50_52.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p8.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 9,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_51_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p9.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 10,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_51_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p10.png",
+    "width": 1838,
+    "height": 1266
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 11,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_52_04.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p11.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 12,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_52_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p12.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 13,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_53_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p13.png",
+    "width": 2155,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 14,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_53_24 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p14.png",
+    "width": 1838,
+    "height": 1383
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 15,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_54_03 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p15.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 16,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_54_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p16.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 17,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_54_50 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p17.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 18,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_55_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p18.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "clients-group-1789",
+    "page_index": 19,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-clients-group-1789-2026-10-21-16_56_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\clients-group-1789__p19.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_51_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_51_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p1.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_52_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p2.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_52_29.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p3.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_52_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p4.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_53_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p5.png",
+    "width": 2025,
+    "height": 934
+  },
+  {
+    "slug": "core-wba-business-account",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-core-wba-business-account-2026-10-22-08_53_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\core-wba-business-account__p6.png",
+    "width": 2025,
+    "height": 934
+  },
+  {
+    "slug": "import-account",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-import-account-2026-10-22-08_50_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\import-account__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "import-account-new",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-import-account-new-2026-10-22-08_50_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\import-account-new__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "import-member",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-import-member-2026-10-22-08_49_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\import-member__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "import-member-new",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-import-member-new-2026-10-22-08_50_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\import-member-new__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "import-transaction",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-import-transaction-2026-10-22-08_50_52.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\import-transaction__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "import-transaction-new",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-import-transaction-new-2026-10-22-08_51_04.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\import-transaction-new__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "messages-message-logs",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-message-logs-2026-10-21-18_00_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-message-logs__p0.png",
+    "width": 1838,
+    "height": 1313
+  },
+  {
+    "slug": "messages-recharge-credits",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-recharge-credits-2026-10-21-18_04_09.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-recharge-credits__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "messages-segment-list",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-segment-list-2026-10-21-18_02_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-segment-list__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "messages-segment-list-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-segment-list-create-2026-10-21-18_03_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-segment-list-create__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "messages-send-message",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-send-message-2026-10-21-18_03_50.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-send-message__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "messages-template-list",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-template-list-2026-10-21-18_01_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-template-list__p0.png",
+    "width": 1838,
+    "height": 1313
+  },
+  {
+    "slug": "messages-template-list-create-3793",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-template-list-create-3793-2026-10-21-18_01_50.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-template-list-create-3793__p0.png",
+    "width": 1838,
+    "height": 1288
+  },
+  {
+    "slug": "messages-users-list",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-users-list-2026-10-21-18_02_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-users-list__p0.png",
+    "width": 1838,
+    "height": 1112
+  },
+  {
+    "slug": "messages-users-list",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-messages-users-list-2026-10-21-18_03_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\messages-users-list__p1.png",
+    "width": 1838,
+    "height": 1112
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_35_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_36_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_36_59.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_37_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_38_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p4.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_38_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p5.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_39_20 (1).png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p6.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-ClientListReport",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-ClientListReport-2026-10-21-18_39_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-ClientListReport__p7.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-client-MemberVerificationReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-client-MemberVerificationReport-2026-10-22-08_34_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-client-MemberVerificationReport__p0.png",
+    "width": 2029,
+    "height": 28800
+  },
+  {
+    "slug": "reports-loan",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-2026-10-21-18_06_00.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-21-18_06_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-21-18_07_09.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-21-18_07_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-21-18_08_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-22-10_14_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-22-10_14_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-22-10_15_28.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInstallmentsReport",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInstallmentsReport-2026-10-22-10_16_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInstallmentsReport__p7.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-21-18_09_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-21-18_09_58.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-21-18_10_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-21-18_10_58.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-21-18_11_18.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p4.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-22-10_16_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-22-10_16_53.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-22-10_17_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p7.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-22-10_17_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p8.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AccruedInterestReport",
+    "page_index": 9,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AccruedInterestReport-2026-10-22-10_18_28.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AccruedInterestReport__p9.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-21-18_11_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p0.png",
+    "width": 7255,
+    "height": 2227
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-22-10_19_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-22-10_19_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-22-10_20_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-22-10_20_48.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-22-10_21_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ActiveLoanReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ActiveLoanReport-2026-10-22-10_22_42.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ActiveLoanReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-21-18_12_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-21-18_13_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-21-18_13_29.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-21-18_13_53.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-21-18_14_17.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p4.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-21-18_14_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p5.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_27_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_28_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p7.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_28_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p8.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 9,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_29_23.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p9.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 10,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_29_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p10.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 11,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_31_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p11.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-AllLoanReport",
+    "page_index": 12,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-AllLoanReport-2026-10-22-10_32_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-AllLoanReport__p12.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-21-18_15_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-21-18_15_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-21-18_16_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-21-18_17_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-21-18_17_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p4.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-22-10_23_12.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-22-10_23_48.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-22-10_24_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p7.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-22-10_24_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p8.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 9,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-22-10_25_53.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p9.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-DeferredInterestReport",
+    "page_index": 10,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-DeferredInterestReport-2026-10-22-10_26_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-DeferredInterestReport__p10.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedLoanRepaymentsReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedLoanRepaymentsReport-2026-10-21-18_18_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p0.png",
+    "width": 6115,
+    "height": 1594
+  },
+  {
+    "slug": "reports-loan-ExpectedLoanRepaymentsReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedLoanRepaymentsReport-2026-10-22-10_34_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedLoanRepaymentsReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedLoanRepaymentsReport-2026-10-22-10_35_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedLoanRepaymentsReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedLoanRepaymentsReport-2026-10-22-10_35_48.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedLoanRepaymentsReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedLoanRepaymentsReport-2026-10-22-10_36_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedLoanRepaymentsReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedLoanRepaymentsReport-2026-10-22-10_37_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedLoanRepaymentsReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-21-18_19_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-21-18_19_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-21-18_20_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-21-18_21_23.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-22-10_38_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-22-10_38_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-22-10_38_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-22-10_39_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p7.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedPaymentByDateReport",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedPaymentByDateReport-2026-10-22-10_40_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedPaymentByDateReport__p8.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedRepaymentReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedRepaymentReport-2026-10-21-18_22_29.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedRepaymentReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedRepaymentReport-2026-10-21-18_23_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedRepaymentReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedRepaymentReport-2026-10-21-18_23_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-loan-ExpectedRepaymentReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedRepaymentReport-2026-10-22-10_41_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedRepaymentReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedRepaymentReport-2026-10-22-10_41_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-ExpectedRepaymentReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-ExpectedRepaymentReport-2026-10-22-10_42_26.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-ExpectedRepaymentReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-FeeStatusReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-FeeStatusReport-2026-10-22-10_43_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-FeeStatusReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-FeeStatusReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-FeeStatusReport-2026-10-22-10_44_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-FeeStatusReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-FeeStatusReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-FeeStatusReport-2026-10-22-10_44_59.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-FeeStatusReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-FeeStatusReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-FeeStatusReport-2026-10-22-10_45_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-FeeStatusReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-GuarantorsReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-GuarantorsReport-2026-10-22-10_45_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-GuarantorsReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-GuarantorsReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-GuarantorsReport-2026-10-22-10_46_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-GuarantorsReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-GuarantorsReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-GuarantorsReport-2026-10-22-10_47_04.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-GuarantorsReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-GuarantorsReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-GuarantorsReport-2026-10-22-10_47_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-GuarantorsReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-IssuedLoansAndArrearsReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-IssuedLoansAndArrearsReport-2026-10-22-10_48_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-IssuedLoansAndArrearsReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-IssuedLoansAndArrearsReport-2026-10-22-10_48_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-IssuedLoansAndArrearsReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-IssuedLoansAndArrearsReport-2026-10-22-10_49_00.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-IssuedLoansAndArrearsReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-IssuedLoansAndArrearsReport-2026-10-22-10_49_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-IssuedLoansAndArrearsReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-IssuedLoansAndArrearsReport-2026-10-22-10_50_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-IssuedLoansAndArrearsReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-IssuedLoansAndArrearsReport-2026-10-22-10_50_42.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-IssuedLoansAndArrearsReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanAgingReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanAgingReport-2026-10-22-10_51_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanAgingReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanAgingReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanAgingReport-2026-10-22-10_51_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanAgingReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanAgingReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanAgingReport-2026-10-22-10_52_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanAgingReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanAgingReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanAgingReport-2026-10-22-10_53_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanAgingReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanAgingReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanAgingReport-2026-10-22-10_54_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanAgingReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanAgingReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanAgingReport-2026-10-22-10_55_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanAgingReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanArrearsReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanArrearsReport-2026-10-22-10_56_02.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanArrearsReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanArrearsReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanArrearsReport-2026-10-22-10_57_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanArrearsReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanArrearsReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanArrearsReport-2026-10-22-10_57_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanArrearsReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanArrearsReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanArrearsReport-2026-10-22-10_58_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanArrearsReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanArrearsReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanArrearsReport-2026-10-22-10_58_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanArrearsReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanArrearsReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanArrearsReport-2026-10-22-10_59_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanArrearsReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanDisbursementReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanDisbursementReport-2026-10-22-10_59_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanDisbursementReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanDisbursementReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanDisbursementReport-2026-10-22-11_00_07.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanDisbursementReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanDisbursementReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanDisbursementReport-2026-10-22-11_00_40.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanDisbursementReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanDisbursementReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanDisbursementReport-2026-10-22-11_01_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanDisbursementReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanDisbursementReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanDisbursementReport-2026-10-22-11_01_40.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanDisbursementReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanDisbursementReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanDisbursementReport-2026-10-22-11_02_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanDisbursementReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanInsuranceReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanInsuranceReport-2026-10-22-11_02_28.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanInsuranceReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanInsuranceReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanInsuranceReport-2026-10-22-11_03_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanInsuranceReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanInsuranceReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanInsuranceReport-2026-10-22-11_05_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanInsuranceReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanInsuranceReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanInsuranceReport-2026-10-22-11_06_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanInsuranceReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOfficerIncomeReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOfficerIncomeReport-2026-10-22-11_06_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOfficerIncomeReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOfficerIncomeReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOfficerIncomeReport-2026-10-22-11_07_07.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOfficerIncomeReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_08_48.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_09_12.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_09_40.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_09_58.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_10_17.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_10_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanOutstandingReport",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanOutstandingReport-2026-10-22-11_11_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanOutstandingReport__p6.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanRepaymentReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanRepaymentReport-2026-10-22-11_12_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanRepaymentReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanRepaymentReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanRepaymentReport-2026-10-22-11_13_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanRepaymentReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanRepaymentReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanRepaymentReport-2026-10-22-11_13_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanRepaymentReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-LoanRepaymentReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-LoanRepaymentReport-2026-10-22-11_14_31.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-LoanRepaymentReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PaidOffLoansReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PaidOffLoansReport-2026-10-22-11_16_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PaidOffLoansReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PaidOffLoansReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PaidOffLoansReport-2026-10-22-11_16_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PaidOffLoansReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PaidOffLoansReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PaidOffLoansReport-2026-10-22-11_17_14.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PaidOffLoansReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PaidOffLoansReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PaidOffLoansReport-2026-10-22-11_17_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PaidOffLoansReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PaidOffLoansReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PaidOffLoansReport-2026-10-22-11_18_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PaidOffLoansReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PendingLoanApplications",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PendingLoanApplications-2026-10-22-11_19_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PendingLoanApplications__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PendingLoanApplications",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PendingLoanApplications-2026-10-22-11_20_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PendingLoanApplications__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PendingLoanApplications",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PendingLoanApplications-2026-10-22-11_20_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PendingLoanApplications__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PendingLoanApplications",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PendingLoanApplications-2026-10-22-11_21_04.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PendingLoanApplications__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PortfolioRiskReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PortfolioRiskReport-2026-10-22-11_21_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PortfolioRiskReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PortfolioRiskReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PortfolioRiskReport-2026-10-22-11_22_42.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PortfolioRiskReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PortfolioRiskReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PortfolioRiskReport-2026-10-22-11_23_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PortfolioRiskReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PortfolioRiskReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PortfolioRiskReport-2026-10-22-11_25_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PortfolioRiskReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PortfolioRiskReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PortfolioRiskReport-2026-10-22-11_25_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PortfolioRiskReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-PortfolioRiskReport",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-PortfolioRiskReport-2026-10-22-11_27_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-PortfolioRiskReport__p5.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-RiskClassificationOfAssets",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-RiskClassificationOfAssets-2026-10-22-11_28_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-RiskClassificationOfAssets__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-RiskClassificationOfAssets",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-RiskClassificationOfAssets-2026-10-22-11_30_02.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-RiskClassificationOfAssets__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-RiskClassificationOfAssets",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-RiskClassificationOfAssets-2026-10-22-11_30_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-RiskClassificationOfAssets__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-RiskClassificationOfAssets",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-RiskClassificationOfAssets-2026-10-22-11_31_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-RiskClassificationOfAssets__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-RiskClassificationOfAssets",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-RiskClassificationOfAssets-2026-10-22-11_32_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-RiskClassificationOfAssets__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-SummarizedPortfolioAtRiskReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-SummarizedPortfolioAtRiskReport-2026-10-22-11_34_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-SummarizedPortfolioAtRiskReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-SummarizedPortfolioAtRiskReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-SummarizedPortfolioAtRiskReport-2026-10-22-11_34_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-SummarizedPortfolioAtRiskReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-SummarizedPortfolioAtRiskReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-SummarizedPortfolioAtRiskReport-2026-10-22-11_35_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-SummarizedPortfolioAtRiskReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-SummarizedPortfolioAtRiskReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-SummarizedPortfolioAtRiskReport-2026-10-22-11_36_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-SummarizedPortfolioAtRiskReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-TransactionReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-TransactionReport-2026-10-22-11_38_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-TransactionReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-TransactionReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-TransactionReport-2026-10-22-11_39_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-TransactionReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-TransactionReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-TransactionReport-2026-10-22-11_39_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-TransactionReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-TransactionReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-TransactionReport-2026-10-22-11_40_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-TransactionReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-WrittenOffLoanReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-WrittenOffLoanReport-2026-10-22-11_40_52.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-WrittenOffLoanReport__p0.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-WrittenOffLoanReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-WrittenOffLoanReport-2026-10-22-11_41_12.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-WrittenOffLoanReport__p1.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-WrittenOffLoanReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-WrittenOffLoanReport-2026-10-22-11_41_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-WrittenOffLoanReport__p2.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-WrittenOffLoanReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-WrittenOffLoanReport-2026-10-22-11_42_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-WrittenOffLoanReport__p3.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-loan-WrittenOffLoanReport",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-loan-WrittenOffLoanReport-2026-10-22-11_42_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-loan-WrittenOffLoanReport__p4.png",
+    "width": 1921,
+    "height": 1297
+  },
+  {
+    "slug": "reports-msp-MSP01Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP01Report-2026-10-22-08_38_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP01Report__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP01Report",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP01Report-2026-10-22-08_42_58.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP01Report__p1.png",
+    "width": 1838,
+    "height": 3822
+  },
+  {
+    "slug": "reports-msp-MSP02Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP02Report-2026-10-22-08_38_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP02Report__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP02Report",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP02Report-2026-10-22-08_43_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP02Report__p1.png",
+    "width": 1838,
+    "height": 2447
+  },
+  {
+    "slug": "reports-msp-MSP03MFIReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP03MFIReport-2026-10-22-08_39_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP03MFIReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP03MFIReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP03MFIReport-2026-10-22-08_43_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP03MFIReport__p1.png",
+    "width": 1838,
+    "height": 1637
+  },
+  {
+    "slug": "reports-msp-MSP03MFIReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP03MFIReport-2026-10-22-08_44_18.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP03MFIReport__p2.png",
+    "width": 1838,
+    "height": 1637
+  },
+  {
+    "slug": "reports-msp-MSP03Type1Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP03Type1Report-2026-10-22-08_39_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP03Type1Report__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP03Type1Report",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP03Type1Report-2026-10-22-08_44_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP03Type1Report__p1.png",
+    "width": 1838,
+    "height": 1617
+  },
+  {
+    "slug": "reports-msp-MSP03Type2Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP03Type2Report-2026-10-22-08_40_14.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP03Type2Report__p0.png",
+    "width": 1838,
+    "height": 1617
+  },
+  {
+    "slug": "reports-msp-MSP04MFIReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP04MFIReport-2026-10-22-08_40_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP04MFIReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP04Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP04Report-2026-10-22-08_41_04.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP04Report__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP04Report",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP04Report-2026-10-22-08_42_00.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP04Report__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP05MFIReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP05MFIReport-2026-10-22-08_42_32.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP05MFIReport__p0.png",
+    "width": 1838,
+    "height": 1257
+  },
+  {
+    "slug": "reports-msp-MSP05Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP05Report-2026-10-22-08_44_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP05Report__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP06Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP06Report-2026-10-22-08_45_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP06Report__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP07Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP07Report-2026-10-22-08_45_26.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP07Report__p0.png",
+    "width": 1838,
+    "height": 1284
+  },
+  {
+    "slug": "reports-msp-MSP08Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP08Report-2026-10-22-08_45_41.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP08Report__p0.png",
+    "width": 1838,
+    "height": 1611
+  },
+  {
+    "slug": "reports-msp-MSP09MFIReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP09MFIReport-2026-10-22-08_46_06.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP09MFIReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-msp-MSP09Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP09Report-2026-10-22-08_46_25.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP09Report__p0.png",
+    "width": 1838,
+    "height": 1646
+  },
+  {
+    "slug": "reports-msp-MSP10MFIReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP10MFIReport-2026-10-22-08_46_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP10MFIReport__p0.png",
+    "width": 1838,
+    "height": 1385
+  },
+  {
+    "slug": "reports-msp-MSP10Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP10Report-2026-10-22-08_47_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP10Report__p0.png",
+    "width": 1838,
+    "height": 1084
+  },
+  {
+    "slug": "reports-msp-MSP10Report",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP10Report-2026-10-22-08_47_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP10Report__p1.png",
+    "width": 1838,
+    "height": 1084
+  },
+  {
+    "slug": "reports-msp-MSP11Report",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-msp-MSP11Report-2026-10-22-08_47_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-msp-MSP11Report__p0.png",
+    "width": 1838,
+    "height": 1658
+  },
+  {
+    "slug": "reports-saving-SavingBeyondPolicyLimitsReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingBeyondPolicyLimitsReport-2026-10-21-18_24_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingBeyondPolicyLimitsReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingBeyondPolicyLimitsReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingBeyondPolicyLimitsReport-2026-10-21-18_25_12.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingBeyondPolicyLimitsReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingReport-2026-10-21-18_25_37.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingReport-2026-10-21-18_26_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingReport-2026-10-21-18_26_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingSnapshotReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingSnapshotReport-2026-10-21-18_27_14.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingSnapshotReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingSnapshotReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingSnapshotReport-2026-10-21-18_27_41.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingSnapshotReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-saving-SavingSnapshotReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-saving-SavingSnapshotReport-2026-10-21-18_28_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-saving-SavingSnapshotReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-statement",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-statement-2026-10-22-08_48_14.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-statement__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-statement-AccountStatementReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-statement-AccountStatementReport-2026-10-22-08_48_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-statement-AccountStatementReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-statement-MemberStatementReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-statement-MemberStatementReport-2026-10-22-08_49_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-statement-MemberStatementReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-DailyTransactionReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-DailyTransactionReport-2026-10-21-18_28_53.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-DailyTransactionReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-DailyTransactionReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-DailyTransactionReport-2026-10-21-18_29_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-DailyTransactionReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-DailyTransactionReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-DailyTransactionReport-2026-10-21-18_29_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-DailyTransactionReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-DailyTransactionReport",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-DailyTransactionReport-2026-10-21-18_30_14.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-DailyTransactionReport__p3.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-ExpenseReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-ExpenseReport-2026-10-21-18_30_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-ExpenseReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-ExpenseReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-ExpenseReport-2026-10-21-18_31_26.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-ExpenseReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-ExpenseReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-ExpenseReport-2026-10-21-18_31_59.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-ExpenseReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-FeesIncomeReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-FeesIncomeReport-2026-10-21-18_32_40.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-FeesIncomeReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-FeesIncomeReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-FeesIncomeReport-2026-10-21-18_33_17.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-FeesIncomeReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-FeesIncomeReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-FeesIncomeReport-2026-10-21-18_33_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-FeesIncomeReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-ReversedTransactionReport",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-ReversedTransactionReport-2026-10-21-18_34_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-ReversedTransactionReport__p0.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-ReversedTransactionReport",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-ReversedTransactionReport-2026-10-21-18_34_50.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-ReversedTransactionReport__p1.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "reports-transaction-ReversedTransactionReport",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-reports-transaction-ReversedTransactionReport-2026-10-21-18_35_16.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\reports-transaction-ReversedTransactionReport__p2.png",
+    "width": 1838,
+    "height": 1041
+  },
+  {
+    "slug": "requests",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-requests-2026-10-21-17_59_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\requests__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "requests",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-requests-2026-10-21-17_59_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\requests__p1.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "requests",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-requests-2026-10-21-18_00_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\requests__p2.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "settings-account",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-account-2026-10-22-08_54_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-account__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-account",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-account-2026-10-22-08_54_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-account__p1.png",
+    "width": 1838,
+    "height": 1068
+  },
+  {
+    "slug": "settings-account",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-account-2026-10-22-08_55_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-account__p2.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-account",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-account-2026-10-22-08_55_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-account__p3.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_55_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_56_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p1.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_56_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p2.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_57_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p3.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_57_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p4.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_58_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p5.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_58_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p6.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-accounting-settings",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-accounting-settings-2026-10-22-08_58_50.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-accounting-settings__p7.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-administrator",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-administrator-2026-10-22-09_19_58.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-administrator__p0.png",
+    "width": 1838,
+    "height": 1148
+  },
+  {
+    "slug": "settings-administrator-add",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-administrator-add-2026-10-22-09_20_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-administrator-add__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-administrator-add",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-administrator-add-2026-10-22-09_21_15.png",
+      "screencapture-cams-wakandi-co-tz-settings-administrator-add-2026-10-22-09_21_40.png"
+    ],
+    "stitched": true,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-administrator-add__p1.png",
+    "width": 1838,
+    "height": 2208
+  },
+  {
+    "slug": "settings-administrator-add",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-administrator-add-2026-10-22-09_22_02.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-administrator-add__p2.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-administrator-add",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-administrator-add-2026-10-22-09_22_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-administrator-add__p3.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-administrator-add",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-administrator-add-2026-10-22-09_22_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-administrator-add__p4.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-branch",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-branch-2026-10-22-08_59_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-branch__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-branch-add",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-branch-add-2026-10-22-08_59_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-branch-add__p0.png",
+    "width": 1838,
+    "height": 1931
+  },
+  {
+    "slug": "settings-branch-add",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-branch-add-2026-10-22-09_00_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-branch-add__p1.png",
+    "width": 1838,
+    "height": 1985
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_07_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p0.png",
+    "width": 1838,
+    "height": 1342
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_12_34.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p1.png",
+    "width": 1838,
+    "height": 1342
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_12_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p2.png",
+    "width": 1838,
+    "height": 1426
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_13_01.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p3.png",
+    "width": 1838,
+    "height": 1380
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_13_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p4.png",
+    "width": 1838,
+    "height": 1340
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_13_23.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p5.png",
+    "width": 1838,
+    "height": 1258
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_13_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p6.png",
+    "width": 1838,
+    "height": 1292
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_13_55.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p7.png",
+    "width": 1838,
+    "height": 1292
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_14_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p8.png",
+    "width": 1838,
+    "height": 1361
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5",
+    "page_index": 9,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-2026-10-22-09_14_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5__p9.png",
+    "width": 1838,
+    "height": 1454
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_08_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p0.png",
+    "width": 1838,
+    "height": 1344
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_09_11.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p1.png",
+    "width": 1838,
+    "height": 1617
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_09_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p2.png",
+    "width": 1838,
+    "height": 1566
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_09_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p3.png",
+    "width": 1838,
+    "height": 1504
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_10_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p4.png",
+    "width": 1838,
+    "height": 1431
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_10_20.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p5.png",
+    "width": 1838,
+    "height": 1263
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_10_31.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p6.png",
+    "width": 1838,
+    "height": 1090
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_10_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p7.png",
+    "width": 1838,
+    "height": 1283
+  },
+  {
+    "slug": "settings-policies-credit-product-policy-5-edit",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-5-edit-2026-10-22-09_11_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy-5-edit__p8.png",
+    "width": 1838,
+    "height": 1670
+  },
+  {
+    "slug": "settings-policies-credit-product-policy",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-2026-10-22-09_07_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-policies-credit-product-policy",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-credit-product-policy-2026-10-22-09_12_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-credit-product-policy__p1.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-policies-holidays",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-holidays-2026-10-22-09_18_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-holidays__p0.png",
+    "width": 1838,
+    "height": 1542
+  },
+  {
+    "slug": "settings-policies-holidays",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-holidays-2026-10-22-09_19_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-holidays__p1.png",
+    "width": 1838,
+    "height": 1542
+  },
+  {
+    "slug": "settings-policies-membership-policy-1",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-1-2026-10-22-09_15_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy-1__p0.png",
+    "width": 1838,
+    "height": 1464
+  },
+  {
+    "slug": "settings-policies-membership-policy-1-edit",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-1-edit-2026-10-22-09_16_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy-1-edit__p0.png",
+    "width": 1838,
+    "height": 2335
+  },
+  {
+    "slug": "settings-policies-membership-policy-2",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-2-2026-10-22-09_06_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy-2__p0.png",
+    "width": 1838,
+    "height": 1404
+  },
+  {
+    "slug": "settings-policies-membership-policy-2-edit",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-2-edit-2026-10-22-09_06_31.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy-2-edit__p0.png",
+    "width": 1838,
+    "height": 2631
+  },
+  {
+    "slug": "settings-policies-membership-policy",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-2026-10-22-09_05_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-policies-membership-policy-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-create-2026-10-22-09_06_48.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy-create__p0.png",
+    "width": 1838,
+    "height": 2422
+  },
+  {
+    "slug": "settings-policies-membership-policy-create",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-policies-membership-policy-create-2026-10-22-09_11_35.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-policies-membership-policy-create__p1.png",
+    "width": 1838,
+    "height": 2422
+  },
+  {
+    "slug": "settings-products-fee-penalties",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-fee-penalties-2026-10-22-09_03_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-fee-penalties__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-fee-penalties",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-fee-penalties-2026-10-22-09_03_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-fee-penalties__p1.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-interest-rate",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-interest-rate-2026-10-22-09_02_54.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-interest-rate__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-interest-rate-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-interest-rate-create-2026-10-22-09_03_08.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-interest-rate-create__p0.png",
+    "width": 1838,
+    "height": 1077
+  },
+  {
+    "slug": "settings-products-loan-5",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-loan-5-2026-10-22-09_01_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-loan-5__p0.png",
+    "width": 1838,
+    "height": 3184
+  },
+  {
+    "slug": "settings-products-loan",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-loan-2026-10-22-09_00_43.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-loan__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-loan-provisioning",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-loan-provisioning-2026-10-22-09_04_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-loan-provisioning__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-loan-provisioning-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-loan-provisioning-create-2026-10-22-09_04_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-loan-provisioning-create__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-savings",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-savings-2026-10-22-09_01_47.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-savings__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-products-savings-create",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-savings-create-2026-10-22-09_02_07.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-savings-create__p0.png",
+    "width": 1838,
+    "height": 1704
+  },
+  {
+    "slug": "settings-products-savings-edit-1",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-products-savings-edit-1-2026-10-22-09_02_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-products-savings-edit-1__p0.png",
+    "width": 1838,
+    "height": 1829
+  },
+  {
+    "slug": "settings-role",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-role-2026-10-22-09_24_23.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-role__p0.png",
+    "width": 1838,
+    "height": 1061
+  },
+  {
+    "slug": "settings-role",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-role-2026-10-22-09_24_36.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-role__p1.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-role",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-role-2026-10-22-09_24_57.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-role__p2.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-role",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-role-2026-10-22-09_25_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-role__p3.png",
+    "width": 1838,
+    "height": 3445
+  },
+  {
+    "slug": "settings-role",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-role-2026-10-22-09_25_45.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-role__p4.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "settings-service-provider",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-settings-service-provider-2026-10-22-09_29_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\settings-service-provider__p0.png",
+    "width": 1838,
+    "height": 1114
+  },
+  {
+    "slug": "transaction-all-transaction",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-all-transaction-2026-10-21-17_20_38.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-all-transaction__p0.png",
+    "width": 2074,
+    "height": 934
+  },
+  {
+    "slug": "transaction-online-payment-reconciliation",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-online-payment-reconciliation-2026-10-21-17_22_27.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-online-payment-reconciliation__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-online-transaction",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-online-transaction-2026-10-21-17_21_09.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-online-transaction__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-online-transaction",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-online-transaction-2026-10-21-17_21_31.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-online-transaction__p1.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_22_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p0.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 1,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_23_13.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p1.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 2,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_23_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p2.png",
+    "width": 1838,
+    "height": 964
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 3,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_24_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p3.png",
+    "width": 1838,
+    "height": 964
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 4,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_25_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p4.png",
+    "width": 1838,
+    "height": 964
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 5,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_25_14.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p5.png",
+    "width": 1838,
+    "height": 964
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 6,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_25_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p6.png",
+    "width": 1838,
+    "height": 2918
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 7,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_26_29.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p7.png",
+    "width": 1838,
+    "height": 2351
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 8,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_27_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p8.png",
+    "width": 1838,
+    "height": 2295
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 9,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_28_33.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p9.png",
+    "width": 1838,
+    "height": 1368
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 10,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_28_56.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p10.png",
+    "width": 1838,
+    "height": 1319
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 11,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_29_24.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p11.png",
+    "width": 1838,
+    "height": 1589
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 12,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_29_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p12.png",
+    "width": 1838,
+    "height": 2173
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 13,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_30_39.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p13.png",
+    "width": 1838,
+    "height": 1451
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 14,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_30_59.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p14.png",
+    "width": 1838,
+    "height": 1462
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 15,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_31_21.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p15.png",
+    "width": 1838,
+    "height": 1462
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 16,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_31_44.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p16.png",
+    "width": 1838,
+    "height": 1462
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 17,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_32_05.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p17.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 18,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_32_28.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p18.png",
+    "width": 1838,
+    "height": 1506
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 19,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_32_46.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p19.png",
+    "width": 1838,
+    "height": 1244
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 20,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_33_15.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p20.png",
+    "width": 1838,
+    "height": 1220
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 21,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_33_51.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p21.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 22,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_34_03.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p22.png",
+    "width": 1838,
+    "height": 1617
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 23,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_34_37.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p23.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 24,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_35_19.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p24.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 25,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_35_49.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p25.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 26,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_36_26.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p26.png",
+    "width": 1838,
+    "height": 1713
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 27,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_37_22.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p27.png",
+    "width": 1838,
+    "height": 1632
+  },
+  {
+    "slug": "transaction-teller-transaction",
+    "page_index": 28,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-2026-10-21-17_38_10.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction__p28.png",
+    "width": 1838,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction-history",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-history-2026-10-21-17_35_00.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction-history__p0.png",
+    "width": 1863,
+    "height": 934
+  },
+  {
+    "slug": "transaction-teller-transaction-request",
+    "page_index": 0,
+    "sources": [
+      "screencapture-cams-wakandi-co-tz-transaction-teller-transaction-request-2026-10-21-17_22_59.png"
+    ],
+    "stitched": false,
+    "overlap": 0,
+    "output": "wakandi-stitched\\transaction-teller-transaction-request__p0.png",
+    "width": 1838,
+    "height": 934
+  }
+]
