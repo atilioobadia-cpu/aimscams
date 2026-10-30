@@ -1,17 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { GenericReportPage } from "@/components/accounting/generic-report-page";
 
-export const metadata: Metadata = {
-  title: "MSP10 mfireport · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "MSP10 mfireport · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="MSP10 mfireport"
-      description="Operational and statutory report."
-      detail="This report arrives with the reporting module. Reports read posted ledger data only."
-    />
-  );
+export default function Route() {
+  return <GenericReportPage title="MSP10 mfireport" description="MSP10 mfireport." />;
 }

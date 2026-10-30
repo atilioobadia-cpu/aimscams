@@ -1,17 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { GenericReportPage } from "@/components/accounting/generic-report-page";
 
-export const metadata: Metadata = {
-  title: "Risk classification of assets · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "Risk classification of assets · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Risk classification of assets"
-      description="Operational and statutory report."
-      detail="This report arrives with the reporting module. Reports read posted ledger data only."
-    />
-  );
+export default function Route() {
+  return <GenericReportPage title="Risk classification of assets" description="Risk classification of assets." />;
 }

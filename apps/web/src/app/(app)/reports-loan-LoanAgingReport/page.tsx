@@ -1,17 +1,9 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { GenericReportPage } from "@/components/accounting/generic-report-page";
 
-export const metadata: Metadata = {
-  title: "Loan aging report · AIMSCAMS",
-};
+export const metadata: Metadata = { title: "Loan aging report · AIMSCAMS" };
 
-export default function Page() {
-  return (
-    <ComingSoon
-      title="Loan aging report"
-      description="Operational and statutory report."
-      detail="This report arrives with the reporting module. Reports read posted ledger data only."
-    />
-  );
+export default function Route() {
+  return <GenericReportPage title="Loan aging report" description="Loan aging report." />;
 }

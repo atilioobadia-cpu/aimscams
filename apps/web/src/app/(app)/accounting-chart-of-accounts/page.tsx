@@ -44,8 +44,23 @@ type Account = {
 
 const TOP_LEVEL_CODES = new Set(["1", "2", "3", "4", "5"]);
 
-function display(value: string): string {
-  return value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+const ACRONYMS = new Set(["CRDB", "NMB", "AIMSCAMS", "MFI", "TCDC", "BOT", "MSP", "TSH", "GPS", "HR"]);
+
+function sentenceCase(s: string): string {
+  const parts = s.split(/(\s+)/);
+  let firstWord = true;
+  return parts
+    .map((part) => {
+      if (!part.trim()) return part;
+      const upper = part.toUpperCase();
+      if (ACRONYMS.has(upper)) return upper;
+      if (firstWord) {
+        firstWord = false;
+        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      }
+      return part.toLowerCase();
+    })
+    .join("");
 }
 
 function formatBalance(value: string, normalBalance: string): string {
@@ -193,7 +208,7 @@ export default function ChartOfAccountsPage() {
 
   function openEdit(account: Account) {
     setEditAccount(account);
-    setEditName(account.name);
+    setEditName(sentenceCase(account.name));
     setEditParent(account.parent_id ?? "");
     setEditOpening(formatBalance(account.opening_balance_minor, account.normal_balance).replace(/^(Dr|Cr) /, ""));
     setEditOpeningDc(account.normal_balance === "debit" ? "Dr" : "Cr");
@@ -307,10 +322,10 @@ export default function ChartOfAccountsPage() {
                               href={account.is_group ? `/accounting-ledger-entries?group=${account.code}` : `/accounting-ledger-entries?account=${account.code}`}
                               className={account.is_group ? "text-strong hover:underline" : "text-body hover:underline"}
                             >
-                              {account.name}
+                              {sentenceCase(account.name)}
                             </Link>
                           ) : (
-                            <span className="text-strong">{account.name}</span>
+                            <span className="text-strong">{sentenceCase(account.name)}</span>
                           )}
                           {account.is_assumption ? (
                             <Badge
@@ -361,7 +376,7 @@ export default function ChartOfAccountsPage() {
               <select id="edit-parent" value={editParent} onChange={(e) => setEditParent(e.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
                 <option value="">None</option>
                 {parentOptions.map((g) => (
-                  <option key={g.id} value={g.id}>{g.code} {g.name}</option>
+                  <option key={g.id} value={g.id}>{g.code} {sentenceCase(g.name)}</option>
                 ))}
               </select>
             </div>
