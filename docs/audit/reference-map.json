@@ -1,0 +1,445 @@
+{
+  "account-loan": {
+    "route": "/account-loan"
+  },
+  "account-loan-application": {
+    "route": "/account-loan-application"
+  },
+  "account-loan-application-create": {
+    "route": "/account-loan-application-create"
+  },
+  "account-loan-application-details-39": {
+    "route": "/account-loan-application-details/[id]"
+  },
+  "account-loan-application-details-124": {
+    "route": "/account-loan-application-details/[id]"
+  },
+  "account-loan-application-edit-39": {
+    "route": "/account-loan-application-edit/[id]"
+  },
+  "account-loan-details-118-documents": {
+    "route": "/account-loan-details/[id]/documents"
+  },
+  "account-loan-details-118-guarantors": {
+    "route": "/account-loan-details/[id]/guarantors"
+  },
+  "account-loan-details-118-repayments": {
+    "route": "/account-loan-details/[id]/repayments"
+  },
+  "account-loan-details-118-schedule": {
+    "route": null,
+    "missing": "Loan detail has no schedule tab; the schedule is not exposed on its own page."
+  },
+  "account-loan-details-118-summary": {
+    "route": "/account-loan-details/[id]"
+  },
+  "account-loan-details-118-transactions": {
+    "route": "/account-loan-details/[id]/transactions"
+  },
+  "account-saving": {
+    "route": "/account-saving"
+  },
+  "accounting-assets": {
+    "route": "/accounting-assets"
+  },
+  "accounting-chart-of-accounts": {
+    "route": "/accounting-chart-of-accounts"
+  },
+  "accounting-entries": {
+    "route": "/accounting-entries"
+  },
+  "accounting-fixed-asset": {
+    "route": "/accounting-fixed-asset"
+  },
+  "accounting-ledger-entries": {
+    "route": "/accounting-ledger-entries"
+  },
+  "accounting-reports": {
+    "route": "/accounting-reports"
+  },
+  "accounting-reports-Assets": {
+    "route": "/accounting-reports-Assets"
+  },
+  "accounting-reports-CashBook": {
+    "route": "/accounting-reports-CashBook"
+  },
+  "accounting-reports-CashFlowStatement": {
+    "route": "/accounting-reports-CashFlowStatement"
+  },
+  "accounting-reports-ComprehensiveTrialBalance": {
+    "route": "/accounting-reports-ComprehensiveTrialBalance"
+  },
+  "accounting-reports-CorporateTaxStatement": {
+    "route": "/accounting-reports-CorporateTaxStatement"
+  },
+  "accounting-reports-FinancialPositionReport": {
+    "route": "/accounting-reports-FinancialPositionReport"
+  },
+  "accounting-reports-GeneralLedgerBook": {
+    "route": "/accounting-reports-GeneralLedgerBook"
+  },
+  "accounting-reports-IncomeStatementReport": {
+    "route": "/accounting-reports-IncomeStatementReport"
+  },
+  "accounting-reports-JournalBook": {
+    "route": "/accounting-reports-JournalBook"
+  },
+  "accounting-reports-LedgerStatementReport": {
+    "route": "/accounting-reports-LedgerStatementReport"
+  },
+  "accounting-reports-MonthlyTrialBalance": {
+    "route": "/accounting-reports-MonthlyTrialBalance"
+  },
+  "accounting-reports-notes-of-account": {
+    "route": "/accounting-reports-notes-of-account"
+  },
+  "accounting-reports-OwnersEquity": {
+    "route": "/accounting-reports-OwnersEquity"
+  },
+  "accounting-reports-reconcile-statement": {
+    "route": "/accounting-reports-reconcile-statement"
+  },
+  "accounting-reports-reconcile-statement-settings": {
+    "route": "/accounting-reports-reconcile-statement-settings"
+  },
+  "accounting-reports-Reconciliation": {
+    "route": "/accounting-reports-Reconciliation"
+  },
+  "accounting-reports-TrialBalanceReport": {
+    "route": "/accounting-reports-TrialBalanceReport"
+  },
+  "clients": {
+    "route": "/clients"
+  },
+  "clients-create": {
+    "route": "/clients/create"
+  },
+  "clients-create-group": {
+    "route": "/clients/create-group"
+  },
+  "clients-group-1789": {
+    "route": null,
+    "missing": "Client groups exist only as a create form; no group detail screen."
+  },
+  "core-wba-business-account": {
+    "route": "/business-account",
+    "note": "Reference page is dropped here by DECISIONS D-015 (WB-01)."
+  },
+  "import-account": {
+    "route": "/import-account"
+  },
+  "import-account-new": {
+    "route": "/import-account-new"
+  },
+  "import-member": {
+    "route": "/import-member"
+  },
+  "import-member-new": {
+    "route": "/import-member-new"
+  },
+  "import-transaction": {
+    "route": "/import-transaction"
+  },
+  "import-transaction-new": {
+    "route": "/import-transaction-new"
+  },
+  "messages-message-logs": {
+    "route": "/messages-message-logs"
+  },
+  "messages-recharge-credits": {
+    "route": "/messages-recharge-credits"
+  },
+  "messages-segment-list": {
+    "route": "/messages-segment-list"
+  },
+  "messages-segment-list-create": {
+    "route": "/messages-segment-list-create"
+  },
+  "messages-send-message": {
+    "route": "/messages-send-message"
+  },
+  "messages-template-list": {
+    "route": "/messages-template-list"
+  },
+  "messages-template-list-create-3793": {
+    "route": null,
+    "missing": "Templates are seeded, not authored in the UI."
+  },
+  "messages-users-list": {
+    "route": "/messages-users-list"
+  },
+  "reports-client-ClientListReport": {
+    "route": "/reports-client-ClientListReport"
+  },
+  "reports-client-MemberVerificationReport": {
+    "route": "/reports-client-MemberVerificationReport"
+  },
+  "reports-loan": {
+    "route": "/reports-loan"
+  },
+  "reports-loan-AccruedInstallmentsReport": {
+    "route": "/reports-loan-AccruedInstallmentsReport"
+  },
+  "reports-loan-AccruedInterestReport": {
+    "route": "/reports-loan-AccruedInterestReport"
+  },
+  "reports-loan-ActiveLoanReport": {
+    "route": "/reports-loan-ActiveLoanReport"
+  },
+  "reports-loan-AllLoanReport": {
+    "route": "/reports-loan-AllLoanReport"
+  },
+  "reports-loan-DeferredInterestReport": {
+    "route": "/reports-loan-DeferredInterestReport"
+  },
+  "reports-loan-ExpectedLoanRepaymentsReport": {
+    "route": "/reports-loan-ExpectedLoanRepaymentsReport"
+  },
+  "reports-loan-ExpectedPaymentByDateReport": {
+    "route": "/reports-loan-ExpectedPaymentByDateReport"
+  },
+  "reports-loan-ExpectedRepaymentReport": {
+    "route": "/reports-loan-ExpectedRepaymentReport"
+  },
+  "reports-loan-FeeStatusReport": {
+    "route": "/reports-loan-FeeStatusReport"
+  },
+  "reports-loan-GuarantorsReport": {
+    "route": "/reports-loan-GuarantorsReport"
+  },
+  "reports-loan-IssuedLoansAndArrearsReport": {
+    "route": "/reports-loan-IssuedLoansAndArrearsReport"
+  },
+  "reports-loan-LoanAgingReport": {
+    "route": "/reports-loan-LoanAgingReport"
+  },
+  "reports-loan-LoanArrearsReport": {
+    "route": "/reports-loan-LoanArrearsReport"
+  },
+  "reports-loan-LoanDisbursementReport": {
+    "route": "/reports-loan-LoanDisbursementReport"
+  },
+  "reports-loan-LoanInsuranceReport": {
+    "route": "/reports-loan-LoanInsuranceReport"
+  },
+  "reports-loan-LoanOfficerIncomeReport": {
+    "route": "/reports-loan-LoanOfficerIncomeReport"
+  },
+  "reports-loan-LoanOutstandingReport": {
+    "route": "/reports-loan-LoanOutstandingReport"
+  },
+  "reports-loan-LoanRepaymentReport": {
+    "route": "/reports-loan-LoanRepaymentReport"
+  },
+  "reports-loan-PaidOffLoansReport": {
+    "route": "/reports-loan-PaidOffLoansReport"
+  },
+  "reports-loan-PendingLoanApplications": {
+    "route": "/reports-loan-PendingLoanApplications"
+  },
+  "reports-loan-PortfolioRiskReport": {
+    "route": "/reports-loan-PortfolioRiskReport"
+  },
+  "reports-loan-RiskClassificationOfAssets": {
+    "route": "/reports-loan-RiskClassificationOfAssets"
+  },
+  "reports-loan-SummarizedPortfolioAtRiskReport": {
+    "route": "/reports-loan-SummarizedPortfolioAtRiskReport"
+  },
+  "reports-loan-TransactionReport": {
+    "route": "/reports-loan-TransactionReport"
+  },
+  "reports-loan-WrittenOffLoanReport": {
+    "route": "/reports-loan-WrittenOffLoanReport"
+  },
+  "reports-msp-MSP01Report": {
+    "route": "/reports-msp-MSP01Report"
+  },
+  "reports-msp-MSP02Report": {
+    "route": "/reports-msp-MSP02Report"
+  },
+  "reports-msp-MSP03MFIReport": {
+    "route": "/reports-msp-MSP03MFIReport"
+  },
+  "reports-msp-MSP03Type1Report": {
+    "route": "/reports-msp-MSP03Type1Report"
+  },
+  "reports-msp-MSP03Type2Report": {
+    "route": "/reports-msp-MSP03Type2Report"
+  },
+  "reports-msp-MSP04MFIReport": {
+    "route": "/reports-msp-MSP04MFIReport"
+  },
+  "reports-msp-MSP04Report": {
+    "route": "/reports-msp-MSP04Report"
+  },
+  "reports-msp-MSP05MFIReport": {
+    "route": "/reports-msp-MSP05MFIReport"
+  },
+  "reports-msp-MSP05Report": {
+    "route": "/reports-msp-MSP05Report"
+  },
+  "reports-msp-MSP06Report": {
+    "route": "/reports-msp-MSP06Report"
+  },
+  "reports-msp-MSP07Report": {
+    "route": "/reports-msp-MSP07Report"
+  },
+  "reports-msp-MSP08Report": {
+    "route": "/reports-msp-MSP08Report"
+  },
+  "reports-msp-MSP09MFIReport": {
+    "route": "/reports-msp-MSP09MFIReport"
+  },
+  "reports-msp-MSP09Report": {
+    "route": "/reports-msp-MSP09Report"
+  },
+  "reports-msp-MSP10MFIReport": {
+    "route": "/reports-msp-MSP10MFIReport"
+  },
+  "reports-msp-MSP10Report": {
+    "route": "/reports-msp-MSP10Report"
+  },
+  "reports-msp-MSP11Report": {
+    "route": "/reports-msp-MSP11Report"
+  },
+  "reports-saving-SavingBeyondPolicyLimitsReport": {
+    "route": "/reports-saving-SavingBeyondPolicyLimitsReport"
+  },
+  "reports-saving-SavingReport": {
+    "route": "/reports-saving-SavingReport"
+  },
+  "reports-saving-SavingSnapshotReport": {
+    "route": "/reports-saving-SavingSnapshotReport"
+  },
+  "reports-statement": {
+    "route": "/reports-statement"
+  },
+  "reports-statement-AccountStatementReport": {
+    "route": "/reports-statement-AccountStatementReport"
+  },
+  "reports-statement-MemberStatementReport": {
+    "route": "/reports-statement-MemberStatementReport"
+  },
+  "reports-transaction-DailyTransactionReport": {
+    "route": "/reports-transaction-DailyTransactionReport"
+  },
+  "reports-transaction-ExpenseReport": {
+    "route": "/reports-transaction-ExpenseReport"
+  },
+  "reports-transaction-FeesIncomeReport": {
+    "route": "/reports-transaction-FeesIncomeReport"
+  },
+  "reports-transaction-ReversedTransactionReport": {
+    "route": "/reports-transaction-ReversedTransactionReport"
+  },
+  "requests": {
+    "route": "/requests"
+  },
+  "settings-account": {
+    "route": "/settings/general",
+    "note": "Mapped to Settings > General (institution profile)."
+  },
+  "settings-accounting-settings": {
+    "route": "/settings/accounting"
+  },
+  "settings-administrator": {
+    "route": "/settings/users"
+  },
+  "settings-administrator-add": {
+    "route": "/settings/users",
+    "note": "Users are added by dialog on the list page, not a separate route."
+  },
+  "settings-branch": {
+    "route": "/settings/branches"
+  },
+  "settings-branch-add": {
+    "route": "/settings/branches/new"
+  },
+  "settings-policies-credit-product-policy-5": {
+    "route": "/settings/policies/credit-product/[id]"
+  },
+  "settings-policies-credit-product-policy-5-edit": {
+    "route": "/settings/policies/credit-product/[id]/edit"
+  },
+  "settings-policies-credit-product-policy": {
+    "route": "/settings/policies/credit-product"
+  },
+  "settings-policies-holidays": {
+    "route": "/settings/policies/holidays"
+  },
+  "settings-policies-membership-policy-1": {
+    "route": "/settings/policies/membership/[id]"
+  },
+  "settings-policies-membership-policy-1-edit": {
+    "route": "/settings/policies/membership/[id]/edit"
+  },
+  "settings-policies-membership-policy-2": {
+    "route": "/settings/policies/membership/[id]"
+  },
+  "settings-policies-membership-policy-2-edit": {
+    "route": "/settings/policies/membership/[id]/edit"
+  },
+  "settings-policies-membership-policy": {
+    "route": "/settings/policies/membership"
+  },
+  "settings-policies-membership-policy-create": {
+    "route": "/settings/policies/membership/new"
+  },
+  "settings-products-fee-penalties": {
+    "route": "/settings/products/fee-penalties"
+  },
+  "settings-products-interest-rate": {
+    "route": "/settings/products/interest-rates"
+  },
+  "settings-products-interest-rate-create": {
+    "route": "/settings/products/interest-rates/new"
+  },
+  "settings-products-loan-5": {
+    "route": "/settings/products/loan/[id]"
+  },
+  "settings-products-loan": {
+    "route": "/settings/products/loan"
+  },
+  "settings-products-loan-provisioning": {
+    "route": "/settings/products/provisioning-rules"
+  },
+  "settings-products-loan-provisioning-create": {
+    "route": "/settings/products/provisioning-rules",
+    "note": "Provisioning rules are created by dialog on the list page."
+  },
+  "settings-products-savings": {
+    "route": "/settings/products/savings"
+  },
+  "settings-products-savings-create": {
+    "route": "/settings/products/savings/new"
+  },
+  "settings-products-savings-edit-1": {
+    "route": "/settings/products/savings",
+    "note": "Savings product edits happen by dialog on the list page."
+  },
+  "settings-role": {
+    "route": "/settings/roles"
+  },
+  "settings-service-provider": {
+    "route": "/settings/services"
+  },
+  "transaction-all-transaction": {
+    "route": "/transaction-all-transaction"
+  },
+  "transaction-online-payment-reconciliation": {
+    "route": "/transaction-online-payment-reconciliation"
+  },
+  "transaction-online-transaction": {
+    "route": "/transaction-online-transaction"
+  },
+  "transaction-teller-transaction": {
+    "route": "/transaction-teller-transaction"
+  },
+  "transaction-teller-transaction-history": {
+    "route": "/transaction-teller-transaction-history"
+  },
+  "transaction-teller-transaction-request": {
+    "route": "/transaction-teller-transaction-request"
+  }
+}

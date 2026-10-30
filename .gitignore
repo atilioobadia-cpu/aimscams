@@ -9,6 +9,8 @@ merged/
 docs/audit/wakandi-stitched/
 docs/audit/wakandi-ocr.json
 docs/audit/wakandi-spec/
+# Word-level comparison detail also quotes reference demo data.
+docs/audit/comparison-words.json
 
 # Python
 __pycache__/
