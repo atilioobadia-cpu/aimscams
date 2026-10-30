@@ -45,6 +45,10 @@ codebase, one installation and one database **per institution**. Reconstructed f
     compatible, native systemd is a fallback. WSL2 may host development databases, but it is never
     a deployed target. Generate Prisma Client and compile native modules inside the Linux image.
 
+## Typography
+
+- All user-facing text and assistant prose must be sentence case. Never use all-caps labels, headings, badges, or button text. This includes data loaded from the database: convert stored values (e.g. account names, branch names) to sentence case at display time. Technical identifiers, SQL keywords, and enum values may remain uppercase where required by the language or schema.
+
 ## Current state
 
 - `packages/domain` — money, schedule generation, allocation, arrears. Builds to `dist`; tested.
