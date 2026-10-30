@@ -59,7 +59,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   return (
     <header
       data-testid="app-header"
-      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b border-header bg-surface px-[14px]"
+      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b bg-surface px-[14px]"
+style={{ borderBottomColor: "var(--border-header)" }}
     >
       <div className="flex min-w-0 flex-[1_1_auto] items-center gap-3">
         <InstitutionLogo
