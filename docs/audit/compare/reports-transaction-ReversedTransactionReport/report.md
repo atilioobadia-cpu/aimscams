@@ -1,22 +1,25 @@
 # reports-transaction-ReversedTransactionReport
 
 - Route: /reports-transaction-ReversedTransactionReport
-- SSIM: 0.7022 (threshold 0.98)
-- Changed pixel ratio: 4.9130% (threshold 1%)
-- Diff regions: 238
+- SSIM (masked): 0.8255 (threshold 0.98)
+- SSIM (unmasked): 0.7834
+- Changed pixel ratio (masked): 3.3785% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.0825%
+- Mask regions: 56
+- Diff regions: 154
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 1310 | 215 | 495 | 51 | 25245 |
-| 2 | 0 | 72 | 1835 | 13 | 23855 |
-| 3 | 279 | 215 | 494 | 45 | 22230 |
-| 4 | 239 | 518 | 1565 | 12 | 18780 |
-| 5 | 790 | 215 | 241 | 51 | 12291 |
-| 6 | 279 | 282 | 243 | 43 | 10449 |
-| 7 | 284 | 449 | 622 | 14 | 8708 |
-| 8 | 8 | 624 | 223 | 39 | 8697 |
-| 9 | 14 | 3 | 115 | 64 | 7360 |
-| 10 | 1725 | 948 | 94 | 78 | 7332 |
+| 1 | 284 | 441 | 622 | 22 | 13684 |
+| 2 | 279 | 277 | 231 | 43 | 9933 |
+| 3 | 1725 | 937 | 94 | 94 | 8836 |
+| 4 | 8 | 624 | 223 | 39 | 8697 |
+| 5 | 790 | 226 | 241 | 34 | 8194 |
+| 6 | 532 | 226 | 241 | 34 | 8194 |
+| 7 | 1635 | 117 | 160 | 44 | 7040 |
+| 8 | 485 | 277 | 137 | 43 | 5891 |
+| 9 | 388 | 131 | 127 | 35 | 4445 |
+| 10 | 279 | 130 | 108 | 36 | 3888 |
