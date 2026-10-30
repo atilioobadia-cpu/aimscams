@@ -18,9 +18,10 @@ export function PasswordInput({
         {...props}
         type={visible ? "text" : "password"}
         className={cn(
-          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-10 fs-text placeholder:text-muted-foreground md:fs-text",
+          "h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pr-10 fs-text placeholder:text-muted-foreground md:fs-text",
           className,
         )}
+        style={{ paddingLeft: 40 }}
       />
       <LockKeyhole
         className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"

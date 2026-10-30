@@ -385,6 +385,7 @@ export function ForgotPasswordForm({ token }: { token?: string }) {
               aria-describedby={emailError ? "reset-email-error" : undefined}
               disabled={requesting}
               className="h-[42px] rounded-[4px] border-[#9e9e9e] bg-white pl-10 pr-3 fs-text placeholder:text-muted-foreground md:fs-text"
+              style={{ paddingLeft: 40 }}
               placeholder="Email"
             />
           </div>

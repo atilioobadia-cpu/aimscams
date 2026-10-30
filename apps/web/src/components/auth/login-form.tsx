@@ -24,7 +24,7 @@ type FieldErrors = {
 };
 
 const fieldClass =
-  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pl-10 pr-3 fs-text text-strong placeholder:text-muted-foreground focus:border-[#057573] focus:outline-none focus:ring-0 md:fs-text";
+  "h-[42px] w-full rounded-[4px] border border-[#9e9e9e] bg-white pr-3 fs-text text-strong placeholder:text-muted-foreground focus:border-[#057573] focus:outline-none focus:ring-0 md:fs-text";
 const fieldErrorClass = "mt-1 fs-text leading-4 text-accent-red";
 
 function validNextPath(candidate: string | undefined): string {
@@ -115,6 +115,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           aria-describedby={fieldErrors.email ? "email-error" : undefined}
           disabled={submitting}
           className={fieldClass}
+          style={{ paddingLeft: 40 }}
           placeholder="Email"
         />
       </div>
@@ -143,6 +144,7 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           aria-describedby={fieldErrors.password ? "password-error" : undefined}
           disabled={submitting}
           className={`${fieldClass} pr-10`}
+          style={{ paddingLeft: 40 }}
           placeholder="Password"
         />
         <button
