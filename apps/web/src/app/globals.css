@@ -5,7 +5,7 @@
 /* Global type scale: every rendered text node is 12.8px. */
 :root {
   --fs: 12.8px;
-  --fs-title: var(--fs);
+  --fs-title: 20px;                 /* page h1 only; see D-033 */
   --fs-kpi: var(--fs);
   --fs-body: var(--fs);
 }
@@ -258,6 +258,11 @@ body[data-modal-open="true"] [data-chat-fab-root] {
    as a colour), so the type scale is expressed as a real utility instead. */
 .fs-text {
   font-size: var(--fs);
+}
+
+.fs-title {
+  font-size: var(--fs-title);
+  line-height: 24px;
 }
 
 @layer base {

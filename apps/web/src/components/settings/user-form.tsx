@@ -119,7 +119,7 @@ export function UserForm({ id }: { id?: string }) {
   return (
     <div className="mx-auto max-w-3xl space-y-5">
       <div>
-        <h1 className="fs-text font-bold leading-tight text-strong">
+        <h1 className="fs-title font-bold leading-tight text-strong">
           {editing ? "Edit user" : "Add user"}
         </h1>
         <p className="mt-1 fs-text text-muted-foreground">

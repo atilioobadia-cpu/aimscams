@@ -23,7 +23,7 @@ export function PageHeader({
     >
       <div className="min-w-0">
         {breadcrumb ? <div className="mb-2 fs-text text-muted-foreground">{breadcrumb}</div> : null}
-        <h1 className="fs-text font-bold leading-tight text-heading">{title}</h1>
+        <h1 className="fs-title font-bold leading-tight text-heading">{title}</h1>
         {description ? (
           <p className="mt-1 max-w-3xl fs-text text-muted-foreground">{description}</p>
         ) : null}
