@@ -302,17 +302,15 @@ export default function ChartOfAccountsPage() {
                           ) : (
                             <span className="size-5" />
                           )}
-                          {clickable ? (
+                          {clickable || !account.is_group ? (
                             <Link
-                              href={`/accounting-ledger-entries?group=${account.code}`}
-                              className="font-semibold text-strong hover:underline"
+                              href={account.is_group ? `/accounting-ledger-entries?group=${account.code}` : `/accounting-ledger-entries?account=${account.code}`}
+                              className={account.is_group ? "text-strong hover:underline" : "text-body hover:underline"}
                             >
                               {account.name}
                             </Link>
                           ) : (
-                            <span className={account.is_group ? "font-semibold text-strong" : "text-body"}>
-                              {account.name}
-                            </span>
+                            <span className="text-strong">{account.name}</span>
                           )}
                           {account.is_assumption ? (
                             <Badge
