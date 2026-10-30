@@ -91,20 +91,24 @@ export function TransactionImportBatchesPage() {
             <table className="w-full min-w-[900px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
                 <tr>
+                  <th className="whitespace-nowrap px-4 py-3">Id</th>
                   <th className="whitespace-nowrap px-4 py-3">Reference</th>
                   <th className="whitespace-nowrap px-4 py-3">File</th>
+                  <th className="whitespace-nowrap px-4 py-3">Type</th>
                   <th className="whitespace-nowrap px-4 py-3">Status</th>
                   <th className="whitespace-nowrap px-4 py-3 text-right">Total</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-right">Success</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right">Uploaded</th>
                   <th className="whitespace-nowrap px-4 py-3 text-right">Failed</th>
-                  <th className="whitespace-nowrap px-4 py-3">Created</th>
+                  <th className="whitespace-nowrap px-4 py-3">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map((item: ImportBatch) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
+                    <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.id.slice(0, 8)}</td>
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.reference}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-body">{item.fileName}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.kind}</td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <Badge variant={item.status === "COMPLETED" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                     </td>
