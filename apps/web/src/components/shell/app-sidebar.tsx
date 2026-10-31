@@ -140,7 +140,7 @@ function SidebarItem({
   const content = (
     <>
       <Icon
-        className={cn("size-4 shrink-0", active ? "text-on-primary" : "text-heading")}
+        className={cn("size-4 shrink-0", active ? "text-on-primary" : "text-[#898d92]")}
         strokeWidth={1.8}
         aria-hidden="true"
       />
@@ -172,7 +172,7 @@ function SidebarItem({
     collapsed && "mx-3 justify-start pl-4",
     active
       ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
-      : "text-heading hover:bg-tab-inactive",
+      : "text-[#72777d] hover:bg-tab-inactive",
     item.disabled && "cursor-not-allowed text-muted-foreground/70 hover:bg-transparent",
   );
 
@@ -211,7 +211,7 @@ function SidebarItem({
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
       "flex h-[28px] min-w-0 flex-1 items-center gap-[6px] rounded-[6px] pl-[10px] pr-1 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
-      isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
+      isGroupActive ? "font-semibold text-primary" : "text-[#72777d] hover:text-primary",
     );
 
     return (
@@ -291,7 +291,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
   const Icon = navIcons[child.icon];
 
   return (
-    <li className="h-7 shrink-0">
+    <li className="h-[31px] shrink-0">
       <Link
         href={child.href}
         prefetch={false}
@@ -300,10 +300,10 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 py-[4px] fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
-            : "text-heading hover:bg-white/60",
+            : "text-[#72777d] hover:bg-white/60",
         )}
       >
         <Icon className="size-4 shrink-0" aria-hidden="true" />

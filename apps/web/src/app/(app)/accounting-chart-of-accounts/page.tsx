@@ -204,7 +204,7 @@ export default function ChartOfAccountsPage() {
   return (
     <div className="flex flex-col">
       <section className="flex h-[70px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-16)]">
-        <h1 className="min-w-0 truncate fs-title font-semibold text-heading">
+        <h1 className="min-w-0 truncate fs-title font-semibold text-heading mt-[-4px]">
           Chart of accounts
         </h1>
         <div className="ml-auto flex shrink-0 items-center gap-[9px]">
