@@ -29,7 +29,7 @@ async function main() {
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    viewport: { width: 1470, height: 1094 },
+    viewport: { width: 1470, height: 833 },
     deviceScaleFactor: 1.25,
   });
   const page = await context.newPage();
@@ -49,8 +49,16 @@ async function main() {
 
   console.log('Logged in. Capturing pages...');
 
+  const only = process.argv[2];
+  const targets = only ? PAGES.filter((p) => p.name === only) : PAGES;
+  if (only && !targets.length) {
+    console.log(`No page named ${only}`);
+    await browser.close();
+    process.exit(1);
+  }
+
   let captured = 0;
-  for (const p of PAGES) {
+  for (const p of targets) {
     const route = p.route;
     if (!route) continue;
     try {
@@ -58,7 +66,7 @@ async function main() {
       await page.waitForTimeout(1000);
       await page.screenshot({ path: path.join(OUT_DIR, `${p.name}.png`), fullPage: true });
       captured++;
-      if (captured % 10 === 0) console.log(`Captured ${captured}/${PAGES.length}`);
+      if (captured % 10 === 0) console.log(`Captured ${captured}/${targets.length}`);
     } catch (e) {
       console.log(`Failed: ${p.name} - ${e.message}`);
     }

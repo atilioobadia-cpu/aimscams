@@ -66,6 +66,7 @@ const userInclude = {
       id: true,
       code: true,
       name: true,
+      registrationNo: true,
       dialect: true,
       logoUrl: true,
       logoUpdatedAt: true,
@@ -966,6 +967,7 @@ export class AuthService {
         id: user.organisation.id,
         code: user.organisation.code,
         name: user.organisation.name,
+        registrationNo: user.organisation.registrationNo,
         dialect: user.organisation.dialect,
         logoUrl: resolveLogoUrl(
           user.organisation.logoUrl,

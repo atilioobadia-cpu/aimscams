@@ -1,4 +1,4 @@
-﻿CREATE TABLE "fixed_asset" (
+CREATE TABLE "fixed_asset" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   "organisationId" uuid NOT NULL REFERENCES "organisation"("id") ON DELETE CASCADE,
   "branchId" uuid REFERENCES "branch"("id") ON DELETE SET NULL,

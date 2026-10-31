@@ -10,7 +10,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
-  expanded: 230,
+  expanded: 191,
   collapsed: 76,
 } as const;
 

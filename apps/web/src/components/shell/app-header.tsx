@@ -62,7 +62,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
       className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b bg-surface px-[14px]"
 style={{ borderBottomColor: "var(--border-header)" }}
     >
-      <div className="flex min-w-0 flex-[1_1_auto] items-center gap-3">
+      <div className="flex min-w-0 flex-[1_1_auto] items-center gap-1">
         <InstitutionLogo
           src={logoUrl}
           alt={institution.name}
@@ -79,12 +79,12 @@ style={{ borderBottomColor: "var(--border-header)" }}
             className="truncate fs-text leading-tight text-[#6c757d]"
             title={`${institution.dialect} SACCOS`}
           >
-            {institution.dialect} SACCOS
+            {institution.registrationNo ?? `${institution.dialect} SACCOS`}
           </p>
         </div>
       </div>
 
-      <div className="ml-auto flex shrink-0 items-center gap-6">
+      <div className="ml-auto flex shrink-0 items-center gap-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -128,7 +128,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
               type="button"
               data-testid="user-menu-trigger"
               aria-label={`Account menu for ${user.name}`}
-              className="flex items-center gap-3 rounded-md py-1.5 pl-2 pr-0 outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex items-center gap-3 rounded-md py-1.5 pl-2 pr-[10px] outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <span
                 data-testid="header-avatar"

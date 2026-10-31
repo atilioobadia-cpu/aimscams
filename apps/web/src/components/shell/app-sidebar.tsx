@@ -140,7 +140,7 @@ function SidebarItem({
   const content = (
     <>
       <Icon
-        className={cn("size-5 shrink-0", active ? "text-on-primary" : "text-heading")}
+        className={cn("size-4 shrink-0", active ? "text-on-primary" : "text-heading")}
         strokeWidth={1.8}
         aria-hidden="true"
       />
@@ -167,7 +167,7 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-5 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    "flex h-[var(--sidebar-row-height)] min-w-0 flex-1 items-center gap-[6px] rounded-[6px] pl-[10px] pr-[10px] text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
     !collapsed && "mx-2",
     collapsed && "mx-3 justify-start pl-4",
     active
@@ -210,7 +210,7 @@ function SidebarItem({
   if (item.children && !collapsed && item.href) {
     const isGroupActive = active || activeChild !== undefined;
     const groupLinkClass = cn(
-      "flex h-[28px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-5 pr-1 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      "flex h-[28px] min-w-0 flex-1 items-center gap-[6px] rounded-[6px] pl-[10px] pr-1 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
       isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
     );
 
@@ -269,14 +269,14 @@ function SidebarItem({
 
   if (!collapsed) {
     return (
-      <li className="flex h-9 shrink-0 items-center">
+      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center">
         {control}
       </li>
     );
   }
 
   return (
-    <li className="flex h-9 shrink-0 items-center">
+    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center">
       <Tooltip>
         <TooltipTrigger asChild>{control}</TooltipTrigger>
         <TooltipContent side="right" sideOffset={12}>
@@ -300,7 +300,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-heading hover:bg-white/60",
@@ -343,9 +343,9 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
       <nav
         id="app-sidebar-nav"
         aria-label="Primary"
-        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-2"
+        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain"
       >
-        <ul className="m-0 flex list-none flex-col gap-[var(--space-4)] p-0">
+        <ul className="m-0 flex list-none flex-col gap-0 p-0">
           {navItems.map((item) => {
             const active = isItemActive(pathname, item);
             const expanded = isExpanded(item.label);

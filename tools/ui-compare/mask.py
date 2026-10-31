@@ -124,6 +124,17 @@ def find_mask_regions(ref_img, our_img, ref_boxes=None, our_boxes=None):
             # Mask it to be safe
             regions.append((max(0, x1_r-4), max(0, y1_r-4), min(ref_img.shape[1], x2_r+4), min(ref_img.shape[0], y2_r+4)))
 
+    # Branding regions that are intentionally different (AIMSCAMS vs Wakandi) or
+    # tenant-specific (logo). Masked on every page; documented in
+    # docs/audit/compare/masks.md.
+    branding_regions = [
+        (0, 940, 239, 1041),   # sidebar footer wordmark + copyright
+        (8, 8, 62, 62),          # header institution logo
+    ]
+    for r in branding_regions:
+        if r[2] <= ref_img.shape[1] and r[3] <= ref_img.shape[0]:
+            regions.append(r)
+
     return regions
 
 

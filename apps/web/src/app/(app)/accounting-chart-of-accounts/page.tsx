@@ -2,16 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Search, ChevronRight, ChevronDown, Pencil } from "lucide-react";
+import { BookOpen, Calendar, ChevronDown, ChevronRight, Pencil, Plus } from "lucide-react";
 
-import { AccountingNav } from "@/components/accounting/accounting-nav";
 import {
   ErrorPanel,
   ForbiddenPanel,
   PanelSkeleton,
 } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
-import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,8 +39,6 @@ type Account = {
   opening_balance_minor: string;
   closing_balance_minor: string;
 };
-
-const TOP_LEVEL_CODES = new Set(["1", "2", "3", "4", "5"]);
 
 const ACRONYMS = new Set(["CRDB", "NMB", "AIMSCAMS", "MFI", "TCDC", "BOT", "MSP", "TSH", "GPS", "HR"]);
 
@@ -87,7 +83,6 @@ export default function ChartOfAccountsPage() {
   const [forbidden, setForbidden] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0);
-  const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   const [editAccount, setEditAccount] = useState<Account | null>(null);
@@ -131,12 +126,6 @@ export default function ChartOfAccountsPage() {
     };
   }, [refresh]);
 
-  const byId = useMemo(() => {
-    const map = new Map<string, Account>();
-    for (const account of accounts) map.set(account.id, account);
-    return map;
-  }, [accounts]);
-
   const childrenOf = useMemo(() => {
     const map = new Map<string, Account[]>();
     for (const account of accounts) {
@@ -148,36 +137,7 @@ export default function ChartOfAccountsPage() {
     return map;
   }, [accounts]);
 
-  const depthOf = useMemo(() => {
-    const depth = new Map<string, number>();
-    const compute = (account: Account): number => {
-      if (depth.has(account.id)) return depth.get(account.id)!;
-      if (!account.parent_id) {
-        depth.set(account.id, 0);
-        return 0;
-      }
-      const parent = byId.get(account.parent_id);
-      const d = parent ? compute(parent) + 1 : 0;
-      depth.set(account.id, d);
-      return d;
-    };
-    for (const account of accounts) compute(account);
-    return depth;
-  }, [accounts, byId]);
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return accounts;
-    return accounts.filter(
-      (account) =>
-        account.code.toLowerCase().includes(q) ||
-        account.name.toLowerCase().includes(q) ||
-        account.type.toLowerCase().includes(q),
-    );
-  }, [accounts, query]);
-
   const visibleRows = useMemo(() => {
-    if (query.trim()) return filtered;
     const result: Account[] = [];
     const walk = (parentId: string | null) => {
       const key = parentId ?? "__root__";
@@ -191,9 +151,7 @@ export default function ChartOfAccountsPage() {
     };
     walk(null);
     return result;
-  }, [childrenOf, expanded, query, filtered]);
-
-  const totalClosing = accounts.reduce((sum, a) => sum + BigInt(a.closing_balance_minor || "0"), 0n);
+  }, [childrenOf, expanded]);
 
   const isExpanded = (id: string) => expanded.has(id);
 
@@ -232,26 +190,60 @@ export default function ChartOfAccountsPage() {
 
   const parentOptions = accounts.filter((a) => a.is_group);
 
-  return (
-    <div className="space-y-[var(--space-14)]">
-      <PageHeader
-        title="Chart of accounts"
-        description="The institution's ledger accounts, grouped. Only postable accounts accept journal lines."
-        breadcrumb={
-          <Link href="/accounting" className="hover:text-brand">
-            Accounting
-          </Link>
-        }
-      />
+  const openingDifference = accounts.reduce(
+    (sum, account) =>
+      sum +
+      (account.normal_balance === "debit"
+        ? BigInt(account.opening_balance_minor || "0")
+        : -BigInt(account.opening_balance_minor || "0")),
+    0n,
+  );
+  const year = new Date().getFullYear();
+  const dateRange = `01-Jan-${year} to 31-Dec-${year}`;
 
-      <AccountingNav />
+  return (
+    <div className="flex flex-col">
+      <section className="flex h-[70px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-16)]">
+        <h1 className="min-w-0 truncate fs-title font-semibold text-heading">
+          Chart of accounts
+        </h1>
+        <div className="ml-auto flex shrink-0 items-center gap-[9px]">
+          <button
+            type="button"
+            onClick={() => pushToast("Adding groups arrives with the Accounting phase.")}
+            className="flex h-8 items-center gap-[8px] rounded-[var(--control-radius)] px-[var(--space-6)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
+          >
+            <Plus className="size-4" aria-hidden="true" />
+            Add groups
+          </button>
+          <button
+            type="button"
+            onClick={() => pushToast("Adding ledgers arrives with the Accounting phase.")}
+            className="flex h-8 items-center gap-[8px] rounded-[var(--control-radius)] px-[var(--space-6)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
+          >
+            <Plus className="size-4" aria-hidden="true" />
+            Add ledgers
+          </button>
+          <div className="flex w-[268px] items-center justify-between gap-[var(--space-8)] px-[var(--space-6)] fs-text text-brand">
+            <span className="truncate">{dateRange}</span>
+            <Calendar className="size-4 shrink-0" aria-hidden="true" />
+          </div>
+        </div>
+      </section>
 
       {forbidden ? (
-        <ForbiddenPanel message="Your role cannot view the chart of accounts. Ask an administrator for Settings Accounting : View." />
+        <ForbiddenPanel
+          className="mt-[var(--space-8)]"
+          message="Your role cannot view the chart of accounts. Ask an administrator for Settings Accounting : View."
+        />
       ) : loading ? (
-        <PanelSkeleton rows={8} />
+        <PanelSkeleton className="mt-[var(--space-8)]" rows={8} />
       ) : error ? (
-        <ErrorPanel message={error} onRetry={() => setRefresh((value) => value + 1)} />
+        <ErrorPanel
+          className="mt-[var(--space-8)]"
+          message={error}
+          onRetry={() => setRefresh((value) => value + 1)}
+        />
       ) : accounts.length === 0 ? (
         <EmptyState
           icon={BookOpen}
@@ -259,74 +251,62 @@ export default function ChartOfAccountsPage() {
           description="Seed the institution's chart of accounts before posting any entry."
         />
       ) : (
-        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-[var(--space-16)] py-[var(--space-10)]">
-            <p className="fs-text text-muted-foreground">
-              {accounts.length} accounts · {accounts.filter((a) => a.is_postable).length} postable ·{" "}
-              {accounts.filter((a) => a.is_group).length} groups
-            </p>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search code or name"
-                className="h-[var(--control-height)] w-64 pl-8"
-              />
-            </div>
-          </div>
-          {totalClosing !== 0n ? (
-            <div className="border-b border-accent-yellow/40 bg-accent-yellow-bg px-[var(--space-16)] py-[var(--space-8)] fs-text text-accent-yellow">
-              Opening balances do not net to zero (closing total {formatBalance(totalClosing.toString(), "debit")}). Review before posting.
+        <>
+          {openingDifference !== 0n ? (
+            <div className="flex h-[56px] items-center rounded-[var(--card-radius)] bg-accent-red-bg px-[var(--space-12)] fs-text text-accent-red">
+              There is a difference in opening balance of{" "}
+              {formatBalance(
+                (openingDifference > 0n ? -openingDifference : openingDifference).toString(),
+                "debit",
+              )}
             </div>
           ) : null}
-          <div className="overflow-x-auto">
-            <Table>
+          <section className="mt-[var(--space-8)] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card pb-[var(--space-12)]">
+            <Table className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="pl-[var(--space-16)]">Account name</TableHead>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead className="text-right">O/P balance (TSh)</TableHead>
-                  <TableHead className="text-right">C/L balance (TSh)</TableHead>
-                  <TableHead className="pr-[var(--space-16)] text-right">Actions</TableHead>
+                  <TableHead className="h-auto pl-[var(--space-12)]">Account name</TableHead>
+                  <TableHead className="h-auto w-[200px]">Type</TableHead>
+                  <TableHead className="h-auto w-[150px] text-right">O/P balance (TSh)</TableHead>
+                  <TableHead className="h-auto w-[279px] text-right">C/L balance (TSh)</TableHead>
+                  <TableHead className="h-auto w-[81px] pr-[var(--space-16)] text-right">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {visibleRows.map((account) => {
-                  const depth = depthOf.get(account.id) ?? 0;
-                  const isTopLevel = TOP_LEVEL_CODES.has(account.code) && account.parent_id === null;
-                  const clickable = account.is_group && !isTopLevel;
+                  const isExpandedRow = isExpanded(account.id);
                   return (
-                    <TableRow key={account.id} className={account.is_group ? "bg-subtle/60" : undefined}>
-                      <TableCell style={{ paddingLeft: `${16 + depth * 20}px` }}>
-                        <div className="flex items-center gap-1">
+                    <TableRow key={account.id} className="h-[45px]">
+                      <TableCell className="pl-[var(--space-12)]">
+                        <div className="flex items-center">
                           {account.is_group ? (
                             <button
                               type="button"
                               onClick={() => toggle(account.id)}
-                              className="flex size-5 items-center justify-center rounded text-muted-foreground hover:text-strong"
-                              aria-label={isExpanded(account.id) ? "Collapse group" : "Expand group"}
+                              className="grid size-5 shrink-0 place-items-center rounded text-muted-foreground hover:text-strong"
+                              aria-label={isExpandedRow ? "Collapse group" : "Expand group"}
                             >
-                              {isExpanded(account.id) ? (
-                                <ChevronDown className="size-4" />
+                              {isExpandedRow ? (
+                                <ChevronDown className="size-3" />
                               ) : (
-                                <ChevronRight className="size-4" />
+                                <ChevronRight className="size-3" />
                               )}
                             </button>
                           ) : (
-                            <span className="size-5" />
+                            <span className="size-5 shrink-0" />
                           )}
-                          {clickable || !account.is_group ? (
-                            <Link
-                              href={account.is_group ? `/accounting-ledger-entries?group=${account.code}` : `/accounting-ledger-entries?account=${account.code}`}
-                              className={account.is_group ? "text-strong hover:underline" : "text-body hover:underline"}
-                            >
-                              {sentenceCase(account.name)}
-                            </Link>
-                          ) : (
-                            <span className="text-strong">{sentenceCase(account.name)}</span>
-                          )}
+                          <Link
+                            href={
+                              account.is_group
+                                ? `/accounting-ledger-entries?group=${account.code}`
+                                : `/accounting-ledger-entries?account=${account.code}`
+                            }
+                            className="ml-[var(--space-16)] truncate text-body hover:underline"
+                          >
+                            {sentenceCase(account.name)}
+                          </Link>
                           {account.is_assumption ? (
                             <Badge
                               variant="outline"
@@ -337,8 +317,9 @@ export default function ChartOfAccountsPage() {
                           ) : null}
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium text-strong">{account.code}</TableCell>
-                      <TableCell className="text-body">{account.is_group ? "Group" : "Ledger"}</TableCell>
+                      <TableCell className="text-body">
+                        {account.is_group ? "Group" : "Ledger"}
+                      </TableCell>
                       <TableCell className="text-right tabular-nums text-body">
                         {formatBalance(account.opening_balance_minor, account.normal_balance)}
                       </TableCell>
@@ -360,8 +341,8 @@ export default function ChartOfAccountsPage() {
                 })}
               </TableBody>
             </Table>
-          </div>
-        </section>
+          </section>
+        </>
       )}
 
       <Modal open={editAccount !== null} onClose={closeEdit} title="Ledger details">

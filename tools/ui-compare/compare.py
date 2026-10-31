@@ -104,7 +104,18 @@ def changed_pixel_ratio(ref, ours, threshold=30):
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--fail-on-any", action="store_true",
+                        help="exit non-zero unless every compared page passes")
+    parser.add_argument("--page", action="append", default=None,
+                        help="only compare the named page (repeatable)")
+    args = parser.parse_args()
+
     pages = json.load(open(PAGES_JSON, encoding="utf-8"))
+    if args.page:
+        wanted = set(args.page)
+        pages = [p for p in pages if p["name"] in wanted]
     summary = []
     wboxes = wakandi_boxes_map()
     for page in pages:
@@ -198,6 +209,13 @@ def main():
         encoding="utf-8",
     )
     print(f"\nSummary: {sum(1 for s in summary if s['pass'])}/{len(summary)} passing")
+
+    if args.fail_on_any:
+        failed = [s["page"] for s in summary if not s["pass"]]
+        if failed or not summary:
+            print("Failing pages: " + ", ".join(failed) if failed else "No pages compared.")
+            sys.exit(1)
+        sys.exit(0)
 
 if __name__ == "__main__":
     main()

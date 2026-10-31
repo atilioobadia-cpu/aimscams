@@ -21,6 +21,7 @@ export interface AuthUser {
     id: string;
     code: string;
     name: string;
+    registrationNo: string | null;
     dialect: string;
     logoUrl: string | null;
   };

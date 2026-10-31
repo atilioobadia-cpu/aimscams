@@ -1,4 +1,4 @@
-﻿CREATE TABLE "message_template" (
+CREATE TABLE "message_template" (
   "id" uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   "organisationId" uuid NOT NULL REFERENCES "organisation"("id") ON DELETE CASCADE,
   "key" text NOT NULL,

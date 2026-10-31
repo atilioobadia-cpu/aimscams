@@ -22,6 +22,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       institution={{
         name: user.organisation.name,
         code: user.organisation.code,
+        registrationNo: user.organisation.registrationNo,
         dialect: user.organisation.dialect,
         logoUrl: user.organisation.logoUrl,
       }}
