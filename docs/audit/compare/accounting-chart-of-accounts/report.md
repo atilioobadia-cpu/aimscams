@@ -1,10 +1,10 @@
 # accounting-chart-of-accounts
 
 - Route: /accounting-chart-of-accounts
-- SSIM (masked): 0.9062 (threshold 0.98)
-- SSIM (unmasked): 0.8527
-- Changed pixel ratio (masked): 1.4092% (threshold 1%)
-- Changed pixel ratio (unmasked): 3.3319%
+- SSIM (masked): 0.9057 (threshold 0.98)
+- SSIM (unmasked): 0.8521
+- Changed pixel ratio (masked): 1.4345% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.3482%
 - Mask regions: 49
 - Diff regions: 57
 - **Pass:** NO
