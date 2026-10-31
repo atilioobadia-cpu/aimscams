@@ -291,7 +291,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
   const Icon = navIcons[child.icon];
 
   return (
-    <li className="h-[31px] shrink-0">
+    <li className="h-[29px] shrink-0">
       <Link
         href={child.href}
         prefetch={false}
@@ -300,7 +300,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 py-[4px] fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-[#72777d] hover:bg-white/60",
