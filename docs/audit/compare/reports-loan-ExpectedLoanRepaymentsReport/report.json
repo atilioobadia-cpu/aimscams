@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-ExpectedLoanRepaymentsReport",
   "route": "/reports-loan-ExpectedLoanRepaymentsReport",
-  "ssim": 0.8911,
+  "ssim": 0.8909,
   "changed_pixel_ratio": 0.008,
-  "ssim_unmasked": 0.8208,
+  "ssim_unmasked": 0.8207,
   "cpr_unmasked": 0.0348,
-  "mask_regions": 1141,
+  "mask_regions": 1142,
   "diff_regions": [
     {
       "x": 268,
@@ -99,13 +99,6 @@
       "area": 3636
     },
     {
-      "x": 1552,
-      "y": 17,
-      "w": 57,
-      "h": 42,
-      "area": 2394
-    },
-    {
       "x": 3312,
       "y": 1533,
       "w": 70,
@@ -146,6 +139,13 @@
       "w": 83,
       "h": 15,
       "area": 1245
+    },
+    {
+      "x": 1361,
+      "y": 882,
+      "w": 55,
+      "h": 21,
+      "area": 1155
     }
   ],
   "pass": false

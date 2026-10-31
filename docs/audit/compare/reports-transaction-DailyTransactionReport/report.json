@@ -1,12 +1,19 @@
 {
   "page": "reports-transaction-DailyTransactionReport",
   "route": "/reports-transaction-DailyTransactionReport",
-  "ssim": 0.8448,
-  "changed_pixel_ratio": 0.0265,
-  "ssim_unmasked": 0.8027,
-  "cpr_unmasked": 0.0446,
-  "mask_regions": 58,
+  "ssim": 0.8479,
+  "changed_pixel_ratio": 0.0249,
+  "ssim_unmasked": 0.8026,
+  "cpr_unmasked": 0.0447,
+  "mask_regions": 60,
   "diff_regions": [
+    {
+      "x": 8,
+      "y": 619,
+      "w": 223,
+      "h": 54,
+      "area": 12042
+    },
     {
       "x": 284,
       "y": 441,
@@ -43,13 +50,6 @@
       "area": 8917
     },
     {
-      "x": 8,
-      "y": 624,
-      "w": 223,
-      "h": 39,
-      "area": 8697
-    },
-    {
       "x": 1725,
       "y": 937,
       "w": 94,
@@ -62,13 +62,6 @@
       "w": 160,
       "h": 44,
       "area": 7040
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 1090,
@@ -146,6 +139,13 @@
       "w": 92,
       "h": 12,
       "area": 1104
+    },
+    {
+      "x": 1729,
+      "y": 380,
+      "w": 59,
+      "h": 18,
+      "area": 1062
     }
   ],
   "pass": false

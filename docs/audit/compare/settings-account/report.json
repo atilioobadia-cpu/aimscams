@@ -1,11 +1,11 @@
 {
   "page": "settings-account",
   "route": "/settings/general",
-  "ssim": 0.8728,
-  "changed_pixel_ratio": 0.0306,
-  "ssim_unmasked": 0.8189,
-  "cpr_unmasked": 0.0504,
-  "mask_regions": 80,
+  "ssim": 0.8715,
+  "changed_pixel_ratio": 0.0305,
+  "ssim_unmasked": 0.8138,
+  "cpr_unmasked": 0.0522,
+  "mask_regions": 82,
   "diff_regions": [
     {
       "x": 387,
@@ -29,6 +29,13 @@
       "area": 19350
     },
     {
+      "x": 8,
+      "y": 703,
+      "w": 223,
+      "h": 66,
+      "area": 14718
+    },
+    {
       "x": 1737,
       "y": 945,
       "w": 82,
@@ -43,25 +50,11 @@
       "area": 6837
     },
     {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
-    },
-    {
       "x": 1654,
       "y": 645,
       "w": 122,
       "h": 37,
       "area": 4514
-    },
-    {
-      "x": 113,
-      "y": 703,
-      "w": 118,
-      "h": 38,
-      "area": 4484
     },
     {
       "x": 1414,
@@ -146,6 +139,13 @@
       "w": 67,
       "h": 22,
       "area": 1474
+    },
+    {
+      "x": 49,
+      "y": 253,
+      "w": 98,
+      "h": 15,
+      "area": 1470
     }
   ],
   "pass": false

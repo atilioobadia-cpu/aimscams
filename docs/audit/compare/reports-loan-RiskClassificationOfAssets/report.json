@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-RiskClassificationOfAssets",
   "route": "/reports-loan-RiskClassificationOfAssets",
-  "ssim": 0.8468,
-  "changed_pixel_ratio": 0.0303,
-  "ssim_unmasked": 0.7928,
-  "cpr_unmasked": 0.0534,
-  "mask_regions": 62,
+  "ssim": 0.8487,
+  "changed_pixel_ratio": 0.0289,
+  "ssim_unmasked": 0.7934,
+  "cpr_unmasked": 0.0531,
+  "mask_regions": 63,
   "diff_regions": [
     {
       "x": 0,
@@ -23,10 +23,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -34,13 +34,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 331,
@@ -99,6 +92,13 @@
       "area": 4038
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 322,
       "y": 142,
       "w": 149,
@@ -111,13 +111,6 @@
       "w": 161,
       "h": 13,
       "area": 2093
-    },
-    {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
     },
     {
       "x": 1547,
@@ -146,6 +139,13 @@
       "w": 70,
       "h": 15,
       "area": 1050
+    },
+    {
+      "x": 501,
+      "y": 1269,
+      "w": 66,
+      "h": 15,
+      "area": 990
     }
   ],
   "pass": false

@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-IssuedLoansAndArrearsReport",
   "route": "/reports-loan-IssuedLoansAndArrearsReport",
-  "ssim": 0.8381,
-  "changed_pixel_ratio": 0.033,
-  "ssim_unmasked": 0.7827,
-  "cpr_unmasked": 0.0561,
-  "mask_regions": 64,
+  "ssim": 0.84,
+  "changed_pixel_ratio": 0.0316,
+  "ssim_unmasked": 0.7834,
+  "cpr_unmasked": 0.0558,
+  "mask_regions": 66,
   "diff_regions": [
     {
       "x": 0,
@@ -23,10 +23,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -34,13 +34,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 331,
@@ -120,18 +113,18 @@
       "area": 4032
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 480,
       "y": 1213,
       "w": 161,
       "h": 13,
       "area": 2093
-    },
-    {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
     },
     {
       "x": 268,
@@ -146,6 +139,13 @@
       "w": 78,
       "h": 16,
       "area": 1248
+    },
+    {
+      "x": 348,
+      "y": 142,
+      "w": 60,
+      "h": 19,
+      "area": 1140
     }
   ],
   "pass": false

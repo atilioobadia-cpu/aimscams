@@ -2,10 +2,10 @@
   "page": "accounting-reports-CashFlowStatement",
   "route": "/accounting-reports-CashFlowStatement",
   "ssim": 0.8836,
-  "changed_pixel_ratio": 0.0092,
-  "ssim_unmasked": 0.8016,
+  "changed_pixel_ratio": 0.0088,
+  "ssim_unmasked": 0.8007,
   "cpr_unmasked": 0.0381,
-  "mask_regions": 197,
+  "mask_regions": 198,
   "diff_regions": [
     {
       "x": 1737,
@@ -51,17 +51,10 @@
     },
     {
       "x": 122,
-      "y": 422,
+      "y": 409,
       "w": 94,
-      "h": 38,
-      "area": 3572
-    },
-    {
-      "x": 1533,
-      "y": 17,
-      "w": 84,
-      "h": 42,
-      "area": 3528
+      "h": 51,
+      "area": 4794
     },
     {
       "x": 288,
@@ -99,11 +92,25 @@
       "area": 1152
     },
     {
+      "x": 105,
+      "y": 507,
+      "w": 62,
+      "h": 12,
+      "area": 744
+    },
+    {
       "x": 1730,
       "y": 386,
       "w": 58,
       "h": 12,
       "area": 696
+    },
+    {
+      "x": 122,
+      "y": 813,
+      "w": 56,
+      "h": 12,
+      "area": 672
     },
     {
       "x": 689,
@@ -120,10 +127,10 @@
       "area": 630
     },
     {
-      "x": 171,
-      "y": 685,
-      "w": 36,
-      "h": 16,
+      "x": 162,
+      "y": 377,
+      "w": 48,
+      "h": 12,
       "area": 576
     },
     {
@@ -139,13 +146,6 @@
       "w": 37,
       "h": 15,
       "area": 555
-    },
-    {
-      "x": 1267,
-      "y": 28,
-      "w": 29,
-      "h": 19,
-      "area": 551
     }
   ],
   "pass": false

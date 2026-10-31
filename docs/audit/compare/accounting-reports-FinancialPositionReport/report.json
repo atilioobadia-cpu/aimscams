@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-FinancialPositionReport",
   "route": "/accounting-reports-FinancialPositionReport",
-  "ssim": 0.8429,
-  "changed_pixel_ratio": 0.0165,
-  "ssim_unmasked": 0.7487,
+  "ssim": 0.8447,
+  "changed_pixel_ratio": 0.0153,
+  "ssim_unmasked": 0.7474,
   "cpr_unmasked": 0.0473,
-  "mask_regions": 147,
+  "mask_regions": 148,
   "diff_regions": [
     {
       "x": 271,
@@ -20,13 +20,6 @@
       "w": 259,
       "h": 29,
       "area": 7511
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 159,
-      "h": 42,
-      "area": 6678
     },
     {
       "x": 1733,
@@ -65,10 +58,10 @@
     },
     {
       "x": 118,
-      "y": 422,
+      "y": 409,
       "w": 98,
-      "h": 38,
-      "area": 3724
+      "h": 51,
+      "area": 4998
     },
     {
       "x": 1681,
@@ -83,13 +76,6 @@
       "w": 161,
       "h": 13,
       "area": 2093
-    },
-    {
-      "x": 1313,
-      "y": 27,
-      "w": 94,
-      "h": 21,
-      "area": 1974
     },
     {
       "x": 0,
@@ -146,6 +132,20 @@
       "w": 67,
       "h": 15,
       "area": 1005
+    },
+    {
+      "x": 550,
+      "y": 1102,
+      "w": 78,
+      "h": 12,
+      "area": 936
+    },
+    {
+      "x": 711,
+      "y": 1212,
+      "w": 76,
+      "h": 12,
+      "area": 912
     }
   ],
   "pass": false

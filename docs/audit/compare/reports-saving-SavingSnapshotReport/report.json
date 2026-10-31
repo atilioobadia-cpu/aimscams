@@ -1,11 +1,11 @@
 {
   "page": "reports-saving-SavingSnapshotReport",
   "route": "/reports-saving-SavingSnapshotReport",
-  "ssim": 0.8441,
-  "changed_pixel_ratio": 0.0278,
-  "ssim_unmasked": 0.7968,
-  "cpr_unmasked": 0.0463,
-  "mask_regions": 64,
+  "ssim": 0.8475,
+  "changed_pixel_ratio": 0.0261,
+  "ssim_unmasked": 0.7972,
+  "cpr_unmasked": 0.0461,
+  "mask_regions": 66,
   "diff_regions": [
     {
       "x": 284,
@@ -43,13 +43,6 @@
       "area": 6444
     },
     {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
-    },
-    {
       "x": 485,
       "y": 277,
       "w": 137,
@@ -60,8 +53,8 @@
       "x": 115,
       "y": 587,
       "w": 116,
-      "h": 38,
-      "area": 4408
+      "h": 47,
+      "area": 5452
     },
     {
       "x": 1090,
@@ -146,6 +139,13 @@
       "w": 231,
       "h": 4,
       "area": 924
+    },
+    {
+      "x": 267,
+      "y": 109,
+      "w": 55,
+      "h": 16,
+      "area": 880
     }
   ],
   "pass": false

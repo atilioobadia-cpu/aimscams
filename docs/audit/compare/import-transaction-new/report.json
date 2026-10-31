@@ -1,11 +1,11 @@
 {
   "page": "import-transaction-new",
   "route": "/import-transaction-new",
-  "ssim": 0.9065,
-  "changed_pixel_ratio": 0.024,
-  "ssim_unmasked": 0.8667,
-  "cpr_unmasked": 0.0444,
-  "mask_regions": 39,
+  "ssim": 0.9107,
+  "changed_pixel_ratio": 0.0219,
+  "ssim_unmasked": 0.8689,
+  "cpr_unmasked": 0.0428,
+  "mask_regions": 41,
   "diff_regions": [
     {
       "x": 288,
@@ -16,17 +16,17 @@
     },
     {
       "x": 8,
-      "y": 674,
+      "y": 671,
       "w": 223,
-      "h": 38,
-      "area": 8474
+      "h": 47,
+      "area": 10481
     },
     {
-      "x": 10,
-      "y": 788,
-      "w": 218,
-      "h": 36,
-      "area": 7848
+      "x": 43,
+      "y": 763,
+      "w": 185,
+      "h": 38,
+      "area": 7030
     },
     {
       "x": 964,
@@ -34,13 +34,6 @@
       "w": 150,
       "h": 43,
       "area": 6450
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 147,
-      "h": 42,
-      "area": 6174
     },
     {
       "x": 1747,
@@ -141,11 +134,18 @@
       "area": 1157
     },
     {
-      "x": 50,
-      "y": 762,
-      "w": 84,
+      "x": 118,
+      "y": 639,
+      "w": 95,
+      "h": 12,
+      "area": 1140
+    },
+    {
+      "x": 73,
+      "y": 20,
+      "w": 79,
       "h": 13,
-      "area": 1092
+      "area": 1027
     }
   ],
   "pass": false

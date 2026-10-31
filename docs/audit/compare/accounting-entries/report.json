@@ -1,10 +1,10 @@
 {
   "page": "accounting-entries",
   "route": "/accounting-entries",
-  "ssim": 0.8825,
-  "changed_pixel_ratio": 0.0155,
-  "ssim_unmasked": 0.7416,
-  "cpr_unmasked": 0.0656,
+  "ssim": 0.8827,
+  "changed_pixel_ratio": 0.0148,
+  "ssim_unmasked": 0.7409,
+  "cpr_unmasked": 0.0651,
   "mask_regions": 346,
   "diff_regions": [
     {
@@ -100,17 +100,10 @@
     },
     {
       "x": 141,
-      "y": 376,
+      "y": 371,
       "w": 86,
-      "h": 35,
-      "area": 3010
-    },
-    {
-      "x": 1551,
-      "y": 17,
-      "w": 62,
-      "h": 42,
-      "area": 2604
+      "h": 30,
+      "area": 2580
     },
     {
       "x": 505,
@@ -134,18 +127,25 @@
       "area": 1838
     },
     {
-      "x": 24,
-      "y": 885,
-      "w": 57,
-      "h": 29,
-      "area": 1653
-    },
-    {
       "x": 1449,
       "y": 486,
       "w": 108,
       "h": 14,
       "area": 1512
+    },
+    {
+      "x": 922,
+      "y": 338,
+      "w": 94,
+      "h": 16,
+      "area": 1504
+    },
+    {
+      "x": 920,
+      "y": 486,
+      "w": 97,
+      "h": 12,
+      "area": 1164
     }
   ],
   "pass": false

@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-IncomeStatementReport",
   "route": "/accounting-reports-IncomeStatementReport",
-  "ssim": 0.8402,
-  "changed_pixel_ratio": 0.0195,
-  "ssim_unmasked": 0.7323,
+  "ssim": 0.8408,
+  "changed_pixel_ratio": 0.0185,
+  "ssim_unmasked": 0.7306,
   "cpr_unmasked": 0.0567,
-  "mask_regions": 126,
+  "mask_regions": 127,
   "diff_regions": [
     {
       "x": 274,
@@ -20,13 +20,6 @@
       "w": 336,
       "h": 37,
       "area": 12432
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 147,
-      "h": 42,
-      "area": 6174
     },
     {
       "x": 1122,
@@ -58,10 +51,10 @@
     },
     {
       "x": 118,
-      "y": 422,
+      "y": 409,
       "w": 98,
-      "h": 38,
-      "area": 3724
+      "h": 51,
+      "area": 4998
     },
     {
       "x": 0,
@@ -143,6 +136,13 @@
     {
       "x": 521,
       "y": 716,
+      "w": 71,
+      "h": 12,
+      "area": 852
+    },
+    {
+      "x": 521,
+      "y": 661,
       "w": 71,
       "h": 12,
       "area": 852

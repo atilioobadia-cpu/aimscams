@@ -1,12 +1,19 @@
 {
   "page": "reports-loan-ExpectedPaymentByDateReport",
   "route": "/reports-loan-ExpectedPaymentByDateReport",
-  "ssim": 0.8406,
-  "changed_pixel_ratio": 0.0293,
+  "ssim": 0.8437,
+  "changed_pixel_ratio": 0.0277,
   "ssim_unmasked": 0.794,
   "cpr_unmasked": 0.048,
-  "mask_regions": 61,
+  "mask_regions": 63,
   "diff_regions": [
+    {
+      "x": 8,
+      "y": 550,
+      "w": 223,
+      "h": 49,
+      "area": 10927
+    },
     {
       "x": 279,
       "y": 273,
@@ -43,13 +50,6 @@
       "area": 8917
     },
     {
-      "x": 8,
-      "y": 550,
-      "w": 223,
-      "h": 38,
-      "area": 8474
-    },
-    {
       "x": 1725,
       "y": 937,
       "w": 94,
@@ -62,13 +62,6 @@
       "w": 160,
       "h": 44,
       "area": 7040
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 790,
@@ -146,6 +139,13 @@
       "w": 64,
       "h": 15,
       "area": 960
+    },
+    {
+      "x": 337,
+      "y": 179,
+      "w": 60,
+      "h": 15,
+      "area": 900
     }
   ],
   "pass": false

@@ -1,12 +1,12 @@
 # reports-loan-ExpectedLoanRepaymentsReport
 
 - Route: /reports-loan-ExpectedLoanRepaymentsReport
-- SSIM (masked): 0.8911 (threshold 0.98)
-- SSIM (unmasked): 0.8208
-- Changed pixel ratio (masked): 0.7992% (threshold 1%)
-- Changed pixel ratio (unmasked): 3.4811%
-- Mask regions: 1141
-- Diff regions: 213
+- SSIM (masked): 0.8909 (threshold 0.98)
+- SSIM (unmasked): 0.8207
+- Changed pixel ratio (masked): 0.8027% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.4842%
+- Mask regions: 1142
+- Diff regions: 217
 - **Pass:** NO
 
 ## Top diff regions

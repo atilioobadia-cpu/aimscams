@@ -1,11 +1,11 @@
 {
   "page": "requests",
   "route": "/requests",
-  "ssim": 0.8846,
-  "changed_pixel_ratio": 0.0213,
-  "ssim_unmasked": 0.8468,
-  "cpr_unmasked": 0.0375,
-  "mask_regions": 52,
+  "ssim": 0.8885,
+  "changed_pixel_ratio": 0.0196,
+  "ssim_unmasked": 0.8477,
+  "cpr_unmasked": 0.0374,
+  "mask_regions": 54,
   "diff_regions": [
     {
       "x": 8,
@@ -34,13 +34,6 @@
       "w": 185,
       "h": 44,
       "area": 8140
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 147,
-      "h": 42,
-      "area": 6174
     },
     {
       "x": 258,
@@ -146,6 +139,13 @@
       "w": 38,
       "h": 34,
       "area": 1292
+    },
+    {
+      "x": 50,
+      "y": 95,
+      "w": 80,
+      "h": 16,
+      "area": 1280
     }
   ],
   "pass": false

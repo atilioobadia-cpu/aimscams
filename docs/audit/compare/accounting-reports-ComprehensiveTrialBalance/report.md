@@ -1,12 +1,12 @@
 # accounting-reports-ComprehensiveTrialBalance
 
 - Route: /accounting-reports-ComprehensiveTrialBalance
-- SSIM (masked): 0.8566 (threshold 0.98)
-- SSIM (unmasked): 0.7294
-- Changed pixel ratio (masked): 1.5901% (threshold 1%)
-- Changed pixel ratio (unmasked): 5.3299%
-- Mask regions: 448
-- Diff regions: 251
+- SSIM (masked): 0.8572 (threshold 0.98)
+- SSIM (unmasked): 0.7287
+- Changed pixel ratio (masked): 1.5468% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.3319%
+- Mask regions: 449
+- Diff regions: 246
 - **Pass:** NO
 
 ## Top diff regions
@@ -21,5 +21,5 @@
 | 6 | 1289 | 121 | 153 | 37 | 5661 |
 | 7 | 962 | 121 | 151 | 37 | 5587 |
 | 8 | 1737 | 958 | 76 | 73 | 5548 |
-| 9 | 1524 | 17 | 93 | 42 | 3906 |
-| 10 | 120 | 422 | 96 | 38 | 3648 |
+| 9 | 120 | 409 | 96 | 51 | 4896 |
+| 10 | 1693 | 121 | 93 | 37 | 3441 |

@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-TransactionReport",
   "route": "/reports-loan-TransactionReport",
-  "ssim": 0.8408,
-  "changed_pixel_ratio": 0.0328,
-  "ssim_unmasked": 0.7906,
-  "cpr_unmasked": 0.0542,
-  "mask_regions": 72,
+  "ssim": 0.8427,
+  "changed_pixel_ratio": 0.0315,
+  "ssim_unmasked": 0.7912,
+  "cpr_unmasked": 0.0539,
+  "mask_regions": 74,
   "diff_regions": [
     {
       "x": 0,
@@ -23,10 +23,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -34,13 +34,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 868,
@@ -106,6 +99,13 @@
       "area": 4032
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 282,
       "y": 142,
       "w": 117,
@@ -118,13 +118,6 @@
       "w": 161,
       "h": 13,
       "area": 2093
-    },
-    {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
     },
     {
       "x": 481,
@@ -146,6 +139,13 @@
       "w": 93,
       "h": 12,
       "area": 1116
+    },
+    {
+      "x": 266,
+      "y": 178,
+      "w": 84,
+      "h": 13,
+      "area": 1092
     }
   ],
   "pass": false

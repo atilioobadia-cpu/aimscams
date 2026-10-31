@@ -1,12 +1,12 @@
 # settings-administrator
 
 - Route: /settings/users
-- SSIM (masked): 0.8496 (threshold 0.98)
-- SSIM (unmasked): 0.7587
-- Changed pixel ratio (masked): 3.0713% (threshold 1%)
-- Changed pixel ratio (unmasked): 7.0279%
+- SSIM (masked): 0.8530 (threshold 0.98)
+- SSIM (unmasked): 0.7592
+- Changed pixel ratio (masked): 2.8340% (threshold 1%)
+- Changed pixel ratio (unmasked): 6.9184%
 - Mask regions: 117
-- Diff regions: 76
+- Diff regions: 71
 - **Pass:** NO
 
 ## Top diff regions
@@ -18,8 +18,8 @@
 | 3 | 1044 | 209 | 367 | 44 | 16148 |
 | 4 | 154 | 75 | 1684 | 9 | 15156 |
 | 5 | 285 | 1053 | 917 | 13 | 11921 |
-| 6 | 10 | 893 | 218 | 38 | 8284 |
-| 7 | 1462 | 17 | 147 | 42 | 6174 |
-| 8 | 1747 | 1053 | 72 | 80 | 5760 |
-| 9 | 1737 | 957 | 76 | 74 | 5624 |
-| 10 | 1707 | 118 | 102 | 44 | 4488 |
+| 6 | 101 | 707 | 115 | 53 | 6095 |
+| 7 | 1747 | 1053 | 72 | 80 | 5760 |
+| 8 | 1737 | 957 | 76 | 74 | 5624 |
+| 9 | 1707 | 118 | 102 | 44 | 4488 |
+| 10 | 548 | 322 | 53 | 57 | 3021 |

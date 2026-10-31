@@ -1,11 +1,11 @@
 {
   "page": "core-wba-business-account",
   "route": "/business-account",
-  "ssim": 0.8863,
-  "changed_pixel_ratio": 0.0294,
-  "ssim_unmasked": 0.8183,
-  "cpr_unmasked": 0.0553,
-  "mask_regions": 66,
+  "ssim": 0.8867,
+  "changed_pixel_ratio": 0.0292,
+  "ssim_unmasked": 0.819,
+  "cpr_unmasked": 0.0552,
+  "mask_regions": 67,
   "diff_regions": [
     {
       "x": 8,

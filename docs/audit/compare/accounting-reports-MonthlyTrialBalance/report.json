@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-MonthlyTrialBalance",
   "route": "/accounting-reports-MonthlyTrialBalance",
-  "ssim": 0.8477,
-  "changed_pixel_ratio": 0.02,
-  "ssim_unmasked": 0.7255,
-  "cpr_unmasked": 0.0618,
-  "mask_regions": 285,
+  "ssim": 0.8484,
+  "changed_pixel_ratio": 0.0193,
+  "ssim_unmasked": 0.7243,
+  "cpr_unmasked": 0.0619,
+  "mask_regions": 286,
   "diff_regions": [
     {
       "x": 271,
@@ -57,18 +57,11 @@
       "area": 5587
     },
     {
-      "x": 1524,
-      "y": 17,
-      "w": 93,
-      "h": 42,
-      "area": 3906
-    },
-    {
       "x": 120,
-      "y": 422,
+      "y": 409,
       "w": 96,
-      "h": 38,
-      "area": 3648
+      "h": 51,
+      "area": 4896
     },
     {
       "x": 288,
@@ -106,13 +99,6 @@
       "area": 1125
     },
     {
-      "x": 50,
-      "y": 738,
-      "w": 67,
-      "h": 16,
-      "area": 1072
-    },
-    {
       "x": 441,
       "y": 441,
       "w": 82,
@@ -132,6 +118,20 @@
       "w": 78,
       "h": 12,
       "area": 936
+    },
+    {
+      "x": 22,
+      "y": 739,
+      "w": 24,
+      "h": 39,
+      "area": 936
+    },
+    {
+      "x": 50,
+      "y": 741,
+      "w": 67,
+      "h": 13,
+      "area": 871
     },
     {
       "x": 523,

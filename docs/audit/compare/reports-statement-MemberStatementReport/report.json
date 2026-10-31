@@ -1,25 +1,25 @@
 {
   "page": "reports-statement-MemberStatementReport",
   "route": "/reports-statement-MemberStatementReport",
-  "ssim": 0.8557,
-  "changed_pixel_ratio": 0.0234,
-  "ssim_unmasked": 0.8241,
-  "cpr_unmasked": 0.0373,
-  "mask_regions": 43,
+  "ssim": 0.8592,
+  "changed_pixel_ratio": 0.0219,
+  "ssim_unmasked": 0.8228,
+  "cpr_unmasked": 0.0375,
+  "mask_regions": 44,
   "diff_regions": [
     {
       "x": 0,
-      "y": 24,
+      "y": 65,
       "w": 1435,
-      "h": 80,
-      "area": 114800
+      "h": 39,
+      "area": 55965
     },
     {
       "x": 8,
-      "y": 730,
+      "y": 736,
       "w": 223,
-      "h": 54,
-      "area": 12042
+      "h": 48,
+      "area": 10704
     },
     {
       "x": 790,
@@ -85,13 +85,6 @@
       "area": 3008
     },
     {
-      "x": 1612,
-      "y": 16,
-      "w": 43,
-      "h": 43,
-      "area": 1849
-    },
-    {
       "x": 49,
       "y": 253,
       "w": 98,
@@ -127,25 +120,32 @@
       "area": 1242
     },
     {
-      "x": 1701,
-      "y": 31,
-      "w": 71,
-      "h": 16,
-      "area": 1136
-    },
-    {
-      "x": 1533,
-      "y": 17,
-      "w": 70,
-      "h": 16,
-      "area": 1120
-    },
-    {
       "x": 442,
       "y": 827,
       "w": 92,
       "h": 12,
       "area": 1104
+    },
+    {
+      "x": 441,
+      "y": 441,
+      "w": 83,
+      "h": 12,
+      "area": 996
+    },
+    {
+      "x": 105,
+      "y": 587,
+      "w": 80,
+      "h": 12,
+      "area": 960
+    },
+    {
+      "x": 267,
+      "y": 109,
+      "w": 55,
+      "h": 16,
+      "area": 880
     }
   ],
   "pass": false

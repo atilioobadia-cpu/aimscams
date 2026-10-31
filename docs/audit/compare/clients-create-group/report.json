@@ -1,11 +1,11 @@
 {
   "page": "clients-create-group",
   "route": "/clients/create-group",
-  "ssim": 0.8584,
-  "changed_pixel_ratio": 0.0367,
-  "ssim_unmasked": 0.8127,
+  "ssim": 0.8624,
+  "changed_pixel_ratio": 0.035,
+  "ssim_unmasked": 0.813,
   "cpr_unmasked": 0.0572,
-  "mask_regions": 44,
+  "mask_regions": 45,
   "diff_regions": [
     {
       "x": 320,
@@ -13,13 +13,6 @@
       "w": 1464,
       "h": 88,
       "area": 128832
-    },
-    {
-      "x": 158,
-      "y": 21,
-      "w": 1680,
-      "h": 57,
-      "area": 95760
     },
     {
       "x": 293,
@@ -55,6 +48,13 @@
       "w": 300,
       "h": 94,
       "area": 28200
+    },
+    {
+      "x": 158,
+      "y": 65,
+      "w": 1680,
+      "h": 13,
+      "area": 21840
     },
     {
       "x": 1696,
@@ -141,11 +141,11 @@
       "area": 1216
     },
     {
-      "x": 1306,
-      "y": 27,
-      "w": 38,
-      "h": 25,
-      "area": 950
+      "x": 1156,
+      "y": 35,
+      "w": 36,
+      "h": 24,
+      "area": 864
     }
   ],
   "pass": false

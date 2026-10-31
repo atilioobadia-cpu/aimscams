@@ -1,12 +1,12 @@
 # accounting-entries
 
 - Route: /accounting-entries
-- SSIM (masked): 0.8825 (threshold 0.98)
-- SSIM (unmasked): 0.7416
-- Changed pixel ratio (masked): 1.5475% (threshold 1%)
-- Changed pixel ratio (unmasked): 6.5643%
+- SSIM (masked): 0.8827 (threshold 0.98)
+- SSIM (unmasked): 0.7409
+- Changed pixel ratio (masked): 1.4800% (threshold 1%)
+- Changed pixel ratio (unmasked): 6.5072%
 - Mask regions: 346
-- Diff regions: 100
+- Diff regions: 101
 - **Pass:** NO
 
 ## Top diff regions

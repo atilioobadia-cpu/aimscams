@@ -1,12 +1,12 @@
 # reports-msp-MSP03Type2Report
 
 - Route: /reports-msp-MSP03Type2Report
-- SSIM (masked): 0.7409 (threshold 0.98)
-- SSIM (unmasked): 0.6429
-- Changed pixel ratio (masked): 22.8121% (threshold 1%)
-- Changed pixel ratio (unmasked): 31.0216%
-- Mask regions: 300
-- Diff regions: 48
+- SSIM (masked): 0.7451 (threshold 0.98)
+- SSIM (unmasked): 0.6431
+- Changed pixel ratio (masked): 22.6155% (threshold 1%)
+- Changed pixel ratio (unmasked): 31.0070%
+- Mask regions: 303
+- Diff regions: 45
 - **Pass:** NO
 
 ## Top diff regions
@@ -15,11 +15,11 @@
 |---|---|---|---|---|---|
 | 1 | 257 | 285 | 1564 | 1332 | 2083248 |
 | 2 | 1520 | 117 | 275 | 44 | 12100 |
-| 3 | 1458 | 16 | 189 | 43 | 8127 |
-| 4 | 95 | 591 | 121 | 38 | 4598 |
-| 5 | 532 | 217 | 90 | 43 | 3870 |
-| 6 | 630 | 217 | 76 | 43 | 3268 |
-| 7 | 1313 | 27 | 94 | 21 | 1974 |
-| 8 | 0 | 75 | 1838 | 1 | 1838 |
-| 9 | 49 | 783 | 64 | 28 | 1792 |
-| 10 | 50 | 730 | 67 | 24 | 1608 |
+| 3 | 95 | 587 | 121 | 47 | 5687 |
+| 4 | 532 | 217 | 90 | 43 | 3870 |
+| 5 | 630 | 217 | 76 | 43 | 3268 |
+| 6 | 0 | 75 | 1838 | 1 | 1838 |
+| 7 | 288 | 273 | 177 | 8 | 1416 |
+| 8 | 50 | 741 | 67 | 13 | 871 |
+| 9 | 121 | 742 | 63 | 12 | 756 |
+| 10 | 119 | 715 | 59 | 12 | 708 |

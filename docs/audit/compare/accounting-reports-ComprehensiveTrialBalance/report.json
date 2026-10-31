@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-ComprehensiveTrialBalance",
   "route": "/accounting-reports-ComprehensiveTrialBalance",
-  "ssim": 0.8566,
-  "changed_pixel_ratio": 0.0159,
-  "ssim_unmasked": 0.7294,
+  "ssim": 0.8572,
+  "changed_pixel_ratio": 0.0155,
+  "ssim_unmasked": 0.7287,
   "cpr_unmasked": 0.0533,
-  "mask_regions": 448,
+  "mask_regions": 449,
   "diff_regions": [
     {
       "x": 271,
@@ -64,18 +64,11 @@
       "area": 5548
     },
     {
-      "x": 1524,
-      "y": 17,
-      "w": 93,
-      "h": 42,
-      "area": 3906
-    },
-    {
       "x": 120,
-      "y": 422,
+      "y": 409,
       "w": 96,
-      "h": 38,
-      "area": 3648
+      "h": 51,
+      "area": 4896
     },
     {
       "x": 1693,
@@ -134,18 +127,25 @@
       "area": 1104
     },
     {
-      "x": 50,
-      "y": 738,
-      "w": 67,
-      "h": 16,
-      "area": 1072
-    },
-    {
       "x": 520,
       "y": 1711,
       "w": 101,
       "h": 10,
       "area": 1010
+    },
+    {
+      "x": 557,
+      "y": 1213,
+      "w": 83,
+      "h": 12,
+      "area": 996
+    },
+    {
+      "x": 486,
+      "y": 2263,
+      "w": 62,
+      "h": 16,
+      "area": 992
     }
   ],
   "pass": false

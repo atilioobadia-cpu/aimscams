@@ -1,11 +1,11 @@
 {
   "page": "accounting-assets",
   "route": "/accounting-assets",
-  "ssim": 0.8904,
-  "changed_pixel_ratio": 0.0181,
-  "ssim_unmasked": 0.852,
-  "cpr_unmasked": 0.0332,
-  "mask_regions": 37,
+  "ssim": 0.8922,
+  "changed_pixel_ratio": 0.0178,
+  "ssim_unmasked": 0.8499,
+  "cpr_unmasked": 0.0357,
+  "mask_regions": 41,
   "diff_regions": [
     {
       "x": 288,
@@ -27,13 +27,6 @@
       "w": 286,
       "h": 23,
       "area": 6578
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 289,
@@ -58,10 +51,10 @@
     },
     {
       "x": 148,
-      "y": 451,
+      "y": 436,
       "w": 83,
-      "h": 42,
-      "area": 3486
+      "h": 57,
+      "area": 4731
     },
     {
       "x": 1769,
@@ -83,13 +76,6 @@
       "w": 52,
       "h": 47,
       "area": 2444
-    },
-    {
-      "x": 50,
-      "y": 843,
-      "w": 134,
-      "h": 18,
-      "area": 2412
     },
     {
       "x": 258,
@@ -146,6 +132,20 @@
       "w": 65,
       "h": 19,
       "area": 1235
+    },
+    {
+      "x": 267,
+      "y": 178,
+      "w": 76,
+      "h": 16,
+      "area": 1216
+    },
+    {
+      "x": 1501,
+      "y": 288,
+      "w": 81,
+      "h": 15,
+      "area": 1215
     }
   ],
   "pass": false

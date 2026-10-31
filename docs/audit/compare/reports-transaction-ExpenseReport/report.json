@@ -1,11 +1,11 @@
 {
   "page": "reports-transaction-ExpenseReport",
   "route": "/reports-transaction-ExpenseReport",
-  "ssim": 0.8446,
-  "changed_pixel_ratio": 0.0262,
-  "ssim_unmasked": 0.7957,
+  "ssim": 0.8477,
+  "changed_pixel_ratio": 0.0246,
+  "ssim_unmasked": 0.7955,
   "cpr_unmasked": 0.0464,
-  "mask_regions": 69,
+  "mask_regions": 71,
   "diff_regions": [
     {
       "x": 268,
@@ -13,6 +13,13 @@
       "w": 1547,
       "h": 20,
       "area": 30940
+    },
+    {
+      "x": 8,
+      "y": 619,
+      "w": 223,
+      "h": 54,
+      "area": 12042
     },
     {
       "x": 284,
@@ -36,13 +43,6 @@
       "area": 8917
     },
     {
-      "x": 8,
-      "y": 624,
-      "w": 223,
-      "h": 39,
-      "area": 8697
-    },
-    {
       "x": 1725,
       "y": 937,
       "w": 94,
@@ -62,13 +62,6 @@
       "w": 177,
       "h": 39,
       "area": 6903
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 1563,
@@ -146,6 +139,13 @@
       "w": 83,
       "h": 12,
       "area": 996
+    },
+    {
+      "x": 267,
+      "y": 178,
+      "w": 59,
+      "h": 15,
+      "area": 885
     }
   ],
   "pass": false

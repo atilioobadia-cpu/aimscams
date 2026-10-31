@@ -1,11 +1,11 @@
 {
   "page": "account-loan-details-118-summary",
   "route": "/account-loan-details/[id]",
-  "ssim": 0.9079,
-  "changed_pixel_ratio": 0.0126,
-  "ssim_unmasked": 0.8371,
-  "cpr_unmasked": 0.0399,
-  "mask_regions": 251,
+  "ssim": 0.9112,
+  "changed_pixel_ratio": 0.0109,
+  "ssim_unmasked": 0.8363,
+  "cpr_unmasked": 0.0398,
+  "mask_regions": 258,
   "diff_regions": [
     {
       "x": 490,
@@ -113,13 +113,6 @@
       "area": 3145
     },
     {
-      "x": 1540,
-      "y": 17,
-      "w": 73,
-      "h": 42,
-      "area": 3066
-    },
-    {
       "x": 266,
       "y": 187,
       "w": 111,
@@ -127,25 +120,32 @@
       "area": 2997
     },
     {
-      "x": 49,
-      "y": 415,
-      "w": 86,
-      "h": 32,
-      "area": 2752
-    },
-    {
-      "x": 50,
-      "y": 730,
-      "w": 134,
-      "h": 20,
-      "area": 2680
-    },
-    {
       "x": 670,
       "y": 294,
       "w": 71,
       "h": 37,
       "area": 2627
+    },
+    {
+      "x": 0,
+      "y": 75,
+      "w": 1838,
+      "h": 1,
+      "area": 1838
+    },
+    {
+      "x": 49,
+      "y": 382,
+      "w": 97,
+      "h": 13,
+      "area": 1261
+    },
+    {
+      "x": 490,
+      "y": 208,
+      "w": 70,
+      "h": 17,
+      "area": 1190
     }
   ],
   "pass": false

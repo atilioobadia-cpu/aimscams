@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-PendingLoanApplications",
   "route": "/reports-loan-PendingLoanApplications",
-  "ssim": 0.8436,
-  "changed_pixel_ratio": 0.0323,
-  "ssim_unmasked": 0.7918,
-  "cpr_unmasked": 0.0545,
-  "mask_regions": 60,
+  "ssim": 0.8455,
+  "changed_pixel_ratio": 0.0309,
+  "ssim_unmasked": 0.7924,
+  "cpr_unmasked": 0.0542,
+  "mask_regions": 61,
   "diff_regions": [
     {
       "x": 0,
@@ -16,10 +16,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -27,13 +27,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 1672,
@@ -92,6 +85,13 @@
       "area": 4038
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 268,
       "y": 142,
       "w": 90,
@@ -104,13 +104,6 @@
       "w": 161,
       "h": 13,
       "area": 2093
-    },
-    {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
     },
     {
       "x": 420,
@@ -146,6 +139,13 @@
       "w": 74,
       "h": 15,
       "area": 1110
+    },
+    {
+      "x": 500,
+      "y": 1103,
+      "w": 70,
+      "h": 15,
+      "area": 1050
     }
   ],
   "pass": false

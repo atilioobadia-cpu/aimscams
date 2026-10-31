@@ -1,9 +1,9 @@
 {
   "page": "messages-users-list",
   "route": "/messages-users-list",
-  "ssim": 0.8576,
-  "changed_pixel_ratio": 0.0265,
-  "ssim_unmasked": 0.7996,
+  "ssim": 0.8601,
+  "changed_pixel_ratio": 0.0253,
+  "ssim_unmasked": 0.8003,
   "cpr_unmasked": 0.0507,
   "mask_regions": 113,
   "diff_regions": [
@@ -27,13 +27,6 @@
       "w": 167,
       "h": 41,
       "area": 6847
-    },
-    {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
     },
     {
       "x": 1169,
@@ -146,6 +139,13 @@
       "w": 51,
       "h": 30,
       "area": 1530
+    },
+    {
+      "x": 1467,
+      "y": 927,
+      "w": 50,
+      "h": 30,
+      "area": 1500
     }
   ],
   "pass": false

@@ -1,12 +1,12 @@
 # settings-policies-credit-product-policy-5-edit
 
 - Route: /settings/policies/credit-product/[id]/edit
-- SSIM (masked): 0.8705 (threshold 0.98)
-- SSIM (unmasked): 0.8350
-- Changed pixel ratio (masked): 2.7776% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.3913%
-- Mask regions: 50
-- Diff regions: 81
+- SSIM (masked): 0.8735 (threshold 0.98)
+- SSIM (unmasked): 0.8346
+- Changed pixel ratio (masked): 2.6498% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.3517%
+- Mask regions: 52
+- Diff regions: 70
 - **Pass:** NO
 
 ## Top diff regions
@@ -20,6 +20,6 @@
 | 5 | 152 | 75 | 1686 | 9 | 15174 |
 | 6 | 293 | 404 | 733 | 16 | 11728 |
 | 7 | 1680 | 1256 | 139 | 74 | 10286 |
-| 8 | 1458 | 17 | 155 | 42 | 6510 |
+| 8 | 43 | 829 | 185 | 37 | 6845 |
 | 9 | 1737 | 946 | 76 | 80 | 6080 |
 | 10 | 293 | 932 | 141 | 43 | 6063 |

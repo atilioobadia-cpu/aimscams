@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-AccruedInstallmentsReport",
   "route": "/reports-loan-AccruedInstallmentsReport",
-  "ssim": 0.8329,
-  "changed_pixel_ratio": 0.0312,
+  "ssim": 0.8359,
+  "changed_pixel_ratio": 0.0297,
   "ssim_unmasked": 0.7283,
-  "cpr_unmasked": 0.066,
-  "mask_regions": 127,
+  "cpr_unmasked": 0.0659,
+  "mask_regions": 129,
   "diff_regions": [
     {
       "x": 263,
@@ -13,6 +13,13 @@
       "w": 1476,
       "h": 20,
       "area": 29520
+    },
+    {
+      "x": 8,
+      "y": 550,
+      "w": 223,
+      "h": 49,
+      "area": 10927
     },
     {
       "x": 279,
@@ -36,13 +43,6 @@
       "area": 8917
     },
     {
-      "x": 8,
-      "y": 550,
-      "w": 223,
-      "h": 38,
-      "area": 8474
-    },
-    {
       "x": 367,
       "y": 130,
       "w": 213,
@@ -62,13 +62,6 @@
       "w": 160,
       "h": 44,
       "area": 7040
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 1725,
@@ -146,6 +139,13 @@
       "w": 80,
       "h": 16,
       "area": 1280
+    },
+    {
+      "x": 1762,
+      "y": 971,
+      "w": 38,
+      "h": 33,
+      "area": 1254
     }
   ],
   "pass": false

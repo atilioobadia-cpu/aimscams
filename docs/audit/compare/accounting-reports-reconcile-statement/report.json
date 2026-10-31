@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-reconcile-statement",
   "route": "/accounting-reports-reconcile-statement",
-  "ssim": 0.8302,
-  "changed_pixel_ratio": 0.0388,
-  "ssim_unmasked": 0.7916,
-  "cpr_unmasked": 0.0556,
-  "mask_regions": 49,
+  "ssim": 0.8367,
+  "changed_pixel_ratio": 0.0361,
+  "ssim_unmasked": 0.7911,
+  "cpr_unmasked": 0.0557,
+  "mask_regions": 55,
   "diff_regions": [
     {
       "x": 268,
@@ -48,13 +48,6 @@
       "w": 208,
       "h": 37,
       "area": 7696
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 155,
-      "h": 42,
-      "area": 6510
     },
     {
       "x": 1737,
@@ -106,18 +99,18 @@
       "area": 3072
     },
     {
+      "x": 23,
+      "y": 302,
+      "w": 113,
+      "h": 27,
+      "area": 3051
+    },
+    {
       "x": 568,
       "y": 297,
       "w": 1240,
       "h": 2,
       "area": 2480
-    },
-    {
-      "x": 50,
-      "y": 633,
-      "w": 76,
-      "h": 29,
-      "area": 2204
     },
     {
       "x": 480,
@@ -127,13 +120,6 @@
       "area": 2093
     },
     {
-      "x": 50,
-      "y": 580,
-      "w": 69,
-      "h": 28,
-      "area": 1932
-    },
-    {
       "x": 0,
       "y": 75,
       "w": 1838,
@@ -141,11 +127,25 @@
       "area": 1838
     },
     {
-      "x": 49,
-      "y": 462,
-      "w": 86,
-      "h": 19,
-      "area": 1634
+      "x": 266,
+      "y": 109,
+      "w": 81,
+      "h": 16,
+      "area": 1296
+    },
+    {
+      "x": 527,
+      "y": 245,
+      "w": 38,
+      "h": 34,
+      "area": 1292
+    },
+    {
+      "x": 480,
+      "y": 245,
+      "w": 38,
+      "h": 34,
+      "area": 1292
     }
   ],
   "pass": false

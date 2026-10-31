@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-LedgerStatementReport",
   "route": "/accounting-reports-LedgerStatementReport",
-  "ssim": 0.9029,
-  "changed_pixel_ratio": 0.0173,
-  "ssim_unmasked": 0.8602,
-  "cpr_unmasked": 0.0348,
-  "mask_regions": 40,
+  "ssim": 0.9108,
+  "changed_pixel_ratio": 0.0137,
+  "ssim_unmasked": 0.8577,
+  "cpr_unmasked": 0.0351,
+  "mask_regions": 47,
   "diff_regions": [
     {
       "x": 1450,
@@ -55,13 +55,6 @@
       "w": 177,
       "h": 39,
       "area": 6903
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 408,
@@ -121,31 +114,38 @@
     },
     {
       "x": 22,
-      "y": 734,
-      "w": 88,
-      "h": 31,
-      "area": 2728
+      "y": 196,
+      "w": 100,
+      "h": 23,
+      "area": 2300
     },
     {
-      "x": 22,
-      "y": 891,
-      "w": 91,
-      "h": 27,
-      "area": 2457
+      "x": 0,
+      "y": 75,
+      "w": 1838,
+      "h": 1,
+      "area": 1838
     },
     {
-      "x": 50,
-      "y": 843,
-      "w": 134,
+      "x": 49,
+      "y": 253,
+      "w": 98,
+      "h": 15,
+      "area": 1470
+    },
+    {
+      "x": 268,
+      "y": 143,
+      "w": 73,
       "h": 18,
-      "area": 2412
+      "area": 1314
     },
     {
-      "x": 22,
-      "y": 787,
-      "w": 80,
-      "h": 28,
-      "area": 2240
+      "x": 1762,
+      "y": 971,
+      "w": 38,
+      "h": 33,
+      "area": 1254
     }
   ],
   "pass": false

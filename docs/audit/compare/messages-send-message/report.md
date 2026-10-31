@@ -1,12 +1,12 @@
 # messages-send-message
 
 - Route: /messages-send-message
-- SSIM (masked): 0.8922 (threshold 0.98)
-- SSIM (unmasked): 0.8653
-- Changed pixel ratio (masked): 2.6359% (threshold 1%)
-- Changed pixel ratio (unmasked): 3.7579%
-- Mask regions: 33
-- Diff regions: 61
+- SSIM (masked): 0.8960 (threshold 0.98)
+- SSIM (unmasked): 0.8662
+- Changed pixel ratio (masked): 2.4626% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.7499%
+- Mask regions: 35
+- Diff regions: 57
 - **Pass:** NO
 
 ## Top diff regions

@@ -1,11 +1,11 @@
 {
   "page": "reports-saving-SavingReport",
   "route": "/reports-saving-SavingReport",
-  "ssim": 0.8441,
-  "changed_pixel_ratio": 0.0274,
-  "ssim_unmasked": 0.7979,
-  "cpr_unmasked": 0.0458,
-  "mask_regions": 64,
+  "ssim": 0.8475,
+  "changed_pixel_ratio": 0.0257,
+  "ssim_unmasked": 0.7983,
+  "cpr_unmasked": 0.0457,
+  "mask_regions": 66,
   "diff_regions": [
     {
       "x": 284,
@@ -50,18 +50,11 @@
       "area": 7040
     },
     {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
-    },
-    {
       "x": 115,
       "y": 587,
       "w": 116,
-      "h": 38,
-      "area": 4408
+      "h": 47,
+      "area": 5452
     },
     {
       "x": 790,
@@ -146,6 +139,13 @@
       "w": 58,
       "h": 21,
       "area": 1218
+    },
+    {
+      "x": 1388,
+      "y": 371,
+      "w": 44,
+      "h": 27,
+      "area": 1188
     }
   ],
   "pass": false

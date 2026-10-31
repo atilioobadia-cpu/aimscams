@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-CashBook",
   "route": "/accounting-reports-CashBook",
-  "ssim": 0.8923,
-  "changed_pixel_ratio": 0.0042,
-  "ssim_unmasked": 0.8049,
+  "ssim": 0.8926,
+  "changed_pixel_ratio": 0.004,
+  "ssim_unmasked": 0.8047,
   "cpr_unmasked": 0.036,
-  "mask_regions": 1935,
+  "mask_regions": 1936,
   "diff_regions": [
     {
       "x": 1450,
@@ -13,13 +13,6 @@
       "w": 336,
       "h": 37,
       "area": 12432
-    },
-    {
-      "x": 1458,
-      "y": 16,
-      "w": 189,
-      "h": 43,
-      "area": 8127
     },
     {
       "x": 284,
@@ -99,6 +92,13 @@
       "area": 5256
     },
     {
+      "x": 122,
+      "y": 409,
+      "w": 94,
+      "h": 51,
+      "area": 4794
+    },
+    {
       "x": 1749,
       "y": 8804,
       "w": 70,
@@ -120,13 +120,6 @@
       "area": 3808
     },
     {
-      "x": 122,
-      "y": 422,
-      "w": 94,
-      "h": 38,
-      "area": 3572
-    },
-    {
       "x": 1751,
       "y": 6728,
       "w": 68,
@@ -146,6 +139,13 @@
       "w": 1838,
       "h": 1,
       "area": 1838
+    },
+    {
+      "x": 698,
+      "y": 306,
+      "w": 164,
+      "h": 11,
+      "area": 1804
     }
   ],
   "pass": false

@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-DeferredInterestReport",
   "route": "/reports-loan-DeferredInterestReport",
-  "ssim": 0.832,
-  "changed_pixel_ratio": 0.0307,
+  "ssim": 0.835,
+  "changed_pixel_ratio": 0.0292,
   "ssim_unmasked": 0.7312,
-  "cpr_unmasked": 0.0644,
-  "mask_regions": 125,
+  "cpr_unmasked": 0.0643,
+  "mask_regions": 127,
   "diff_regions": [
     {
       "x": 263,
@@ -13,6 +13,13 @@
       "w": 1476,
       "h": 20,
       "area": 29520
+    },
+    {
+      "x": 8,
+      "y": 550,
+      "w": 223,
+      "h": 49,
+      "area": 10927
     },
     {
       "x": 279,
@@ -36,25 +43,11 @@
       "area": 8917
     },
     {
-      "x": 8,
-      "y": 550,
-      "w": 223,
-      "h": 38,
-      "area": 8474
-    },
-    {
       "x": 1635,
       "y": 117,
       "w": 160,
       "h": 44,
       "area": 7040
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 1725,
@@ -146,6 +139,13 @@
       "w": 80,
       "h": 16,
       "area": 1280
+    },
+    {
+      "x": 1548,
+      "y": 370,
+      "w": 45,
+      "h": 28,
+      "area": 1260
     }
   ],
   "pass": false

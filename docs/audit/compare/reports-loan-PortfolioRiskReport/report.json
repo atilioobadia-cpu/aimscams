@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-PortfolioRiskReport",
   "route": "/reports-loan-PortfolioRiskReport",
-  "ssim": 0.8417,
-  "changed_pixel_ratio": 0.0327,
-  "ssim_unmasked": 0.7862,
-  "cpr_unmasked": 0.0552,
-  "mask_regions": 69,
+  "ssim": 0.8436,
+  "changed_pixel_ratio": 0.0314,
+  "ssim_unmasked": 0.7868,
+  "cpr_unmasked": 0.0549,
+  "mask_regions": 71,
   "diff_regions": [
     {
       "x": 337,
@@ -23,10 +23,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -34,13 +34,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 331,
@@ -92,18 +85,18 @@
       "area": 4032
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 480,
       "y": 1213,
       "w": 161,
       "h": 13,
       "area": 2093
-    },
-    {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
     },
     {
       "x": 268,
@@ -146,6 +139,13 @@
       "w": 66,
       "h": 15,
       "area": 990
+    },
+    {
+      "x": 441,
+      "y": 1048,
+      "w": 78,
+      "h": 12,
+      "area": 936
     }
   ],
   "pass": false

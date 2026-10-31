@@ -1,12 +1,12 @@
 # accounting-reports-LedgerStatementReport
 
 - Route: /accounting-reports-LedgerStatementReport
-- SSIM (masked): 0.9029 (threshold 0.98)
-- SSIM (unmasked): 0.8602
-- Changed pixel ratio (masked): 1.7340% (threshold 1%)
-- Changed pixel ratio (unmasked): 3.4756%
-- Mask regions: 40
-- Diff regions: 78
+- SSIM (masked): 0.9108 (threshold 0.98)
+- SSIM (unmasked): 0.8577
+- Changed pixel ratio (masked): 1.3714% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.5131%
+- Mask regions: 47
+- Diff regions: 76
 - **Pass:** NO
 
 ## Top diff regions
@@ -20,6 +20,6 @@
 | 5 | 552 | 239 | 157 | 44 | 6908 |
 | 6 | 1035 | 278 | 177 | 39 | 6903 |
 | 7 | 843 | 278 | 177 | 39 | 6903 |
-| 8 | 1458 | 17 | 151 | 42 | 6342 |
-| 9 | 408 | 239 | 136 | 44 | 5984 |
-| 10 | 1122 | 121 | 159 | 37 | 5883 |
+| 8 | 408 | 239 | 136 | 44 | 5984 |
+| 9 | 1122 | 121 | 159 | 37 | 5883 |
+| 10 | 1725 | 945 | 75 | 76 | 5700 |

@@ -1,11 +1,11 @@
 {
   "page": "reports-msp-MSP04Report",
   "route": "/reports-msp-MSP04Report",
-  "ssim": 0.7848,
-  "changed_pixel_ratio": 0.0893,
-  "ssim_unmasked": 0.6789,
-  "cpr_unmasked": 0.1782,
-  "mask_regions": 168,
+  "ssim": 0.7868,
+  "changed_pixel_ratio": 0.0878,
+  "ssim_unmasked": 0.6778,
+  "cpr_unmasked": 0.1783,
+  "mask_regions": 169,
   "diff_regions": [
     {
       "x": 257,
@@ -32,15 +32,8 @@
       "x": 8,
       "y": 698,
       "w": 223,
-      "h": 44,
-      "area": 9812
-    },
-    {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
+      "h": 39,
+      "area": 8697
     },
     {
       "x": 1769,
@@ -113,6 +106,13 @@
       "area": 1027
     },
     {
+      "x": 107,
+      "y": 587,
+      "w": 78,
+      "h": 12,
+      "area": 936
+    },
+    {
       "x": 279,
       "y": 256,
       "w": 231,
@@ -134,18 +134,18 @@
       "area": 779
     },
     {
+      "x": 144,
+      "y": 555,
+      "w": 50,
+      "h": 14,
+      "area": 700
+    },
+    {
       "x": 267,
       "y": 109,
       "w": 55,
       "h": 12,
       "area": 660
-    },
-    {
-      "x": 93,
-      "y": 560,
-      "w": 47,
-      "h": 14,
-      "area": 658
     }
   ],
   "pass": false

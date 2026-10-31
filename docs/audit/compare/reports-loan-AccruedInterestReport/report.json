@@ -1,12 +1,19 @@
 {
   "page": "reports-loan-AccruedInterestReport",
   "route": "/reports-loan-AccruedInterestReport",
-  "ssim": 0.8444,
-  "changed_pixel_ratio": 0.0277,
-  "ssim_unmasked": 0.7975,
-  "cpr_unmasked": 0.0464,
-  "mask_regions": 59,
+  "ssim": 0.8475,
+  "changed_pixel_ratio": 0.0261,
+  "ssim_unmasked": 0.7976,
+  "cpr_unmasked": 0.0463,
+  "mask_regions": 61,
   "diff_regions": [
+    {
+      "x": 8,
+      "y": 550,
+      "w": 223,
+      "h": 49,
+      "area": 10927
+    },
     {
       "x": 279,
       "y": 273,
@@ -36,13 +43,6 @@
       "area": 8558
     },
     {
-      "x": 8,
-      "y": 550,
-      "w": 223,
-      "h": 38,
-      "area": 8474
-    },
-    {
       "x": 1725,
       "y": 937,
       "w": 94,
@@ -55,13 +55,6 @@
       "w": 160,
       "h": 44,
       "area": 7040
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 367,
@@ -146,6 +139,13 @@
       "w": 38,
       "h": 33,
       "area": 1254
+    },
+    {
+      "x": 50,
+      "y": 355,
+      "w": 69,
+      "h": 18,
+      "area": 1242
     }
   ],
   "pass": false

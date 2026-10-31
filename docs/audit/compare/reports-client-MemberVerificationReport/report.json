@@ -1,19 +1,12 @@
 {
   "page": "reports-client-MemberVerificationReport",
   "route": "/reports-client-MemberVerificationReport",
-  "ssim": 0.9185,
+  "ssim": 0.9187,
   "changed_pixel_ratio": 0.0031,
   "ssim_unmasked": 0.8764,
   "cpr_unmasked": 0.0176,
-  "mask_regions": 2052,
+  "mask_regions": 2053,
   "diff_regions": [
-    {
-      "x": 1458,
-      "y": 16,
-      "w": 194,
-      "h": 43,
-      "area": 8342
-    },
     {
       "x": 1737,
       "y": 937,
@@ -134,18 +127,25 @@
       "area": 2000
     },
     {
-      "x": 1313,
-      "y": 27,
-      "w": 94,
-      "h": 21,
-      "area": 1974
-    },
-    {
       "x": 267,
       "y": 177,
       "w": 141,
       "h": 13,
       "area": 1833
+    },
+    {
+      "x": 394,
+      "y": 3643,
+      "w": 113,
+      "h": 16,
+      "area": 1808
+    },
+    {
+      "x": 275,
+      "y": 1667,
+      "w": 89,
+      "h": 19,
+      "area": 1691
     }
   ],
   "pass": false

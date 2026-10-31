@@ -1,11 +1,11 @@
 {
   "page": "settings-accounting-settings",
   "route": "/settings/accounting",
-  "ssim": 0.8582,
-  "changed_pixel_ratio": 0.0343,
-  "ssim_unmasked": 0.823,
-  "cpr_unmasked": 0.0493,
-  "mask_regions": 43,
+  "ssim": 0.8575,
+  "changed_pixel_ratio": 0.0347,
+  "ssim_unmasked": 0.819,
+  "cpr_unmasked": 0.0512,
+  "mask_regions": 46,
   "diff_regions": [
     {
       "x": 277,
@@ -22,18 +22,18 @@
       "area": 14852
     },
     {
+      "x": 8,
+      "y": 738,
+      "w": 223,
+      "h": 51,
+      "area": 11373
+    },
+    {
       "x": 288,
       "y": 404,
       "w": 224,
       "h": 45,
       "area": 10080
-    },
-    {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
     },
     {
       "x": 289,
@@ -55,13 +55,6 @@
       "w": 134,
       "h": 33,
       "area": 4422
-    },
-    {
-      "x": 142,
-      "y": 740,
-      "w": 89,
-      "h": 38,
-      "area": 3382
     },
     {
       "x": 266,
@@ -90,13 +83,6 @@
       "w": 100,
       "h": 23,
       "area": 2300
-    },
-    {
-      "x": 22,
-      "y": 668,
-      "w": 92,
-      "h": 23,
-      "area": 2116
     },
     {
       "x": 976,
@@ -146,6 +132,20 @@
       "w": 93,
       "h": 16,
       "area": 1488
+    },
+    {
+      "x": 50,
+      "y": 610,
+      "w": 67,
+      "h": 22,
+      "area": 1474
+    },
+    {
+      "x": 49,
+      "y": 253,
+      "w": 98,
+      "h": 15,
+      "area": 1470
     }
   ],
   "pass": false

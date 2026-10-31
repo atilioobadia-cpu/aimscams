@@ -1,11 +1,11 @@
 # core-wba-business-account
 
 - Route: /business-account
-- SSIM (masked): 0.8863 (threshold 0.98)
-- SSIM (unmasked): 0.8183
-- Changed pixel ratio (masked): 2.9359% (threshold 1%)
-- Changed pixel ratio (unmasked): 5.5316%
-- Mask regions: 66
+- SSIM (masked): 0.8867 (threshold 0.98)
+- SSIM (unmasked): 0.8190
+- Changed pixel ratio (masked): 2.9235% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.5204%
+- Mask regions: 67
 - Diff regions: 98
 - **Pass:** NO
 

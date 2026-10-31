@@ -1,12 +1,12 @@
 # reports-saving-SavingBeyondPolicyLimitsReport
 
 - Route: /reports-saving-SavingBeyondPolicyLimitsReport
-- SSIM (masked): 0.8403 (threshold 0.98)
-- SSIM (unmasked): 0.7948
-- Changed pixel ratio (masked): 3.1489% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.9372%
-- Mask regions: 54
-- Diff regions: 137
+- SSIM (masked): 0.8437 (threshold 0.98)
+- SSIM (unmasked): 0.7952
+- Changed pixel ratio (masked): 2.9799% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.9253%
+- Mask regions: 56
+- Diff regions: 134
 - **Pass:** NO
 
 ## Top diff regions
@@ -20,6 +20,6 @@
 | 5 | 532 | 223 | 241 | 37 | 8917 |
 | 6 | 1725 | 937 | 94 | 89 | 8366 |
 | 7 | 1635 | 117 | 160 | 44 | 7040 |
-| 8 | 1458 | 17 | 151 | 42 | 6342 |
-| 9 | 115 | 587 | 116 | 38 | 4408 |
-| 10 | 1563 | 217 | 90 | 43 | 3870 |
+| 8 | 115 | 587 | 116 | 47 | 5452 |
+| 9 | 1563 | 217 | 90 | 43 | 3870 |
+| 10 | 1662 | 217 | 75 | 43 | 3225 |

@@ -1,25 +1,18 @@
 {
   "page": "reports-statement",
   "route": "/reports-statement",
-  "ssim": 0.9308,
-  "changed_pixel_ratio": 0.0163,
-  "ssim_unmasked": 0.8995,
-  "cpr_unmasked": 0.0317,
-  "mask_regions": 32,
+  "ssim": 0.9325,
+  "changed_pixel_ratio": 0.0147,
+  "ssim_unmasked": 0.8996,
+  "cpr_unmasked": 0.0307,
+  "mask_regions": 33,
   "diff_regions": [
     {
       "x": 8,
-      "y": 731,
+      "y": 736,
       "w": 223,
-      "h": 53,
-      "area": 11819
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
+      "h": 48,
+      "area": 10704
     },
     {
       "x": 1725,
@@ -29,11 +22,11 @@
       "area": 5625
     },
     {
-      "x": 105,
-      "y": 586,
-      "w": 123,
-      "h": 35,
-      "area": 4305
+      "x": 90,
+      "y": 581,
+      "w": 138,
+      "h": 30,
+      "area": 4140
     },
     {
       "x": 1769,
@@ -111,6 +104,13 @@
       "w": 38,
       "h": 33,
       "area": 1254
+    },
+    {
+      "x": 50,
+      "y": 355,
+      "w": 69,
+      "h": 18,
+      "area": 1242
     },
     {
       "x": 1483,

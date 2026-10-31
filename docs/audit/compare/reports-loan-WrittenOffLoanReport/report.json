@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-WrittenOffLoanReport",
   "route": "/reports-loan-WrittenOffLoanReport",
-  "ssim": 0.8402,
-  "changed_pixel_ratio": 0.0323,
-  "ssim_unmasked": 0.7888,
-  "cpr_unmasked": 0.0541,
-  "mask_regions": 65,
+  "ssim": 0.8421,
+  "changed_pixel_ratio": 0.0309,
+  "ssim_unmasked": 0.7895,
+  "cpr_unmasked": 0.0538,
+  "mask_regions": 67,
   "diff_regions": [
     {
       "x": 0,
@@ -16,10 +16,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -27,13 +27,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 331,
@@ -106,6 +99,13 @@
       "area": 4032
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 339,
       "y": 642,
       "w": 1469,
@@ -127,13 +127,6 @@
       "area": 2007
     },
     {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
-    },
-    {
       "x": 266,
       "y": 142,
       "w": 81,
@@ -146,6 +139,13 @@
       "w": 78,
       "h": 16,
       "area": 1248
+    },
+    {
+      "x": 442,
+      "y": 827,
+      "w": 93,
+      "h": 12,
+      "area": 1116
     }
   ],
   "pass": false

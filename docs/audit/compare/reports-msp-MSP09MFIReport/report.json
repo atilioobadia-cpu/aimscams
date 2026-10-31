@@ -1,11 +1,11 @@
 {
   "page": "reports-msp-MSP09MFIReport",
   "route": "/reports-msp-MSP09MFIReport",
-  "ssim": 0.7842,
-  "changed_pixel_ratio": 0.081,
-  "ssim_unmasked": 0.7354,
+  "ssim": 0.7863,
+  "changed_pixel_ratio": 0.0795,
+  "ssim_unmasked": 0.7343,
   "cpr_unmasked": 0.1073,
-  "mask_regions": 56,
+  "mask_regions": 57,
   "diff_regions": [
     {
       "x": 257,
@@ -25,8 +25,8 @@
       "x": 8,
       "y": 698,
       "w": 223,
-      "h": 44,
-      "area": 9812
+      "h": 39,
+      "area": 8697
     },
     {
       "x": 1725,
@@ -34,13 +34,6 @@
       "w": 94,
       "h": 89,
       "area": 8366
-    },
-    {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
     },
     {
       "x": 790,
@@ -118,6 +111,13 @@
       "w": 79,
       "h": 13,
       "area": 1027
+    },
+    {
+      "x": 107,
+      "y": 587,
+      "w": 78,
+      "h": 12,
+      "area": 936
     },
     {
       "x": 355,

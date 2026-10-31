@@ -1,19 +1,12 @@
 {
   "page": "accounting-reports-JournalBook",
   "route": "/accounting-reports-JournalBook",
-  "ssim": 0.8795,
-  "changed_pixel_ratio": 0.0077,
-  "ssim_unmasked": 0.7746,
+  "ssim": 0.8802,
+  "changed_pixel_ratio": 0.0072,
+  "ssim_unmasked": 0.7739,
   "cpr_unmasked": 0.0457,
-  "mask_regions": 518,
+  "mask_regions": 519,
   "diff_regions": [
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 156,
-      "h": 42,
-      "area": 6552
-    },
     {
       "x": 1122,
       "y": 121,
@@ -50,6 +43,13 @@
       "area": 5256
     },
     {
+      "x": 120,
+      "y": 409,
+      "w": 96,
+      "h": 51,
+      "area": 4896
+    },
+    {
       "x": 1751,
       "y": 2594,
       "w": 68,
@@ -62,13 +62,6 @@
       "w": 68,
       "h": 60,
       "area": 4080
-    },
-    {
-      "x": 120,
-      "y": 422,
-      "w": 96,
-      "h": 38,
-      "area": 3648
     },
     {
       "x": 1692,
@@ -127,13 +120,6 @@
       "area": 1170
     },
     {
-      "x": 50,
-      "y": 738,
-      "w": 67,
-      "h": 16,
-      "area": 1072
-    },
-    {
       "x": 767,
       "y": 446,
       "w": 74,
@@ -146,6 +132,20 @@
       "w": 64,
       "h": 15,
       "area": 960
+    },
+    {
+      "x": 22,
+      "y": 739,
+      "w": 24,
+      "h": 39,
+      "area": 936
+    },
+    {
+      "x": 421,
+      "y": 441,
+      "w": 77,
+      "h": 12,
+      "area": 924
     }
   ],
   "pass": false

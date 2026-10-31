@@ -1,11 +1,11 @@
 {
   "page": "settings-policies-credit-product-policy",
   "route": "/settings/policies/credit-product",
-  "ssim": 0.8977,
-  "changed_pixel_ratio": 0.0196,
-  "ssim_unmasked": 0.8372,
-  "cpr_unmasked": 0.0421,
-  "mask_regions": 88,
+  "ssim": 0.8983,
+  "changed_pixel_ratio": 0.02,
+  "ssim_unmasked": 0.834,
+  "cpr_unmasked": 0.0452,
+  "mask_regions": 90,
   "diff_regions": [
     {
       "x": 288,
@@ -36,18 +36,11 @@
       "area": 11472
     },
     {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
-    },
-    {
-      "x": 101,
-      "y": 851,
-      "w": 130,
-      "h": 40,
-      "area": 5200
+      "x": 118,
+      "y": 836,
+      "w": 113,
+      "h": 53,
+      "area": 5989
     },
     {
       "x": 434,
@@ -146,6 +139,13 @@
       "w": 69,
       "h": 18,
       "area": 1242
+    },
+    {
+      "x": 50,
+      "y": 561,
+      "w": 52,
+      "h": 22,
+      "area": 1144
     }
   ],
   "pass": false

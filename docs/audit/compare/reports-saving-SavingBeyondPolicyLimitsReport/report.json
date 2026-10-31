@@ -1,11 +1,11 @@
 {
   "page": "reports-saving-SavingBeyondPolicyLimitsReport",
   "route": "/reports-saving-SavingBeyondPolicyLimitsReport",
-  "ssim": 0.8403,
-  "changed_pixel_ratio": 0.0315,
-  "ssim_unmasked": 0.7948,
-  "cpr_unmasked": 0.0494,
-  "mask_regions": 54,
+  "ssim": 0.8437,
+  "changed_pixel_ratio": 0.0298,
+  "ssim_unmasked": 0.7952,
+  "cpr_unmasked": 0.0493,
+  "mask_regions": 56,
   "diff_regions": [
     {
       "x": 284,
@@ -57,18 +57,11 @@
       "area": 7040
     },
     {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
-    },
-    {
       "x": 115,
       "y": 587,
       "w": 116,
-      "h": 38,
-      "area": 4408
+      "h": 47,
+      "area": 5452
     },
     {
       "x": 1563,
@@ -146,6 +139,13 @@
       "w": 83,
       "h": 12,
       "area": 996
+    },
+    {
+      "x": 267,
+      "y": 109,
+      "w": 55,
+      "h": 16,
+      "area": 880
     }
   ],
   "pass": false

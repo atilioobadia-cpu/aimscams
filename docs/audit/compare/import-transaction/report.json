@@ -1,11 +1,11 @@
 {
   "page": "import-transaction",
   "route": "/import-transaction",
-  "ssim": 0.9107,
-  "changed_pixel_ratio": 0.023,
-  "ssim_unmasked": 0.8721,
-  "cpr_unmasked": 0.0413,
-  "mask_regions": 41,
+  "ssim": 0.9154,
+  "changed_pixel_ratio": 0.0199,
+  "ssim_unmasked": 0.874,
+  "cpr_unmasked": 0.0395,
+  "mask_regions": 43,
   "diff_regions": [
     {
       "x": 267,
@@ -16,17 +16,10 @@
     },
     {
       "x": 8,
-      "y": 674,
+      "y": 671,
       "w": 223,
-      "h": 38,
-      "area": 8474
-    },
-    {
-      "x": 10,
-      "y": 751,
-      "w": 218,
-      "h": 35,
-      "area": 7630
+      "h": 47,
+      "area": 10481
     },
     {
       "x": 1604,
@@ -55,13 +48,6 @@
       "w": 175,
       "h": 36,
       "area": 6300
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 147,
-      "h": 42,
-      "area": 6174
     },
     {
       "x": 1747,
@@ -146,6 +132,20 @@
       "w": 80,
       "h": 16,
       "area": 1280
+    },
+    {
+      "x": 118,
+      "y": 639,
+      "w": 95,
+      "h": 12,
+      "area": 1140
+    },
+    {
+      "x": 191,
+      "y": 731,
+      "w": 37,
+      "h": 30,
+      "area": 1110
     }
   ],
   "pass": false

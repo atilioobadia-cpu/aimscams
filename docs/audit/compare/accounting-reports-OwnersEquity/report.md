@@ -1,12 +1,12 @@
 # accounting-reports-OwnersEquity
 
 - Route: /accounting-reports-OwnersEquity
-- SSIM (masked): 0.8592 (threshold 0.98)
-- SSIM (unmasked): 0.7904
-- Changed pixel ratio (masked): 2.1578% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.6193%
-- Mask regions: 78
-- Diff regions: 114
+- SSIM (masked): 0.8628 (threshold 0.98)
+- SSIM (unmasked): 0.7879
+- Changed pixel ratio (masked): 1.9669% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.6568%
+- Mask regions: 82
+- Diff regions: 115
 - **Pass:** NO
 
 ## Top diff regions
@@ -16,10 +16,10 @@
 | 1 | 279 | 248 | 129 | 69 | 8901 |
 | 2 | 8 | 529 | 223 | 39 | 8697 |
 | 3 | 1725 | 937 | 94 | 89 | 8366 |
-| 4 | 1458 | 17 | 151 | 42 | 6342 |
-| 5 | 1281 | 129 | 152 | 37 | 5624 |
-| 6 | 1121 | 129 | 152 | 37 | 5624 |
-| 7 | 1681 | 129 | 97 | 37 | 3589 |
-| 8 | 271 | 573 | 1536 | 2 | 3072 |
-| 9 | 50 | 843 | 134 | 18 | 2412 |
-| 10 | 22 | 787 | 80 | 28 | 2240 |
+| 4 | 1281 | 129 | 152 | 37 | 5624 |
+| 5 | 1121 | 129 | 152 | 37 | 5624 |
+| 6 | 1681 | 129 | 97 | 37 | 3589 |
+| 7 | 271 | 573 | 1536 | 2 | 3072 |
+| 8 | 23 | 302 | 113 | 27 | 3051 |
+| 9 | 0 | 75 | 1838 | 1 | 1838 |
+| 10 | 49 | 253 | 98 | 15 | 1470 |

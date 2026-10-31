@@ -1,11 +1,11 @@
 {
   "page": "clients-create",
   "route": "/clients/create",
-  "ssim": 0.8914,
-  "changed_pixel_ratio": 0.0262,
-  "ssim_unmasked": 0.8498,
+  "ssim": 0.8945,
+  "changed_pixel_ratio": 0.0246,
+  "ssim_unmasked": 0.85,
   "cpr_unmasked": 0.0435,
-  "mask_regions": 55,
+  "mask_regions": 56,
   "diff_regions": [
     {
       "x": 320,
@@ -13,13 +13,6 @@
       "w": 1463,
       "h": 138,
       "area": 201894
-    },
-    {
-      "x": 158,
-      "y": 21,
-      "w": 1680,
-      "h": 57,
-      "area": 95760
     },
     {
       "x": 371,
@@ -76,6 +69,13 @@
       "w": 300,
       "h": 93,
       "area": 27900
+    },
+    {
+      "x": 158,
+      "y": 65,
+      "w": 1680,
+      "h": 13,
+      "area": 21840
     },
     {
       "x": 1696,

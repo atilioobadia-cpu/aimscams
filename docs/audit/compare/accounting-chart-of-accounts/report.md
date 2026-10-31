@@ -1,19 +1,19 @@
 # accounting-chart-of-accounts
 
 - Route: /accounting-chart-of-accounts
-- SSIM (masked): 0.9079 (threshold 0.98)
-- SSIM (unmasked): 0.8439
-- Changed pixel ratio (masked): 1.3069% (threshold 1%)
-- Changed pixel ratio (unmasked): 3.6829%
-- Mask regions: 54
-- Diff regions: 54
+- SSIM (masked): 0.9074 (threshold 0.98)
+- SSIM (unmasked): 0.8442
+- Changed pixel ratio (masked): 1.3219% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.6833%
+- Mask regions: 53
+- Diff regions: 56
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 8 | 338 | 223 | 43 | 9589 |
+| 1 | 45 | 338 | 186 | 51 | 9486 |
 | 2 | 1725 | 945 | 75 | 76 | 5700 |
 | 3 | 288 | 133 | 243 | 21 | 5103 |
 | 4 | 334 | 396 | 217 | 22 | 4774 |

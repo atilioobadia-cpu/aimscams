@@ -95,7 +95,7 @@ export const navItems: NavItem[] = [
     label: "Campaigns",
     icon: "campaigns",
     href: "/campaigns",
-    chevron: true,
+    badge: "Soon",
   },
   {
     label: "Reports",

@@ -1,11 +1,11 @@
 {
   "page": "messages-recharge-credits",
   "route": "/messages-recharge-credits",
-  "ssim": 0.9231,
-  "changed_pixel_ratio": 0.0182,
-  "ssim_unmasked": 0.9039,
-  "cpr_unmasked": 0.0257,
-  "mask_regions": 27,
+  "ssim": 0.927,
+  "changed_pixel_ratio": 0.0164,
+  "ssim_unmasked": 0.9048,
+  "cpr_unmasked": 0.0256,
+  "mask_regions": 29,
   "diff_regions": [
     {
       "x": 8,
@@ -20,13 +20,6 @@
       "w": 218,
       "h": 51,
       "area": 11118
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 147,
-      "h": 42,
-      "area": 6174
     },
     {
       "x": 1747,
@@ -146,6 +139,13 @@
       "w": 46,
       "h": 15,
       "area": 690
+    },
+    {
+      "x": 909,
+      "y": 312,
+      "w": 52,
+      "h": 12,
+      "area": 624
     }
   ],
   "pass": false

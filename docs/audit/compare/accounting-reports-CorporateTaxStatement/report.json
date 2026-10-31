@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-CorporateTaxStatement",
   "route": "/accounting-reports-CorporateTaxStatement",
-  "ssim": 0.8464,
-  "changed_pixel_ratio": 0.0205,
-  "ssim_unmasked": 0.7917,
-  "cpr_unmasked": 0.0421,
-  "mask_regions": 68,
+  "ssim": 0.8498,
+  "changed_pixel_ratio": 0.0187,
+  "ssim_unmasked": 0.7892,
+  "cpr_unmasked": 0.0425,
+  "mask_regions": 72,
   "diff_regions": [
     {
       "x": 271,
@@ -36,11 +36,11 @@
       "area": 8366
     },
     {
-      "x": 1461,
-      "y": 17,
-      "w": 148,
-      "h": 42,
-      "area": 6216
+      "x": 23,
+      "y": 302,
+      "w": 113,
+      "h": 27,
+      "area": 3051
     },
     {
       "x": 568,
@@ -48,27 +48,6 @@
       "w": 1239,
       "h": 2,
       "area": 2478
-    },
-    {
-      "x": 50,
-      "y": 843,
-      "w": 134,
-      "h": 18,
-      "area": 2412
-    },
-    {
-      "x": 22,
-      "y": 787,
-      "w": 80,
-      "h": 28,
-      "area": 2240
-    },
-    {
-      "x": 50,
-      "y": 633,
-      "w": 76,
-      "h": 29,
-      "area": 2204
     },
     {
       "x": 0,
@@ -79,10 +58,10 @@
     },
     {
       "x": 49,
-      "y": 462,
-      "w": 86,
-      "h": 19,
-      "area": 1634
+      "y": 253,
+      "w": 98,
+      "h": 15,
+      "area": 1470
     },
     {
       "x": 50,
@@ -146,6 +125,27 @@
       "w": 62,
       "h": 12,
       "area": 744
+    },
+    {
+      "x": 119,
+      "y": 813,
+      "w": 59,
+      "h": 12,
+      "area": 708
+    },
+    {
+      "x": 267,
+      "y": 143,
+      "w": 35,
+      "h": 19,
+      "area": 665
+    },
+    {
+      "x": 441,
+      "y": 772,
+      "w": 48,
+      "h": 12,
+      "area": 576
     }
   ],
   "pass": false

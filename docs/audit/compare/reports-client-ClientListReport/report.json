@@ -1,18 +1,18 @@
 {
   "page": "reports-client-ClientListReport",
   "route": "/reports-client-ClientListReport",
-  "ssim": 0.836,
-  "changed_pixel_ratio": 0.0248,
-  "ssim_unmasked": 0.7621,
-  "cpr_unmasked": 0.0509,
-  "mask_regions": 193,
+  "ssim": 0.8389,
+  "changed_pixel_ratio": 0.0233,
+  "ssim_unmasked": 0.7613,
+  "cpr_unmasked": 0.051,
+  "mask_regions": 195,
   "diff_regions": [
     {
       "x": 8,
-      "y": 661,
+      "y": 660,
       "w": 223,
-      "h": 39,
-      "area": 8697
+      "h": 40,
+      "area": 8920
     },
     {
       "x": 1635,
@@ -20,13 +20,6 @@
       "w": 160,
       "h": 44,
       "area": 7040
-    },
-    {
-      "x": 1458,
-      "y": 17,
-      "w": 151,
-      "h": 42,
-      "area": 6342
     },
     {
       "x": 1725,
@@ -146,6 +139,13 @@
       "w": 83,
       "h": 12,
       "area": 996
+    },
+    {
+      "x": 267,
+      "y": 109,
+      "w": 55,
+      "h": 16,
+      "area": 880
     }
   ],
   "pass": false

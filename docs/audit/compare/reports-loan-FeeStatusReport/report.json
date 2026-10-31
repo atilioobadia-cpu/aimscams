@@ -1,11 +1,11 @@
 {
   "page": "reports-loan-FeeStatusReport",
   "route": "/reports-loan-FeeStatusReport",
-  "ssim": 0.8364,
-  "changed_pixel_ratio": 0.0331,
-  "ssim_unmasked": 0.784,
-  "cpr_unmasked": 0.0553,
-  "mask_regions": 67,
+  "ssim": 0.8383,
+  "changed_pixel_ratio": 0.0317,
+  "ssim_unmasked": 0.7846,
+  "cpr_unmasked": 0.0549,
+  "mask_regions": 69,
   "diff_regions": [
     {
       "x": 0,
@@ -16,10 +16,10 @@
     },
     {
       "x": 10,
-      "y": 681,
+      "y": 686,
       "w": 314,
-      "h": 61,
-      "area": 19154
+      "h": 49,
+      "area": 15386
     },
     {
       "x": 1747,
@@ -27,13 +27,6 @@
       "w": 149,
       "h": 91,
       "area": 13559
-    },
-    {
-      "x": 1593,
-      "y": 23,
-      "w": 245,
-      "h": 55,
-      "area": 13475
     },
     {
       "x": 331,
@@ -113,6 +106,13 @@
       "area": 4032
     },
     {
+      "x": 1593,
+      "y": 65,
+      "w": 245,
+      "h": 13,
+      "area": 3185
+    },
+    {
       "x": 339,
       "y": 642,
       "w": 1469,
@@ -134,18 +134,18 @@
       "area": 2093
     },
     {
-      "x": 1285,
-      "y": 27,
-      "w": 59,
-      "h": 34,
-      "area": 2006
-    },
-    {
       "x": 481,
       "y": 1158,
       "w": 78,
       "h": 16,
       "area": 1248
+    },
+    {
+      "x": 313,
+      "y": 144,
+      "w": 69,
+      "h": 18,
+      "area": 1242
     }
   ],
   "pass": false

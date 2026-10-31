@@ -1,11 +1,11 @@
 {
   "page": "accounting-reports-GeneralLedgerBook",
   "route": "/accounting-reports-GeneralLedgerBook",
-  "ssim": 0.8485,
-  "changed_pixel_ratio": 0.0236,
-  "ssim_unmasked": 0.8379,
+  "ssim": 0.849,
+  "changed_pixel_ratio": 0.0232,
+  "ssim_unmasked": 0.8377,
   "cpr_unmasked": 0.026,
-  "mask_regions": 32,
+  "mask_regions": 33,
   "diff_regions": [
     {
       "x": 1653,
@@ -43,11 +43,11 @@
       "area": 26435
     },
     {
-      "x": 1458,
-      "y": 16,
-      "w": 354,
-      "h": 43,
-      "area": 15222
+      "x": 8,
+      "y": 343,
+      "w": 208,
+      "h": 117,
+      "area": 24336
     },
     {
       "x": 1666,
@@ -62,13 +62,6 @@
       "w": 336,
       "h": 37,
       "area": 12432
-    },
-    {
-      "x": 8,
-      "y": 422,
-      "w": 208,
-      "h": 56,
-      "area": 11648
     },
     {
       "x": 1676,
@@ -146,6 +139,13 @@
       "w": 72,
       "h": 73,
       "area": 5256
+    },
+    {
+      "x": 1747,
+      "y": 2314,
+      "w": 72,
+      "h": 72,
+      "area": 5184
     }
   ],
   "pass": false

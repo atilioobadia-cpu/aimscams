@@ -1,11 +1,11 @@
 {
   "page": "messages-segment-list-create",
   "route": "/messages-segment-list-create",
-  "ssim": 0.9162,
-  "changed_pixel_ratio": 0.019,
-  "ssim_unmasked": 0.8994,
-  "cpr_unmasked": 0.0268,
-  "mask_regions": 25,
+  "ssim": 0.9201,
+  "changed_pixel_ratio": 0.0173,
+  "ssim_unmasked": 0.9003,
+  "cpr_unmasked": 0.0267,
+  "mask_regions": 27,
   "diff_regions": [
     {
       "x": 8,
@@ -20,13 +20,6 @@
       "w": 209,
       "h": 50,
       "area": 10450
-    },
-    {
-      "x": 1462,
-      "y": 17,
-      "w": 147,
-      "h": 42,
-      "area": 6174
     },
     {
       "x": 1747,
@@ -146,6 +139,13 @@
       "w": 28,
       "h": 25,
       "area": 700
+    },
+    {
+      "x": 1156,
+      "y": 312,
+      "w": 46,
+      "h": 15,
+      "area": 690
     }
   ],
   "pass": false

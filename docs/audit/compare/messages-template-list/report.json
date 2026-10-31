@@ -1,11 +1,11 @@
 {
   "page": "messages-template-list",
   "route": "/messages-template-list",
-  "ssim": 0.8735,
-  "changed_pixel_ratio": 0.0199,
-  "ssim_unmasked": 0.8021,
-  "cpr_unmasked": 0.0465,
-  "mask_regions": 164,
+  "ssim": 0.8779,
+  "changed_pixel_ratio": 0.0179,
+  "ssim_unmasked": 0.8027,
+  "cpr_unmasked": 0.0464,
+  "mask_regions": 167,
   "diff_regions": [
     {
       "x": 272,
@@ -48,13 +48,6 @@
       "w": 76,
       "h": 99,
       "area": 7524
-    },
-    {
-      "x": 1459,
-      "y": 17,
-      "w": 150,
-      "h": 42,
-      "area": 6300
     },
     {
       "x": 1169,
@@ -106,13 +99,6 @@
       "area": 2240
     },
     {
-      "x": 1313,
-      "y": 27,
-      "w": 94,
-      "h": 21,
-      "area": 1974
-    },
-    {
       "x": 0,
       "y": 75,
       "w": 1838,
@@ -146,6 +132,20 @@
       "w": 50,
       "h": 30,
       "area": 1500
+    },
+    {
+      "x": 1296,
+      "y": 538,
+      "w": 50,
+      "h": 30,
+      "area": 1500
+    },
+    {
+      "x": 50,
+      "y": 610,
+      "w": 67,
+      "h": 22,
+      "area": 1474
     }
   ],
   "pass": false
