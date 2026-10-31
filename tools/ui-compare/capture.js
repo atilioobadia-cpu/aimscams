@@ -62,8 +62,8 @@ async function main() {
     const route = p.route;
     if (!route) continue;
     try {
-      await page.goto(`http://localhost:3000${route}`, { waitUntil: 'networkidle', timeout: 15000 });
-      await page.waitForTimeout(1000);
+      await page.goto(`http://localhost:3000${route}`, { waitUntil: 'networkidle', timeout: 30000 });
+      await page.waitForTimeout(15000);
       await page.screenshot({ path: path.join(OUT_DIR, `${p.name}.png`), fullPage: true });
       captured++;
       if (captured % 10 === 0) console.log(`Captured ${captured}/${targets.length}`);
