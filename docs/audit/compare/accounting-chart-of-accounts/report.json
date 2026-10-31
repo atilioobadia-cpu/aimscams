@@ -2,18 +2,11 @@
   "page": "accounting-chart-of-accounts",
   "route": "/accounting-chart-of-accounts",
   "ssim": 0.9062,
-  "changed_pixel_ratio": 0.0142,
-  "ssim_unmasked": 0.8502,
-  "cpr_unmasked": 0.0348,
-  "mask_regions": 50,
+  "changed_pixel_ratio": 0.0141,
+  "ssim_unmasked": 0.8527,
+  "cpr_unmasked": 0.0333,
+  "mask_regions": 49,
   "diff_regions": [
-    {
-      "x": 8,
-      "y": 338,
-      "w": 223,
-      "h": 43,
-      "area": 9589
-    },
     {
       "x": 1725,
       "y": 945,
@@ -134,11 +127,11 @@
       "area": 1431
     },
     {
-      "x": 49,
-      "y": 467,
-      "w": 86,
-      "h": 16,
-      "area": 1376
+      "x": 50,
+      "y": 588,
+      "w": 69,
+      "h": 20,
+      "area": 1380
     },
     {
       "x": 931,
@@ -146,6 +139,13 @@
       "w": 53,
       "h": 25,
       "area": 1325
+    },
+    {
+      "x": 50,
+      "y": 95,
+      "w": 80,
+      "h": 16,
+      "area": 1280
     }
   ],
   "pass": false
