@@ -95,7 +95,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
             >
               <TanzaniaFlag className="h-4 w-6" />
               <span>{language}</span>
-              <ChevronDown className="size-4" aria-hidden="true" />
+              <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-44">
@@ -148,7 +148,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
               >
                 {user.name}
               </span>
-              <ChevronDown className="size-4 text-body" aria-hidden="true" />
+              <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-64">

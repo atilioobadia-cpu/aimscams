@@ -6,4 +6,4 @@ Pages failing: 1
 
 | Page | SSIM | CPR | Regions | Pass |
 |---|---|---|---|---|
-| accounting-chart-of-accounts | 0.9079 | 0.0131 | 20 | NO |
+| core-wba-business-account | 0.8863 | 0.0294 | 20 | NO |

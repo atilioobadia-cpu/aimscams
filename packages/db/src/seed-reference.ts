@@ -125,7 +125,7 @@ async function main() {
         where id = $1`,
       [organisationId, "MFSL MFI", "101457"],
     );
-    await client.query(`update branch set name = 'Main Branch' where "organisationId" = $1`, [
+    await client.query(`update branch set name = 'MFSL MWANZA' where "organisationId" = $1`, [
       organisationId,
     ]);
     await client.query(
@@ -146,6 +146,8 @@ async function main() {
       return current.name;
     };
 
+    await client.query("delete from journal_line where organisation_id = $1", [organisationId]);
+    await client.query("delete from journal_entry where organisation_id = $1", [organisationId]);
     await client.query("delete from gl_account where organisation_id = $1", [organisationId]);
 
     for (const row of rows) {
