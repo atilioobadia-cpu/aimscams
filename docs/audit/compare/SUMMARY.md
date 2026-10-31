@@ -6,4 +6,4 @@ Pages failing: 1
 
 | Page | SSIM | CPR | Regions | Pass |
 |---|---|---|---|---|
-| accounting-chart-of-accounts | 0.9057 | 0.0143 | 20 | NO |
+| accounting-chart-of-accounts | 0.9079 | 0.0131 | 20 | NO |
