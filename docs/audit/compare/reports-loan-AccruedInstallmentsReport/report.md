@@ -1,25 +1,25 @@
 # reports-loan-AccruedInstallmentsReport
 
 - Route: /reports-loan-AccruedInstallmentsReport
-- SSIM (masked): 0.8155 (threshold 0.98)
-- SSIM (unmasked): 0.7145
-- Changed pixel ratio (masked): 3.6192% (threshold 1%)
-- Changed pixel ratio (unmasked): 6.9190%
-- Mask regions: 126
-- Diff regions: 145
+- SSIM (masked): 0.8329 (threshold 0.98)
+- SSIM (unmasked): 0.7283
+- Changed pixel ratio (masked): 3.1182% (threshold 1%)
+- Changed pixel ratio (unmasked): 6.5967%
+- Mask regions: 127
+- Diff regions: 135
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 279 | 937 | 1540 | 94 | 144760 |
-| 2 | 8 | 549 | 223 | 51 | 11373 |
-| 3 | 279 | 277 | 231 | 43 | 9933 |
-| 4 | 277 | 130 | 273 | 36 | 9828 |
-| 5 | 790 | 226 | 241 | 34 | 8194 |
-| 6 | 532 | 226 | 241 | 34 | 8194 |
-| 7 | 1635 | 117 | 160 | 44 | 7040 |
-| 8 | 1803 | 372 | 13 | 361 | 4693 |
-| 9 | 22 | 96 | 125 | 32 | 4000 |
-| 10 | 790 | 277 | 90 | 43 | 3870 |
+| 1 | 263 | 995 | 1476 | 20 | 29520 |
+| 2 | 279 | 273 | 231 | 47 | 10857 |
+| 3 | 790 | 223 | 241 | 37 | 8917 |
+| 4 | 532 | 223 | 241 | 37 | 8917 |
+| 5 | 8 | 550 | 223 | 38 | 8474 |
+| 6 | 367 | 130 | 213 | 36 | 7668 |
+| 7 | 284 | 993 | 483 | 15 | 7245 |
+| 8 | 1635 | 117 | 160 | 44 | 7040 |
+| 9 | 1458 | 17 | 151 | 42 | 6342 |
+| 10 | 1725 | 937 | 75 | 83 | 6225 |

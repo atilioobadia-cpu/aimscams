@@ -1,25 +1,25 @@
 # reports-msp-MSP10MFIReport
 
 - Route: /reports-msp-MSP10MFIReport
-- SSIM (masked): 0.7245 (threshold 0.98)
-- SSIM (unmasked): 0.6406
-- Changed pixel ratio (masked): 17.8687% (threshold 1%)
-- Changed pixel ratio (unmasked): 28.2943%
-- Mask regions: 291
-- Diff regions: 78
+- SSIM (masked): 0.7318 (threshold 0.98)
+- SSIM (unmasked): 0.6484
+- Changed pixel ratio (masked): 17.7501% (threshold 1%)
+- Changed pixel ratio (unmasked): 28.2485%
+- Mask regions: 289
+- Diff regions: 55
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 257 | 285 | 1564 | 1090 | 1704760 |
-| 2 | 97 | 589 | 119 | 52 | 6188 |
+| 1 | 257 | 285 | 1564 | 1100 | 1720400 |
+| 2 | 1461 | 17 | 156 | 42 | 6552 |
 | 3 | 1520 | 117 | 109 | 44 | 4796 |
-| 4 | 790 | 217 | 90 | 43 | 3870 |
-| 5 | 888 | 217 | 76 | 43 | 3268 |
-| 6 | 1550 | 17 | 67 | 47 | 3149 |
-| 7 | 17 | 12 | 50 | 56 | 2800 |
-| 8 | 279 | 252 | 231 | 12 | 2772 |
-| 9 | 1392 | 26 | 60 | 35 | 2100 |
-| 10 | 0 | 77 | 1835 | 1 | 1835 |
+| 4 | 97 | 591 | 119 | 38 | 4522 |
+| 5 | 790 | 217 | 90 | 43 | 3870 |
+| 6 | 888 | 217 | 76 | 43 | 3268 |
+| 7 | 279 | 248 | 231 | 12 | 2772 |
+| 8 | 1313 | 27 | 94 | 21 | 1974 |
+| 9 | 0 | 75 | 1838 | 1 | 1838 |
+| 10 | 49 | 783 | 64 | 28 | 1792 |

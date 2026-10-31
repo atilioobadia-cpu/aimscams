@@ -1,25 +1,25 @@
 # reports-client-ClientListReport
 
 - Route: /reports-client-ClientListReport
-- SSIM (masked): 0.8193 (threshold 0.98)
-- SSIM (unmasked): 0.7481
-- Changed pixel ratio (masked): 2.9930% (threshold 1%)
-- Changed pixel ratio (unmasked): 5.4572%
-- Mask regions: 192
-- Diff regions: 151
+- SSIM (masked): 0.8360 (threshold 0.98)
+- SSIM (unmasked): 0.7621
+- Changed pixel ratio (masked): 2.4807% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.0936%
+- Mask regions: 193
+- Diff regions: 141
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 279 | 937 | 1540 | 94 | 144760 |
-| 2 | 8 | 661 | 223 | 39 | 8697 |
-| 3 | 1635 | 117 | 160 | 44 | 7040 |
-| 4 | 1305 | 217 | 90 | 43 | 3870 |
-| 5 | 278 | 113 | 65 | 53 | 3445 |
-| 6 | 22 | 254 | 140 | 24 | 3360 |
-| 7 | 23 | 302 | 127 | 26 | 3302 |
-| 8 | 1404 | 217 | 75 | 43 | 3225 |
-| 9 | 22 | 352 | 114 | 27 | 3078 |
-| 10 | 383 | 131 | 76 | 39 | 2964 |
+| 1 | 8 | 661 | 223 | 39 | 8697 |
+| 2 | 1635 | 117 | 160 | 44 | 7040 |
+| 3 | 1458 | 17 | 151 | 42 | 6342 |
+| 4 | 1725 | 937 | 75 | 83 | 6225 |
+| 5 | 288 | 273 | 177 | 31 | 5487 |
+| 6 | 1305 | 217 | 90 | 43 | 3870 |
+| 7 | 267 | 130 | 110 | 32 | 3520 |
+| 8 | 1769 | 957 | 50 | 69 | 3450 |
+| 9 | 284 | 826 | 251 | 13 | 3263 |
+| 10 | 1404 | 217 | 75 | 43 | 3225 |

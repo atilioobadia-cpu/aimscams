@@ -1,25 +1,25 @@
 # accounting-ledger-entries
 
 - Route: /accounting-ledger-entries
-- SSIM (masked): 0.8453 (threshold 0.98)
-- SSIM (unmasked): 0.8058
-- Changed pixel ratio (masked): 2.9719% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.4064%
-- Mask regions: 38
-- Diff regions: 144
+- SSIM (masked): 0.8659 (threshold 0.98)
+- SSIM (unmasked): 0.8188
+- Changed pixel ratio (masked): 2.3838% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.1578%
+- Mask regions: 42
+- Diff regions: 116
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 271 | 231 | 523 | 52 | 27196 |
-| 2 | 299 | 327 | 387 | 40 | 15480 |
-| 3 | 1450 | 121 | 336 | 37 | 12432 |
-| 4 | 8 | 415 | 236 | 41 | 9676 |
-| 5 | 701 | 327 | 173 | 40 | 6920 |
-| 6 | 889 | 327 | 172 | 40 | 6880 |
-| 7 | 1122 | 121 | 159 | 37 | 5883 |
-| 8 | 1289 | 121 | 153 | 37 | 5661 |
-| 9 | 962 | 121 | 151 | 37 | 5587 |
-| 10 | 22 | 828 | 162 | 34 | 5508 |
+| 1 | 217 | 227 | 505 | 56 | 28280 |
+| 2 | 257 | 323 | 374 | 44 | 16456 |
+| 3 | 8 | 413 | 236 | 68 | 16048 |
+| 4 | 1450 | 121 | 336 | 37 | 12432 |
+| 5 | 646 | 323 | 178 | 44 | 7832 |
+| 6 | 839 | 323 | 177 | 44 | 7788 |
+| 7 | 1458 | 17 | 150 | 42 | 6300 |
+| 8 | 1122 | 121 | 159 | 37 | 5883 |
+| 9 | 1725 | 945 | 75 | 76 | 5700 |
+| 10 | 1289 | 121 | 153 | 37 | 5661 |

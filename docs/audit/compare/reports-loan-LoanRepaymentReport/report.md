@@ -1,25 +1,25 @@
 # reports-loan-LoanRepaymentReport
 
 - Route: /reports-loan-LoanRepaymentReport
-- SSIM (masked): 0.8381 (threshold 0.98)
-- SSIM (unmasked): 0.7909
-- Changed pixel ratio (masked): 3.2022% (threshold 1%)
-- Changed pixel ratio (unmasked): 5.2006%
-- Mask regions: 65
-- Diff regions: 190
+- SSIM (masked): 0.8383 (threshold 0.98)
+- SSIM (unmasked): 0.7866
+- Changed pixel ratio (masked): 3.2612% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.4677%
+- Mask regions: 64
+- Diff regions: 181
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 10 | 682 | 322 | 53 | 17066 |
-| 2 | 315 | 271 | 267 | 51 | 13617 |
-| 3 | 868 | 271 | 237 | 53 | 12561 |
-| 4 | 610 | 271 | 237 | 53 | 12561 |
-| 5 | 318 | 148 | 239 | 50 | 11950 |
-| 6 | 1672 | 148 | 196 | 54 | 10584 |
-| 7 | 1803 | 1183 | 93 | 91 | 8463 |
-| 8 | 359 | 551 | 382 | 19 | 7258 |
-| 9 | 868 | 345 | 110 | 53 | 5830 |
-| 10 | 989 | 345 | 93 | 57 | 5301 |
+| 1 | 0 | 93 | 1918 | 18 | 34524 |
+| 2 | 10 | 681 | 314 | 61 | 19154 |
+| 3 | 1747 | 1183 | 149 | 91 | 13559 |
+| 4 | 1593 | 23 | 245 | 55 | 13475 |
+| 5 | 331 | 271 | 251 | 51 | 12801 |
+| 6 | 868 | 271 | 237 | 53 | 12561 |
+| 7 | 610 | 271 | 237 | 53 | 12561 |
+| 8 | 1672 | 148 | 196 | 54 | 10584 |
+| 9 | 0 | 18 | 147 | 61 | 8967 |
+| 10 | 359 | 551 | 382 | 19 | 7258 |

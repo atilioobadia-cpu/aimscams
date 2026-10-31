@@ -1,25 +1,25 @@
 # transaction-teller-transaction
 
 - Route: /transaction-teller-transaction
-- SSIM (masked): 0.8372 (threshold 0.98)
-- SSIM (unmasked): 0.7901
-- Changed pixel ratio (masked): 4.0729% (threshold 1%)
-- Changed pixel ratio (unmasked): 6.0052%
-- Mask regions: 50
-- Diff regions: 121
+- SSIM (masked): 0.8595 (threshold 0.98)
+- SSIM (unmasked): 0.8122
+- Changed pixel ratio (masked): 3.5341% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.5111%
+- Mask regions: 49
+- Diff regions: 120
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 8 | 294 | 236 | 69 | 16284 |
-| 2 | 1424 | 453 | 351 | 46 | 16146 |
-| 3 | 671 | 538 | 359 | 41 | 14719 |
-| 4 | 1418 | 538 | 357 | 41 | 14637 |
-| 5 | 1045 | 538 | 357 | 41 | 14637 |
-| 6 | 299 | 538 | 357 | 40 | 14280 |
-| 7 | 706 | 453 | 324 | 41 | 13284 |
-| 8 | 1473 | 277 | 201 | 40 | 8040 |
-| 9 | 671 | 453 | 143 | 41 | 5863 |
-| 10 | 300 | 600 | 147 | 39 | 5733 |
+| 1 | 667 | 542 | 364 | 44 | 16016 |
+| 2 | 1047 | 542 | 363 | 44 | 15972 |
+| 3 | 288 | 542 | 363 | 44 | 15972 |
+| 4 | 1425 | 546 | 363 | 40 | 14520 |
+| 5 | 8 | 294 | 223 | 65 | 14495 |
+| 6 | 1427 | 459 | 362 | 40 | 14480 |
+| 7 | 1481 | 273 | 206 | 44 | 9064 |
+| 8 | 1726 | 842 | 93 | 77 | 7161 |
+| 9 | 877 | 453 | 154 | 44 | 6776 |
+| 10 | 666 | 453 | 148 | 44 | 6512 |

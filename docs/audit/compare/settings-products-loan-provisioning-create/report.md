@@ -1,25 +1,25 @@
 # settings-products-loan-provisioning-create
 
 - Route: /settings/products/provisioning-rules
-- SSIM (masked): 0.8931 (threshold 0.98)
-- SSIM (unmasked): 0.8483
-- Changed pixel ratio (masked): 2.5601% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.2375%
+- SSIM (masked): 0.9139 (threshold 0.98)
+- SSIM (unmasked): 0.8683
+- Changed pixel ratio (masked): 2.3002% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.9900%
 - Mask regions: 53
-- Diff regions: 78
+- Diff regions: 68
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 309 | 247 | 1466 | 70 | 102620 |
-| 2 | 299 | 247 | 1180 | 37 | 43660 |
-| 3 | 8 | 802 | 236 | 61 | 14396 |
-| 4 | 1553 | 160 | 242 | 39 | 9438 |
-| 5 | 1652 | 642 | 144 | 43 | 6192 |
-| 6 | 1747 | 1025 | 72 | 74 | 5328 |
-| 7 | 22 | 606 | 176 | 21 | 3696 |
-| 8 | 22 | 656 | 107 | 32 | 3424 |
-| 9 | 49 | 738 | 118 | 29 | 3422 |
-| 10 | 22 | 254 | 140 | 24 | 3360 |
+| 1 | 304 | 247 | 1485 | 70 | 103950 |
+| 2 | 288 | 247 | 1210 | 70 | 84700 |
+| 3 | 1737 | 946 | 82 | 153 | 12546 |
+| 4 | 1567 | 152 | 242 | 43 | 10406 |
+| 5 | 1442 | 500 | 199 | 43 | 8557 |
+| 6 | 1231 | 500 | 199 | 43 | 8557 |
+| 7 | 1025 | 500 | 194 | 43 | 8342 |
+| 8 | 859 | 496 | 162 | 47 | 7614 |
+| 9 | 701 | 500 | 146 | 43 | 6278 |
+| 10 | 1461 | 17 | 148 | 42 | 6216 |

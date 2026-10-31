@@ -1,25 +1,25 @@
 # accounting-reports-CorporateTaxStatement
 
 - Route: /accounting-reports-CorporateTaxStatement
-- SSIM (masked): 0.8232 (threshold 0.98)
-- SSIM (unmasked): 0.7768
-- Changed pixel ratio (masked): 2.7572% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.5574%
-- Mask regions: 63
-- Diff regions: 133
+- SSIM (masked): 0.8464 (threshold 0.98)
+- SSIM (unmasked): 0.7917
+- Changed pixel ratio (masked): 2.0522% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.2122%
+- Mask regions: 68
+- Diff regions: 109
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 1450 | 121 | 336 | 37 | 12432 |
-| 2 | 272 | 247 | 206 | 60 | 12360 |
-| 3 | 1725 | 937 | 94 | 94 | 8836 |
-| 4 | 8 | 529 | 223 | 39 | 8697 |
-| 5 | 22 | 828 | 162 | 34 | 5508 |
-| 6 | 22 | 96 | 125 | 32 | 4000 |
-| 7 | 22 | 629 | 121 | 33 | 3993 |
-| 8 | 22 | 578 | 114 | 30 | 3420 |
-| 9 | 22 | 254 | 140 | 24 | 3360 |
-| 10 | 22 | 730 | 85 | 35 | 2975 |
+| 1 | 271 | 247 | 209 | 60 | 12540 |
+| 2 | 1450 | 121 | 336 | 37 | 12432 |
+| 3 | 8 | 529 | 223 | 39 | 8697 |
+| 4 | 1725 | 937 | 94 | 89 | 8366 |
+| 5 | 1461 | 17 | 148 | 42 | 6216 |
+| 6 | 568 | 305 | 1239 | 2 | 2478 |
+| 7 | 50 | 843 | 134 | 18 | 2412 |
+| 8 | 22 | 787 | 80 | 28 | 2240 |
+| 9 | 50 | 633 | 76 | 29 | 2204 |
+| 10 | 0 | 75 | 1838 | 1 | 1838 |

@@ -1,21 +1,21 @@
 # account-loan-details-118-summary
 
 - Route: /account-loan-details/[id]
-- SSIM (masked): 0.8979 (threshold 0.98)
-- SSIM (unmasked): 0.8301
-- Changed pixel ratio (masked): 1.5570% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.1424%
+- SSIM (masked): 0.9079 (threshold 0.98)
+- SSIM (unmasked): 0.8371
+- Changed pixel ratio (masked): 1.2636% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.9863%
 - Mask regions: 251
-- Diff regions: 81
+- Diff regions: 68
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 277 | 191 | 1520 | 70 | 106400 |
-| 2 | 277 | 223 | 245 | 37 | 9065 |
-| 3 | 1718 | 1272 | 76 | 86 | 6536 |
+| 1 | 490 | 187 | 1320 | 74 | 97680 |
+| 2 | 266 | 223 | 256 | 37 | 9472 |
+| 3 | 1738 | 945 | 75 | 85 | 6375 |
 | 4 | 1172 | 294 | 165 | 37 | 6105 |
 | 5 | 500 | 294 | 161 | 37 | 5957 |
 | 6 | 889 | 294 | 160 | 37 | 5920 |

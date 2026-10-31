@@ -1,25 +1,25 @@
 # settings-products-savings
 
 - Route: /settings/products/savings
-- SSIM (masked): 0.8852 (threshold 0.98)
-- SSIM (unmasked): 0.8478
-- Changed pixel ratio (masked): 2.5611% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.0153%
-- Mask regions: 52
-- Diff regions: 81
+- SSIM (masked): 0.9082 (threshold 0.98)
+- SSIM (unmasked): 0.8672
+- Changed pixel ratio (masked): 2.0191% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.5630%
+- Mask regions: 53
+- Diff regions: 66
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 299 | 277 | 1186 | 40 | 47440 |
-| 2 | 8 | 802 | 236 | 61 | 14396 |
-| 3 | 1500 | 271 | 301 | 46 | 13846 |
-| 4 | 292 | 346 | 252 | 52 | 13104 |
-| 5 | 1590 | 160 | 205 | 39 | 7995 |
-| 6 | 1747 | 1025 | 72 | 74 | 5328 |
-| 7 | 22 | 606 | 176 | 21 | 3696 |
-| 8 | 22 | 656 | 107 | 32 | 3424 |
-| 9 | 49 | 738 | 118 | 29 | 3422 |
-| 10 | 22 | 254 | 140 | 24 | 3360 |
+| 1 | 288 | 273 | 1211 | 44 | 53284 |
+| 2 | 1514 | 271 | 287 | 46 | 13202 |
+| 3 | 1737 | 946 | 82 | 153 | 12546 |
+| 4 | 292 | 346 | 240 | 43 | 10320 |
+| 5 | 1603 | 152 | 206 | 43 | 8858 |
+| 6 | 1461 | 17 | 148 | 42 | 6216 |
+| 7 | 124 | 814 | 107 | 38 | 4066 |
+| 8 | 23 | 302 | 112 | 21 | 2352 |
+| 9 | 22 | 196 | 100 | 23 | 2300 |
+| 10 | 22 | 668 | 92 | 23 | 2116 |

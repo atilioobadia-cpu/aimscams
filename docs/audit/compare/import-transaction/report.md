@@ -1,25 +1,25 @@
 # import-transaction
 
 - Route: /import-transaction
-- SSIM (masked): 0.8900 (threshold 0.98)
-- SSIM (unmasked): 0.8540
-- Changed pixel ratio (masked): 2.8111% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.4387%
-- Mask regions: 40
-- Diff regions: 62
+- SSIM (masked): 0.9107 (threshold 0.98)
+- SSIM (unmasked): 0.8721
+- Changed pixel ratio (masked): 2.2981% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.1332%
+- Mask regions: 41
+- Diff regions: 57
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 8 | 673 | 223 | 53 | 11819 |
-| 2 | 272 | 216 | 240 | 43 | 10320 |
-| 3 | 10 | 740 | 234 | 35 | 8190 |
+| 1 | 267 | 216 | 245 | 43 | 10535 |
+| 2 | 8 | 674 | 223 | 38 | 8474 |
+| 3 | 10 | 751 | 218 | 35 | 7630 |
 | 4 | 1604 | 121 | 191 | 37 | 7067 |
-| 5 | 278 | 113 | 132 | 53 | 6996 |
+| 5 | 266 | 109 | 133 | 53 | 7049 |
 | 6 | 625 | 217 | 166 | 41 | 6806 |
 | 7 | 1421 | 122 | 175 | 36 | 6300 |
-| 8 | 1747 | 845 | 72 | 74 | 5328 |
-| 9 | 982 | 370 | 108 | 47 | 5076 |
-| 10 | 1681 | 226 | 114 | 39 | 4446 |
+| 8 | 1462 | 17 | 147 | 42 | 6174 |
+| 9 | 1747 | 845 | 72 | 74 | 5328 |
+| 10 | 983 | 370 | 109 | 47 | 5123 |

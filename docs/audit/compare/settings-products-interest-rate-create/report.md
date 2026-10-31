@@ -1,25 +1,25 @@
 # settings-products-interest-rate-create
 
 - Route: /settings/products/interest-rates/new
-- SSIM (masked): 0.8683 (threshold 0.98)
-- SSIM (unmasked): 0.8197
-- Changed pixel ratio (masked): 2.6307% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.8369%
-- Mask regions: 57
-- Diff regions: 75
+- SSIM (masked): 0.8707 (threshold 0.98)
+- SSIM (unmasked): 0.8213
+- Changed pixel ratio (masked): 2.7307% (threshold 1%)
+- Changed pixel ratio (unmasked): 4.9744%
+- Mask regions: 56
+- Diff regions: 68
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 304 | 617 | 1466 | 94 | 137804 |
-| 2 | 1047 | 286 | 723 | 96 | 69408 |
-| 3 | 304 | 522 | 723 | 55 | 39765 |
-| 4 | 1047 | 532 | 710 | 45 | 31950 |
-| 5 | 304 | 429 | 727 | 43 | 31261 |
-| 6 | 1047 | 429 | 723 | 43 | 31089 |
-| 7 | 304 | 286 | 722 | 43 | 31046 |
-| 8 | 304 | 342 | 723 | 40 | 28920 |
-| 9 | 156 | 77 | 1679 | 9 | 15111 |
-| 10 | 10 | 802 | 234 | 42 | 9828 |
+| 1 | 293 | 624 | 1491 | 95 | 141645 |
+| 2 | 1047 | 284 | 737 | 98 | 72226 |
+| 3 | 293 | 525 | 736 | 52 | 38272 |
+| 4 | 1047 | 429 | 737 | 47 | 34639 |
+| 5 | 1047 | 532 | 736 | 45 | 33120 |
+| 6 | 293 | 338 | 736 | 44 | 32384 |
+| 7 | 293 | 432 | 735 | 44 | 32340 |
+| 8 | 293 | 284 | 733 | 41 | 30053 |
+| 9 | 298 | 429 | 733 | 40 | 29320 |
+| 10 | 156 | 75 | 1682 | 9 | 15138 |

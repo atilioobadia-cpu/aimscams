@@ -1,25 +1,25 @@
 # reports-statement-AccountStatementReport
 
 - Route: /reports-statement-AccountStatementReport
-- SSIM (masked): 0.8377 (threshold 0.98)
-- SSIM (unmasked): 0.8092
-- Changed pixel ratio (masked): 2.8507% (threshold 1%)
-- Changed pixel ratio (unmasked): 4.0835%
-- Mask regions: 39
-- Diff regions: 138
+- SSIM (masked): 0.8560 (threshold 0.98)
+- SSIM (unmasked): 0.8245
+- Changed pixel ratio (masked): 2.3082% (threshold 1%)
+- Changed pixel ratio (unmasked): 3.7126%
+- Mask regions: 41
+- Diff regions: 126
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 8 | 721 | 223 | 64 | 14272 |
-| 2 | 277 | 131 | 255 | 35 | 8925 |
-| 3 | 1725 | 937 | 94 | 94 | 8836 |
-| 4 | 790 | 226 | 241 | 34 | 8194 |
-| 5 | 532 | 226 | 241 | 34 | 8194 |
+| 1 | 8 | 730 | 223 | 54 | 12042 |
+| 2 | 790 | 223 | 241 | 37 | 8917 |
+| 3 | 532 | 223 | 241 | 37 | 8917 |
+| 4 | 1725 | 937 | 94 | 89 | 8366 |
+| 5 | 288 | 273 | 177 | 44 | 7788 |
 | 6 | 1635 | 117 | 160 | 44 | 7040 |
-| 7 | 299 | 277 | 172 | 40 | 6880 |
-| 8 | 22 | 96 | 125 | 32 | 4000 |
+| 7 | 366 | 131 | 189 | 35 | 6615 |
+| 8 | 1458 | 17 | 151 | 42 | 6342 |
 | 9 | 1305 | 217 | 90 | 43 | 3870 |
-| 10 | 22 | 254 | 140 | 24 | 3360 |
+| 10 | 1404 | 217 | 75 | 43 | 3225 |

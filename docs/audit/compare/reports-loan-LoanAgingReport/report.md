@@ -1,25 +1,25 @@
 # reports-loan-LoanAgingReport
 
 - Route: /reports-loan-LoanAgingReport
-- SSIM (masked): 0.8418 (threshold 0.98)
-- SSIM (unmasked): 0.7921
-- Changed pixel ratio (masked): 3.1230% (threshold 1%)
-- Changed pixel ratio (unmasked): 5.1519%
-- Mask regions: 67
-- Diff regions: 184
+- SSIM (masked): 0.8414 (threshold 0.98)
+- SSIM (unmasked): 0.7878
+- Changed pixel ratio (masked): 3.2033% (threshold 1%)
+- Changed pixel ratio (unmasked): 5.4203%
+- Mask regions: 66
+- Diff regions: 174
 - **Pass:** NO
 
 ## Top diff regions
 
 | # | x | y | w | h | area |
 |---|---|---|---|---|---|
-| 1 | 337 | 638 | 1458 | 38 | 55404 |
-| 2 | 10 | 682 | 322 | 53 | 17066 |
-| 3 | 315 | 271 | 267 | 51 | 13617 |
-| 4 | 352 | 345 | 213 | 53 | 11289 |
-| 5 | 1672 | 148 | 196 | 54 | 10584 |
-| 6 | 1803 | 1183 | 93 | 91 | 8463 |
-| 7 | 17 | 17 | 68 | 62 | 4216 |
-| 8 | 339 | 146 | 80 | 52 | 4160 |
-| 9 | 1664 | 23 | 73 | 52 | 3796 |
-| 10 | 0 | 85 | 1819 | 2 | 3638 |
+| 1 | 337 | 638 | 1471 | 36 | 52956 |
+| 2 | 0 | 93 | 1918 | 18 | 34524 |
+| 3 | 10 | 681 | 314 | 61 | 19154 |
+| 4 | 1747 | 1183 | 149 | 91 | 13559 |
+| 5 | 1593 | 23 | 245 | 55 | 13475 |
+| 6 | 331 | 271 | 251 | 51 | 12801 |
+| 7 | 352 | 345 | 213 | 53 | 11289 |
+| 8 | 1672 | 148 | 196 | 54 | 10584 |
+| 9 | 0 | 18 | 147 | 61 | 8967 |
+| 10 | 1737 | 937 | 76 | 94 | 7144 |

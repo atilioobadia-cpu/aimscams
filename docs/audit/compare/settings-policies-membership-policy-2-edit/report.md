@@ -1,12 +1,12 @@
 # settings-policies-membership-policy-2-edit
 
 - Route: /settings/policies/membership/[id]/edit
-- SSIM (masked): 0.9190 (threshold 0.98)
-- SSIM (unmasked): 0.8898
-- Changed pixel ratio (masked): 1.2107% (threshold 1%)
-- Changed pixel ratio (unmasked): 2.5185%
-- Mask regions: 74
-- Diff regions: 94
+- SSIM (masked): 0.9263 (threshold 0.98)
+- SSIM (unmasked): 0.8957
+- Changed pixel ratio (masked): 0.9806% (threshold 1%)
+- Changed pixel ratio (unmasked): 2.3749%
+- Mask regions: 75
+- Diff regions: 79
 - **Pass:** NO
 
 ## Top diff regions
@@ -15,11 +15,11 @@
 |---|---|---|---|---|---|
 | 1 | 1047 | 279 | 715 | 44 | 31460 |
 | 2 | 1646 | 2513 | 173 | 103 | 17819 |
-| 3 | 154 | 77 | 1681 | 9 | 15129 |
-| 4 | 10 | 829 | 234 | 46 | 10764 |
-| 5 | 1718 | 1272 | 76 | 86 | 6536 |
-| 6 | 103 | 664 | 113 | 49 | 5537 |
-| 7 | 1747 | 1579 | 72 | 72 | 5184 |
-| 8 | 1747 | 845 | 72 | 72 | 5184 |
-| 9 | 1524 | 2513 | 113 | 43 | 4859 |
-| 10 | 992 | 281 | 148 | 29 | 4292 |
+| 3 | 154 | 75 | 1684 | 9 | 15156 |
+| 4 | 1737 | 945 | 76 | 86 | 6536 |
+| 5 | 1747 | 1579 | 72 | 72 | 5184 |
+| 6 | 1747 | 845 | 72 | 72 | 5184 |
+| 7 | 1524 | 2513 | 113 | 43 | 4859 |
+| 8 | 993 | 279 | 148 | 31 | 4588 |
+| 9 | 1521 | 17 | 93 | 42 | 3906 |
+| 10 | 118 | 670 | 98 | 38 | 3724 |
