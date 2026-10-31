@@ -300,14 +300,14 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-[6px] rounded-[6px] pl-[10px] pr-2 mt-[5px] fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-[#72777d] hover:bg-white/60",
         )}
       >
-        <Icon className="size-4 shrink-0" aria-hidden="true" />
-        <span className="min-w-0 truncate">{child.label}</span>
+        <Icon className="size-4 shrink-0 mt-[-5px]" aria-hidden="true" />
+        <span className="min-w-0 truncate mt-[-5px]">{child.label}</span>
       </Link>
     </li>
   );
