@@ -251,7 +251,7 @@ function SidebarItem({
           </button>
         </div>
         {expanded ? (
-          <ul className="m-0 flex list-none flex-col gap-[2px] p-0">
+          <ul className="m-0 ml-[16px] flex list-none flex-col gap-[2px] border-l border-[#dee2e6] pl-[10px] p-0">
             {item.children
               .filter((child) => !(child.href === "/system-logs" && !isAdmin))
               .map((child) => (
