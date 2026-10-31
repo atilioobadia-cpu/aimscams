@@ -7,4 +7,5 @@ unavoidable dynamic or branding values. All coordinates are reference pixels at 
 |---|---|---|
 | Sidebar footer (0,940)-(239,1041) | all | Branding: reference shows "Wakandi", ours shows "AIMSCAMS" wordmark and copyright. |
 | Header institution logo (8,8)-(62,62) | all | Tenant asset: reference carries the MFSL logo image; ours falls back to the monogram until a logo is uploaded. |
+| Header branch + user menu (1280,0)-(1838,65) | all | Tenant data: branch name/status and user name/initials differ per installation. |
 | Dynamic text (amounts, dates, IDs, names) | per page | Masked automatically by `mask.py` (digits / unknown single words / differing text). |

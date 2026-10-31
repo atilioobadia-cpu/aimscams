@@ -130,6 +130,7 @@ def find_mask_regions(ref_img, our_img, ref_boxes=None, our_boxes=None):
     branding_regions = [
         (0, 940, 239, 1041),   # sidebar footer wordmark + copyright
         (8, 8, 62, 62),          # header institution logo
+        (1280, 0, 1838, 65),    # header branch + user menu (tenant-specific)
     ]
     for r in branding_regions:
         if r[2] <= ref_img.shape[1] and r[3] <= ref_img.shape[0]:
