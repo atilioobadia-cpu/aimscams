@@ -331,11 +331,11 @@ export default function RolesPage() {
         footer={(
           <>
             <Button type="button" variant="outline" onClick={() => setCreateOpen(false)} className="border-primary text-primary"><X className="size-4" />Cancel</Button>
-            <Button type="submit" form="create-role-form" disabled={saving} className="bg-primary text-primary-foreground"><Check className="size-4" />{saving ? "Saving..." : "Save"}</Button>
+            <Button type="submit" form="create-role-form" disabled={saving || !newCodeName.trim() || !newDisplayName.trim()} className="bg-primary text-primary-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"><Check className="size-4" />{saving ? "Saving..." : "Save"}</Button>
           </>
         )}
       >
-        <form id="create-role-form" onSubmit={submitNewRole}>
+        <form id="create-role-form" onSubmit={submitNewRole} className="min-h-[390px]">
           <div role="tablist" aria-label="New role sections" className="mb-5 flex border-b border-chrome">
             {tabs.map((tab) => <button key={tab.id} type="button" role="tab" aria-selected={createTab === tab.id} onClick={() => setCreateTab(tab.id)} className={`px-4 py-3 fs-text font-medium ${createTab === tab.id ? "border-b-2 border-primary text-primary" : "text-muted-foreground hover:text-heading"}`}>{tab.label}</button>)}
           </div>
@@ -348,7 +348,7 @@ export default function RolesPage() {
             </div>
           ) : createTab === "permissions" ? (
             <div className="max-h-[55vh] overflow-y-auto">
-              <PermissionGroups groups={grouped} checked={newPermissions} onToggle={(key) => togglePermission(key, newPermissions, setNewPermissions)} />
+              <PermissionGroups groups={grouped} checked={newPermissions} onToggle={(key) => togglePermission(key, newPermissions, setNewPermissions)} onToggleAll={() => setNewPermissions(newPermissions.length === permissions.length ? [] : permissions)} />
             </div>
           ) : (
             <div className="flex min-h-48 flex-col items-center justify-center text-center fs-text text-muted-foreground"><Clock3 className="mb-3 size-8" aria-hidden="true" /><strong className="text-heading">History</strong><span>No history records found.</span></div>
@@ -377,7 +377,7 @@ export default function RolesPage() {
           </div>
           <label className="mb-5 block space-y-1.5 fs-text font-medium text-body">Role description<textarea value={editorDescription} onChange={(event) => setEditorDescription(event.target.value)} rows={2} className="w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 fs-text outline-none focus-visible:ring-2 focus-visible:ring-ring/50" /></label>
           <h3 className="mb-3 fs-text font-semibold text-heading">Permissions</h3>
-          <div className="max-h-[45vh] overflow-y-auto"><PermissionGroups groups={grouped} checked={editorPermissions} onToggle={(key) => togglePermission(key, editorPermissions, setEditorPermissions)} /></div>
+          <div className="max-h-[45vh] overflow-y-auto"><PermissionGroups groups={grouped} checked={editorPermissions} onToggle={(key) => togglePermission(key, editorPermissions, setEditorPermissions)} onToggleAll={() => setEditorPermissions(editorPermissions.length === permissions.length ? [] : permissions)} /></div>
         </form>
       </Modal>
     </div>
@@ -388,21 +388,19 @@ function PermissionGroups({
   groups,
   checked,
   onToggle,
+  onToggleAll,
 }: {
   groups: Record<string, string[]>;
   checked: string[];
   onToggle: (key: string) => void;
+  onToggleAll: () => void;
 }) {
+  const keys = Object.values(groups).flat();
+  const allSelected = keys.length > 0 && keys.every((key) => checked.includes(key));
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      {Object.entries(groups).map(([entity, keys]) => (
-        <section key={entity} className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
-          <h3 className="mb-3 fs-text font-semibold text-heading">{entity}</h3>
-          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2">
-            {keys.map((key) => <label key={key} className="flex items-center gap-2 fs-text text-body"><input type="checkbox" checked={checked.includes(key)} onChange={() => onToggle(key)} className="size-4 accent-[var(--primary)]" />{key.split(" : ")[1] ?? key}</label>)}
-          </div>
-        </section>
-      ))}
+    <div className="grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+      <label className="col-span-full flex items-center gap-2 fs-text text-body"><input type="checkbox" checked={allSelected} onChange={onToggleAll} className="size-4 accent-[var(--primary)]" />Select All</label>
+      {keys.map((key) => <label key={key} className="flex items-center gap-2 fs-text text-body"><input type="checkbox" checked={checked.includes(key)} onChange={() => onToggle(key)} className="size-4 accent-[var(--primary)]" />{key.replace(" : ", ": ")}</label>)}
     </div>
   );
 }

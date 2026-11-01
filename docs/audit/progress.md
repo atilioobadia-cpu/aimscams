@@ -233,6 +233,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Reopened `/settings-service-provider` in the visible browser and compared it with `F:\Wakandi\settings-service-provider\FULL.png`. The Services icon/title card and empty workspace match; the obsolete In Build placeholder issue is resolved.
 - No service data or configuration was changed. Canonical pixel scoring remains unmeasured.
 
+## 2026-11-01 — Role Management follow-up
+
+- Reviewed the first and second role-list pages and all three Create new role tabs in the visible browser against `F:\Wakandi\settings-role\FULL.png` and the numbered captures. No roles, permissions, or audit records were changed.
+- Matched the dialog height to the 536px reference, replaced grouped permission cards with the flat two-column reference list, added Select All, and disabled Save until required names are present. Kept permissions unchecked by default for least-privilege behavior; I379 retains the unverified existing-role audit-history gap.
+- Web production build passed; GitHub push is pending.
+
 ## 2026-11-01 — Loan reports, first batch
 
 - Compared Accrued Installments, Accrued Interest, All Loan, Deferred Interest, Expected Loan Repayments, Expected Payment By Date, and Expected Repayment with their supplied references in the visible browser.
