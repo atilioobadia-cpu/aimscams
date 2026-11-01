@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowDownLeft, TriangleAlert } from "lucide-react";
+import { Receipt, TriangleAlert } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { TransactionsTable } from "@/components/transactions/transactions-table";
 import { TransactionFilterPanel } from "@/components/transactions/transaction-filter-panel";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/ui/modal";
 import { ApiError } from "@/lib/api";
 import {
   listTransactions,
@@ -33,6 +34,9 @@ export function AllTransactionsPage() {
   const [accountingStatus, setAccountingStatus] = useState<AccountingStatus | "">("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [dateEnabled, setDateEnabled] = useState(true);
+  const [accountingEnabled, setAccountingEnabled] = useState(false);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
 
@@ -102,12 +106,23 @@ export function AllTransactionsPage() {
     setPage(1);
   }
 
+  function clearFilters() {
+    setQuery("");
+    setStatus("");
+    setAccountingStatus("");
+    setFrom("");
+    setTo("");
+    setDateEnabled(true);
+    setAccountingEnabled(false);
+    setPage(1);
+  }
+
   return (
     <div className="space-y-5">
       <PageHeader
-        title="All transactions"
-        description="Review transaction activity and its operational and accounting status."
-        breadcrumb="Transactions"
+        variant="card"
+        title="Transactions"
+        icon={<Receipt className="size-6 shrink-0 text-primary" aria-hidden="true" />}
       />
 
       {(data?.summary.unposted ?? 0) > 0 ? (
@@ -137,11 +152,17 @@ export function AllTransactionsPage() {
         accountingStatus={accountingStatus}
         from={from}
         to={to}
+        dateEnabled={dateEnabled}
+        accountingEnabled={accountingEnabled}
         onQueryChange={updateQuery}
         onStatusChange={updateStatus}
         onAccountingStatusChange={updateAccountingStatus}
         onFromChange={updateFrom}
         onToChange={updateTo}
+        onDateToggle={(enabled) => { setDateEnabled(enabled); if (!enabled) { setFrom(""); setTo(""); setPage(1); } }}
+        onAccountingToggle={(enabled) => { setAccountingEnabled(enabled); if (!enabled) { setAccountingStatus(""); setPage(1); } }}
+        onSave={() => setSaveDialogOpen(true)}
+        onClear={clearFilters}
       />
 
       {forbidden ? (
@@ -152,25 +173,20 @@ export function AllTransactionsPage() {
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={8} />
         </section>
-      ) : items.length === 0 ? (
-        <EmptyState
-          icon={ArrowDownLeft}
-          title={hasFilters ? "No transactions match" : "No transactions yet"}
-          description={
-            hasFilters
-              ? "Adjust or clear the filters to see other transactions."
-              : "Posted and pending transaction activity will appear here."
-          }
-        />
       ) : (
         <TransactionsTable
           items={items}
           total={data?.total ?? 0}
           page={page}
           pageCount={pageCount}
+          hasFilters={hasFilters}
           onPageChange={setPage}
         />
       )}
+
+      <Modal open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)} title="Save current filters" footer={<Button variant="outline" onClick={() => setSaveDialogOpen(false)}>Close</Button>}>
+        <p className="fs-text text-body">Saved filters are not available for this installation yet.</p>
+      </Modal>
     </div>
   );
 }

@@ -362,3 +362,8 @@
 | UI019 | /account-loan-details/[id]/repayments | data | posted repayment history | No matching local UUID loan or posted repayment rows | Blocked by local data | `docs/audit/visual/loan-details-repayments.md` | `aec5349` |
 | UI020 | /account-loan-details/[id]/documents | data | document list and row actions | No matching local UUID loan or document rows | Blocked by local data | `docs/audit/visual/loan-details-documents.md` | `aec5349` |
 | UI021 | /account-loan-details/[id]/guarantors | data | guarantor details table | No matching local UUID loan or guarantor rows | Blocked by local data | `docs/audit/visual/loan-details-guarantors.md` | `aec5349` |
+| I335 | /transaction-all-transaction | text | Transactions title, compact filter toolbar, table headers, empty state and pager | Aligned to reference structure; empty dataset remains | Medium |
+| I336 | /transaction-all-transaction | missing | Session Date and Product Name values | Response model does not provide either field | Medium |
+| I337 | /transaction-all-transaction | missing | Resubmit unposted transactions action | No safe resubmission endpoint/action in local app | High |
+| UI022 | /transaction-all-transaction | structure/control | Transactions card, compact filter toolbar, full table headers, empty row and pager | Matched structure; Add filters, clear, status, and save feedback checked in browser | Resolved structurally; data/service caveats | `docs/audit/visual/transactions.md` | pending |
+| UI023 | /transaction-all-transaction | data/action | Populated values for all columns and unposted resubmission | No local rows; two reference fields unsupported and no resubmission endpoint | Open: API/data capability | `docs/audit/visual/transactions.md` | pending |

@@ -131,3 +131,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Web typecheck and scoped lint passed. Browser route check confirmed the new Schedule route renders without a 404; console errors and warnings were empty.
 - Implementation commit: pending.
 - Implementation commit: `aec5349` (`feat(web): add loan schedule route and audit detail pages`).
+
+## 2026-11-01 — All transactions reference pass
+
+- Aligned the title card, compact filter toolbar, optional filter menu, persistent table headings, empty state, and pager.
+- In the visible browser, checked the status control sizing, optional Accounting status toggle, Save dialog feedback, clear action, and final default state.
+- The local transaction list is empty. Session Date and Product Name are not in the response model. The reference Resubmit action has no safe local endpoint, and saved-filter persistence is unavailable.
+- Web typecheck and scoped lint passed; see the pass commit record.

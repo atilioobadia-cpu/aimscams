@@ -11,6 +11,7 @@ type TransactionsTableProps = {
   total: number;
   page: number;
   pageCount: number;
+  hasFilters: boolean;
   onPageChange: (page: number) => void;
 };
 
@@ -31,39 +32,48 @@ export function TransactionsTable({
   total,
   page,
   pageCount,
+  hasFilters,
   onPageChange,
 }: TransactionsTableProps) {
   return (
     <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1400px] text-left fs-text">
+        <table className="w-full min-w-[1600px] text-left fs-text">
           <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
             <tr>
-              <th className="whitespace-nowrap px-4 py-3">Reference</th>
-              <th className="whitespace-nowrap px-4 py-3">Client</th>
-              <th className="whitespace-nowrap px-4 py-3">Transaction type</th>
-              <th className="whitespace-nowrap px-4 py-3">Amount</th>
-              <th className="whitespace-nowrap px-4 py-3">Payment method</th>
+              <th className="whitespace-nowrap px-4 py-3">Date</th>
+              <th className="whitespace-nowrap px-4 py-3">Session date</th>
+              <th className="whitespace-nowrap px-4 py-3">Member name</th>
+              <th className="whitespace-nowrap px-4 py-3">Transaction number</th>
+              <th className="whitespace-nowrap px-4 py-3">Account number</th>
+              <th className="whitespace-nowrap px-4 py-3">Type</th>
+              <th className="whitespace-nowrap px-4 py-3 text-right">Amount (TSh)</th>
               <th className="whitespace-nowrap px-4 py-3">Transaction status</th>
-              <th className="whitespace-nowrap px-4 py-3">Accounting status</th>
-              <th className="whitespace-nowrap px-4 py-3">Value date</th>
-              <th className="whitespace-nowrap px-4 py-3">Teller</th>
+              <th className="whitespace-nowrap px-4 py-3">Transaction reference ID</th>
+              <th className="whitespace-nowrap px-4 py-3">Product name</th>
+              <th className="whitespace-nowrap px-4 py-3">Source</th>
+              <th className="whitespace-nowrap px-4 py-3">Comment</th>
+              <th className="whitespace-nowrap px-4 py-3">User</th>
             </tr>
           </thead>
           <tbody>
-            {items.map((item) => (
+            {items.length === 0 ? (
+              <tr>
+                <td colSpan={13} className="px-4 py-16 text-center fs-text text-muted-foreground">
+                  {hasFilters ? "No data available for the selected filters." : "No data available"}
+                </td>
+              </tr>
+            ) : items.map((item) => (
               <tr key={item.id} className="border-b border-card-border last:border-0">
-                <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">
-                  {item.transactionNo}
-                </td>
-                <td className="whitespace-nowrap px-4 py-3 text-body">
-                  <span className="block">{item.clientName}</span>
-                  <span className="text-muted-foreground">{item.clientReference}</span>
-                </td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">{item.valueDate}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">—</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">{item.clientName || item.clientReference || "—"}</td>
+                <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.transactionNo}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">{item.accountNumber || "—"}</td>
                 <td className="whitespace-nowrap px-4 py-3 text-body">
                   {transactionLabel(item.type)}
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 tabular-nums text-body">
+                <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-body">
                   <span className="inline-flex items-center gap-1.5">
                     {item.drCr === "DR" ? (
                       <ArrowDownLeft className="size-3.5 text-accent-red" aria-label="Debit" />
@@ -73,19 +83,14 @@ export function TransactionsTable({
                     {formatTzs(item.amountMinor)}
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-body">
-                  {transactionLabel(item.paymentMethod)}
-                </td>
                 <td className="whitespace-nowrap px-4 py-3">
                   <Badge variant={statusVariant(item.status)}>{titleCase(item.status)}</Badge>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3">
-                  <Badge variant={statusVariant(item.accountingStatus)}>
-                    {titleCase(item.accountingStatus)}
-                  </Badge>
-                </td>
-                <td className="whitespace-nowrap px-4 py-3 text-body">{item.valueDate}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-body">{item.tellerName}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">{item.externalRef || item.receiptNo || "—"}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">—</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">{item.paymentMethod || "—"}</td>
+                <td className="max-w-[300px] truncate px-4 py-3 text-body">{item.narration || "—"}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-body">{item.tellerName || "—"}</td>
               </tr>
             ))}
           </tbody>
