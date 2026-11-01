@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { EmptyState } from "@/components/data/empty-state";
 import { FundsChart } from "@/components/dashboard/funds-chart";
 import { KpiGrid } from "@/components/dashboard/kpi-grid";
-import { PortfolioComposition } from "@/components/dashboard/portfolio-composition";
+import { ParBucketsChart } from "@/components/dashboard/par-buckets-chart";
+import { SavingsSharesLoansChart } from "@/components/dashboard/savings-shares-loans-chart";
 import { UnpostedBanner } from "@/components/dashboard/unposted-banner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
@@ -135,9 +136,10 @@ export function DashboardTabs({ data }: DashboardViewProps) {
       <TabsContent value="overview" className="mt-5 space-y-5 outline-none">
         <UnpostedBanner unposted={data.unposted} />
         <KpiGrid kpis={data.kpis} />
-        <div className="grid grid-cols-1 gap-5 2xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
-          <FundsChart funds={data.funds} />
-          <PortfolioComposition portfolio={data.portfolio} />
+        <FundsChart funds={data.funds} />
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <SavingsSharesLoansChart />
+          <ParBucketsChart />
         </div>
       </TabsContent>
 
