@@ -1,4 +1,5 @@
 import { ChartCard } from "@/components/data/chart-card";
+import { cn } from "cn";
 
 type DashboardChartPanelProps = {
   title: string;
@@ -6,6 +7,8 @@ type DashboardChartPanelProps = {
   xLabels?: string[];
   height?: "compact" | "large";
   message?: string;
+  legend?: string[];
+  secondaryPoints?: number[];
 };
 
 export function DashboardChartPanel({
@@ -14,8 +17,10 @@ export function DashboardChartPanel({
   xLabels = ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
   height = "compact",
   message = "Chart history is unavailable in the local data.",
+  legend = [],
+  secondaryPoints,
 }: DashboardChartPanelProps) {
-  const chartHeight = height === "large" ? "h-[300px]" : "h-[220px]";
+  const chartHeight = height === "large" ? "h-[420px]" : "h-[360px]";
   const max = Math.max(1, ...(points ?? []));
   const yAxisValues = [0, 1, 2, 3, 4].map((line) => Math.round(max * (1 - line / 4)));
   const yAxisLabels = yAxisValues.map((value, index) =>
@@ -30,9 +35,18 @@ export function DashboardChartPanel({
         })
         .join(" ")
     : "";
+  const secondaryPolyline = secondaryPoints?.length
+    ? secondaryPoints
+        .map((point, index) => {
+          const x = secondaryPoints.length === 1 ? 500 : (index / (secondaryPoints.length - 1)) * 1000;
+          const y = 190 - (Math.max(0, point) / max) * 170;
+          return `${x},${y}`;
+        })
+        .join(" ")
+    : "";
 
   return (
-    <ChartCard title={title} className="px-5 pt-9 pb-5">
+    <ChartCard title={title} className="px-[30px] pt-[48px] pb-[30px]">
       <div className={`relative mt-4 ${chartHeight}`}>
         <div className="absolute inset-y-3 left-[68px] right-0 flex flex-col justify-between">
           {[0, 1, 2, 3, 4].map((line) => (
@@ -60,6 +74,15 @@ export function DashboardChartPanel({
               strokeWidth="3"
               vectorEffect="non-scaling-stroke"
             />
+            {secondaryPolyline ? (
+              <polyline
+                points={secondaryPolyline}
+                fill="none"
+                stroke="#374957"
+                strokeWidth="3"
+                vectorEffect="non-scaling-stroke"
+              />
+            ) : null}
             {points.map((point, index) => {
               const x = points.length === 1 ? 500 : (index / (points.length - 1)) * 1000;
               const y = 190 - (Math.max(0, point) / max) * 170;
@@ -79,6 +102,16 @@ export function DashboardChartPanel({
           ))}
         </div>
       </div>
+      {legend.length ? (
+        <ul className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-card-border pt-4">
+          {legend.map((label, index) => (
+            <li key={label} className="flex items-center gap-2 fs-text text-body">
+              <span className={cn("size-3 border-2", index === 0 ? "border-primary" : "border-slate-600")} aria-hidden="true" />
+              {label}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </ChartCard>
   );
 }

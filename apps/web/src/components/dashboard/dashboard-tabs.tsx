@@ -67,10 +67,11 @@ function ageOf(client: Client): number | null {
 function ageBucket(client: Client): string | null {
   const age = ageOf(client);
   if (age === null) return null;
-  if (age < 18) return "UNDER_18";
-  if (age <= 35) return "18_35";
-  if (age <= 60) return "36_60";
-  return "OVER_60";
+  if (age < 25) return "UNDER_25";
+  if (age <= 34) return "25_34";
+  if (age <= 44) return "35_44";
+  if (age <= 54) return "45_54";
+  return "55_PLUS";
 }
 
 function dateMatches(value: string | null | undefined, filter: string): boolean {
@@ -78,6 +79,7 @@ function dateMatches(value: string | null | undefined, filter: string): boolean 
   if (!value) return false;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return false;
+  if (filter.startsWith("ON:")) return value.slice(0, 10) === filter.slice(3);
   const today = new Date();
   if (filter === "THIS_MONTH") {
     return date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth();
@@ -95,7 +97,7 @@ function memberMatches(client: Client, filters: DashboardFilters): boolean {
   if (filters.branch !== "ALL" && client.branchName !== filters.branch) return false;
   if (filters.clientType !== "ALL" && client.clientType !== filters.clientType) return false;
   if (filters.gender !== "ALL" && genderOf(client) !== filters.gender) return false;
-  if (filters.age !== "ALL" && ageBucket(client) !== filters.age) return false;
+  if (filters.age !== "ALL" && (filters.age === "UNDEFINED" ? ageOf(client) === null : ageBucket(client) !== filters.age)) return false;
   if (!dateMatches(client.joinedAt ?? client.createdAt, filters.date)) return false;
   return true;
 }
@@ -177,7 +179,7 @@ function DashboardTablePanel({
           <tbody>
             {visibleRows.length > 0 ? (
               visibleRows.map((row, rowIndex) => (
-                <tr key={`${title}-${rowIndex}`} className="border-b border-card-border last:border-0">
+                <tr key={`${title}-${rowIndex}`} className="border-b border-card-border odd:bg-surface even:bg-subtle last:border-0">
                   {row.map((cell, cellIndex) => (
                     <td key={`${rowIndex}-${cellIndex}`} className="whitespace-nowrap px-3 py-2.5 text-body">{cell}</td>
                   ))}
@@ -239,24 +241,28 @@ function MembersView({
   ];
 
   return (
-    <div className="mt-[14px] space-y-[14px]">
+      <div className="mt-5 space-y-[14px]">
       <DashboardFilterBar filters={filters} branches={branches} products={products} onChange={onFilterChange} />
       <DashboardChartPanel
         title="Members Growth (Cumulative)"
         points={growth?.values}
+        secondaryPoints={growth ? growth.values.map(() => 0) : undefined}
         xLabels={growth?.labels}
         height="large"
+        legend={["Total Members", "Active Members"]}
         message="The local API has no member join history for this view."
       />
       <KpiGrid kpis={kpis} />
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        <DashboardChartPanel title="New Vs Recurring Members" />
-        <DashboardChartPanel title="Registered Users Over Time" />
-        <DashboardChartPanel title="Churned Users Over Time" />
-        <DashboardChartPanel title="Members by Gender" />
-        <DashboardChartPanel title="Members by Age Bands" />
-        <DashboardChartPanel title="Members by Disability Status" />
-        <DashboardChartPanel title="Members by Impairment Type" />
+      <div className="space-y-[14px]">
+        <DashboardChartPanel title="New Vs Recurring Members" height="large" />
+        <DashboardChartPanel title="Registered Users Over Time" height="large" />
+        <DashboardChartPanel title="Churned Users Over Time" height="large" />
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+          <DashboardChartPanel title="Members by Gender" height="large" />
+          <DashboardChartPanel title="Members by Age Bands" height="large" />
+          <DashboardChartPanel title="Members by Disability Status" height="large" />
+          <DashboardChartPanel title="Members by Impairment Type" height="large" />
+        </div>
         <DashboardTablePanel
           title="Churned Members by Gender"
           columns={["Gender", "# of Churned Members"]}
@@ -320,7 +326,7 @@ function LoansView({
   ];
 
   return (
-    <div className="mt-[14px] space-y-[14px]">
+      <div className="mt-5 space-y-[14px]">
       <DashboardFilterBar filters={filters} branches={branches} products={products} onChange={onFilterChange} />
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-3" aria-label="Loan metrics">
         {kpis.map((kpi) => <StatCard key={kpi.id} kpi={kpi} />)}
@@ -330,7 +336,7 @@ function LoansView({
         <DashboardChartPanel title="Loan Application Stages" />
       </div>
       <DashboardChartPanel title="Loans Transactions Amount" height="large" />
-      <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+      <div className="space-y-[14px]">
         <DashboardTablePanel
           title="Loan Product Insights"
           columns={["Product(s)", "Number of Loans", "Number of Defaults", "Average Period"]}
@@ -419,9 +425,9 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     <Tabs value={tab} onValueChange={setTab} className="gap-0">
       <div
         data-testid="dashboard-tab-card"
-        className="flex h-[70px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5"
+        className="flex h-[105px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-[30px]"
       >
-        <TabsList aria-label="Dashboard views" className="h-auto gap-2 bg-transparent p-0">
+          <TabsList aria-label="Dashboard views" className="h-auto gap-2 bg-transparent p-0">
           {tabs.map((item) => {
             const Icon = item.icon;
             const active = tab === item.value;
@@ -435,13 +441,13 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                   active ? "font-semibold" : "text-strong",
                 )}
                 style={{
-                  width: 102,
-                  height: 30,
+                  width: 154,
+                  height: 44,
                   backgroundColor: active ? "var(--primary)" : "transparent",
                   color: active ? "var(--text-on-primary)" : "var(--text-strong)",
                 }}
               >
-                <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
+                <Icon className="size-5" strokeWidth={1.8} aria-hidden="true" />
                 <span>{item.label}</span>
               </TabsTrigger>
             );
@@ -449,7 +455,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         </TabsList>
       </div>
 
-      <TabsContent value="overview" className="mt-[14px] space-y-[14px] outline-none">
+      <TabsContent value="overview" className="mt-5 space-y-5 outline-none">
         <KpiGrid kpis={data.kpis} />
         <FundsChart funds={data.funds} />
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -489,7 +495,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
             onFilterChange={changeFilter}
           />
         ) : (
-          <div className="mt-[14px] space-y-[14px]">
+          <div className="mt-5 space-y-[14px]">
             <DashboardFilterBar filters={filters} branches={branchOptions} products={productOptions} onChange={changeFilter} />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3" aria-label="Loan metrics">
               <StatCard kpi={metric("loans-disbursed", "Loans Disbursed", "0", "principal")} />
@@ -501,7 +507,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
               <DashboardChartPanel title="Loan Application Stages" />
             </div>
             <DashboardChartPanel title="Loans Transactions Amount" height="large" />
-            <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+            <div className="space-y-[14px]">
               <DashboardTablePanel title="Loan Product Insights" columns={["Product(s)", "Number of Loans", "Number of Defaults", "Average Period"]} rows={[]} />
               <DashboardTablePanel title="Loan PAR Summary" columns={["Bucket (DPD)", "Number of Members", "Number of Loans", "Amount at Risk", "PAR %", "Overdue Amount"]} rows={[]} />
               <DashboardTablePanel title="Loan Loss Ratios" columns={["Ratio", "Value"]} rows={[

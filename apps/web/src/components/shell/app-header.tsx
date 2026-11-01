@@ -61,7 +61,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   return (
     <header
       data-testid="app-header"
-      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b bg-surface px-[14px]"
+      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b bg-surface px-5"
       style={{ borderBottomColor: "var(--border-header)" }}
     >
       <div className="flex min-w-0 flex-[1_1_auto] items-center gap-1">
@@ -134,9 +134,9 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-[36px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
+                className="grid size-[56px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
                 style={{
-                  background: "linear-gradient(135deg, #f47d91 0%, #f49a82 50%, #f3b27d 100%)",
+                  background: "linear-gradient(135deg, #168888 0%, #377ab1 100%)",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
                   outline: "2px solid #f7f7f7",
                   outlineOffset: "-2px",
