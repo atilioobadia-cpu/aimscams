@@ -236,7 +236,7 @@ export default function ClientsPage() {
               className="w-full justify-between !border-primary !text-primary"
               onClick={() => setFilterMenuOpen((open) => !open)}
             >
-              <span className="inline-flex items-center gap-2"><Plus aria-hidden="true" />Add filters</span>
+              <span className="inline-flex items-center gap-2"><Plus aria-hidden="true" />Add Filters</span>
               <ChevronDown aria-hidden="true" />
             </Button>
             {filterMenuOpen ? (
@@ -321,18 +321,18 @@ export default function ClientsPage() {
             <table className="w-full min-w-[1495px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
-                  <th className="px-4 py-3">Member ID</th>
-                  <th className="px-4 py-3">Full name</th>
-                  <th className="px-4 py-3">Ref number</th>
-                  <th className="px-4 py-3">National ID</th>
+                  <th className="px-4 py-3">Member Id</th>
+                  <th className="px-4 py-3">Full Name</th>
+                  <th className="px-4 py-3">Reference Number</th>
+                  <th className="px-4 py-3">National Id</th>
                   <th className="px-4 py-3">Type</th>
-                  <th className="px-4 py-3">Phone</th>
-                  <th className="px-4 py-3">Email</th>
+                  <th className="px-4 py-3">Phone Number</th>
+                  <th className="px-4 py-3">Email Address</th>
                   <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">KYC status</th>
+                  <th className="px-4 py-3">KYC Status</th>
                   <th className="px-4 py-3">DOJ</th>
-                  <th className="px-4 py-3">Group</th>
-                  <th className="px-4 py-3 text-right">Action</th>
+                  <th className="px-4 py-3">Group Name</th>
+                  <th scope="col" aria-label="Actions" className="px-4 py-3 text-right" />
                 </tr>
               </thead>
               <tbody>
