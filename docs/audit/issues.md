@@ -118,9 +118,9 @@
 | I115 | /messages-users-list | missing | Add button | No add button | Low |
 | I116 | /reports-client-ClientListReport | in-build | Implemented page | Placeholder (In build) | High |
 | I117 | /reports-client-ClientListReport | text | Reference UI words | 14% coverage | Medium |
-| I118 | /reports-client-MemberVerificationReport | in-build | Implemented page | Placeholder (In build) | High |
-| I119 | /reports-client-MemberVerificationReport | text | Reference UI words | 9% coverage | Medium |
-| I120 | /reports-client-MemberVerificationReport | text | Member Verification Report | client MemberVerificationReport | Low |
+| I118 | /reports-client-MemberVerificationReport | in-build | Implemented page | Reference-style report shell implemented; data/export contract tracked in I427 | High |
+| I119 | /reports-client-MemberVerificationReport | text | Reference UI words | Report title and seven column labels present; table data and interactive controls unavailable | Medium |
+| I120 | /reports-client-MemberVerificationReport | text | Member Verification Report | Member Verification Report | Low |
 | I121 | /reports-loan-AccruedInstallmentsReport | in-build | Implemented page | Placeholder (In build) | High |
 | I122 | /reports-loan-AccruedInstallmentsReport | text | Reference UI words | 11% coverage | Medium |
 | I123 | /reports-loan-AccruedInstallmentsReport | text | Accrued Installments Report | loan AccruedInstallmentsReport | Low |
@@ -469,7 +469,7 @@
 | I423 | /reports-loan-SummarizedPortfolioAtRiskReport | report data/calculation | Summarized PAR query, measures, and calculation/aggregation rules | Generic chart-of-accounts balances; no PAR fields | High |
 | I424 | /reports-loan-TransactionReport | report data | Loan transaction filters, transaction/reference fields, and paging | Generic chart-of-accounts balances; no transaction fields | High |
 | I425 | /reports-loan-WrittenOffLoanReport | report data/access | Write-off filters, reason/date/initiator fields, and recovery amount | Generic chart-of-accounts balances; no write-off fields | High |
-| I427 | /reports-client-MemberVerificationReport | report data/access | Member verification filters, status fields, and access-controlled export | Generic chart-of-accounts balances; no verification fields | High |
+| I427 | /reports-client-MemberVerificationReport | report data/access | Member verification filters, status fields, and access-controlled export | Report shell present; authorized verification query, records, and export access are unavailable | High |
 | I428 | /messages-recharge-credits | workflow | Credit amount, description, balance/cost summary, and safe purchase flow | Local route is In Build; no form or purchase state | High |
 | I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Local route is In Build; no form or filter state | High |
 | I430 | /clients/create | structure/data | Reference accordion groups and resolved reference-number state | Local route uses six-step wizard; generated reference shows Loading in captured state | High |

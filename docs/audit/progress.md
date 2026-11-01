@@ -287,6 +287,13 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recharge Credits and Create Segment are In Build locally; their reference form controls are recorded without triggering purchase or save.
 - Updated the page notes and issues I428–I429. No teller request, message segment, loan record, policy, or credit purchase was created or changed.
 
+## 2026-11-01 — Member Verification Report shell
+
+- Compared the route with `reports-client-MemberVerificationReport/FULL.png` in the visible browser. Replaced the unrelated chart-of-accounts view with the reference title card, Download control, seven report columns, and sort/filter/table-column affordances.
+- Disabled controls whose query, filtering, or export actions are not backed by the local API; the table explains that verification data is unavailable. No member names or identifiers were copied, and no report data was fabricated.
+- Updated the page note and issues I118–I120/I427. The visual shell is implemented; the authorized report data and export contract remain open.
+- Production build and commit/push pending.
+
 ## 2026-11-01 — Cross-module audit, third batch
 
 - Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.
