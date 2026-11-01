@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight, Eye, Link2, Plus, Search, UserCheck, UserPlus, UsersRound, UserX } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
@@ -25,13 +26,14 @@ function message(failure: unknown, fallback: string): string {
 }
 
 export default function ClientsPage() {
+  const searchParams = useSearchParams();
   const [data, setData] = useState<Awaited<ReturnType<typeof listClients>> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
-  const [clientType, setClientType] = useState("");
+  const [clientType, setClientType] = useState(() => searchParams.get("type") ?? "");
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
   const { pushToast } = useToast();

@@ -31,6 +31,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         name: user.fullName,
         initials: initialsFor(user.fullName),
         role: user.roles.map((role) => role.name).join(", ") || "No role assigned",
+        email: user.email,
+        phone: user.phone,
       }}
     >
       {children}

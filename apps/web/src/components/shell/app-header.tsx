@@ -6,9 +6,11 @@ import {
   ChevronDown,
   LoaderCircle,
   LogOut,
-  Settings,
-  UserRound,
+  Mail,
+  Phone,
+  UsersRound,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -60,7 +62,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
     <header
       data-testid="app-header"
       className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b bg-surface px-[14px]"
-style={{ borderBottomColor: "var(--border-header)" }}
+      style={{ borderBottomColor: "var(--border-header)" }}
     >
       <div className="flex min-w-0 flex-[1_1_auto] items-center gap-1">
         <InstitutionLogo
@@ -151,27 +153,29 @@ style={{ borderBottomColor: "var(--border-header)" }}
               <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={10} className="w-64">
-            <DropdownMenuLabel>
-              <span className="block fs-text font-semibold text-strong">{user.name}</span>
-              <span className="mt-0.5 block fs-text font-normal text-muted-foreground">
-                {user.role}
-              </span>
-            </DropdownMenuLabel>
+          <DropdownMenuContent align="end" sideOffset={10} className="w-[280px]">
+            {user.email ? (
+              <DropdownMenuItem asChild>
+                <a href={"mailto:" + user.email} aria-label={"Email " + user.email}>
+                  <Mail aria-hidden="true" />
+                  <span className="min-w-0 truncate">{user.email}</span>
+                </a>
+              </DropdownMenuItem>
+            ) : null}
+            {user.phone ? (
+              <DropdownMenuItem asChild>
+                <a href={"tel:" + user.phone} aria-label={"Call " + user.phone}>
+                  <Phone aria-hidden="true" />
+                  <span>{user.phone}</span>
+                </a>
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuSeparator />
-            <DropdownMenuItem disabled>
-              <UserRound aria-hidden="true" />
-              Profile
-              <span className="ml-auto fs-text tracking-wide text-muted-foreground">
-                Soon
-              </span>
-            </DropdownMenuItem>
-            <DropdownMenuItem disabled>
-              <Settings aria-hidden="true" />
-              Settings
-              <span className="ml-auto fs-text tracking-wide text-muted-foreground">
-                Phase 4
-              </span>
+            <DropdownMenuItem asChild>
+              <Link href="/clients?type=GROUP">
+                <UsersRound aria-hidden="true" />
+                My Groups
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             {signOutError ? (
@@ -189,7 +193,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
               ) : (
                 <LogOut aria-hidden="true" />
               )}
-              {signingOut ? "Signing out" : "Sign out"}
+              {signingOut ? "Logging out" : "Logout"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

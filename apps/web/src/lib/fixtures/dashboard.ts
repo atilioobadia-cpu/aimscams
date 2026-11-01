@@ -49,6 +49,8 @@ export type DashboardFixture = {
     name: string;
     initials: string;
     role: string;
+    email?: string;
+    phone?: string | null;
   };
   unposted: {
     count: number;
