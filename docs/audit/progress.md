@@ -382,4 +382,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added the organization-scoped create-role API flow with permission validation and an audit event; default permissions remain unselected.
 - Checked the page in the visible browser at 1838×1114 and 1280×800. The shell remained 76px/240px at desktop, and the narrower viewport had no horizontal overflow. Inspected search, filters, paging, row actions, and create/edit dialogs.
 - Left all 17 pre-existing roles unchanged. No create/edit was saved. Audit History is still an empty, unconnected state; I379 remains open for that gap and final regression.
-- API and web production builds passed. The browser create-role permission tab loaded all 200 permissions from the catalog, with none selected. This batch is ready to commit and push; no role was created or edited during verification.
+- API and web production builds passed. The browser create-role permission tab loaded all 200 permissions from the catalog, with none selected. Roles batch committed as `5c6680e` and pushed to `origin/main`; no role was created or edited during verification.
+
+## 2026-11-01 — Users list layout
+
+- Compared `/settings-administrator` to `F:\Wakandi\settings-administrator\FULL.png` in the visible browser. Updated the local page to the User Management title card, Add Filters toolbar, reference column order including phone, and 10/25/50 pagination.
+- Kept search, role/branch filtering, account actions, and privacy masking connected to the existing user API. Browser inspection at 1280×800 found no horizontal page overflow and showed the existing two local users.
+- The reference capture has 18 entries; no user fixtures were added because the local/test seed scope is not yet verified. No user account was changed. Web production build passed.

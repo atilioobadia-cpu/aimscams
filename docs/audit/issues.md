@@ -416,7 +416,7 @@
 | I375 | /import-member-new, /import-account-new, /import-transaction-new | workflow/structure | Four-step upload, mapping, validation, result | Local wizards expose three steps and CSV-only upload | High |
 | I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |
 
-| I377 | /settings-administrator | structure/data | Reference title card, Add Filters toolbar, phone/status/role columns and pager | Local list uses fixed filters, branch column, two synthetic rows and no pager | Medium |
+| I377 | /settings-administrator | data/privacy | 18 reference entries with phone/status/role data | UI structure and pager implemented; local organization has two users and masks email/phone values | Medium |
 | I378 | /settings-administrator-add | workflow/structure | Full-page accordion form with user, role, branch, WBA and teller access | Local route opens a centered modal with a flat form and role checklist | High |
 | I379 | /settings-role | workflow | Role list/search/pagination and tabbed create/edit dialogs | Implemented; Audit History remains an unconnected empty state, populated history not verified | Medium |
 | I380 | /settings-service-provider | structure | Compact Services title card and empty workspace | Local route is an In Build placeholder with a large card and different label | Low |

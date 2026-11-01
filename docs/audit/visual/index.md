@@ -122,7 +122,7 @@ The folder index and manifest disagree about inventory totals: the index claims 
 | Page | Reference | Visual finding | Data/reference limitation |
 | Accounting settings | settings-accounting-settings/FULL.png | Tax component manager is missing; local page centers statutory rate, fiscal periods, and posting policies; see [Accounting settings](accounting-settings.md). | Inter-branch setting has partial concept overlap. |
 |---|---|---|---|
-| Users | `settings-administrator/FULL.png` | List shell and columns differ; see [Users](users.md). | Local list has two synthetic users and lacks reference phone/pager fields. |
+| Users | `settings-administrator/FULL.png` | User Management card, search/filter toolbar, phone/status/role columns, and pager now follow the reference; see [Users](users.md). | Two local users versus 18 reference entries; contact fields remain masked; final regression pending. |
 | Add user | `settings-administrator-add/FULL.png` | Local modal replaces the reference full-page accordion workflow; see [Add user](add-user.md). | User and access model fields differ. |
 | Roles | `settings-role/FULL.png` | AIMSCAMS now has the reference-style role list and tabbed create/edit dialogs; see [Roles](roles.md). | Audit History is present but remains an unconnected empty state; final regression pending. |
 | Branches | `settings-branch/FULL.png` | Toolbar and table schema differ; see [Branches](branches.md). | Only one local synthetic branch. |
