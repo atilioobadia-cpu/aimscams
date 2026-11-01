@@ -30,9 +30,9 @@ export function ParBucketsChart() {
     <ChartCard
       testId="par-buckets-chart"
       title="Risk Snapshot: PAR Buckets"
-      className="px-[30px] pt-[48px] pb-[30px]"
+      className="px-5 pt-9 pb-5"
     >
-      <div className="relative mt-7 h-[420px]">
+      <div className="relative mt-7 h-[300px]">
         <div className="absolute bottom-0 left-[80px] right-0 top-8">
           {[50, 40, 30, 20, 10, 0].map((tick) => (
             <div

@@ -6,19 +6,19 @@ The user supplied 22 read-only reference screenshots from `F:\aimscams_snapshots
 
 ### Visual contract from the supplied Dashboard screens
 
-- Desktop reference viewport: 1920 × 1080. Header is about 96px high, expanded navigation about 300px wide, and the content inset is about 20px.
-- The dashboard view card is about 105px high; each active tab is about 154 × 44px. The active tab and filter controls use the MFSL teal; inactive tabs stay on white.
-- KPI cards are about 185px high with a 60px circular icon badge. Keep the AIMSCAMS v1.2.0 font scale (`--fs: 12.8px`) intact.
-- Member and loan tabs begin with a 124px filter card containing six 54px outlined controls. Value filters use a condition/value popover with search; Date uses a calendar with Clear and Apply.
+- Desktop reference viewport: 1920 × 1080. The Wakandi header is about 96px high, expanded navigation about 300px wide, and its content inset is about 20px. AIMSCAMS retains its v1.2.0 shared-shell dimensions by user instruction.
+- The Wakandi dashboard view card is about 105px high; each active tab is about 154 × 44px. AIMSCAMS retains its v1.2.0 tab sizing while matching the teal active state and white inactive state.
+- Wakandi KPI cards are about 185px high with a 60px circular icon badge. AIMSCAMS retains its v1.2.0 KPI sizing and font scale (`--fs: 12.8px`).
+- Wakandi member and loan tabs begin with a 124px filter card containing six 54px outlined controls. AIMSCAMS retains its v1.2.0 control sizing while using condition/value popovers with search and a calendar with Clear and Apply.
 - Overview uses four KPIs, a full-width funds chart, then two side-by-side portfolio/risk charts. Members uses growth, eight KPIs, three full-width trends, two pairs of demographic charts, and the churn table. Loans uses three KPIs, two charts, a full-width transactions chart, then four full-width insight tables.
 - Cards use a white surface, thin cool-gray borders, subtle corner rounding, and restrained shadows. Chart series use teal, terracotta, yellow, and slate. No production figures, member names, or other record values were copied into AIMSCAMS.
 
 ### AIMSCAMS adjustments made
 
-- Matched the shared shell dimensions, header logo scale, dashboard tabs, KPI card geometry, chart spacing, member/loan section order, and filter popover/date-picker controls to the screenshot structure.
-- Added the user-provided MFSL logo at `apps/web/public/brand/mfsl_logo_systm.jpg` as the round header logo fallback.
+- Preserved v1.2.0 shared-shell, header, tab, KPI, chart, and control dimensions as instructed; aligned the colors, member/loan section order, and filter popover/date-picker behavior to the screenshot structure.
+- Added the user-provided MFSL logo at `apps/web/public/brand/mfsl_logo_systm.jpg` inside the original 44px round header mark.
 - Aligned the age filter buckets with the reference bands (`<25`, `25-34`, `35-44`, `45-54`, `55+`, and undefined) and added single-date filtering.
-- The visible AIMSCAMS browser remains open on `/dashboard`. The browser screenshot verified the updated shell, MFSL logo, Overview tab, and KPI sizing. The in-app browser is narrower than the 1920px reference, so desktop pixel parity for the full-width layout is not directly verified here.
+- The visible AIMSCAMS browser remains open. The local header/shell/tab/KPI dimensions are restored to their v1.2.0 values. The in-app browser is narrower than the 1920px reference, so desktop pixel parity for the full-width layout is not directly verified here.
 
 ### Data and verification limits
 
@@ -30,9 +30,9 @@ The user supplied 22 read-only reference screenshots from `F:\aimscams_snapshots
 
 ## Layout match
 
-- Shared shell: 96px header and 300px expanded navigation rail at the supplied desktop reference viewport; retain the v1.2.0 font scale.
-- Dashboard view card: 105px high, with three 154px by 44px view tabs.
-- Overview: four KPI cards at about 185px high, followed by the funds chart and two side-by-side portfolio/risk charts. The reference dashboard has no unposted-transaction banner or branch/date strip inside the dashboard view card.
+- Shared shell reference: 96px header and 300px expanded navigation rail at the supplied desktop viewport. AIMSCAMS retains its original v1.2.0 header and navigation sizes.
+- Dashboard reference view card: about 105px high, with three 154px by 44px view tabs. AIMSCAMS retains its original v1.2.0 tab sizes.
+- Overview reference: four KPI cards at about 185px high, followed by the funds chart and two side-by-side portfolio/risk charts. AIMSCAMS retains its original v1.2.0 KPI/chart sizes. The reference dashboard has no unposted-transaction banner or branch/date strip inside the dashboard view card.
 - Members and Loans: six filters (Branch, Gender, Age, Client Type, Product, Date) above the analytics content.
 - Members: cumulative growth chart, eight KPIs, the member breakdown charts, and churn table.
 - Loans: three KPIs, two first-row charts, a full-width transaction chart, and four insight tables.

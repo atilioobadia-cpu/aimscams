@@ -34,8 +34,8 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
   }
 
   return (
-    <ChartCard testId="funds-chart" title={funds.title} className="px-[30px] pt-[48px] pb-[30px]">
-      <div className="relative mt-4 h-[420px]">
+    <ChartCard testId="funds-chart" title={funds.title} className="px-5 pt-9 pb-5">
+      <div className="relative mt-4 h-[300px]">
         <div className="absolute bottom-8 left-[100px] right-0 top-8">
           {ticks.map((tick) => (
             <div

@@ -241,7 +241,7 @@ function MembersView({
   ];
 
   return (
-      <div className="mt-5 space-y-[14px]">
+      <div className="mt-[14px] space-y-[14px]">
       <DashboardFilterBar filters={filters} branches={branches} products={products} onChange={onFilterChange} />
       <DashboardChartPanel
         title="Members Growth (Cumulative)"
@@ -326,7 +326,7 @@ function LoansView({
   ];
 
   return (
-      <div className="mt-5 space-y-[14px]">
+      <div className="mt-[14px] space-y-[14px]">
       <DashboardFilterBar filters={filters} branches={branches} products={products} onChange={onFilterChange} />
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-3" aria-label="Loan metrics">
         {kpis.map((kpi) => <StatCard key={kpi.id} kpi={kpi} />)}
@@ -425,7 +425,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     <Tabs value={tab} onValueChange={setTab} className="gap-0">
       <div
         data-testid="dashboard-tab-card"
-        className="flex h-[105px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-[30px]"
+        className="flex h-[70px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5"
       >
           <TabsList aria-label="Dashboard views" className="h-auto gap-2 bg-transparent p-0">
           {tabs.map((item) => {
@@ -441,13 +441,13 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                   active ? "font-semibold" : "text-strong",
                 )}
                 style={{
-                  width: 154,
-                  height: 44,
+                  width: 102,
+                  height: 30,
                   backgroundColor: active ? "var(--primary)" : "transparent",
                   color: active ? "var(--text-on-primary)" : "var(--text-strong)",
                 }}
               >
-                <Icon className="size-5" strokeWidth={1.8} aria-hidden="true" />
+                <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
                 <span>{item.label}</span>
               </TabsTrigger>
             );
@@ -455,7 +455,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         </TabsList>
       </div>
 
-      <TabsContent value="overview" className="mt-5 space-y-5 outline-none">
+      <TabsContent value="overview" className="mt-[14px] space-y-[14px] outline-none">
         <KpiGrid kpis={data.kpis} />
         <FundsChart funds={data.funds} />
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -495,7 +495,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
             onFilterChange={changeFilter}
           />
         ) : (
-          <div className="mt-5 space-y-[14px]">
+          <div className="mt-[14px] space-y-[14px]">
             <DashboardFilterBar filters={filters} branches={branchOptions} products={productOptions} onChange={changeFilter} />
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3" aria-label="Loan metrics">
               <StatCard kpi={metric("loans-disbursed", "Loans Disbursed", "0", "principal")} />

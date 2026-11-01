@@ -121,13 +121,13 @@ function DateFilter({ value, onApply }: { value: string; onApply: (value: string
         })}
       </div>
       <div className="mt-2 border-t border-card-border pt-4">
-        <div className="flex h-11 overflow-hidden rounded-[var(--control-radius)] border border-input focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30">
+        <div className="flex h-[var(--control-height)] overflow-hidden rounded-[var(--control-radius)] border border-input focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30">
           <input aria-label="Selected date" type="date" value={draftDate} onChange={(event) => setDraftDate(event.target.value)} className="min-w-0 flex-1 bg-surface px-3 fs-text text-body outline-none" />
           <span className="grid w-12 place-items-center border-l border-input bg-subtle text-body"><CalendarDays className="size-4" /></span>
         </div>
         <div className="mt-4 flex justify-end gap-3 border-t border-card-border pt-4">
-          <Button type="button" variant="outline" className="h-11 px-5 fs-text font-semibold text-primary" onClick={() => { setDraftDate(""); onApply("ALL"); }}>Clear</Button>
-          <Button type="button" disabled={!draftDate} className="h-11 px-5 fs-text font-semibold" onClick={() => onApply(`ON:${draftDate}`)}>Apply</Button>
+          <Button type="button" variant="outline" className="h-[var(--control-height)] px-5 fs-text font-semibold text-primary" onClick={() => { setDraftDate(""); onApply("ALL"); }}>Clear</Button>
+          <Button type="button" disabled={!draftDate} className="h-[var(--control-height)] px-5 fs-text font-semibold" onClick={() => onApply(`ON:${draftDate}`)}>Apply</Button>
         </div>
       </div>
     </div>
@@ -168,7 +168,7 @@ function FilterPopover({
           aria-label={filter.label}
           aria-expanded={open}
           data-testid={`dashboard-filter-${filter.key}`}
-          className="h-[54px] justify-between gap-3 rounded-[9px] border-primary px-4 fs-text font-medium text-primary hover:bg-primary-tint hover:text-primary"
+          className="h-9 justify-between gap-3 rounded-[5px] border-primary px-3 fs-text font-normal text-primary hover:bg-primary-tint hover:text-primary"
         >
           <span>{filter.label}{isDate && value.startsWith("ON:") ? `: ${dateText(value.slice(3))}` : ""}</span>
           <ChevronDown className="size-4" aria-hidden="true" />
@@ -187,7 +187,7 @@ function FilterPopover({
             <div className="p-7">
               <h3 className="border-b border-card-border pb-4 fs-text font-semibold text-body">{filter.label}</h3>
               <label className="mt-5 block fs-text font-semibold text-body" htmlFor={`condition-${filter.key}`}>Condition</label>
-              <select id={`condition-${filter.key}`} defaultValue="IS" className="mt-2 h-[52px] w-full appearance-none rounded-[9px] border border-input bg-surface px-4 fs-text text-body outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
+              <select id={`condition-${filter.key}`} defaultValue="IS" className="mt-2 h-[var(--control-height)] w-full appearance-none rounded-[var(--control-radius)] border border-input bg-surface px-4 fs-text text-body outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
                 <option value="IS">Is</option>
               </select>
               <label className="mt-5 block fs-text font-semibold text-body" htmlFor={`value-${filter.key}`}>Value</label>
@@ -196,14 +196,14 @@ function FilterPopover({
                 type="button"
                 aria-expanded={valueOpen}
                 onClick={() => setValueOpen((current) => !current)}
-                className="mt-2 flex h-[52px] w-full items-center justify-between rounded-[9px] border border-input bg-surface px-4 fs-text text-body hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="mt-2 flex h-[var(--control-height)] w-full items-center justify-between rounded-[var(--control-radius)] border border-input bg-surface px-4 fs-text text-body hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               >
                 {active?.label ?? "All"}
                 <ChevronDown className="size-4 text-label" />
               </button>
               {valueOpen ? (
                 <div className="relative z-10 -mt-px overflow-hidden rounded-b-[9px] border border-input bg-surface shadow-md">
-                  <div className="m-2 flex h-[54px] items-center gap-3 rounded-[9px] border border-primary px-3 text-label focus-within:ring-2 focus-within:ring-ring/40">
+                  <div className="m-2 flex h-[var(--control-height)] items-center gap-3 rounded-[var(--control-radius)] border border-primary px-3 text-label focus-within:ring-2 focus-within:ring-ring/40">
                     <input aria-label={`Search ${filter.label}`} value={search} onChange={(event) => setSearch(event.target.value)} className="min-w-0 flex-1 bg-transparent fs-text text-body outline-none" />
                     <Search className="size-5" aria-hidden="true" />
                   </div>
@@ -236,7 +236,7 @@ export function DashboardFilterBar({ filters: currentFilters, branches, products
   return (
     <div
       data-testid="dashboard-filter-bar"
-      className="flex min-h-[124px] flex-wrap items-center gap-2.5 rounded-[var(--card-radius)] border border-card-border bg-surface px-[30px] py-5"
+      className="flex min-h-[72px] flex-wrap items-center gap-2 rounded-[var(--card-radius)] border border-card-border bg-surface px-5 py-3"
     >
       {filters.map((filter) => (
         <FilterPopover

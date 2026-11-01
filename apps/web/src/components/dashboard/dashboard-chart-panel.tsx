@@ -20,7 +20,7 @@ export function DashboardChartPanel({
   legend = [],
   secondaryPoints,
 }: DashboardChartPanelProps) {
-  const chartHeight = height === "large" ? "h-[420px]" : "h-[360px]";
+  const chartHeight = height === "large" ? "h-[300px]" : "h-[220px]";
   const max = Math.max(1, ...(points ?? []));
   const yAxisValues = [0, 1, 2, 3, 4].map((line) => Math.round(max * (1 - line / 4)));
   const yAxisLabels = yAxisValues.map((value, index) =>
@@ -46,7 +46,7 @@ export function DashboardChartPanel({
     : "";
 
   return (
-    <ChartCard title={title} className="px-[30px] pt-[48px] pb-[30px]">
+    <ChartCard title={title} className="px-5 pt-9 pb-5">
       <div className={`relative mt-4 ${chartHeight}`}>
         <div className="absolute inset-y-3 left-[68px] right-0 flex flex-col justify-between">
           {[0, 1, 2, 3, 4].map((line) => (
