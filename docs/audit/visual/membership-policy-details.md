@@ -6,11 +6,11 @@ AIMSCAMS route: `/settings/policies/membership/[id]`
 
 ## Comparison
 
-The references show Individual and Group membership policy detail states. Both use a summary header with status/name/member type and Back/Edit actions, then Next of Kin and Member Dormancy, Member Activation, an approval-status timeline, board-member selection, and an approval list. The Group state adds group-specific requirements. AIMSCAMS now renders the matching summary, section order, approval status, board-member selector, and approval-list table for the synthetic `VISUAL-QA-MEM` Individual draft. The local membership model does not provide an approval timeline, board assignment, or approval rows; those areas show an explicit unavailable state. Group-specific details remain unverified.
+The references show Individual and Group membership policy detail states. Both use a summary header with status/name/member type and Back/Edit actions, then Next of Kin and Member Dormancy, Member Activation, an approval-status timeline, board-member selection, and an approval list. AIMSCAMS renders this structure for both synthetic `VISUAL-QA-MEM` Individual and `VISUAL-QA-GRP` Group drafts. The local membership model does not provide an approval timeline, board assignment, or approval rows; those areas show an explicit unavailable state.
 
 ## Recommendations
 
 - Add persisted approval history and board assignments before enabling approval controls.
-- Verify group-specific detail fields after a safe synthetic Group policy fixture is available.
+- Preserve the shared detail layout for both member types; Group Settings belong to create/edit as in the reference.
 
-Read-only browser review at 1280×720; detail page/body widths were 1280px with no horizontal overflow. The draft was not edited or approved. Detail layout implementation pending build/commit/push.
+Read-only browser review at 1280×720 for both member types; detail page/body widths were 1280px with no horizontal overflow. Neither draft was edited or approved.

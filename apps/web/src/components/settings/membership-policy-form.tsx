@@ -204,6 +204,21 @@ export function MembershipPolicyFormPage({ mode, policyId }: { mode: "create" | 
             <p className="fs-caption text-muted-foreground">Minor eligibility and age limits are not represented in the current membership policy model.</p>
           </section>
 
+          {memberType === "GROUP" ? (
+            <section className="space-y-4 border-b border-chrome px-5 py-5">
+              <h2 className="fs-text font-semibold text-strong">♙ Group Settings</h2>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div><label className="mb-1 block fs-text font-medium text-body">Group Type</label><select disabled className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this policy model</option></select></div>
+                <div><label className="mb-1 block fs-text font-medium text-body">Minimum Number of Members</label><Input disabled placeholder="Not available in this policy model" className="h-[var(--control-height)]" /></div>
+                <div><label className="mb-1 block fs-text font-medium text-body">Maximum Number of Members</label><Input disabled placeholder="Not available in this policy model" className="h-[var(--control-height)]" /></div>
+                <div><label className="mb-1 block fs-text font-medium text-body">Minimum Number of Signatories</label><Input disabled placeholder="Not available in this policy model" className="h-[var(--control-height)]" /></div>
+                <div><label className="mb-1 block fs-text font-medium text-body">Minimum Share Required</label><Input disabled placeholder="Not available in this policy model" className="h-[var(--control-height)]" /></div>
+              </div>
+              <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Allow Member In Multiple Groups</label>
+              <p className="fs-caption text-muted-foreground">Group classification, membership limits, signatories, share requirements, and multiple-group behavior are not persisted by the current policy model.</p>
+            </section>
+          ) : null}
+
           <section className="space-y-3 border-b border-chrome px-5 py-5">
             <h2 className="fs-text font-semibold text-strong">▣ Mandatory Savings</h2>
             <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Enable Mandatory Savings</label>

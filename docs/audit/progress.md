@@ -503,7 +503,7 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 
 ## 2026-11-01 — Membership Policy populated routes
 
-- Created one local `VISUAL-QA-MEM` Individual policy in Draft with only supported default fields and a description identifying it as synthetic and not for operational use. This enables the populated list/detail/edit review; no approval or fee values were added.
+- Created local `VISUAL-QA-MEM` Individual and `VISUAL-QA-GRP` Group policies in Draft with only supported default fields and descriptions identifying them as synthetic and not for operational use. This enables populated list/detail/edit review; no approval or fee values were added.
 - Fixed the list's long-name cell so it truncates with a title instead of overlapping the Member Type column. Visible 1280px browser review confirms cells align and there is no document-width overflow.
 - Matched the membership detail summary card, Next of Kin & Member Dormancy and Member Activation sections, approval status, Board Member selector, and approval list to the reference. Unsupported workflow areas are visibly unavailable, not simulated.
-- Inspected the saved draft in the edit form; values loaded correctly and no changes were saved. Group-specific data remains pending a synthetic Group fixture. Web production build passed with the detail layout and row-overflow fix; GitHub push is pending.
+- Inspected both drafts in the edit form; supported values loaded correctly and no changes were saved. Added the reference Group Settings section conditionally for Group policies, with unavailable fields disabled. Group terms and approval workflow remain tracked in I390/I398. Web production build passed; GitHub push for this follow-up is pending.
