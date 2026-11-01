@@ -320,6 +320,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Reviewed the empty queue in the visible browser. Current local data has no teller session, branch ledger balance, or teller account number; unavailable values remain explicit. No request was created, approved, or rejected.
 - Updated the page note, visual index, and issue I340/UI024. Production build and GitHub push pending.
 
+## 2026-11-01 — Loan 118 Transactions route
+
+- Compared the loan Transactions reference with `/account-loan-details/118/transactions` in the visible browser. The numeric reference ID caused the API UUID validation error; no matching local loan or transaction records are available.
+- Added a friendly unavailable-record state and Back to loans link for non-UUID/stale IDs. No loan account or financial transaction was created from screenshot data.
+- Updated the page note, visual index, and UI018. The populated detail workspace remains blocked by missing local loan and ledger data.
+
 ## 2026-11-01 — Cross-module audit, third batch
 
 - Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.

@@ -24,12 +24,20 @@ export default function LoanTransactionsPage() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notFound, setNotFound] = useState(false);
   const [forbidden, setForbidden] = useState(false);
   const [loanNumber, setLoanNumber] = useState<string>("");
 
   useEffect(() => {
     let cancelled = false;
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+      setLoading(false);
+      setNotFound(true);
+      setError(null);
+      return () => { cancelled = true; };
+    }
     setLoading(true);
+    setNotFound(false);
     setError(null);
     void getLoan(id)
       .then((response) => {
@@ -40,6 +48,7 @@ export default function LoanTransactionsPage() {
       .catch((failure: unknown) => {
         if (cancelled) return;
         if (failure instanceof ApiError && failure.status === 403) setForbidden(true);
+        else if (failure instanceof ApiError && failure.status === 404) setNotFound(true);
         else setError(message(failure, "Could not load transactions."));
       })
       .finally(() => {
@@ -74,6 +83,24 @@ export default function LoanTransactionsPage() {
       <div className="space-y-5">
         <PageHeader title="Loan transactions" description="Transaction ledger for this loan." />
         <ErrorPanel message={error} />
+      </div>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <div className="space-y-5">
+        <PageHeader breadcrumb="Accounts" title="Loan transactions" description="Transaction ledger for this loan." />
+        <EmptyState
+          icon={Receipt}
+          title="Loan record unavailable"
+          description="Select a loan from the Loans list to view its transaction ledger. The reference sample ID is not a local loan identifier."
+          action={(
+            <Button asChild variant="outline">
+              <Link href="/account-loan">Back to loans</Link>
+            </Button>
+          )}
+        />
       </div>
     );
   }
