@@ -147,3 +147,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded the workflow/API differences on the other routes; their reference pages require teller transaction history, provider confirmation, category workflows, and persisted statement-upload metadata that the local APIs do not currently expose.
 - Browser inspection remained read-only for operational controls. Teller request implementation commit: pending.
 - Teller Requests implementation commit: `4211399` (`feat(web): align teller request empty table with reference`).
+
+## 2026-11-01 — Core accounting pages reviewed
+
+- Compared Chart of Accounts, Journal Entries, and Ledger Entries in the visible browser against the corresponding reference screenshots.
+- Added the supported account Code column to Chart of Accounts and verified it rendered. No ledger edit or accounting mutation was performed.
+- Recorded the differing journal grouping/export model, unsupported ledger-edit save path, and unavailable local ledger movements.
+- Chart of Accounts implementation commit: pending.

@@ -373,3 +373,8 @@
 | I341 | /transaction-online-transaction | workflow/data | Online transaction list, filters, and provider confirmation wizard | Local page records collections directly; provider steps and list fields absent | High |
 | I342 | /transaction-online-payment-reconciliation | workflow/data | Provider/date filtered upload history | Local page performs statement-to-ledger matching without persisted upload records | High |
 | UI024 | /transaction-teller-transaction-request | empty state | Keep request table headings visible with no rows | Persistent table headings and empty row implemented | Resolved structurally; queue data caveat | `docs/audit/visual/teller-requests.md` | `4211399` |
+| I343 | /accounting-chart-of-accounts | structure | Code column between Account Name and Type | Added using existing account.code field | Low |
+| I344 | /accounting-chart-of-accounts | workflow | Ledger Details fields and working save action | Local edit is a stub for unsupported accounting phase | High |
+| I345 | /accounting-entries | structure/data | Export toolbar and grouped ledger line rows | Local journal view is a compact list; details model differs | Medium |
+| I346 | /accounting-ledger-entries | structure | Export actions and compact filter strip | Local view has date/account controls and extra balance summary | Low |
+| UI025 | /accounting-chart-of-accounts | table columns | Show account code | Code column rendered from existing local field and verified in browser | Resolved | `docs/audit/visual/chart-of-accounts.md` | pending |

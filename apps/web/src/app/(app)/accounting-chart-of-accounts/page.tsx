@@ -266,6 +266,7 @@ export default function ChartOfAccountsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="h-auto pl-[var(--space-12)]">Account name</TableHead>
+                  <TableHead className="h-auto w-[140px]">Code</TableHead>
                   <TableHead className="h-auto w-[200px]">Type</TableHead>
                   <TableHead className="h-auto w-[150px] text-right">O/P balance (TSh)</TableHead>
                   <TableHead className="h-auto w-[279px] text-right">C/L balance (TSh)</TableHead>
@@ -317,6 +318,7 @@ export default function ChartOfAccountsPage() {
                           ) : null}
                         </div>
                       </TableCell>
+                      <TableCell className="whitespace-nowrap text-body">{account.code}</TableCell>
                       <TableCell className="text-body">
                         {account.is_group ? "Group" : "Ledger"}
                       </TableCell>
