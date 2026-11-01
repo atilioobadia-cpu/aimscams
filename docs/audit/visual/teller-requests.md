@@ -19,4 +19,4 @@ Inspected the reference and the local empty request queue in the visible browser
 - Keep the request table headings visible on empty results, matching the reference's empty table structure.
 - Retain local request count and existing review controls.
 
-Implementation commit: pending.
+Implementation commit: `4211399` (`feat(web): align teller request empty table with reference`).

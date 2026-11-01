@@ -146,3 +146,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Updated Teller Requests so the table headers remain visible for an empty queue. No approve/reject action was used.
 - Recorded the workflow/API differences on the other routes; their reference pages require teller transaction history, provider confirmation, category workflows, and persisted statement-upload metadata that the local APIs do not currently expose.
 - Browser inspection remained read-only for operational controls. Teller request implementation commit: pending.
+- Teller Requests implementation commit: `4211399` (`feat(web): align teller request empty table with reference`).

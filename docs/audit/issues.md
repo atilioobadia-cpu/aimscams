@@ -372,4 +372,4 @@
 | I340 | /transaction-teller-transaction-request | structure | Request table remains visible when empty | Updated to retain headings and empty row; no local records | Low |
 | I341 | /transaction-online-transaction | workflow/data | Online transaction list, filters, and provider confirmation wizard | Local page records collections directly; provider steps and list fields absent | High |
 | I342 | /transaction-online-payment-reconciliation | workflow/data | Provider/date filtered upload history | Local page performs statement-to-ledger matching without persisted upload records | High |
-| UI024 | /transaction-teller-transaction-request | empty state | Keep request table headings visible with no rows | Persistent table headings and empty row implemented | Resolved structurally; queue data caveat | `docs/audit/visual/teller-requests.md` | pending |
+| UI024 | /transaction-teller-transaction-request | empty state | Keep request table headings visible with no rows | Persistent table headings and empty row implemented | Resolved structurally; queue data caveat | `docs/audit/visual/teller-requests.md` | `4211399` |
