@@ -22,3 +22,11 @@
 ## Status
 
 The title/action card, list shell, empty table structure, modal proportions, and supported form labels align. Account-name parity and data-dependent row states remain open.
+
+## 2026-11-01 re-review
+
+Compared the live Wakandi Savings list and `F:\Wakandi\account-saving\FULL.png`. The AIMSCAMS list now follows the visible reference columns: Account Number, Member ID, Member Name, Product, Type, Creation Date, Status, and Actions. It uses the existing account number, client reference, client name, product, account type, created date, and status fields; the extra Balance column was removed.
+
+The toolbar now has Product and Status filter popovers with Condition `Is`, Value, Clear, and Apply controls, plus Add Filters options for Account Number, Member ID, Member Name, and Type. Product filtering and status filtering were exercised in the visible local browser; Clear filters restored the empty default state. No account records were created and no Wakandi data was copied.
+
+The reference Details form includes Account Name. AIMSCAMS has account type and account number fields but no account-name field, so exact form data parity remains blocked on a model decision. The local account list is empty, so populated row styling and row actions remain unverified.

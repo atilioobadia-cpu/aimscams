@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, UserCheck, UserX, Wallet } from "lucide-react";
+import { ChevronDown, FilterX, Plus, Save, Search, UserCheck, UserX, Wallet, X } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
 import { PageHeader } from "@/components/data/page-header";
@@ -28,6 +28,13 @@ export default function SavingsAccountsPage() {
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
+  const [productIdFilter, setProductIdFilter] = useState("");
+  const [draftStatus, setDraftStatus] = useState("");
+  const [draftProductId, setDraftProductId] = useState("");
+  const [filterPopover, setFilterPopover] = useState<"product" | "status" | null>(null);
+  const [filterMenuOpen, setFilterMenuOpen] = useState(false);
+  const [extraFilterFields, setExtraFilterFields] = useState<string[]>([]);
+  const [extraFilters, setExtraFilters] = useState({ accountNumber: "", memberId: "", memberName: "", type: "" });
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
 
@@ -125,8 +132,19 @@ export default function SavingsAccountsPage() {
     }
   }
 
-  const items = data?.items ?? [];
-  const hasFilters = Boolean(query.trim() || status);
+  const items = (data?.items ?? []).filter((item) => {
+    if (productIdFilter && !products.some((product) => product.id === productIdFilter && (product.name === item.productName || product.code === item.productCode))) return false;
+    return extraFilterFields.every((field) => {
+      const value = extraFilters[field as keyof typeof extraFilters].trim().toLocaleLowerCase();
+      if (!value) return true;
+      const fieldValue = field === "accountNumber" ? item.accountNumber
+        : field === "memberId" ? item.clientReference ?? ""
+        : field === "memberName" ? item.clientName ?? ""
+        : item.accountType;
+      return fieldValue.toLocaleLowerCase().includes(value);
+    });
+  });
+  const hasFilters = Boolean(query.trim() || status || productIdFilter || Object.values(extraFilters).some((value) => value.trim()));
 
   return (
     <div className="space-y-5">
@@ -146,40 +164,47 @@ export default function SavingsAccountsPage() {
         ) : null}
       />
 
-      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end">
-          <div className="flex-1">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="savings-account-search">
-              Search
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input
-                id="savings-account-search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Account number or client"
-                className="h-[var(--control-height)] pl-9"
-              />
-            </div>
+      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="relative w-full sm:w-[240px] sm:flex-none">
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input id="savings-account-search" aria-label="Search savings accounts" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[var(--control-height)] pl-9" />
           </div>
-          <div className="w-full md:w-[220px]">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="savings-account-status">
-              Status
-            </label>
-            <select
-              id="savings-account-status"
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-            >
-              <option value="">All statuses</option>
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-              <option value="CLOSED">Closed</option>
-            </select>
+          {(["product", "status"] as const).map((field) => {
+            const label = field === "product" ? "Product" : "Status";
+            const open = filterPopover === field;
+            return (
+              <div key={field} className="relative w-full sm:w-[150px]">
+                <Button type="button" variant="outline" aria-label={`Filter by ${label}`} aria-expanded={open} className="w-full justify-between !border-primary !text-primary" onClick={() => { setDraftProductId(productIdFilter); setDraftStatus(status); setFilterPopover(open ? null : field); }}>
+                  {label}<ChevronDown aria-hidden="true" />
+                </Button>
+                {open ? (
+                  <div role="dialog" aria-label={`${label} filter`} className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-card-border bg-surface p-4 shadow-lg">
+                    <p className="fs-text font-semibold text-heading">{label}</p>
+                    <label className="mt-3 block fs-caption text-label" htmlFor={`savings-${field}-condition`}>Condition</label>
+                    <select id={`savings-${field}-condition`} aria-label="Condition" disabled className="mt-1 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option>Is</option></select>
+                    <label className="mt-3 block fs-caption text-label" htmlFor={`savings-${field}-value`}>Value</label>
+                    <select id={`savings-${field}-value`} aria-label={`${label} value`} value={field === "product" ? draftProductId : draftStatus} onChange={(event) => field === "product" ? setDraftProductId(event.target.value) : setDraftStatus(event.target.value)} className="mt-1 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text">
+                      <option value="">Select {label.toLocaleLowerCase()}</option>
+                      {field === "product" ? products.map((product) => <option key={product.id} value={product.id}>{product.name}</option>) : <><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option><option value="CLOSED">Closed</option></>}
+                    </select>
+                    <div className="mt-4 flex justify-end gap-2">
+                      <Button type="button" variant="ghost" onClick={() => { if (field === "product") { setProductIdFilter(""); setDraftProductId(""); } else { setStatus(""); setDraftStatus(""); } setFilterPopover(null); }}>Clear</Button>
+                      <Button type="button" variant="outline" className="!border-primary !text-primary" onClick={() => { if (field === "product") setProductIdFilter(draftProductId); else setStatus(draftStatus); setFilterPopover(null); }}>Apply</Button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+          <div className="relative w-full sm:w-[150px]">
+            <Button type="button" variant="outline" aria-label="Add filters" aria-expanded={filterMenuOpen} className="w-full justify-between !border-primary !text-primary" onClick={() => setFilterMenuOpen((value) => !value)}><span>{extraFilterFields.length ? `${extraFilterFields.length} added` : "Add Filters"}</span><ChevronDown aria-hidden="true" /></Button>
+            {filterMenuOpen ? <div role="group" aria-label="Additional savings filters" className="absolute left-0 top-full z-30 mt-1 w-56 rounded-md border border-card-border bg-surface p-2 shadow-lg">{[{ key: "accountNumber", label: "Account Number" }, { key: "memberId", label: "Member ID" }, { key: "memberName", label: "Member Name" }, { key: "type", label: "Type" }].map(({ key, label }) => <label key={key} className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 fs-text hover:bg-subtle"><input type="checkbox" checked={extraFilterFields.includes(key)} onChange={(event) => { setExtraFilterFields((current) => event.target.checked ? [...current, key] : current.filter((field) => field !== key)); if (!event.target.checked) setExtraFilters((current) => ({ ...current, [key]: "" })); }} />{label}</label>)}</div> : null}
           </div>
+          <Button type="button" variant="outline" size="icon-lg" aria-label="Save current filters" className="!size-[36px] !border-primary !text-primary" onClick={() => pushToast("Saved filters are not available for this installation yet.")}><Save aria-hidden="true" /></Button>
+          <Button type="button" variant="outline" size="icon-lg" aria-label="Clear filters" className="!size-[36px] !border-primary !text-primary" onClick={() => { setQuery(""); setStatus(""); setProductIdFilter(""); setDraftStatus(""); setDraftProductId(""); setExtraFilterFields([]); setExtraFilters({ accountNumber: "", memberId: "", memberName: "", type: "" }); setFilterMenuOpen(false); setFilterPopover(null); }}><FilterX aria-hidden="true" /></Button>
         </div>
+        {extraFilterFields.length ? <div className="mt-3 flex flex-wrap gap-2">{extraFilterFields.map((field) => { const label = field === "accountNumber" ? "Account Number" : field === "memberId" ? "Member ID" : field === "memberName" ? "Member Name" : "Type"; return <div key={field} className="flex w-full sm:w-[230px]"><Input aria-label={label} placeholder={label} value={extraFilters[field as keyof typeof extraFilters]} onChange={(event) => setExtraFilters((current) => ({ ...current, [field]: event.target.value }))} className="h-[var(--control-height)] rounded-r-none" /><Button type="button" variant="outline" size="icon-lg" aria-label={`Remove ${label} filter`} className="!size-[42px] !rounded-l-none !border-primary !border-l-0 !text-primary" onClick={() => { setExtraFilterFields((current) => current.filter((item) => item !== field)); setExtraFilters((current) => ({ ...current, [field]: "" })); }}><X aria-hidden="true" /></Button></div>; })}</div> : null}
       </div>
 
       {forbidden ? (
@@ -193,35 +218,37 @@ export default function SavingsAccountsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left fs-text">
+            <table className="w-full min-w-[1160px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
                   <th className="px-4 py-3">Account number</th>
-                  <th className="px-4 py-3">Client</th>
+                  <th className="px-4 py-3">Member ID</th>
+                  <th className="px-4 py-3">Member name</th>
                   <th className="px-4 py-3">Product</th>
+                  <th className="px-4 py-3">Type</th>
                   <th className="px-4 py-3">Creation date</th>
                   <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Balance</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center fs-text text-muted-foreground">
+                    <td colSpan={8} className="px-4 py-12 text-center fs-text text-muted-foreground">
                       {hasFilters ? "No savings account matches. Adjust or clear the filters." : "No savings accounts yet. Create a savings account to get started."}
                     </td>
                   </tr>
                 ) : items.map((item: SavingsAccount) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
                     <td className="px-4 py-3 font-medium text-strong">{item.accountNumber}</td>
+                    <td className="px-4 py-3 text-body">{item.clientReference ?? "N/A"}</td>
                     <td className="px-4 py-3 text-body">{item.clientName ?? "N/A"}</td>
                     <td className="px-4 py-3 text-body">{item.productName ?? "N/A"}</td>
+                    <td className="px-4 py-3 text-body">{item.accountType}</td>
                     <td className="px-4 py-3 text-body">{new Date(item.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
                     </td>
-                    <td className="px-4 py-3 tabular-nums text-body">{item.balanceMinor}</td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end">
                         <RowActionsMenu
