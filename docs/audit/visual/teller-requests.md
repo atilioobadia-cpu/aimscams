@@ -1,22 +1,23 @@
 # Teller Requests visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\transaction-teller-transaction-request\FULL.png`  
+Date: 2026-11-01
+Reference: `F:\Wakandi\transaction-teller-transaction-request\FULL.png`
 AIMSCAMS route: `/transaction-teller-transaction-request`
 
 ## Comparison
 
-The reference shows the Requests tab of Teller Transaction with a table for Date, Request, Status, Requester, Current Assignee, and Approved By. AIMSCAMS exposes the same request queue concepts and an additional Review action. The local queue was empty, so its previous empty-state panel hid the headers. The table now remains visible with its headings and a centered `No data available` row, preserving the existing Review action for populated queues.
+The reference shows Teller Transaction with a summary header, New Transaction/History/Requests tabs, and a Requests table with Date, Request, Status, Requester, Current Assignee, and Approved By. The original AIMSCAMS page had a standalone approval-request heading and count; its empty table was corrected earlier to retain its headings.
 
-The local page remains a standalone route with its own heading and count rather than a Requests tab inside the shared Teller Transaction workspace. No pending requests were available for a populated comparison.
+## Changes and browser review
 
-## Browser review
+- Added the Teller Transaction summary card and linked tabs, with Requests active.
+- Kept the empty table headings visible and added the reference table-column affordance. The local Review action remains in the unheaded action column when rows exist.
+- The till API supplies session status and balance only when a session exists. This organization has no open teller session, and the API has no branch-ledger balance or teller account number; the summary labels those unavailable instead of copying the reference's financial amount.
+- Reviewed the local route in the visible browser at 1280×720. The queue is empty, so no approval or rejection action was triggered.
 
-Inspected the reference and the local empty request queue in the visible browser. The review/approve/reject flow was not invoked.
+## Remaining gaps
 
-## Changes
+- Add an authorized branch-ledger balance source and teller account reference to complete the summary card.
+- Populate the request table through the actual workflow to verify a row and Review actions. No sample request was created for a page-layout check.
 
-- Keep the request table headings visible on empty results, matching the reference's empty table structure.
-- Retain local request count and existing review controls.
-
-Implementation commit: `4211399` (`feat(web): align teller request empty table with reference`).
+The structure is aligned; balance/account and populated request data remain tracked in I340.

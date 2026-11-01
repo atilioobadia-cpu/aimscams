@@ -314,6 +314,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - No pricing, balance, or purchase API exists locally. The form reports those values unavailable instead of fabricating a balance or charge; I428 remains open for the integration.
 - Production build and GitHub push pending.
 
+## 2026-11-01 — Teller Requests workspace
+
+- Added the reference Teller Transaction summary card and New Transaction/History/Requests tabs around the existing request queue. Kept the empty table headings visible and added the column-control affordance.
+- Reviewed the empty queue in the visible browser. Current local data has no teller session, branch ledger balance, or teller account number; unavailable values remain explicit. No request was created, approved, or rejected.
+- Updated the page note, visual index, and issue I340/UI024. Production build and GitHub push pending.
+
 ## 2026-11-01 — Cross-module audit, third batch
 
 - Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.

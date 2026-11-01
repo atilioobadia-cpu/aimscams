@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2, XCircle } from "lucide-react";
+import Link from "next/link";
+import { CheckCircle2, SlidersHorizontal, Wallet, XCircle } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { PageHeader } from "@/components/data/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,11 +14,13 @@ import { titleCase } from "@/lib/privacy";
 import {
   approveRequest,
   getRequest,
+  getTill,
   listRequests,
   rejectRequest,
   type RequestDetail,
   type RequestItem,
   type RequestList,
+  type TillInfo,
 } from "@/lib/transactions";
 
 function failureMessage(failure: unknown, fallback: string): string {
@@ -29,6 +31,7 @@ function failureMessage(failure: unknown, fallback: string): string {
 
 export function TellerApprovalRequestPage() {
   const [queue, setQueue] = useState<RequestList | null>(null);
+  const [till, setTill] = useState<TillInfo | null>(null);
   const [queueLoading, setQueueLoading] = useState(true);
   const [queueError, setQueueError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
@@ -77,6 +80,20 @@ export function TellerApprovalRequestPage() {
       window.clearTimeout(timer);
     };
   }, [reloadKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void getTill()
+      .then((next) => {
+        if (!cancelled) setTill(next);
+      })
+      .catch(() => {
+        if (!cancelled) setTill(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     if (!id) {
@@ -150,7 +167,7 @@ export function TellerApprovalRequestPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Teller approval request" description="Approve or reject a queued teller action." breadcrumb="Transactions" />
+        <TellerRequestWorkspaceHeader till={till} />
         <ForbiddenPanel message="Your role cannot view teller requests. Ask an administrator for Transaction : View." />
       </div>
     );
@@ -159,19 +176,14 @@ export function TellerApprovalRequestPage() {
   const items = queue?.items ?? [];
 
   return (
-    <div className="space-y-5">
-      <PageHeader title="Teller approval request" description="Approve or reject a queued teller action." breadcrumb="Transactions" />
+    <div className="space-y-4">
+      <TellerRequestWorkspaceHeader till={till} />
 
       {queueError ? <ErrorPanel message={queueError} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
       {error ? <ErrorPanel message={error} onRetry={() => setId(id)} /> : null}
       {result ? <p className="fs-text text-accent-teal" role="status">{result}</p> : null}
 
       <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-[var(--space-16)] py-[var(--space-10)]">
-          <p className="fs-text text-muted-foreground">
-            {items.length} pending request{items.length === 1 ? "" : "s"}
-          </p>
-        </div>
         {queueLoading ? <PanelSkeleton rows={6} /> : null}
         {!queueLoading ? (
           <div className="overflow-x-auto">
@@ -184,7 +196,11 @@ export function TellerApprovalRequestPage() {
                   <th className="whitespace-nowrap px-4 py-3">Requester</th>
                   <th className="whitespace-nowrap px-4 py-3">Current assignee</th>
                   <th className="whitespace-nowrap px-4 py-3">Approved by</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-right">Actions</th>
+                  <th className="w-12 px-2 py-3 text-center">
+                    <Button type="button" variant="ghost" size="icon-sm" disabled aria-label="Table columns" className="disabled:opacity-100 disabled:text-primary">
+                      <SlidersHorizontal className="size-4" aria-hidden="true" />
+                    </Button>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -202,7 +218,7 @@ export function TellerApprovalRequestPage() {
                     <td className="whitespace-nowrap px-4 py-3 text-body">{item.requestedBy}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-body">{item.currentAssignee}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-body">{item.approvedBy}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right">
+                    <td className="whitespace-nowrap px-2 py-3 text-center">
                       <Button size="sm" variant="outline" onClick={() => selectRequest(item)}>
                         Review
                       </Button>
@@ -296,5 +312,54 @@ export function TellerApprovalRequestPage() {
         </section>
       ) : id ? null : null}
     </div>
+  );
+}
+
+function TellerRequestWorkspaceHeader({ till }: { till: TillInfo | null }) {
+  const isOpen = till?.session?.status === "OPEN";
+
+  return (
+    <>
+      <section className="flex min-h-[84px] flex-wrap items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <Wallet className="size-6 shrink-0 text-primary" aria-hidden="true" />
+          <div className="min-w-0">
+            <h1 className="fs-title font-bold leading-tight text-heading">Teller Transaction</h1>
+            <p className="mt-1 fs-text text-muted-foreground">
+              <span className={isOpen ? "font-semibold text-accent-teal" : "font-semibold text-accent-red"}>
+                {isOpen ? "Open" : "Closed"}
+              </span>
+              {till?.session?.branchName ? ` · ${till.session.branchName}` : " · Teller account unavailable"}
+            </p>
+          </div>
+        </div>
+        <div className="min-w-[150px] text-right">
+          <p className="fs-caption font-semibold uppercase tracking-wide text-label">Balance</p>
+          <p className="mt-1 fs-text font-semibold text-primary">
+            {till?.session?.systemBalanceMinor ? formatTzs(till.session.systemBalanceMinor) : "Unavailable"}
+          </p>
+        </div>
+      </section>
+
+      <nav aria-label="Teller transaction sections" className="flex min-h-[56px] items-stretch gap-1 border-b border-card-border bg-surface px-4">
+        <TellerRequestTab href="/transaction-teller-transaction" label="New Transaction" />
+        <TellerRequestTab href="/transaction-teller-transaction-history" label="History" />
+        <TellerRequestTab href="/transaction-teller-transaction-request" label="Requests" active />
+      </nav>
+    </>
+  );
+}
+
+function TellerRequestTab({ href, label, active = false }: { href: string; label: string; active?: boolean }) {
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={`inline-flex min-w-[112px] items-center justify-center border-b-2 px-4 fs-text font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none ${
+        active ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-primary"
+      }`}
+    >
+      {label}
+    </Link>
   );
 }

@@ -334,7 +334,7 @@
 | I331 | /transaction-teller-transaction-history | text | Reference UI words | 32% coverage | Medium |
 | I332 | /transaction-teller-transaction-history | text | Reference headers | Our headers differ | Medium |
 | I333 | /transaction-teller-transaction-history | missing | Search control | No search | Medium |
-| I334 | /transaction-teller-transaction-request | text | Reference UI words | 10% coverage | Medium |
+| I334 | /transaction-teller-transaction-request | text | Reference UI words | Teller Transaction title, three tab labels, and six request columns present | Medium |
 
 
 ## 2026-11-01 implementation pass
@@ -369,10 +369,10 @@
 | UI023 | /transaction-all-transaction | data/action | Populated values for all columns and unposted resubmission | No local rows; two reference fields unsupported and no resubmission endpoint | Open: API/data capability | `docs/audit/visual/transactions.md` | `5629690` |
 | I338 | /transaction-teller-transaction | structure/workflow | Teller title card, summary and category-card workspace | Current page is a direct till form; reference workflows are unsupported | High |
 | I339 | /transaction-teller-transaction-history | API/data | Teller transaction history table and filters | Local endpoint returns till sessions instead of transaction rows | High |
-| I340 | /transaction-teller-transaction-request | structure | Request table remains visible when empty | Updated to retain headings and empty row; no local records | Low |
+| I340 | /transaction-teller-transaction-request | structure/data | Teller summary, request tabs, persistent empty table, and branch-balance display | Summary/tabs/table aligned; branch ledger balance, teller account number, and local request records unavailable | Medium |
 | I341 | /transaction-online-transaction | workflow/data | Online transaction list, filters, and provider confirmation wizard | Local page records collections directly; provider steps and list fields absent | High |
 | I342 | /transaction-online-payment-reconciliation | workflow/data | Provider/date filtered upload history | Local page performs statement-to-ledger matching without persisted upload records | High |
-| UI024 | /transaction-teller-transaction-request | empty state | Keep request table headings visible with no rows | Persistent table headings and empty row implemented | Resolved structurally; queue data caveat | `docs/audit/visual/teller-requests.md` | `4211399` |
+| UI024 | /transaction-teller-transaction-request | empty state | Keep request table headings visible with no rows | Persistent table headings, empty row, teller summary, and tabs implemented | Resolved structurally; balance and queue data caveat | `docs/audit/visual/teller-requests.md` | `4211399` |
 | I343 | /accounting-chart-of-accounts | structure | Code column between Account Name and Type, full-width account names | Code column uses account.code; proportional widths preserve full names | Low |
 | I344 | /accounting-chart-of-accounts | workflow | Ledger Details fields and working save action | Edit save, Add Groups, Add Ledgers, and date filtering are unavailable in current accounting phase | High |
 | I345 | /accounting-entries | structure/data | Export toolbar and grouped ledger line rows | Header, filter strip, list columns, and ledger detail structure align; exports, archive query, reference-style grouped rows, and matching history remain unavailable | Medium |
