@@ -486,3 +486,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Preserved the existing membership policy defaults and save payload. Minor eligibility, mandatory savings/shares, fees, exit, and mandatory credit mappings are disabled because the current model cannot persist them. I390 remains open.
 - At 1280×720 the visible browser showed the form at the top and footer at the bottom; document/body widths were both 1280px. No values were entered and no policy was created.
 - Web production build passed with the reference-section form layout.
+
+## 2026-11-01 — Credit Product Policy create form
+
+- Compared `/settings/policies/credit-product/new` with the available Wakandi edit capture; rebuilt the form shell to use the reference accordion sections, six-column Accounting Setting grid, and bottom action area.
+- Kept existing save behavior and marked reference controls disabled where the policy API has no typed fields. The AIMSCAMS JSON payload remains available under its own collapsed section. I388 tracks typed-term, mapping, and approval-workflow work.
+- Visible browser review at 1280×720 confirmed the page and document widths were 1280px, with no horizontal overflow and Cancel/Create reachable. No values were entered or policy created.
+- Web production build passed. GitHub push is pending for this page.

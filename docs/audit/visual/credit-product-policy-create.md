@@ -6,12 +6,14 @@ AIMSCAMS route: `/settings/policies/credit-product/new`
 
 ## Comparison
 
-AIMSCAMS currently exposes a basic form for Code, Name, Status, Description, and a raw Policy content (JSON) textarea. The reference policy details use domain sections and tabs for Terms, Settings, Interest, Repayments, Guarantors and Collateral, Loan Charges, Loan Stages, and Accounting Setting; additional reference sections show approval status, stage approvers, and an approval list. This is a major contract and workflow difference, not just spacing or color.
+The create form now follows the reference's accordion hierarchy: Basic Details, Terms, Settings, Repayment, Interest, Income, Quick Loan, Loan Stages, and Accounting Setting. The accounting section uses the reference's six-column mapping layout, and the bottom Cancel/Create actions remain reachable. At 1280×720, the document and body widths are both 1280px with no horizontal overflow.
+
+The current policy API persists Code, Name, Status, Description, and flexible JSON content only. Loan type, domain terms, accounting mappings, and approval workflow are not typed or persisted. Unsupported reference fields are visibly disabled; the existing JSON editor remains under a collapsed AIMSCAMS Policy Payload section. I388 remains open for the policy model and workflow gap.
 
 ## Recommendations
 
-- Replace the generic JSON editor with structured policy fields and the reference section/tab hierarchy as the lending policy model supports it.
-- Provide visible approval state and assignment history from persisted policy data.
-- Keep these financial terms versioned and validate before saving; do not copy values from reference screenshots into AIMSCAMS.
+- Add typed/versioned lending terms, accounting mappings, and validation to the credit policy model before enabling the disabled reference fields.
+- Provide persisted approval state and assignment history for the reference approval sections.
+- Keep policy terms institution-owned; do not infer or copy financial values from screenshots.
 
-Read-only browser review; no policy values were entered or saved. Implementation commit: none.
+Read-only browser review at 1280×720; no values were entered, and no policy was created.
