@@ -6,11 +6,12 @@ AIMSCAMS route: `/settings/products/loan`
 
 ## Comparison
 
-The reference is a Product Setup workspace with five shared tabs (Loan Product, Savings Product, Interest Rate, Fee & Penalties, Loan Provisioning), a compact search toolbar, and a populated product table for Name, Interest Rate, Loan Amount, Tenure, and Status. AIMSCAMS renders a plain Loan products heading and description, search plus status filter, and a large empty state. The shared product tab navigation and reference table columns are absent locally; local product data is empty.
+The local page now has the Product Setup title card, all five reference tabs, compact search/Add Filters toolbar, table column controls, and reference columns for Name, Interest Rate, Loan Amount, Tenure, and Status. At 1280×720, the page/document/body width is 1280px with no horizontal overflow. The reference has five loan products; the current organization has none, so the page shows an honest empty table row. Search/filter/column menus were inspected without changing product records.
 
 ## Recommendations
 
-- Build the shared Product Setup title card and cross-product tabs around the existing settings routes.
-- Use product-specific list columns and preserve the empty state only when the API truly returns no products.
+- Populate the configured product catalog through an approved local/test fixture process before validating populated-row parity; do not copy reference financial terms.
+- Continue applying the shared Product Setup tabs and product-specific list structure to Savings, Interest Rate, Fee & Penalties, and Loan Provisioning routes.
+- Review interest-rate period labeling and currency display against a defined local product contract; the current loan API does not expose a rate period or currency code.
 
-Read-only browser review; no product was created or changed. Implementation commit: none.
+No product data was created or changed. Web production build passed. Implementation commit: pending.

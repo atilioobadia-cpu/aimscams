@@ -407,3 +407,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/branches/new` in the visible browser with `F:\Wakandi\settings-branch-add\FULL.png`; updated the title/action card, Details heading, two-column name/code layout, and multiline address control.
 - At 1280×720, document/body widths were both 1280px. The 1858px form scrolls to reachable Create/Cancel actions. No field values were entered and the branch was not created.
 - Web production build passed. I382 remains open for governed location selectors, weekly schedule controls, and a persisted branch-specific special-date model. Audit note, index, and issue row were synchronized.
+
+## 2026-11-01 — Loan Products page layout
+
+- Compared `/settings/products/loan` in the visible browser with `F:\Wakandi\settings-products-loan\FULL.png`; added the Product Setup title and five tabs, compact search/Add Filters toolbar, configurable columns, and reference loan-product fields.
+- At 1280×720 the page/document/body widths were all 1280px. Filter and column menus opened correctly. The local organization has no loan products versus five reference rows; no product configuration was added or changed.
+- Web production build passed. Updated the page note, visual index, and I383; Savings and remaining product pages remain in the queue.
