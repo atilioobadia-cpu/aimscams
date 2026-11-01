@@ -326,6 +326,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added a friendly unavailable-record state and Back to loans link for non-UUID/stale IDs. No loan account or financial transaction was created from screenshot data.
 - Updated the page note, visual index, and UI018. The populated detail workspace remains blocked by missing local loan and ledger data.
 
+## 2026-11-01 — Create Message Segment form shell
+
+- Replaced the In Build placeholder with the reference title card, required Name field, Description textarea, Create Filters selector, and Save/Cancel actions; corrected the textarea height and section spacing after visible browser review.
+- Entered a non-submitted visual sample name and description in the browser. Filter and Save remain disabled because no criteria model or persistence API exists.
+- Updated the page note, visual index, and issues I107/I108/I429. Production build and GitHub push pending.
+
 ## 2026-11-01 — Cross-module audit, third batch
 
 - Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.

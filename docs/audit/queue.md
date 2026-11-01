@@ -17,7 +17,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | 11 | transaction-teller-transaction-request | 0.9079 | 0.0227 | IN_PROGRESS |
 | 12 | account-loan-details-118-transactions | 0.9040 | 0.0202 | IN_PROGRESS |
 | 13 | settings-policies-credit-product-policy-5 | 0.9026 | 0.0190 | IN_PROGRESS |
-| 14 | messages-segment-list-create | 0.9020 | 0.0220 | IN_PROGRESS |
+| 14 | messages-segment-list-create | — | — | IN_PROGRESS |
 | 15 | settings-policies-membership-policy-2 | 0.9013 | 0.0193 | IN_PROGRESS |
 | 16 | messages-segment-list | 0.8955 | 0.0200 | IN_PROGRESS |
 | 17 | import-member | 0.8949 | 0.0242 | IN_PROGRESS |
@@ -86,7 +86,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | 80 | messages-message-logs | 0.8591 | 0.0163 | IN_PROGRESS |
 | 81 | messages-recharge-credits | 0.9087 | 0.0213 | IN_PROGRESS |
 | 82 | messages-segment-list | 0.8955 | 0.0200 | IN_PROGRESS |
-| 83 | messages-segment-list-create | 0.9020 | 0.0220 | IN_PROGRESS |
+| 83 | messages-segment-list-create | — | — | IN_PROGRESS |
 | 84 | messages-send-message | 0.8781 | 0.0291 | IN_PROGRESS |
 | 85 | messages-template-list | 0.8679 | 0.0204 | IN_PROGRESS |
 | 86 | messages-users-list | 0.8465 | 0.0266 | IN_PROGRESS |

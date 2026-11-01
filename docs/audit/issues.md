@@ -107,8 +107,8 @@
 | I104 | /messages-segment-list | in-build | Implemented page | Placeholder (In build) | High |
 | I105 | /messages-segment-list | text | Reference UI words | 12% coverage | Medium |
 | I106 | /messages-segment-list | text | MessageService | Segments | Low |
-| I107 | /messages-segment-list-create | in-build | Implemented page | Placeholder (In build) | High |
-| I108 | /messages-segment-list-create | text | Reference UI words | 14% coverage | Medium |
+| I107 | /messages-segment-list-create | in-build | Implemented page | Reference-style form shell implemented; criteria/save workflow tracked in I429 | High |
+| I108 | /messages-segment-list-create | text | Reference UI words | Create Segment, Name, Description, Create Filters, Filter, Save, Cancel present | Medium |
 | I109 | /messages-send-message | text | Reference UI words | 33% coverage | Medium |
 | I110 | /messages-template-list | text | Reference UI words | 15% coverage | Medium |
 | I111 | /messages-template-list | text | Message Service | Templates | Low |
@@ -471,7 +471,7 @@
 | I425 | /reports-loan-WrittenOffLoanReport | report data/access | Write-off filters, reason/date/initiator fields, and recovery amount | Generic chart-of-accounts balances; no write-off fields | High |
 | I427 | /reports-client-MemberVerificationReport | report data/access | Member verification filters, status fields, and access-controlled export | Report shell present; authorized verification query, records, and export access are unavailable | High |
 | I428 | /messages-recharge-credits | workflow | Credit amount, description, balance/cost summary, and safe purchase flow | Form shell present; pricing, WBA balance, and purchase APIs are unavailable | High |
-| I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Local route is In Build; no form or filter state | High |
+| I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Form shell present; segment criteria, preview/count, and persistence APIs are unavailable | High |
 | I430 | /clients/create | structure/data | Reference accordion groups and resolved reference-number state | Local route uses six-step wizard; generated reference shows Loading in captured state | High |
 | I431 | /messages-send-message | workflow/structure | Company, segment and template-based send/test workflow | Local form targets a direct recipient with freeform body and has no segment field | High |
 | I432 | /clients/create-group | workflow/structure | Membership Details and Group Details accordions with searchable policy, branch, and relationship-manager selectors | Local route is a three-step wizard with free-text branch/policy fields and a different group form structure | High |
