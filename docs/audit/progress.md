@@ -85,6 +85,14 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Rebuilt the Loans list structure from the reference: title card, status tabs, compact toolbar, wide table, horizontal scroll, and pager.
 - Added live loan-officer filtering by exposing officer metadata from the loan’s source application in the read-only list response.
 - Verified title geometry at x=256/y=94 (1198×84), tabs y=196 (55px), table x≈277/y≈336, and 1495px table content width at 1470×1094 CSS.
-- Exercised status tabs, loan-officer selector, advanced Product filter, clear action, save-unavailable notice, and sidebar collapse/expand. No console errors or warnings were recorded.
+- Exercised status tabs, loan-officer selector, default Status filter, optional Product filter, clear action, save-unavailable notice, and sidebar collapse/expand. No console errors or warnings were recorded.
 - Web and API typechecks passed; scoped web lint passed, and the full suite passed 140 tests (API 81, worker 6, domain 34, ledger 19). API lint exited successfully with existing warnings.
 - Implementation commit: `a56e9bc` (`feat(web): align loans list with visual reference`).
+
+## 2026-11-01 — Loan applications list reference pass
+
+- Matched the title/action card, Pending/Approved/All tabs, filter toolbar, table columns and horizontal scrolling to the supplied screenshot.
+- Used existing loan-officer data; documented the missing application workflow-stage field and saved-filter persistence.
+- Verified title at x=256/y=94 (1198×84), tabs y=196 (55px), toolbar x≈277/y≈270, and table x≈277/y≈336 with 1515px content width at 1470×1094 CSS.
+- Exercised product/status/officer filters, clear action, empty-state feedback, and arrow-key tab navigation in the visible browser. No console errors or warnings were recorded.
+- Web typecheck and scoped page lint passed. The full project suite passed 140 tests (API 81, worker 6, domain 34, ledger 19).

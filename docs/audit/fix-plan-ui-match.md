@@ -2,7 +2,7 @@
 
 Status: **implementation in progress.** The user authorized the work on 2026-11-01.
 The earlier Phase 4 plan remains in `fix-plan.md`; this file covers the pixel and control
-match work started on 2026-10-30. The shared shell scale, shared table row density, Clients list and Loans list have completed focused implementation passes. The remaining pages and control states are still open.
+match work started on 2026-10-30. The shared shell scale, shared table row density, Clients list, Loans list and Loan Applications list have completed focused implementation passes. The remaining pages and control states are still open.
 
 ## Where the measurements stand
 
