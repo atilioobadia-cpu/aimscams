@@ -105,3 +105,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Opened Additional Details and Next of Kin in the visible browser. No browser console errors or warnings were recorded.
 - Web typecheck passed. Scoped lint remains blocked by the existing `react-hooks/set-state-in-effect` warning-as-error in the edit initialization effect.
 - Implementation commit: pending.
+- Implementation commit: `e86716c` (`feat(web): align loan application form with visual reference`).
