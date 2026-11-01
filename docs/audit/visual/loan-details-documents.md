@@ -1,11 +1,18 @@
 # Loan documents visual audit
 
-## Evidence
+Date: 2026-11-01
+Reference: `F:\Wakandi\account-loan-details-118-documents\FULL.png`
+AIMSCAMS route: `/account-loan-details/[id]/documents`
 
-- Reference: `F:\Wakandi\account-loan-details-118-documents\FULL.png`.
-- AIMSCAMS route: `/account-loan-details/[id]/documents`.
-- The route uses a loan UUID; the supplied numeric reference suffix does not load local data. No local loan rows or documents are available.
+## Comparison
 
-## Status
+The reference includes the shared loan header and tabs with Documents active, an Upload Documents action, and a populated table for file, document type, filename, upload date, and row actions. AIMSCAMS shows a standalone Loan documents heading; the supplied numeric reference suffix triggers “Validation failed (uuid is expected)” before a table or upload action appears. The local loan list has no records. Reference filenames and all personal values are omitted.
 
-Reference state reviewed as a loan-detail subpage. File rows and actions need comparison against a representative local loan; no reference files or record values were copied.
+## Recommendations
+
+- Keep the shared loan header and tabs on the document route.
+- Match the document table and upload action after the loan document contract is available.
+- Preserve access control and safe file handling; do not copy reference documents or filenames.
+
+Read-only browser review; no document was uploaded or downloaded.
+Implementation commit: none; populated comparison depends on a local UUID loan and document rows.

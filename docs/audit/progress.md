@@ -292,3 +292,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Message Templates uses a local inline add form while the reference emphasizes shared service navigation and a filterable template table. Requests uses status-count checkboxes and an empty card instead of the reference status tabs, filter strip, and table. Send Message uses direct recipient/body fields in place of company/segment selection; added page-specific note and issue I431.
 - The supplied loan sample resolves to a UUID-validation error locally, so populated summary comparison remains blocked as tracked in UI016. No client/loan names or account values were copied.
 - Updated queue statuses for all duplicate references. No product, message, request, or loan action was submitted.
+
+## 2026-11-01 — Loan details and application states, first batch
+
+- Rechecked Loan Repayments, Guarantors, and Documents plus both supplied Loan Application Details samples and the Edit sample in the visible browser.
+- Repayments reference shows the shared loan header/tabs, component columns and a totals row; the local numeric sample returns a UUID validation error. Guarantors reference is captured with Add New Guarantor open over a populated table; Documents shows a populated file table and upload action. The local numeric loan sample fails UUID validation on each route.
+- Both application-detail samples and the edit sample also fail UUID validation locally. References show the four-stage application workflow and review/history/document tabs; the edit capture opens Additional Details. Existing notes record the field and workflow gaps without reproducing names, IDs, or filenames.
+- Updated the repayment, guarantor, and document notes with route-specific reference structure and all matching queue rows. No loan/application data or documents were changed.
