@@ -280,11 +280,11 @@
 | I277 | /settings/policies/membership/[id] | text | Reference UI words | 46% coverage | Medium |
 | I278 | /settings/policies/membership/[id] | text | Approved | MP-STD — Standard membership | Low |
 | I279 | /settings/policies/membership/[id] | missing | Actions column | No actions | Medium |
-| I280 | /settings/policies/membership/[id]/edit | text | Reference UI words | 50% coverage | Medium |
-| I281 | /settings/policies/membership/[id]/edit | missing | Add button | No add button | Low |
+| I280 | /settings/policies/membership/[id]/edit | text | Reference edit form labels and actions | Shared Individual edit form has the reference section order, onboarding control, verification select, and Update label; unsupported fields remain disabled | Low |
+| I281 | /settings/policies/membership/[id]/edit | missing | Add button | Add Fee is displayed in the reference section position; fee creation is disabled until the model supports it | Low |
 | I282 | /settings/policies/membership/[id] | text | Reference UI words | 40% coverage | Medium |
 | I283 | /settings/policies/membership/[id] | missing | Actions column | No actions | Medium |
-| I284 | /settings/policies/membership/[id]/edit | text | Reference UI words | 45% coverage | Medium |
+| I284 | /settings/policies/membership/[id]/edit | text | Reference edit form labels | Shared Group edit form includes conditional Group Settings and matching supported sections; group requirements remain unavailable in the model | Low |
 | I285 | /settings/policies/membership | text | Reference UI words | 44% coverage | Medium |
 | I286 | /settings/policies/membership | text | Holidays | Membership policies | Low |
 | I287 | /settings/policies/membership | missing | Search control | No search | Medium |
@@ -428,7 +428,7 @@
 | I387 | /settings/policies/credit-product | data/schema | Typed loan terms and approval state for domain table | Shared policy tabs, reference table shell, and empty state are present; flexible policy JSON has no typed loan terms or approval state | High |
 | I388 | /settings/policies/credit-product/new | data/workflow | Structured lending terms, settings, interest, repayment, collateral, charges, stages and accounting | Reference-style form sections now render, but the API persists identity and flexible JSON only; typed fields, ledger mappings, and approval workflow are unavailable | High |
 | I389 | /settings/policies/membership | data/schema | Reference savings/shares/fees/activation/onboarding and approval fields | Shared tabs and reference table shell are present; current membership model and empty catalog do not supply all reference values | Medium |
-| I390 | /settings/policies/membership/new | data/schema/workflow | Persisted minor eligibility, Group Settings, mandatory savings/shares, membership fees, exit and credit-product mappings | Reference sections are present, including Group Settings for Group policies; the current model cannot save these fields or workflows | High |
+| I390 | /settings/policies/membership/new and /edit | data/schema/workflow | Persisted onboarding, minor eligibility, Group Settings, mandatory savings/shares, membership fees, exit and credit-product mappings | Reference controls and section order are present across create/edit; unsupported fields remain disabled until the policy schema can save them | High |
 | I391 | /settings/policies/holidays | workflow/data | Persisted recurring/multi-entry holidays and branch working-day schedule | Shared tabs, month grid, and single holiday dialog are present; current APIs do not persist recurrence, multiple entries, or working days | High |
 
 | I392 | /settings/general | structure/data | Info/Appearance tabs and online collection preference | Local identity/installation form has no appearance or online collection sections | Medium |
@@ -438,7 +438,7 @@
 | I395 | /settings/products/savings/new | data/workflow | Persisted transaction bounds, permission, charge setup, default-account flags and ledger mappings | Reference-style sections now surface these controls, but the current product contract cannot save them | High |
 | I396 | /settings/products/loan/[id] | data/structure | Populated product details, terms, settings, repayment, charges, stages, accounting, history | Local sample detail route returns not found; list is empty | High |
 | I397 | /settings/products/savings/[id] | route/data | Populated savings product edit state and full terms/charges/accounting | Local list has no product row and edit state is unavailable | High |
-| I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Synthetic Individual and Group drafts load; shared detail structure and type-aware edit sections render. Group Settings and approval history/assignment are unavailable in the model | High |
+| I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Both synthetic drafts load; type-aware detail/edit sections render. Group Settings and approval history/assignment remain unavailable. Supported reference-like values are saved only on the synthetic Drafts | High |
 | I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Synthetic draft exercises both routes; model still lacks typed lending fields, ledger mappings, and approval history | High |
 | I401 | /settings/products/provisioning-rules/new | data/schema | Category, multi-row criteria, and separate liability/expense/income account mappings | Local rule model supports one day range, percentage and one ledger account ID | High |
 

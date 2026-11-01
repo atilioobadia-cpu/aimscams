@@ -179,6 +179,7 @@ export function MembershipPolicyFormPage({ mode, policyId }: { mode: "create" | 
               <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-member-type">Member Type <span className="text-accent-red" aria-hidden="true">*</span></label><select id="mp-member-type" value={memberType} onChange={(event) => setMemberType(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="INDIVIDUAL">Individual</option><option value="GROUP">Group</option></select></div>
               <div className="md:col-span-2"><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-description">Description</label><textarea id="mp-description" value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className="w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 fs-text" /></div>
             </div>
+            {memberType === "INDIVIDUAL" ? <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />SelfOnboardingPolicy</label> : null}
           </section>
 
           <section className="space-y-4 border-b border-chrome px-5 py-5">
@@ -233,26 +234,16 @@ export function MembershipPolicyFormPage({ mode, policyId }: { mode: "create" | 
 
           <section className="space-y-4 border-b border-chrome px-5 py-5">
             <h2 className="fs-text font-semibold text-strong">▧ Membership Policy Fees</h2>
-            <div className="rounded-md border border-dashed border-card-border bg-subtle p-4">
-              <p className="mb-3 fs-text font-medium text-body">Fee</p>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div><label className="mb-1 block fs-text font-medium text-body">Fee Type</label><select disabled className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this policy model</option></select></div>
-                <div><label className="mb-1 block fs-text font-medium text-body">Charges Type</label><select disabled className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this policy model</option></select></div>
-                <div><label className="mb-1 block fs-text font-medium text-body">Amount (TSh)</label><Input disabled placeholder="Not available in this policy model" className="h-[var(--control-height)]" /></div>
-              </div>
-              <div className="mt-4 flex flex-wrap gap-6">
-                <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Auto Debit</label>
-                <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Apply To Migrated Members</label>
-              </div>
+            <div className="flex justify-end">
+              <Button type="button" variant="outline" disabled aria-describedby="membership-fee-unavailable" title="Fee rules are unavailable in the current policy model" className="border-primary text-primary"><span className="fs-text">＋</span>Add Fee</Button>
             </div>
-            <Button type="button" variant="outline" disabled className="border-primary text-primary"><span className="fs-text">＋</span>Add Fee</Button>
-            <p className="fs-caption text-muted-foreground">Fee rules, amounts, auto-debit and migration settings are not persisted by this model.</p>
+            <p id="membership-fee-unavailable" className="sr-only">Fee rules, amounts, auto-debit and migration settings are not persisted by this model.</p>
           </section>
 
           <section className="space-y-4 border-b border-chrome px-5 py-5">
             <h2 className="fs-text font-semibold text-strong">✓ Member Activation</h2>
             <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={enableVerification} onChange={(event) => setEnableVerification(event.target.checked)} className="size-4 accent-primary" />Enable Member Verification Required</label>
-            {enableVerification ? <div className="max-w-[520px]"><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-verification">Verification Type</label><Input id="mp-verification" value={verificationType} onChange={(event) => setVerificationType(event.target.value)} className="h-[var(--control-height)]" /></div> : null}
+            {enableVerification ? <div className="max-w-[520px]"><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-verification">Verification Type</label><select id="mp-verification" value={verificationType} onChange={(event) => setVerificationType(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="">Select verification type</option><option value="Manual">Manual</option>{verificationType && verificationType !== "Manual" ? <option value={verificationType}>{verificationType}</option> : null}</select></div> : null}
             <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Allow Deactivate or Exit</label>
             <p className="fs-caption text-muted-foreground">Deactivate/exit behavior is not represented in the current membership policy model.</p>
           </section>
@@ -263,17 +254,17 @@ export function MembershipPolicyFormPage({ mode, policyId }: { mode: "create" | 
             <p className="fs-caption text-muted-foreground">Mandatory credit-product mappings are not saved by the current model.</p>
           </section>
 
-          <section className="space-y-4 px-5 py-5">
-            <h2 className="fs-text font-semibold text-strong">AIMSCAMS Configuration</h2>
-            <div className="grid gap-4 md:grid-cols-2">
+          <details open={!editing} className="border-t border-chrome px-5 py-4">
+            <summary className="cursor-pointer fs-text font-semibold text-strong">AIMSCAMS Configuration</summary>
+            <div className="grid gap-4 pt-4 md:grid-cols-2">
               <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-code">Code <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="mp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" /></div>
               <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-status">Status</label><select id="mp-status" value={status} onChange={(event) => setStatus(event.target.value as MembershipPolicyStatus)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></div>
             </div>
-          </section>
+          </details>
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-chrome bg-card px-5 py-4">
             <div className="min-w-0"><FormError message={saveError} /><SuccessNote message={saved} /></div>
-            <div className="flex items-center gap-3"><Button asChild variant="outline" className="border-primary text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership">Cancel</Link></Button><Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">{saving ? "Saving..." : "Submit"}</Button></div>
+            <div className="flex items-center gap-3"><Button asChild variant="outline" className="border-primary text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership">Cancel</Link></Button><Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">{saving ? "Saving..." : editing ? "Update" : "Submit"}</Button></div>
           </div>
         </form>
       )}

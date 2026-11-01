@@ -525,6 +525,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Matched the membership detail summary card, Next of Kin & Member Dormancy and Member Activation sections, approval status, Board Member selector, and approval list to the reference. Unsupported workflow areas are visibly unavailable, not simulated.
 - Inspected both drafts in the edit form; supported values loaded correctly and no changes were saved. Added the reference Group Settings section conditionally for Group policies, with unavailable fields disabled. Group terms and approval workflow remain tracked in I390/I398. Web production build passed; follow-up commit `dffa9ff` is pushed to `origin/main`.
 
+## 2026-11-01 — Membership Policy edit follow-up
+
+- Compared Individual and Group edit states with both Wakandi full-page captures in the visible browser. Added the Individual-only onboarding control, changed Verification Type to a select, labeled the edit action Update, and moved local Code/Status under a collapsed configuration section. The Add Fee control now sits at the reference position without drawing an unsupported fee editor.
+- Updated only the supported values on the local synthetic Drafts to match the captured states: Individual Next of Kin 1–2; Group 1–4; both 365 dormant days, Allow Withdraw, Auto Active Upon Deposit, and Manual member verification. Both sample descriptions still mark them non-operational. No real or reference data was copied and no policy was approved.
+- Group Settings and other model gaps remain disabled and tracked in I390/I398. The web production build passed after the shared form changes.
+
 ## 2026-11-01 — Chart of Accounts follow-up
 
 - Compared the default chart and ledger-details reference captures with the visible AIMSCAMS page at 1280×720. Matched title/icon/casing, outlined controls, date-range shell, table heading casing, proportions, and spacing; full group names now fit.
