@@ -388,3 +388,5 @@
 | I351 | /accounting-reports-IncomeStatementReport | data/structure | Comparative income, expense, notes, subtotals and net result | Local response is a flat account amount list | High |
 | I352 | /accounting-reports-FinancialPositionReport | data/structure | Comparative assets/liabilities/equity, notes and balance totals | Local response only supplies flat asset rows | High |
 | I353 | /accounting-reports-CashFlowStatement | data/structure | Operating/investing/financing and prior-year schedules | Local route supplies cash movement summary only | High |
+| I354 | /accounting-reports-ComprehensiveTrialBalance | data/structure | Hierarchical period totals and grand total | Same flat account response as Trial Balance | High |
+| I355 | /accounting-reports-MonthlyTrialBalance | data/structure | Month selector and opening/activity/closing balances | Local route uses an as-of date and flat balance rows | High |

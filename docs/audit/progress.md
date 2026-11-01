@@ -177,3 +177,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared Income Statement, Financial Position, and Cash Flow Statement pages with their supplied captures.
 - Recorded their report-data gaps: comparative periods, note numbers, section subtotals, statement totals, and category schedules are absent from the local responses.
 - No statement numbers were copied into the audit; no exports or accounting writes were performed.
+
+## 2026-11-01 — Additional trial-balance variants
+
+- Compared Comprehensive and Monthly Trial Balance routes with their reference screenshots.
+- Both local routes use the flat as-of-date account response. The reference needs hierarchical period totals, monthly activity, opening/closing balances, and exports.
+- Recorded both route-specific differences; no reference amounts or accounting changes were introduced.
