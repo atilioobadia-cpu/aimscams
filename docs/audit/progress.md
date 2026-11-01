@@ -419,3 +419,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/products/savings` in the visible browser with `F:\Wakandi\settings-products-savings\FULL.png`; applied the shared Product Setup header/tabs, outlined Add new action, compact filter/search bar, column menu, and reference table columns.
 - At 1280×720 the page/document/body widths were all 1280px. The local organization has no savings product versus one reference row; Account Number and General Ledger Code are not represented by the current product model and are shown as N/A for any existing row.
 - Web production build passed. No product was created or changed. Updated the per-page note, index, and I383.
+
+## 2026-11-01 — Interest Rates list layout
+
+- Compared `/settings/products/interest-rates` in the visible browser with `F:\Wakandi\settings-products-interest-rate\FULL.png`; added the shared Product Setup frame, outlined Add new action, compact search/filter toolbar, column chooser, and Name/Start Date/End Date/Type columns.
+- At 1280×720 both local document/body widths are 1280px. Both local and reference lists are empty. The local API has no end-date field; no interest-rate record was created or changed.
+- Updated the page note, index, and I384. Fee & Penalties remains the next route in I384.

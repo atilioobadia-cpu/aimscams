@@ -6,11 +6,12 @@ AIMSCAMS route: `/settings/products/interest-rates`
 
 ## Comparison
 
-The reference is the Interest Rate tab in Product Setup. It has the shared five-tab bar, Add New action, search field, and empty table columns Start Date, End Date, and Type. AIMSCAMS is a standalone Interest rates page with explanatory text, search and status filters, and a Create interest rate link plus its own empty state. Even though both reference and local data are empty, the shell and fields differ.
+The local route now uses the shared Product Setup title and tabs, outlined Add new action, compact search/Add Filters toolbar, column chooser, and Name, Start Date, End Date, Type columns. The visible browser at 1280×720 shows the same no-data table state as the reference and has no horizontal overflow (document/body widths are both 1280px). The current InterestRate model has an effectiveFrom date and period but no end date; rows will display N/A for End Date.
 
 ## Recommendations
 
-- Render this route within the shared Product Setup tab frame.
-- Match the reference toolbar and date/type column structure while preserving status only if the local model requires it.
+- Add a persisted end-date field only if the product contract defines a valid end-date lifecycle.
+- Populate the catalog through verified local/test fixtures before checking populated-row formatting; no rate was created or changed.
+- Status remains available from Add Filters and activation actions remain available from row menus.
 
-Read-only browser review; no interest rate was created. Implementation commit: none.
+No interest rate was created or changed. Web production build passed for the Product Setup UI before final browser inspection. Implementation commit: pending.
