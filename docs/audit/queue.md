@@ -5,7 +5,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | # | Page | SSIM | CPR | Status |
 |---|------|------|-----|--------|
 | 1 | accounting-chart-of-accounts | 0.9495 | 0.0073 | IN_PROGRESS |
-| 2 | settings-service-provider | — | — | IN_PROGRESS |
+| 2 | settings-service-provider | — | — | PASS |
 | 3 | settings-role | 0.9368 | 0.0076 | IN_PROGRESS |
 | 4 | accounting-entries | 0.9216 | 0.0080 | IN_PROGRESS |
 | 5 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | IN_PROGRESS |
