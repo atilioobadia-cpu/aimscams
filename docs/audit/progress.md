@@ -255,3 +255,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - All seven AIMSCAMS routes render the generic chart-of-accounts grid. Added page notes and issues I419–I425 for their distinct query, fields, calculations, and access needs.
 - Reference captures include both empty states and populated risk summaries; no live report filters or exports were triggered.
 - Implementation commit: none; the route-specific query, filter, and calculation contracts remain missing.
+
+## 2026-11-01 — Cross-module audit, first batch
+
+- Compared Chart of Accounts, Services, Roles, Journal Entries, Individual and Group Membership Policy edit states, and Member Verification Report using the supplied screenshots and the visible AIMSCAMS browser.
+- Existing notes for the first six pages were confirmed against their current local routes. Both captured membership-edit URLs return 404; no matching local policy record exists. Member Verification Report was added as a page-specific note and issue I427.
+- The member-verification reference contains personal names and identifiers; the audit records only field categories and does not reproduce those values.
+- Review was read-only; no ledger, role, policy, or report changes were submitted.

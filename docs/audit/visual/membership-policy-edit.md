@@ -6,7 +6,7 @@ AIMSCAMS route: `/settings/policies/membership/[id]/edit`
 
 ## Comparison
 
-The references show long edit forms for Individual and Group membership types. Shared sections include Basic Details, Next of Kin, Member Dormancy, Allow Minors, Mandatory Savings, Mandatory Shares, Membership Policy Fees, Member Activation, and Mandatory Credit Products; Group policies also expose member/signatory limits and multiple-group behavior. AIMSCAMS edit route renders Membership policy not found for the sample ID because its policy list is empty. The local create form lacks several of the reference fields, so the populated edit state cannot be compared.
+The references show long edit forms for Individual and Group membership types. Shared sections include Basic Details, Next of Kin, Member Dormancy, Allow Minors, Mandatory Savings, Mandatory Shares, Membership Policy Fees, Member Activation, and Mandatory Credit Products; Group policies also expose member/signatory limits and multiple-group behavior. AIMSCAMS edit route renders Membership policy not found for the sample ID because its policy list is empty. Direct navigation to both captured `settings-policies-membership-policy-1-edit` and `...-2-edit` paths also returns a 404; no matching local individual or group policy is available. The local create form lacks several of the reference fields, so the populated edit state cannot be compared.
 
 ## Recommendations
 

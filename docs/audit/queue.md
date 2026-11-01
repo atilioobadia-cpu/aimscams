@@ -4,13 +4,13 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 
 | # | Page | SSIM | CPR | Status |
 |---|------|------|-----|--------|
-| 1 | accounting-chart-of-accounts | 0.9495 | 0.0073 | TODO |
-| 2 | settings-service-provider | 0.9306 | 0.0180 | TODO |
-| 3 | settings-role | 0.9368 | 0.0076 | TODO |
-| 4 | accounting-entries | 0.9216 | 0.0080 | TODO |
-| 5 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | TODO |
-| 6 | settings-policies-membership-policy-2-edit | 0.9190 | 0.0121 | TODO |
-| 7 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | TODO |
+| 1 | accounting-chart-of-accounts | 0.9495 | 0.0073 | IN_PROGRESS |
+| 2 | settings-service-provider | 0.9306 | 0.0180 | IN_PROGRESS |
+| 3 | settings-role | 0.9368 | 0.0076 | IN_PROGRESS |
+| 4 | accounting-entries | 0.9216 | 0.0080 | IN_PROGRESS |
+| 5 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | IN_PROGRESS |
+| 6 | settings-policies-membership-policy-2-edit | 0.9190 | 0.0121 | IN_PROGRESS |
+| 7 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | IN_PROGRESS |
 | 8 | reports-statement | 0.9109 | 0.0232 | TODO |
 | 9 | settings-products-loan-5 | 0.9094 | 0.0164 | TODO |
 | 10 | messages-recharge-credits | 0.9087 | 0.0213 | TODO |
@@ -52,7 +52,7 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 46 | account-loan | 0.8242 | 0.0387 | TODO |
 | 47 | account-saving | 0.8692 | 0.0293 | TODO |
 | 48 | accounting-assets | 0.8669 | 0.0248 | TODO |
-| 49 | accounting-entries | 0.9216 | 0.0080 | TODO |
+| 49 | accounting-entries | 0.9216 | 0.0080 | IN_PROGRESS |
 | 50 | accounting-fixed-asset | 0.8720 | 0.0246 | TODO |
 | 51 | accounting-ledger-entries | 0.8453 | 0.0297 | TODO |
 | 52 | accounting-reports | 0.8460 | 0.0311 | TODO |
@@ -91,7 +91,7 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 85 | messages-template-list | 0.8679 | 0.0204 | TODO |
 | 86 | messages-users-list | 0.8465 | 0.0266 | TODO |
 | 87 | reports-client-ClientListReport | 0.8193 | 0.0299 | TODO |
-| 88 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | TODO |
+| 88 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | IN_PROGRESS |
 | 89 | reports-loan | 0.8387 | 0.0280 | TODO |
 | 90 | reports-loan-AccruedInstallmentsReport | 0.8155 | 0.0362 | IN_PROGRESS |
 | 91 | reports-loan-AccruedInterestReport | 0.8275 | 0.0327 | IN_PROGRESS |
@@ -164,9 +164,9 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 158 | settings-policies-holidays | 0.8955 | 0.0247 | TODO |
 | 159 | settings-policies-membership-policy | 0.8934 | 0.0235 | TODO |
 | 160 | settings-policies-membership-policy-1 | 0.8988 | 0.0204 | TODO |
-| 161 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | TODO |
+| 161 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | IN_PROGRESS |
 | 162 | settings-policies-membership-policy-2 | 0.9013 | 0.0193 | TODO |
-| 163 | settings-policies-membership-policy-2-edit | 0.9190 | 0.0121 | TODO |
+| 163 | settings-policies-membership-policy-2-edit | 0.9190 | 0.0121 | IN_PROGRESS |
 | 164 | settings-policies-membership-policy-create | 0.9010 | 0.0213 | TODO |
 | 165 | settings-products-fee-penalties | 0.8618 | 0.0258 | TODO |
 | 166 | settings-products-interest-rate | 0.8786 | 0.0251 | TODO |
@@ -178,4 +178,4 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 172 | settings-products-savings | 0.8852 | 0.0256 | TODO |
 | 173 | settings-products-savings-create | 0.8525 | 0.0292 | TODO |
 | 174 | settings-products-savings-edit-1 | 0.8672 | 0.0232 | TODO |
-| 175 | settings-service-provider | 0.9306 | 0.0180 | TODO |
+| 175 | settings-service-provider | 0.9306 | 0.0180 | IN_PROGRESS |
