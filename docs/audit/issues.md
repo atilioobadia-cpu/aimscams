@@ -415,3 +415,30 @@
 | I374 | /import-member, /import-account, /import-transaction | structure/data | Reference batch toolbar and persistent table | Local pages show empty standalone cards | Medium |
 | I375 | /import-member-new, /import-account-new, /import-transaction-new | workflow/structure | Four-step upload, mapping, validation, result | Local wizards expose three steps and CSV-only upload | High |
 | I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |
+
+| I377 | /settings-administrator | structure/data | Reference title card, Add Filters toolbar, phone/status/role columns and pager | Local list uses fixed filters, branch column, two synthetic rows and no pager | Medium |
+| I378 | /settings-administrator-add | workflow/structure | Full-page accordion form with user, role, branch, WBA and teller access | Local route opens a centered modal with a flat form and role checklist | High |
+| I379 | /settings-role | structure/workflow | Role list, search, create/edit modal tabs and audit history | Local route is a long side-by-side permission matrix | High |
+| I380 | /settings-service-provider | structure | Compact Services title card and empty workspace | Local route is an In Build placeholder with a large card and different label | Low |
+| I381 | /settings/branches | structure/data | Search/Add Filters and reference location columns | Local schema shows status/default/council/staff and one synthetic branch | Medium |
+| I382 | /settings/branches/new | workflow/structure | Reference location selectors, open/closed hours and special-date overrides | Local form uses text location fields and lacks special-date overrides | Medium |
+| I383 | /settings/products/loan, /settings/products/savings | structure/data | Shared Product Setup tabs and reference product columns | Local standalone pages have empty data and separate filters | High |
+| I384 | /settings/products/interest-rates, /settings/products/fee-penalties | structure/workflow | Shared product tabs, reference date/type list and charge modal | Local routes are standalone; reference fee capture is a modal state | Medium |
+| I385 | /settings/products/provisioning-rules | structure | Shared Product Setup title/tabs and Add New list chrome | Local standalone page omits shared product shell | Low |
+| I386 | /settings/policies | information architecture | Policy category navigation for membership, credit policy and holidays | Local hub is In Build although child routes exist | Medium |
+| I387 | /settings/policies/credit-product | structure/data | Shared tabs and loan policy table with domain columns | Local list is empty and has generic status filter | High |
+| I388 | /settings/policies/credit-product/new | data/workflow | Structured lending terms, settings, interest, repayment, collateral, charges, stages and accounting | Local form stores a generic JSON document | High |
+| I389 | /settings/policies/membership | structure/data | Shared policy tabs and membership policy table | Local list is empty and standalone | Medium |
+| I390 | /settings/policies/membership/new | data/structure | Full policy sections for minors, savings, shares, fees, activation and credit mapping | Several reference policy groups are absent from local form | High |
+| I391 | /settings/policies/holidays | workflow/structure | Month calendar, recurring holidays, and multiple-entry dialog | Local page only provides working days and empty holiday state | High |
+
+| I392 | /settings/general | structure/data | Info/Appearance tabs and online collection preference | Local identity/installation form has no appearance or online collection sections | Medium |
+| I393 | /settings/accounting | data/structure | Tax-rate catalog and multi-component editor | Local page contains statutory rate, fiscal periods and posting policies without the reference tax manager | High |
+
+| I394 | /settings/products/interest-rates/new | data/structure | Frequency type/value, date range and fixed/variable sections | Local form has code/status/rate/period/effective-from only | High |
+| I395 | /settings/products/savings/new | data/structure | Transaction bounds, permission, charge setup and ledger mapping sections | Local create form omits several reference contract sections | High |
+| I396 | /settings/products/loan/[id] | data/structure | Populated product details, terms, settings, repayment, charges, stages, accounting, history | Local sample detail route returns not found; list is empty | High |
+| I397 | /settings/products/savings/[id] | route/data | Populated savings product edit state and full terms/charges/accounting | Local list has no product row and edit state is unavailable | High |
+| I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Local sample record routes return not found | High |
+| I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Local sample record routes return not found | High |
+| I400 | /settings/products/provisioning-rules/new | missing route | Provisioning-rule creation form | Local URL returns 404 | Medium |

@@ -213,3 +213,17 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Browser inspection remained read-only: no approval/rejection, message send, import upload/commit, setting save, or financial action was used.
 - Loan Reports hub implementation commit: 8875cd3 (feat/web: align loan reports hub with reference).
 
+
+## 2026-11-01 — Settings pages, first pass
+
+- Compared Users, Add User, Roles, Services, Branches, Add Branch, product settings, policy lists/forms, and Holidays in the visible browser against the corresponding `F:\Wakandi` captures.
+- Added route-specific audit notes and settings rows to the visual index. Major gaps are the role management presentation, product/policy tab shells, structured lending policy model, and the holiday calendar workflow.
+- Preserved the read-only boundary: no user/role/branch/product/policy creation, access changes, working-day edits, or saves were performed.
+- No visual implementation changes made in this pass; business-model and workflow gaps need product/data contracts before styling alone can close them.
+
+- Also matched General Settings to `settings-account/FULL.png` and Accounting Settings to `settings-accounting-settings/FULL.png`; corrected the earlier General Settings reference mapping. Local tenant identity controls remain AIMSCAMS-specific; tax-rate component management is absent.
+
+- Reviewed configured-state references for loan product details, interest-rate and savings-product creation, membership policy details/edits, credit product policy details/edits, and provisioning-rule creation. Local detail records are absent; `/settings/products/provisioning-rules/new` returns 404.
+- Added route-specific notes for these populated and create/edit states. No product or policy forms were submitted.
+
+- Corrected the service reference mapping: the supplied Services capture corresponds to `/settings-service-provider`; `/settings/services` is a separate value-added-services catalogue with no reference capture. Added a read-only System Logs note; no reference screenshot is present.

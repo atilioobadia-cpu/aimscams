@@ -6,6 +6,7 @@ Scope: visual comparison plus the shared-shell and Clients adjustments recorded 
 Reference captures are stored at F:\Wakandi. AIMSCAMS was inspected in the visible in-app browser; page-specific viewport measurements are recorded in each audit. Reference screenshots have a 1838 px content width on list pages, with screenshot scale calibrated individually. Authentication captures are about 1830 × 930 px. Exact pixel and perceptual metrics remain pending calibrated, same-state captures.
 
 | Page | Reference | Visual finding | Data/reference limitation |
+
 |---|---|---|---|
 | Authentication | `authentication/` (three state screenshots) | Shared green and white palette; login structure and brand mark differ. See [authentication](authentication.md). | Reference contains capture-toolbar/CAPTCHA overlays. It has login, recovery-email, and password-reset states, not a stitched `FULL.png`. |
 | Clients | `clients/FULL.png` | Shared shell and list structure adjusted; activation-link behavior and data count remain different. See [clients](clients.md). | Local list has one synthetic individual record; avoid data-dependent comparisons. |
@@ -74,4 +75,40 @@ The folder index and manifest disagree about inventory totals: the index claims 
 | Account Import Wizard | `import-account-new/FULL.png` | Local three-stage CSV form differs from reference four-stage upload/mapping/validation/result flow. See [Account Import Wizard](account-import-wizard.md). | Excel and mapping/validation stages absent. |
 | Transaction Import Wizard | `import-transaction-new/FULL.png` | Local three-stage CSV form differs from the reference four-stage upload/mapping/validation/result flow. See [Transaction Import Wizard](transaction-import-wizard.md). | Excel and mapping/validation stages absent. |
 | Business Account | `core-wba-business-account/FULL.png` | Reference capture shows Add Funds modal; local review was the default wallet page. See [Business Account](business-account.md). | Captured states differ; no matching-state comparison. |
-| General Settings | No reference capture found | Local settings page has identity, timezone, and branch controls. See [General Settings](general-settings.md). | No direct reference screenshot. |
+| General Settings | `settings-account/FULL.png` | Local identity and installation cards differ from the reference Info/Appearance and online collections workspace; see [General Settings](general-settings.md). | Captured reference has preferred savings product modal open. |
+
+## Settings
+
+
+
+| Page | Reference | Visual finding | Data/reference limitation |
+| Accounting settings | settings-accounting-settings/FULL.png | Tax component manager is missing; local page centers statutory rate, fiscal periods, and posting policies; see [Accounting settings](accounting-settings.md). | Inter-branch setting has partial concept overlap. |
+|---|---|---|---|
+| Users | `settings-administrator/FULL.png` | List shell and columns differ; see [Users](users.md). | Local list has two synthetic users and lacks reference phone/pager fields. |
+| Add user | `settings-administrator-add/FULL.png` | Local modal replaces the reference full-page accordion workflow; see [Add user](add-user.md). | User and access model fields differ. |
+| Roles | `settings-role/FULL.png` | Local permission matrix replaces the reference role list and tabbed modal; see [Roles](roles.md). | No local role list or audit-history UI in the reviewed route. |
+| Branches | `settings-branch/FULL.png` | Toolbar and table schema differ; see [Branches](branches.md). | Only one local synthetic branch. |
+| Add branch | `settings-branch-add/FULL.png` | Shared form sections exist; location and holiday schedule controls differ; see [Add branch](branch-create.md). | Reference special-date overrides are absent locally. |
+| Service providers | `settings-service-provider/FULL.png` | Local In Build page adds a status badge and placeholder card to the reference empty Services workspace; see [Service providers](services.md). | Reference capture is an empty landing state. |
+| Value-added services | No reference capture found | Local route is a catalogue placeholder distinct from Service providers; see [Value-added services](service-catalogue.md). | No direct reference capture. |
+| System logs | No reference capture found | Local audit page has category tabs, filters and event table; see [System logs](system-logs.md). | No direct reference capture. |
+| Loan products | `settings-products-loan/FULL.png` | Shared product tabs and populated product table are missing locally; see [Loan products](products-loan.md). | Local product list is empty. |
+| Loan product details | `settings-products-loan-5/FULL.png` | Reference has extensive product terms and accounting details; local sample returns not found; see [Loan product details](loan-product-details.md). | No local loan products. |
+| Savings products | `settings-products-savings/FULL.png` | Shared tabs and savings columns are missing locally; see [Savings products](products-savings.md). | Local product list is empty. |
+| Create savings product | `settings-products-savings-create/FULL.png` | Local form omits reference terms, charges and accounting groups; see [Savings product creation](savings-product-create.md). | Product contract is narrower. |
+| Edit savings product | `settings-products-savings-edit-1/FULL.png` | No local product exists to open a populated edit state; see [Savings product edit](savings-product-edit.md). | Local product list is empty. |
+| Interest rates | `settings-products-interest-rate/FULL.png` | Reference has shared tabs and date/type table; local has standalone search/status page; see [Interest rates](products-interest-rates.md). | Both captured lists are empty. |
+| Create interest rate | `settings-products-interest-rate-create/FULL.png` | Frequency, date range and fixed/variable fields differ from the local form; see [Interest rate creation](interest-rate-create.md). | No matching created record. |
+| Fees and penalties | `settings-products-fee-penalties/FULL.png` | Reference captures Add Charge modal; AIMSCAMS route is a standalone list; see [Fees and penalties](products-fees-penalties.md). | Interaction states differ. |
+| Loan provisioning | `settings-products-loan-provisioning/FULL.png` | Empty-state intent matches; shared product tabs/table chrome is missing; see [Loan provisioning](products-loan-provisioning.md). | Both captured lists are empty. |
+| Create provisioning rule | `settings-products-loan-provisioning-create/FULL.png` | Reference create state has no local route (404); see [Provisioning rule creation](loan-provisioning-create.md). | Route is missing. |
+| Policies hub | Policy captures show three category tabs; no direct hub capture. | Local route is In Build despite direct policy routes; see [Policies hub](policies-hub.md). | No direct hub screenshot. |
+| Credit product policies | `settings-policies-credit-product-policy/FULL.png` | Shared policy tabs and populated domain table are missing; see [Credit product policies](credit-product-policies.md). | Local list has no rows. |
+| Credit product policy details | `settings-policies-credit-product-policy-5/FULL.png` | Reference tabs and approval state have no local record counterpart; see [Credit product policy details](credit-product-policy-details.md). | No local policy records. |
+| Create credit product policy | No direct create capture found; edit reference is `settings-policies-credit-product-policy-5-edit/FULL.png` | Raw JSON form lacks structured policy tabs and approval workflow; see [Create credit product policy](credit-product-policy-create.md). | Local policy model is materially narrower than reference. |
+| Edit credit product policy | `settings-policies-credit-product-policy-5-edit/FULL.png` | No populated local record/edit state; see [Credit product policy edit](credit-product-policy-edit.md). | No local policy records. |
+| Membership policies | `settings-policies-membership-policy/FULL.png` | Shared policy tabs and populated list are missing; see [Membership policies](membership-policies.md). | Local list has no rows. |
+| Membership policy details | `settings-policies-membership-policy-1/FULL.png`, `...-2/FULL.png` | Individual and Group details include approvals; local sample routes are not found; see [Membership policy details](membership-policy-details.md). | No local policy records. |
+| Edit membership policy | `settings-policies-membership-policy-1-edit/FULL.png`, `...-2-edit/FULL.png` | Type-aware populated edit form unavailable locally; see [Membership policy edit](membership-policy-edit.md). | No local policy records. |
+| Create membership policy | `settings-policies-membership-policy-create/FULL.png` | Local form omits several policy groups in the long reference form; see [Create membership policy](membership-policy-create.md). | Membership policy fields are incomplete. |
+| Holidays | `settings-policies-holidays/FULL.png` | Local working-day checklist and empty card lack reference calendar and recurring holiday dialog; see [Holiday calendar](holidays.md). | Local calendar has no holidays. |
