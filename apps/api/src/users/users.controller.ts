@@ -37,6 +37,22 @@ export class UsersController {
     return this.users.listRoles(auth);
   }
 
+  @Get('permissions')
+  @RequirePermissions('Settings Role : View')
+  async rolePermissions(@CurrentAuth() auth: AuthContext) {
+    return this.users.listRolePermissions(auth);
+  }
+
+  @Post('roles')
+  @RequirePermissions('Settings Role : Create')
+  async createRole(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.users.createRole(auth, body, requestContext(request));
+  }
+
   @Get('branches')
   @RequirePermissions('Settings Branch : View')
   async branches(@CurrentAuth() auth: AuthContext) {

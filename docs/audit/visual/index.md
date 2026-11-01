@@ -124,7 +124,7 @@ The folder index and manifest disagree about inventory totals: the index claims 
 |---|---|---|---|
 | Users | `settings-administrator/FULL.png` | List shell and columns differ; see [Users](users.md). | Local list has two synthetic users and lacks reference phone/pager fields. |
 | Add user | `settings-administrator-add/FULL.png` | Local modal replaces the reference full-page accordion workflow; see [Add user](add-user.md). | User and access model fields differ. |
-| Roles | `settings-role/FULL.png` | Local permission matrix replaces the reference role list and tabbed modal; see [Roles](roles.md). | No local role list or audit-history UI in the reviewed route. |
+| Roles | `settings-role/FULL.png` | AIMSCAMS now has the reference-style role list and tabbed create/edit dialogs; see [Roles](roles.md). | Audit History is present but remains an unconnected empty state; final regression pending. |
 | Branches | `settings-branch/FULL.png` | Toolbar and table schema differ; see [Branches](branches.md). | Only one local synthetic branch. |
 | Add branch | `settings-branch-add/FULL.png` | Shared form sections exist; location and holiday schedule controls differ; see [Add branch](branch-create.md). | Reference special-date overrides are absent locally. |
 | Service providers | `settings-service-provider/FULL.png` | Local `/settings-service-provider` page now uses the reference title-card structure and empty workspace; see [Service providers](services.md). | Reference capture is an empty landing state. |

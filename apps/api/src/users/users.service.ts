@@ -1,4 +1,4 @@
-﻿import {
+import {
   BadRequestException,
   ForbiddenException,
   Injectable,
@@ -42,6 +42,13 @@ interface UpdateUserInput {
   roleCodes?: unknown;
   status?: unknown;
   password?: unknown;
+}
+
+interface CreateRoleInput {
+  code?: unknown;
+  name?: unknown;
+  description?: unknown;
+  permissionKeys?: unknown;
 }
 
 interface UpdateRoleInput {
@@ -345,6 +352,86 @@ export class UsersService {
     }));
   }
 
+  async listRolePermissions(_auth: AuthContext) {
+    const permissions = await this.prisma.permission.findMany({
+      orderBy: [{ entity: 'asc' }, { action: 'asc' }],
+      select: { key: true },
+    });
+    return permissions.map((permission) => permission.key);
+  }
+
+  async createRole(auth: AuthContext, body: CreateRoleInput, context: UserContext) {
+    const organisationId = auth.user.organisation.id;
+    const rawCode = asText(body.code).trim().toUpperCase();
+    const code = rawCode.replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+    if (!code) throw new BadRequestException('Role name is required.');
+    if (!/^[A-Z][A-Z0-9_]{1,59}$/.test(code)) {
+      throw new BadRequestException('Role name must start with a letter and contain only letters, numbers, or spaces.');
+    }
+
+    const name = asText(body.name).trim();
+    if (!name) throw new BadRequestException('Display name is required.');
+    const existing = await this.prisma.role.findFirst({
+      where: { organisationId, code },
+      select: { id: true },
+    });
+    if (existing) throw new BadRequestException('A role with that name already exists.');
+
+    const permissionKeys = Array.isArray(body.permissionKeys)
+      ? [...new Set(body.permissionKeys.map((item) => asText(item).trim()).filter(Boolean))]
+      : [];
+    const permissions = await this.prisma.permission.findMany({
+      where: { key: { in: permissionKeys } },
+      select: { key: true },
+    });
+    if (permissions.length !== permissionKeys.length) {
+      throw new BadRequestException('One or more permissions do not exist.');
+    }
+
+    const created = await this.prisma.$transaction(async (tx) => {
+      const role = await tx.role.create({
+        data: {
+          organisationId,
+          code,
+          name,
+          description: asText(body.description).trim() || null,
+          isSystem: false,
+        },
+      });
+      if (permissionKeys.length > 0) {
+        await tx.rolePermission.createMany({
+          data: permissionKeys.map((permissionId) => ({ roleId: role.id, permissionId })),
+        });
+      }
+      return tx.role.findUniqueOrThrow({
+        where: { id: role.id },
+        include: { permissions: true, users: { select: { userId: true } } },
+      });
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Role created',
+      entityType: 'Role',
+      entityId: created.id,
+      after: { code: created.code, name: created.name, permissionKeys },
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return {
+      id: created.id,
+      code: created.code,
+      name: created.name,
+      description: created.description,
+      isSystem: created.isSystem,
+      permissionKeys: created.permissions.map((item) => item.permissionId),
+      userCount: created.users.length,
+    };
+  }
   async listBranches(auth: AuthContext) {
     const organisationId = auth.user.organisation.id;
     const branches = await this.prisma.branch.findMany({

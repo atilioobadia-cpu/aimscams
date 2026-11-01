@@ -70,6 +70,10 @@ export function listRoles(): Promise<RoleSummary[]> {
   return apiRequest<RoleSummary[]>("/users/roles");
 }
 
+export function listRolePermissions(): Promise<string[]> {
+  return apiRequest<string[]>("/users/permissions");
+}
+
 export function createUser(body: Record<string, unknown>): Promise<UserSummary> {
   return apiRequest<UserSummary>("/users", { method: "POST", body });
 }
@@ -80,6 +84,10 @@ export function updateUser(id: string, body: Record<string, unknown>): Promise<U
 
 export function unlockUser(id: string): Promise<{ ok: boolean }> {
   return apiRequest<{ ok: boolean }>(`/users/${id}/unlock`, { method: "POST" });
+}
+
+export function createRole(body: Record<string, unknown>): Promise<RoleSummary> {
+  return apiRequest<RoleSummary>("/users/roles", { method: "POST", body });
 }
 
 export function updateRole(id: string, body: Record<string, unknown>): Promise<RoleSummary> {

@@ -375,3 +375,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Continued through the settings queue. Confirmed the reference pages for General/Accounting settings, Users/Add User, Branches/Add Branch, Credit Product Policies/edit, Holidays, Membership Policy detail/create, Fees and Penalties, Loan Product detail, and Savings Product creation have page-specific visual notes. Rechecked the direct local states for key routes; missing sample records and route-specific 404 states are documented in the corresponding nested-route notes.
 - Updated remaining TODO rows 142–146 and 149–155, 157–158, 160, 164–165, 169, and 173 to IN_PROGRESS to reflect the recorded mismatches. The 175-entry visual match queue now has no TODO rows; all captured mismatches remain IN_PROGRESS pending implementation.
 - The review remained read-only. No user, branch, policy, holiday, loan, savings product, transaction, or financial setting was created, edited, approved, submitted, or saved.
+
+## 2026-11-01 — Roles page implementation and verification
+
+- Replaced the role selector/permission matrix with a searchable, filterable, paginated Role Management list and reference-aligned create/edit tabs.
+- Added the organization-scoped create-role API flow with permission validation and an audit event; default permissions remain unselected.
+- Checked the page in the visible browser at 1838×1114 and 1280×800. The shell remained 76px/240px at desktop, and the narrower viewport had no horizontal overflow. Inspected search, filters, paging, row actions, and create/edit dialogs.
+- Left all 17 pre-existing roles unchanged. No create/edit was saved. Audit History is still an empty, unconnected state; I379 remains open for that gap and final regression.
+- API and web production builds passed. The browser create-role permission tab loaded all 200 permissions from the catalog, with none selected. This batch is ready to commit and push; no role was created or edited during verification.

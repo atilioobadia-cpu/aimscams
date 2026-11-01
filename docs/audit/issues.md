@@ -418,7 +418,7 @@
 
 | I377 | /settings-administrator | structure/data | Reference title card, Add Filters toolbar, phone/status/role columns and pager | Local list uses fixed filters, branch column, two synthetic rows and no pager | Medium |
 | I378 | /settings-administrator-add | workflow/structure | Full-page accordion form with user, role, branch, WBA and teller access | Local route opens a centered modal with a flat form and role checklist | High |
-| I379 | /settings-role | structure/workflow | Role list, search, create/edit modal tabs and audit history | Local route is a long side-by-side permission matrix | High |
+| I379 | /settings-role | workflow | Role list/search/pagination and tabbed create/edit dialogs | Implemented; Audit History remains an unconnected empty state, populated history not verified | Medium |
 | I380 | /settings-service-provider | structure | Compact Services title card and empty workspace | Local route is an In Build placeholder with a large card and different label | Low |
 | I381 | /settings/branches | structure/data | Search/Add Filters and reference location columns | Local schema shows status/default/council/staff and one synthetic branch | Medium |
 | I382 | /settings/branches/new | workflow/structure | Reference location selectors, open/closed hours and special-date overrides | Local form uses text location fields and lacks special-date overrides | Medium |
