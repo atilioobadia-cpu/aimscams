@@ -87,3 +87,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Verified title geometry at x=256/y=94 (1198×84), tabs y=196 (55px), table x≈277/y≈336, and 1495px table content width at 1470×1094 CSS.
 - Exercised status tabs, loan-officer selector, advanced Product filter, clear action, save-unavailable notice, and sidebar collapse/expand. No console errors or warnings were recorded.
 - Web and API typechecks passed; scoped web lint passed, and the full suite passed 140 tests (API 81, worker 6, domain 34, ledger 19). API lint exited successfully with existing warnings.
+- Implementation commit: `a56e9bc` (`feat(web): align loans list with visual reference`).
