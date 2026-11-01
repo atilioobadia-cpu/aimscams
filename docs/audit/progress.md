@@ -122,3 +122,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - The local account schema has no Account Name field, and the list has no rows. Both remain documented instead of inventing unsupported data.
 - Web typecheck and scoped Savings lint passed.
 - Implementation commit: pending.
+- Implementation commit: `38c7d4a` (`feat(web): align savings page with visual reference`).
