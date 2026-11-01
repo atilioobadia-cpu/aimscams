@@ -6,18 +6,19 @@ AIMSCAMS route: `/clients/create`
 
 ## Comparison
 
-The reference capture shows a full-page Create New Client workflow organized as expandable sections. Membership Details is open with policy, joining date, branch, reference number, client manager, and group fields; Personal, Contact, Identity, Residence, and Employment sections follow below. AIMSCAMS instead presents a six-step registration wizard with a progress bar and a compact Membership step. Its initial fields are arranged in two columns, and it has a separate Clients link and Next action. The information architecture, page length, section treatment, and control grouping differ. The captured reference values are intentionally omitted.
+The reference capture shows a full-page Create New Client workflow organized as expandable sections. Membership Details is open with policy, joining date, reference number, branch, client manager, and group fields in two columns. Personal, Contact, Identity Number, Residence, and Employment follow below as disabled sections. Cancel and Create actions sit at the bottom.
 
-## Recommendations
+AIMSCAMS now uses the same six-section accordion structure, field groups, two-column desktop layout, Membership Details default state, and bottom actions. The current v1.2.0 font and control sizes are retained. At the visible in-app browser's narrow viewport, the form correctly collapses to one column. The screenshot's reference values were not copied.
 
-- Align the registration sections and field groupings to the approved client contract while retaining the local validation and step flow where appropriate.
-- Match the reference accordion hierarchy, full-page spacing, title card, and footer actions.
-- Resolve the reference-number loading state in AIMSCAMS before relying on that field in a live registration flow.
+## Implementation and verification
 
-Read-only browser review; no client information was entered and no registration was submitted.  
-Implementation commit: none; form structure and reference-number state need follow-up.
-## Local form re-review — 2026-11-01
+- Kept the user's in-progress form work and fixed `FormSection` props so Next and Create actions typecheck.
+- The next reference number is generated through the existing local API; if that service is unavailable, the page explains that it will be assigned when saved. No reference production value was copied.
+- Read the AIMSCAMS accessibility tree and visually inspected the visible `/clients/create` page at the local viewport. Membership Details opens by default; the remaining sections stay locked until validation allows progression.
+- `npm run typecheck` passes after the prop fix.
+- No client information was entered and no registration was submitted. The browser remains open on `/clients/create`.
 
-The visible AIMSCAMS `/clients/create` page currently exposes a `Create New Client` title, Cancel links, and an expanded Membership Details section with Policy, Date Of Joining, Reference Number, Branch Name, Client Manager, and Group Name. Personal Details, Contact Details, Identity Number, Residence, and Employment appear below as disabled sections; `Next` is disabled in the untouched initial state. This is the current working-tree UI, whose page source has unrelated uncommitted user changes. Those changes were not edited, staged, or committed by this audit.
+## Remaining limits
 
-This observation used the local page accessibility tree only. No data was entered and no client was created. A current active-session Wakandi comparison is pending because its browser is still on Dashboard; no screenshots were used for this re-review.
+- The reference shows a 1920px desktop view; the visible AIMSCAMS browser is narrower, so desktop-width wrapping and precise full-page heights remain unverified.
+- Reference control popovers are not open in the supplied Create Client screenshot. Their exact option-list interactions remain unscored pending a matching Wakandi state capture.
