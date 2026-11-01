@@ -130,3 +130,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded separate notes for summary, schedule, transactions, repayments, documents, and guarantors. Populated comparisons remain blocked by unavailable local loan records; unsupported financial columns remain unmapped.
 - Web typecheck and scoped lint passed. Browser route check confirmed the new Schedule route renders without a 404; console errors and warnings were empty.
 - Implementation commit: pending.
+- Implementation commit: `aec5349` (`feat(web): add loan schedule route and audit detail pages`).
