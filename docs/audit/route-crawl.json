@@ -2607,24 +2607,22 @@
     },
     {
       "route": "/settings-service-provider",
-      "linkedInSidebar": false,
+      "linkedInSidebar": true,
       "status": 200,
       "finalPath": "/settings-service-provider",
       "error": null,
       "facts": {
-        "title": "Service providers · AIMSCAMS",
-        "h1": "Service providers",
-        "bodyChars": 432,
-        "flagged": [
-          "in build"
-        ],
+        "title": "Services · AIMSCAMS",
+        "h1": "Services",
+        "bodyChars": 345,
+        "flagged": [],
         "backControl": false,
         "emptyState": false,
         "tableRows": 0,
         "pagination": false,
         "nativeSelects": 0,
         "comboboxes": 0,
-        "overflowX": -15
+        "overflowX": 0
       },
       "consoleIssues": [],
       "failedRequests": []

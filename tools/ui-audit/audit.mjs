@@ -39,7 +39,7 @@ const settingsChildLabels = {
   "/settings/policies": "Policies",
   "/settings/users": "Users",
   "/settings/roles": "Roles",
-  "/settings/services": "Services",
+  "/settings-service-provider": "Services",
 };
 const storageState = process.env.AUDIT_STORAGE_STATE
   ? resolve(process.env.AUDIT_STORAGE_STATE)

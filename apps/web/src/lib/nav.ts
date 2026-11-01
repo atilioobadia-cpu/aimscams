@@ -136,7 +136,7 @@ export const navItems: NavItem[] = [
       { label: "Policies", icon: "shield", href: "/settings/policies" },
       { label: "Users", icon: "users", href: "/settings-administrator" },
       { label: "Roles", icon: "scroll", href: "/settings-role" },
-      { label: "Services", icon: "wrench", href: "/settings/services" },
+      { label: "Services", icon: "wrench", href: "/settings-service-provider" },
       { label: "System logs", icon: "file", href: "/system-logs" },
     ],
   },

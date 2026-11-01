@@ -497,7 +497,7 @@ rule, so this is a contract conflict to settle in Phase 4, not a styling bug.
 | `settings-products-savings-create` | `/settings/products/savings/new` | Create savings product | 41% | low coverage, no add action |
 | `settings-products-savings-edit-1` | `/settings/products/savings` | Savings products | 33% | low coverage |
 | `settings-role` | `/settings/roles` | Roles | 70% | title differs, no search |
-| `settings-service-provider` | `/settings/services` | Services | — | — |
+| `settings-service-provider` | `/settings-service-provider` | Services | — | — |
 | `transaction-all-transaction` | `/transaction-all-transaction` | All transactions | 50% | low coverage, header differs, no search, no add action |
 | `transaction-online-payment-reconciliation` | `/transaction-online-payment-reconciliation` | Reconciliation workspace | 25% | low coverage, header differs, title differs |
 | `transaction-online-transaction` | `/transaction-online-transaction` | Online collections | 38% | low coverage, title differs, no search |

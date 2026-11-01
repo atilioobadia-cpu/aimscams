@@ -1081,7 +1081,7 @@
   },
   {
     "name": "settings-service-provider",
-    "route": "/settings/services",
+    "route": "/settings-service-provider",
     "reference_image": "docs/audit/wakandi-stitched\\settings-service-provider__p0.png",
     "state": {},
     "masks": [],

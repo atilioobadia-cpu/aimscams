@@ -422,7 +422,8 @@
     "route": "/settings/roles"
   },
   "settings-service-provider": {
-    "route": "/settings/services"
+    "route": "/settings-service-provider",
+    "note": "Canonical service-provider screen; reference shows the empty Services landing state."
   },
   "transaction-all-transaction": {
     "route": "/transaction-all-transaction"

@@ -1,11 +1,11 @@
 # UI Match Queue
 
-Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
+Sorted by SSIM descending (run v10). A dash means the previous score was invalidated and awaits a canonical recapture. Status: TODO / IN_PROGRESS / PASS.
 
 | # | Page | SSIM | CPR | Status |
 |---|------|------|-----|--------|
 | 1 | accounting-chart-of-accounts | 0.9495 | 0.0073 | IN_PROGRESS |
-| 2 | settings-service-provider | 0.9306 | 0.0180 | IN_PROGRESS |
+| 2 | settings-service-provider | — | — | IN_PROGRESS |
 | 3 | settings-role | 0.9368 | 0.0076 | IN_PROGRESS |
 | 4 | accounting-entries | 0.9216 | 0.0080 | IN_PROGRESS |
 | 5 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | IN_PROGRESS |
@@ -178,4 +178,4 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 172 | settings-products-savings | 0.8852 | 0.0256 | IN_PROGRESS |
 | 173 | settings-products-savings-create | 0.8525 | 0.0292 | IN_PROGRESS |
 | 174 | settings-products-savings-edit-1 | 0.8672 | 0.0232 | IN_PROGRESS |
-| 175 | settings-service-provider | 0.9306 | 0.0180 | IN_PROGRESS |
+| 175 | settings-service-provider | — | — | IN_PROGRESS |

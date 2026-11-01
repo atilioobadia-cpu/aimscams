@@ -127,7 +127,7 @@ The folder index and manifest disagree about inventory totals: the index claims 
 | Roles | `settings-role/FULL.png` | Local permission matrix replaces the reference role list and tabbed modal; see [Roles](roles.md). | No local role list or audit-history UI in the reviewed route. |
 | Branches | `settings-branch/FULL.png` | Toolbar and table schema differ; see [Branches](branches.md). | Only one local synthetic branch. |
 | Add branch | `settings-branch-add/FULL.png` | Shared form sections exist; location and holiday schedule controls differ; see [Add branch](branch-create.md). | Reference special-date overrides are absent locally. |
-| Service providers | `settings-service-provider/FULL.png` | Local In Build page adds a status badge and placeholder card to the reference empty Services workspace; see [Service providers](services.md). | Reference capture is an empty landing state. |
+| Service providers | `settings-service-provider/FULL.png` | Local `/settings-service-provider` page now uses the reference title-card structure and empty workspace; see [Service providers](services.md). | Reference capture is an empty landing state. |
 | Value-added services | No reference capture found | Local route is a catalogue placeholder distinct from Service providers; see [Value-added services](service-catalogue.md). | No direct reference capture. |
 | System logs | No reference capture found | Local audit page has category tabs, filters and event table; see [System logs](system-logs.md). | No direct reference capture. |
 | Loan products | `settings-products-loan/FULL.png` | Shared product tabs and populated product table are missing locally; see [Loan products](products-loan.md). | Local product list is empty. |

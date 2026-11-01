@@ -1,7 +1,7 @@
 # Value-added services visual audit
 
-Date: 2026-11-01  
-Reference: No direct capture found. The supplied `settings-service-provider` capture maps to `/settings-service-provider`.  
+Date: 2026-11-01
+Reference: No direct capture found. The `settings-service-provider` capture is a different service-provider screen and maps to `/settings-service-provider`. This value-added catalogue has no direct reference capture.
 AIMSCAMS route: `/settings/services`
 
 ## Comparison

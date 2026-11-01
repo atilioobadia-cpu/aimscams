@@ -128,7 +128,7 @@ Severity: **High** = placeholder or broken page that users reach from the sideba
 | `/settings-administrator` | Yes | Users | OK | None | None |
 | `/settings-administrator-add` | No | Users | Redirect | redirects to /settings-administrator | None |
 | `/settings-role` | Yes | Roles | OK | None | None |
-| `/settings-service-provider` | No | Service providers | In build | Placeholder text: in build | Medium |
+| `/settings-service-provider` | Yes | Services | OK | Empty workspace matches reference; title card verified in browser | — |
 | `/settings/accounting` | Yes | Accounting settings | OK | None | None |
 | `/settings/branches` | Yes | Branches | OK | None | None |
 | `/settings/branches/new` | No | Add branch | OK | None | Low |
@@ -148,7 +148,7 @@ Severity: **High** = placeholder or broken page that users reach from the sideba
 | `/settings/products/savings` | No | Savings products | OK | None | Low |
 | `/settings/products/savings/new` | No | Create savings product | OK | None | Low |
 | `/settings/roles` | No | Roles | Redirect | redirects to /settings-role | None |
-| `/settings/services` | Yes | Services | OK | None | None |
+| `/settings/services` | No | Services | OK | Value-added catalogue route, no reference capture; currently not in Settings navigation | Low |
 | `/settings/users` | No | Users | Redirect | redirects to /settings-administrator | None |
 | `/system-logs` | Yes | System logs | OK | None | None |
 | `/transaction-all-transaction` | Yes | All transactions | OK | None | None |
