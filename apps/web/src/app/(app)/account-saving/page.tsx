@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Building2, UserCheck, UserX } from "lucide-react";
+import { Plus, Search, UserCheck, UserX, Wallet } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
-import { listClients, listSavingsAccounts, listSavingsProducts, createSavingsAccount, updateSavingsAccount, type Client, type SavingsAccount, type SavingsAccountStatus } from "@/lib/settings";
+import { listClients, listSavingsAccounts, listSavingsProducts, createSavingsAccount, updateSavingsAccount, type Client, type SavingsAccount } from "@/lib/settings";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -131,15 +130,21 @@ export default function SavingsAccountsPage() {
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader breadcrumb="Accounts" title="Savings accounts" description="Savings accounts opened from eligible products." />
-        {data?.canCreate ? (
-          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
+      <PageHeader
+        variant="card"
+        title="Savings"
+        icon={<Wallet className="size-6 shrink-0 text-primary" aria-hidden="true" />}
+        actions={data?.canCreate ? (
+          <Button
+            onClick={() => setModalOpen(true)}
+            variant="outline"
+            className="h-[var(--control-height)] border-primary px-[var(--space-16)] fs-text font-semibold text-primary hover:bg-primary/5"
+          >
             <Plus className="size-4" aria-hidden="true" />
-            New savings account
+            New saving
           </Button>
         ) : null}
-      </div>
+      />
 
       <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
         <div className="flex flex-col gap-3 md:flex-row md:items-end">
@@ -185,12 +190,6 @@ export default function SavingsAccountsPage() {
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={8} />
         </section>
-      ) : items.length === 0 ? (
-        <EmptyState
-          icon={Building2}
-          title={hasFilters ? "No savings account matches" : "No savings accounts yet"}
-          description={hasFilters ? "Adjust or clear the filters to see other accounts." : "Create a savings account."}
-        />
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
@@ -200,19 +199,25 @@ export default function SavingsAccountsPage() {
                   <th className="px-4 py-3">Account number</th>
                   <th className="px-4 py-3">Client</th>
                   <th className="px-4 py-3">Product</th>
-                  <th className="px-4 py-3">Type</th>
+                  <th className="px-4 py-3">Creation date</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Balance</th>
                   <th className="px-4 py-3 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {items.map((item: SavingsAccount) => (
+                {items.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-12 text-center fs-text text-muted-foreground">
+                      {hasFilters ? "No savings account matches. Adjust or clear the filters." : "No savings accounts yet. Create a savings account to get started."}
+                    </td>
+                  </tr>
+                ) : items.map((item: SavingsAccount) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
                     <td className="px-4 py-3 font-medium text-strong">{item.accountNumber}</td>
                     <td className="px-4 py-3 text-body">{item.clientName ?? "N/A"}</td>
                     <td className="px-4 py-3 text-body">{item.productName ?? "N/A"}</td>
-                    <td className="px-4 py-3 text-body">{item.accountType}</td>
+                    <td className="px-4 py-3 text-body">{new Date(item.createdAt).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{item.status}</Badge>
                     </td>
@@ -248,12 +253,12 @@ export default function SavingsAccountsPage() {
         </section>
       )}
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="New savings account" size="large">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Details">
         <form className="space-y-5" onSubmit={(event) => void save(event)}>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="sa-client">
-                Client
+              Client/Member
               </label>
               <select
                 id="sa-client"
@@ -271,7 +276,7 @@ export default function SavingsAccountsPage() {
             </div>
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="sa-product">
-                Savings product
+                Product
               </label>
               <select
                 id="sa-product"
@@ -309,7 +314,7 @@ export default function SavingsAccountsPage() {
               Cancel
             </Button>
             <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-              {saving ? "Saving..." : "Create"}
+              {saving ? "Saving..." : "Save"}
             </Button>
           </div>
         </form>

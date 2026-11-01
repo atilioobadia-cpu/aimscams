@@ -104,7 +104,6 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Kept existing application state and submit behavior; moved the secondary fields into Additional Details and kept their validation in that section.
 - Opened Additional Details and Next of Kin in the visible browser. No browser console errors or warnings were recorded.
 - Web typecheck passed. Scoped lint remains blocked by the existing `react-hooks/set-state-in-effect` warning-as-error in the edit initialization effect.
-- Implementation commit: pending.
 - Implementation commit: `e86716c` (`feat(web): align loan application form with visual reference`).
 
 ## 2026-11-01 — Loan application details and edit review
@@ -115,3 +114,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Updated the shared edit wizard to open on Additional Details, use the Update title, and link Cancel to the application detail page. The edit state is not browser-verifiable until a local UUID record exists.
 - Web typecheck passed. Scoped lint passed with the existing edit-initialization `react-hooks/set-state-in-effect` rule suppressed for this check.
 - Implementation commit: `597b4d7` (`feat(web): align loan application edit state with reference`).
+
+## 2026-11-01 — Savings accounts reference pass
+
+- Aligned the title/action card, persistent table header and empty row, modal width, heading, and supported form labels to the supplied screenshot.
+- Opened the New saving modal in the visible browser; no save action was taken.
+- The local account schema has no Account Name field, and the list has no rows. Both remain documented instead of inventing unsupported data.
+- Web typecheck and scoped Savings lint passed.
+- Implementation commit: pending.
