@@ -269,3 +269,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Statement Reports is narrowed to two statement links in the reference while AIMSCAMS also lists transaction/client/savings reports. Teller Requests preserves its empty table headers but lacks the shared teller tabs and branch balance panel. The loan and credit-policy sample URLs return 404; the membership detail resolves to a not-found state.
 - Recharge Credits and Create Segment are In Build locally; their reference form controls are recorded without triggering purchase or save.
 - Updated the page notes and issues I428–I429. No teller request, message segment, loan record, policy, or credit purchase was created or changed.
+
+## 2026-11-01 — Cross-module audit, third batch
+
+- Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.
+- Message Segments remains an In Build placeholder. All three local import pages show a zero-batch standalone empty card, while the references show upload/template actions, filters, and persistent table headers. The membership list has a local empty-state card with search/status controls, while the reference includes shared policy tabs and a policy table. The provisioning create URL returns 404.
+- The Business Account reference is captured with Add Funds open; the local review stayed on its default wallet page. No funds were added and no financial action was opened, so dialog matching remains unverified.
+- Confirmed these findings are already tracked in I373, I374, I376, I389, and I400. Updated queue statuses for all duplicate references. No new issue was needed.
