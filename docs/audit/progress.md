@@ -97,3 +97,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Exercised product/status/officer filters, clear action, empty-state feedback, and arrow-key tab navigation in the visible browser. No console errors or warnings were recorded.
 - Web typecheck and scoped page lint passed. The full project suite passed 140 tests (API 81, worker 6, domain 34, ledger 19).
 - Implementation commit: `69c10be` (`feat(web): align loan applications list with visual reference`).
+
+## 2026-11-01 — Loan application creation reference pass
+
+- Matched the title card, separated accordion sections, initial Details state, field grouping, and Cancel/Next placement to the supplied create screenshot.
+- Kept existing application state and submit behavior; moved the secondary fields into Additional Details and kept their validation in that section.
+- Opened Additional Details and Next of Kin in the visible browser. No browser console errors or warnings were recorded.
+- Web typecheck passed. Scoped lint remains blocked by the existing `react-hooks/set-state-in-effect` warning-as-error in the edit initialization effect.
+- Implementation commit: pending.

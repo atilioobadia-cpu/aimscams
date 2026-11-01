@@ -11,6 +11,7 @@ Reference captures are stored at F:\Wakandi. AIMSCAMS was inspected in the visib
 | Clients | `clients/FULL.png` | Shared shell and list structure adjusted; activation-link behavior and data count remain different. See [clients](clients.md). | Local list has one synthetic individual record; avoid data-dependent comparisons. |
 | Loans | `account-loan/FULL.png` | Title, tabs, toolbar, table structure, horizontal scroll, and pager aligned; see [loans](account-loan.md). | No local loan records; saved-filter persistence remains unavailable. |
 | Loan applications | `account-loan-application/FULL.png` | Title/action card, status tabs, filter toolbar, and table structure aligned; see [loan applications](loan-applications.md). | No local application rows; workflow stage and saved-filter persistence are not available. |
+| Loan application create | `account-loan-application-create/FULL.png` | Title card and accordion sections aligned; see [loan application creation](loan-application-create.md). | Edit state and hover/focus states still need review; interest-on-grace control differs. |
 | Dashboard | None found | Cannot score visual similarity without a reference capture. See [dashboard](dashboard.md). | `F:\Wakandi\dashboard\FULL.png` is absent. |
 
 The folder index and manifest disagree about inventory totals: the index claims 438 originals, while the manifest contains 576 rows and the current scan sees 576 PNGs plus one JPG. Reconcile the manifest before using corpus totals in a final audit score.

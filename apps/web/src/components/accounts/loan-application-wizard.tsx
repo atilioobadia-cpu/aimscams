@@ -1,18 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
+  ChevronDown,
   FileText,
   LoaderCircle,
   Paperclip,
   Search,
   Trash2,
-  UserRound,
 } from "lucide-react";
 
 import { FormError, ForbiddenPanel } from "@/components/accounting/states";
@@ -46,10 +45,10 @@ import {
 
 const STEPS = [
   { key: "details", label: "Details" },
-  { key: "additional", label: "Additional details" },
-  { key: "nominee", label: "Next of kin" },
-  { key: "payment", label: "Payment destination" },
-  { key: "documents", label: "Documents" },
+  { key: "additional", label: "Additional Details" },
+  { key: "nominee", label: "Next of Kin" },
+  { key: "payment", label: "Payment Destination" },
+  { key: "documents", label: "Loan Documents" },
 ] as const;
 
 const TENURE_PERIODS: { value: LoanTenurePeriod; label: string }[] = [
@@ -318,6 +317,9 @@ export function LoanApplicationWizard({
         if (!Number.isInteger(grace) || grace < 0 || grace > 60) {
           return "Grace period must be a whole number of months between 0 and 60.";
         }
+        return null;
+      }
+      if (index === 1) {
         if (!installmentStartDate) return "Choose the installment start date.";
         if (!loanOfficerId) return "Select the loan officer.";
         if (debtCapacity.trim() && parseMajorToMinor(debtCapacity) === null) {
@@ -513,94 +515,45 @@ export function LoanApplicationWizard({
   }
 
   return (
-    <div className="space-y-5">
-      {applicationId ? null : (
-        <div>
-          <Button asChild variant="outline" size="sm">
+    <div className="flex flex-col gap-[26px]">
+      <PageHeader
+        className="min-h-[88px]"
+        variant="card"
+        icon={<FileText className="size-6 shrink-0 text-primary" aria-hidden="true" />}
+        title={applicationId ? "Edit Loan Application" : "Create Loan Application"}
+        actions={
+          <Button asChild variant="ghost" size="sm">
             <Link href="/account-loan-application">
               <ArrowLeft className="size-4" aria-hidden="true" />
-              Loan applications
+              Cancel
             </Link>
           </Button>
-        </div>
-      )}
-
-      <PageHeader
-        title={applicationId ? "Edit loan application" : "New loan application"}
-        description="Five steps. The application stays editable until the first approval."
+        }
       />
-
-      <section
-        data-testid="wizard-steps"
-        className="rounded-[var(--card-radius)] border border-card-border bg-surface py-[14px] px-[20px]"
-      >
-        <ol className="flex flex-wrap items-center gap-x-3 gap-y-3">
-          {STEPS.map((item, index) => {
-            const complete = index < step;
-            const current = index === step;
-            return (
-              <li key={item.key} className="flex items-center gap-3">
-                <button
-                  type="button"
-                  data-testid={`wizard-step-${item.key}`}
-                  aria-current={current ? "step" : undefined}
-                  onClick={() => {
-                    if (index > step) {
-                      const failure = validateStep(step);
-                      if (failure) {
-                        setStepError(failure);
-                        return;
-                      }
-                    }
-                    setStepError(null);
-                    setStep(index);
-                  }}
-                  className={[
-                    "flex items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
-                    current ? "bg-primary text-on-primary" : "text-body hover:bg-subtle",
-                  ].join(" ")}
-                >
-                  <span
-                    className={[
-                      "grid size-6 place-items-center rounded-full fs-text font-semibold",
-                      current
-                        ? "bg-surface/20 text-on-primary"
-                        : complete
-                          ? "bg-primary/10 text-primary"
-                          : "bg-subtle text-muted-foreground",
-                    ].join(" ")}
-                  >
-                    {complete ? <Check className="size-3.5" aria-hidden="true" /> : index + 1}
-                  </span>
-                  <span className={current ? "font-semibold" : ""}>{item.label}</span>
-                </button>
-                {index < STEPS.length - 1 ? (
-                  <span aria-hidden="true" className="hidden h-px w-6 bg-chrome sm:block" />
-                ) : null}
-              </li>
-            );
-          })}
-        </ol>
-      </section>
 
       {optionsError ? (
         <FormError message={optionsError} />
       ) : null}
 
       <form
-        className="space-y-5 rounded-[var(--card-radius)] border border-card-border bg-surface py-[18px] px-[20px]"
+        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
           if (step === STEPS.length - 1) void submit("SUBMITTED");
           else goNext();
         }}
       >
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-details" aria-expanded={step === 0} aria-controls="loan-application-panel-details" onClick={() => { setStepError(null); setStep(0); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 0 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Details <ChevronDown className={`size-5 transition-transform ${step === 0 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
         {step === 0 ? (
+          <div id="loan-application-panel-details" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <div className="grid gap-4 md:grid-cols-2">
               <div className="md:col-span-2">
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-client-search">
-                  Client
+                  Client/Member
                 </label>
                 {selectedClient ? (
                   <div className="flex items-center justify-between gap-3 rounded-[6px] border border-[#dee2e6] bg-[#f8fafc] px-[12px] py-[8px]">
@@ -682,7 +635,7 @@ export function LoanApplicationWizard({
             <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-product">
-                  Loan product
+                  Product
                 </label>
                 <select
                   id="la-product"
@@ -705,7 +658,7 @@ export function LoanApplicationWizard({
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-principal">
-                  Principal (TZS)
+                  Principal Amount (TSh)
                 </label>
                 <Input
                   id="la-principal"
@@ -784,6 +737,78 @@ export function LoanApplicationWizard({
                   ))}
                 </select>
               </div>
+            </div>
+
+            <label className="flex items-center gap-2 fs-text text-strong">
+              <input
+                type="checkbox"
+                checked={interestOnGrace}
+                onChange={(event) => setInterestOnGrace(event.target.checked)}
+              />
+              Charge interest during the grace period
+            </label>
+
+            <div className="flex justify-end border-t border-card-border pt-3">
+              <Button
+                type="submit"
+                data-testid="wizard-next"
+                className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
+              >
+                Next
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Button>
+            </div>
+
+
+          </div>
+          </div>
+        ) : null}
+        </section>
+
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-additional" aria-expanded={step === 1} aria-controls="loan-application-panel-additional" onClick={() => { setStepError(null); setStep(1); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 1 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Additional Details <ChevronDown className={`size-5 transition-transform ${step === 1 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
+        {step === 1 ? (
+          <div id="loan-application-panel-additional" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
+          <div className="space-y-5">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-purpose">
+                  Purpose
+                </label>
+                <select
+                  id="la-purpose"
+                  value={purpose}
+                  onChange={(event) => setPurpose(event.target.value)}
+                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+                >
+                  <option value="">Select purpose</option>
+                  {PURPOSES.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-disbursement">
+                  Disbursement preference
+                </label>
+                <select
+                  id="la-disbursement"
+                  value={disbursementPreference}
+                  onChange={(event) => setDisbursementPreference(event.target.value)}
+                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+                >
+                  <option value="Cash at branch">Cash at branch</option>
+                  <option value="Bank transfer">Bank transfer</option>
+                  <option value="Mobile money">Mobile money</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-start">
                   Installment start date
@@ -827,6 +852,7 @@ export function LoanApplicationWizard({
                   className="h-[var(--control-height)]"
                 />
               </div>
+
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
@@ -895,15 +921,6 @@ export function LoanApplicationWizard({
               </div>
             </div>
 
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input
-                type="checkbox"
-                checked={interestOnGrace}
-                onChange={(event) => setInterestOnGrace(event.target.checked)}
-              />
-              Charge interest during the grace period
-            </label>
-
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-description">
                 Description
@@ -915,46 +932,6 @@ export function LoanApplicationWizard({
                 rows={3}
                 placeholder="Optional note about this request"
               />
-            </div>
-          </div>
-        ) : null}
-
-        {step === 1 ? (
-          <div className="space-y-5">
-            <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-purpose">
-                  Purpose
-                </label>
-                <select
-                  id="la-purpose"
-                  value={purpose}
-                  onChange={(event) => setPurpose(event.target.value)}
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-                >
-                  <option value="">Select purpose</option>
-                  {PURPOSES.map((item) => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-disbursement">
-                  Disbursement preference
-                </label>
-                <select
-                  id="la-disbursement"
-                  value={disbursementPreference}
-                  onChange={(event) => setDisbursementPreference(event.target.value)}
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-                >
-                  <option value="Cash at branch">Cash at branch</option>
-                  <option value="Bank transfer">Bank transfer</option>
-                  <option value="Mobile money">Mobile money</option>
-                </select>
-              </div>
             </div>
 
             <div className="grid gap-2 md:grid-cols-2">
@@ -989,9 +966,16 @@ export function LoanApplicationWizard({
               />
             </div>
           </div>
+          </div>
         ) : null}
+        </section>
 
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-nominee" aria-expanded={step === 2} aria-controls="loan-application-panel-nominee" onClick={() => { setStepError(null); setStep(2); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 2 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Next of Kin <ChevronDown className={`size-5 transition-transform ${step === 2 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
         {step === 2 ? (
+          <div id="loan-application-panel-nominee" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <p className="fs-text text-muted-foreground">
               Optional. Record one next of kin for this application. Leave blank when the client has not
@@ -1065,9 +1049,16 @@ export function LoanApplicationWizard({
               </div>
             </div>
           </div>
+          </div>
         ) : null}
+        </section>
 
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-payment" aria-expanded={step === 3} aria-controls="loan-application-panel-payment" onClick={() => { setStepError(null); setStep(3); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 3 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Payment Destination <ChevronDown className={`size-5 transition-transform ${step === 3 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
         {step === 3 ? (
+          <div id="loan-application-panel-payment" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <fieldset>
               <legend className="mb-2 block fs-text font-medium text-body">Destination</legend>
@@ -1189,9 +1180,16 @@ export function LoanApplicationWizard({
               </p>
             ) : null}
           </div>
+          </div>
         ) : null}
+        </section>
 
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-documents" aria-expanded={step === 4} aria-controls="loan-application-panel-documents" onClick={() => { setStepError(null); setStep(4); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 4 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Loan Documents <ChevronDown className={`size-5 transition-transform ${step === 4 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
         {step === 4 ? (
+          <div id="loan-application-panel-documents" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <div>
               <p className="fs-text font-medium text-body">Attachments</p>
@@ -1306,12 +1304,14 @@ export function LoanApplicationWizard({
               </dl>
             </div>
           </div>
+          </div>
         ) : null}
+        </section>
 
         <FormError message={stepError} />
         <FormError message={saveError} />
 
-        <div className="sticky bottom-0 -mx-[20px] -mb-[18px] flex flex-wrap items-center gap-3 border-t border-[#dee2e6] bg-white px-[20px] py-[10px] pr-[90px]">
+        {step > 0 ? <div className="flex flex-wrap items-center gap-3 border-t border-card-border bg-surface px-[19px] py-[10px] pr-[90px]">
           {step > 0 ? (
             <Button type="button" variant="outline" onClick={goBack} disabled={saving !== null}>
               <ArrowLeft className="size-4" aria-hidden="true" />
@@ -1356,10 +1356,7 @@ export function LoanApplicationWizard({
             </>
           )}
 
-          <Button asChild variant="outline" className="ml-auto">
-            <Link href="/account-loan-application">Cancel</Link>
-          </Button>
-        </div>
+        </div> : null}
       </form>
     </div>
   );
