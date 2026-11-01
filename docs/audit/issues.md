@@ -487,3 +487,10 @@
 | I441 | /reports-msp-MSP04Report | report data/structure | Monthly loan-type and amortization-rate schedule | Local route renders generic chart-of-accounts balances | High |
 | I442 | /reports-msp-MSP05MFIReport | report data/calculation | Quarterly liquid-assets schedule, minimum requirement, excess/deficiency, and ratio | Local route renders generic chart-of-accounts balances | High |
 | I443 | /reports-msp-MSP05Report | report data/structure | Monthly sector/sub-sector disbursements by borrower sex and amount | Local route renders generic chart-of-accounts balances | High |
+| I444 | /reports-msp-MSP06Report | report data/structure | Monthly related-party loan counts, amounts, and savings/deposit/share guarantees with totals | Local route renders generic chart-of-accounts balances | High |
+| I445 | /reports-msp-MSP07Report | report data/structure | Monthly geography, branches/employees, loan counts, outstanding balances, age/sex groups, totals and validation | Local route renders generic chart-of-accounts balances | High |
+| I446 | /reports-msp-MSP08Report | report data/calculation | Monthly liquid-asset categories, liabilities, regulatory minimum, excess/deficiency, and liquidity ratios | Local route renders generic chart-of-accounts balances | High |
+| I447 | /reports-msp-MSP09MFIReport | report data/structure | Quarterly sector disbursements split by female/male/total counts and amounts | Local route renders generic chart-of-accounts balances | High |
+| I448 | /reports-msp-MSP09Report | report data/calculation | Monthly core/institutional capital, total assets, and capital adequacy ratios | Local route renders generic chart-of-accounts balances | High |
+| I449 | /reports-msp-MSP10MFIReport | report data/structure | Quarterly geography, compulsory savings, branch/employee counts, and age/sex loan measures | Local route renders generic chart-of-accounts balances | High |
+| I450 | /reports-msp-MSP10Report | report data/workflow | Monthly complaint lifecycle counts, totals, editable rows, and submit/save controls | Local route renders generic chart-of-accounts balances | High |

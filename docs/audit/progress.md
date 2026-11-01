@@ -355,3 +355,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added the page note and I435, then marked the queue row IN_PROGRESS. The review did not submit, save, or export the report.
 - Continued through MSP02, MSP03 MFI, and MSP03 Type 1/Type 2. Each local route also renders the generic account-balance table; the references contain distinct comprehensive-income and sector-classification/provision schedules. Added page notes and I436–I439; no form actions were used.
 - Reviewed MSP04 MFI, MSP04, MSP05 MFI, and MSP05. Their references provide loan interest-rate, liquid-asset, and sex-disaggregated loan-disbursement schedules; AIMSCAMS still renders generic account balances. Added page notes and I440–I443; no report actions were used.
+
+## 2026-11-01 — MSP reports, continued
+
+- Reviewed MSP06 through MSP10 in the visible local browser against each route's matching Wakandi capture.
+- AIMSCAMS renders the generic chart-of-accounts table across all seven routes. The references instead contain a related-party lending schedule (MSP06), monthly and quarterly geographic/age/sex schedules (MSP07 and MSP10 MFI), a monthly liquid-assets computation (MSP08), quarterly sector disbursements (MSP09 MFI), monthly capital adequacy (MSP09), and a monthly complaint report with an editable row (MSP10).
+- Added separate page notes and issues I444–I450, updated the visual index, and marked queue rows 124–130 IN_PROGRESS. Report actions were not used; no reference values or personal details were copied.
