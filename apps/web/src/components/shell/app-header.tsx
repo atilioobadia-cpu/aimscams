@@ -136,7 +136,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
                 data-testid="header-avatar"
                 className="grid size-[36px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
                 style={{
-                  background: "linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)",
+                  background: "linear-gradient(135deg, #f47d91 0%, #f49a82 50%, #f3b27d 100%)",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
                   outline: "2px solid #f7f7f7",
                   outlineOffset: "-2px",

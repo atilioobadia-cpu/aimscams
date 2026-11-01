@@ -14,6 +14,12 @@ The read-only profile menu inspection showed account contact links for email and
 
 The local API has no user-scoped My Groups endpoint or membership relation. The menu therefore opens the existing group client list, not a user-specific group list. The Wakandi screenshot did not establish matching local data or actions beyond these menu entries.
 
-## Verification status
+## Initial verification status
 
-The in-app AIMSCAMS tab was on `/login` during this change, so the authenticated dropdown could not be visually rechecked after implementation. The production build compiled the application but TypeScript validation is currently blocked by errors in the pre-existing, uncommitted Create Client draft (`apps/web/src/app/(app)/clients/create/page.tsx`). A final visible menu comparison needs the user to sign in locally.
+At first implementation, the in-app AIMSCAMS tab was on `/login` and the authenticated menu could not be rechecked. The build compiled, but TypeScript validation was blocked by errors in the pre-existing Create Client draft (`apps/web/src/app/(app)/clients/create/page.tsx`). The local account menu has since been rechecked below.
+
+## Re-review — 2026-11-01
+
+- Reopened AIMSCAMS `/dashboard` in the visible in-app browser and opened the account menu. It shows the authenticated email and phone links, `My Groups`, and `Logout`; the header shows institution name/registration, language, branch/status, avatar, and full user name.
+- Compared the supplied Wakandi Teller reference header (`F:\Wakandi\transaction-teller-transaction\FULL.png`): the reference account avatar uses a warm coral-to-peach fill. AIMSCAMS used a blue gradient, so the local avatar gradient now uses the matching warm range. Initials and account name remain dynamic because the authenticated identities differ.
+- No Wakandi control was submitted or changed. A fresh live profile-menu comparison remains limited by the Windows browser URL verification guard; the local menu was visually rechecked in the visible browser.
