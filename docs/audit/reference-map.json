@@ -27,8 +27,8 @@
     "route": "/account-loan-details/[id]/repayments"
   },
   "account-loan-details-118-schedule": {
-    "route": null,
-    "missing": "Loan detail has no schedule tab; the schedule is not exposed on its own page."
+    "route": "/account-loan-details/[id]/schedule",
+    "note": "Canonical route exists; local populated comparison requires a synthetic loan with the documented schedule API fields."
   },
   "account-loan-details-118-summary": {
     "route": "/account-loan-details/[id]"
@@ -118,8 +118,8 @@
     "route": "/clients/create-group"
   },
   "clients-group-1789": {
-    "route": null,
-    "missing": "Client groups exist only as a create form; no group detail screen."
+    "route": "/clients/groups/[id]",
+    "note": "Canonical group detail route exists; the reference-specific populated state requires a local synthetic group record."
   },
   "core-wba-business-account": {
     "route": "/business-account",
@@ -162,8 +162,8 @@
     "route": "/messages-template-list"
   },
   "messages-template-list-create-3793": {
-    "route": null,
-    "missing": "Templates are seeded, not authored in the UI."
+    "route": "/messages-template-list",
+    "note": "Canonical template list/create route exists; current local template state and model fields differ from the reference."
   },
   "messages-users-list": {
     "route": "/messages-users-list"

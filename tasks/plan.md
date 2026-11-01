@@ -1,6 +1,6 @@
 # AIMSCAMS visual parity implementation plan
 
-Status: Planning only. The screenshot audit is complete; implementation begins after the user reviews this plan and says to start.
+Status: Active. Implementation and visual verification are underway at the user’s direction.
 
 This plan turns the 175-entry Wakandi-reference audit into coordinated AIMSCAMS work. Its target is consistent layout and interaction fidelity while retaining AIMSCAMS identity and implementing supported product behavior. The route name in a screenshot folder is a reference ID, not assumed to be an AIMSCAMS URL.
 

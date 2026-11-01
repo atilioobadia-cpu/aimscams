@@ -1,14 +1,14 @@
 # AIMSCAMS visual parity tasks
 
-All tasks are pending. Begin implementation only after the user reviews the plan and says to start.
+Implementation is active at the user’s direction. Phase 0 route reconciliation is complete; later phases remain pending.
 
 ## Phase 0 — Route and evidence reconciliation
 
-- [ ] Map each screenshot reference ID to a canonical AIMSCAMS route, rendered title, content signature, and reference state.
-- [ ] Verify suspected 404s by checking route map, Next.js route tree, navigation, and loaded page content; distinguish aliases, missing records, and genuinely missing routes.
-- [ ] Synchronize `reference-map.json`, per-page notes, visual index, queue, and route-crawl records.
+- [x] Map each screenshot reference ID to a canonical AIMSCAMS route, rendered title, content signature, and reference state; reconcile route IDs against the app route tree and visible browser.
+- [x] Verify suspected 404s by checking route map, Next.js route tree, navigation, and loaded page content; distinguish aliases, missing records, and genuinely missing routes.
+- [x] Synchronize `reference-map.json`, per-page notes, visual index, queue, and route-crawl records for all route corrections.
 
-**Checkpoint:** All 175 queue items resolve to a canonical route or have an evidence-based missing/scope reason.
+**Checkpoint:** Complete. All 175 queue rows (142 unique reference IDs) resolve through the map to canonical routes; 3 stale null entries were corrected. Dynamic local records remain tracked separately from route existence.
 
 ## Phase 1 — Measurement and UI contract baseline
 
