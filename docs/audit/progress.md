@@ -361,3 +361,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Reviewed MSP06 through MSP10 in the visible local browser against each route's matching Wakandi capture.
 - AIMSCAMS renders the generic chart-of-accounts table across all seven routes. The references instead contain a related-party lending schedule (MSP06), monthly and quarterly geographic/age/sex schedules (MSP07 and MSP10 MFI), a monthly liquid-assets computation (MSP08), quarterly sector disbursements (MSP09 MFI), monthly capital adequacy (MSP09), and a monthly complaint report with an editable row (MSP10).
 - Added separate page notes and issues I444–I450, updated the visual index, and marked queue rows 124–130 IN_PROGRESS. Report actions were not used; no reference values or personal details were copied.
+
+## 2026-11-01 — MSP11, savings, statements, and transaction reports
+
+- Compared MSP11, three savings reports, two statements, and four transaction reports in the visible local browser against the matching Wakandi captures.
+- Each AIMSCAMS route renders the generic chart-of-accounts balance table. The references instead provide regulatory institution exposure, savings limit/product/snapshot reports, account/member statements, and distinct transaction registers with page-specific filters and actions.
+- Added separate page notes and issues I451–I460, updated the visual index, and marked queue rows 131–134 and 136–141 IN_PROGRESS. The existing Statement Reports hub row remained unchanged.
+- No report filters were submitted, exports were not started, and no reference personal or financial values were copied.
