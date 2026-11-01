@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, Eye, Pencil, Plus, Search } from "lucide-react";
+import { ChevronDown, Eye, Pencil, Plus, Search, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
-import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { PolicySetupHeader } from "@/components/settings/policy-setup-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ApiError } from "@/lib/api";
 import {
@@ -33,6 +32,14 @@ export default function MembershipPoliciesPage() {
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
+  const [showStatusFilter, setShowStatusFilter] = useState(false);
+  const [showMemberType, setShowMemberType] = useState(true);
+  const [showSavings, setShowSavings] = useState(true);
+  const [showShares, setShowShares] = useState(true);
+  const [showFees, setShowFees] = useState(true);
+  const [showActivation, setShowActivation] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [showStatusColumn, setShowStatusColumn] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
 
@@ -75,117 +82,67 @@ export default function MembershipPoliciesPage() {
 
   const items = data?.items ?? [];
   const hasFilters = Boolean(query.trim() || status);
+  const columnCount = 2 + Number(showMemberType) + Number(showSavings) + Number(showShares) + Number(showFees) + Number(showActivation) + Number(showOnboarding) + Number(showStatusColumn);
 
   return (
-    <div className="space-y-5">
+    <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
       <PolicySetupHeader active="membership" />
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader breadcrumb="Settings" title="Membership policies" description="Membership policy definitions." />
-        {data?.canEdit ? (
-          <Button asChild className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-            <Link href="/settings/policies/membership/new">Create membership policy</Link>
-          </Button>
-        ) : null}
-      </div>
+      {data?.canEdit ? <div className="flex justify-end px-4 py-3"><Button asChild variant="outline" className="h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership/new"><Plus className="size-4" aria-hidden="true" />Add New</Link></Button></div> : null}
 
-      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end">
-          <div className="flex-1">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="membership-policy-search">
-              Search
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input
-                id="membership-policy-search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Code or name"
-                className="h-[var(--control-height)] pl-9"
-              />
-            </div>
-          </div>
-          <div className="w-full md:w-[220px]">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="membership-policy-status">
-              Status
-            </label>
-            <select
-              id="membership-policy-status"
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-            >
-              <option value="">All statuses</option>
-              <option value="DRAFT">Draft</option>
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-            </select>
-          </div>
+      <section className="overflow-hidden border-t border-card-border">
+        <div className="flex min-h-[68px] flex-wrap items-center gap-3 border-b border-chrome px-3 py-3">
+          <label className="relative block w-[240px] max-w-full"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" /><Input id="membership-policy-search" aria-label="Search membership policies" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" /></label>
+          <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="outline" className="h-[42px] min-w-[150px] justify-between border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><span className="flex items-center gap-2"><Plus className="size-4" aria-hidden="true" />Add Filters</span><ChevronDown className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="start"><DropdownMenuCheckboxItem checked={showStatusFilter} onCheckedChange={setShowStatusFilter}>Status</DropdownMenuCheckboxItem></DropdownMenuContent></DropdownMenu>
+          {showStatusFilter ? <select aria-label="Filter by status" value={status} onChange={(event) => setStatus(event.target.value)} className="h-[42px] min-w-[180px] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="">All statuses</option><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select> : null}
+          <div className="ml-auto"><DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label="Table columns" className="text-primary"><SlidersHorizontal className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">
+            <DropdownMenuCheckboxItem checked={showMemberType} onCheckedChange={setShowMemberType}>Member Type</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem checked={showSavings} onCheckedChange={setShowSavings}>Is Savings</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem checked={showShares} onCheckedChange={setShowShares}>Is Shares</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem checked={showFees} onCheckedChange={setShowFees}>Is Fees</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem checked={showActivation} onCheckedChange={setShowActivation}>Is Member Activation</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem checked={showOnboarding} onCheckedChange={setShowOnboarding}>SelfOnboardingPolicy</DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem checked={showStatusColumn} onCheckedChange={setShowStatusColumn}>Status</DropdownMenuCheckboxItem>
+          </DropdownMenuContent></DropdownMenu></div>
         </div>
-      </div>
 
-      {forbidden ? (
-        <ForbiddenPanel message="Your role cannot view membership policies. Ask an administrator for Settings Policy : View." />
-      ) : error ? (
-        <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} />
-      ) : loading ? (
-        <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <PanelSkeleton rows={8} />
-        </section>
-      ) : items.length === 0 ? (
-        <EmptyState
-          icon={Building2}
-          title={hasFilters ? "No membership policy matches" : "No membership policies yet"}
-          description={hasFilters ? "Adjust or clear the filters to see other policies." : "Create a membership policy."}
-        />
-      ) : (
-        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+        {forbidden ? <ForbiddenPanel message="Your role cannot view membership policies. Ask an administrator for Settings Policy : View." /> : error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : loading ? <PanelSkeleton rows={8} /> : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left fs-text">
-              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
-                <tr>
-                  <th className="px-4 py-3">Code</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Member type</th>
-                  <th className="px-4 py-3">Next of kin</th>
-                  <th className="px-4 py-3">Dormant days</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="px-4 py-3 font-medium text-strong">{item.code}</td>
-                    <td className="px-4 py-3 text-body">{item.name}</td>
-                    <td className="px-4 py-3">
-                      <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
-                    </td>
-                    <td className="px-4 py-3 text-body">{item.memberType}</td>
-                    <td className="px-4 py-3 text-body">
-                      {item.minNextOfKin}–{item.maxNextOfKin}
-                    </td>
-                    <td className="px-4 py-3 text-body">{item.dormantDays}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex justify-end">
-                        <RowActionsMenu
-                          label={`${item.code} ${item.name}`}
-                          actions={[
-                            { label: "View policy", icon: Eye, href: `/settings/policies/membership/${item.id}` },
-                            ...(data?.canEdit
-                              ? [{ label: "Edit policy", icon: Pencil, href: `/settings/policies/membership/${item.id}/edit` }]
-                              : []),
-                          ]}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+            <table className="w-full min-w-[940px] table-fixed text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle font-semibold text-label"><tr>
+                <th className="px-3 py-3"><div className="whitespace-normal break-words">Name</div></th>
+                {showMemberType ? <th className="px-3 py-3"><div className="whitespace-normal break-words">Member Type</div></th> : null}
+                {showSavings ? <th className="px-3 py-3"><div className="whitespace-normal break-words">Is Savings</div></th> : null}
+                {showShares ? <th className="px-3 py-3"><div className="whitespace-normal break-words">Is Shares</div></th> : null}
+                {showFees ? <th className="px-3 py-3"><div className="whitespace-normal break-words">Is Fees</div></th> : null}
+                {showActivation ? <th className="px-3 py-3"><div className="whitespace-normal break-words">Is Member Activation</div></th> : null}
+                {showOnboarding ? <th className="px-3 py-3"><div className="whitespace-normal break-words">SelfOnboardingPolicy</div></th> : null}
+                {showStatusColumn ? <th className="px-3 py-3"><div className="whitespace-normal break-words">Status</div></th> : null}
+                <th className="w-14 px-2 py-2 text-right"><span className="sr-only">Actions</span></th>
+              </tr></thead>
+              <tbody className="text-body">
+                {items.length === 0 ? <tr><td colSpan={columnCount} className="h-[216px] px-4 text-center text-muted-foreground"><div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-subtle text-muted-foreground"><Search className="size-6" aria-hidden="true" /></div>{hasFilters ? "No membership policies match these filters." : "No data available"}</td></tr> : null}
+                {items.map((item) => {
+                  const actions: RowAction[] = [
+                    { label: "View policy", icon: Eye, href: `/settings/policies/membership/${item.id}` },
+                    ...(data?.canEdit ? [{ label: "Edit policy", icon: Pencil, href: `/settings/policies/membership/${item.id}/edit` }] : []),
+                  ];
+                  return <tr key={item.id} className="h-[67px] border-b border-card-border last:border-0">
+                    <td className="px-4 py-3 font-medium">{item.name}</td>
+                    {showMemberType ? <td className="px-4 py-3">{titleCase(item.memberType)}</td> : null}
+                    {showSavings ? <td className="px-4 py-3">—</td> : null}
+                    {showShares ? <td className="px-4 py-3">—</td> : null}
+                    {showFees ? <td className="px-4 py-3">—</td> : null}
+                    {showActivation ? <td className="px-4 py-3">—</td> : null}
+                    {showOnboarding ? <td className="px-4 py-3">—</td> : null}
+                    {showStatusColumn ? <td className="px-4 py-3"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td> : null}
+                    <td className="w-14 bg-subtle/40 px-2 py-3"><div className="flex justify-end"><RowActionsMenu label={`${item.code} ${item.name}`} actions={actions} /></div></td>
+                  </tr>;
+                })}
               </tbody>
             </table>
           </div>
-        </section>
-      )}
+        )}
+      </section>
     </div>
   );
 }

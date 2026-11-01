@@ -465,3 +465,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Aligned the credit policy page with the reference Add New action, search/filter toolbar, column control, domain headers, and empty table state. The local flexible JSON contract does not expose loan type, interest, amount, tenure, or approval state; missing values are shown as em dashes and remain tracked in I387.
 - Verified the policy hub redirect and credit list in the visible browser at 1280px wide. Membership and Holidays tabs render above their existing local pages; their field/calendar gaps remain documented in I389/I391. No policies, holidays, or working-day settings were changed.
 - Web production build passed with the shared policy tabs, credit list, and hub redirect.
+
+## 2026-11-01 — Membership Policy list
+
+- Compared `/settings/policies/membership` with `F:\Wakandi\settings-policies-membership-policy\FULL.png`; matched Add New, search/filter toolbar, column chooser, and the reference policy columns inside the shared tabs.
+- Used the actual member type and policy lifecycle status. Reference savings/shares/fees/activation/onboarding flags and approval state are absent from the current response; those values display as em dashes. No membership policy was added or changed.
+- At 1280×720 the local page/document/body widths were all 1280px, with the full table header and empty state visible. I389 remains open for missing policy data.
+- Web production build passed with the Membership Policy list alignment.

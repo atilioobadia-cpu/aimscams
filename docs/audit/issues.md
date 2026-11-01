@@ -427,7 +427,7 @@
 | I385 | /settings/products/provisioning-rules | data | Populated provisioning-rule row comparison | Shared Product Setup title/tabs, Add New and empty table aligned; both captures have no rule rows | Low |
 | I387 | /settings/policies/credit-product | data/schema | Typed loan terms and approval state for domain table | Shared policy tabs, reference table shell, and empty state are present; flexible policy JSON has no typed loan terms or approval state | High |
 | I388 | /settings/policies/credit-product/new | data/workflow | Structured lending terms, settings, interest, repayment, collateral, charges, stages and accounting | Local form stores a generic JSON document | High |
-| I389 | /settings/policies/membership | data/schema | Reference savings/shares/fees/activation/onboarding and approval fields | Shared policy tabs are present; current membership model and empty catalog do not supply all reference fields | Medium |
+| I389 | /settings/policies/membership | data/schema | Reference savings/shares/fees/activation/onboarding and approval fields | Shared tabs and reference table shell are present; current membership model and empty catalog do not supply all reference values | Medium |
 | I390 | /settings/policies/membership/new | data/structure | Full policy sections for minors, savings, shares, fees, activation and credit mapping | Several reference policy groups are absent from local form | High |
 | I391 | /settings/policies/holidays | workflow/structure | Month calendar, recurring holidays, and multiple-entry dialog | Shared policy tabs are present; local page still only provides working days and a holiday list | High |
 
