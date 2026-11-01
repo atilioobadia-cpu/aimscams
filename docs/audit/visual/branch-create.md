@@ -6,12 +6,14 @@ AIMSCAMS route: `/settings/branches/new`
 
 ## Comparison
 
-Both pages use a full-page form with branch details, location, and weekly opening hours. AIMSCAMS has a strong structural match in the shared sections and includes the default-branch option. The reference places Branch Name and Branch Code side by side, uses a wide address field, employee count, region/district/ward selectors, an opening-hours schedule with open/closed toggles, and a Special Dates & Holidays area. AIMSCAMS uses text inputs for region/district/ward, a council-type selector, a different editable weekly grid, and has no holiday-exception section. The local heading includes breadcrumbs and instructional copy absent from the reference capture.
+The visible local form now uses the reference-style Add Branch title card with an outlined Back to branches action, a Details section heading, side-by-side branch name/code fields, and a multiline address field. At 1280×720 the document/body widths are both 1280px. The complete form is 1858px tall and scrolling reaches the bottom Create/Cancel controls without a fixed footer covering content.
+
+Remaining differences: AIMSCAMS has extra Status and council-type controls, employee count is in the location section, region/district/ward are free-text fields instead of the reference selectors, and the weekly schedule uses checkboxes/time inputs rather than reference status toggles. The reference also includes a Special Dates & Holidays area with per-date closed/open hours; the local branch model stores weekly hours only. Existing branch validation and API payload remain connected.
 
 ## Recommendations
 
-- Match the reference field grouping and schedule controls while preserving AIMSCAMS validation and branch rules.
-- Add the special-date override workflow only with a defined data model and safe persistence behavior.
-- Review full-page scrolling and footer actions so Save remains reachable without overlaying the schedule.
+- Add governed region/district/ward catalogs and dependent selectors to the branch data contract.
+- Define and persist branch-specific date overrides, including open/closed and optional hours, before adding the Special Dates workflow.
+- Refine the weekly closed/open controls and field order while preserving existing validation and branch rules.
 
-Read-only browser review; no fields changed and Create branch was not activated. Implementation commit: none.
+No fields were entered and Create branch was not activated. Web production build passed. Implementation commit: pending.

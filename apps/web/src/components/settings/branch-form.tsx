@@ -13,7 +13,6 @@ import {
   SuccessNote,
 } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
-import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
@@ -273,39 +272,21 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
     }
   }
 
-  const title = mode === "create" ? "Add branch" : (branch?.name ?? "Branch");
-  const description =
-    mode === "create"
-      ? "Create a branch so members, users and transactions can be scoped to it."
-      : "Address, council classification and weekly opening hours for this branch.";
-
+  const title = mode === "create" ? "Add Branch" : (branch?.name ?? "Branch");
   const errorList = Object.values(fieldErrors);
 
   return (
     <div className="space-y-[var(--space-14)]">
-      <PageHeader
-        title={title}
-        description={description}
-        breadcrumb={
-          <span className="flex items-center gap-1">
-            <Link href="/settings/general" className="hover:text-brand hover:underline">
-              Settings
-            </Link>
-            <span aria-hidden="true">/</span>
-            <Link href="/settings/branches" className="hover:text-brand hover:underline">
-              Branches
-            </Link>
-          </span>
-        }
-        actions={
-          <Button asChild variant="outline">
-            <Link href="/settings/branches">
-              <ArrowLeft className="size-4" aria-hidden="true" />
-              Back to branches
-            </Link>
-          </Button>
-        }
-      />
+      <section className="flex min-h-[90px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-24)]">
+        <Building2 className="mr-3 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />
+        <h1 className="fs-title font-semibold text-heading">{title}</h1>
+        <Button asChild variant="outline" className="ml-auto h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary">
+          <Link href="/settings/branches">
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            Back to branches
+          </Link>
+        </Button>
+      </section>
 
       {forbidden ? (
         <ForbiddenPanel
@@ -349,19 +330,17 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-              <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
+              <h2 className="flex items-center gap-2 fs-text font-semibold text-primary">
                 <Building2 className="size-4 text-brand" aria-hidden="true" />
-                Branch details
+                Details
               </h2>
-              <p className="mt-1 fs-text text-muted-foreground">
-                The code is the short identifier printed on receipts and used in reports.
-              </p>
             </header>
 
-            <div className="grid gap-[var(--space-12)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-[var(--space-12)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2 xl:grid-cols-2">
               <div className="sm:col-span-2 xl:col-span-1">
                 <label htmlFor="branch-name" className="mb-1 block fs-text font-medium text-strong">
                   Branch name
+                  <span className="ml-1 text-accent-red" aria-hidden="true">*</span>
                 </label>
                 <Input
                   id="branch-name"
@@ -411,7 +390,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                 </select>
               </div>
 
-              <div className="sm:col-span-2 xl:col-span-3">
+              <div className="sm:col-span-2 xl:col-span-2">
                 <label className="flex items-start gap-2 fs-text">
                   <input
                     type="checkbox"
@@ -437,7 +416,7 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-              <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
+              <h2 className="flex items-center gap-2 fs-text font-semibold text-primary">
                 <MapPin className="size-4 text-brand" aria-hidden="true" />
                 Location and council
               </h2>
@@ -454,11 +433,13 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
                 >
                   Street address
                 </label>
-                <Input
+                <textarea
                   id="branch-address"
                   value={form.addressLine}
                   disabled={!canEdit || saving}
                   onChange={(event) => update({ addressLine: event.target.value })}
+                  rows={3}
+                  className="w-full resize-y rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-10)] fs-text text-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
 
@@ -559,14 +540,11 @@ export function BranchFormPage({ mode, branchId }: { mode: BranchFormMode; branc
 
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-              <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
+              <h2 className="flex items-center gap-2 fs-text font-semibold text-primary">
                 <Clock3 className="size-4 text-brand" aria-hidden="true" />
                 Opening hours
               </h2>
-              <p className="mt-1 fs-text text-muted-foreground">
-                One row per weekday. Closed days store no times; closing time must be after opening
-                time.
-              </p>
+              <p className="mt-1 fs-text text-muted-foreground">Configure the weekly schedule for this branch.</p>
             </header>
 
             <div className="overflow-x-auto px-[var(--space-16)] py-[var(--space-14)]">

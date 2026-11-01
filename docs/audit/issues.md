@@ -421,7 +421,7 @@
 | I379 | /settings-role | workflow | Role list/search/pagination and tabbed create/edit dialogs | Implemented; Audit History remains an unconnected empty state, populated history not verified | Medium |
 | I380 | /settings-service-provider | structure | Compact Services title card and empty workspace | Local route is an In Build placeholder with a large card and different label | Low |
 | I381 | /settings/branches | data | Reference has three branch rows and populated location values | Local organization has one branch; location catalog/model coverage differs | Medium |
-| I382 | /settings/branches/new | workflow/structure | Reference location selectors, open/closed hours and special-date overrides | Local form uses text location fields and lacks special-date overrides | Medium |
+| I382 | /settings/branches/new | workflow/structure/data | Governed location selectors, reference open/closed schedule controls, and branch-specific special-date overrides | Title/Details structure, side-by-side name/code, and multiline address aligned; location fields remain free text and the data model stores weekly hours only | Medium |
 | I383 | /settings/products/loan, /settings/products/savings | structure/data | Shared Product Setup tabs and reference product columns | Local standalone pages have empty data and separate filters | High |
 | I384 | /settings/products/interest-rates, /settings/products/fee-penalties | structure/workflow | Shared product tabs, reference date/type list and charge modal | Local routes are standalone; reference fee capture is a modal state | Medium |
 | I385 | /settings/products/provisioning-rules | structure | Shared Product Setup title/tabs and Add New list chrome | Local standalone page omits shared product shell | Low |

@@ -401,3 +401,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/branches` in the visible browser with `F:\Wakandi\settings-branch\FULL.png` and aligned the title/action card, search/Add Filters toolbar, location columns, and row actions.
 - At 1280×720, the page and document widths were both 1280px. The local organization has one branch versus three rows in the reference; I381 remains open for data/location coverage.
 - Web production build passed. No branch records were changed and no row actions were invoked. Audit note, index, and issue row were synchronized.
+
+## 2026-11-01 — Add Branch form layout
+
+- Compared `/settings/branches/new` in the visible browser with `F:\Wakandi\settings-branch-add\FULL.png`; updated the title/action card, Details heading, two-column name/code layout, and multiline address control.
+- At 1280×720, document/body widths were both 1280px. The 1858px form scrolls to reachable Create/Cancel actions. No field values were entered and the branch was not created.
+- Web production build passed. I382 remains open for governed location selectors, weekly schedule controls, and a persisted branch-specific special-date model. Audit note, index, and issue row were synchronized.
