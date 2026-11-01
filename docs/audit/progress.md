@@ -121,5 +121,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Opened the New saving modal in the visible browser; no save action was taken.
 - The local account schema has no Account Name field, and the list has no rows. Both remain documented instead of inventing unsupported data.
 - Web typecheck and scoped Savings lint passed.
-- Implementation commit: pending.
 - Implementation commit: `38c7d4a` (`feat(web): align savings page with visual reference`).
+
+## 2026-11-01 — Loan detail pages and Schedule route
+
+- Reviewed the loan summary and Schedule references; the supplied numeric loan suffix returns a UUID validation error against the local API.
+- Added the missing Schedule route and Schedule navigation from the summary. The route reads only the existing schedule response and supports a status filter and CSV export.
+- Recorded separate notes for summary, schedule, transactions, repayments, documents, and guarantors. Populated comparisons remain blocked by unavailable local loan records; unsupported financial columns remain unmapped.
+- Web typecheck and scoped lint passed. Browser route check confirmed the new Schedule route renders without a 404; console errors and warnings were empty.
+- Implementation commit: pending.

@@ -33,6 +33,7 @@ export default function LoanDetailPage() {
 
   useEffect(() => {
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Reset loading when a different loan ID is selected.
     setLoading(true);
     setError(null);
     void getLoan(id)
@@ -111,6 +112,9 @@ export default function LoanDetailPage() {
           </Button>
           <Button asChild variant="outline" size="sm">
             <Link href={`/account-loan-details/${loan.id}/transactions`}>Transactions</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link href={`/account-loan-details/${loan.id}/schedule`}>Schedule</Link>
           </Button>
           <Button asChild variant="outline" size="sm">
             <Link href={`/account-loan-details/${loan.id}/repayments`}>Repayment history</Link>
