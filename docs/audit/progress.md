@@ -170,3 +170,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Reordered the 15 report links and aligned the landing page title card and four-column compact card grid to the supplied reference.
 - Visually checked the hub and compared Trial Balance to its reference. Trial Balance hierarchy, period totals, opening-balance alert, and exports remain blocked by its local response model.
 - Accounting Reports implementation commit: pending.
+- Accounting Reports implementation commit: `98160a4` (`feat(web): align accounting reports hub with reference`).

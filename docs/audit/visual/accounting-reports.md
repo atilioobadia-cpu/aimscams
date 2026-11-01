@@ -15,4 +15,4 @@ The reference page uses an Accounting Reports title card followed by a four-colu
 - Kept each card as a keyboard-accessible link to its existing report route.
 - Verified the grid in the visible browser at the reference comparison viewport. No report actions were run.
 
-Implementation commit: pending.
+Implementation commit: `98160a4` (`feat(web): align accounting reports hub with reference`).
