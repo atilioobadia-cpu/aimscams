@@ -323,3 +323,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - General Ledger Book and Journal Book both currently display the same single opening-balance entry table; the references show account-grouped ledger lines and dated debit/credit pairs, respectively. Notes of Account is also the same generic account-balance table instead of numbered comparative schedules.
 - Ledger Statement loads chart-of-accounts choices in its selector, correcting the earlier note that the selector was empty; it still lacks posting-date and entry-type controls and the reference title/export actions. Corrected I363 and its page note. Existing issues I048–I063 and I351–I352, I355, I358, I361–I363 cover these differences; no duplicate issue was added.
 - Updated the matching queue rows. Browser inspection was read-only; no report filters, exports, or accounting writes were submitted.
+
+## 2026-11-01 — Accounting reports, fourth batch
+
+- Compared Owners Equity, Reconciliation, Trial Balance, Reconcile Statement, and Reconciliation Settings in the visible local browser against the supplied reference screenshots.
+- Owners Equity is a single-date list of equity account balances; the reference is a period movement matrix. Trial Balance uses a single as-of date and flat rows; the reference includes opening-balance warning, period filters, and expandable group totals. Existing notes already identify these contract gaps.
+- The Reconciliation route renders the generic account table instead of the reference workspace toolbar. Reconcile Statement also renders that generic table in place of statement balances and adjustments. Reconciliation Settings lacks the reference configuration form and currently renders account balances.
+- Existing issues I064–I076 and I356, I364–I366 cover the route gaps; no duplicate issues were added. Updated matching queue rows. Browser inspection was read-only; no reconciliation buttons, settings fields, exports, or accounting writes were used.

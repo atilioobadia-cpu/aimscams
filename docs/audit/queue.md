@@ -68,11 +68,11 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 62 | accounting-reports-LedgerStatementReport | 0.8892 | 0.0221 | IN_PROGRESS |
 | 63 | accounting-reports-MonthlyTrialBalance | 0.8379 | 0.0222 | IN_PROGRESS |
 | 64 | accounting-reports-notes-of-account | 0.8297 | 0.0209 | IN_PROGRESS |
-| 65 | accounting-reports-OwnersEquity | 0.8385 | 0.0274 | TODO |
-| 66 | accounting-reports-Reconciliation | 0.8367 | 0.0287 | TODO |
-| 67 | accounting-reports-TrialBalanceReport | 0.8438 | 0.0188 | TODO |
-| 68 | accounting-reports-reconcile-statement | 0.8221 | 0.0400 | TODO |
-| 69 | accounting-reports-reconcile-statement-settings | 0.8358 | 0.0287 | TODO |
+| 65 | accounting-reports-OwnersEquity | 0.8385 | 0.0274 | IN_PROGRESS |
+| 66 | accounting-reports-Reconciliation | 0.8367 | 0.0287 | IN_PROGRESS |
+| 67 | accounting-reports-TrialBalanceReport | 0.8438 | 0.0188 | IN_PROGRESS |
+| 68 | accounting-reports-reconcile-statement | 0.8221 | 0.0400 | IN_PROGRESS |
+| 69 | accounting-reports-reconcile-statement-settings | 0.8358 | 0.0287 | IN_PROGRESS |
 | 70 | clients | 0.8335 | 0.0427 | TODO |
 | 71 | clients-create | 0.8850 | 0.0254 | IN_PROGRESS |
 | 72 | clients-create-group | 0.8586 | 0.0343 | TODO |
