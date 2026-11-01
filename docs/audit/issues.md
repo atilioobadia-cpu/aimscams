@@ -414,7 +414,7 @@
 | I373 | /messages-segment-list | data/workflow | Segment list/query, filters, enable/disable actions, and credit balances | Reference-style shell and empty table implemented; segment and balance APIs are unavailable, so no rows/actions are fabricated | High |
 | I374 | /import-member, /import-account, /import-transaction | structure/data | Reference batch toolbar and persistent table | All three batch pages now use the shared reference-style headers, filters, table chooser, and persistent tables; uploader metadata and row actions remain absent from the local API | Medium |
 | I375 | /import-member-new, /import-account-new, /import-transaction-new | workflow/structure | Four-step upload, mapping, validation, result | Local wizards expose three steps and CSV-only upload | High |
-| I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |
+| I376 | /business-account | data/API | Wallet balances, account details, invoices, statement, and payment-provider operations | AIMSCAMS has no business-account service; values/actions are explicitly unavailable and Save is disabled | Medium |
 
 | I377 | /settings-administrator | data/privacy | 18 reference entries with phone/status/role data | UI structure and pager implemented; local organization has two users and masks email/phone values | Medium |
 | I378 | /settings-administrator-add | domain/workflow | Full-page accordion form with user, role, branch, WBA and teller access | Full-page details/roles/branch workflow implemented; WBA and Teller remain unavailable in the local user model | High |

@@ -608,3 +608,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 
 - Reused the shared batch-list page for `/import-transaction` with Transaction Import title/icon, Upload Transaction and Transaction Template actions, search/status/date filters, column chooser, and the reference table headers. The downloadable CSV headers match the local transaction wizard parser.
 - Reviewed the empty local list in the visible browser against `F:\Wakandi\import-transaction\FULL.png`. No transaction batches exist and uploader/action fields are absent. Did not submit sample transactions because that wizard would post transactions to the local ledger. The old screenshot score is marked stale pending canonical recapture.
+
+## 2026-11-01 — Business Account reference pass
+
+- Restored `/business-account` after the route file was removed during the prior interrupted work; rebuilt the page around the Wakandi Add Funds capture and invoice table.
+- Replaced unverified balances/account details with unavailable labels, disabled statement download and Save, and left payment and invoice data unmodified.
+- Opened the local Add Funds dialog in the visible in-app browser. Its controls and labels match the reference structure; the browser viewport was smaller than the reference, so no geometry score was assigned. Invalidated the previous different-state score in both queue rows.
+- Web production build passed. No financial form was submitted.

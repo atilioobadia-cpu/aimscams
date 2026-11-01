@@ -46,7 +46,7 @@ Severity: **High** = placeholder or broken page that users reach from the sideba
 | `/accounting-reports-reconcile-statement` | No | reconcile statement | In build | Placeholder text: in build | Medium |
 | `/accounting-reports-reconcile-statement-settings` | No | reconcile statement settings | In build | Placeholder text: in build | Medium |
 | `/accounts` | Yes | Accounts | OK | None | None |
-| `/business-account` | Yes | Business account | In build | Placeholder text: in build | High |
+| `/business-account` | Yes | Business account | UI aligned; API unavailable | No local business-account service for balances, invoices, statements, or payment providers | Medium |
 | `/campaigns` | Yes | Campaigns | In build | Placeholder text: in build | High |
 | `/clients` | Yes | Clients | OK | None | None |
 | `/clients/create` | No | Add client | OK | None | Low |

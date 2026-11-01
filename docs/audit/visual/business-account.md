@@ -6,13 +6,20 @@ AIMSCAMS route: `/business-account`
 
 ## Comparison
 
-The reference capture shows the Business Account page with the Add Funds modal open over the institution wallet and invoice list. AIMSCAMS was reviewed in its default state: wallet summary, collection/disbursement, quick-loan, expenditure, transaction, fee, and invoice tabs, alerts, and an empty transactions table. The reference capture is in a different interaction state, so modal geometry cannot be compared to the local default screenshot.
+The reference capture shows the Add Funds dialog open above the Business Account header, collection/disbursement section, and invoice table. AIMSCAMS now presents the same page structure and opens an Add Funds dialog with Top Up, Deposit, QuickLoan Top Up, Amount, Payer, Provider, Message, Cancel, and disabled Save controls. The local empty table uses the reference invoice columns without copying invoice records.
 
-## Recommendations
+The visible in-app browser review confirmed the route renders and the dialog opens. The in-app viewport was narrower and shorter than the reference image, so dialog geometry and page-wide pixel parity were not scored. The existing automated score measured a different state and is invalidated pending a canonical same-size recapture.
 
-- Capture the same default page state before scoring the shared wallet layout.
-- Compare the Add Funds dialog separately only when it can be opened without entering or submitting financial data.
-- Keep wallet balances and financial actions sourced from the business-account service.
+## Data and workflow limits
 
-Browser review was read-only. No funds were added, no financial workflow was opened, and no transaction was initiated.  
-Implementation commit: none; reference and local states differ.
+- No local business-account API is available for wallet balances, account details, invoice rows, statements, tariffs, or payment providers. Those values are shown as unavailable and the statement action is disabled.
+- Save remains disabled; no payment details were entered and no funds or transactions were submitted.
+- Tabs are selectable, but the local system does not expose data or workflows for these sections.
+
+## Verification
+
+- `npm run build -w @aimscams/web` passed.
+- Opened `/business-account` and the Add Funds dialog in the visible in-app browser.
+- No financial workflow was submitted.
+
+Implementation commit: `6a1d7f4` (`feat(web): align business account with Wakandi reference`).

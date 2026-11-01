@@ -112,7 +112,7 @@ The folder index and manifest disagree about inventory totals: the index claims 
 | Member Import Wizard | `import-member-new/FULL.png` | Local three-stage CSV form differs from the reference four-stage CSV/Excel wizard. See [Member Import Wizard](member-import-wizard.md). | Field mapping/result stages absent. |
 | Account Import Wizard | `import-account-new/FULL.png` | Local three-stage CSV form differs from reference four-stage upload/mapping/validation/result flow. See [Account Import Wizard](account-import-wizard.md). | Excel and mapping/validation stages absent. |
 | Transaction Import Wizard | `import-transaction-new/FULL.png` | Local three-stage CSV form differs from the reference four-stage upload/mapping/validation/result flow. See [Transaction Import Wizard](transaction-import-wizard.md). | Excel and mapping/validation stages absent. |
-| Business Account | `core-wba-business-account/FULL.png` | Reference capture shows Add Funds modal; local review was the default wallet page. See [Business Account](business-account.md). | Captured states differ; no matching-state comparison. |
+| Business Account | `core-wba-business-account/FULL.png` | Local Add Funds dialog and invoice table now follow the reference structure; see [Business Account](business-account.md). | Visible review used a smaller viewport; old score invalidated. Account/payment data API unavailable. |
 | General Settings | `settings-account/FULL.png` | Local identity and installation cards differ from the reference Info/Appearance and online collections workspace; see [General Settings](general-settings.md). | Captured reference has preferred savings product modal open. |
 
 ## Settings
