@@ -593,3 +593,8 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Rebuilt `/import-member` around the Wakandi title/action card, Upload Member and Member Template actions, search/status/date filters, column control, and persistent reference table headers. Search and local date/status filtering work against the existing batch-list response.
 - Reviewed the page in the visible in-app browser against `F:\Wakandi\import-member\FULL.png`. The local organization has no member-import batches; Uploaded By and row actions are not exposed by the local API. Kept those fields unavailable and did not copy the real reference row.
 - Prepared a synthetic CSV but the in-app browser file chooser did not attach it, so no import was submitted and no member was created. The old screenshot score is marked stale. Web production build passed; canonical screenshot recapture remains.
+
+## 2026-11-01 — Account Import Batches
+
+- Reused the shared import-batches page for `/import-account` with Account Import title/actions, Account Template download, the reference Template Type column, status/date filters, table-column control, and persistent empty-state table.
+- Reviewed the visible local route against `F:\Wakandi\import-account\FULL.png`. No account-import batches exist; the local API omits template type and uploader data. No account file or balance was created. The prior screenshot metrics are marked stale pending canonical recapture.

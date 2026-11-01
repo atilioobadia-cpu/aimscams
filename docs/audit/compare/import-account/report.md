@@ -1,5 +1,7 @@
 # import-account
 
+> Stale baseline: the metrics below compare the supplied reference to the previous standalone empty card. The route now renders the reference-style title/actions, filters, and table; recapture AIMSCAMS and rerun the canonical diff before using these values as a score.
+
 - Route: /import-account
 - SSIM (masked): 0.9183 (threshold 0.98)
 - SSIM (unmasked): 0.8758
