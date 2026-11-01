@@ -56,7 +56,7 @@ Severity: **High** = placeholder or broken page that users reach from the sideba
 | `/import-account` | Yes | Account import batches | OK | None | None |
 | `/import-account-new` | Yes | Account import wizard | OK | None | None |
 | `/import-member` | Yes | Member import batches | OK | None | None |
-| `/import-member-new` | Yes | Member import wizard | OK | None | None |
+| `/import-member-new` | Yes | Member import wizard | UI aligned; workflow limits | CSV only; file preview unverified; no relationship fields or Excel parser | Medium |
 | `/import-transaction` | Yes | Transaction import batches | OK | None | None |
 | `/import-transaction-new` | Yes | Transaction import wizard | OK | None | None |
 | `/messages` | Yes | Messages | In build | Placeholder text: in build | High |

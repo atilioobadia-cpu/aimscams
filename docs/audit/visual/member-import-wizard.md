@@ -6,13 +6,21 @@ AIMSCAMS route: `/import-member-new`
 
 ## Comparison
 
-The reference uses a four-step process (Upload File, Field Mapping, Validation and Preview, Result) inside a large card, accepts CSV or Excel, and places file selection centrally with a Next action. AIMSCAMS uses three steps (Upload, Preview, Commit), requires CSV, and shows a batch-reference field plus schema text above a basic file control.
+The Wakandi capture shows the Members heading and subtitle in a large white card, a horizontal four-step progress row (Upload File, Field Mapping, Validation And Preview, Result), a centered upload prompt, and a Next button at the lower right. The local page now follows that initial layout and exposes the same four steps. The upload and result stages retain AIMSCAMS member creation through the existing client API.
 
-## Recommendations
+The visible in-app browser confirmed the updated page renders at `/import-member-new` after sign-in. Its viewport is much narrower than the reference, so the full-width geometry is not scored. The file picker did not open through the in-app browser automation, so a synthetic CSV was not previewed this pass.
 
-- Align the wizard step labels/order and upload panel to the reference.
-- Support the reference file formats and mapping/validation steps only when the import implementation can safely process them.
-- Preserve validation and preview before any commit.
+## Workflow and data limits
 
-Browser review was read-only. The file chooser was not opened; no upload or commit occurred.  
-Implementation commit: none; workflow/state mismatch.
+- Local parsing supports CSV up to 10MB. Excel parsing is unavailable because the project has no spreadsheet parser dependency; the interface states CSV support clearly.
+- Field mapping covers reference number, full name, client type, phone, and national ID. Reference number is optional because the local API can generate it.
+- The local client model has no user-relationship fields from the Wakandi description.
+- Validation and preview occur before the final import step. No member records were created during this review.
+
+## Verification
+
+- `npm run build -w @aimscams/web` passed.
+- Reviewed the initial wizard state in the visible in-app browser.
+- File upload and mapped preview remain unverified because the browser file chooser timed out.
+
+Implementation commit: `72182e0` (`feat(import): align member wizard with reference`).

@@ -615,3 +615,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Replaced unverified balances/account details with unavailable labels, disabled statement download and Save, and left payment and invoice data unmodified.
 - Opened the local Add Funds dialog in the visible in-app browser. Its controls and labels match the reference structure; the browser viewport was smaller than the reference, so no geometry score was assigned. Invalidated the previous different-state score in both queue rows.
 - Web production build passed. No financial form was submitted.
+
+## 2026-11-01 — Member Import Wizard reference pass
+
+- Matched the Members title, subtitle, card, progress row, centered file selection, and lower-right Next action to the Wakandi first-step capture.
+- Replaced the local three-step shell with Upload File, Field Mapping, Validation And Preview, and Result. Added CSV column mapping, client validation, and preview before the existing member API commit step.
+- The local project has no Excel parser or member relationship fields; the file chooser timed out, so the synthetic CSV preview was not reached. No member records were created.
+- Web production build passed. Full-width visual geometry and the post-upload steps remain to be verified in the visible browser.
