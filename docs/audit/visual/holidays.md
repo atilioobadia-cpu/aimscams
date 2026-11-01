@@ -6,7 +6,7 @@ AIMSCAMS route: `/settings/policies/holidays`
 
 ## Comparison
 
-The reference shows the shared policy tabs, working-day card, month/year calendar, and Add Holiday dialog states with name, date, recurring toggle, and add-another control. AIMSCAMS shows a working-day checklist and Save working days, followed by a No holidays yet empty card and Create holiday action. The month calendar, recurring entries, and multi-holiday dialog are not present in the local page. Working-day defaults currently mark Monday–Friday as open and Saturday/Sunday closed.
+The reference shows the shared policy tabs, working-day card, month/year calendar, and Add Holiday dialog states with name, date, recurring toggle, and add-another control. AIMSCAMS now includes the shared Membership Policy / Credit Product Policy / Holidays tab row above its existing working-day checklist and holiday list. The month calendar, recurring entries, and multi-holiday dialog are still not present. Working-day defaults currently mark Monday–Friday as open and Saturday/Sunday closed.
 
 ## Recommendations
 
@@ -14,4 +14,4 @@ The reference shows the shared policy tabs, working-day card, month/year calenda
 - Support recurring and multi-entry holiday creation through a dedicated dialog.
 - Keep date and working-day changes read-only until the calendar workflow is deliberately exercised.
 
-Read-only browser review; no checkbox was changed and no save/create action was used. Implementation commit: none.
+Visible browser review at 1280×720 confirmed the Holidays tab is active and the document width is 1280px. No checkbox was changed and no save/create action was used. The remaining calendar workflows are tracked in I391. Implementation commit: pending.

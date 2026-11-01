@@ -4,14 +4,14 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\settings-policies-credit-product-policy\FULL.png`  
 AIMSCAMS route: `/settings/policies/credit-product`
 
-## Comparison
+## Comparison and implementation
 
-The reference sits inside a shared policy tab workspace (Membership Policy, Credit Product Policy, Holidays), with Add New, search, and a populated table for Name, Loan Type, Interest Rate, Loan Amount, Tenure, and Status. AIMSCAMS shows a standalone Credit product policies title, description, search and Draft/Active/Inactive filter, plus an empty state. Shared tabs and reference columns are missing, and the local list has no policy rows.
+Added a shared Membership Policy / Credit Product Policy / Holidays tab row and aligned this route to the reference Add New, search/filter toolbar, column control, and Name, Loan Type, Interest Rate, Loan Amount, Tenure, and Status columns. The local list remains empty for this organization. The current policy response stores flexible JSON content and a draft/active/inactive status; it does not expose typed loan terms or the reference approval state. Missing terms are shown as em dashes instead of inferred values.
 
-## Recommendations
+The `/settings/policies` entry now opens this shared policy workspace on its Membership Policy tab. The credit policy detail fields and approval workflow remain open in I387/I399.
 
-- Share the policy tab shell across membership, credit product, and holiday pages.
-- Render loan type, interest, amount, tenure, and approval status from a dedicated contract rather than raw JSON.
-- Preserve the empty state when no credit product policy exists.
+## Browser review
 
-Read-only browser review; no policy was created or approved. Implementation commit: none.
+At 1280×720 the visible local browser showed all three policy tabs, Add New, toolbar, reference columns, and the centered empty state. Document and body widths were both 1280px. No policy was created or approved.
+
+Web production build passed. Implementation commit: pending.

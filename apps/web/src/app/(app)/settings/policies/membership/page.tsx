@@ -8,6 +8,7 @@ import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounti
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
+import { PolicySetupHeader } from "@/components/settings/policy-setup-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,6 +78,7 @@ export default function MembershipPoliciesPage() {
 
   return (
     <div className="space-y-5">
+      <PolicySetupHeader active="membership" />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader breadcrumb="Settings" title="Membership policies" description="Membership policy definitions." />
         {data?.canEdit ? (

@@ -425,12 +425,11 @@
 | I383 | /settings/products/loan, /settings/products/savings | data/schema | Reference product rows and required savings account/ledger fields | Both list shells and reference columns aligned; local catalogs are empty and savings account/ledger associations are absent | High |
 | I384 | /settings/products/interest-rates, /settings/products/fee-penalties | data/schema/workflow | Interest-rate end dates and fee account/tax fields with reference workflows | Shared list shells aligned; rate end date and fee account/tax associations remain absent from local models | Medium |
 | I385 | /settings/products/provisioning-rules | data | Populated provisioning-rule row comparison | Shared Product Setup title/tabs, Add New and empty table aligned; both captures have no rule rows | Low |
-| I386 | /settings/policies | information architecture | Policy category navigation for membership, credit policy and holidays | Local hub is In Build although child routes exist | Medium |
-| I387 | /settings/policies/credit-product | structure/data | Shared tabs and loan policy table with domain columns | Local list is empty and has generic status filter | High |
+| I387 | /settings/policies/credit-product | data/schema | Typed loan terms and approval state for domain table | Shared policy tabs, reference table shell, and empty state are present; flexible policy JSON has no typed loan terms or approval state | High |
 | I388 | /settings/policies/credit-product/new | data/workflow | Structured lending terms, settings, interest, repayment, collateral, charges, stages and accounting | Local form stores a generic JSON document | High |
-| I389 | /settings/policies/membership | structure/data | Shared policy tabs and membership policy table | Local list is empty and standalone | Medium |
+| I389 | /settings/policies/membership | data/schema | Reference savings/shares/fees/activation/onboarding and approval fields | Shared policy tabs are present; current membership model and empty catalog do not supply all reference fields | Medium |
 | I390 | /settings/policies/membership/new | data/structure | Full policy sections for minors, savings, shares, fees, activation and credit mapping | Several reference policy groups are absent from local form | High |
-| I391 | /settings/policies/holidays | workflow/structure | Month calendar, recurring holidays, and multiple-entry dialog | Local page only provides working days and empty holiday state | High |
+| I391 | /settings/policies/holidays | workflow/structure | Month calendar, recurring holidays, and multiple-entry dialog | Shared policy tabs are present; local page still only provides working days and a holiday list | High |
 
 | I392 | /settings/general | structure/data | Info/Appearance tabs and online collection preference | Local identity/installation form has no appearance or online collection sections | Medium |
 | I393 | /settings/accounting | data/structure | Tax-rate catalog and multi-component editor | Local page contains statutory rate, fiscal periods and posting policies without the reference tax manager | High |

@@ -6,6 +6,7 @@ import { Plus, Search, Building2 } from "lucide-react";
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
+import { PolicySetupHeader } from "@/components/settings/policy-setup-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
@@ -118,6 +119,7 @@ export default function HolidaysPage() {
 
   return (
     <div className="space-y-5">
+      <PolicySetupHeader active="holidays" />
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <PageHeader breadcrumb="Settings" title="Holiday calendar" description="Public holidays that affect due-date calculation." />
         {data?.canEdit ? (

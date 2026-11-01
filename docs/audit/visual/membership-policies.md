@@ -4,13 +4,12 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\settings-policies-membership-policy\FULL.png`  
 AIMSCAMS route: `/settings/policies/membership`
 
-## Comparison
+## Comparison and implementation
 
-The reference uses the common Membership Policy / Credit Product Policy / Holidays tabs, Add New action, search, and a populated table. AIMSCAMS has a standalone Membership policies heading, description, search/status filter, and No membership policies yet card. The shared policy navigation and reference list columns are absent locally, and no local policy rows are available for a populated comparison.
+Added the shared Membership Policy / Credit Product Policy / Holidays navigation and made the Policies settings entry open this workspace on Membership Policy. The local membership list still has its own policy fields and empty state; the reference flags for savings, shares, fees, activation, onboarding and approval are not all represented in the current membership-policy response.
 
-## Recommendations
+## Browser review
 
-- Reuse the shared policy tab shell and match the reference search and list layout.
-- Use a policy-specific table contract and preserve a truthful empty state when unconfigured.
+At 1280×720 the shared tabs are visible above the local Membership Policy page. The captured local organization has no membership policy rows; no policy was created or edited. I389 remains open for domain columns and data support.
 
-Read-only browser review; no membership policy was created or edited. Implementation commit: none.
+Web production build passed. Implementation commit: pending.

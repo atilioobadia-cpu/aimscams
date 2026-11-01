@@ -458,3 +458,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Mapped min/max days and percentage to the existing provisioning API. Category, multiple criteria rows, and separate liability/expense/income accounts are disabled because those fields are absent from the current rule model. Closed I400 and opened I401 for the remaining schema gap.
 - At 1280×720 the document/body widths were both 1280px. Criteria headings fit within the local table, and Save/Cancel are reachable by vertical scrolling. No sample values were entered and no rule was created.
 - Web production build passed with the new route included.
+
+## 2026-11-01 — Policy workspace and credit policy list
+
+- Added shared Membership Policy, Credit Product Policy, and Holidays tabs to all three policy routes. The `/settings/policies` entry now opens the shared workspace on the Membership Policy tab.
+- Aligned the credit policy page with the reference Add New action, search/filter toolbar, column control, domain headers, and empty table state. The local flexible JSON contract does not expose loan type, interest, amount, tenure, or approval state; missing values are shown as em dashes and remain tracked in I387.
+- Verified the policy hub redirect and credit list in the visible browser at 1280px wide. Membership and Holidays tabs render above their existing local pages; their field/calendar gaps remain documented in I389/I391. No policies, holidays, or working-day settings were changed.
+- Web production build passed with the shared policy tabs, credit list, and hub redirect.
