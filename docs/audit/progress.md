@@ -413,3 +413,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/products/loan` in the visible browser with `F:\Wakandi\settings-products-loan\FULL.png`; added the Product Setup title and five tabs, compact search/Add Filters toolbar, configurable columns, and reference loan-product fields.
 - At 1280×720 the page/document/body widths were all 1280px. Filter and column menus opened correctly. The local organization has no loan products versus five reference rows; no product configuration was added or changed.
 - Web production build passed. Updated the page note, visual index, and I383; Savings and remaining product pages remain in the queue.
+
+## 2026-11-01 — Savings Products page layout
+
+- Compared `/settings/products/savings` in the visible browser with `F:\Wakandi\settings-products-savings\FULL.png`; applied the shared Product Setup header/tabs, outlined Add new action, compact filter/search bar, column menu, and reference table columns.
+- At 1280×720 the page/document/body widths were all 1280px. The local organization has no savings product versus one reference row; Account Number and General Ledger Code are not represented by the current product model and are shown as N/A for any existing row.
+- Web production build passed. No product was created or changed. Updated the per-page note, index, and I383.
