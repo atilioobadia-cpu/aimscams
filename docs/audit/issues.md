@@ -457,3 +457,9 @@
 | I411 | /reports-loan-IssuedLoansAndArrearsReport | report data | Issued loan arrears fields with filters and paging | Generic chart-of-accounts balances; no loan fields or paging | High |
 | I412 | /reports-loan-LoanAgingReport | report data/calculation | Aging buckets and portfolio totals by classification | Generic chart-of-accounts balances; all shown values are zero | High |
 | I413 | /reports-loan-LoanArrearsReport | report data/calculation | Loan penalty/total arrears, principal ratio, and days overdue | Generic chart-of-accounts balances; no arrears fields | High |
+
+| I414 | /reports-loan-LoanDisbursementReport | report data | Disbursement filters, amount fields, and paging | Generic chart-of-accounts balances; no disbursement rows | High |
+| I415 | /reports-loan-LoanInsuranceReport | report data | Loan insurance filters and premium/provider fields | Generic chart-of-accounts balances; no insurance rows | High |
+| I416 | /reports-loan-LoanOfficerIncomeReport | report data/access | Officer ledger income grouped by policy and account | Generic chart-of-accounts balances; no officer-income fields | High |
+| I417 | /reports-loan-LoanOutstandingReport | report data | Outstanding interest/charges/total/arrears with filters | Generic chart-of-accounts balances; no loan totals | High |
+| I418 | /reports-loan-LoanRepaymentReport | report data | Repayment date/portfolio filters and component totals | Generic chart-of-accounts balances; no repayment fields | High |

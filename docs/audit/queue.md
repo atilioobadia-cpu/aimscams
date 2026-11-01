@@ -106,11 +106,11 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 100 | reports-loan-IssuedLoansAndArrearsReport | 0.8417 | 0.0307 | IN_PROGRESS |
 | 101 | reports-loan-LoanAgingReport | 0.8418 | 0.0312 | IN_PROGRESS |
 | 102 | reports-loan-LoanArrearsReport | 0.8414 | 0.0313 | IN_PROGRESS |
-| 103 | reports-loan-LoanDisbursementReport | 0.8355 | 0.0331 | TODO |
-| 104 | reports-loan-LoanInsuranceReport | 0.8390 | 0.0323 | TODO |
-| 105 | reports-loan-LoanOfficerIncomeReport | 0.8442 | 0.0315 | TODO |
-| 106 | reports-loan-LoanOutstandingReport | 0.8405 | 0.0317 | TODO |
-| 107 | reports-loan-LoanRepaymentReport | 0.8381 | 0.0320 | TODO |
+| 103 | reports-loan-LoanDisbursementReport | 0.8355 | 0.0331 | IN_PROGRESS |
+| 104 | reports-loan-LoanInsuranceReport | 0.8390 | 0.0323 | IN_PROGRESS |
+| 105 | reports-loan-LoanOfficerIncomeReport | 0.8442 | 0.0315 | IN_PROGRESS |
+| 106 | reports-loan-LoanOutstandingReport | 0.8405 | 0.0317 | IN_PROGRESS |
+| 107 | reports-loan-LoanRepaymentReport | 0.8381 | 0.0320 | IN_PROGRESS |
 | 108 | reports-loan-PaidOffLoansReport | 0.8390 | 0.0318 | TODO |
 | 109 | reports-loan-PendingLoanApplications | 0.8437 | 0.0318 | TODO |
 | 110 | reports-loan-PortfolioRiskReport | 0.8444 | 0.0306 | TODO |

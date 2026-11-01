@@ -241,3 +241,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - AIMSCAMS continues to return chart-of-accounts balances for these routes. Added route-specific notes with reference filters, report fields, and risks; issues I409–I413 track missing report contracts and calculations.
 - Kept review read-only; no report filters were submitted and no exports were downloaded.
 - Implementation commit: none; report query/filter contracts remain missing.
+
+## 2026-11-01 — Loan reports, third batch
+
+- Compared Loan Disbursement, Loan Insurance, Loan Officer Income, Loan Outstanding, and Loan Repayment with the supplied references in the visible browser.
+- Each local route returns the generic chart-of-accounts balance grid instead of its distinct report filters and fields. Added notes and issue-register entries I414–I418.
+- Kept review read-only; no report filters were submitted and no exports were downloaded.
+- Implementation commit: none; the report query and filter contracts are not present.
