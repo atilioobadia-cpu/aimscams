@@ -299,3 +299,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Repayments reference shows the shared loan header/tabs, component columns and a totals row; the local numeric sample returns a UUID validation error. Guarantors reference is captured with Add New Guarantor open over a populated table; Documents shows a populated file table and upload action. The local numeric loan sample fails UUID validation on each route.
 - Both application-detail samples and the edit sample also fail UUID validation locally. References show the four-stage application workflow and review/history/document tabs; the edit capture opens Additional Details. Existing notes record the field and workflow gaps without reproducing names, IDs, or filenames.
 - Updated the repayment, guarantor, and document notes with route-specific reference structure and all matching queue rows. No loan/application data or documents were changed.
+
+## 2026-11-01 — Accounts and accounting, first batch
+
+- Compared Loan Applications, Create Loan Application, Loans, Savings Accounts, Asset Types, and Fixed Assets in the visible local browser against their references. Journal Entries (#49) was already reviewed and remains tracked separately.
+- Loan application and loan list structures match their reference shells; both local lists are empty while the screenshots are populated. The create-application title, Details accordion and primary fields align, with the previously recorded Interest On Grace Period checkbox/select difference still open.
+- Savings Accounts is empty locally; its reference capture has the New saving Details modal open. The existing local note confirms the modal was previously inspected safely and records unsupported Account Name behavior.
+- Asset Types and Fixed Assets retain the reviewed title/table/modal structures. Reference state gaps include allocation/ledger fields and fixed-asset import/entry-date behavior already tracked in I347–I348. No forms or file choosers were submitted.
+- Updated queue status for all duplicate references. No account, loan, application, asset type, or fixed asset was created or changed.
