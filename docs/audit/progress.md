@@ -292,7 +292,14 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared the route with `reports-client-MemberVerificationReport/FULL.png` in the visible browser. Replaced the unrelated chart-of-accounts view with the reference title card, Download control, seven report columns, and sort/filter/table-column affordances.
 - Disabled controls whose query, filtering, or export actions are not backed by the local API; the table explains that verification data is unavailable. No member names or identifiers were copied, and no report data was fabricated.
 - Updated the page note and issues I118–I120/I427. The visual shell is implemented; the authorized report data and export contract remain open.
-- Production build and commit/push pending.
+- Production build passed; commit `9c88725` is pushed to `origin/main`.
+
+## 2026-11-01 — Statement Reports hub
+
+- Matched the reference heading card, chart icon, two compact statement report cards, and information icons in the visible browser.
+- Moved transaction, saving, client, and MSP report destinations into distinct category hubs so the Statement page can match its reference without orphaning existing report routes. Added those category links to the Reports navigation and overview.
+- The new category hubs use the existing report-card pattern because the reference set contains no captures of those hub pages. No report filters, exports, or records were changed.
+- Production build passed.
 
 ## 2026-11-01 — Cross-module audit, third batch
 

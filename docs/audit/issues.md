@@ -407,7 +407,7 @@
 
 | I367 | /reports-loan-ActiveLoanReport | report data | Active-loan filters and portfolio table | Local route renders generic chart-of-accounts data | High |
 | I368 | /reports-loan | missing route | Loan Repayment Schedule Report destination | Reference link has no local route | Medium |
-| I369 | /reports-statement | information architecture | Separate statement, transaction, savings, and client report categories | Ten mixed destinations appear in the Statement hub | Medium |
+| I369 | /reports-statement | information architecture | Separate statement, transaction, savings, and client report categories | Statement hub now contains only its two reference destinations; other reports have separate category hubs | Low |
 | I370 | /requests | structure/data | Request tabs, filter toolbar, and persistent empty table | Local page uses status checkboxes and a standalone no-requests card | Medium |
 | I371 | /messages-message-logs | structure/data | Shared Message Service shell, filters, table, pager | Local page has a search field and empty card; no local log rows | High |
 | I372 | /messages-template-list | structure/data | Message service tabs and template list fields | Local page uses inline add form and has no template rows | High |

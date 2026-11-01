@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BarChart3, FileText, Landmark } from "lucide-react";
+import { ArrowRight, BarChart3, FileText, Landmark, Users, Wallet } from "lucide-react";
 
 import { PageHeader } from "@/components/data/page-header";
 
@@ -10,7 +10,11 @@ export const metadata: Metadata = {
 
 const sections = [
   { href: "/reports-loan", title: "Loan reports", description: "Portfolio, arrears, risk and disbursements.", icon: Landmark },
-  { href: "/reports-statement", title: "Statements", description: "Account, member and transaction statements.", icon: FileText },
+  { href: "/reports-saving", title: "Saving reports", description: "Savings, snapshots and policy limits.", icon: Wallet },
+  { href: "/reports-transaction", title: "Transaction reports", description: "Daily, expense, fee and reversal reports.", icon: FileText },
+  { href: "/reports-client", title: "Client reports", description: "Client lists and member verification.", icon: Users },
+  { href: "/reports-msp", title: "MSP reports", description: "Microfinance sector performance returns.", icon: BarChart3 },
+  { href: "/reports-statement", title: "Statement reports", description: "Account and member statements.", icon: FileText },
   { href: "/accounting-reports", title: "Financial reports", description: "Trial balance, income statement, position and cash flow.", icon: BarChart3 },
 ];
 

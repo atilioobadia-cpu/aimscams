@@ -104,8 +104,11 @@ export const navItems: NavItem[] = [
     chevron: true,
     children: [
       { label: "Loan reports", icon: "reports", href: "/reports-loan" },
+      { label: "Saving", icon: "piggy", href: "/reports-saving" },
+      { label: "Transactions", icon: "transactions", href: "/reports-transaction" },
+      { label: "Client", icon: "clients", href: "/reports-client" },
+      { label: "MSP reports", icon: "shield", href: "/reports-msp" },
       { label: "Statements", icon: "file", href: "/reports-statement" },
-      { label: "Financial reports", icon: "chart", href: "/accounting-reports" },
     ],
   },
   {

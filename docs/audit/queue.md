@@ -11,7 +11,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | 5 | settings-policies-membership-policy-1-edit | 0.9220 | 0.0126 | IN_PROGRESS |
 | 6 | settings-policies-membership-policy-2-edit | 0.9190 | 0.0121 | IN_PROGRESS |
 | 7 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | IN_PROGRESS |
-| 8 | reports-statement | 0.9109 | 0.0232 | IN_PROGRESS |
+| 8 | reports-statement | — | — | IN_PROGRESS |
 | 9 | settings-products-loan-5 | 0.9094 | 0.0164 | IN_PROGRESS |
 | 10 | messages-recharge-credits | 0.9087 | 0.0213 | IN_PROGRESS |
 | 11 | transaction-teller-transaction-request | 0.9079 | 0.0227 | IN_PROGRESS |
@@ -138,7 +138,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | 132 | reports-saving-SavingBeyondPolicyLimitsReport | 0.8223 | 0.0367 | IN_PROGRESS |
 | 133 | reports-saving-SavingReport | 0.8293 | 0.0314 | IN_PROGRESS |
 | 134 | reports-saving-SavingSnapshotReport | 0.8269 | 0.0330 | IN_PROGRESS |
-| 135 | reports-statement | 0.9109 | 0.0232 | IN_PROGRESS |
+| 135 | reports-statement | — | — | IN_PROGRESS |
 | 136 | reports-statement-AccountStatementReport | 0.8377 | 0.0285 | IN_PROGRESS |
 | 137 | reports-statement-MemberStatementReport | 0.8384 | 0.0286 | IN_PROGRESS |
 | 138 | reports-transaction-DailyTransactionReport | 0.8269 | 0.0318 | IN_PROGRESS |
