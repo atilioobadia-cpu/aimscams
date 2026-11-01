@@ -102,8 +102,8 @@
 | I099 | /messages-message-logs | text | Reference UI words | 25% coverage | Medium |
 | I100 | /messages-message-logs | text | Reference headers | Our headers differ | Medium |
 | I101 | /messages-message-logs | text | Message Service | Delivery logs | Low |
-| I102 | /messages-recharge-credits | in-build | Implemented page | Placeholder (In build) | High |
-| I103 | /messages-recharge-credits | text | Reference UI words | 25% coverage | Medium |
+| I102 | /messages-recharge-credits | in-build | Implemented page | Reference-style form shell implemented; purchase integration tracked in I428 | High |
+| I103 | /messages-recharge-credits | text | Reference UI words | Credit, Description, WBA Balance, Total Cost, Buy Credits, Cancel present | Medium |
 | I104 | /messages-segment-list | in-build | Implemented page | Placeholder (In build) | High |
 | I105 | /messages-segment-list | text | Reference UI words | 12% coverage | Medium |
 | I106 | /messages-segment-list | text | MessageService | Segments | Low |
@@ -470,7 +470,7 @@
 | I424 | /reports-loan-TransactionReport | report data | Loan transaction filters, transaction/reference fields, and paging | Generic chart-of-accounts balances; no transaction fields | High |
 | I425 | /reports-loan-WrittenOffLoanReport | report data/access | Write-off filters, reason/date/initiator fields, and recovery amount | Generic chart-of-accounts balances; no write-off fields | High |
 | I427 | /reports-client-MemberVerificationReport | report data/access | Member verification filters, status fields, and access-controlled export | Report shell present; authorized verification query, records, and export access are unavailable | High |
-| I428 | /messages-recharge-credits | workflow | Credit amount, description, balance/cost summary, and safe purchase flow | Local route is In Build; no form or purchase state | High |
+| I428 | /messages-recharge-credits | workflow | Credit amount, description, balance/cost summary, and safe purchase flow | Form shell present; pricing, WBA balance, and purchase APIs are unavailable | High |
 | I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Local route is In Build; no form or filter state | High |
 | I430 | /clients/create | structure/data | Reference accordion groups and resolved reference-number state | Local route uses six-step wizard; generated reference shows Loading in captured state | High |
 | I431 | /messages-send-message | workflow/structure | Company, segment and template-based send/test workflow | Local form targets a direct recipient with freeform body and has no segment field | High |

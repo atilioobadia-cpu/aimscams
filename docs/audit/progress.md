@@ -307,6 +307,13 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - The list is empty, the detail route requires a UUID while the reference sample uses suffix `5`, and the current API has no product creation operation. The product schema also lacks several reference terms, charges, stages, and ledger details.
 - Updated the page note, visual index, and issue I396. Did not create an inactive product by bypassing the missing API or copy the reference product's financial terms into local data; a governed creation/data contract is needed for a safe populated comparison.
 
+## 2026-11-01 — Recharge Credits form shell
+
+- Replaced the In Build placeholder with the reference-style title card, Credit/Description fields, balance/cost summary, and Buy Credits/Cancel footer.
+- Entered `1000` and a clearly marked visual-QA-only description in the visible browser; values stayed in the unsaved form. Buy Credits remained disabled.
+- No pricing, balance, or purchase API exists locally. The form reports those values unavailable instead of fabricating a balance or charge; I428 remains open for the integration.
+- Production build and GitHub push pending.
+
 ## 2026-11-01 — Cross-module audit, third batch
 
 - Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.
