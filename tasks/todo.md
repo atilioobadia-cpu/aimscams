@@ -12,7 +12,7 @@ Implementation is active at the user’s direction. Phase 0 route reconciliation
 
 ## Phase 1 — Measurement and UI contract baseline
 
-- [ ] Reconcile stale targets against `docs/11-ui-contract.md` and current decisions.
+- [x] Reconcile stale targets against `docs/11-ui-contract.md` and current decisions. The browser gate, README and build sequence now use 76px header, 240px rail, and 16px shared text / 24px titles.
 - [ ] Confirm reference/local viewport, DPR, browser zoom, and crop alignment for representative page families.
 - [ ] Ensure structural screenshot comparisons mask dynamic data on both images; save reproducible baseline artifacts and measurements.
 

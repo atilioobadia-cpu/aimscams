@@ -50,7 +50,7 @@ not in days.
 
 ## 3. The verification gate
 
-Every page is measured at **1837Ã—1080** and **1280Ã—800**, in a real browser, with the console open.
+The shell gate defaults to **1838×1114** and **1280×800** in a real browser, with the console open. For visual comparison, calibrate each reference capture to its CSS viewport and record DPR; the Services reference is **1838×1114**. Do not assume one scale across reference folders.
 
 ### 3.1 Automated assertions
 
@@ -61,11 +61,11 @@ run only when the route ends in `/dashboard`.
 
 | Check | Expected |
 |---|---|
-| Header height | 68px |
+| Header height | 76px |
 | Tenant logo | image, 28px tall, â‰¤190px wide, 40px monogram fallback |
-| Sidebar width, expanded | 204px |
+| Sidebar width, expanded | 240px |
 | Sidebar width, collapsed | 76px |
-| Active nav pill | 36px tall, x=8â†’195.3, radius 6px, background `#057573` |
+| Active nav pill | 36px tall, 224px wide from x=8 to x=232, radius 6px; use the active-sidebar color exception in `docs/11` |
 | Sidebar row / sub-item | 36px (Settings link 34px) / 28px; icon 20px on x=28 |
 | Sidebar item count | exactly 12, in the order in `docs/11 Â§4` |
 | Sidebar footer | 73px; collapse control 44px on the rail edge |
@@ -75,8 +75,8 @@ run only when the route ends in `/dashboard`.
 | Card radius / padding | 8px; KPI 14px, chart and portfolio 30px |
 | Card border | 1px, `#dee2e6`, no heavy shadow |
 | Floating chat button | 60px circle, `#037674`, right 20 / bottom 16 |
-| Text | every rendered node is 12.8px |
-| Horizontal scrollbar | none at 1837Ã—1080 and none at 1280Ã—800 |
+| Text | shared labels and controls 16px; page titles 24px; utility sizes are checked by page state |
+| Horizontal scrollbar | none at calibrated reference scale and none at 1280×800 |
 | Console | zero errors, zero warnings, zero unhandled rejections |
 | Requests | zero failed same-origin requests, zero HTTP 5xx |
 | Fonts | loaded, no fallback flash in the screenshot |
@@ -122,7 +122,7 @@ feat(<module>): <page name>
 Route: /<route>
 - what was built
 - tests added
-- measured: header 68, sidebar 204, pill 36, bg #ebe9e9, no overflow, console clean
+- measured: header 76, sidebar 240, pill 36, bg #ebe9e9, no overflow, console clean
 ```
 
 **Cadence**
@@ -305,7 +305,7 @@ proven parts.
   components.
 - Primitives: Button, Input, Select, Checkbox, Radio, Textarea, Card, Table, Badge, Tabs, Dropdown,
   Dialog, Sheet, Tooltip, Pagination, EmptyState, StatCard, ChartCard, PageHeader, FilterBar.
-- Header (68px), sidebar (204px, 12 items, exact order, chevrons as specified), collapse control,
+- Header (76px), sidebar (240px, 12 items, exact order, chevrons as specified), collapse control,
   footer wordmark, floating chat button (60px), content grid.
 - The collapsed sidebar is **76px** and keeps the icon axis at x=28; the value is recorded in
   `docs/11 Â§4` and enforced by the audit.

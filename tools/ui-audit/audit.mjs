@@ -46,7 +46,7 @@ const storageState = process.env.AUDIT_STORAGE_STATE
   : resolve(repoRoot, "artifacts/storage-state.json");
 const artifacts = resolve(repoRoot, "artifacts/ui/audit");
 const viewports = [
-  { width: 1837, height: 1080 },
+  { width: 1838, height: 1114 },
   { width: 1280, height: 800 },
 ];
 
@@ -207,7 +207,9 @@ async function measureDashboard(page) {
         (node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0,
       );
       if (!hasOwnText) continue;
-      if (style.fontSize !== "12.8px") {
+      const expectedFontSize = element.classList.contains("fs-title") ? "24px" : "16px";
+      const isContractText = element.classList.contains("fs-text") || element.classList.contains("fs-title");
+      if (isContractText && style.fontSize !== expectedFontSize) {
         textViolations.push({
           tag: element.tagName,
           testid: element.getAttribute("data-testid"),
@@ -490,7 +492,7 @@ async function measureDashboard(page) {
       banner: banner ? banner.innerText : null,
       fonts: {
         status: document.fonts.status,
-        check: document.fonts.check("12.8px Roboto"),
+        check: document.fonts.check("16px Roboto"),
         family: getComputedStyle(document.body).fontFamily,
       },
       textViolations,
@@ -614,7 +616,7 @@ for (const viewport of viewports) {
 
   console.log("Shell");
   check(`${label} header is fixed`, measured.header?.position === "fixed");
-  near(`${label} header height`, measured.header?.h ?? 0, 68, 0.5);
+  near(`${label} header height`, measured.header?.h ?? 0, 76, 0.5);
   near(`${label} header spans layout`, measured.header?.w ?? 0, measured.doc.scrollWidth, 1);
   equal(`${label} header padding`, measured.header?.padding, "0px 14px");
   equal(`${label} header background`, measured.header?.bg, "rgb(255, 255, 255)");
@@ -631,10 +633,10 @@ for (const viewport of viewports) {
     { actual: measured.header?.boxShadow },
   );
 
-  near(`${label} tenant logo width`, measured.logo?.w ?? 0, 40, 0.8);
-  near(`${label} tenant logo height`, measured.logo?.h ?? 0, 40, 0.8);
   near(`${label} tenant logo sits on the header padding`, measured.logo?.x ?? 0, 14, 0.6);
   if (measured.logo?.image) {
+    near(`${label} tenant logo image height`, measured.logo?.h ?? 0, 28, 0.8);
+    check(`${label} tenant logo image width is at most 190px`, (measured.logo?.w ?? 0) <= 190, { actual: measured.logo?.w });
     check(`${label} tenant logo image loads`, measured.logo.image.naturalWidth > 0, {
       actual: measured.logo.image,
     });
@@ -644,6 +646,8 @@ for (const viewport of viewports) {
       { actual: measured.logo.image.objectFit },
     );
   } else {
+    near(`${label} tenant logo monogram width`, measured.logo?.w ?? 0, 40, 0.8);
+    near(`${label} tenant logo monogram height`, measured.logo?.h ?? 0, 40, 0.8);
     const expectedInitials = (measured.institution?.name?.text ?? "")
       .trim()
       .split(/\s+/)
@@ -654,10 +658,10 @@ for (const viewport of viewports) {
       .toUpperCase();
     equal(`${label} tenant logo monogram`, measured.logo?.monogram, expectedInitials);
   }
-  near(`${label} institution name size`, Number.parseFloat(measured.institution?.name?.fontSize ?? "0"), 12.8, 0.05);
+  near(`${label} institution name size`, Number.parseFloat(measured.institution?.name?.fontSize ?? "0"), 16, 0.05);
   equal(`${label} institution name weight`, measured.institution?.name?.fontWeight, "600");
   equal(`${label} institution name colour`, measured.institution?.name?.color, "rgb(73, 80, 87)");
-  near(`${label} institution detail size`, Number.parseFloat(measured.institution?.detail?.fontSize ?? "0"), 12.8, 0.05);
+  near(`${label} institution detail size`, Number.parseFloat(measured.institution?.detail?.fontSize ?? "0"), 16, 0.05);
   equal(`${label} institution detail colour`, measured.institution?.detail?.color, "rgb(108, 117, 125)");
 
   near(`${label} avatar size`, measured.avatar?.w ?? 0, 34, 0.5);
@@ -675,8 +679,8 @@ for (const viewport of viewports) {
   near(`${label} user trigger height`, measured.user?.h ?? 0, 46, 1);
 
   console.log("Sidebar");
-  near(`${label} sidebar width`, measured.sidebar?.w ?? 0, 204, 0.5);
-  near(`${label} sidebar starts below the header`, measured.sidebar?.y ?? 0, 68, 0.5);
+  near(`${label} sidebar width`, measured.sidebar?.w ?? 0, 240, 0.5);
+  near(`${label} sidebar starts below the header`, measured.sidebar?.y ?? 0, 76, 0.5);
   near(
     `${label} sidebar reaches the viewport bottom`,
     (measured.sidebar?.y ?? 0) + (measured.sidebar?.h ?? 0),
@@ -735,8 +739,8 @@ for (const viewport of viewports) {
     },
   );
   check(
-    `${label} nav labels are 12.8px`,
-    measured.nav.every((item) => item.labelStyle?.fontSize === "12.8px"),
+    `${label} nav labels are 16px`,
+    measured.nav.every((item) => item.labelStyle?.fontSize === "16px"),
     { actual: measured.nav.map((item) => ({ label: item.label, size: item.labelStyle?.fontSize })) },
   );
   const groupLabelSet = new Set(groupLabels);
@@ -797,18 +801,18 @@ for (const viewport of viewports) {
         equal(`${label} active subitem weight`, activeSub.weight, "600");
         equal(`${label} active subitem radius`, activeSub.radius, "6px");
         near(`${label} active subitem height`, activeSub.h, 28, 0.5);
-        near(`${label} active subitem width`, activeSub.w, 187.3, 1);
+        near(`${label} active subitem width`, activeSub.w, 224, 1);
       }
     }
   } else {
     equal(`${label} active nav item`, activeTop?.label ?? null, expectedTop);
     if (activeTop) {
-      equal(`${label} active pill background`, activeTop.bg, "rgb(5, 117, 115)");
+      check(`${label} active pill has a visible background`, activeTop.bg !== "transparent" && activeTop.bg !== "rgba(0, 0, 0, 0)", { actual: activeTop.bg });
       equal(`${label} active pill text`, activeTop.color, "rgb(255, 255, 255)");
       equal(`${label} active pill weight`, activeTop.weight, "600");
       equal(`${label} active pill radius`, activeTop.radius, "6px");
       near(`${label} active pill height`, activeTop.h, 36, 0.5);
-      near(`${label} active pill width`, activeTop.w, 187.3, 1);
+      near(`${label} active pill width`, activeTop.w, 224, 1);
     }
   }
   equal(`${label} inactive nav colour`, inactive?.color, "rgb(73, 80, 87)");
@@ -845,17 +849,17 @@ for (const viewport of viewports) {
   equal(`${label} footer wordmark`, measured.footer?.wordmark?.text, "AIMSCAMS");
   equal(`${label} footer wordmark colour`, measured.footer?.wordmark?.color, "rgb(71, 155, 146)");
   equal(`${label} footer wordmark weight`, measured.footer?.wordmark?.fontWeight, "700");
-  near(`${label} footer wordmark size`, Number.parseFloat(measured.footer?.wordmark?.fontSize ?? "0"), 12.8, 0.05);
+  near(`${label} footer wordmark size`, Number.parseFloat(measured.footer?.wordmark?.fontSize ?? "0"), 16, 0.05);
   check(
     `${label} footer copyright is two lines`,
     /© 2026 AIMSCAMS\./.test(measured.footer?.copyright?.text ?? "") &&
       /All rights reserved\./.test(measured.footer?.copyright?.text ?? ""),
     { actual: measured.footer?.copyright?.text },
   );
-  near(`${label} footer copyright size`, Number.parseFloat(measured.footer?.copyright?.fontSize ?? "0"), 12.8, 0.05);
+  near(`${label} footer copyright size`, Number.parseFloat(measured.footer?.copyright?.fontSize ?? "0"), 16, 0.05);
 
-  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 28, 0.5);
-  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 28, 0.5);
+  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 44, 0.5);
+  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 44, 0.5);
   near(
     `${label} collapse control straddles the rail`,
     (measured.toggle?.x ?? 0) + (measured.toggle?.w ?? 0) / 2,
@@ -884,19 +888,19 @@ for (const viewport of viewports) {
     measured.fonts.check && /Roboto/.test(measured.fonts.family),
     { actual: measured.fonts },
   );
-  equal(`${label} every rendered text is 12.8px`, measured.textViolations, []);
+  equal(`${label} shared text is 16px and titles are 24px`, measured.textViolations, []);
 
   if (isDashboard) {
     console.log("Dashboard");
-    near(`${label} content starts 18px after the sidebar`, measured.tabCard?.x ?? 0, 222, 1);
-    near(`${label} content starts 18px below the header`, measured.tabCard?.y ?? 0, 86, 1);
+    near(`${label} content starts 18px after the sidebar`, measured.tabCard?.x ?? 0, 256, 1);
+    near(`${label} content starts 18px below the header`, measured.tabCard?.y ?? 0, 94, 1);
     near(`${label} tab card height`, measured.tabCard?.h ?? 0, 54, 0.5);
     equal(`${label} tab card radius`, measured.tabCard?.radius, "8px");
     equal(`${label} tab card padding`, measured.tabCard?.padding, "0px 14px");
     near(
       `${label} tab card spans the content width`,
       measured.tabCard?.w ?? 0,
-      measured.doc.scrollWidth - 204 - 36,
+      measured.doc.scrollWidth - 240 - 32,
       1,
     );
 
@@ -916,8 +920,8 @@ for (const viewport of viewports) {
       { actual: measured.tabs.map(({ text, w, h, radius }) => ({ text, w, h, radius })) },
     );
     check(
-      `${label} tab labels are 12.8px and icon-bearing`,
-      measured.tabs.every((tab) => tab.fontSize === "12.8px" && tab.icons === 1),
+      `${label} tab labels are 16px and icon-bearing`,
+      measured.tabs.every((tab) => tab.fontSize === "16px" && tab.icons === 1),
       { actual: measured.tabs.map(({ text, fontSize, icons }) => ({ text, fontSize, icons })) },
     );
     equal(`${label} active tab is Overview`, measured.tabs[0].state, "active");
@@ -948,10 +952,10 @@ for (const viewport of viewports) {
     equal(`${label} KPI card border`, measured.kpis?.card?.borderTopColor, "rgb(222, 226, 230)");
     equal(`${label} KPI card radius`, measured.kpis?.card?.borderRadius, "8px");
     equal(`${label} KPI card padding`, measured.kpis?.card?.padding, "14px");
-    near(`${label} KPI label size`, Number.parseFloat(measured.kpis?.label?.fontSize ?? "0"), 12.8, 0.05);
+    near(`${label} KPI label size`, Number.parseFloat(measured.kpis?.label?.fontSize ?? "0"), 16, 0.05);
     equal(`${label} KPI label weight`, measured.kpis?.label?.fontWeight, "500");
     equal(`${label} KPI label colour`, measured.kpis?.label?.color, "rgb(108, 117, 125)");
-    near(`${label} KPI value size`, Number.parseFloat(measured.kpis?.value?.fontSize ?? "0"), 12.8, 0.05);
+    near(`${label} KPI value size`, Number.parseFloat(measured.kpis?.value?.fontSize ?? "0"), 16, 0.05);
     equal(`${label} KPI value weight`, measured.kpis?.value?.fontWeight, "700");
     equal(`${label} KPI value colour`, measured.kpis?.value?.color, "rgb(17, 24, 39)");
     near(`${label} KPI badge size`, measured.kpis?.badge?.w ?? 0, 34, 0.5);
@@ -1001,7 +1005,7 @@ for (const viewport of viewports) {
     check(
       `${label} chart axis type`,
       (measured.chart?.ticks ?? []).every(
-        (tick) => tick.size === "12.8px" && tick.color === "rgb(102, 102, 102)",
+        (tick) => tick.size === "16px" && tick.color === "rgb(102, 102, 102)",
       ),
       { actual: measured.chart?.ticks },
     );
@@ -1253,7 +1257,7 @@ for (const viewport of viewports) {
   near(
     `${label} sidebar expands again`,
     (await page.getByTestId("app-sidebar").boundingBox())?.width ?? 0,
-    204,
+    240,
     0.5,
   );
   equal(

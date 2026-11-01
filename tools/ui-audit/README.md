@@ -2,7 +2,7 @@
 
 Measures the rendered back office against `docs/11-ui-contract.md` in a real browser. Shell
 geometry, typography, overflow and console checks run on **any authenticated route**; dashboard
-content checks run only when `AUDIT_URL` ends in `/dashboard`. It runs at **1837×1080** and
+content checks run only when `AUDIT_URL` ends in `/dashboard`. It runs at **1838×1114** and
 **1280×800**, expanded and collapsed, and exits non-zero on any failed check.
 
 ## Run
@@ -56,11 +56,11 @@ value and what was measured.
 
 ## What it asserts
 
-- Header 68, sidebar 204/76, active pill 187.3×36 at radius 6, 12 items in order, icon axis 28,
+- Header 76, sidebar 240/76, active pill 224×36 at radius 6, 12 items in order, icon axis 28,
   footer 73, collapse control 44 on the rail edge.
 - Tab card 54 with 154×44 tabs, eight KPI cards fixed at four per row, chart and portfolio geometry,
   60px chat button.
-- Every rendered text node is 12.8px; no horizontal overflow at either viewport.
+- Shared text is 16px and page titles are 24px; utility text follows page-specific checks. No horizontal overflow at either viewport.
 - Language dropdown, sheet, support dialog and chart tooltip: open, close on Escape and outside
   click, focus return, keyboard operation.
 - Collapsed sidebar keeps the icon axis, active state and accessible names.
