@@ -276,3 +276,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Message Segments remains an In Build placeholder. All three local import pages show a zero-batch standalone empty card, while the references show upload/template actions, filters, and persistent table headers. The membership list has a local empty-state card with search/status controls, while the reference includes shared policy tabs and a policy table. The provisioning create URL returns 404.
 - The Business Account reference is captured with Add Funds open; the local review stayed on its default wallet page. No funds were added and no financial action was opened, so dialog matching remains unverified.
 - Confirmed these findings are already tracked in I373, I374, I376, I389, and I400. Updated queue statuses for all duplicate references. No new issue was needed.
+
+## 2026-11-01 — Cross-module audit, fourth batch
+
+- Compared Member, Account, and Transaction Import Wizards; Create Client; and the Loan Provisioning, Interest Rate, and Savings Product lists in the visible local browser against their references.
+- The three AIMSCAMS import wizards expose three steps (Upload/Preview/Commit) and CSV schema text; references show four steps (Upload/Field Mapping/Validation and Preview/Result), accept CSV or Excel, and use a centered upload panel. No file was selected.
+- Create Client uses a six-step wizard with a compact Membership step; the reference shows a full-page accordion form with multiple registration groups. The generated local reference-number control remained Loading. Added the page note and issue I430; no values were entered or registration submitted.
+- Product lists share the missing standalone Product Setup tabs. Provisioning and interest-rate lists are empty locally; the savings reference contains a populated row while AIMSCAMS is empty. The sample row values are not copied. Existing product findings I383–I385 cover these structural gaps.
+- Updated the page-specific notes and all duplicate queue rows. No files were uploaded and no product was changed.

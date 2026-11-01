@@ -6,7 +6,7 @@ AIMSCAMS route: `/settings/products/provisioning-rules`
 
 ## Comparison
 
-The reference shows Product Setup with the Loan Provisioning tab active, Add New, search, Name and Status columns, and a centered No data available empty state. AIMSCAMS has the same broad search/status and empty-state intent but uses a standalone Loan provisioning rules heading, description, and filters; the shared product tabs and Add New/table chrome are absent in the inspected initial viewport.
+The reference shows Product Setup with the Loan Provisioning tab active, Add New, search, Name and Status columns, and a centered No data available empty state. AIMSCAMS has the same broad search/status and empty-state intent but uses a standalone Loan provisioning rules heading, description, and filters; the shared product tabs and table chrome are absent; the local action is labeled Create provisioning rule.
 
 ## Recommendations
 
