@@ -368,3 +368,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Each AIMSCAMS route renders the generic chart-of-accounts balance table. The references instead provide regulatory institution exposure, savings limit/product/snapshot reports, account/member statements, and distinct transaction registers with page-specific filters and actions.
 - Added separate page notes and issues I451–I460, updated the visual index, and marked queue rows 131–134 and 136–141 IN_PROGRESS. The existing Statement Reports hub row remained unchanged.
 - No report filters were submitted, exports were not started, and no reference personal or financial values were copied.
+
+## 2026-11-01 — Transactions and settings queue continuation
+
+- Reopened All Transactions, Online Reconciliation, Online Collections, Teller Console, Teller History, and Teller Approval Requests in the visible local browser and compared the captured states with their corresponding Wakandi screenshots. Existing page notes cover the documented workflow and empty-state differences; no transaction, till, request, upload, or export action was used.
+- Continued through the settings queue. Confirmed the reference pages for General/Accounting settings, Users/Add User, Branches/Add Branch, Credit Product Policies/edit, Holidays, Membership Policy detail/create, Fees and Penalties, Loan Product detail, and Savings Product creation have page-specific visual notes. Rechecked the direct local states for key routes; missing sample records and route-specific 404 states are documented in the corresponding nested-route notes.
+- Updated remaining TODO rows 142–146 and 149–155, 157–158, 160, 164–165, 169, and 173 to IN_PROGRESS to reflect the recorded mismatches. The 175-entry visual match queue now has no TODO rows; all captured mismatches remain IN_PROGRESS pending implementation.
+- The review remained read-only. No user, branch, policy, holiday, loan, savings product, transaction, or financial setting was created, edited, approved, submitted, or saved.
