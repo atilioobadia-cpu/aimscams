@@ -21,3 +21,9 @@
 
 - Wire overview totals and funds history to local aggregate endpoints before evaluating numeric parity.
 - Revisit empty chart/table states when local loan and member history is available; do not seed more than five sample records.
+
+## Live-session re-review — 2026-11-01
+
+Screenshots are excluded from this pass per the user's instruction. Read the active Wakandi `/dashboard` accessibility tree directly: it exposes Overview, Members, and Loans tabs, the institution/language/branch/user header, and the funds, savings/shares/loans, and PAR dashboard sections. The visible AIMSCAMS `/dashboard` exposes the same three views and corresponding sections. Members and Loans are data-limited locally as recorded above; no sample records were added.
+
+The active session confirms the dashboard's structural navigation and section labels. Pixel-level measurements are not scored in this pass because screenshot use is prohibited and the reference corpus has no Dashboard image folder. Production metric values were not copied.
