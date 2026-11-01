@@ -4,14 +4,14 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\settings-products-savings-create\FULL.png`  
 AIMSCAMS route: `/settings/products/savings/new`
 
-## Comparison
+## Comparison and implementation
 
-Both screens are full-page product forms. The reference separates Details, Terms, Saving Product Charges, and Accounting. It includes product type, minimum balance and transaction bounds, permission, guarantor/collateral/multiple-account/debit options, charge configuration, account name, and general-ledger mappings. AIMSCAMS provides Code, Name, Status, minimum balance, interest rate/payout frequency, description, and four availability toggles. Reference transaction limits, permissions, charges, account labels, and ledger mappings are absent, while AIMSCAMS adds explicit code/status/rate fields.
+Reorganized the local form into the reference's Details, Terms, Savings Product Charges, and Accounting sections. Added the reference field labels and placement, and grouped the existing guarantor, collateral, multiple-account, and interest-payout flags with the term fields. Kept local Name, Product Code, Status, description, minimum balance, interest rate, and payout-frequency values editable and connected to their existing save payload.
 
-## Recommendations
+The current savings-product contract does not persist product type, transaction bounds, permission, default auto-debit/primary-account flags, charge rules, or account/ledger mappings. Those controls are shown disabled with an explanation rather than appearing configurable when they would not save. I395 remains open until the API and persistence model support these fields and workflows.
 
-- Group supported savings terms, charges, and accounting mappings into reference-style sections.
-- Extend the contract before implementing fields that would affect account opening or transaction posting.
-- Keep the long form responsive and maintain a fixed/reachable footer action area.
+## Browser review
 
-Read-only browser review; no values were entered and the product was not created. Implementation commit: none.
+Compared the full local page with `F:\Wakandi\settings-products-savings-create\FULL.png` in the visible browser at 1280×720. The long form is vertically scrollable, the document and body widths are both 1280px, and the Accounting section and Cancel/Create actions are reachable at the bottom without horizontal overflow. The browser showed empty form values; no values were entered, saved, or used to create a product.
+
+Web production build passed. Implementation commit: pending.

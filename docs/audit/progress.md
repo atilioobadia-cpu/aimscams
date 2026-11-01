@@ -437,3 +437,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/products/provisioning-rules` with its reference capture; applied the shared Product Setup tabs/title, Add new placement, compact filter/search bar, Name/Status columns, and centered empty state.
 - At 1280×720 the page/document/body widths were all 1280px. Both reference and local lists are empty. The existing rule-creation modal and status actions remain connected; no rule was created.
 - Web production build passed. Updated the per-page note, index, and I385.
+
+## 2026-11-01 — Savings Product create form layout
+
+- Compared `/settings/products/savings/new` with `F:\Wakandi\settings-products-savings-create\FULL.png`; reorganized the form into Details, Terms, Savings Product Charges, and Accounting sections and matched supported labels, grouping, and page actions.
+- Kept existing persisted fields connected to the current save flow. Transaction bounds, permission, default-account flags, charge configuration, and ledger mapping are displayed as disabled because the current product contract cannot persist them; I395 remains open.
+- At 1280×720 the document/body widths were both 1280px. Scrolled to the bottom in the visible browser and confirmed Accounting and Cancel/Create actions are reachable. No values were entered or saved.
+- Web production build passed. Updated the page note, visual index, and issue row.

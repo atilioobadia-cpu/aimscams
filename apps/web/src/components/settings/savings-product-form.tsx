@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Lock } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, SuccessNote, FormError } from "@/components/accounting/states";
 import { PageHeader } from "@/components/data/page-header";
@@ -172,139 +172,79 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <Button asChild variant="outline" size="sm">
-          <Link href="/settings/products/savings">
-            <ArrowLeft className="size-4" aria-hidden="true" />
-            Savings products
-          </Link>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="fs-title font-semibold text-heading">{editing ? "Edit Savings Product" : "Create Savings Product"}</h1>
+        <Button asChild variant="outline" className="h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary">
+          <Link href="/settings/products/savings"><ArrowLeft className="size-4" aria-hidden="true" />Savings products</Link>
         </Button>
       </div>
-
-      <PageHeader
-        title={editing ? "Edit savings product" : "Create savings product"}
-        description="Savings product terms. Accounts snapshot these terms at opening."
-      />
 
       {loading ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={8} />
         </section>
       ) : (
-        <form onSubmit={(event) => void save(event)} className="space-y-5 rounded-xl border border-card-border bg-surface p-5">
-          {!editing ? (
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-code">
-                  Code
-                </label>
-                <Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
+        <form onSubmit={(event) => void save(event)} className="space-y-4">
+          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+            <header className="border-b border-chrome px-5 py-4"><h2 className="fs-text font-semibold text-strong">Details</h2></header>
+            <div className="grid gap-4 px-5 py-4 md:grid-cols-2">
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-name">Name <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-type">Type <span className="text-accent-red" aria-hidden="true">*</span></label><select id="sp-type" disabled aria-describedby="sp-contract-note" className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this product model</option></select></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-code">Product Code</label><Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-status">Status</label><select id="sp-status" value={status} onChange={(event) => setStatus(event.target.value as SavingsProductStatus)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></div>
+              <div className="md:col-span-2"><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-description">Description</label><textarea id="sp-description" value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className="w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 fs-text" /></div>
+            </div>
+          </section>
+
+          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+            <header className="border-b border-chrome px-5 py-4"><h2 className="fs-text font-semibold text-strong">Terms</h2></header>
+            <div className="grid gap-4 px-5 py-4 md:grid-cols-2">
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-min-balance">Minimum Balance <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="sp-min-balance" value={minBalance} onChange={(event) => setMinBalance(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-min-transaction">Minimum Transaction Amount</label><Input id="sp-min-transaction" disabled placeholder="Not available in this product model" className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-max-transaction">Maximum Transaction Amount</label><Input id="sp-max-transaction" disabled placeholder="Not available in this product model" className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-permission">Permission</label><select id="sp-permission" disabled className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this product model</option></select></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-rate">Interest rate (%)</label><Input id="sp-rate" value={interestRate} onChange={(event) => setInterestRate(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-frequency">Interest payout frequency</label><Input id="sp-frequency" value={frequency} onChange={(event) => setFrequency(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div className="grid gap-3 sm:grid-cols-2 md:col-span-2 md:grid-cols-3">
+                <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={allowedAsGuarantor} onChange={(event) => setAllowedAsGuarantor(event.target.checked)} className="size-4 accent-primary" />Allowed As Guarantor</label>
+                <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={allowedAsCollateral} onChange={(event) => setAllowedAsCollateral(event.target.checked)} className="size-4 accent-primary" />Allowed As Collateral</label>
+                <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={allowedMultipleAccounts} onChange={(event) => setAllowedMultipleAccounts(event.target.checked)} className="size-4 accent-primary" />Allowed Multiple Accounts</label>
+                <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={allowInterestPayout} onChange={(event) => setAllowInterestPayout(event.target.checked)} className="size-4 accent-primary" />Allow Interest Payout</label>
+                <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Default Auto Debit Account</label>
+                <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Primary Account</label>
               </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-name">
-                  Name
-                </label>
-                <Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+          </section>
+
+          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+            <header className="border-b border-chrome px-5 py-4"><h2 className="fs-text font-semibold text-strong">Savings Product Charges</h2></header>
+            <div className="space-y-4 px-5 py-4">
+              <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Add Charges On Transfer</label>
+              <div id="sp-contract-note" className="rounded-md border border-dashed border-card-border bg-subtle px-4 py-5 fs-text text-muted-foreground">Charge rules and transaction-charge selectors are not supported by the current savings product model.</div>
+            </div>
+          </section>
+
+          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+            <header className="border-b border-chrome px-5 py-4"><h2 className="fs-text font-semibold text-strong">Accounting</h2></header>
+            <div className="space-y-4 px-5 py-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-account-name">Account Name</label><Input id="sp-account-name" disabled placeholder="Not available in this product model" className="h-[var(--control-height)]" /></div>
+                <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-ledger">General Ledger Code</label><Input id="sp-ledger" disabled placeholder="Not available in this product model" className="h-[var(--control-height)]" /></div>
+                <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-payout-account">Interest Payout Account Name</label><Input id="sp-payout-account" disabled placeholder="Not available in this product model" className="h-[var(--control-height)]" /></div>
+                <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-payout-ledger">Interest Payout General Ledger Code</label><Input id="sp-payout-ledger" disabled placeholder="Not available in this product model" className="h-[var(--control-height)]" /></div>
               </div>
+              <p className="fs-text text-muted-foreground">Ledger-account mappings are not persisted by the current savings product model.</p>
             </div>
-          ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-code">
-                  Code
-                </label>
-                <Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-name">
-                  Name
-                </label>
-                <Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
-              </div>
+          </section>
+
+          <section className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-4">
+            <div className="min-w-0"><FormError message={saveError} /><SuccessNote message={saved} /></div>
+            <div className="flex items-center gap-3">
+              <Button asChild variant="outline"><Link href="/settings/products/savings">Cancel</Link></Button>
+              <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">{saving ? "Saving..." : editing ? "Save changes" : "Create"}</Button>
             </div>
-          )}
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-status">
-                Status
-              </label>
-              <select
-                id="sp-status"
-                value={status}
-                onChange={(event) => setStatus(event.target.value as SavingsProductStatus)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-              >
-                <option value="DRAFT">Draft</option>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-min-balance">
-                Minimum balance
-              </label>
-              <Input id="sp-min-balance" value={minBalance} onChange={(event) => setMinBalance(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-rate">
-                Interest rate (%)
-              </label>
-              <Input id="sp-rate" value={interestRate} onChange={(event) => setInterestRate(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-frequency">
-              Interest payout frequency
-            </label>
-            <Input id="sp-frequency" value={frequency} onChange={(event) => setFrequency(event.target.value)} className="h-[var(--control-height)]" />
-          </div>
-
-          <div>
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-description">
-              Description
-            </label>
-            <textarea
-              id="sp-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={3}
-              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
-            />
-          </div>
-
-          <div className="grid gap-2 md:grid-cols-2">
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={allowedAsGuarantor} onChange={(event) => setAllowedAsGuarantor(event.target.checked)} />
-              Allowed as guarantor
-            </label>
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={allowedAsCollateral} onChange={(event) => setAllowedAsCollateral(event.target.checked)} />
-              Allowed as collateral
-            </label>
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={allowedMultipleAccounts} onChange={(event) => setAllowedMultipleAccounts(event.target.checked)} />
-              Allowed multiple accounts
-            </label>
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={allowInterestPayout} onChange={(event) => setAllowInterestPayout(event.target.checked)} />
-              Allow interest payout
-            </label>
-          </div>
-
-          <FormError message={saveError} />
-          <SuccessNote message={saved} />
-
-          <div className="flex items-center gap-3">
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-              {saving ? "Saving..." : editing ? "Save changes" : "Create savings product"}
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/settings/products/savings">Cancel</Link>
-            </Button>
-          </div>
+          </section>
         </form>
       )}
     </div>
