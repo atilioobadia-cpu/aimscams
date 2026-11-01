@@ -297,7 +297,7 @@ export default function LoansPage() {
         ) : (
           <>
             <div className="table-scroll overflow-x-auto">
-              <table className="w-full min-w-[1495px] text-left fs-text">
+              <table className="w-full min-w-[1695px] text-left fs-text">
                 <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                   <tr>
                     <th className="px-4 py-3">Account number</th>
@@ -307,7 +307,10 @@ export default function LoansPage() {
                     <th className="px-4 py-3">Status</th>
                     <th className="px-4 py-3">Tenure</th>
                     <th className="px-4 py-3 text-right">Loan amount (TSh)</th>
-                    <th className="px-4 py-3 text-right">Balance</th>
+                    <th className="px-4 py-3 text-right">Balance (TSh)</th>
+                    <th className="px-4 py-3">Created date</th>
+                    <th className="px-4 py-3 text-right">Overdue days</th>
+                    <th className="px-4 py-3">Provisioning status</th>
                     <th className="px-4 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -322,6 +325,9 @@ export default function LoansPage() {
                       <td className="whitespace-nowrap px-4 py-6 text-body">{item.tenureCount} {titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
                       <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{formatMinorUnitsExact(item.principalMinor)}</td>
                       <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{formatMinorUnitsExact(item.outstandingPrincipalMinor)}</td>
+                      <td className="whitespace-nowrap px-4 py-6 text-body">{new Date(item.createdAt).toLocaleDateString("en-GB").replaceAll("/", "-")}</td>
+                      <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{item.daysPastDue}</td>
+                      <td className="whitespace-nowrap px-4 py-6 text-body">N/A</td>
                       <td className="px-4 py-6">
                         <div className="flex justify-end">
                           <RowActionsMenu label={item.loanNumber} actions={[{ label: "View details", icon: Eye, href: `/account-loan-details/${item.id}` }]} />
@@ -331,7 +337,7 @@ export default function LoansPage() {
                   ))}
                   {visibleItems.length === 0 ? (
                     <tr>
-                      <td colSpan={9} className="h-[250px] px-4 text-center">
+                      <td colSpan={12} className="h-[250px] px-4 text-center">
                         <p className="fs-text font-semibold text-strong">{hasFilters ? "No loan matches" : `No ${tab.toLocaleLowerCase()} loans`}</p>
                         <p className="mt-1 fs-text text-muted-foreground">{hasFilters ? "Adjust or clear the filters to see other loans." : "Loans in this status group will appear here."}</p>
                       </td>

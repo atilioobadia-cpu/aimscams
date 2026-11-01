@@ -39,3 +39,7 @@ The reference viewport is 1838×1241 CSS px while the local inspection viewport 
 ## Status
 
 The Loans list title, tab structure, toolbar, column region, horizontal scroll and pager now match the reference structure at the calibrated shell positions. Data-state parity and saved-filter persistence remain open.
+
+## 2026-11-01 re-review
+
+Wakandi reference: `F:\Wakandi\account-loan\FULL.png` and the visible Loans page. AIMSCAMS now displays the available `Created Date` and `Overdue Days` fields in the reference column order. Its API has no equivalent provisioning-status field; the table keeps that column and shows `N/A`. The separate risk-classification field is not used as a substitute. Local and Wakandi datasets differ, and no production records were copied or local data seeded.
