@@ -138,3 +138,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - In the visible browser, checked the status control sizing, optional Accounting status toggle, Save dialog feedback, clear action, and final default state.
 - The local transaction list is empty. Session Date and Product Name are not in the response model. The reference Resubmit action has no safe local endpoint, and saved-filter persistence is unavailable.
 - Web typecheck and scoped lint passed; see the pass commit record.
+- Implementation commit: `5629690` (`feat(web): align transactions page with visual reference`).

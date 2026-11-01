@@ -33,4 +33,4 @@ The reference table includes Date, Session Date, Member Name, Transaction Number
 - Replaced the breadcrumb-style title with the compact Transactions title card.
 - Matched the reference's compact filter arrangement and optional filters menu while keeping date and status filters connected to the existing query.
 - Kept table headings, empty state, and pager visible when the result set is empty.
-- Implementation commit: pending.
+- Implementation commit: `5629690` (`feat(web): align transactions page with visual reference`).
