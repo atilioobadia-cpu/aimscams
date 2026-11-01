@@ -506,4 +506,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Created local `VISUAL-QA-MEM` Individual and `VISUAL-QA-GRP` Group policies in Draft with only supported default fields and descriptions identifying them as synthetic and not for operational use. This enables populated list/detail/edit review; no approval or fee values were added.
 - Fixed the list's long-name cell so it truncates with a title instead of overlapping the Member Type column. Visible 1280px browser review confirms cells align and there is no document-width overflow.
 - Matched the membership detail summary card, Next of Kin & Member Dormancy and Member Activation sections, approval status, Board Member selector, and approval list to the reference. Unsupported workflow areas are visibly unavailable, not simulated.
-- Inspected both drafts in the edit form; supported values loaded correctly and no changes were saved. Added the reference Group Settings section conditionally for Group policies, with unavailable fields disabled. Group terms and approval workflow remain tracked in I390/I398. Web production build passed; GitHub push for this follow-up is pending.
+- Inspected both drafts in the edit form; supported values loaded correctly and no changes were saved. Added the reference Group Settings section conditionally for Group policies, with unavailable fields disabled. Group terms and approval workflow remain tracked in I390/I398. Web production build passed; follow-up commit `dffa9ff` is pushed to `origin/main`.
+
+## 2026-11-01 — Chart of Accounts follow-up
+
+- Compared the default chart and ledger-details reference captures with the visible AIMSCAMS page at 1280×720. Matched title/icon/casing, outlined controls, date-range shell, table heading casing, proportions, and spacing; full group names now fit.
+- Confirmed Add Groups reports that creation is unavailable in the current Accounting phase. Group/ledger creation, date filtering, and ledger-edit persistence remain tracked in I028/I344. No account or balance was changed.
+- Web production build passed; GitHub push is pending.

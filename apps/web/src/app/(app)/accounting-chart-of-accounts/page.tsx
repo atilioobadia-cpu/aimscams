@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Calendar, ChevronDown, ChevronRight, Pencil, Plus } from "lucide-react";
+import { BookOpen, Calendar, ChevronDown, ChevronRight, FolderPlus, Network, Pencil } from "lucide-react";
 
 import {
   ErrorPanel,
@@ -50,11 +50,12 @@ function sentenceCase(s: string): string {
       if (!part.trim()) return part;
       const upper = part.toUpperCase();
       if (ACRONYMS.has(upper)) return upper;
-      if (firstWord) {
-        firstWord = false;
-        return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+      const lower = part.toLowerCase();
+      if (!firstWord && ["and", "or", "of", "the", "in", "on", "to", "for"].includes(lower)) {
+        return lower;
       }
-      return part.toLowerCase();
+      firstWord = false;
+      return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
     })
     .join("");
 }
@@ -202,29 +203,30 @@ export default function ChartOfAccountsPage() {
   const dateRange = `01-Jan-${year} to 31-Dec-${year}`;
 
   return (
-    <div className="flex flex-col">
-      <section className="flex h-[70px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-16)]">
-        <h1 className="min-w-0 truncate fs-title font-semibold text-heading mt-[-4px]">
-          Chart of accounts
+    <div className="mx-2 mt-2 flex flex-col">
+      <section className="flex h-[88px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-16)]">
+        <h1 className="flex min-w-0 items-center gap-3 truncate fs-title font-semibold text-heading">
+          <Network className="size-5 shrink-0 text-brand" aria-hidden="true" />
+          Chart of Accounts
         </h1>
         <div className="ml-auto flex shrink-0 items-center gap-[9px]">
           <button
             type="button"
             onClick={() => pushToast("Adding groups arrives with the Accounting phase.")}
-            className="flex h-8 items-center gap-[8px] rounded-[var(--control-radius)] px-[var(--space-6)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="flex h-9 items-center gap-[8px] rounded-[var(--control-radius)] border border-brand px-[var(--space-12)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
           >
-            <Plus className="size-4" aria-hidden="true" />
-            Add groups
+            <FolderPlus className="size-4" aria-hidden="true" />
+            Add Groups
           </button>
           <button
             type="button"
             onClick={() => pushToast("Adding ledgers arrives with the Accounting phase.")}
-            className="flex h-8 items-center gap-[8px] rounded-[var(--control-radius)] px-[var(--space-6)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="flex h-9 items-center gap-[8px] rounded-[var(--control-radius)] border border-brand px-[var(--space-12)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
           >
-            <Plus className="size-4" aria-hidden="true" />
-            Add ledgers
+            <BookOpen className="size-4" aria-hidden="true" />
+            Add Ledgers
           </button>
-          <div className="flex w-[268px] items-center justify-between gap-[var(--space-8)] px-[var(--space-6)] fs-text text-brand">
+          <div className="flex h-9 w-[268px] items-center justify-between gap-[var(--space-8)] rounded-[var(--control-radius)] border border-input bg-card px-[var(--space-12)] fs-text text-brand">
             <span className="truncate">{dateRange}</span>
             <Calendar className="size-4 shrink-0" aria-hidden="true" />
           </div>
@@ -253,7 +255,7 @@ export default function ChartOfAccountsPage() {
       ) : (
         <>
           {openingDifference !== 0n ? (
-            <div className="flex h-[56px] items-center rounded-[var(--card-radius)] bg-accent-red-bg px-[var(--space-12)] fs-text text-accent-red">
+            <div className="mt-4 flex h-[45px] items-center rounded-[var(--card-radius)] bg-accent-red-bg px-[var(--space-12)] fs-text text-accent-red">
               There is a difference in opening balance of{" "}
               {formatBalance(
                 (openingDifference > 0n ? -openingDifference : openingDifference).toString(),
@@ -261,16 +263,16 @@ export default function ChartOfAccountsPage() {
               )}
             </div>
           ) : null}
-          <section className="mt-[var(--space-8)] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card pb-[var(--space-12)]">
+          <section className="mt-4 overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card pb-[var(--space-12)]">
             <Table className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="h-auto pl-[var(--space-12)]">Account name</TableHead>
-                  <TableHead className="h-auto w-[140px]">Code</TableHead>
-                  <TableHead className="h-auto w-[200px]">Type</TableHead>
-                  <TableHead className="h-auto w-[150px] text-right">O/P balance (TSh)</TableHead>
-                  <TableHead className="h-auto w-[279px] text-right">C/L balance (TSh)</TableHead>
-                  <TableHead className="h-auto w-[81px] pr-[var(--space-16)] text-right">
+                  <TableHead className="h-[48px] w-[35%] pl-[var(--space-12)]">Account Name</TableHead>
+                  <TableHead className="h-[48px] w-[10%]">Code</TableHead>
+                  <TableHead className="h-[48px] w-[12%]">Type</TableHead>
+                  <TableHead className="h-[48px] w-[17%] text-right">O/P Balance (TSh)</TableHead>
+                  <TableHead className="h-[48px] w-[18%] text-right">C/L Balance (TSh)</TableHead>
+                  <TableHead className="h-[48px] w-[8%] pr-[var(--space-16)] text-right">
                     Actions
                   </TableHead>
                 </TableRow>
