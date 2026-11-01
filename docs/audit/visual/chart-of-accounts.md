@@ -19,4 +19,4 @@ Inspected the reference default state and modal screenshot, then opened AIMSCAMS
 - Added the available account code to each table row and matching column heading.
 - Keep unsupported ledger fields and the unavailable save implementation documented until an API workflow exists.
 
-Implementation commit: pending.
+Implementation commit: `8cde171` (`feat(web): show account codes in chart of accounts`).

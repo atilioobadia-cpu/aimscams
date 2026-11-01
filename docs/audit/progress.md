@@ -154,3 +154,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added the supported account Code column to Chart of Accounts and verified it rendered. No ledger edit or accounting mutation was performed.
 - Recorded the differing journal grouping/export model, unsupported ledger-edit save path, and unavailable local ledger movements.
 - Chart of Accounts implementation commit: pending.
+- Chart of Accounts implementation commit: `8cde171` (`feat(web): show account codes in chart of accounts`).

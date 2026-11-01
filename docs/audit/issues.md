@@ -377,4 +377,4 @@
 | I344 | /accounting-chart-of-accounts | workflow | Ledger Details fields and working save action | Local edit is a stub for unsupported accounting phase | High |
 | I345 | /accounting-entries | structure/data | Export toolbar and grouped ledger line rows | Local journal view is a compact list; details model differs | Medium |
 | I346 | /accounting-ledger-entries | structure | Export actions and compact filter strip | Local view has date/account controls and extra balance summary | Low |
-| UI025 | /accounting-chart-of-accounts | table columns | Show account code | Code column rendered from existing local field and verified in browser | Resolved | `docs/audit/visual/chart-of-accounts.md` | pending |
+| UI025 | /accounting-chart-of-accounts | table columns | Show account code | Code column rendered from existing local field and verified in browser | Resolved | `docs/audit/visual/chart-of-accounts.md` | `8cde171` |
