@@ -478,3 +478,12 @@
 | I432 | /clients/create-group | workflow/structure | Membership Details and Group Details accordions with searchable policy, branch, and relationship-manager selectors | Local route is a three-step wizard with free-text branch/policy fields and a different group form structure | High |
 | I433 | /messages-users-list | module/structure/data | Shared Message Service shell, user filters, channel-preference table, and pager | Local route is an In Build placeholder | High |
 | I434 | /reports-client-ClientListReport | report data/structure | Status, branch, group, and region filters; client/nominee table; and download actions | Local route renders an as-of-date generic chart-of-accounts balance report | High |
+| I435 | /reports-msp-MSP01Report | report data/structure | Regulatory financial-position schedule, current/prior period columns, and saved-report actions | Local route renders generic chart-of-accounts balances | High |
+| I436 | /reports-msp-MSP02Report | report data/structure | Comparative comprehensive-income schedule and saved-report actions | Local route renders generic chart-of-accounts balances | High |
+| I437 | /reports-msp-MSP03MFIReport | report data/structure | Quarterly sector loan classification, provision calculations, and totals | Local route renders generic chart-of-accounts balances | High |
+| I438 | /reports-msp-MSP03Type1Report | report data/structure | Sector/sub-sector loan classification, aging buckets, provisions, and totals | Local route renders generic chart-of-accounts balances | High |
+| I439 | /reports-msp-MSP03Type2Report | report data/structure | Type 2 sector classification, aging buckets, provisions, and totals | Local route renders generic chart-of-accounts balances | High |
+| I440 | /reports-msp-MSP04MFIReport | report data/structure | Quarterly loan-type rate statistics and nested amortization-rate columns | Local route renders generic chart-of-accounts balances | High |
+| I441 | /reports-msp-MSP04Report | report data/structure | Monthly loan-type and amortization-rate schedule | Local route renders generic chart-of-accounts balances | High |
+| I442 | /reports-msp-MSP05MFIReport | report data/calculation | Quarterly liquid-assets schedule, minimum requirement, excess/deficiency, and ratio | Local route renders generic chart-of-accounts balances | High |
+| I443 | /reports-msp-MSP05Report | report data/structure | Monthly sector/sub-sector disbursements by borrower sex and amount | Local route renders generic chart-of-accounts balances | High |

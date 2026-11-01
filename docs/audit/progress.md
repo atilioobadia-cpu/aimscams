@@ -348,3 +348,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Active Loan Report shows the generic account balances locally instead of the reference loan filters and portfolio table. Existing I367 covers the data/structure mismatch.
 - All Loan Report has the same generic chart-of-accounts table, while its reference has date range, branch, group, region, loan officer, and product filters plus arrears/fee amount columns. Existing I404 covers this gap.
 - Updated the queue, index, and hub note. No report filters were submitted and no exports were started.
+
+## 2026-11-01 — MSP reports, first page
+
+- Compared MSP01 in the visible local browser against its reference capture. AIMSCAMS renders the generic chart-of-accounts balance table; the reference is a long regulatory financial-position schedule with grouped categories, current/prior-period amounts, Submit/Clear, and Save/Saved Reports actions.
+- Added the page note and I435, then marked the queue row IN_PROGRESS. The review did not submit, save, or export the report.
+- Continued through MSP02, MSP03 MFI, and MSP03 Type 1/Type 2. Each local route also renders the generic account-balance table; the references contain distinct comprehensive-income and sector-classification/provision schedules. Added page notes and I436–I439; no form actions were used.
+- Reviewed MSP04 MFI, MSP04, MSP05 MFI, and MSP05. Their references provide loan interest-rate, liquid-asset, and sex-disaggregated loan-disbursement schedules; AIMSCAMS still renders generic account balances. Added page notes and I440–I443; no report actions were used.
