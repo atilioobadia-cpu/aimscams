@@ -390,3 +390,12 @@
 | I353 | /accounting-reports-CashFlowStatement | data/structure | Operating/investing/financing and prior-year schedules | Local route supplies cash movement summary only | High |
 | I354 | /accounting-reports-ComprehensiveTrialBalance | data/structure | Hierarchical period totals and grand total | Same flat account response as Trial Balance | High |
 | I355 | /accounting-reports-MonthlyTrialBalance | data/structure | Month selector and opening/activity/closing balances | Local route uses an as-of date and flat balance rows | High |
+
+| I356 | /accounting-reports-OwnersEquity | report data | Comparative equity movement matrix and period totals | Local response is equity account balances at one date | High |
+| I357 | /accounting-reports-Assets | report source/data | Asset register rows and status filter | Local route renders general-ledger account balances rather than registered assets | High |
+| I358 | /accounting-reports-notes-of-account | report data | Numbered note groups, comparative balances, and subtotals | Local response is a flat chart-of-accounts list | High |
+| I359 | /accounting-reports-CorporateTaxStatement | report data | Current/prior-period tax summary and paid/closing balance | Local response is a flat chart-of-accounts list | High |
+
+| I360 | /accounting-reports-CashBook | report data | Cash-account ledger lines and reference columns | Current result is empty and local table omits grouping fields | Medium |
+| I361 | /accounting-reports-GeneralLedgerBook | report structure/data | Account-grouped period ledger with running balances | Local route renders a flat journal-entry table | High |
+| I362 | /accounting-reports-JournalBook | report structure/data | Dated ledger-line groups, reference columns, period totals | Local route renders a generic entry summary | High |

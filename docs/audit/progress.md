@@ -183,3 +183,17 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared Comprehensive and Monthly Trial Balance routes with their reference screenshots.
 - Both local routes use the flat as-of-date account response. The reference needs hierarchical period totals, monthly activity, opening/closing balances, and exports.
 - Recorded both route-specific differences; no reference amounts or accounting changes were introduced.
+
+## 2026-11-01 — Equity, Assets, Notes, and Tax report review
+
+- Compared Owners Equity, Assets Report, Notes of Account, and Corporate Tax Statement in the visible browser against their supplied screenshots.
+- Added route-specific audit notes. These references require report-specific sources: equity movement totals, registered asset rows/status, numbered note schedules, and comparative tax balances. The local routes currently show generic account balances.
+- Kept the pass read-only; no exports or accounting actions were triggered.
+- Implementation commit: none; report data/API gaps remain.
+
+## 2026-11-01 — Cash Book, General Ledger Book, and Journal Book
+
+- Visually compared all three local report routes with their supplied references in the visible browser.
+- Added route-specific audit notes for the missing cash-ledger movements, per-account general-ledger groupings, and journal-book ledger lines/period totals.
+- Local data remains limited to empty cash movements and one opening-balance journal entry. No exports or accounting writes were performed.
+- Implementation commit: none; report data gaps remain.

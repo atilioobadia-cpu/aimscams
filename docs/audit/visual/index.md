@@ -42,3 +42,12 @@ Reference captures are stored at F:\Wakandi. AIMSCAMS was inspected in the visib
 | Dashboard | None found | Cannot score visual similarity without a reference capture. See [dashboard](dashboard.md). | `F:\Wakandi\dashboard\FULL.png` is absent. |
 
 The folder index and manifest disagree about inventory totals: the index claims 438 originals, while the manifest contains 576 rows and the current scan sees 576 PNGs plus one JPG. Reconcile the manifest before using corpus totals in a final audit score.
+
+| Owners Equity Report | `accounting-reports-OwnersEquity/FULL.png` | Reference shows a comparative equity movement matrix; AIMSCAMS shows one-date equity account balances. See [Owners Equity Report](owners-equity-report.md). | Equity movements and comparative balances are absent from the local report response. |
+| Assets Report | `accounting-reports-Assets/FULL.png` | Reference is a filtered asset register; AIMSCAMS displays general-ledger asset account balances. See [Assets Report](assets-report.md). | Fixed-asset register status/date report source is missing. |
+| Notes of Account | `accounting-reports-notes-of-account/FULL.png` | Reference has grouped numbered note schedules with comparative totals; AIMSCAMS shows flat account balances. See [Notes of Account](notes-of-account-report.md). | Note groups, prior periods, and subtotals are absent from the local response. |
+| Corporate Tax Statement | `accounting-reports-CorporateTaxStatement/FULL.png` | Reference shows a comparative tax summary; AIMSCAMS displays the full generic account list. See [Corporate Tax Statement](corporate-tax-statement.md). | Period tax totals and paid/closing balances are absent from the local response. |
+
+| Cash Book | `accounting-reports-CashBook/FULL.png` | Reference lists grouped cash-account ledger lines; local result is an empty cash movement list. See [Cash Book](cash-book.md). | Local result has no movement rows; some reference grouping fields are missing. |
+| General Ledger Book | `accounting-reports-GeneralLedgerBook/FULL.png` | Reference groups period activity by account; local route is a flat journal-entry list. See [General Ledger Book](general-ledger-book.md). | Account grouping and running-balance ledger lines are unavailable. |
+| Journal Book | `accounting-reports-JournalBook/FULL.png` | Reference shows grouped ledger lines by date; local route shows the generic journal-entry table. See [Journal Book](journal-book.md). | Local journal response lacks ledger line grouping and period balances. |
