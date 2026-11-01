@@ -96,3 +96,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Verified title at x=256/y=94 (1198×84), tabs y=196 (55px), toolbar x≈277/y≈270, and table x≈277/y≈336 with 1515px content width at 1470×1094 CSS.
 - Exercised product/status/officer filters, clear action, empty-state feedback, and arrow-key tab navigation in the visible browser. No console errors or warnings were recorded.
 - Web typecheck and scoped page lint passed. The full project suite passed 140 tests (API 81, worker 6, domain 34, ledger 19).
+- Implementation commit: `69c10be` (`feat(web): align loan applications list with visual reference`).
