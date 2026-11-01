@@ -248,3 +248,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Each local route returns the generic chart-of-accounts balance grid instead of its distinct report filters and fields. Added notes and issue-register entries I414–I418.
 - Kept review read-only; no report filters were submitted and no exports were downloaded.
 - Implementation commit: none; the report query and filter contracts are not present.
+
+## 2026-11-01 — Loan reports, fourth batch
+
+- Compared Paid Off Loans, Pending Loan Applications, Portfolio Risk, Risk Classification of Assets, Summarized Portfolio at Risk, Loan Transaction, and Written-Off Loan reports in the visible browser against their supplied references.
+- All seven AIMSCAMS routes render the generic chart-of-accounts grid. Added page notes and issues I419–I425 for their distinct query, fields, calculations, and access needs.
+- Reference captures include both empty states and populated risk summaries; no live report filters or exports were triggered.
+- Implementation commit: none; the route-specific query, filter, and calculation contracts remain missing.

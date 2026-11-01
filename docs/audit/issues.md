@@ -463,3 +463,10 @@
 | I416 | /reports-loan-LoanOfficerIncomeReport | report data/access | Officer ledger income grouped by policy and account | Generic chart-of-accounts balances; no officer-income fields | High |
 | I417 | /reports-loan-LoanOutstandingReport | report data | Outstanding interest/charges/total/arrears with filters | Generic chart-of-accounts balances; no loan totals | High |
 | I418 | /reports-loan-LoanRepaymentReport | report data | Repayment date/portfolio filters and component totals | Generic chart-of-accounts balances; no repayment fields | High |
+| I419 | /reports-loan-PaidOffLoansReport | report data | Paid-off loan date and portfolio filters, principal/interest/total paid | Generic chart-of-accounts balances; no loan fields | High |
+| I420 | /reports-loan-PendingLoanApplications | report data/workflow | Pending application filters, workflow stage, and debt-capacity fields | Generic chart-of-accounts balances; no application fields | High |
+| I421 | /reports-loan-PortfolioRiskReport | report data/calculation | Portfolio risk query, arrears/risk calculations, and reconciled totals | Generic chart-of-accounts balances; no risk fields | High |
+| I422 | /reports-loan-RiskClassificationOfAssets | report data/calculation | Asset risk classification query and classification schedule | Generic chart-of-accounts balances; no classification fields | High |
+| I423 | /reports-loan-SummarizedPortfolioAtRiskReport | report data/calculation | Summarized PAR query, measures, and calculation/aggregation rules | Generic chart-of-accounts balances; no PAR fields | High |
+| I424 | /reports-loan-TransactionReport | report data | Loan transaction filters, transaction/reference fields, and paging | Generic chart-of-accounts balances; no transaction fields | High |
+| I425 | /reports-loan-WrittenOffLoanReport | report data/access | Write-off filters, reason/date/initiator fields, and recovery amount | Generic chart-of-accounts balances; no write-off fields | High |
