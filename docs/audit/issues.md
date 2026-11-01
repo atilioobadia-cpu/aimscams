@@ -341,11 +341,11 @@
 
 | ID | Page | Type | Expected | Actual | Status | Evidence | Commit |
 |---|---|---|---|---|---|---|---|
-| UI001 | Shared shell | geometry | 76px header, 240px expanded rail, 16px horizontal and 18px vertical content inset | 76px, 240px, x=256/y=94 on the visible Clients page | Resolved | `docs/audit/compare/calibration.md` | pending |
-| UI002 | Shared table | size/spacing | about 45px header and 69px body rows | 44.3px header and 68.3px body row | Resolved | `docs/audit/visual/clients.md` | pending |
-| UI003 | /clients | structure/control | title card, three actions, compact four-control toolbar and pager | Visual structure present and measured; page size control works | Resolved with data caveat | `docs/audit/visual/clients.md` | pending |
-| UI004 | /clients | behavior | Type, Status, Search and optional filters change the visible row set | All exercised; Type and Status are enforced locally over returned rows | Resolved for returned rows | `docs/audit/visual/clients.md` | pending |
-| UI005 | /clients | behavior/missing | client activation link opens the reference workflow | Local action explains the activation-link service is unavailable | Open: API/product flow missing | `docs/audit/NEEDS-HUMAN.md` | pending |
-| UI006 | /clients | data/pagination | reference has multiple rows and a larger total | local API returns one row; pager reflects only local data | Blocked by local data state | `docs/audit/visual/clients.md` | pending |
-| UI007 | /account-loan | structure/missing | title card, status tabs, Loan Officer/Add filters/saved-filter controls | Existing breadcrumb/description and Status dropdown remain | Open | `docs/audit/visual/account-loan.md` | pending |
-| UI008 | /account-loan | data | populated rows and pager | local API returns no loan rows | Blocked by local data state | `docs/audit/visual/account-loan.md` | pending |
+| UI001 | Shared shell | geometry | 76px header, 240px expanded rail, 16px horizontal and 18px vertical content inset | 76px, 240px, x=256/y=94 on the visible Clients page | Resolved | `docs/audit/compare/calibration.md` | 963e0be |
+| UI002 | Shared table | size/spacing | about 45px header and 69px body rows | 44.3px header and 68.3px body row | Resolved | `docs/audit/visual/clients.md` | 963e0be |
+| UI003 | /clients | structure/control | title card, three actions, compact four-control toolbar and pager | Visual structure present and measured; page size control works | Resolved with data caveat | `docs/audit/visual/clients.md` | 963e0be |
+| UI004 | /clients | behavior | Type, Status, Search and optional filters change the visible row set | All exercised; Type and Status are enforced locally over returned rows | Resolved for returned rows | `docs/audit/visual/clients.md` | 963e0be |
+| UI005 | /clients | behavior/missing | client activation link opens the reference workflow | Local action explains the activation-link service is unavailable | Open: API/product flow missing | `docs/audit/NEEDS-HUMAN.md` | 963e0be |
+| UI006 | /clients | data/pagination | reference has multiple rows and a larger total | local API returns one row; pager reflects only local data | Blocked by local data state | `docs/audit/visual/clients.md` | 963e0be |
+| UI007 | /account-loan | structure/missing | title card, status tabs, Loan Officer/Add filters/saved-filter controls | Existing breadcrumb/description and Status dropdown remain | Open | `docs/audit/visual/account-loan.md` | 963e0be |
+| UI008 | /account-loan | data | populated rows and pager | local API returns no loan rows | Blocked by local data state | `docs/audit/visual/account-loan.md` | 963e0be |

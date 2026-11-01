@@ -78,3 +78,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded visual findings and unresolved behavior in docs/audit/visual/ and docs/audit/NEEDS-HUMAN.md.
 - Verified client filters and pagination in the visible browser; web typecheck and full test suite passed.
 - Repo-wide lint reports 23 errors and 106 warnings; modified-file lint completed with one existing image-element warning.
+- Implementation commit: 963e0be (eat(web): align clients page with visual reference).
