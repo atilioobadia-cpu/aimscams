@@ -382,3 +382,6 @@
 | I348 | /accounting-fixed-asset | workflow | Asset import and reference entry-date field | No local import workflow or entry-date field | Medium |
 | UI026 | /accounting-assets | structure/control | Assets title card, modal Add Asset Type, persistent table headers | Implemented with supported asset-type fields; allocation model unavailable | Resolved structurally | `docs/audit/visual/asset-types.md` | `11883a8` |
 | UI027 | /accounting-fixed-asset | structure/control | Fixed Assets title card, modal registration, persistent empty table | Implemented with current register API and fields | Resolved structurally; import caveat | `docs/audit/visual/fixed-assets.md` | `11883a8` |
+| I349 | /accounting-reports | structure | Compact four-column grid and title card | Aligned while retaining existing report links | Low |
+| I350 | /accounting-reports-TrialBalanceReport | data/structure | Period hierarchy and opening/debit/credit/closing totals | Local report response exposes flat rows and different summary fields | High |
+| UI028 | /accounting-reports | structure | Accounting Reports title card and four-column report links | Implemented and visually checked | Resolved | `docs/audit/visual/accounting-reports.md` | pending |

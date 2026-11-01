@@ -164,3 +164,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Reference allocation, import, and ledger-linked depreciation functions are not supported by local APIs and remain documented.
 - Asset page implementation commit: pending.
 - Asset page implementation commit: `11883a8` (`feat(web): align asset register pages with visual references`).
+
+## 2026-11-01 — Accounting Reports hub and Trial Balance
+
+- Reordered the 15 report links and aligned the landing page title card and four-column compact card grid to the supplied reference.
+- Visually checked the hub and compared Trial Balance to its reference. Trial Balance hierarchy, period totals, opening-balance alert, and exports remain blocked by its local response model.
+- Accounting Reports implementation commit: pending.

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BarChart3, BookOpen, Scale } from "lucide-react";
+import { BarChart3, Info } from "lucide-react";
 
 import { PageHeader } from "@/components/data/page-header";
 
@@ -9,49 +9,38 @@ export const metadata: Metadata = {
 };
 
 const sections = [
-  { href: "/accounting-reports-TrialBalanceReport", title: "Trial balance", icon: Scale },
-  { href: "/accounting-reports-IncomeStatementReport", title: "Income statement", icon: BarChart3 },
-  { href: "/accounting-reports-FinancialPositionReport", title: "Financial position", icon: BookOpen },
-  { href: "/accounting-reports-CashFlowStatement", title: "Cash flow statement", icon: BarChart3 },
-  { href: "/accounting-reports-GeneralLedgerBook", title: "General ledger book", icon: BookOpen },
-  { href: "/accounting-reports-JournalBook", title: "Journal book", icon: BookOpen },
-  { href: "/accounting-reports-CashBook", title: "Cash book", icon: BookOpen },
-  { href: "/accounting-reports-LedgerStatementReport", title: "Ledger statement", icon: BookOpen },
-  { href: "/accounting-reports-ComprehensiveTrialBalance", title: "Comprehensive trial balance", icon: Scale },
-  { href: "/accounting-reports-MonthlyTrialBalance", title: "Monthly trial balance", icon: Scale },
-  { href: "/accounting-reports-OwnersEquity", title: "Owner's equity", icon: BarChart3 },
-  { href: "/accounting-reports-Assets", title: "Assets", icon: BookOpen },
-  { href: "/accounting-reports-notes-of-account", title: "Notes of account", icon: BookOpen },
-  { href: "/accounting-reports-CorporateTaxStatement", title: "Corporate tax statement", icon: BookOpen },
-  { href: "/accounting-reports-Reconciliation", title: "Reconciliation", icon: BookOpen },
+  { href: "/accounting-reports-TrialBalanceReport", title: "Trial Balance Report" },
+  { href: "/accounting-reports-ComprehensiveTrialBalance", title: "Comprehensive Trial Balance" },
+  { href: "/accounting-reports-IncomeStatementReport", title: "Income Statement Report" },
+  { href: "/accounting-reports-LedgerStatementReport", title: "Ledger Statement Report" },
+  { href: "/accounting-reports-FinancialPositionReport", title: "Financial Position Report" },
+  { href: "/accounting-reports-MonthlyTrialBalance", title: "Monthly Trial Balance" },
+  { href: "/accounting-reports-notes-of-account", title: "Notes of Account" },
+  { href: "/accounting-reports-CashFlowStatement", title: "Cash Flow Statement" },
+  { href: "/accounting-reports-Assets", title: "Assets" },
+  { href: "/accounting-reports-CashBook", title: "Cash Book" },
+  { href: "/accounting-reports-JournalBook", title: "Journal Book" },
+  { href: "/accounting-reports-OwnersEquity", title: "Owner's Equity" },
+  { href: "/accounting-reports-GeneralLedgerBook", title: "General Ledger Book" },
+  { href: "/accounting-reports-Reconciliation", title: "Reconciliation" },
+  { href: "/accounting-reports-CorporateTaxStatement", title: "Corporate Tax Statement" },
 ];
 
 export default function FinancialReportsHubPage() {
   return (
     <div className="space-y-[var(--space-14)]">
-      <PageHeader
-        title="Financial reports"
-        description="The financial statements and books behind every balance."
-        breadcrumb="Accounting"
-      />
+      <PageHeader variant="card" title="Accounting Reports" icon={<BarChart3 className="size-6 text-primary" aria-hidden="true" />} />
 
-      <div className="grid gap-[var(--space-14)] md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {sections.map((section) => {
-          const Icon = section.icon;
           return (
             <Link
               key={section.href}
               href={section.href}
-              className="group flex flex-col rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-14)] transition-colors hover:border-brand focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+              className="group flex min-h-[82px] items-center justify-between gap-3 rounded-[var(--card-radius)] border border-card-border bg-surface px-4 py-3 shadow-sm transition-colors hover:border-primary focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
             >
-              <span className="grid size-10 place-items-center rounded-full bg-accent-teal-bg text-brand">
-                <Icon className="size-5" strokeWidth={1.8} aria-hidden="true" />
-              </span>
-              <h2 className="mt-[var(--space-10)] fs-text font-bold text-strong">{section.title}</h2>
-              <span className="mt-[var(--space-10)] flex items-center gap-1.5 fs-text font-semibold text-brand">
-                Open
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-              </span>
+              <h2 className="fs-text font-semibold text-strong">{section.title}</h2>
+              <Info className="size-4 shrink-0 text-label transition-colors group-hover:text-primary" aria-label={`Open ${section.title}`} />
             </Link>
           );
         })}
