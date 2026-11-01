@@ -385,3 +385,6 @@
 | I349 | /accounting-reports | structure | Compact four-column grid and title card | Aligned while retaining existing report links | Low |
 | I350 | /accounting-reports-TrialBalanceReport | data/structure | Period hierarchy and opening/debit/credit/closing totals | Local report response exposes flat rows and different summary fields | High |
 | UI028 | /accounting-reports | structure | Accounting Reports title card and four-column report links | Implemented and visually checked | Resolved | `docs/audit/visual/accounting-reports.md` | `98160a4` |
+| I351 | /accounting-reports-IncomeStatementReport | data/structure | Comparative income, expense, notes, subtotals and net result | Local response is a flat account amount list | High |
+| I352 | /accounting-reports-FinancialPositionReport | data/structure | Comparative assets/liabilities/equity, notes and balance totals | Local response only supplies flat asset rows | High |
+| I353 | /accounting-reports-CashFlowStatement | data/structure | Operating/investing/financing and prior-year schedules | Local route supplies cash movement summary only | High |

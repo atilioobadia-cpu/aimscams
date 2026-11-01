@@ -171,3 +171,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Visually checked the hub and compared Trial Balance to its reference. Trial Balance hierarchy, period totals, opening-balance alert, and exports remain blocked by its local response model.
 - Accounting Reports implementation commit: pending.
 - Accounting Reports implementation commit: `98160a4` (`feat(web): align accounting reports hub with reference`).
+
+## 2026-11-01 — Financial statement report review
+
+- Compared Income Statement, Financial Position, and Cash Flow Statement pages with their supplied captures.
+- Recorded their report-data gaps: comparative periods, note numbers, section subtotals, statement totals, and category schedules are absent from the local responses.
+- No statement numbers were copied into the audit; no exports or accounting writes were performed.
