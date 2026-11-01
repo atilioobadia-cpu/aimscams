@@ -123,7 +123,7 @@ The folder index and manifest disagree about inventory totals: the index claims 
 | Accounting settings | settings-accounting-settings/FULL.png | Tax component manager is missing; local page centers statutory rate, fiscal periods, and posting policies; see [Accounting settings](accounting-settings.md). | Inter-branch setting has partial concept overlap. |
 |---|---|---|---|
 | Users | `settings-administrator/FULL.png` | User Management card, search/filter toolbar, phone/status/role columns, and pager now follow the reference; see [Users](users.md). | Two local users versus 18 reference entries; contact fields remain masked; final regression pending. |
-| Add user | `settings-administrator-add/FULL.png` | Local modal replaces the reference full-page accordion workflow; see [Add user](add-user.md). | User and access model fields differ. |
+| Add user | `settings-administrator-add/FULL.png` | Canonical route now uses a full-page accordion form; see [Add user](add-user.md). | WBA and Teller controls remain unavailable because the current user model does not support them. |
 | Roles | `settings-role/FULL.png` | AIMSCAMS now has the reference-style role list and tabbed create/edit dialogs; see [Roles](roles.md). | Audit History is present but remains an unconnected empty state; final regression pending. |
 | Branches | `settings-branch/FULL.png` | Toolbar and table schema differ; see [Branches](branches.md). | Only one local synthetic branch. |
 | Add branch | `settings-branch-add/FULL.png` | Shared form sections exist; location and holiday schedule controls differ; see [Add branch](branch-create.md). | Reference special-date overrides are absent locally. |

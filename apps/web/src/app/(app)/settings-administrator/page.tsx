@@ -210,7 +210,7 @@ export default function UsersPage() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setManualModal({})}
+            onClick={() => router.push("/settings-administrator-add")}
             className="ml-auto h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"
           >
             <Plus className="size-4" aria-hidden="true" />

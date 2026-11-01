@@ -417,7 +417,7 @@
 | I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |
 
 | I377 | /settings-administrator | data/privacy | 18 reference entries with phone/status/role data | UI structure and pager implemented; local organization has two users and masks email/phone values | Medium |
-| I378 | /settings-administrator-add | workflow/structure | Full-page accordion form with user, role, branch, WBA and teller access | Local route opens a centered modal with a flat form and role checklist | High |
+| I378 | /settings-administrator-add | domain/workflow | Full-page accordion form with user, role, branch, WBA and teller access | Full-page details/roles/branch workflow implemented; WBA and Teller remain unavailable in the local user model | High |
 | I379 | /settings-role | workflow | Role list/search/pagination and tabbed create/edit dialogs | Implemented; Audit History remains an unconnected empty state, populated history not verified | Medium |
 | I380 | /settings-service-provider | structure | Compact Services title card and empty workspace | Local route is an In Build placeholder with a large card and different label | Low |
 | I381 | /settings/branches | structure/data | Search/Add Filters and reference location columns | Local schema shows status/default/council/staff and one synthetic branch | Medium |
