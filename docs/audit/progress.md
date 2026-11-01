@@ -301,6 +301,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - The new category hubs use the existing report-card pattern because the reference set contains no captures of those hub pages. No report filters, exports, or records were changed.
 - Production build passed.
 
+## 2026-11-01 — Loan Product details route
+
+- Compared `settings-products-loan-5/FULL.png` with `/settings/products/loan/5` in the visible browser and opened the product list to resolve the 404.
+- The list is empty, the detail route requires a UUID while the reference sample uses suffix `5`, and the current API has no product creation operation. The product schema also lacks several reference terms, charges, stages, and ledger details.
+- Updated the page note, visual index, and issue I396. Did not create an inactive product by bypassing the missing API or copy the reference product's financial terms into local data; a governed creation/data contract is needed for a safe populated comparison.
+
 ## 2026-11-01 — Cross-module audit, third batch
 
 - Compared Message Segments, Member/Account/Transaction Import Batches, Membership Policies, Loan Provisioning Rule Creation, and Business Account in the visible local browser against their supplied screenshots.
