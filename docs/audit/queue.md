@@ -90,12 +90,12 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 84 | messages-send-message | 0.8781 | 0.0291 | IN_PROGRESS |
 | 85 | messages-template-list | 0.8679 | 0.0204 | IN_PROGRESS |
 | 86 | messages-users-list | 0.8465 | 0.0266 | IN_PROGRESS |
-| 87 | reports-client-ClientListReport | 0.8193 | 0.0299 | TODO |
+| 87 | reports-client-ClientListReport | 0.8193 | 0.0299 | IN_PROGRESS |
 | 88 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | IN_PROGRESS |
-| 89 | reports-loan | 0.8387 | 0.0280 | TODO |
+| 89 | reports-loan | 0.8387 | 0.0280 | IN_PROGRESS |
 | 90 | reports-loan-AccruedInstallmentsReport | 0.8155 | 0.0362 | IN_PROGRESS |
 | 91 | reports-loan-AccruedInterestReport | 0.8275 | 0.0327 | IN_PROGRESS |
-| 92 | reports-loan-ActiveLoanReport | 0.8829 | 0.0080 | TODO |
+| 92 | reports-loan-ActiveLoanReport | 0.8829 | 0.0080 | IN_PROGRESS |
 | 93 | reports-loan-AllLoanReport | 0.8213 | 0.0325 | IN_PROGRESS |
 | 94 | reports-loan-DeferredInterestReport | 0.8172 | 0.0343 | IN_PROGRESS |
 | 95 | reports-loan-ExpectedLoanRepaymentsReport | 0.8867 | 0.0090 | IN_PROGRESS |

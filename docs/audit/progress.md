@@ -339,3 +339,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Delivery Logs is an empty search/empty-state page locally, without the shared Message Service header, tabs, date/recipient filters, reference columns, or pager. Existing I371 tracks the gap.
 - Message Users remains an In Build placeholder locally. The reference shows the shared service shell and tabs, name/phone filters, channel-preference table, pager, and a separate template-modal overlay state. Added I433.
 - Updated queue rows and the visual index. No form values, messages, filters, channel preferences, or client data were changed; reference personal details were not copied into the audit notes.
+
+## 2026-11-01 — Client and loan reports, second batch
+
+- Compared the Client List Report, Loan Reports hub, Active Loan Report, and All Loan Report in the visible local browser against their supplied screenshots.
+- Client List Report is wired to the generic chart-of-accounts balance table locally, while the reference has status/branch/group/region filters, a download menu, and a wide client/nominee table. Added I434.
+- The Loan Reports hub's title card, four-column layout, card sequence, and info icons match; the reference Loan Repayment Schedule Report destination remains absent and is already tracked in I368.
+- Active Loan Report shows the generic account balances locally instead of the reference loan filters and portfolio table. Existing I367 covers the data/structure mismatch.
+- All Loan Report has the same generic chart-of-accounts table, while its reference has date range, branch, group, region, loan officer, and product filters plus arrears/fee amount columns. Existing I404 covers this gap.
+- Updated the queue, index, and hub note. No report filters were submitted and no exports were started.

@@ -477,3 +477,4 @@
 | I431 | /messages-send-message | workflow/structure | Company, segment and template-based send/test workflow | Local form targets a direct recipient with freeform body and has no segment field | High |
 | I432 | /clients/create-group | workflow/structure | Membership Details and Group Details accordions with searchable policy, branch, and relationship-manager selectors | Local route is a three-step wizard with free-text branch/policy fields and a different group form structure | High |
 | I433 | /messages-users-list | module/structure/data | Shared Message Service shell, user filters, channel-preference table, and pager | Local route is an In Build placeholder | High |
+| I434 | /reports-client-ClientListReport | report data/structure | Status, branch, group, and region filters; client/nominee table; and download actions | Local route renders an as-of-date generic chart-of-accounts balance report | High |
