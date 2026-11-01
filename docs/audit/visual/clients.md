@@ -1,47 +1,36 @@
-# Clients list visual audit
+# Clients page visual audit
 
 ## Evidence
 
-- Reference: `F:\Wakandi\clients\FULL.png` (1838 × 1368 pixels; calibrated DPR 1.25, 1470 × 1094 CSS px).
-- AIMSCAMS: `/clients`, visible Playwright-backed browser at 1470 × 1094 CSS px (DPR 1.0).
-- Local text and record content were not copied into this report.
+- Wakandi reference: `https://cams.wakandi.co.tz/clients`, inspected in the authenticated Chrome session at 90% zoom. Temporary filters were cleared; the reference was left on its default list.
+- AIMSCAMS: `http://localhost:3000/clients`, inspected in the visible Chrome session at the current local viewport.
+- Production rows were viewed only to understand layout and filter behavior. No row values or customer identifiers are recorded here, and no records were changed.
 
-## Implemented measurements
+## Observed reference behavior
 
-| Element | Reference target | Local after change | Result |
-|---|---:|---:|---|
-| Header / expanded sidebar | 76px / 240px CSS | 76px / 240px | Matched |
-| Content inset | x=256px, y=94px | x=256px, y=94px | Matched |
-| Title card | 1198 × 84px at x=256, y=94 | 1198 × 84px at x=256, y=94 | Matched |
-| Toolbar | y≈195px, 1198px wide | y=196px, 1198px wide | Within 1px |
-| Search / Type / Status / Add filters | 230 / 80 / 90 / 158px wide; 42px high | 230 / 80 / 90 / 158px; 42px high | Matched |
-| Table header / body row | ≈45px / ≈69px | 44.3px / 68.3px | Within 1px |
-| Table viewport / content | ≈1196px / horizontally scrollable | 1197px / 1495px content | Matched structure |
-| Page controls | pager and page-size selector | pager and page-size selector | Present; local total reflects local data |
+- The page title sits in a bordered header card with Add Client, Add Group, and Client Invitation Link actions.
+- Search, Type, Status, and Add Filters controls appear in one toolbar above a horizontally scrollable table.
+- Type and Status open condition/value popovers with Clear and Apply actions. Their condition is `Is`.
+- Add Filters opens a searchable, scrollable checklist of nine fields: Member Id, Full Name, Reference Number, National Id, Phone Number, Email Address, KYC Status, DOJ, and Group Name.
+- A selected additional field appears as a removable filter chip. Opening the chip shows a condition and value control. Text conditions observed in Wakandi are Contains, Equals, Starts with, Ends with, and Does not contain.
+- The table keeps the identifier, name, reference, identity, type, contact, status, KYC, joining date, group, and row actions in a horizontally scrollable region.
 
-The title card, toolbar, column region and footer pager now follow the screenshot structure. The local
-browser returned no console errors or warnings after the changes. The page's extra filters were
-opened and exercised with a nonmatching value; the empty state appeared, then the filter was cleared.
-The sidebar was collapsed and expanded; collapsed width measured 76px.
+## AIMSCAMS changes and verification
+
+- Type and Status now use condition/value popovers with Clear and Apply actions. AIMSCAMS currently offers Individual and Group, and Active, Inactive, and Pending, because those are the values supported by its local client model.
+- Add Filters now provides the nine reference fields, a field search input, removable chips, text matching conditions, and an exact date filter for DOJ.
+- The existing font scale, shared shell, title actions, table density, and local sample records were retained.
+- Manual browser verification covered opening the Type popover, opening the searchable filter checklist, adding Full Name, applying a harmless synthetic value to confirm the empty state, clearing the value and field, and restoring the unfiltered list.
+- Focused ESLint completed successfully for `apps/web/src/app/(app)/clients/page.tsx`.
 
 ## Remaining differences and blockers
 
-1. The screenshot shows three outlined actions. The local title card now shows all three, but the
-   Client activation link dialog reports that no activation-link service is configured. Its visible
-   control matches; its action does not. Do not invent a secure token flow without a backend route.
-2. The reference table contains multiple rows and a larger total. The local environment currently
-   returns one row. Pagination is present and operates over returned rows; no reference records were
-   copied or local records changed.
-3. The visible local table header order differs from the reference. AIMSCAMS shows Member ID,
-   Full Name, Ref number, National ID, Type, Phone, Email, Status, and KYC status; the reference's
-   visible columns include Member Id, Full Name, Reference Number, National Id, Type, Phone Number,
-   and Email Address, with additional columns available via horizontal scroll. Reference rows are
-   group records while the current local sample is one individual record.
-4. Hover and focus colors are not established by the reference capture and remain recorded in
-   `NEEDS-HUMAN.md`.
+1. AIMSCAMS' client model only represents two client types and three statuses. Wakandi exposes additional production values; those cannot be reproduced faithfully without extending the product model and backend behavior.
+2. The local environment has one client sample, so row density, production pagination, and group-row details cannot be compared against the larger reference dataset. No records were copied or added.
+3. Client Invitation Link is visible locally, but the local dialog reports that no activation-link service is configured. Do not invent a token flow without a backend route.
+4. AIMSCAMS has additional columns beyond the initial Wakandi viewport; horizontal scrolling is available. Keep exact column parity open for a dedicated table pass.
+5. Hover and focus colors have not been measured systematically.
 
 ## Status
 
-Shared shell scale, Clients title card, filter toolbar, table row density and pagination structure have
-been adjusted and measured. This page is not a 100% match while activation-link behavior and the
-reference data state remain unresolved.
+The Clients list now follows Wakandi's filter interaction pattern for the values AIMSCAMS supports. Filter behavior was verified in the browser without changing client data. The page is not a complete production parity match while the model, activation-link service, row dataset, and remaining table details differ.

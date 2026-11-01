@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight, Eye, Link2, Plus, Search, UserCheck, UserPlus, UsersRound, UserX } from "lucide-react";
+import { Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight, Eye, Link2, Plus, Search, UserCheck, UserPlus, UsersRound, UserX, X } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -25,6 +25,21 @@ function message(failure: unknown, fallback: string): string {
   return fallback;
 }
 
+type FilterCondition = "Contains" | "Equals" | "Starts with" | "Ends with" | "Does not contain";
+
+const textConditions: FilterCondition[] = ["Contains", "Equals", "Starts with", "Ends with", "Does not contain"];
+
+function matchesTextFilter(source: unknown, value: string, condition: FilterCondition): boolean {
+  const field = String(source ?? "").toLocaleLowerCase();
+  const needle = value.trim().toLocaleLowerCase();
+  if (!needle) return true;
+  if (condition === "Equals") return field === needle;
+  if (condition === "Starts with") return field.startsWith(needle);
+  if (condition === "Ends with") return field.endsWith(needle);
+  if (condition === "Does not contain") return !field.includes(needle);
+  return field.includes(needle);
+}
+
 export default function ClientsPage() {
   const searchParams = useSearchParams();
   const [data, setData] = useState<Awaited<ReturnType<typeof listClients>> | null>(null);
@@ -41,6 +56,13 @@ export default function ClientsPage() {
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const [extraFilterFields, setExtraFilterFields] = useState<string[]>([]);
   const [extraFilters, setExtraFilters] = useState<Record<string, string>>({});
+  const [extraFilterConditions, setExtraFilterConditions] = useState<Record<string, FilterCondition>>({});
+  const [filterPopover, setFilterPopover] = useState<"type" | "status" | string | null>(null);
+  const [typeDraft, setTypeDraft] = useState(clientType);
+  const [statusDraft, setStatusDraft] = useState(status);
+  const [extraFilterDraft, setExtraFilterDraft] = useState("");
+  const [conditionDraft, setConditionDraft] = useState<FilterCondition>("Contains");
+  const [fieldSearch, setFieldSearch] = useState("");
   const [clientActivationOpen, setClientActivationOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -85,19 +107,27 @@ export default function ClientsPage() {
   const items = data?.items ?? [];
   const extraFilterOptions = [
     { key: "memberNo", label: "Member ID" },
+    { key: "fullName", label: "Full Name" },
+    { key: "referenceNo", label: "Reference Number" },
     { key: "nationalId", label: "National ID" },
     { key: "phone", label: "Phone number" },
     { key: "email", label: "Email address" },
-    { key: "groupName", label: "Group" },
+    { key: "kycStatus", label: "KYC Status" },
+    { key: "joinedAt", label: "DOJ" },
+    { key: "groupName", label: "Group Name" },
   ] as const;
   const visibleItems = items.filter((item) => {
     if (clientType && item.clientType !== clientType) return false;
     if (status && item.status !== status) return false;
     return extraFilterFields.every((key) => {
-      const value = extraFilters[key]?.trim().toLocaleLowerCase();
-      if (!value) return true;
+      const value = extraFilters[key] ?? "";
+      if (!value.trim()) return true;
+      const condition = extraFilterConditions[key] ?? "Contains";
       const fieldValue = item[key as keyof Client];
-      return String(fieldValue ?? "").toLocaleLowerCase().includes(value);
+      if (key === "joinedAt" && condition === "Equals" && value) {
+        return Boolean(fieldValue) && new Date(String(fieldValue)).toISOString().slice(0, 10) === value;
+      }
+      return matchesTextFilter(fieldValue, value, condition);
     });
   });
   const pageCount = Math.max(1, Math.ceil(visibleItems.length / pageSize));
@@ -106,6 +136,17 @@ export default function ClientsPage() {
   const firstItem = visibleItems.length === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const lastItem = Math.min(currentPage * pageSize, visibleItems.length);
   const hasFilters = Boolean(query.trim() || status || clientType || Object.values(extraFilters).some((value) => value.trim()));
+  const openFieldFilter = (key: string) => {
+    setExtraFilterDraft(extraFilters[key] ?? "");
+    setConditionDraft(extraFilterConditions[key] ?? (key === "joinedAt" ? "Equals" : "Contains"));
+    setFilterPopover(key);
+  };
+  const applyFieldFilter = (key: string) => {
+    setExtraFilters((current) => ({ ...current, [key]: extraFilterDraft }));
+    setExtraFilterConditions((current) => ({ ...current, [key]: conditionDraft }));
+    setPage(1);
+    setFilterPopover(null);
+  };
 
   return (
     <div className="space-y-[18px]">
@@ -141,34 +182,50 @@ export default function ClientsPage() {
               className="h-[var(--control-height)] !border-primary pl-9"
             />
           </div>
-          <div className="w-full shrink-0 sm:w-[80px]">
-            <label className="sr-only" htmlFor="client-type">Type</label>
-            <select
-              id="client-type"
-              aria-label="Type"
-              value={clientType}
-              onChange={(event) => { setClientType(event.target.value); setPage(1); }}
-              className="h-[var(--control-height)] rounded-[var(--control-radius)] !border-primary bg-background px-3 fs-text"
-            >
-              <option value="">Type</option>
-              <option value="INDIVIDUAL">Individual</option>
-              <option value="GROUP">Group</option>
-            </select>
+          <div className="relative shrink-0">
+            <Button type="button" variant="outline" aria-expanded={filterPopover === "type"} onClick={() => { setTypeDraft(clientType); setFilterPopover(filterPopover === "type" ? null : "type"); }} className="h-[var(--control-height)] justify-between gap-2 !border-primary !px-3 !text-primary">
+              Type <ChevronDown aria-hidden="true" className="size-4" />
+            </Button>
+            {filterPopover === "type" ? (
+              <div role="dialog" aria-label="Filter by Type" className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-card-border bg-surface p-3 shadow-lg">
+                <p className="mb-2 fs-text font-semibold text-strong">Type</p>
+                <label className="mb-1 block fs-text text-muted-foreground" htmlFor="client-type-condition">Condition</label>
+                <select id="client-type-condition" value="Is" disabled className="mb-3 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text"><option>Is</option></select>
+                <label className="mb-1 block fs-text text-muted-foreground" htmlFor="client-type">Value</label>
+                <select id="client-type" value={typeDraft} onChange={(event) => setTypeDraft(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text">
+                  <option value="">Select type</option>
+                  <option value="INDIVIDUAL">Individual</option>
+                  <option value="GROUP">Group</option>
+                </select>
+                <div className="mt-3 flex justify-end gap-2">
+                  <Button type="button" variant="ghost" size="sm" onClick={() => { setTypeDraft(""); setClientType(""); setPage(1); setFilterPopover(null); }}>Clear</Button>
+                  <Button type="button" size="sm" onClick={() => { setClientType(typeDraft); setPage(1); setFilterPopover(null); }}>Apply</Button>
+                </div>
+              </div>
+            ) : null}
           </div>
-          <div className="w-full shrink-0 sm:w-[90px]">
-            <label className="sr-only" htmlFor="client-status">Status</label>
-            <select
-              id="client-status"
-              aria-label="Status"
-              value={status}
-              onChange={(event) => { setStatus(event.target.value); setPage(1); }}
-              className="h-[var(--control-height)] rounded-[var(--control-radius)] !border-primary bg-background px-3 fs-text"
-            >
-              <option value="">Status</option>
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-              <option value="PENDING">Pending</option>
-            </select>
+          <div className="relative shrink-0">
+            <Button type="button" variant="outline" aria-expanded={filterPopover === "status"} onClick={() => { setStatusDraft(status); setFilterPopover(filterPopover === "status" ? null : "status"); }} className="h-[var(--control-height)] justify-between gap-2 !border-primary !px-3 !text-primary">
+              Status <ChevronDown aria-hidden="true" className="size-4" />
+            </Button>
+            {filterPopover === "status" ? (
+              <div role="dialog" aria-label="Filter by Status" className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-card-border bg-surface p-3 shadow-lg">
+                <p className="mb-2 fs-text font-semibold text-strong">Status</p>
+                <label className="mb-1 block fs-text text-muted-foreground" htmlFor="client-status-condition">Condition</label>
+                <select id="client-status-condition" value="Is" disabled className="mb-3 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text"><option>Is</option></select>
+                <label className="mb-1 block fs-text text-muted-foreground" htmlFor="client-status">Value</label>
+                <select id="client-status" value={statusDraft} onChange={(event) => setStatusDraft(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text">
+                  <option value="">Select status</option>
+                  <option value="ACTIVE">Active</option>
+                  <option value="INACTIVE">Inactive</option>
+                  <option value="PENDING">Pending</option>
+                </select>
+                <div className="mt-3 flex justify-end gap-2">
+                  <Button type="button" variant="ghost" size="sm" onClick={() => { setStatusDraft(""); setStatus(""); setPage(1); setFilterPopover(null); }}>Clear</Button>
+                  <Button type="button" size="sm" onClick={() => { setStatus(statusDraft); setPage(1); setFilterPopover(null); }}>Apply</Button>
+                </div>
+              </div>
+            ) : null}
           </div>
           <div className="relative w-full sm:w-[158px]">
             <Button
@@ -183,8 +240,10 @@ export default function ClientsPage() {
               <ChevronDown aria-hidden="true" />
             </Button>
             {filterMenuOpen ? (
-              <div id="client-extra-filters" role="group" aria-label="Additional client filters" className="absolute left-0 top-full z-20 mt-1 w-56 rounded-md border border-card-border bg-surface p-2 shadow-lg">
-                {extraFilterOptions.map(({ key, label }) => (
+              <div id="client-extra-filters" role="group" aria-label="Additional client filters" className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-card-border bg-surface p-2 shadow-lg">
+                <Input aria-label="Search filters" placeholder="Search filters" value={fieldSearch} onChange={(event) => setFieldSearch(event.target.value)} className="mb-1 h-9" />
+                <div className="max-h-64 overflow-y-auto">
+                {extraFilterOptions.filter(({ label }) => label.toLocaleLowerCase().includes(fieldSearch.toLocaleLowerCase())).map(({ key, label }) => (
                   <label key={key} className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 fs-text hover:bg-subtle">
                     <input
                       type="checkbox"
@@ -192,28 +251,52 @@ export default function ClientsPage() {
                       onChange={(event) => {
                         setExtraFilterFields((current) => event.target.checked ? [...current, key] : current.filter((field) => field !== key));
                         setPage(1);
-                        if (!event.target.checked) setExtraFilters((current) => ({ ...current, [key]: "" }));
+                        if (!event.target.checked) {
+                          setExtraFilters((current) => ({ ...current, [key]: "" }));
+                          if (filterPopover === key) setFilterPopover(null);
+                        } else {
+                          setExtraFilters((current) => ({ ...current, [key]: current[key] ?? "" }));
+                        }
                       }}
                     />
                     {label}
                   </label>
                 ))}
+                </div>
               </div>
             ) : null}
           </div>
         </div>
         {extraFilterFields.length > 0 ? (
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             {extraFilterOptions.filter(({ key }) => extraFilterFields.includes(key)).map(({ key, label }) => (
-              <Input
-                key={key}
-                aria-label={label}
-                placeholder={label}
-                value={extraFilters[key] ?? ""}
-                onChange={(event) => { setExtraFilters((current) => ({ ...current, [key]: event.target.value })); setPage(1); }}
-                className="h-[var(--control-height)] w-full sm:w-[230px]"
-              />
+              <div key={key} className="relative">
+                <div className="flex items-center rounded border border-primary/50 bg-background text-primary">
+                  <Button type="button" variant="ghost" aria-expanded={filterPopover === key} className="h-9 !px-2 fs-text !text-primary" onClick={() => filterPopover === key ? setFilterPopover(null) : openFieldFilter(key)}>
+                    Filter by {label}
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon-xs" aria-label={`Remove ${label} filter`} className="!size-7 !text-primary" onClick={() => { setExtraFilterFields((current) => current.filter((field) => field !== key)); setExtraFilters((current) => ({ ...current, [key]: "" })); setPage(1); setFilterPopover(null); }}>
+                    <X aria-hidden="true" className="size-3" />
+                  </Button>
+                </div>
+                {filterPopover === key ? (
+                  <div role="dialog" aria-label={`Filter by ${label}`} className="absolute left-0 top-full z-30 mt-1 w-72 rounded-md border border-card-border bg-surface p-3 shadow-lg">
+                    <p className="mb-2 fs-text font-semibold text-strong">{label}</p>
+                    <label className="mb-1 block fs-text text-muted-foreground" htmlFor={`condition-${key}`}>Condition</label>
+                    <select id={`condition-${key}`} value={conditionDraft} onChange={(event) => setConditionDraft(event.target.value as FilterCondition)} className="mb-3 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text">
+                      {(key === "joinedAt" ? ["Equals"] : textConditions).map((condition) => <option key={condition}>{condition}</option>)}
+                    </select>
+                    <label className="mb-1 block fs-text text-muted-foreground" htmlFor={`value-${key}`}>Value</label>
+                    <Input id={`value-${key}`} type={key === "joinedAt" ? "date" : "text"} placeholder={`Enter ${label}`} value={extraFilterDraft} onChange={(event) => setExtraFilterDraft(event.target.value)} className="h-[var(--control-height)]" />
+                    <div className="mt-3 flex justify-end gap-2">
+                      <Button type="button" variant="ghost" size="sm" onClick={() => { setExtraFilterDraft(""); setExtraFilters((current) => ({ ...current, [key]: "" })); setPage(1); setFilterPopover(null); }}>Clear</Button>
+                      <Button type="button" size="sm" onClick={() => applyFieldFilter(key)}>Apply</Button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             ))}
+            <span className="fs-text text-muted-foreground">{extraFilterFields.length} added</span>
           </div>
         ) : null}
       </section>
