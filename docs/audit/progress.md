@@ -114,3 +114,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded the missing four-stage review, assignment, approval-history, notes, score-history, audit-history, and document-tab model as a blocker.
 - Updated the shared edit wizard to open on Additional Details, use the Update title, and link Cancel to the application detail page. The edit state is not browser-verifiable until a local UUID record exists.
 - Web typecheck passed. Scoped lint passed with the existing edit-initialization `react-hooks/set-state-in-effect` rule suppressed for this check.
+- Implementation commit: `597b4d7` (`feat(web): align loan application edit state with reference`).
