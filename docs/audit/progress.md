@@ -472,3 +472,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Used the actual member type and policy lifecycle status. Reference savings/shares/fees/activation/onboarding flags and approval state are absent from the current response; those values display as em dashes. No membership policy was added or changed.
 - At 1280×720 the local page/document/body widths were all 1280px, with the full table header and empty state visible. I389 remains open for missing policy data.
 - Web production build passed with the Membership Policy list alignment.
+
+## 2026-11-01 — Holiday calendar
+
+- Compared `/settings/policies/holidays` with `F:\Wakandi\settings-policies-holidays\FULL.png`; added the month/year calendar grid, month selectors, previous/next navigation, and reference-style Add Holiday dialog fields.
+- Calendar entries render from the existing holiday API. Recurring and Add Another Holiday controls are disabled because the model only saves one name/date; the working-day save control is still not backed by persistence. I391 now tracks those exact gaps.
+- At 1280×720 the browser confirmed the calendar/dialog fit without page-width overflow. Opened and canceled the dialog without entering values or changing working days.
+- Web production build passed with the month calendar and reference-style holiday dialog.

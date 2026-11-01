@@ -6,12 +6,11 @@ AIMSCAMS route: `/settings/policies/holidays`
 
 ## Comparison
 
-The reference shows the shared policy tabs, working-day card, month/year calendar, and Add Holiday dialog states with name, date, recurring toggle, and add-another control. AIMSCAMS now includes the shared Membership Policy / Credit Product Policy / Holidays tab row above its existing working-day checklist and holiday list. The month calendar, recurring entries, and multi-holiday dialog are still not present. Working-day defaults currently mark Monday–Friday as open and Saturday/Sunday closed.
+The reference shows the shared policy tabs, working-day card, month/year calendar, and Add Holiday dialog with name, date, recurring toggle, and add-another control. AIMSCAMS now includes the shared tabs and a six-week month grid with month/year selectors and previous/next controls. Existing holiday records render on their date. The Add Holiday dialog matches the reference field layout; recurring and Add Another Holiday controls are disabled because the current endpoint stores one date/name at a time and has no recurrence field. Working-day defaults currently mark Monday–Friday as open and Saturday/Sunday closed; the local Save working days action still does not persist.
 
 ## Recommendations
 
-- Add the shared policy tabs and month/year calendar with a holiday list or calendar entries.
-- Support recurring and multi-entry holiday creation through a dedicated dialog.
-- Keep date and working-day changes read-only until the calendar workflow is deliberately exercised.
+- Extend the holiday contract to save recurring and multi-entry holidays.
+- Persist branch working-day settings instead of showing a success action without a save endpoint.
 
-Visible browser review at 1280×720 confirmed the Holidays tab is active and the document width is 1280px. No checkbox was changed and no save/create action was used. The remaining calendar workflows are tracked in I391. Implementation commit: pending.
+Visible browser review at 1280×720 confirmed the Holidays tab, month grid, and date navigation. Document/body widths were both 1280px. Opened and canceled the Add Holiday dialog without entering values; no checkbox was changed and no save/create action was used. The remaining recurrence, multi-entry, and working-day persistence gaps are tracked in I391. Web production build passed. Implementation commit: pending.
