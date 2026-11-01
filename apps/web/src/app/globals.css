@@ -66,15 +66,15 @@ body {
   --space-32: 32px;
 
   /* Shared geometry */
-  --header-height: 76px;
-  --sidebar-width: 240px;
+  --header-height: 64px;
+  --sidebar-width: 200px;
   --sidebar-collapsed-width: 76px;
   --sidebar-footer-height: 73px;
   --sidebar-subitem-height: 28px;
   --sidebar-row-height: 36px;
   --content-padding: 18px;
-  --content-padding-x: 16px;
-  --content-padding-y: 18px;
+  --content-padding-x: 12px;
+  --content-padding-y: 16px;
   --control-height: 42px;
   --control-compact-height: 28px;
   --icon-size: 20px;

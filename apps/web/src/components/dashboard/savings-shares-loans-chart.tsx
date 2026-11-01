@@ -28,7 +28,7 @@ export function SavingsSharesLoansChart() {
     <ChartCard
       testId="savings-shares-loans-chart"
       title="Total Savings, Shares & Loans"
-      description="Aggregated financial breakdown by category"
+      className="px-5 pt-9 pb-5"
     >
       <div className="relative mt-7 h-[300px]">
         <div className="absolute bottom-0 left-[80px] right-0 top-8">
@@ -50,7 +50,7 @@ export function SavingsSharesLoansChart() {
         </div>
 
         <div className="absolute bottom-0 left-[80px] right-0 top-8 flex items-end justify-center gap-16">
-          {categories.map((category, index) => {
+          {categories.map((category) => {
             const height = percentageOfRange(category.value, MAX_VALUE);
             return (
               <div key={category.id} className="relative h-full w-[77px]">

@@ -30,7 +30,7 @@ export function ParBucketsChart() {
     <ChartCard
       testId="par-buckets-chart"
       title="Risk Snapshot: PAR Buckets"
-      description="Portfolio-at-risk aging breakdown"
+      className="px-5 pt-9 pb-5"
     >
       <div className="relative mt-7 h-[300px]">
         <div className="absolute bottom-0 left-[80px] right-0 top-8">
@@ -52,7 +52,7 @@ export function ParBucketsChart() {
         </div>
 
         <div className="absolute bottom-0 left-[80px] right-0 top-8 flex items-end justify-center gap-12">
-          {categories.map((category, index) => {
+          {categories.map((category) => {
             const height = percentageOfRange(category.value, MAX_VALUE);
             return (
               <div key={category.id} className="relative h-full w-[64px]">

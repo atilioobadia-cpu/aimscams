@@ -52,7 +52,7 @@ export function StatCard({ kpi, className }: { kpi: KpiFixture; className?: stri
       data-testid="kpi-card"
       data-kpi-id={kpi.id}
       className={cn(
-        "relative flex min-h-[92px] flex-col justify-between rounded-[var(--card-radius)] border border-card-border bg-surface p-3.5",
+        "relative flex min-h-[124px] flex-col justify-between rounded-[var(--card-radius)] border border-card-border bg-surface p-3.5",
         className,
       )}
     >

@@ -169,7 +169,7 @@ export const dashboardFixture: DashboardFixture = {
     title: "FundsInVsFundsOut",
     period: "October 2026",
     axis: {
-      min: "1500000000",
+      min: "0",
       max: "5000000000",
       step: "500000000",
     },
