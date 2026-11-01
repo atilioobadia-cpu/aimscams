@@ -3,7 +3,7 @@
 ## Evidence
 
 - Reference: `F:\Wakandi\account-loan-details-118-transactions\FULL.png`.
-- AIMSCAMS route: `/account-loan-details/[id]/transactions`.
+- AIMSCAMS route: `/account-loan-details/[id]/transactions` (the captured slug URL `/account-loan-details-118-transactions` returns 404).
 - The route uses a loan UUID; the supplied numeric reference suffix does not load local data. No local loan rows are available.
 
 ## Status

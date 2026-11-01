@@ -471,3 +471,5 @@
 | I424 | /reports-loan-TransactionReport | report data | Loan transaction filters, transaction/reference fields, and paging | Generic chart-of-accounts balances; no transaction fields | High |
 | I425 | /reports-loan-WrittenOffLoanReport | report data/access | Write-off filters, reason/date/initiator fields, and recovery amount | Generic chart-of-accounts balances; no write-off fields | High |
 | I427 | /reports-client-MemberVerificationReport | report data/access | Member verification filters, status fields, and access-controlled export | Generic chart-of-accounts balances; no verification fields | High |
+| I428 | /messages-recharge-credits | workflow | Credit amount, description, balance/cost summary, and safe purchase flow | Local route is In Build; no form or purchase state | High |
+| I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Local route is In Build; no form or filter state | High |

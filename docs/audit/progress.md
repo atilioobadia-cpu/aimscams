@@ -262,3 +262,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Existing notes for the first six pages were confirmed against their current local routes. Both captured membership-edit URLs return 404; no matching local policy record exists. Member Verification Report was added as a page-specific note and issue I427.
 - The member-verification reference contains personal names and identifiers; the audit records only field categories and does not reproduce those values.
 - Review was read-only; no ledger, role, policy, or report changes were submitted.
+
+## 2026-11-01 — Cross-module audit, second batch
+
+- Compared Statement Reports, Recharge Credits, Teller Requests, Loan Transactions, Credit Product Policy Details, Create Message Segment, and Group Membership Policy Details in the visible browser against their references.
+- Statement Reports is narrowed to two statement links in the reference while AIMSCAMS also lists transaction/client/savings reports. Teller Requests preserves its empty table headers but lacks the shared teller tabs and branch balance panel. The loan and credit-policy sample URLs return 404; the membership detail resolves to a not-found state.
+- Recharge Credits and Create Segment are In Build locally; their reference form controls are recorded without triggering purchase or save.
+- Updated the page notes and issues I428–I429. No teller request, message segment, loan record, policy, or credit purchase was created or changed.
