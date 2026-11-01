@@ -10,7 +10,7 @@ import { ToastProvider } from "@/components/ui/toast";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 
 const SIDEBAR_WIDTH = {
-  expanded: 204,
+  expanded: 240,
   collapsed: 76,
 } as const;
 
@@ -60,7 +60,7 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
           style={{ paddingLeft: width, paddingTop: "var(--header-height)" }}
           className="min-h-screen transition-[padding-left] duration-200"
         >
-          <div className="content-fade px-[var(--content-padding)] pb-[76px] pt-[var(--content-padding)]">
+          <div className="content-fade px-[var(--content-padding-x)] pb-[76px] pt-[var(--content-padding-y)]">
             {children}
           </div>
         </main>

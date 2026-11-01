@@ -84,7 +84,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
         </div>
       </div>
 
-      <div className="ml-auto flex shrink-0 items-center gap-4">
+      <div className="ml-auto flex shrink-0 items-center gap-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -132,7 +132,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
             >
               <span
                 data-testid="header-avatar"
-                className="grid size-[34px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
+                className="grid size-[40px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
                 style={{
                   background: "linear-gradient(135deg, #1f7893 0%, #3279aa 50%, #537cd3 100%)",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.2)",

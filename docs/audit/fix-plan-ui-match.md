@@ -1,21 +1,26 @@
 # UI match fix plan (Wakandi reference → AIMSCAMS)
 
-Status: **draft, not started.** Implementation waits for the user's "go".
+Status: **implementation in progress.** The user authorized the work on 2026-11-01.
 The earlier Phase 4 plan remains in `fix-plan.md`; this file covers the pixel and control
-match work started on 2026-10-30.
+match work started on 2026-10-30. The first implementation pass has updated the shared shell scale,
+shared table row density and Clients list layout. Remaining phases are still open.
 
 ## Where the measurements stand
 
 | Measure | Value | Source |
 |---|---|---|
-| Pages compared | 142 | `tools/ui-compare/pages.json` |
-| Pages passing structural criteria | 0 / 142 | `docs/audit/compare/SUMMARY.md` |
-| SSIM range (unmasked) | 0.71 – 0.92 | `compare.py` run |
+| Pages compared before the new calibration | 142 | `tools/ui-compare/pages.json` |
+| Pages passing structural criteria | 0 / 142 | `docs/audit/compare/SUMMARY.md` (old run; not trusted) |
+| SSIM range (unmasked) | 0.71 – 0.92 | `compare.py` old run; not trusted |
 | Issues in register | 335 (216 text, 50 missing, 68 in-build, 1 header row) | `docs/audit/issues.md` |
 | Structural masking | **not implemented** | open |
 | DPR/viewport calibration check | **asserted, not re-measured** | `calibration.md` |
 | Controls inventory (Step 3) | **not started** | open |
 | Control-level comparison (Step 5) | **not started** | open |
+
+The previous corpus-wide results are not a valid baseline: screenshots use more than one scale, and
+the masks could hide missing controls. Recalibrate and replace these numbers before reporting a
+pass rate.
 
 Two gaps must close before the numbers can be trusted:
 
