@@ -6,11 +6,11 @@ AIMSCAMS route: `/settings/products/provisioning-rules`
 
 ## Comparison
 
-The reference shows Product Setup with the Loan Provisioning tab active, Add New, search, Name and Status columns, and a centered No data available empty state. AIMSCAMS has the same broad search/status and empty-state intent but uses a standalone Loan provisioning rules heading, description, and filters; the shared product tabs and table chrome are absent; the local action is labeled Create provisioning rule.
+The local route now shows the Product Setup title with Loan Provisioning active, an outlined Add new action, compact search/Add Filters toolbar, Name and Status columns, and centered No data available state. At 1280×720, the document/body widths are both 1280px. The captured reference and local organization both have no provisioning rules. The local Create provisioning rule dialog remains connected behind the Add new action; no rule was created.
 
 ## Recommendations
 
-- Reuse the shared Product Setup shell and match the reference table and create-action placement.
-- Retain the empty table state when no provisioning rule exists.
+- Preserve the true empty table while no local rules exist; compare populated rows once safe test records are available.
+- Keep the existing provisioning-rule form and activation actions connected.
 
-Read-only browser review; no provisioning rule was created or saved. Implementation commit: none.
+No provisioning rule was created or saved. Web production build passed. Implementation commit: pending.

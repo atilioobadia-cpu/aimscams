@@ -1,16 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Building2, UserCheck, UserX } from "lucide-react";
+import { ChevronDown, LoaderCircle, Plus, Search, SlidersHorizontal, UserCheck, UserX } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
-import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { ProductSetupHeader } from "@/components/settings/product-setup-header";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import {
@@ -36,6 +41,8 @@ export default function ProvisioningRulesPage() {
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
+  const [showStatusFilter, setShowStatusFilter] = useState(false);
+  const [showStatusColumn, setShowStatusColumn] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
 
@@ -153,53 +160,12 @@ export default function ProvisioningRulesPage() {
 
   const items = data?.items ?? [];
   const hasFilters = Boolean(query.trim() || status);
+  const columnCount = 2 + Number(showStatusColumn);
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader breadcrumb="Settings" title="Loan provisioning rules" description="Provisioning rules applied to loan assets." />
-        {data?.canEdit ? (
-          <Button onClick={() => setModalOpen(true)} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-            <Plus className="size-4" aria-hidden="true" />
-            Create provisioning rule
-          </Button>
-        ) : null}
-      </div>
-
-      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end">
-          <div className="flex-1">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="provisioning-search">
-              Search
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input
-                id="provisioning-search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Code or name"
-                className="h-[var(--control-height)] pl-9"
-              />
-            </div>
-          </div>
-          <div className="w-full md:w-[220px]">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="provisioning-status">
-              Status
-            </label>
-            <select
-              id="provisioning-status"
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-            >
-              <option value="">All statuses</option>
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-            </select>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-3">
+      <ProductSetupHeader active="provisioning-rules" />
+      {data?.canEdit ? <div className="flex justify-end px-[var(--space-16)]"><Button type="button" variant="outline" onClick={() => setModalOpen(true)} className="h-[42px] border-primary px-4 text-primary hover:bg-primary-tint hover:text-primary"><Plus className="size-4" aria-hidden="true" />Add new</Button></div> : null}
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view provisioning rules. Ask an administrator for Settings Product : View." />
@@ -209,41 +175,31 @@ export default function ProvisioningRulesPage() {
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={8} />
         </section>
-      ) : items.length === 0 ? (
-        <EmptyState
-          icon={Building2}
-          title={hasFilters ? "No provisioning rule matches" : "No provisioning rules yet"}
-          description={hasFilters ? "Adjust or clear the filters to see other rules." : "Create a provisioning rule."}
-        />
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[840px] text-left fs-text">
-              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
+            <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
+              <label className="relative block w-[240px] max-w-full"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" /><Input id="provisioning-search" aria-label="Search provisioning rules" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" /></label>
+              <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="outline" className="h-[42px] min-w-[168px] justify-between border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><span className="flex items-center gap-2"><Plus className="size-4" aria-hidden="true" />Add Filters</span><ChevronDown className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="start"><DropdownMenuCheckboxItem checked={showStatusFilter} onCheckedChange={setShowStatusFilter}>Status</DropdownMenuCheckboxItem></DropdownMenuContent></DropdownMenu>
+              {hasFilters ? <Button type="button" variant="ghost" onClick={() => { setQuery(""); setStatus(""); }} className="text-muted-foreground">Clear</Button> : null}
+              {loading ? <LoaderCircle className="size-4 animate-spin text-primary" aria-label="Updating provisioning rules" /> : null}
+            </div>
+            {showStatusFilter ? <div className="border-b border-chrome px-[var(--space-12)] py-3"><select id="provisioning-status" aria-label="Filter by status" value={status} onChange={(event) => setStatus(event.target.value)} className="h-[42px] min-w-[180px] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text text-body"><option value="">All statuses</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></div> : null}
+            <table className="w-full min-w-[760px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold text-label">
                 <tr>
-                  <th className="px-4 py-3">Code</th>
                   <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Days from</th>
-                  <th className="px-4 py-3">Days to</th>
-                  <th className="px-4 py-3">Rate</th>
-                  <th className="px-4 py-3">GL account</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                  {showStatusColumn ? <th className="px-4 py-3">Status</th> : null}
+                  <th className="w-14 px-2 py-2 text-right"><DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label="Table columns" className="text-primary"><SlidersHorizontal className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuCheckboxItem checked={showStatusColumn} onCheckedChange={setShowStatusColumn}>Status</DropdownMenuCheckboxItem></DropdownMenuContent></DropdownMenu></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-body">
+                {items.length === 0 ? <tr><td colSpan={columnCount} className="h-[216px] px-4 text-center text-muted-foreground"><div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-subtle text-muted-foreground"><Search className="size-6" aria-hidden="true" /></div>{hasFilters ? "No provisioning rules match these filters." : "No data available"}</td></tr> : null}
                 {items.map((item) => (
-                  <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="px-4 py-3 font-medium text-strong">{item.code}</td>
-                    <td className="px-4 py-3 text-body">{item.name}</td>
-                    <td className="px-4 py-3">
-                      <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
-                    </td>
-                    <td className="px-4 py-3 tabular-nums text-body">{item.daysFrom}</td>
-                    <td className="px-4 py-3 tabular-nums text-body">{item.daysTo ?? "N/A"}</td>
-                    <td className="px-4 py-3 tabular-nums text-body">{(item.rateBp / 100).toFixed(2)}%</td>
-                    <td className="px-4 py-3 text-body">{item.glAccountId ?? "N/A"}</td>
-                    <td className="px-4 py-3">
+                  <tr key={item.id} className="h-[67px] border-b border-card-border last:border-0">
+                    <td className="px-4 py-3 font-medium">{item.name}</td>
+                    {showStatusColumn ? <td className="px-4 py-3"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td> : null}
+                    <td className="w-14 bg-subtle/40 px-2 py-3">
                       <div className="flex justify-end">
                         <RowActionsMenu
                           label={`${item.code} ${item.name}`}

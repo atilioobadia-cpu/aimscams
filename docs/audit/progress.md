@@ -431,3 +431,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/products/fee-penalties` with both the normal list and Add Charge reference captures. Added the shared Product Setup shell, reference list columns, Add Charge action, and Details modal title/core field labels.
 - At 1280×720 the local page/document/body width is 1280px. The reference shows four charges while the local organization has none. Add Charge was opened and canceled without entering data; nothing was saved.
 - Web production build passed. I384 remains open for account number, searchable GL account, tax rate, and tax-inclusive data support. Updated its note, index, and issue row.
+
+## 2026-11-01 — Loan Provisioning list layout
+
+- Compared `/settings/products/provisioning-rules` with its reference capture; applied the shared Product Setup tabs/title, Add new placement, compact filter/search bar, Name/Status columns, and centered empty state.
+- At 1280×720 the page/document/body widths were all 1280px. Both reference and local lists are empty. The existing rule-creation modal and status actions remain connected; no rule was created.
+- Web production build passed. Updated the per-page note, index, and I385.
