@@ -16,3 +16,8 @@ The reference capture shows a full-page Create New Client workflow organized as 
 
 Read-only browser review; no client information was entered and no registration was submitted.  
 Implementation commit: none; form structure and reference-number state need follow-up.
+## Local form re-review — 2026-11-01
+
+The visible AIMSCAMS `/clients/create` page currently exposes a `Create New Client` title, Cancel links, and an expanded Membership Details section with Policy, Date Of Joining, Reference Number, Branch Name, Client Manager, and Group Name. Personal Details, Contact Details, Identity Number, Residence, and Employment appear below as disabled sections; `Next` is disabled in the untouched initial state. This is the current working-tree UI, whose page source has unrelated uncommitted user changes. Those changes were not edited, staged, or committed by this audit.
+
+This observation used the local page accessibility tree only. No data was entered and no client was created. A current active-session Wakandi comparison is pending because its browser is still on Dashboard; no screenshots were used for this re-review.
