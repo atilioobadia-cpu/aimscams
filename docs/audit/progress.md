@@ -491,7 +491,7 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 
 - Compared `/settings/policies/credit-product/new` with the available Wakandi edit capture; rebuilt the form shell to use the reference accordion sections, six-column Accounting Setting grid, and bottom action area.
 - Kept existing save behavior and marked reference controls disabled where the policy API has no typed fields. The AIMSCAMS JSON payload remains available under its own collapsed section. I388 tracks typed-term, mapping, and approval-workflow work.
-- Visible browser review at 1280×720 confirmed the page and document widths were 1280px, with no horizontal overflow and Cancel/Create reachable. No values were entered or policy created.
+- Visible browser review at 1280×720 confirmed the page and document widths were 1280px, with no horizontal overflow and Cancel/Create reachable. The initial form inspection entered no values; a synthetic draft was created afterward for populated route checks.
 - Web production build passed; create-form commit `1cc44ff` is pushed to `origin/main`.
 
 ## 2026-11-01 — Credit Product Policy edit and detail routes
@@ -499,4 +499,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Browser inspection exposed a bug: edit swallowed GET failures and showed a blank editable form. Replaced that with an explicit invalid/missing record state and a return link.
 - Matched the reference edit section order, open Accounting Setting grid, and bottom action area. A visible 1280×720 browser review confirmed the populated synthetic form, footer reachability, and 1280px body/document widths.
 - Created one local draft, `VISUAL-QA-CPP`, explicitly described as synthetic and not a financial configuration. It contains no lending terms or ledger mappings and is used to inspect the credit-policy list, detail, and edit states. The draft was not edited after creation.
-- Policy model and approval gaps remain tracked in I388/I399. The web production build passed with the edit-form, error-state, and detail-page layout changes; GitHub push is pending.
+- Policy model and approval gaps remain tracked in I388/I399. The web production build passed with the edit-form, error-state, and detail-page layout changes; commit `7af3ffc` is pushed to `origin/main`.
+
+## 2026-11-01 — Membership Policy populated routes
+
+- Created one local `VISUAL-QA-MEM` Individual policy in Draft with only supported default fields and a description identifying it as synthetic and not for operational use. This enables the populated list/detail/edit review; no approval or fee values were added.
+- Fixed the list's long-name cell so it truncates with a title instead of overlapping the Member Type column. Visible 1280px browser review confirms cells align and there is no document-width overflow.
+- Matched the membership detail summary card, Next of Kin & Member Dormancy and Member Activation sections, approval status, Board Member selector, and approval list to the reference. Unsupported workflow areas are visibly unavailable, not simulated.
+- Inspected the saved draft in the edit form; values loaded correctly and no changes were saved. Group-specific data remains pending a synthetic Group fixture. Web production build passed with the detail layout and row-overflow fix; GitHub push is pending.

@@ -127,7 +127,7 @@ export default function MembershipPoliciesPage() {
                     ...(data?.canEdit ? [{ label: "Edit policy", icon: Pencil, href: `/settings/policies/membership/${item.id}/edit` }] : []),
                   ];
                   return <tr key={item.id} className="h-[67px] border-b border-card-border last:border-0">
-                    <td className="px-4 py-3 font-medium">{item.name}</td>
+                    <td className="min-w-0 px-4 py-3 font-medium"><div className="max-w-full truncate" title={item.name}>{item.name}</div></td>
                     {showMemberType ? <td className="px-4 py-3">{titleCase(item.memberType)}</td> : null}
                     {showSavings ? <td className="px-4 py-3">—</td> : null}
                     {showShares ? <td className="px-4 py-3">—</td> : null}

@@ -438,7 +438,7 @@
 | I395 | /settings/products/savings/new | data/workflow | Persisted transaction bounds, permission, charge setup, default-account flags and ledger mappings | Reference-style sections now surface these controls, but the current product contract cannot save them | High |
 | I396 | /settings/products/loan/[id] | data/structure | Populated product details, terms, settings, repayment, charges, stages, accounting, history | Local sample detail route returns not found; list is empty | High |
 | I397 | /settings/products/savings/[id] | route/data | Populated savings product edit state and full terms/charges/accounting | Local list has no product row and edit state is unavailable | High |
-| I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Local sample record routes return not found | High |
+| I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Individual summary/detail structure and populated edit form render with a synthetic draft; approval history, board assignment, and Group-specific populated state are unavailable | High |
 | I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Synthetic draft exercises both routes; model still lacks typed lending fields, ledger mappings, and approval history | High |
 | I401 | /settings/products/provisioning-rules/new | data/schema | Category, multi-row criteria, and separate liability/expense/income account mappings | Local rule model supports one day range, percentage and one ledger account ID | High |
 

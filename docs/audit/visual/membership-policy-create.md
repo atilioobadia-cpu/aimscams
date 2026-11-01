@@ -12,6 +12,6 @@ The current policy contract cannot save minor eligibility, mandatory savings/sha
 
 ## Browser review
 
-Compared `/settings/policies/membership/new` with `F:\Wakandi\settings-policies-membership-policy-create\FULL.png` in the visible browser at 1280×720. The form scrolls vertically to the configuration and Submit/Cancel footer; document and body widths are both 1280px. No values were changed and no policy was created.
+Compared `/settings/policies/membership/new` with `F:\Wakandi\settings-policies-membership-policy-create\FULL.png` in the visible browser at 1280×720. The form scrolls vertically to the configuration and Submit/Cancel footer; document and body widths are both 1280px. Afterwards, created the clearly labeled `VISUAL-QA-MEM` draft with ordinary defaults and a synthetic-only description to review the related list, detail, and edit routes. Unsupported policy settings remain disabled.
 
-Web production build passed. Implementation commit: pending.
+Web production build passed. Create-form implementation commit: `1746efb`.
