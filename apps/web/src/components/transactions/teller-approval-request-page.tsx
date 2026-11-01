@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -167,17 +166,14 @@ export function TellerApprovalRequestPage() {
       {error ? <ErrorPanel message={error} onRetry={() => setId(id)} /> : null}
       {result ? <p className="fs-text text-accent-teal" role="status">{result}</p> : null}
 
-      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-card-border px-[var(--space-16)] py-[var(--space-10)]">
           <p className="fs-text text-muted-foreground">
             {items.length} pending request{items.length === 1 ? "" : "s"}
           </p>
         </div>
-        {queueLoading ? (
-          <PanelSkeleton rows={6} />
-        ) : items.length === 0 ? (
-          <EmptyState icon={CheckCircle2} title="No pending requests" description="All teller requests have been reviewed." />
-        ) : (
+        {queueLoading ? <PanelSkeleton rows={6} /> : null}
+        {!queueLoading ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
@@ -192,7 +188,11 @@ export function TellerApprovalRequestPage() {
                 </tr>
               </thead>
               <tbody>
-                {items.map((item) => (
+                {items.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-16 text-center fs-text text-muted-foreground">No data available</td>
+                  </tr>
+                ) : items.map((item) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
                     <td className="whitespace-nowrap px-4 py-3 text-body">{new Date(item.createdAt).toLocaleDateString()}</td>
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.requestNo}</td>
@@ -212,7 +212,7 @@ export function TellerApprovalRequestPage() {
               </tbody>
             </table>
           </div>
-        )}
+        ) : null}
       </section>
 
       {loading ? (

@@ -139,3 +139,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - The local transaction list is empty. Session Date and Product Name are not in the response model. The reference Resubmit action has no safe local endpoint, and saved-filter persistence is unavailable.
 - Web typecheck and scoped lint passed; see the pass commit record.
 - Implementation commit: `5629690` (`feat(web): align transactions page with visual reference`).
+
+## 2026-11-01 — Transaction workflow routes reviewed
+
+- Visually reviewed Teller Console, Teller History, Teller Requests, Online Transactions, and Online Transaction Reconciliation against their reference captures in the visible browser and image viewer.
+- Updated Teller Requests so the table headers remain visible for an empty queue. No approve/reject action was used.
+- Recorded the workflow/API differences on the other routes; their reference pages require teller transaction history, provider confirmation, category workflows, and persisted statement-upload metadata that the local APIs do not currently expose.
+- Browser inspection remained read-only for operational controls. Teller request implementation commit: pending.
