@@ -1,12 +1,9 @@
-﻿import type { Metadata } from "next";
-import { ComingSoon } from "@/components/shell/coming-soon";
+import type { Metadata } from "next";
+
+import { MessageSegmentListPage } from "@/components/messages/message-segment-list-page";
+
 export const metadata: Metadata = { title: "Segments · AIMSCAMS" };
+
 export default function Page() {
-  return (
-    <ComingSoon
-      title="Segments"
-      description="Message segments."
-      detail="This module arrives with the messages phase."
-    />
-  );
+  return <MessageSegmentListPage />;
 }

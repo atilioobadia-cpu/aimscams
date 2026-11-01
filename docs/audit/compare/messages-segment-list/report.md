@@ -1,5 +1,7 @@
 # messages-segment-list
 
+> Stale baseline: the metrics below compare the supplied reference to the pre-fix In Build placeholder. The route now renders a reference-style Message Service page; recapture AIMSCAMS and rerun the canonical diff before using these values as a score.
+
 - Route: /messages-segment-list
 - SSIM (masked): 0.9150 (threshold 0.98)
 - SSIM (unmasked): 0.8826

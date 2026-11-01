@@ -581,3 +581,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared the default chart and ledger-details reference captures with the visible AIMSCAMS page at 1280×720. Matched title/icon/casing, outlined controls, date-range shell, table heading casing, proportions, and spacing; full group names now fit.
 - Confirmed Add Groups reports that creation is unavailable in the current Accounting phase. Group/ledger creation, date filtering, and ledger-edit persistence remain tracked in I028/I344. No account or balance was changed.
 - Web production build passed; GitHub push is pending.
+
+## 2026-11-01 — Message Segments list
+
+- Replaced the In Build placeholder on `/messages-segment-list` with the reference Message Service title/action bar, credit summary, Logs/Messages/Segments/Users tabs, compact Name/Date filters, and persistent empty table.
+- Connected the available navigation actions and reviewed the responsive empty-state layout in the visible in-app browser. Kept the list empty because no segment records are available and displayed credit balances as Unavailable because no balance API is connected.
+- Updated the visual note, audit index, issues, and queue. The previous screenshot metrics are marked stale because they compare against the old placeholder; a canonical recapture is still needed. No segment was created or enabled. The web production build passed after the final filter-width tweak.

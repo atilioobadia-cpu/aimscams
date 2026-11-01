@@ -6,13 +6,16 @@ AIMSCAMS route: `/messages-segment-list`
 
 ## Comparison
 
-The reference uses the shared Message Service header/actions and Segments tab, followed by Name/Date filters and an empty table with Name, Alias, Date, and enable/disable columns. AIMSCAMS marks Segments “In build” and renders only a placeholder card; it has no shared toolbar, tab, filters, or table.
+The reference shows the shared Message Service title and action row, service credit summary, Logs/Messages/Segments/Users tabs, Name and Date filters, and a persistent empty table with Name, Alias, Date, and Enable / Disable columns. AIMSCAMS previously showed an In Build placeholder.
 
-## Recommendations
+Implemented the reference page structure and connected the existing actions to the local template, segment-create, send-message, recharge, logs, messages, and users routes. The filter controls now remain compact and side by side; the top action row wraps at narrow widths. The visible in-app browser was used to review the empty-state table and responsive layout after the change.
 
-- Add the shared message-service shell and segment table when segment data is supported.
-- Keep the empty state within the table structure.
-- Verify enable/disable behavior against the segment service before exposing controls.
+The organization has no segment records, and no segment list, filter, activation, or credit-balance API is available. The table therefore stays empty, credit balances show Unavailable, and no segment data or enable/disable actions were fabricated. Segment creation criteria and persistence remain tracked in I429.
 
-Browser review was read-only; no segment was created or enabled.  
-Implementation commit: none; module remains gated.
+## Remaining work
+
+- Connect segment list/query, filter, and enable/disable operations to the segment service before exposing data actions.
+- Connect organization SMS/email credit balances to replace the unavailable values.
+- Recapture and run the canonical screenshot diff; the saved comparison metrics were generated against the old placeholder and are stale.
+
+No segment was created or enabled during this review.

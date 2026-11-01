@@ -104,9 +104,9 @@
 | I101 | /messages-message-logs | text | Message Service | Delivery logs | Low |
 | I102 | /messages-recharge-credits | in-build | Implemented page | Reference-style form shell implemented; purchase integration tracked in I428 | High |
 | I103 | /messages-recharge-credits | text | Reference UI words | Credit, Description, WBA Balance, Total Cost, Buy Credits, Cancel present | Medium |
-| I104 | /messages-segment-list | in-build | Implemented page | Placeholder (In build) | High |
-| I105 | /messages-segment-list | text | Reference UI words | 12% coverage | Medium |
-| I106 | /messages-segment-list | text | MessageService | Segments | Low |
+| I104 | /messages-segment-list | in-build | Implemented page | Reference-style service page implemented; list/API gap tracked in I373 | Resolved visually |
+| I105 | /messages-segment-list | text | Reference UI words | Message Service, credits, actions, tabs, filters, and table headings present | Resolved visually |
+| I106 | /messages-segment-list | text | MessageService | Message Service | Resolved visually |
 | I107 | /messages-segment-list-create | in-build | Implemented page | Reference-style form shell implemented; criteria/save workflow tracked in I429 | High |
 | I108 | /messages-segment-list-create | text | Reference UI words | Create Segment, Name, Description, Create Filters, Filter, Save, Cancel present | Medium |
 | I109 | /messages-send-message | text | Reference UI words | 33% coverage | Medium |
@@ -411,7 +411,7 @@
 | I370 | /requests | structure/data | Request tabs, filter toolbar, and persistent empty table | Local page uses status checkboxes and a standalone no-requests card | Medium |
 | I371 | /messages-message-logs | structure/data | Shared Message Service shell, filters, table, pager | Local page has a search field and empty card; no local log rows | High |
 | I372 | /messages-template-list | structure/data | Message service tabs and template list fields | Local page uses inline add form and has no template rows | High |
-| I373 | /messages-segment-list | module/structure | Segment table and service navigation | Local page is gated In Build | High |
+| I373 | /messages-segment-list | data/workflow | Segment list/query, filters, enable/disable actions, and credit balances | Reference-style shell and empty table implemented; segment and balance APIs are unavailable, so no rows/actions are fabricated | High |
 | I374 | /import-member, /import-account, /import-transaction | structure/data | Reference batch toolbar and persistent table | Local pages show empty standalone cards | Medium |
 | I375 | /import-member-new, /import-account-new, /import-transaction-new | workflow/structure | Four-step upload, mapping, validation, result | Local wizards expose three steps and CSV-only upload | High |
 | I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |
