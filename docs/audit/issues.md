@@ -428,7 +428,7 @@
 | I387 | /settings/policies/credit-product | data/schema | Typed loan terms and approval state for domain table | Shared policy tabs, reference table shell, and empty state are present; flexible policy JSON has no typed loan terms or approval state | High |
 | I388 | /settings/policies/credit-product/new | data/workflow | Structured lending terms, settings, interest, repayment, collateral, charges, stages and accounting | Local form stores a generic JSON document | High |
 | I389 | /settings/policies/membership | data/schema | Reference savings/shares/fees/activation/onboarding and approval fields | Shared tabs and reference table shell are present; current membership model and empty catalog do not supply all reference values | Medium |
-| I390 | /settings/policies/membership/new | data/structure | Full policy sections for minors, savings, shares, fees, activation and credit mapping | Several reference policy groups are absent from local form | High |
+| I390 | /settings/policies/membership/new | data/schema/workflow | Persisted minor eligibility, mandatory savings/shares, membership fees, exit and credit-product mappings | Reference sections are present; the current membership model cannot save these fields or workflows | High |
 | I391 | /settings/policies/holidays | workflow/data | Persisted recurring/multi-entry holidays and branch working-day schedule | Shared tabs, month grid, and single holiday dialog are present; current APIs do not persist recurrence, multiple entries, or working days | High |
 
 | I392 | /settings/general | structure/data | Info/Appearance tabs and online collection preference | Local identity/installation form has no appearance or online collection sections | Medium |

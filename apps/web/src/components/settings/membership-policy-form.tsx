@@ -160,125 +160,105 @@ export function MembershipPolicyFormPage({ mode, policyId }: { mode: "create" | 
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <Button asChild variant="outline" size="sm">
-          <Link href="/settings/policies/membership">
-            <ArrowLeft className="size-4" aria-hidden="true" />
-            Membership policies
-          </Link>
-        </Button>
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="fs-title font-semibold text-heading">{editing ? "Edit Membership Policy" : "Create Membership Policy"}</h1>
+        <Button asChild variant="outline" className="h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership"><ArrowLeft className="size-4" aria-hidden="true" />Membership policies</Link></Button>
       </div>
-
-      <PageHeader
-        title={editing ? "Edit membership policy" : "Create membership policy"}
-        description="Membership policy definitions."
-      />
 
       {loading ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={8} />
         </section>
       ) : (
-        <form className="space-y-5 rounded-xl border border-card-border bg-surface p-5" onSubmit={(event) => void save(event)}>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-code">
-                Code
-              </label>
-              <Input id="mp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
+        <form onSubmit={(event) => void save(event)} className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+          <section className="space-y-4 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">ⓘ Basic Details</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-name">Name <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="mp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-member-type">Member Type <span className="text-accent-red" aria-hidden="true">*</span></label><select id="mp-member-type" value={memberType} onChange={(event) => setMemberType(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="INDIVIDUAL">Individual</option><option value="GROUP">Group</option></select></div>
+              <div className="md:col-span-2"><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-description">Description</label><textarea id="mp-description" value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className="w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 fs-text" /></div>
             </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-name">
-                Name
-              </label>
-              <Input id="mp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-status">
-                Status
-              </label>
-              <select
-                id="mp-status"
-                value={status}
-                onChange={(event) => setStatus(event.target.value as MembershipPolicyStatus)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-              >
-                <option value="DRAFT">Draft</option>
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-member-type">
-                Member type
-              </label>
-              <Input id="mp-member-type" value={memberType} onChange={(event) => setMemberType(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-min-nok">
-                Minimum next of kin
-              </label>
-              <Input id="mp-min-nok" value={minNextOfKin} onChange={(event) => setMinNextOfKin(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-max-nok">
-                Maximum next of kin
-              </label>
-              <Input id="mp-max-nok" value={maxNextOfKin} onChange={(event) => setMaxNextOfKin(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-dormant">
-                Dormant days
-              </label>
-              <Input id="mp-dormant" value={dormantDays} onChange={(event) => setDormantDays(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-verification">
-                Verification type
-              </label>
-              <Input id="mp-verification" value={verificationType} onChange={(event) => setVerificationType(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-          </div>
+          </section>
 
-          <div className="grid gap-2 md:grid-cols-3">
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={allowWithdraw} onChange={(event) => setAllowWithdraw(event.target.checked)} />
-              Allow withdraw
-            </label>
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={autoActive} onChange={(event) => setAutoActive(event.target.checked)} />
-              Auto active upon deposit
-            </label>
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input type="checkbox" checked={enableVerification} onChange={(event) => setEnableVerification(event.target.checked)} />
-              Enable member verification
-            </label>
-          </div>
+          <section className="space-y-4 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">♙ Next of Kin</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-min-nok">Minimum Next of Kin <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="mp-min-nok" type="number" min="0" value={minNextOfKin} onChange={(event) => setMinNextOfKin(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-max-nok">Maximum Next of Kin <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="mp-max-nok" type="number" min={minNextOfKin} value={maxNextOfKin} onChange={(event) => setMaxNextOfKin(event.target.value)} className="h-[var(--control-height)]" /></div>
+            </div>
+          </section>
 
-          <div>
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-description">
-              Description
-            </label>
-            <textarea
-              id="mp-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={3}
-              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
-            />
-          </div>
+          <section className="space-y-4 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">◷ Member Dormancy</h2>
+            <div className="max-w-[520px]"><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-dormant">Dormant Days <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="mp-dormant" type="number" min="0" value={dormantDays} onChange={(event) => setDormantDays(event.target.value)} className="h-[var(--control-height)]" /></div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={allowWithdraw} onChange={(event) => setAllowWithdraw(event.target.checked)} className="size-4 accent-primary" />Allow Withdraw</label>
+              <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={autoActive} onChange={(event) => setAutoActive(event.target.checked)} className="size-4 accent-primary" />Auto Active Upon Deposit</label>
+            </div>
+          </section>
 
-          <FormError message={saveError} />
-          <SuccessNote message={saved} />
+          <section className="space-y-3 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">♙ Allow Minors</h2>
+            <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Allow Minors</label>
+            <p className="fs-caption text-muted-foreground">Minor eligibility and age limits are not represented in the current membership policy model.</p>
+          </section>
 
-          <div className="flex items-center gap-3">
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-              {saving ? "Saving..." : editing ? "Save changes" : "Create membership policy"}
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/settings/policies/membership">Cancel</Link>
-            </Button>
+          <section className="space-y-3 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">▣ Mandatory Savings</h2>
+            <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Enable Mandatory Savings</label>
+            <p className="fs-caption text-muted-foreground">Mandatory savings product and amount settings are not saved by the current model.</p>
+          </section>
+
+          <section className="space-y-3 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">♧ Mandatory Shares</h2>
+            <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Enable Mandatory Shares</label>
+            <p className="fs-caption text-muted-foreground">Mandatory share product and amount settings are not saved by the current model.</p>
+          </section>
+
+          <section className="space-y-4 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">▧ Membership Policy Fees</h2>
+            <div className="rounded-md border border-dashed border-card-border bg-subtle p-4">
+              <p className="mb-3 fs-text font-medium text-body">Fee</p>
+              <div className="grid gap-4 md:grid-cols-3">
+                <div><label className="mb-1 block fs-text font-medium text-body">Fee Type</label><select disabled className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this policy model</option></select></div>
+                <div><label className="mb-1 block fs-text font-medium text-body">Charges Type</label><select disabled className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this policy model</option></select></div>
+                <div><label className="mb-1 block fs-text font-medium text-body">Amount (TSh)</label><Input disabled placeholder="Not available in this policy model" className="h-[var(--control-height)]" /></div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-6">
+                <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Auto Debit</label>
+                <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Apply To Migrated Members</label>
+              </div>
+            </div>
+            <Button type="button" variant="outline" disabled className="border-primary text-primary"><span className="fs-text">＋</span>Add Fee</Button>
+            <p className="fs-caption text-muted-foreground">Fee rules, amounts, auto-debit and migration settings are not persisted by this model.</p>
+          </section>
+
+          <section className="space-y-4 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">✓ Member Activation</h2>
+            <label className="flex items-center gap-2 fs-text text-strong"><input type="checkbox" checked={enableVerification} onChange={(event) => setEnableVerification(event.target.checked)} className="size-4 accent-primary" />Enable Member Verification Required</label>
+            {enableVerification ? <div className="max-w-[520px]"><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-verification">Verification Type</label><Input id="mp-verification" value={verificationType} onChange={(event) => setVerificationType(event.target.value)} className="h-[var(--control-height)]" /></div> : null}
+            <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Allow Deactivate or Exit</label>
+            <p className="fs-caption text-muted-foreground">Deactivate/exit behavior is not represented in the current membership policy model.</p>
+          </section>
+
+          <section className="space-y-3 border-b border-chrome px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">◇ Mandatory Credit Products</h2>
+            <label className="flex items-center gap-2 fs-text text-muted-foreground"><input type="checkbox" disabled className="size-4" />Enable Credit Product Mapping</label>
+            <p className="fs-caption text-muted-foreground">Mandatory credit-product mappings are not saved by the current model.</p>
+          </section>
+
+          <section className="space-y-4 px-5 py-5">
+            <h2 className="fs-text font-semibold text-strong">AIMSCAMS Configuration</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-code">Code <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="mp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" /></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="mp-status">Status</label><select id="mp-status" value={status} onChange={(event) => setStatus(event.target.value as MembershipPolicyStatus)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></div>
+            </div>
+          </section>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-chrome bg-card px-5 py-4">
+            <div className="min-w-0"><FormError message={saveError} /><SuccessNote message={saved} /></div>
+            <div className="flex items-center gap-3"><Button asChild variant="outline" className="border-primary text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership">Cancel</Link></Button><Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">{saving ? "Saving..." : "Submit"}</Button></div>
           </div>
         </form>
       )}
