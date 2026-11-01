@@ -441,7 +441,7 @@
 | I397 | /settings/products/savings/[id] | route/data | Populated savings product edit state and full terms/charges/accounting | Local list has no product row and edit state is unavailable | High |
 | I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Local sample record routes return not found | High |
 | I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Local sample record routes return not found | High |
-| I400 | /settings/products/provisioning-rules/new | missing route | Provisioning-rule creation form | Local URL returns 404 | Medium |
+| I401 | /settings/products/provisioning-rules/new | data/schema | Category, multi-row criteria, and separate liability/expense/income account mappings | Local rule model supports one day range, percentage and one ledger account ID | High |
 
 | I402 | /reports-loan-AccruedInstallmentsReport | report data | Accrued installment filters and interest fields | Generic chart-of-accounts balances; no loan filters or download | High |
 | I403 | /reports-loan-AccruedInterestReport | report data | Accrued interest filters and outstanding-interest fields | Generic chart-of-accounts balances; no loan filters or download | High |

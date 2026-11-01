@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { ChevronDown, LoaderCircle, Plus, Search, SlidersHorizontal, UserCheck, UserX } from "lucide-react";
 
-import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
+import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,16 +15,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Modal } from "@/components/ui/modal";
 import { ProductSetupHeader } from "@/components/settings/product-setup-header";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import {
-  createProvisioningRule,
   listProvisioningRules,
   updateProvisioningRule,
   type ProvisioningRule,
-  type ProvisioningRuleStatus,
 } from "@/lib/settings";
 import { titleCase } from "@/lib/privacy";
 
@@ -45,20 +43,6 @@ export default function ProvisioningRulesPage() {
   const [showStatusColumn, setShowStatusColumn] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saved, setSaved] = useState<string | null>(null);
-
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [itemStatus, setItemStatus] = useState<ProvisioningRuleStatus>("ACTIVE");
-  const [daysFrom, setDaysFrom] = useState("0");
-  const [daysTo, setDaysTo] = useState("");
-  const [rate, setRate] = useState("0");
-  const [glAccount, setGlAccount] = useState("");
-  const [description, setDescription] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -97,67 +81,6 @@ export default function ProvisioningRulesPage() {
     };
   }, [query, status, reloadKey]);
 
-  async function save(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSaveError(null);
-    setSaved(null);
-
-    const trimmedCode = code.trim().toUpperCase();
-    const trimmedName = name.trim();
-    if (!trimmedCode) {
-      setSaveError("Code is required.");
-      return;
-    }
-    if (!trimmedName) {
-      setSaveError("Name is required.");
-      return;
-    }
-    const from = Number(daysFrom);
-    const to = daysTo.trim() === "" ? null : Number(daysTo);
-    const rateBp = Number(rate);
-    if (!Number.isFinite(from) || from < 0) {
-      setSaveError("Days from must be a valid number.");
-      return;
-    }
-    if (to !== null && (!Number.isFinite(to) || to < from)) {
-      setSaveError("Days to must be greater than or equal to days from.");
-      return;
-    }
-    if (!Number.isFinite(rateBp) || rateBp < 0) {
-      setSaveError("Rate must be a valid number.");
-      return;
-    }
-
-    setSaving(true);
-    try {
-      await createProvisioningRule({
-        code: trimmedCode,
-        name: trimmedName,
-        status: itemStatus,
-        daysFrom: from,
-        daysTo: to,
-        rateBp: Math.round(rateBp * 100),
-        glAccountId: glAccount.trim() || null,
-        description: description.trim() || null,
-      });
-      pushToast("Provisioning rule created.");
-      setSaved("Created.");
-      setModalOpen(false);
-      setCode("");
-      setName("");
-      setDaysFrom("0");
-      setDaysTo("");
-      setRate("0");
-      setGlAccount("");
-      setDescription("");
-      setReloadKey((value) => value + 1);
-    } catch (failure) {
-      setSaveError(message(failure, "Could not create this provisioning rule."));
-    } finally {
-      setSaving(false);
-    }
-  }
-
   const items = data?.items ?? [];
   const hasFilters = Boolean(query.trim() || status);
   const columnCount = 2 + Number(showStatusColumn);
@@ -165,7 +88,7 @@ export default function ProvisioningRulesPage() {
   return (
     <div className="space-y-3">
       <ProductSetupHeader active="provisioning-rules" />
-      {data?.canEdit ? <div className="flex justify-end px-[var(--space-16)]"><Button type="button" variant="outline" onClick={() => setModalOpen(true)} className="h-[42px] border-primary px-4 text-primary hover:bg-primary-tint hover:text-primary"><Plus className="size-4" aria-hidden="true" />Add new</Button></div> : null}
+      {data?.canEdit ? <div className="flex justify-end px-[var(--space-16)]"><Button asChild variant="outline" className="h-[42px] border-primary px-4 text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/products/provisioning-rules/new"><Plus className="size-4" aria-hidden="true" />Add new</Link></Button></div> : null}
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view provisioning rules. Ask an administrator for Settings Product : View." />
@@ -230,87 +153,6 @@ export default function ProvisioningRulesPage() {
         </section>
       )}
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Create provisioning rule" size="large">
-        <form className="space-y-5" onSubmit={(event) => void save(event)}>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-code">
-                Code
-              </label>
-              <Input id="pr-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-name">
-                Name
-              </label>
-              <Input id="pr-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-status">
-                Status
-              </label>
-              <select
-                id="pr-status"
-                value={itemStatus}
-                onChange={(event) => setItemStatus(event.target.value as ProvisioningRuleStatus)}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-              >
-                <option value="ACTIVE">Active</option>
-                <option value="INACTIVE">Inactive</option>
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-days-from">
-                Days from
-              </label>
-              <Input id="pr-days-from" value={daysFrom} onChange={(event) => setDaysFrom(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-days-to">
-                Days to
-              </label>
-              <Input id="pr-days-to" value={daysTo} onChange={(event) => setDaysTo(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-rate">
-                Rate (%)
-              </label>
-              <Input id="pr-rate" value={rate} onChange={(event) => setRate(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-gl">
-                GL account
-              </label>
-              <Input id="pr-gl" value={glAccount} onChange={(event) => setGlAccount(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-          </div>
-
-          <div>
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="pr-description">
-              Description
-            </label>
-            <textarea
-              id="pr-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={3}
-              className="w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-[var(--space-8)] fs-text"
-            />
-          </div>
-
-          <FormError message={saveError} />
-          <SuccessNote message={saved} />
-
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-              {saving ? "Saving..." : "Create"}
-            </Button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 }

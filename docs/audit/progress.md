@@ -451,3 +451,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Frequency type/value, end date, and fixed/variable selection are disabled because the current rate model does not persist them. I394 remains open for the API/model gap.
 - At 1280×720 the document/body widths were both 1280px. The visible browser confirmed the fixed-rate input and Cancel/Create actions are reachable by vertical scrolling without horizontal overflow. No values were entered or saved.
 - Web production build passed. Updated the page note, visual index, and issue row.
+
+## 2026-11-01 — Loan Provisioning create route
+
+- Compared `/settings/products/provisioning-rules/new` with `F:\Wakandi\settings-products-loan-provisioning-create\FULL.png`; added the missing full-page route and replaced the list's modal action with navigation to the form.
+- Mapped min/max days and percentage to the existing provisioning API. Category, multiple criteria rows, and separate liability/expense/income accounts are disabled because those fields are absent from the current rule model. Closed I400 and opened I401 for the remaining schema gap.
+- At 1280×720 the document/body widths were both 1280px. Criteria headings fit within the local table, and Save/Cancel are reachable by vertical scrolling. No sample values were entered and no rule was created.
+- Web production build passed with the new route included.
