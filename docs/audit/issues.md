@@ -442,3 +442,12 @@
 | I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Local sample record routes return not found | High |
 | I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Local sample record routes return not found | High |
 | I400 | /settings/products/provisioning-rules/new | missing route | Provisioning-rule creation form | Local URL returns 404 | Medium |
+
+| I402 | /reports-loan-AccruedInstallmentsReport | report data | Accrued installment filters and interest fields | Generic chart-of-accounts balances; no loan filters or download | High |
+| I403 | /reports-loan-AccruedInterestReport | report data | Accrued interest filters and outstanding-interest fields | Generic chart-of-accounts balances; no loan filters or download | High |
+| I404 | /reports-loan-AllLoanReport | report data | All-loan portfolio filters and arrears/fees columns | Generic chart-of-accounts balances; no portfolio fields or download | High |
+
+| I405 | /reports-loan-DeferredInterestReport | report data | Deferred principal, interest, and charge filters/report columns | Generic chart-of-accounts balances; no deferred-interest fields | High |
+| I406 | /reports-loan-ExpectedLoanRepaymentsReport | report data | Date-scoped expected principal/interest/repayment totals | Generic chart-of-accounts balances; no expected repayment fields | High |
+| I407 | /reports-loan-ExpectedPaymentByDateReport | report data | Due-date range filters and due/overdue amount columns | Generic chart-of-accounts balances; no expected payment fields | High |
+| I408 | /reports-loan-ExpectedRepaymentReport | report data | Expected principal balance and principal/interest/penalty due columns | Generic chart-of-accounts balances; no expected repayment fields | High |

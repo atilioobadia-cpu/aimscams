@@ -227,3 +227,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added route-specific notes for these populated and create/edit states. No product or policy forms were submitted.
 
 - Corrected the service reference mapping: the supplied Services capture corresponds to `/settings-service-provider`; `/settings/services` is a separate value-added-services catalogue with no reference capture. Added a read-only System Logs note; no reference screenshot is present.
+
+## 2026-11-01 — Loan reports, first batch
+
+- Compared Accrued Installments, Accrued Interest, All Loan, Deferred Interest, Expected Loan Repayments, Expected Payment By Date, and Expected Repayment with their supplied references in the visible browser.
+- Each local route renders the same generic chart-of-accounts balance grid; the references show loan-specific date/portfolio filters and distinct financial columns. Added one route-specific note per page and issue-register entries I402–I408.
+- Kept report inspection read-only; no submit, refresh, download, or financial action was triggered.
+- Implementation commit: none; report query/filter contracts are missing.
