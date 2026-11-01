@@ -58,7 +58,7 @@ Severity: **High** = placeholder or broken page that users reach from the sideba
 | `/import-member` | Yes | Member import batches | OK | None | None |
 | `/import-member-new` | Yes | Member import wizard | UI aligned; workflow limits | CSV only; file preview unverified; no relationship fields or Excel parser | Medium |
 | `/import-transaction` | Yes | Transaction import batches | OK | None | None |
-| `/import-transaction-new` | Yes | Transaction import wizard | OK | None | None |
+| `/import-transaction-new` | Yes | Transaction import wizard | UI aligned; workflow limits | CSV only; file mapping and preview not yet verified; importing posts ledger transactions | Medium |
 | `/messages` | Yes | Messages | In build | Placeholder text: in build | High |
 | `/messages-message-logs` | No | Delivery logs | OK | None | Low |
 | `/messages-recharge-credits` | No | Recharge credits | In build | Placeholder text: in build | Medium |

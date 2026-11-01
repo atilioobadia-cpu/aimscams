@@ -628,3 +628,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Restored the shared text scale to 12.8px, page-title size to 20px, and page-title token mapping to the v1.2.0 release values.
 - Updated the Member Import Wizard headings to use the release typography classes.
 - Invalidated prior visual scores and PASS statuses in the audit queue because the shared scale affects every page; retained the previous queue priority order for recapture. Commit: `999f692`.
+
+## 2026-11-01 — Transaction Import Wizard reference pass
+
+- Matched the Transactions title, subtitle, card, progress row, centered file selection, and lower-right Next action to the Wakandi first-step reference using the restored v1.2.0 text scale.
+- Replaced the three-step shell with Upload File, Field Mapping, Validation And Preview, and Result. Added CSV mapping for the fields supported by the local transaction API and preview checks before import.
+- Excel parsing is unavailable. No transaction file was uploaded and no ledger transaction was submitted; the action would post transactions.
+- Reviewed the initial screen in the visible in-app browser. The viewport is narrower than the reference. Production build passed.

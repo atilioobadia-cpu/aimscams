@@ -144,7 +144,7 @@ style={{ borderBottomColor: "var(--border-header)" }}
               </span>
               <span
                 data-testid="header-user-name"
-                className="hidden fs-text font-semibold leading-none text-body xl:block"
+                className="max-w-[112px] truncate fs-text font-semibold leading-none text-body lg:max-w-none"
               >
                 {user.name}
               </span>
