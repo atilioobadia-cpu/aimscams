@@ -2,10 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Shared type scale measured against the reference at DPR 1.25. */
+/* Type scale restored from release v1.2.0. */
 :root {
-  --fs: 16px;
-  --fs-title: 24px;                 /* page h1 only; reference scale */
+  --fs: 12.8px;
+  --fs-title: 20px;                 /* page h1 only; see D-033 */
   --fs-kpi: var(--fs);
   --fs-body: var(--fs);
 }
@@ -44,13 +44,13 @@ body {
   --table-scroll-thumb: #8b8b8b;
   --tab-inactive-bg: #f8fafc;
 
-  /* Type scale: shared text uses the 16px reference scale */
+  /* Type scale: everything is 12.8px */
   --font-size-micro: var(--fs);
   --font-size-helper: var(--fs);
   --font-size-secondary: var(--fs);
   --font-size-body: var(--fs);
   --font-size-section: var(--fs);
-  --font-size-page-title: var(--fs-title);
+  --font-size-page-title: var(--fs);
   --font-size-kpi: var(--fs);
 
   /* Spacing scale, in rendered pixels */

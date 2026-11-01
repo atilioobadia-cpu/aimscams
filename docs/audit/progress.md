@@ -622,3 +622,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Replaced the local three-step shell with Upload File, Field Mapping, Validation And Preview, and Result. Added CSV column mapping, client validation, and preview before the existing member API commit step.
 - The local project has no Excel parser or member relationship fields; the file chooser timed out, so the synthetic CSV preview was not reached. No member records were created.
 - Web production build passed. Full-width visual geometry and the post-upload steps remain to be verified in the visible browser.
+
+## 2026-11-01 — Restore v1.2.0 typography baseline
+
+- Restored the shared text scale to 12.8px, page-title size to 20px, and page-title token mapping to the v1.2.0 release values.
+- Updated the Member Import Wizard headings to use the release typography classes.
+- Invalidated prior visual scores and PASS statuses in the audit queue because the shared scale affects every page; retained the previous queue priority order for recapture. Commit: `999f692`.

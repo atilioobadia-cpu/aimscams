@@ -5,6 +5,7 @@ import { AlertTriangle, CheckCircle2, CloudUpload, UsersRound } from "lucide-rea
 
 import { Button } from "@/components/ui/button";
 import { createImportBatch, completeImportBatch, createClient } from "@/lib/settings";
+import { parseCsv } from "@/lib/csv";
 
 type MemberField = "referenceNo" | "fullName" | "clientType" | "phone" | "nationalId";
 type MemberRow = {
@@ -30,40 +31,6 @@ const FIELDS: { key: MemberField; label: string; optional: boolean; match: RegEx
 ];
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const EMPTY_MAP: FieldMap = { referenceNo: "", fullName: "", clientType: "", phone: "", nationalId: "" };
-
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
-  let row: string[] = [];
-  let cell = "";
-  let quoted = false;
-
-  for (let index = 0; index < text.length; index += 1) {
-    const character = text[index];
-    if (character === '"') {
-      if (quoted && text[index + 1] === '"') {
-        cell += '"';
-        index += 1;
-      } else {
-        quoted = !quoted;
-      }
-    } else if (character === "," && !quoted) {
-      row.push(cell.trim());
-      cell = "";
-    } else if ((character === "\n" || character === "\r") && !quoted) {
-      if (character === "\r" && text[index + 1] === "\n") index += 1;
-      row.push(cell.trim());
-      if (row.some((value) => value.length > 0)) rows.push(row);
-      row = [];
-      cell = "";
-    } else {
-      cell += character;
-    }
-  }
-
-  row.push(cell.trim());
-  if (row.some((value) => value.length > 0)) rows.push(row);
-  return rows;
-}
 
 function detectFieldMap(headers: string[]): FieldMap {
   const map = { ...EMPTY_MAP };
@@ -218,7 +185,7 @@ export function MemberImportWizardPage() {
       <header className="flex items-center gap-3 border-b border-card-border pb-5">
         <UsersRound aria-hidden="true" className="size-7 shrink-0 text-primary" />
         <div>
-          <h1 className="fs-h3 font-semibold text-heading">Members</h1>
+          <h1 className="fs-title font-bold leading-tight text-heading">Members</h1>
           <p className="fs-text text-muted-foreground">Import credit union members with user relationships</p>
         </div>
       </header>
@@ -246,7 +213,7 @@ export function MemberImportWizardPage() {
         {step === 1 ? (
           <div className="flex flex-col items-center justify-center gap-4 text-center">
             <CloudUpload aria-hidden="true" className="size-14 text-primary" strokeWidth={1.8} />
-            <h2 className="fs-h3 font-semibold text-heading">Upload Your File</h2>
+            <h2 className="fs-text font-semibold text-heading">Upload Your File</h2>
             <p className="fs-text text-muted-foreground">Select a CSV file to import</p>
             <input
               accept=".csv,text/csv"
@@ -269,7 +236,7 @@ export function MemberImportWizardPage() {
         {step === 2 ? (
           <div className="mx-auto w-full max-w-3xl space-y-5">
             <div>
-              <h2 className="fs-h3 font-semibold text-heading">Field Mapping</h2>
+              <h2 className="fs-text font-semibold text-heading">Field Mapping</h2>
               <p className="mt-1 fs-text text-muted-foreground">Match each member field to a column in {fileName}.</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -298,7 +265,7 @@ export function MemberImportWizardPage() {
           <div className="space-y-4">
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
-                <h2 className="fs-h3 font-semibold text-heading">Validation And Preview</h2>
+                <h2 className="fs-text font-semibold text-heading">Validation And Preview</h2>
                 <p className="mt-1 fs-text text-muted-foreground">Review mapped members and fix rows with errors before importing.</p>
               </div>
               <p className="fs-text text-heading"><span className="font-semibold text-accent-teal">{validRows.length} valid</span> · <span className="font-semibold text-accent-red">{invalidRows.length} invalid</span></p>
@@ -340,7 +307,7 @@ export function MemberImportWizardPage() {
 
         {step === 4 ? (
           <div className="mx-auto w-full max-w-2xl space-y-5">
-            <h2 className="fs-h3 font-semibold text-heading">{results ? "Import Result" : "Ready to Import"}</h2>
+            <h2 className="fs-text font-semibold text-heading">{results ? "Import Result" : "Ready to Import"}</h2>
             {results ? (
               <div className="space-y-3" role="status">
                 <p className="fs-text text-accent-teal">{results.success} members imported successfully.</p>
