@@ -395,3 +395,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Restored `/settings-administrator-add` as the reference-style full-page New User form with User details, Roles, Branch Access, WBA Access, and Teller accordion sections. The New User button now opens that page.
 - Kept supported details, role assignment, and branch selection on the existing validated user API. WBA and Teller are visible but unavailable because the current user data model has no such access fields; the Teller checkbox is disabled.
 - Inspected all sections in the visible browser at 1280×720; the page had no horizontal overflow. No user data was entered or submitted. Web production build passed.
+
+## 2026-11-01 — Branches list layout
+
+- Compared `/settings/branches` in the visible browser with `F:\Wakandi\settings-branch\FULL.png` and aligned the title/action card, search/Add Filters toolbar, location columns, and row actions.
+- At 1280×720, the page and document widths were both 1280px. The local organization has one branch versus three rows in the reference; I381 remains open for data/location coverage.
+- Web production build passed. No branch records were changed and no row actions were invoked. Audit note, index, and issue row were synchronized.

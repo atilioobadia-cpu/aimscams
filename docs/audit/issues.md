@@ -420,7 +420,7 @@
 | I378 | /settings-administrator-add | domain/workflow | Full-page accordion form with user, role, branch, WBA and teller access | Full-page details/roles/branch workflow implemented; WBA and Teller remain unavailable in the local user model | High |
 | I379 | /settings-role | workflow | Role list/search/pagination and tabbed create/edit dialogs | Implemented; Audit History remains an unconnected empty state, populated history not verified | Medium |
 | I380 | /settings-service-provider | structure | Compact Services title card and empty workspace | Local route is an In Build placeholder with a large card and different label | Low |
-| I381 | /settings/branches | structure/data | Search/Add Filters and reference location columns | Local schema shows status/default/council/staff and one synthetic branch | Medium |
+| I381 | /settings/branches | data | Reference has three branch rows and populated location values | Local organization has one branch; location catalog/model coverage differs | Medium |
 | I382 | /settings/branches/new | workflow/structure | Reference location selectors, open/closed hours and special-date overrides | Local form uses text location fields and lacks special-date overrides | Medium |
 | I383 | /settings/products/loan, /settings/products/savings | structure/data | Shared Product Setup tabs and reference product columns | Local standalone pages have empty data and separate filters | High |
 | I384 | /settings/products/interest-rates, /settings/products/fee-penalties | structure/workflow | Shared product tabs, reference date/type list and charge modal | Local routes are standalone; reference fee capture is a modal state | Medium |

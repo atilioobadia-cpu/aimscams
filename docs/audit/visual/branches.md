@@ -6,12 +6,14 @@ AIMSCAMS route: `/settings/branches`
 
 ## Comparison
 
-The reference uses a Branches title card, outlined New Branch action, search/Add Filters toolbar, and a table for Branch Name, Branch Code, Address, Region, District, Ward, and row actions. AIMSCAMS uses a plain heading with explanatory copy and a filled Add branch button, a search field plus an always-visible status select and Clear control, then a Branch network card. Its table instead shows Branch, Code, Region, Council, Staff, Status, Default, and Actions. The local table has one synthetic branch; the reference has three rows.
+The reference has a Branches title card with an outlined New Branch action, a search/Add Filters toolbar, and columns for Branch Name, Branch Code, Address, Region, District, Ward, and row actions. The local page now follows that structure. Status remains available through Add Filters, and location columns can be hidden using the table column control. Existing branch APIs, search, status filtering, detail links, and row actions remain connected.
 
-## Recommendations
+At 1280×720, the visible browser showed the expected table and no horizontal document/body overflow (both 1280px). The local organization has one branch row while the reference capture has three. That data-count difference is not addressed by the visual layout change.
 
-- Align the page header, action treatment, and filter toolbar to the reference.
-- Use the reference location columns when available; retain operational fields such as status/default only if they fit the product contract.
-- Keep local counts/data clearly tied to actual branch records.
+## Remaining findings
 
-Read-only browser review. No branch action menu or add flow was used. Implementation commit: none.
+- The local branch model does not expose the reference's full region/district/ward catalog; missing row values display `N/A`.
+- Local and reference row counts differ; do not seed reference values to force a screenshot match.
+- The add-branch form is tracked separately in [Add branch](branch-create.md).
+
+No branch records were created, edited, or deleted. Row actions were not invoked. Web production build passed. Implementation commit: pending.
