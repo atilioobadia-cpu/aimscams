@@ -404,3 +404,14 @@
 | I364 | /accounting-reports-Reconciliation | workflow/structure | Ledger reconciliation toolbar and entry filters | Local route renders generic as-of-date account balances | High |
 | I365 | /accounting-reports-reconcile-statement | workflow/data | Statement matching balances and reconciliation controls | Local route renders generic account balances | High |
 | I366 | /accounting-reports-reconcile-statement-settings | structure/workflow | Reconciliation settings form with dynamic rows | Local route renders generic account balances; settings form is absent | High |
+
+| I367 | /reports-loan-ActiveLoanReport | report data | Active-loan filters and portfolio table | Local route renders generic chart-of-accounts data | High |
+| I368 | /reports-loan | missing route | Loan Repayment Schedule Report destination | Reference link has no local route | Medium |
+| I369 | /reports-statement | information architecture | Separate statement, transaction, savings, and client report categories | Ten mixed destinations appear in the Statement hub | Medium |
+| I370 | /requests | structure/data | Request tabs, filter toolbar, and persistent empty table | Local page uses status checkboxes and a standalone no-requests card | Medium |
+| I371 | /messages-message-logs | structure/data | Shared Message Service shell, filters, table, pager | Local page has a search field and empty card; no local log rows | High |
+| I372 | /messages-template-list | structure/data | Message service tabs and template list fields | Local page uses inline add form and has no template rows | High |
+| I373 | /messages-segment-list | module/structure | Segment table and service navigation | Local page is gated In Build | High |
+| I374 | /import-member, /import-account, /import-transaction | structure/data | Reference batch toolbar and persistent table | Local pages show empty standalone cards | Medium |
+| I375 | /import-member-new, /import-account-new, /import-transaction-new | workflow/structure | Four-step upload, mapping, validation, result | Local wizards expose three steps and CSV-only upload | High |
+| I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |

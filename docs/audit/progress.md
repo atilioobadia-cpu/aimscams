@@ -204,3 +204,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded that the local account selector is empty and reconciliation/report routes currently render generic chart-of-accounts balances instead of the reference workflows.
 - Kept the pass read-only; no reconciliation save, submit, or export controls were activated.
 - Implementation commit: none; report/workflow data contracts remain missing.
+
+## 2026-11-01 — Reports, Requests, Messages, Import, Business Account
+
+- Reviewed the Reports, Loan Reports, Statement Reports, Requests, Messages, Import, Business Account, and General Settings routes in the visible browser against the available references.
+- Updated the Loan Reports hub title card, report ordering, labels, and card styling; verified the result visibly. The reference Loan Repayment Schedule destination has no local route.
+- Recorded page-specific notes for the reviewed routes. Loan report pages currently return generic account balances; message and import pages have empty or gated states and differ from reference workflows.
+- Browser inspection remained read-only: no approval/rejection, message send, import upload/commit, setting save, or financial action was used.
+- Loan Reports hub implementation commit: 8875cd3 (feat/web: align loan reports hub with reference).
+
