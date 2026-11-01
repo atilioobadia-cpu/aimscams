@@ -330,3 +330,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Owners Equity is a single-date list of equity account balances; the reference is a period movement matrix. Trial Balance uses a single as-of date and flat rows; the reference includes opening-balance warning, period filters, and expandable group totals. Existing notes already identify these contract gaps.
 - The Reconciliation route renders the generic account table instead of the reference workspace toolbar. Reconcile Statement also renders that generic table in place of statement balances and adjustments. Reconciliation Settings lacks the reference configuration form and currently renders account balances.
 - Existing issues I064–I076 and I356, I364–I366 cover the route gaps; no duplicate issues were added. Updated matching queue rows. Browser inspection was read-only; no reconciliation buttons, settings fields, exports, or accounting writes were used.
+
+## 2026-11-01 — Clients and messaging, first batch
+
+- Rechecked Clients and Create Group, then compared Delivery Logs and Message Users in the visible local browser against their supplied reference captures.
+- Clients retains the measured title/actions/filter/table shell, but the current local result is one individual row while the reference is a large group-member list; visible column labels and order also differ. Existing UI005/UI006 track activation-link service and data-count gaps.
+- Create Group uses a three-step wizard with free-text Branch ID and Membership Policy fields. The reference starts with an expanded Membership Details accordion and searchable Policy, Branch Name, and Relationship Manager selectors; the Group Details accordion and fixed footer are also visible. Added I432.
+- Delivery Logs is an empty search/empty-state page locally, without the shared Message Service header, tabs, date/recipient filters, reference columns, or pager. Existing I371 tracks the gap.
+- Message Users remains an In Build placeholder locally. The reference shows the shared service shell and tabs, name/phone filters, channel-preference table, pager, and a separate template-modal overlay state. Added I433.
+- Updated queue rows and the visual index. No form values, messages, filters, channel preferences, or client data were changed; reference personal details were not copied into the audit notes.

@@ -475,3 +475,5 @@
 | I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Local route is In Build; no form or filter state | High |
 | I430 | /clients/create | structure/data | Reference accordion groups and resolved reference-number state | Local route uses six-step wizard; generated reference shows Loading in captured state | High |
 | I431 | /messages-send-message | workflow/structure | Company, segment and template-based send/test workflow | Local form targets a direct recipient with freeform body and has no segment field | High |
+| I432 | /clients/create-group | workflow/structure | Membership Details and Group Details accordions with searchable policy, branch, and relationship-manager selectors | Local route is a three-step wizard with free-text branch/policy fields and a different group form structure | High |
+| I433 | /messages-users-list | module/structure/data | Shared Message Service shell, user filters, channel-preference table, and pager | Local route is an In Build placeholder | High |

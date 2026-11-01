@@ -73,9 +73,9 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 67 | accounting-reports-TrialBalanceReport | 0.8438 | 0.0188 | IN_PROGRESS |
 | 68 | accounting-reports-reconcile-statement | 0.8221 | 0.0400 | IN_PROGRESS |
 | 69 | accounting-reports-reconcile-statement-settings | 0.8358 | 0.0287 | IN_PROGRESS |
-| 70 | clients | 0.8335 | 0.0427 | TODO |
+| 70 | clients | 0.8335 | 0.0427 | IN_PROGRESS |
 | 71 | clients-create | 0.8850 | 0.0254 | IN_PROGRESS |
-| 72 | clients-create-group | 0.8586 | 0.0343 | TODO |
+| 72 | clients-create-group | 0.8586 | 0.0343 | IN_PROGRESS |
 | 73 | core-wba-business-account | 0.8901 | 0.0219 | IN_PROGRESS |
 | 74 | import-account | 0.8946 | 0.0256 | IN_PROGRESS |
 | 75 | import-account-new | 0.8859 | 0.0287 | IN_PROGRESS |
@@ -83,13 +83,13 @@ Sorted by SSIM descending (run v10). Status: TODO / IN_PROGRESS / PASS.
 | 77 | import-member-new | 0.8877 | 0.0271 | IN_PROGRESS |
 | 78 | import-transaction | 0.8900 | 0.0281 | IN_PROGRESS |
 | 79 | import-transaction-new | 0.8857 | 0.0288 | IN_PROGRESS |
-| 80 | messages-message-logs | 0.8591 | 0.0163 | TODO |
+| 80 | messages-message-logs | 0.8591 | 0.0163 | IN_PROGRESS |
 | 81 | messages-recharge-credits | 0.9087 | 0.0213 | IN_PROGRESS |
 | 82 | messages-segment-list | 0.8955 | 0.0200 | IN_PROGRESS |
 | 83 | messages-segment-list-create | 0.9020 | 0.0220 | IN_PROGRESS |
 | 84 | messages-send-message | 0.8781 | 0.0291 | IN_PROGRESS |
 | 85 | messages-template-list | 0.8679 | 0.0204 | IN_PROGRESS |
-| 86 | messages-users-list | 0.8465 | 0.0266 | TODO |
+| 86 | messages-users-list | 0.8465 | 0.0266 | IN_PROGRESS |
 | 87 | reports-client-ClientListReport | 0.8193 | 0.0299 | TODO |
 | 88 | reports-client-MemberVerificationReport | 0.9182 | 0.0033 | IN_PROGRESS |
 | 89 | reports-loan | 0.8387 | 0.0280 | TODO |

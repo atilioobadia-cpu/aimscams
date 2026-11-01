@@ -32,8 +32,11 @@ The sidebar was collapsed and expanded; collapsed width measured 76px.
 2. The reference table contains multiple rows and a larger total. The local environment currently
    returns one row. Pagination is present and operates over returned rows; no reference records were
    copied or local records changed.
-3. The local table retains product fields after the shared initial columns. The visible first-column
-   order follows the reference; later column content is data- and viewport-dependent.
+3. The visible local table header order differs from the reference. AIMSCAMS shows Member ID,
+   Full Name, Ref number, National ID, Type, Phone, Email, Status, and KYC status; the reference's
+   visible columns include Member Id, Full Name, Reference Number, National Id, Type, Phone Number,
+   and Email Address, with additional columns available via horizontal scroll. Reference rows are
+   group records while the current local sample is one individual record.
 4. Hover and focus colors are not established by the reference capture and remain recorded in
    `NEEDS-HUMAN.md`.
 
