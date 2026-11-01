@@ -444,3 +444,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Kept existing persisted fields connected to the current save flow. Transaction bounds, permission, default-account flags, charge configuration, and ledger mapping are displayed as disabled because the current product contract cannot persist them; I395 remains open.
 - At 1280×720 the document/body widths were both 1280px. Scrolled to the bottom in the visible browser and confirmed Accounting and Cancel/Create actions are reachable. No values were entered or saved.
 - Web production build passed. Updated the page note, visual index, and issue row.
+
+## 2026-11-01 — Interest Rate create form layout
+
+- Compared `/settings/products/interest-rates/new` with `F:\Wakandi\settings-products-interest-rate-create\FULL.png`; aligned the Details, frequency/date rows, rate-type choice, and fixed-rate section while retaining required local Code, Status, and Period fields in a separate group.
+- Frequency type/value, end date, and fixed/variable selection are disabled because the current rate model does not persist them. I394 remains open for the API/model gap.
+- At 1280×720 the document/body widths were both 1280px. The visible browser confirmed the fixed-rate input and Cancel/Create actions are reachable by vertical scrolling without horizontal overflow. No values were entered or saved.
+- Web production build passed. Updated the page note, visual index, and issue row.

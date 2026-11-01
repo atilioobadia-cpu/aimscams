@@ -435,7 +435,7 @@
 | I392 | /settings/general | structure/data | Info/Appearance tabs and online collection preference | Local identity/installation form has no appearance or online collection sections | Medium |
 | I393 | /settings/accounting | data/structure | Tax-rate catalog and multi-component editor | Local page contains statutory rate, fiscal periods and posting policies without the reference tax manager | High |
 
-| I394 | /settings/products/interest-rates/new | data/structure | Frequency type/value, date range and fixed/variable sections | Local form has code/status/rate/period/effective-from only | High |
+| I394 | /settings/products/interest-rates/new | data/workflow | Persisted frequency type/value, end date and fixed/variable rate selection | Reference-style groups are present; local model supports only one rate, period and effective-from date | High |
 | I395 | /settings/products/savings/new | data/workflow | Persisted transaction bounds, permission, charge setup, default-account flags and ledger mappings | Reference-style sections now surface these controls, but the current product contract cannot save them | High |
 | I396 | /settings/products/loan/[id] | data/structure | Populated product details, terms, settings, repayment, charges, stages, accounting, history | Local sample detail route returns not found; list is empty | High |
 | I397 | /settings/products/savings/[id] | route/data | Populated savings product edit state and full terms/charges/accounting | Local list has no product row and edit state is unavailable | High |

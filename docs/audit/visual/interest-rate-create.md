@@ -4,13 +4,14 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\settings-products-interest-rate-create\FULL.png`  
 AIMSCAMS route: `/settings/products/interest-rates/new`
 
-## Comparison
+## Comparison and implementation
 
-The reference form groups Name and Description, Frequency Type and Frequency, Start Date and End Date, then Fixed/Variable Interest Rate details. AIMSCAMS exposes Code, Name, Status, Rate, Period, Effective from, and Description. It has no end date, frequency value, or fixed-versus-variable selection and uses an annual period default. Both are full-page forms, but the product semantics and grouping differ.
+Reorganized the local form to follow the reference Details group, Frequency Type/Frequency row, Start Date/End Date row, Interest Rate Type choice, and Fixed Interest Rate section. The local persisted rate and effective-from date remain editable in their matching positions. The existing Code, Status, and Period fields remain available in a separate AIMSCAMS Configuration section because they are part of the current create contract.
 
-## Recommendations
+The local model does not persist frequency type/value, an end date, or fixed/variable selection. Those reference controls are shown disabled, and a helper note explains the rate-type limitation. I394 remains open until the product API can represent these semantics.
 
-- Use explicit frequency and effective date range fields with fixed/variable rate sections where required by the product model.
-- Keep rate type and period values validated and avoid assuming the local annual default matches every reference configuration.
+## Browser review
 
-Read-only browser review; no rate values were entered or created. Implementation commit: none.
+Compared `/settings/products/interest-rates/new` with `F:\Wakandi\settings-products-interest-rate-create\FULL.png` in the visible browser at 1280×720. Document and body widths were both 1280px with no horizontal overflow. The form scrolls vertically, and the rate input, local configuration fields, and Cancel/Create actions are reachable at the bottom. All values remained at their initial state; no rate was created.
+
+Web production build passed. Implementation commit: pending.
