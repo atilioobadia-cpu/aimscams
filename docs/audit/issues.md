@@ -94,9 +94,9 @@
 | I091 | /import-member | missing | Add button | Upload Member and Member Template actions implemented | Resolved visually |
 | I092 | /import-member-new | text | Reference UI words | 27% coverage | Medium |
 | I093 | /import-member-new | text | Members | Member import wizard | Low |
-| I094 | /import-transaction | text | Reference UI words | 14% coverage | Medium |
-| I095 | /import-transaction | missing | Search control | No search | Medium |
-| I096 | /import-transaction | missing | Add button | No add button | Low |
+| I094 | /import-transaction | text | Reference UI words | Transaction Import, Upload Transaction, Transaction Template, Search, Status, Add Filters, and reference table headers present | Resolved visually |
+| I095 | /import-transaction | missing | Search control | Search supports batch reference, file name, and id | Resolved |
+| I096 | /import-transaction | missing | Add button | Upload Transaction and Transaction Template actions implemented | Resolved visually |
 | I097 | /import-transaction-new | text | Reference UI words | 33% coverage | Medium |
 | I098 | /import-transaction-new | text | Transactions | Transaction import wizard | Low |
 | I099 | /messages-message-logs | text | Reference UI words | 25% coverage | Medium |
@@ -412,7 +412,7 @@
 | I371 | /messages-message-logs | structure/data | Shared Message Service shell, filters, table, pager | Local page has a search field and empty card; no local log rows | High |
 | I372 | /messages-template-list | structure/data | Message service tabs and template list fields | Local page uses inline add form and has no template rows | High |
 | I373 | /messages-segment-list | data/workflow | Segment list/query, filters, enable/disable actions, and credit balances | Reference-style shell and empty table implemented; segment and balance APIs are unavailable, so no rows/actions are fabricated | High |
-| I374 | /import-member, /import-account, /import-transaction | structure/data | Reference batch toolbar and persistent table | Member and account pages now use shared reference-style headers, filters, and persistent tables; transaction page still shows a standalone empty card | Medium |
+| I374 | /import-member, /import-account, /import-transaction | structure/data | Reference batch toolbar and persistent table | All three batch pages now use the shared reference-style headers, filters, table chooser, and persistent tables; uploader metadata and row actions remain absent from the local API | Medium |
 | I375 | /import-member-new, /import-account-new, /import-transaction-new | workflow/structure | Four-step upload, mapping, validation, result | Local wizards expose three steps and CSV-only upload | High |
 | I376 | /business-account | state/data | Default wallet screen comparison | Supplied capture is Add Funds modal state; matching default reference missing | Medium |
 

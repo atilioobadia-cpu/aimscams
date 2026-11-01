@@ -603,3 +603,8 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 
 - Compared `/settings/products/provisioning-rules/new` with the supplied reference in the visible browser. Matched the title, required Provisioning Name state, Active checkbox, criteria-table layout, and bottom actions; moved code, description, and the local single-ledger-account field under a collapsed AIMSCAMS-specific section.
 - Category-based rows and separate liability/expense/income mappings are not in the local schema. Disabled those controls and Save so the form cannot create a misleading partial financial rule; I401 remains open. No policy was created. The old report points at the list route and has been marked stale; a canonical create-page screenshot diff remains.
+
+## 2026-11-01 — Transaction Import Batches
+
+- Reused the shared batch-list page for `/import-transaction` with Transaction Import title/icon, Upload Transaction and Transaction Template actions, search/status/date filters, column chooser, and the reference table headers. The downloadable CSV headers match the local transaction wizard parser.
+- Reviewed the empty local list in the visible browser against `F:\Wakandi\import-transaction\FULL.png`. No transaction batches exist and uploader/action fields are absent. Did not submit sample transactions because that wizard would post transactions to the local ledger. The old screenshot score is marked stale pending canonical recapture.

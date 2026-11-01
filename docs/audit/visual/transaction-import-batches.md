@@ -6,13 +6,14 @@ AIMSCAMS route: `/import-transaction`
 
 ## Comparison
 
-The reference uses an upload/template title card, search/status/add-filter controls, and a table of import batch outcomes. AIMSCAMS shows a plain heading, zero batch count, New Import action, and an empty-state card. The local transaction batch response has no rows in the captured state.
+The reference shows a Transaction Import title card with Upload Transaction and Transaction Template actions, a search/status/add-filter toolbar, a table-column control, and a persistent empty table with Id, File, Batch Reference Id, Date, Status, Total Records, Uploaded Records, and Uploaded By.
 
-## Recommendations
+AIMSCAMS now uses the shared import-batches page with transaction-specific title, icon, actions, and the CSV headers supported by the local transaction wizard. Search supports batch reference, file name, and id; status/date filters operate on the batch response. The local organization has no transaction-import batches, and the API omits uploader metadata and row actions, so no history or operators are fabricated.
 
-- Align the list shell and empty table state to the reference.
-- Use the local transaction-batch fields for status and counts.
-- Keep upload and commit steps separate from the list page.
+The reference has no transaction batch row to copy. No sample transaction was imported because the local wizard would post financial transactions to the ledger; no transaction or balance was created or changed.
 
-Browser review was read-only. No file was selected or uploaded.  
-Implementation commit: none; page structure/data gap.
+## Remaining work
+
+- Connect import creator metadata and row actions to the batch service.
+- Review a populated batch when safe, non-posting sample data and a supported upload flow are available.
+- Recapture and run the canonical screenshot diff; the stored metrics compare against the old standalone empty card and are stale.

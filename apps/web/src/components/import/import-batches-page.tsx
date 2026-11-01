@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { Download, SlidersHorizontal, Upload, UserRound, Search, Plus, ChevronDown, Wallet } from "lucide-react";
+import { Download, SlidersHorizontal, Upload, UserRound, Search, Plus, ChevronDown, Wallet, ReceiptText } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ type ImportKind = "MEMBER" | "ACCOUNT" | "TRANSACTION";
 type ImportEntity = "Member" | "Account" | "Transaction";
 
 function downloadTemplate(entity: ImportEntity) {
-  const headers = entity === "Member" ? "referenceNo,fullName,clientType,phone,nationalId" : entity === "Account" ? "accountNumber,clientId,accountType,balanceMinor" : "referenceNo,accountNumber,amountMinor,transactionDate";
+  const headers = entity === "Member" ? "referenceNo,fullName,clientType,phone,nationalId" : entity === "Account" ? "accountNumber,clientId,accountType,balanceMinor" : "transactionNo,type,amountMinor,clientId";
   const blob = new Blob([`${headers}\n`], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -177,7 +177,7 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
 }
 
 function PageTitle({ entity }: { entity: ImportEntity }) {
-  const TitleIcon = entity === "Account" ? Wallet : UserRound;
+  const TitleIcon = entity === "Account" ? Wallet : entity === "Transaction" ? ReceiptText : UserRound;
   return (
     <section className="flex min-h-[88px] flex-wrap items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-4">
       <div className="flex items-center gap-3"><TitleIcon className="size-6 shrink-0 text-primary" aria-hidden="true" /><h1 className="fs-title font-semibold text-heading">{entity} Import</h1></div>
