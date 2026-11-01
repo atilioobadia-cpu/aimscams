@@ -20,4 +20,4 @@ Opened the local route and its Add Fixed Asset dialog in the visible browser. Cl
 - Add import only after an asset-import API and validation workflow are available.
 - Compare populated table rows after safe local asset data exists.
 
-Implementation commit: pending.
+Implementation commit: `11883a8` (`feat(web): align asset register pages with visual references`).

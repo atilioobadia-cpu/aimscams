@@ -19,4 +19,4 @@ Verified the list and opened/closed the Add Asset Type dialog in the visible bro
 - Matched the title/action card, modal placement, and persistent empty table structure.
 - Asset Allocation and reference ledger/depreciation fields need corresponding local model support before they can be implemented faithfully.
 
-Implementation commit: pending.
+Implementation commit: `11883a8` (`feat(web): align asset register pages with visual references`).

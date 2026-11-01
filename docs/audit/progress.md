@@ -163,3 +163,4 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Opened and closed both dialogs in the visible browser without submitting either form.
 - Reference allocation, import, and ledger-linked depreciation functions are not supported by local APIs and remain documented.
 - Asset page implementation commit: pending.
+- Asset page implementation commit: `11883a8` (`feat(web): align asset register pages with visual references`).
