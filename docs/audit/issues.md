@@ -451,3 +451,9 @@
 | I406 | /reports-loan-ExpectedLoanRepaymentsReport | report data | Date-scoped expected principal/interest/repayment totals | Generic chart-of-accounts balances; no expected repayment fields | High |
 | I407 | /reports-loan-ExpectedPaymentByDateReport | report data | Due-date range filters and due/overdue amount columns | Generic chart-of-accounts balances; no expected payment fields | High |
 | I408 | /reports-loan-ExpectedRepaymentReport | report data | Expected principal balance and principal/interest/penalty due columns | Generic chart-of-accounts balances; no expected repayment fields | High |
+
+| I409 | /reports-loan-FeeStatusReport | report data | Fee/status filters and due/payment/overdue fields | Generic chart-of-accounts balances; no fee status or filters | High |
+| I410 | /reports-loan-GuarantorsReport | report data/access | Guarantor identity, savings/share values, and guarantee totals | Generic chart-of-accounts balances; no guarantor rows or filters | High |
+| I411 | /reports-loan-IssuedLoansAndArrearsReport | report data | Issued loan arrears fields with filters and paging | Generic chart-of-accounts balances; no loan fields or paging | High |
+| I412 | /reports-loan-LoanAgingReport | report data/calculation | Aging buckets and portfolio totals by classification | Generic chart-of-accounts balances; all shown values are zero | High |
+| I413 | /reports-loan-LoanArrearsReport | report data/calculation | Loan penalty/total arrears, principal ratio, and days overdue | Generic chart-of-accounts balances; no arrears fields | High |
