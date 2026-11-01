@@ -66,16 +66,14 @@ body {
   --space-32: 32px;
 
   /* Shared geometry */
-  --header-height: 64px;
-  --sidebar-width: 200px;
+  --header-height: 68px;
+  --sidebar-width: 204px;
   --sidebar-collapsed-width: 76px;
   --sidebar-footer-height: 73px;
   --sidebar-subitem-height: 28px;
   --sidebar-row-height: 36px;
   --content-padding: 18px;
-  --content-padding-x: 12px;
-  --content-padding-y: 16px;
-  --control-height: 42px;
+  --control-height: 33px;
   --control-compact-height: 28px;
   --icon-size: 20px;
   --icon-box-size: 34px;
@@ -83,7 +81,7 @@ body {
   --icon-sm: 18px;
   --icon-md: 22px;
   --icon-lg: 28px;
-  --active-pill-height: 36px;
+  --active-pill-height: 32px;
   --tab-strip-height: 32px;
   --card-radius: 8px;
   --control-radius: 5px;
