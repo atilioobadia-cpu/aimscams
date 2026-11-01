@@ -197,3 +197,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added route-specific audit notes for the missing cash-ledger movements, per-account general-ledger groupings, and journal-book ledger lines/period totals.
 - Local data remains limited to empty cash movements and one opening-balance journal entry. No exports or accounting writes were performed.
 - Implementation commit: none; report data gaps remain.
+
+## 2026-11-01 — Ledger Statement and Reconciliation routes
+
+- Compared Ledger Statement, Reconciliation, Reconcile Statement, and Reconciliation Settings with their supplied references in the visible browser.
+- Recorded that the local account selector is empty and reconciliation/report routes currently render generic chart-of-accounts balances instead of the reference workflows.
+- Kept the pass read-only; no reconciliation save, submit, or export controls were activated.
+- Implementation commit: none; report/workflow data contracts remain missing.
