@@ -474,3 +474,4 @@
 | I428 | /messages-recharge-credits | workflow | Credit amount, description, balance/cost summary, and safe purchase flow | Local route is In Build; no form or purchase state | High |
 | I429 | /messages-segment-list-create | workflow | Segment identity, filter builder, preview, and save flow | Local route is In Build; no form or filter state | High |
 | I430 | /clients/create | structure/data | Reference accordion groups and resolved reference-number state | Local route uses six-step wizard; generated reference shows Loading in captured state | High |
+| I431 | /messages-send-message | workflow/structure | Company, segment and template-based send/test workflow | Local form targets a direct recipient with freeform body and has no segment field | High |

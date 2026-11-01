@@ -284,3 +284,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Create Client uses a six-step wizard with a compact Membership step; the reference shows a full-page accordion form with multiple registration groups. The generated local reference-number control remained Loading. Added the page note and issue I430; no values were entered or registration submitted.
 - Product lists share the missing standalone Product Setup tabs. Provisioning and interest-rate lists are empty locally; the savings reference contains a populated row while AIMSCAMS is empty. The sample row values are not copied. Existing product findings I383–I385 cover these structural gaps.
 - Updated the page-specific notes and all duplicate queue rows. No files were uploaded and no product was changed.
+
+## 2026-11-01 — Cross-module audit, fifth batch
+
+- Compared Loan Products, Savings Product Edit, Message Templates, Interest Rate Creation, Requests, Send Message, and Loan Details in the visible local browser against their supplied references.
+- Loan Products has no local rows; its reference list is populated. The sampled savings product returns a local not-found state. Product list structure was already captured in I383/I397. Interest Rate Creation still lacks frequency type/value, an end date, and fixed/variable sections from the reference.
+- Message Templates uses a local inline add form while the reference emphasizes shared service navigation and a filterable template table. Requests uses status-count checkboxes and an empty card instead of the reference status tabs, filter strip, and table. Send Message uses direct recipient/body fields in place of company/segment selection; added page-specific note and issue I431.
+- The supplied loan sample resolves to a UUID-validation error locally, so populated summary comparison remains blocked as tracked in UI016. No client/loan names or account values were copied.
+- Updated queue statuses for all duplicate references. No product, message, request, or loan action was submitted.
