@@ -1,5 +1,7 @@
 # import-member
 
+> Stale baseline: the metrics below compare the supplied reference to the pre-fix zero-batch card. The route now renders the reference-style title/actions, filters, and table; recapture AIMSCAMS and rerun the canonical diff before using these values as a score.
+
 - Route: /import-member
 - SSIM (masked): 0.9197 (threshold 0.98)
 - SSIM (unmasked): 0.8730
