@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, type ComponentProps } from "react";
-import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeftRight,
   BookOpen,
-  Eye,
+  Calendar,
+  ChevronDown,
   Plus,
   Search,
   Trash2,
 } from "lucide-react";
 
-import { AccountingNav } from "@/components/accounting/accounting-nav";
 import {
   ErrorPanel,
   ForbiddenPanel,
@@ -21,8 +20,6 @@ import {
 } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { FilterBar } from "@/components/data/filter-bar";
-import { PageHeader } from "@/components/data/page-header";
-import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,6 +67,15 @@ function displayDay(value: string | null): string {
   if (!value) return "—";
   const day = value.slice(0, 10);
   return dateFormat.format(new Date(`${day}T00:00:00`));
+}
+
+function entryAmount(value: string): string {
+  return formatTzsExact(value).replace(/^TZS\s*/, "");
+}
+
+function entryTypeLabel(value: string): string {
+  if (value === "opening_balance") return "Opening Balance";
+  return value.toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function today(): string {
@@ -416,18 +422,26 @@ export default function JournalEntriesPage() {
     ? totals.debit - totals.credit
     : totals.credit - totals.debit;
   const totalsEmpty = totals.debit === 0n && totals.credit === 0n;
+  const year = new Date().getFullYear();
+  const periodStart = from || `${year}-01-01`;
+  const periodEnd = to || `${year}-12-31`;
 
   return (
-    <div className="space-y-[var(--space-14)]">
-      <PageHeader
-        title="Journal entries"
-        description="Every posting in the general ledger, with its balanced lines and reversal trail."
-        breadcrumb={
-          <Link href="/accounting" className="hover:text-brand">
-            Accounting
-          </Link>
-        }
-        actions={
+    <div className="space-y-4">
+      <header className="flex min-h-[94px] flex-col justify-center gap-3 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <BookOpen className="size-6 shrink-0 text-primary" aria-hidden="true" />
+          <div className="min-w-0">
+            <h1 className="fs-title font-semibold text-heading">Entries</h1>
+            <p className="mt-1 fs-text text-muted-foreground">Entries from {displayDay(`${year}-01-01`)} to {displayDay(today())}</p>
+          </div>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <button type="button" onClick={() => document.getElementById("entry-from")?.focus()} className="flex h-9 items-center gap-2 rounded-[var(--control-radius)] border border-primary bg-card px-3 fs-text text-primary transition-colors hover:bg-primary-tint">
+            <Calendar className="size-4" aria-hidden="true" />
+            <span>{displayDay(periodStart)} to {displayDay(periodEnd)}</span>
+            <ChevronDown className="size-4" aria-hidden="true" />
+          </button>
           <Button
             onClick={openCompose}
             disabled={!accountsLoaded || accountsBlocked || accounts.length === 0}
@@ -441,10 +455,8 @@ export default function JournalEntriesPage() {
             <Plus className="size-4" aria-hidden="true" />
             New entry
           </Button>
-        }
-      />
-
-      <AccountingNav />
+        </div>
+      </header>
 
       {accountsBlocked ? (
         <p className="fs-text text-muted-foreground">
@@ -452,7 +464,7 @@ export default function JournalEntriesPage() {
         </p>
       ) : null}
 
-      <FilterBar label="Journal entry filters">
+      <FilterBar label="Entry filters" className="gap-2 rounded-[var(--card-radius)] p-3">
         <form
           className="flex items-end gap-2"
           onSubmit={(event) => {
@@ -462,27 +474,27 @@ export default function JournalEntriesPage() {
           }}
         >
           <label className="flex flex-col gap-1">
-            <span className="fs-text text-muted-foreground">Search</span>
+            <span className="sr-only">Search</span>
             <Input
               key={q}
               name="q"
               defaultValue={q}
-              placeholder="Entry number, narration or source"
-              className="w-[240px]"
+              placeholder="Search"
+              className="w-[160px]"
             />
           </label>
-          <Button type="submit" size="icon" aria-label="Apply search">
+          <Button type="submit" size="icon" className="size-9" aria-label="Apply search">
             <Search className="size-4" aria-hidden="true" />
           </Button>
         </form>
 
         <label className="flex flex-col gap-1">
-          <span className="fs-text text-muted-foreground">Status</span>
+          <span className="sr-only">Status</span>
           <NativeSelect
             value={status}
             onChange={(event) => setParams({ status: event.target.value || null })}
             aria-label="Filter by status"
-            className="w-[150px]"
+            className="!w-[120px] !min-w-0"
           >
             <option value="">All statuses</option>
             <option value="draft">Draft</option>
@@ -491,41 +503,42 @@ export default function JournalEntriesPage() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="fs-text text-muted-foreground">Event</span>
+          <span className="sr-only">Entry type</span>
           <NativeSelect
             value={eventCode}
             onChange={(event) => setParams({ eventCode: event.target.value || null })}
-            aria-label="Filter by event"
-            className="w-[170px]"
+            aria-label="Filter by entry type"
+            className="!w-[125px] !min-w-0"
           >
-            <option value="">All events</option>
+            <option value="">All types</option>
             {eventOptions.map((code) => (
               <option key={code} value={code}>
-                {code}
+                {entryTypeLabel(code)}
               </option>
             ))}
           </NativeSelect>
         </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="fs-text text-muted-foreground">From</span>
+        <label className="flex min-w-0 flex-col gap-1">
+          <span className="sr-only">From</span>
           <Input
+            id="entry-from"
             type="date"
             value={from}
             onChange={(event) => setParams({ from: event.target.value || null })}
             aria-label="Filter from date"
-            className="w-[150px]"
+            className="!w-[130px] !min-w-0"
           />
         </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="fs-text text-muted-foreground">To</span>
+        <label className="flex min-w-0 flex-col gap-1">
+          <span className="sr-only">To</span>
           <Input
             type="date"
             value={to}
             onChange={(event) => setParams({ to: event.target.value || null })}
             aria-label="Filter to date"
-            className="w-[150px]"
+            className="!w-[130px] !min-w-0"
           />
         </label>
 
@@ -539,6 +552,10 @@ export default function JournalEntriesPage() {
             Clear filters
           </Button>
         ) : null}
+
+        <Button type="button" variant="outline" onClick={() => pushToast("Archived journal entries are not supported by the current API.")} className="h-10 min-w-[90px] justify-between">
+          <span>Archived</span><ChevronDown className="size-4" aria-hidden="true" />
+        </Button>
       </FilterBar>
 
       {forbidden ? (
@@ -590,65 +607,54 @@ export default function JournalEntriesPage() {
             </div>
           ) : (
             <>
-              <Table>
+              <div className="overflow-x-auto">
+              <Table className="min-w-[960px] table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="pl-[var(--space-16)]">Entry</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Event</TableHead>
-                    <TableHead>Narration</TableHead>
-                    <TableHead className="text-right">Debit</TableHead>
-                    <TableHead className="text-right">Credit</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="pr-[var(--space-16)] text-right">Actions</TableHead>
+                    <TableHead className="w-[12%] pl-[var(--space-16)]">Date</TableHead>
+                    <TableHead className="w-[15%]">Entry ID</TableHead>
+                    <TableHead className="w-[14%]">Entry Type</TableHead>
+                    <TableHead className="w-[10%]">Status</TableHead>
+                    <TableHead className="w-[21%]">Details</TableHead>
+                    <TableHead className="w-[14%] text-right">Debit (TSh)</TableHead>
+                    <TableHead className="w-[14%] pr-[var(--space-16)] text-right">Credit (TSh)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {entries.map((entry) => (
                     <TableRow key={entry.id}>
-                      <TableCell className="pl-[var(--space-16)]">
+                      <TableCell className="pl-[var(--space-16)]">{displayDay(entry.entryDate)}</TableCell>
+                      <TableCell className="font-medium text-strong">
                         <button
                           type="button"
                           onClick={() => setEntryParam(entry.id)}
-                          className="font-medium text-brand hover:underline focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
+                          className="text-brand hover:underline focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
                         >
                           {entry.entryNo}
                         </button>
                       </TableCell>
-                      <TableCell>{displayDay(entry.entryDate)}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">{entry.eventCode}</Badge>
-                      </TableCell>
-                      <TableCell className="max-w-[360px] truncate" title={entry.description}>
-                        {entry.description || "N/A"}
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">
-                        {entry.debitMinor === "0" ? "N/A" : formatTzsExact(entry.debitMinor)}
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">
-                        {entry.creditMinor === "0" ? "N/A" : formatTzsExact(entry.creditMinor)}
+                        <Badge variant="outline">{entryTypeLabel(entry.eventCode)}</Badge>
                       </TableCell>
                       <TableCell>
                         <Badge variant={entry.status === "posted" ? "default" : "outline"}>
                           {entry.status === "posted" ? "Posted" : "Draft"}
                         </Badge>
                       </TableCell>
-                      <TableCell className="pr-[var(--space-16)] text-right">
-                        <RowActionsMenu
-                          label={`journal entry ${entry.entryNo}`}
-                          actions={[
-                            {
-                              label: "View entry",
-                              icon: Eye,
-                              onSelect: () => setEntryParam(entry.id),
-                            },
-                          ]}
-                        />
+                      <TableCell className="max-w-[360px] truncate" title={entry.description}>
+                        {entry.description || "N/A"}
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {entry.debitMinor === "0" ? "-" : entryAmount(entry.debitMinor)}
+                      </TableCell>
+                      <TableCell className="pr-[var(--space-16)] text-right tabular-nums">
+                        {entry.creditMinor === "0" ? "-" : entryAmount(entry.creditMinor)}
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
+              </div>
 
               <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chrome px-[var(--space-16)] py-[var(--space-10)] fs-text text-muted-foreground">
                 <span>
@@ -683,8 +689,8 @@ export default function JournalEntriesPage() {
       <Modal
         open={Boolean(entryId)}
         onClose={() => setEntryParam(null)}
-        title={detail ? `Journal entry ${detail.entryNo}` : "Journal entry"}
-        size="large"
+        title={detail ? `Entry Details - ${detail.entryNo}` : "Entry Details"}
+        size="extra-wide"
         footer={
           <>
             <Button variant="outline" onClick={() => setEntryParam(null)}>
@@ -712,19 +718,14 @@ export default function JournalEntriesPage() {
             onRetry={() => setRefresh((value) => value + 1)}
           />
         ) : detail ? (
-          <div className="space-y-[var(--space-14)]">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant={detail.status === "posted" ? "default" : "outline"}>
-                {detail.status === "posted" ? "Posted" : "Draft"}
-              </Badge>
-              <Badge variant="outline">{detail.eventCode}</Badge>
-              {detail.reversalOf ? <Badge variant="secondary">Reversal</Badge> : null}
-              <span className="fs-text text-muted-foreground">
-                {displayDay(detail.entryDate)} · {postingWhen(detail.postedAt)}
-              </span>
-            </div>
-
-            <p className="fs-text text-strong">{detail.description || "No narration"}</p>
+          <div className="space-y-5">
+            <dl className="grid gap-5 fs-text sm:grid-cols-2 lg:grid-cols-4">
+              <div><dt className="mb-1 font-semibold text-body">Entry Number:</dt><dd className="text-muted-foreground">{detail.entryNo}</dd></div>
+              <div><dt className="mb-1 font-semibold text-body">Date:</dt><dd className="text-muted-foreground">{displayDay(detail.entryDate)}</dd></div>
+              <div><dt className="mb-1 font-semibold text-body">Entry Type:</dt><dd className="text-muted-foreground">{entryTypeLabel(detail.eventCode)}</dd></div>
+              <div><dt className="mb-1 font-semibold text-body">Status:</dt><dd className="text-muted-foreground">{detail.status === "posted" ? "Posted" : "Draft"}</dd></div>
+            </dl>
+            {detail.reversalOf ? <Badge variant="secondary">Reversal</Badge> : null}
 
             {detail.reversalOf ? (
               <p className="fs-text text-muted-foreground">
@@ -740,50 +741,51 @@ export default function JournalEntriesPage() {
               </p>
             ) : null}
 
+            <h2 className="fs-text font-semibold text-heading">Ledger Entries</h2>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-10">#</TableHead>
-                  <TableHead>Ledger account</TableHead>
-                  <TableHead>Memo</TableHead>
-                  <TableHead className="text-right">Debit</TableHead>
-                  <TableHead className="text-right">Credit</TableHead>
+                  <TableHead className="w-[9%]">Dr/Cr</TableHead>
+                  <TableHead className="w-[11%]">Code</TableHead>
+                  <TableHead>Ledger</TableHead>
+                  <TableHead className="w-[24%] text-right">Debit Amount (TSh)</TableHead>
+                  <TableHead className="w-[24%] text-right">Credit Amount (TSh)</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {detail.lines.map((line) => (
                   <TableRow key={line.id}>
-                    <TableCell className="text-muted-foreground">{line.lineNo}</TableCell>
-                    <TableCell>
-                      <span className="font-medium text-strong">{line.accountCode}</span>{" "}
-                      <span className="ml-2 text-muted-foreground">{line.accountName}</span>
-                    </TableCell>
-                    <TableCell>{line.memo || "N/A"}</TableCell>
+                    <TableCell className="text-muted-foreground">{line.debitMinor === "0" ? "Cr" : "Dr"}</TableCell>
+                    <TableCell className="text-muted-foreground">{line.accountCode}</TableCell>
+                    <TableCell className="font-medium text-strong">{line.accountName}</TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {line.debitMinor === "0" ? "N/A" : formatTzsExact(line.debitMinor)}
+                      {line.debitMinor === "0" ? "-" : entryAmount(line.debitMinor)}
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
-                      {line.creditMinor === "0" ? "N/A" : formatTzsExact(line.creditMinor)}
+                      {line.creditMinor === "0" ? "-" : entryAmount(line.creditMinor)}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
               <TableFooter>
                 <TableRow>
-                  <TableCell colSpan={3} className="pl-[var(--space-8)]">
-                    Total
+                  <TableCell colSpan={3} className="text-right font-semibold">Total:</TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">
+                    Dr {entryAmount(detail.debitMinor)}
                   </TableCell>
-                  <TableCell className="text-right tabular-nums">
-                    {formatTzsExact(detail.debitMinor)}
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums">
-                    {formatTzsExact(detail.creditMinor)}
+                  <TableCell className="text-right font-semibold tabular-nums">
+                    Cr {entryAmount(detail.creditMinor)}
                   </TableCell>
                 </TableRow>
               </TableFooter>
             </Table>
 
-            <dl className="grid gap-[var(--space-8)] fs-text sm:grid-cols-2">
+            <div className="space-y-2 fs-text text-body">
+              <p><span className="font-semibold">Narration:</span> {detail.description || "N/A"}</p>
+              {detail.lines.some((line) => line.memo) ? <p><span className="font-semibold">Comment:</span> {detail.lines.find((line) => line.memo)?.memo}</p> : null}
+            </div>
+
+            <dl className="grid gap-[var(--space-8)] fs-caption text-muted-foreground sm:grid-cols-2">
               <div>
                 <dt className="text-muted-foreground">Source</dt>
                 <dd className="text-strong">

@@ -1,23 +1,24 @@
 # Journal Entries visual audit
 
 Date: 2026-11-01  
-Reference: `F:\Wakandi\accounting-entries\01_screencapture-cams-wakandi-co-tz-accounting-entries-2026-10-21-17_41_55.png`  
+Reference: `F:\Wakandi\accounting-entries\01_screencapture-cams-wakandi-co-tz-accounting-entries-2026-10-21-17_41_55.png` and `F:\Wakandi\accounting-entries\FULL.png`
 AIMSCAMS route: `/accounting-entries`
 
 ## Comparison
 
-The reference calls this page Entries and provides PDF, Excel, CSV, and date-range actions, then Search, Date Range, Entry Type, Status, and Archived filters. Its table groups each accounting entry with the ledger lines that debit and credit accounts. AIMSCAMS calls the page Journal entries, provides search/status/event/date filters and a New entry action, and shows a compact one-row journal summary with an entry details action. The local details model does not expose the same imported transaction history and row grouping as the reference capture.
+The reference page is titled Entries and uses a title/date card, compact search and filters, a ledger register grouped by posting, and PDF/Excel/CSV downloads. AIMSCAMS now uses the Entries title, date-range header control, one-row search/status/type/date/archive filter strip, and matching Date, Entry ID, Entry Type, Status, Details, Debit, and Credit list columns. Its detail dialog follows the reference's Entry Details metadata, Ledger Entries table, Dr/Cr totals, narration, and comment structure.
 
-The current local backend has a small synthetic journal state; it cannot reproduce the reference's populated ledger breakdown from the capture. We did not copy reference member or posting data.
+The current local API provides one synthetic opening-balance posting with five account lines. The reference capture has 147 entries and a grouped ledger-line register. Local search/status/type/date filtering and detail lines use supported API data, but PDF/Excel/CSV exports and archived-entry browsing are unavailable. The Archived control therefore reports this API limitation; no unsupported archive behavior is simulated. Source and created metadata plus the existing reverse action remain local workflow details beyond the reference dialog.
 
 ## Browser review
 
-Opened the local route in the visible browser and compared the default journal table with the reference list and details state. No journal entry was created, posted, or reversed.
+Reviewed the list and existing opening-balance detail in the visible in-app browser at 1280×720. Confirmed the toolbar stays on one row, type labels are human-readable, detail metadata and ledger headings/columns align to the reference structure, and totals identify Dr and Cr. The local record is a pre-existing fixture. No journal entry was created, posted, reversed, or edited.
 
-## Recommendations
+## Remaining gaps
 
-- Decide whether Journal Entries should expose an Entries-style ledger line register or retain the current journal workflow.
-- If the reference is the target, add equivalent export actions and grouped ledger-line detail using supported local journal data.
-- Review the entry detail modal against the supported local model before changing its fields.
+- Add real PDF, Excel, and CSV exports when the local reporting/export contract is available.
+- Add reference-style grouped ledger register rows and full pagination when the journal API returns transaction lines and sufficient history.
+- Implement archive filtering only if the journal API supports archived records.
+- Existing API exposes a compact aggregate list row; it cannot populate the reference's 147-row register from the local fixture.
 
-Implementation commit: none; data and workflow mapping required.
+Implementation and audit-note changes are committed together with this page's visual refinement.

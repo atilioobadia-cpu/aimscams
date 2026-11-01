@@ -11,7 +11,7 @@ type ModalProps = {
   title: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
-  size?: "default" | "large" | "wide";
+  size?: "default" | "large" | "wide" | "extra-wide";
   unsaved?: boolean;
 };
 
@@ -84,7 +84,7 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
         className={cn(
           "relative z-10 flex max-h-[90vh] flex-col rounded-[11px] bg-surface shadow-xl transition-transform duration-150",
           open ? "scale-100" : "scale-95",
-          size === "wide" ? "w-[1080px] max-w-[92vw]" : size === "large" ? "w-[900px] max-w-[92vw]" : "w-[643px] max-w-[92vw]",
+          size === "extra-wide" ? "w-[1280px] max-w-[92vw]" : size === "wide" ? "w-[1080px] max-w-[92vw]" : size === "large" ? "w-[900px] max-w-[92vw]" : "w-[643px] max-w-[92vw]",
         )}
       >
         <div className="flex items-center justify-between border-b border-chrome px-5 py-3">

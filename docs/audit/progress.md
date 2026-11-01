@@ -1,5 +1,11 @@
 # UI Match Progress
 
+## 2026-11-01 — Journal Entries
+
+- Compared `/accounting-entries` against the Wakandi list and detail captures in the visible browser. Matched the Entries title card, date range control, compact single-row filters, list columns, Entry Details metadata, Ledger Entries table, and Dr/Cr total labels.
+- Reviewed the existing local opening-balance fixture only. No journal data or workflow state was changed. The local API still lacks exports, archived-entry support, reference-style grouped register rows, and the reference history; these remain in I345 and the per-page note.
+- Web production build passed after the page and shared modal updates. The code and audit record are committed and pushed with this page's completion.
+
 ## Session 2026-10-30
 
 ### Fixes Applied (11 commits)

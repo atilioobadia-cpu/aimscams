@@ -30,7 +30,7 @@
 | I027 | /accounting-chart-of-accounts | text | Reference headers | Title, table header casing, and balance labels aligned | Low |
 | I028 | /accounting-chart-of-accounts | workflow | Add group and ledger actions | Controls are present; creation is unavailable in the current accounting phase | High |
 | I029 | /accounting-chart-of-accounts | structure | Expandable account hierarchy | Groups expand inline without pagination, matching the reference pattern | Low |
-| I030 | /accounting-entries | missing | Search control | No search | Medium |
+| I030 | /accounting-entries | controls | Search and common entry filters | Search, status, type, and date filters are present; Archived only reports the missing API support | Low |
 | I031 | /accounting-fixed-asset | text | Reference UI words | 56% coverage | Medium |
 | I032 | /accounting-fixed-asset | missing | Add button | No add button | Low |
 | I033 | /accounting-ledger-entries | text | Reference UI words | 31% coverage | Medium |
@@ -375,7 +375,7 @@
 | UI024 | /transaction-teller-transaction-request | empty state | Keep request table headings visible with no rows | Persistent table headings and empty row implemented | Resolved structurally; queue data caveat | `docs/audit/visual/teller-requests.md` | `4211399` |
 | I343 | /accounting-chart-of-accounts | structure | Code column between Account Name and Type, full-width account names | Code column uses account.code; proportional widths preserve full names | Low |
 | I344 | /accounting-chart-of-accounts | workflow | Ledger Details fields and working save action | Edit save, Add Groups, Add Ledgers, and date filtering are unavailable in current accounting phase | High |
-| I345 | /accounting-entries | structure/data | Export toolbar and grouped ledger line rows | Local journal view is a compact list; details model differs | Medium |
+| I345 | /accounting-entries | structure/data | Export toolbar and grouped ledger line rows | Header, filter strip, list columns, and ledger detail structure align; exports, archive query, reference-style grouped rows, and matching history remain unavailable | Medium |
 | I346 | /accounting-ledger-entries | structure | Export actions and compact filter strip | Local view has date/account controls and extra balance summary | Low |
 | UI025 | /accounting-chart-of-accounts | table columns | Show account code | Code column rendered from existing local field and verified in browser | Resolved | `docs/audit/visual/chart-of-accounts.md` | `8cde171` |
 | I347 | /accounting-assets | workflow/data | Asset allocation tab and ledger-linked depreciation fields | Local model has types with code/method/life but no allocation or ledger links | High |
