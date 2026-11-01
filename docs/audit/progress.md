@@ -78,4 +78,12 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded visual findings and unresolved behavior in docs/audit/visual/ and docs/audit/NEEDS-HUMAN.md.
 - Verified client filters and pagination in the visible browser; web typecheck and full test suite passed.
 - Repo-wide lint reports 23 errors and 106 warnings; modified-file lint completed with one existing image-element warning.
-- Implementation commit: 963e0be (eat(web): align clients page with visual reference).
+- Implementation commit: `963e0be` (`feat(web): align clients page with visual reference`).
+
+## 2026-11-01 — Loans list reference pass
+
+- Rebuilt the Loans list structure from the reference: title card, status tabs, compact toolbar, wide table, horizontal scroll, and pager.
+- Added live loan-officer filtering by exposing officer metadata from the loan’s source application in the read-only list response.
+- Verified title geometry at x=256/y=94 (1198×84), tabs y=196 (55px), table x≈277/y≈336, and 1495px table content width at 1470×1094 CSS.
+- Exercised status tabs, loan-officer selector, advanced Product filter, clear action, save-unavailable notice, and sidebar collapse/expand. No console errors or warnings were recorded.
+- Web and API typechecks passed; scoped web lint passed, and the full suite passed 140 tests (API 81, worker 6, domain 34, ledger 19). API lint exited successfully with existing warnings.

@@ -1041,6 +1041,8 @@ export type Loan = {
   productCode: string | null;
   applicationNo: string | null;
   applicationId?: string | null;
+  loanOfficerName: string | null;
+  loanOfficerId: string | null;
   createdAt: string;
   updatedAt: string;
 };

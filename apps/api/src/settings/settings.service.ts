@@ -87,7 +87,13 @@ const LOAN_APPLICATION_INCLUDE = {
 const LOAN_INCLUDE = {
   client: { select: { fullName: true, referenceNo: true } },
   product: { select: { name: true, code: true } },
-  application: { select: { applicationNo: true } },
+  application: {
+    select: {
+      applicationNo: true,
+      loanOfficerId: true,
+      loanOfficer: { select: { fullName: true } },
+    },
+  },
 } satisfies Prisma.LoanInclude;
 
 const ORGANISATION_SELECT = {
@@ -2409,6 +2415,8 @@ export class SettingsService {
       productCode: item.product?.code ?? null,
       applicationNo: item.application?.applicationNo ?? null,
       applicationId: item.applicationId ?? null,
+      loanOfficerName: item.application?.loanOfficer?.fullName ?? null,
+      loanOfficerId: item.application?.loanOfficerId ?? null,
       createdAt: item.createdAt.toISOString(),
       updatedAt: item.updatedAt.toISOString(),
     };

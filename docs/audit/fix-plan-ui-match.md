@@ -2,8 +2,7 @@
 
 Status: **implementation in progress.** The user authorized the work on 2026-11-01.
 The earlier Phase 4 plan remains in `fix-plan.md`; this file covers the pixel and control
-match work started on 2026-10-30. The first implementation pass has updated the shared shell scale,
-shared table row density and Clients list layout. Remaining phases are still open.
+match work started on 2026-10-30. The shared shell scale, shared table row density, Clients list and Loans list have completed focused implementation passes. The remaining pages and control states are still open.
 
 ## Where the measurements stand
 
@@ -40,8 +39,8 @@ Shared fixes first, so one change clears many pages.
 - Exit: structural SSIM and CPR reported per page with masks; calibration confirmed or corrected.
 
 ### Phase A — Theme tokens and surfaces
-- Colors, typography (`--fs-title` 20px per D-033, body 12.8px), radius, shadow, page background,
-  card surface, from `docs/audit/components/COMPONENT-SPEC.md` after Phase 0 corrects it.
+- Colors, typography (current measured target `--fs-title` 24px and shared text 16px), radius, shadow, page background,
+  and card surface; continue checking page-specific captures before adjusting shared tokens.
 - Files: `apps/web/src/app/globals.css`, theme token file(s).
 - Exit: colour delta CIEDE2000 ≤ 2 on sampled shell regions for 5 sample pages.
 
