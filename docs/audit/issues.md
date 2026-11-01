@@ -400,7 +400,7 @@
 | I361 | /accounting-reports-GeneralLedgerBook | report structure/data | Account-grouped period ledger with running balances | Local route renders a flat journal-entry table | High |
 | I362 | /accounting-reports-JournalBook | report structure/data | Dated ledger-line groups, reference columns, period totals | Local route renders a generic entry summary | High |
 
-| I363 | /accounting-reports-LedgerStatementReport | filters/data | Selectable ledger account and reference date/posting/entry filters | Account selector has no options in captured local state | High |
+| I363 | /accounting-reports-LedgerStatementReport | filters/data | Reference posting-date and entry-type filters plus report actions | Local account choices load; posting-date/type filters and report actions are absent | High |
 | I364 | /accounting-reports-Reconciliation | workflow/structure | Ledger reconciliation toolbar and entry filters | Local route renders generic as-of-date account balances | High |
 | I365 | /accounting-reports-reconcile-statement | workflow/data | Statement matching balances and reconciliation controls | Local route renders generic account balances | High |
 | I366 | /accounting-reports-reconcile-statement-settings | structure/workflow | Reconciliation settings form with dynamic rows | Local route renders generic account balances; settings form is absent | High |

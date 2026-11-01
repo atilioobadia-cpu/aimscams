@@ -6,13 +6,13 @@ AIMSCAMS route: `/accounting-reports-LedgerStatementReport`
 
 ## Comparison
 
-The reference has a title/action card with PDF/Excel/CSV exports and date range, then filters for date range, posting date, ledger account, and entry type. AIMSCAMS has an account selector and From/To dates, but no account is selectable in the captured state and the page shows a prompt instead of the reference filter strip and empty-results message.
+The reference has a title/action card with PDF/Excel/CSV exports and date range, then filters for date range, posting date, ledger account, and entry type. AIMSCAMS has an account selector backed by loaded chart-of-accounts choices and From/To dates. It starts with no account selected and shows a selection prompt; posting-date and entry-type filters and report actions are absent.
 
 ## Recommendations
 
-- Populate the ledger-account selector from the chart of accounts and bind it to the ledger statement query.
-- Add the reference entry-type and posting-date filters after those query fields are supported.
+- Keep the account selector populated from the chart of accounts and bind the selected account to the ledger statement query.
+- Add posting-date and entry-type filters when those query fields are supported.
 - Add report actions only when the selected account and date range generate matching data.
 
 Browser review was read-only.  
-Implementation commit: none; local selector/report state unavailable.
+Implementation commit: none; report filters and actions are incomplete.
