@@ -307,3 +307,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Savings Accounts is empty locally; its reference capture has the New saving Details modal open. The existing local note confirms the modal was previously inspected safely and records unsupported Account Name behavior.
 - Asset Types and Fixed Assets retain the reviewed title/table/modal structures. Reference state gaps include allocation/ledger fields and fixed-asset import/entry-date behavior already tracked in I347–I348. No forms or file choosers were submitted.
 - Updated queue status for all duplicate references. No account, loan, application, asset type, or fixed asset was created or changed.
+
+## 2026-11-01 — Accounting reports, second batch
+
+- Compared Ledger Entries, the Accounting Reports hub, Assets Report, Cash Book, Cash Flow Statement, Comprehensive Trial Balance, and Corporate Tax Statement in the visible local browser against the supplied reference screenshots.
+- The report hub's title card and four-column report-card grid now match the reference structure. Ledger Entries shares the filter/empty-state intent but has account/date inputs and balance summaries in place of the reference range/account/type controls and download actions.
+- Assets Report shows general-ledger account balances rather than a filtered fixed-asset register. Cash Book has account/date filters but the local sample is empty and its table omits the reference ledger grouping columns. Cash Flow Statement shows a zero movement summary rather than the operating/investing/financing schedules and prior-year comparison.
+- Comprehensive Trial Balance and Corporate Tax Statement both render the generic flat chart-of-accounts balance table; the reference pages require grouped period totals and a comparative tax statement, respectively. Existing issues I033–I048 and I350, I353–I360, I354, I357, and I359 cover these findings; no duplicate issue was added.
+- Updated the matching queue rows. Browser inspection was read-only; no filters were submitted, exports run, or accounting records changed.
