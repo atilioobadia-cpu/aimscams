@@ -439,7 +439,7 @@
 | I396 | /settings/products/loan/[id] | data/structure | Populated product details, terms, settings, repayment, charges, stages, accounting, history | Local sample detail route returns not found; list is empty | High |
 | I397 | /settings/products/savings/[id] | route/data | Populated savings product edit state and full terms/charges/accounting | Local list has no product row and edit state is unavailable | High |
 | I398 | /settings/policies/membership/[id] and /edit | data/workflow | Individual and group detail/edit sections plus approval history | Local sample record routes return not found | High |
-| I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Local sample record routes return not found | High |
+| I399 | /settings/policies/credit-product/[id] and /edit | data/workflow | Structured loan policy tabs, stage approvals, and accounting sections | Synthetic draft exercises both routes; model still lacks typed lending fields, ledger mappings, and approval history | High |
 | I401 | /settings/products/provisioning-rules/new | data/schema | Category, multi-row criteria, and separate liability/expense/income account mappings | Local rule model supports one day range, percentage and one ledger account ID | High |
 
 | I402 | /reports-loan-AccruedInstallmentsReport | report data | Accrued installment filters and interest fields | Generic chart-of-accounts balances; no loan filters or download | High |

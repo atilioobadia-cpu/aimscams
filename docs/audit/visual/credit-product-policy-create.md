@@ -16,4 +16,4 @@ The current policy API persists Code, Name, Status, Description, and flexible JS
 - Provide persisted approval state and assignment history for the reference approval sections.
 - Keep policy terms institution-owned; do not infer or copy financial values from screenshots.
 
-Read-only browser review at 1280×720; no values were entered, and no policy was created.
+The create form was reviewed at 1280×720 before a clearly labeled local visual-QA draft was created (`VISUAL-QA-CPP`, no lending terms or ledger mappings). This synthetic record enables populated detail/edit route review; it is explicitly marked as not a financial product configuration. Create-form implementation commit: `1cc44ff`.
