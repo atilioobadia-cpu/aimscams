@@ -1,6 +1,6 @@
 {
   "page": "settings-products-loan-provisioning-create",
-  "route": "/settings/products/provisioning-rules",
+  "route": "/settings/products/provisioning-rules/new",
   "ssim": 0.9139,
   "changed_pixel_ratio": 0.023,
   "ssim_unmasked": 0.8683,

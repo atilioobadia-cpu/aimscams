@@ -23,7 +23,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | 17 | import-member | — | — | IN_PROGRESS |
 | 18 | import-account | — | — | IN_PROGRESS |
 | 19 | settings-policies-membership-policy | 0.8934 | 0.0235 | IN_PROGRESS |
-| 20 | settings-products-loan-provisioning-create | 0.8931 | 0.0256 | IN_PROGRESS |
+| 20 | settings-products-loan-provisioning-create | — | — | IN_PROGRESS |
 | 21 | import-transaction | 0.8900 | 0.0281 | IN_PROGRESS |
 | 22 | core-wba-business-account | 0.8901 | 0.0219 | IN_PROGRESS |
 | 23 | import-member-new | 0.8877 | 0.0271 | IN_PROGRESS |
@@ -174,7 +174,7 @@ Sorted by SSIM descending (run v10). A dash means the previous score was invalid
 | 168 | settings-products-loan | 0.8707 | 0.0206 | IN_PROGRESS |
 | 169 | settings-products-loan-5 | 0.9094 | 0.0164 | IN_PROGRESS |
 | 170 | settings-products-loan-provisioning | 0.8784 | 0.0260 | IN_PROGRESS |
-| 171 | settings-products-loan-provisioning-create | 0.8931 | 0.0256 | IN_PROGRESS |
+| 171 | settings-products-loan-provisioning-create | — | — | IN_PROGRESS |
 | 172 | settings-products-savings | 0.8852 | 0.0256 | IN_PROGRESS |
 | 173 | settings-products-savings-create | 0.8525 | 0.0292 | IN_PROGRESS |
 | 174 | settings-products-savings-edit-1 | 0.8672 | 0.0232 | IN_PROGRESS |

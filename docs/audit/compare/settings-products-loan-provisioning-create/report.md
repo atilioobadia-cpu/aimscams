@@ -1,6 +1,8 @@
 # settings-products-loan-provisioning-create
 
-- Route: /settings/products/provisioning-rules
+> Stale baseline: this report's stored metrics were captured from `/settings/products/provisioning-rules`, the list route. The reference is for `/settings/products/provisioning-rules/new`; the page now has a reference-style form and requires a fresh canonical capture before scoring.
+
+- Route: /settings/products/provisioning-rules/new
 - SSIM (masked): 0.9139 (threshold 0.98)
 - SSIM (unmasked): 0.8683
 - Changed pixel ratio (masked): 2.3002% (threshold 1%)

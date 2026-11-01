@@ -598,3 +598,8 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 
 - Reused the shared import-batches page for `/import-account` with Account Import title/actions, Account Template download, the reference Template Type column, status/date filters, table-column control, and persistent empty-state table.
 - Reviewed the visible local route against `F:\Wakandi\import-account\FULL.png`. No account-import batches exist; the local API omits template type and uploader data. No account file or balance was created. The prior screenshot metrics are marked stale pending canonical recapture.
+
+## 2026-11-01 — Loan Provisioning Rule creation
+
+- Compared `/settings/products/provisioning-rules/new` with the supplied reference in the visible browser. Matched the title, required Provisioning Name state, Active checkbox, criteria-table layout, and bottom actions; moved code, description, and the local single-ledger-account field under a collapsed AIMSCAMS-specific section.
+- Category-based rows and separate liability/expense/income mappings are not in the local schema. Disabled those controls and Save so the form cannot create a misleading partial financial rule; I401 remains open. No policy was created. The old report points at the list route and has been marked stale; a canonical create-page screenshot diff remains.

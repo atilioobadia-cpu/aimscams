@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { FormError, SuccessNote } from "@/components/accounting/states";
@@ -21,6 +21,7 @@ function message(failure: unknown, fallback: string): string {
 export default function CreateProvisioningRulePage() {
   const router = useRouter();
   const { pushToast } = useToast();
+  const unsupportedRuleSchema = true;
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
@@ -37,6 +38,10 @@ export default function CreateProvisioningRulePage() {
     event.preventDefault();
     setSaveError(null);
     setSaved(null);
+    if (unsupportedRuleSchema) {
+      setSaveError("Saving is unavailable until category-based criteria and separate liability, expense, and income mappings are supported.");
+      return;
+    }
 
     const trimmedCode = code.trim().toUpperCase();
     const trimmedName = name.trim();
@@ -76,26 +81,17 @@ export default function CreateProvisioningRulePage() {
     <div className="space-y-4">
       <h1 className="fs-title font-semibold text-heading">Loan Provisioning Criteria</h1>
 
-      <form onSubmit={(event) => void save(event)} className="space-y-4">
-        <section className="rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-5">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="md:col-span-2">
-              <label htmlFor="pr-name" className="mb-1 block fs-text font-medium text-body">Provisioning Name <span className="text-accent-red" aria-hidden="true">*</span></label>
-              <Input id="pr-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label htmlFor="pr-code" className="mb-1 block fs-text font-medium text-body">AIMSCAMS Code <span className="text-accent-red" aria-hidden="true">*</span></label>
-              <Input id="pr-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
-            <div>
-              <label htmlFor="pr-status" className="mb-1 block fs-text font-medium text-body">Status</label>
-              <select id="pr-status" value={status} onChange={(event) => setStatus(event.target.value as ProvisioningRuleStatus)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select>
-            </div>
-            <div className="md:col-span-2">
-              <label htmlFor="pr-description" className="mb-1 block fs-text font-medium text-body">Description</label>
-              <Input id="pr-description" value={description} onChange={(event) => setDescription(event.target.value)} className="h-[var(--control-height)]" />
-            </div>
+      <form onSubmit={(event) => void save(event)} className="space-y-6">
+        <section className="min-h-[200px] space-y-6 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-6">
+          <div>
+            <label htmlFor="pr-name" className="mb-2 block fs-text font-medium text-body">Provisioning Name <span className="text-accent-red" aria-hidden="true">*</span></label>
+            <Input id="pr-name" value={name} onChange={(event) => setName(event.target.value)} aria-required="true" aria-invalid={!name.trim()} aria-describedby={!name.trim() ? "pr-name-required" : undefined} className="h-[var(--control-height)]" />
+            {!name.trim() ? <p id="pr-name-required" className="mt-2 fs-caption text-accent-red">Provisioning Name is Required Field</p> : null}
           </div>
+          <label className="inline-flex cursor-pointer items-center gap-3 fs-text text-body">
+            <input type="checkbox" checked={status === "ACTIVE"} onChange={(event) => setStatus(event.target.checked ? "ACTIVE" : "INACTIVE")} className="size-5 accent-[var(--primary)]" />
+            <span>Active</span>
+          </label>
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
@@ -115,35 +111,47 @@ export default function CreateProvisioningRulePage() {
               </thead>
               <tbody>
                 <tr className="align-top">
-                  <td className="p-2"><select disabled aria-label="Category" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-subtle px-2 fs-text text-muted-foreground"><option>Not supported</option></select></td>
-                  <td className="p-2"><Input id="pr-days-from" type="number" min="0" value={daysFrom} onChange={(event) => setDaysFrom(event.target.value)} aria-label="Minimum days" className="h-[var(--control-height)] w-full min-w-0 px-2" /></td>
-                  <td className="p-2"><Input id="pr-days-to" type="number" min={daysFrom} value={daysTo} onChange={(event) => setDaysTo(event.target.value)} aria-label="Maximum days" placeholder="No limit" className="h-[var(--control-height)] w-full min-w-0 px-2" /></td>
-                  <td className="p-2"><Input id="pr-rate" type="number" min="0" max="100" step="0.01" value={rate} onChange={(event) => setRate(event.target.value)} aria-label="Percentage" className="h-[var(--control-height)] w-full min-w-0 px-2" /></td>
-                  <td className="p-2"><select disabled aria-label="Liability account" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-subtle px-2 fs-text text-muted-foreground"><option>Not supported</option></select></td>
-                  <td className="p-2"><select disabled aria-label="Expenses account" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-subtle px-2 fs-text text-muted-foreground"><option>Not supported</option></select></td>
-                  <td className="p-2"><select disabled aria-label="Income account" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-subtle px-2 fs-text text-muted-foreground"><option>Not supported</option></select></td>
-                  <td className="p-2 text-center text-muted-foreground" aria-label="Additional categories unavailable">—</td>
+                  <td className="p-2"><select disabled aria-label="Category" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-background px-2 fs-text text-muted-foreground disabled:opacity-100"><option>Select Category</option></select></td>
+                  <td className="p-2"><Input id="pr-days-from" type="number" min="0" defaultValue="" disabled aria-label="Minimum days" placeholder="In Days" className="h-[var(--control-height)] w-full min-w-0 px-2 disabled:opacity-100" /></td>
+                  <td className="p-2"><Input id="pr-days-to" type="number" min="0" defaultValue="" disabled aria-label="Maximum days" placeholder="In Days" className="h-[var(--control-height)] w-full min-w-0 px-2 disabled:opacity-100" /></td>
+                  <td className="p-2"><Input id="pr-rate" type="number" min="0" max="100" step="0.01" defaultValue="" disabled aria-label="Percentage" placeholder="Percentage" className="h-[var(--control-height)] w-full min-w-0 px-2 disabled:opacity-100" /></td>
+                  <td className="p-2"><select disabled aria-label="Liability account" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-background px-2 fs-text text-muted-foreground disabled:opacity-100"><option>Select Liability Account</option></select></td>
+                  <td className="p-2"><select disabled aria-label="Expenses account" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-background px-2 fs-text text-muted-foreground disabled:opacity-100"><option>Select Expense Account</option></select></td>
+                  <td className="p-2"><select disabled aria-label="Income account" className="h-[var(--control-height)] w-full min-w-0 rounded-[var(--control-radius)] border border-input bg-background px-2 fs-text text-muted-foreground disabled:opacity-100"><option>Select Income Account</option></select></td>
+                  <td className="p-2 text-center"><Button type="button" variant="ghost" size="icon" disabled aria-label="Add category" title="Multiple provisioning categories are not supported by the current model" className="text-primary disabled:opacity-60"><Plus aria-hidden="true" /></Button></td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div className="space-y-4 border-t border-chrome px-5 py-4">
-            <p className="fs-text text-muted-foreground">Category-based rules and separate liability, expense, and income accounts are not stored by the current provisioning model.</p>
-            <div className="max-w-[520px]">
-              <label htmlFor="pr-gl-account-id" className="mb-1 block fs-text font-medium text-body">AIMSCAMS General Ledger Account ID</label>
-              <Input id="pr-gl-account-id" value={glAccountId} onChange={(event) => setGlAccountId(event.target.value)} className="h-[var(--control-height)]" />
-              <p className="mt-1 fs-caption text-muted-foreground">The current model stores one account ID for a rule; separate accounting roles are not available.</p>
-            </div>
-          </div>
+          <p className="border-t border-chrome px-5 py-4 fs-caption text-muted-foreground">Category-based rules and separate liability, expense, and income accounts are not stored by the current provisioning model.</p>
         </section>
 
         <section className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-4">
           <div className="min-w-0"><FormError message={saveError} /><SuccessNote message={saved} /></div>
           <div className="flex items-center gap-3">
             <Button asChild variant="outline" className="border-primary text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/products/provisioning-rules"><ArrowLeft className="size-4" aria-hidden="true" />Cancel</Link></Button>
-            <Button type="submit" disabled={saving} aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">{saving ? "Saving..." : "Save"}</Button>
+            <Button type="submit" disabled={saving || unsupportedRuleSchema} title="Save is unavailable until category-based criteria and separate account mappings are supported." aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">{saving ? "Saving..." : "Save"}</Button>
           </div>
         </section>
+
+        <details className="rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-4">
+          <summary className="cursor-pointer fs-text font-medium text-heading">AIMSCAMS-specific fields</summary>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <div>
+              <label htmlFor="pr-code" className="mb-1 block fs-text font-medium text-body">AIMSCAMS Code <span className="text-accent-red" aria-hidden="true">*</span></label>
+              <Input id="pr-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label htmlFor="pr-description" className="mb-1 block fs-text font-medium text-body">Description</label>
+              <Input id="pr-description" value={description} onChange={(event) => setDescription(event.target.value)} className="h-[var(--control-height)]" />
+            </div>
+            <div>
+              <label htmlFor="pr-gl-account-id" className="mb-1 block fs-text font-medium text-body">AIMSCAMS General Ledger Account ID</label>
+              <Input id="pr-gl-account-id" value={glAccountId} onChange={(event) => setGlAccountId(event.target.value)} className="h-[var(--control-height)]" />
+              <p className="mt-1 fs-caption text-muted-foreground">The current model stores one account ID for a rule; separate accounting roles are unavailable.</p>
+            </div>
+          </div>
+        </details>
       </form>
     </div>
   );
