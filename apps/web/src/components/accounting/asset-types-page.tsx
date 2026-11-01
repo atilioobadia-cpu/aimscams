@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Search } from "lucide-react";
+import { Box, Plus, Search } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { ApiError } from "@/lib/api";
 import { createAssetType, listAssetTypes, type AssetType } from "@/lib/accounting";
 import { titleCase } from "@/lib/privacy";
@@ -33,6 +33,7 @@ export function AssetTypesPage() {
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [createOpen, setCreateOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -80,6 +81,7 @@ export function AssetTypesPage() {
       setName("");
       setDescription("");
       setLife("0");
+      setCreateOpen(false);
       setReloadKey((value) => value + 1);
     } catch (failure) {
       setCreateError(failureMessage(failure));
@@ -97,7 +99,7 @@ export function AssetTypesPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Asset types" description="Categories for the fixed-asset register." breadcrumb="Accounting" />
+        <PageHeader variant="card" title="Assets" icon={<Box className="size-6 text-primary" aria-hidden="true" />} actions={<Button variant="outline" onClick={() => setCreateOpen(true)}><Plus className="size-4" aria-hidden="true" />Add Asset Type</Button>} />
         <ForbiddenPanel message="Your role cannot view asset types. Ask an administrator for Settings Accounting : View." />
       </div>
     );
@@ -105,12 +107,11 @@ export function AssetTypesPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Asset types" description="Categories for the fixed-asset register." breadcrumb="Accounting" />
+      <PageHeader variant="card" title="Assets" icon={<Box className="size-6 text-primary" aria-hidden="true" />} actions={<Button variant="outline" onClick={() => setCreateOpen(true)}><Plus className="size-4" aria-hidden="true" />Add Asset Type</Button>} />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 
-      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
-        <h2 className="mb-3 fs-text font-bold text-strong">Add asset type</h2>
+      <Modal open={createOpen} onClose={() => setCreateOpen(false)} title="Add Asset Type" size="large" unsaved={Boolean(code || name || description)}>
         <form className="space-y-3" onSubmit={handleCreate}>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
             <div>
@@ -141,7 +142,7 @@ export function AssetTypesPage() {
           {createError ? <p className="fs-text text-accent-red" role="alert">{createError}</p> : null}
           <Button type="submit" disabled={creating || !code || !name}>{creating ? "Saving..." : "Add asset type"}</Button>
         </form>
-      </section>
+      </Modal>
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
         <div className="mb-3 flex flex-wrap items-end gap-3">
@@ -157,8 +158,6 @@ export function AssetTypesPage() {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <PanelSkeleton rows={6} />
           </section>
-        ) : filtered.length === 0 ? (
-          <EmptyState icon={Box} title={query ? "No asset types match" : "No asset types yet"} description={query ? "Adjust the search." : "Add an asset type to start the fixed-asset register."} />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px] text-left fs-text">
@@ -173,7 +172,9 @@ export function AssetTypesPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((item) => (
+                {filtered.length === 0 ? (
+                  <tr><td colSpan={6} className="px-4 py-16 text-center fs-text text-muted-foreground">{query ? "No data available for the selected search." : "No data available"}</td></tr>
+                ) : filtered.map((item) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.code}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-body">{item.name}</td>

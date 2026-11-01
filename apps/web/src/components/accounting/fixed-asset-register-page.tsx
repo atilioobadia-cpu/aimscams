@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Search } from "lucide-react";
+import { Box, Plus, Search } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import { ApiError } from "@/lib/api";
 import { createFixedAsset, listAssetTypes, listFixedAssets, type AssetType, type FixedAsset } from "@/lib/accounting";
 import { formatTzs } from "@/lib/format";
@@ -35,6 +35,7 @@ export function FixedAssetRegisterPage() {
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [createOpen, setCreateOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,6 +83,7 @@ export function FixedAssetRegisterPage() {
       setAssetNo("");
       setDescription("");
       setCost("");
+      setCreateOpen(false);
       setReloadKey((value) => value + 1);
     } catch (failure) {
       setCreateError(failureMessage(failure));
@@ -99,7 +101,7 @@ export function FixedAssetRegisterPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <PageHeader title="Fixed asset register" description="Acquisition, valuation, depreciation and disposal." />
+        <PageHeader variant="card" title="Fixed Assets" icon={<Box className="size-6 text-primary" aria-hidden="true" />} actions={<Button variant="outline" onClick={() => setCreateOpen(true)}><Plus className="size-4" aria-hidden="true" />Add Fixed Asset</Button>} />
         <ForbiddenPanel message="Your role cannot view fixed assets. Ask an administrator for Settings Accounting : View." />
       </div>
     );
@@ -107,12 +109,11 @@ export function FixedAssetRegisterPage() {
 
   return (
     <div className="space-y-5">
-      <PageHeader title="Fixed asset register" description="Acquisition, valuation, depreciation and disposal of fixed assets." breadcrumb="Accounting" />
+      <PageHeader variant="card" title="Fixed Assets" icon={<Box className="size-6 text-primary" aria-hidden="true" />} actions={<Button variant="outline" onClick={() => setCreateOpen(true)}><Plus className="size-4" aria-hidden="true" />Add Fixed Asset</Button>} />
 
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 
-      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
-        <h2 className="mb-3 fs-text font-bold text-strong">Register a fixed asset</h2>
+      <Modal open={createOpen} onClose={() => setCreateOpen(false)} title="Add Fixed Asset" size="large" unsaved={Boolean(assetNo || description || cost)}>
         <form className="space-y-3" onSubmit={handleCreate}>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
             <div>
@@ -144,7 +145,7 @@ export function FixedAssetRegisterPage() {
           {createError ? <p className="fs-text text-accent-red" role="alert">{createError}</p> : null}
           <Button type="submit" disabled={creating || !assetNo || !description || !cost}>{creating ? "Saving..." : "Register asset"}</Button>
         </form>
-      </section>
+      </Modal>
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
         <div className="mb-3 flex flex-wrap items-end gap-3">
@@ -160,8 +161,6 @@ export function FixedAssetRegisterPage() {
           <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
             <PanelSkeleton rows={6} />
           </section>
-        ) : filtered.length === 0 ? (
-          <EmptyState icon={Box} title={query ? "No assets match" : "No fixed assets yet"} description={query ? "Adjust the search." : "Register a fixed asset to start the register."} />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[1000px] text-left fs-text">
@@ -177,7 +176,9 @@ export function FixedAssetRegisterPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((item) => (
+                {filtered.length === 0 ? (
+                  <tr><td colSpan={7} className="px-4 py-16 text-center fs-text text-muted-foreground">{query ? "No data available for the selected search." : "No data available"}</td></tr>
+                ) : filtered.map((item) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
                     <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.assetNo}</td>
                     <td className="whitespace-nowrap px-4 py-3 text-body">{item.description}</td>

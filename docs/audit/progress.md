@@ -155,3 +155,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Recorded the differing journal grouping/export model, unsupported ledger-edit save path, and unavailable local ledger movements.
 - Chart of Accounts implementation commit: pending.
 - Chart of Accounts implementation commit: `8cde171` (`feat(web): show account codes in chart of accounts`).
+
+## 2026-11-01 — Asset register pages
+
+- Compared Asset Types and Fixed Assets with the supplied reference states.
+- Moved the existing create forms into dialogs, added title/action cards, and kept table headings visible on empty results.
+- Opened and closed both dialogs in the visible browser without submitting either form.
+- Reference allocation, import, and ledger-linked depreciation functions are not supported by local APIs and remain documented.
+- Asset page implementation commit: pending.

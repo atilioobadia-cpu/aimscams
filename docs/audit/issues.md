@@ -378,3 +378,7 @@
 | I345 | /accounting-entries | structure/data | Export toolbar and grouped ledger line rows | Local journal view is a compact list; details model differs | Medium |
 | I346 | /accounting-ledger-entries | structure | Export actions and compact filter strip | Local view has date/account controls and extra balance summary | Low |
 | UI025 | /accounting-chart-of-accounts | table columns | Show account code | Code column rendered from existing local field and verified in browser | Resolved | `docs/audit/visual/chart-of-accounts.md` | `8cde171` |
+| I347 | /accounting-assets | workflow/data | Asset allocation tab and ledger-linked depreciation fields | Local model has types with code/method/life but no allocation or ledger links | High |
+| I348 | /accounting-fixed-asset | workflow | Asset import and reference entry-date field | No local import workflow or entry-date field | Medium |
+| UI026 | /accounting-assets | structure/control | Assets title card, modal Add Asset Type, persistent table headers | Implemented with supported asset-type fields; allocation model unavailable | Resolved structurally | `docs/audit/visual/asset-types.md` | pending |
+| UI027 | /accounting-fixed-asset | structure/control | Fixed Assets title card, modal registration, persistent empty table | Implemented with current register API and fields | Resolved structurally; import caveat | `docs/audit/visual/fixed-assets.md` | pending |
