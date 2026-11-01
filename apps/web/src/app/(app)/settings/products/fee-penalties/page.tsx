@@ -1,16 +1,21 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Plus, Search, Pencil, Building2, UserCheck, UserX } from "lucide-react";
+import { ChevronDown, Plus, Search, Pencil, SlidersHorizontal, UserCheck, UserX } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton, FormError, SuccessNote } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
-import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu, type RowAction } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { ProductSetupHeader } from "@/components/settings/product-setup-header";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import { parseMajorToMinor } from "@/lib/accounting";
@@ -40,6 +45,12 @@ export default function FeePenaltiesPage() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
   const [kind, setKind] = useState("");
+  const [showKindFilter, setShowKindFilter] = useState(false);
+  const [showStatusFilter, setShowStatusFilter] = useState(false);
+  const [showChargeType, setShowChargeType] = useState(true);
+  const [showLedgerCode, setShowLedgerCode] = useState(true);
+  const [showTaxRates, setShowTaxRates] = useState(true);
+  const [showTaxInclusive, setShowTaxInclusive] = useState(true);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
 
@@ -192,68 +203,12 @@ export default function FeePenaltiesPage() {
 
   const items = data?.items ?? [];
   const hasFilters = Boolean(query.trim() || status || kind);
+  const columnCount = 2 + Number(showChargeType) + Number(showLedgerCode) + Number(showTaxRates) + Number(showTaxInclusive);
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <PageHeader breadcrumb="Settings" title="Fees and penalties" description="Fee and penalty definitions used by products and transactions." />
-        {data?.canEdit ? (
-          <Button onClick={openCreate} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-            <Plus className="size-4" aria-hidden="true" />
-            Create fee or penalty
-          </Button>
-        ) : null}
-      </div>
-
-      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-        <div className="flex flex-col gap-3 md:flex-row md:items-end">
-          <div className="flex-1">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-search">
-              Search
-            </label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input
-                id="fee-search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Code or name"
-                className="h-[var(--control-height)] pl-9"
-              />
-            </div>
-          </div>
-          <div className="w-full md:w-[180px]">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-kind">
-              Kind
-            </label>
-            <select
-              id="fee-kind"
-              value={kind}
-              onChange={(event) => setKind(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-            >
-              <option value="">All kinds</option>
-              <option value="FEE">Fee</option>
-              <option value="PENALTY">Penalty</option>
-            </select>
-          </div>
-          <div className="w-full md:w-[180px]">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-status">
-              Status
-            </label>
-            <select
-              id="fee-status"
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-            >
-              <option value="">All statuses</option>
-              <option value="ACTIVE">Active</option>
-              <option value="INACTIVE">Inactive</option>
-            </select>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-3">
+      <ProductSetupHeader active="fee-penalties" />
+      {data?.canEdit ? <div className="flex justify-end px-[var(--space-16)]"><Button type="button" variant="outline" onClick={openCreate} className="h-[42px] border-primary px-4 text-primary hover:bg-primary-tint hover:text-primary"><Plus className="size-4" aria-hidden="true" />Add Charge</Button></div> : null}
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view fees and penalties. Ask an administrator for Settings Product : View." />
@@ -263,28 +218,32 @@ export default function FeePenaltiesPage() {
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={8} />
         </section>
-      ) : items.length === 0 ? (
-        <EmptyState
-          icon={Building2}
-          title={hasFilters ? "No fee or penalty matches" : "No fees or penalties yet"}
-          description={hasFilters ? "Adjust or clear the filters to see other items." : "Create a fee or penalty definition."}
-        />
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[900px] text-left fs-text">
-              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
+            <div className="flex min-h-[71px] flex-wrap items-center gap-3 border-b border-chrome px-[var(--space-12)] py-3">
+              <label className="relative block w-[240px] max-w-full"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" /><Input id="fee-search" aria-label="Search charges" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" /></label>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild><Button type="button" variant="outline" className="h-[42px] min-w-[168px] justify-between border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><span className="flex items-center gap-2"><Plus className="size-4" aria-hidden="true" />Add Filters</span><ChevronDown className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger>
+                <DropdownMenuContent align="start"><DropdownMenuCheckboxItem checked={showKindFilter} onCheckedChange={setShowKindFilter}>Charge Type</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem checked={showStatusFilter} onCheckedChange={setShowStatusFilter}>Status</DropdownMenuCheckboxItem></DropdownMenuContent>
+              </DropdownMenu>
+              {hasFilters ? <Button type="button" variant="ghost" onClick={() => { setQuery(""); setKind(""); setStatus(""); }} className="text-muted-foreground">Clear</Button> : null}
+            </div>
+            {showKindFilter || showStatusFilter ? <div className="flex flex-wrap gap-3 border-b border-chrome px-[var(--space-12)] py-3">{showKindFilter ? <select id="fee-kind" aria-label="Filter by charge type" value={kind} onChange={(event) => setKind(event.target.value)} className="h-[42px] min-w-[180px] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text text-body"><option value="">All charge types</option><option value="FEE">Fee</option><option value="PENALTY">Penalty</option></select> : null}{showStatusFilter ? <select id="fee-status" aria-label="Filter by status" value={status} onChange={(event) => setStatus(event.target.value)} className="h-[42px] min-w-[180px] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text text-body"><option value="">All statuses</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select> : null}</div> : null}
+            <table className="w-full min-w-[1000px] text-left fs-text">
+              <thead className="border-b border-card-border bg-subtle fs-text font-semibold text-label">
                 <tr>
-                  <th className="px-4 py-3">Code</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Kind</th>
-                  <th className="px-4 py-3">Amount</th>
-                  <th className="px-4 py-3">GL account</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                  <th className="px-4 py-3">Account Number</th>
+                  <th className="px-4 py-3">Charge Name</th>
+                  {showChargeType ? <th className="px-4 py-3">Charge Type</th> : null}
+                  {showLedgerCode ? <th className="px-4 py-3">General Ledger Code</th> : null}
+                  {showTaxRates ? <th className="px-4 py-3">Tax Rates</th> : null}
+                  {showTaxInclusive ? <th className="px-4 py-3">Tax Inclusive</th> : null}
+                  <th className="w-14 px-2 py-2 text-right"><DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label="Table columns" className="text-primary"><SlidersHorizontal className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuCheckboxItem checked={showChargeType} onCheckedChange={setShowChargeType}>Charge Type</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem checked={showLedgerCode} onCheckedChange={setShowLedgerCode}>General Ledger Code</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem checked={showTaxRates} onCheckedChange={setShowTaxRates}>Tax Rates</DropdownMenuCheckboxItem><DropdownMenuCheckboxItem checked={showTaxInclusive} onCheckedChange={setShowTaxInclusive}>Tax Inclusive</DropdownMenuCheckboxItem></DropdownMenuContent></DropdownMenu></th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-body">
+                {items.length === 0 ? <tr><td colSpan={columnCount} className="h-[216px] px-4 text-center text-muted-foreground"><div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-subtle text-muted-foreground"><Search className="size-6" aria-hidden="true" /></div>{hasFilters ? "No charges match these filters." : "No data available"}</td></tr> : null}
                 {items.map((item) => {
                   const actions: RowAction[] = data?.canEdit
                     ? [
@@ -302,20 +261,14 @@ export default function FeePenaltiesPage() {
                       ]
                     : [];
                   return (
-                    <tr key={item.id} className="border-b border-card-border last:border-0">
-                      <td className="px-4 py-3 font-medium text-strong">{item.code}</td>
-                      <td className="px-4 py-3 text-body">{item.name}</td>
-                      <td className="px-4 py-3 text-body">{item.kind}</td>
-                      <td className="px-4 py-3 tabular-nums text-body">
-                        {item.amountType === "FIXED"
-                          ? item.amountMinor ?? "N/A"
-                          : `${((item.rateBp ?? 0) / 100).toFixed(2)}%`}
-                      </td>
-                      <td className="px-4 py-3 text-body">{item.glAccountId ?? "N/A"}</td>
-                      <td className="px-4 py-3">
-                        <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
-                      </td>
-                      <td className="px-4 py-3">
+                    <tr key={item.id} className="h-[67px] border-b border-card-border last:border-0">
+                      <td className="px-4 py-3">N/A</td>
+                      <td className="px-4 py-3 font-medium">{item.name}</td>
+                      {showChargeType ? <td className="px-4 py-3">{titleCase(item.kind)}</td> : null}
+                      {showLedgerCode ? <td className="px-4 py-3">{item.glAccountId ?? "N/A"}</td> : null}
+                      {showTaxRates ? <td className="px-4 py-3">N/A</td> : null}
+                      {showTaxInclusive ? <td className="px-4 py-3">N/A</td> : null}
+                      <td className="w-14 bg-subtle/40 px-2 py-3">
                         <div className="flex justify-end">
                           <RowActionsMenu label={`${item.code} ${item.name}`} actions={actions} />
                         </div>
@@ -329,7 +282,7 @@ export default function FeePenaltiesPage() {
         </section>
       )}
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Edit fee or penalty" : "Create fee or penalty"} size="large">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Details" size="large">
         <form className="space-y-5" onSubmit={(event) => void save(event)}>
           <div className="grid gap-4 md:grid-cols-2">
             <div>
@@ -340,13 +293,13 @@ export default function FeePenaltiesPage() {
             </div>
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-name">
-                Name
+                Charge Name <span className="text-accent-red" aria-hidden="true">*</span>
               </label>
               <Input id="fee-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" />
             </div>
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-kind">
-                Kind
+                Charge Type <span className="text-accent-red" aria-hidden="true">*</span>
               </label>
               <select
                 id="fee-kind"
@@ -389,7 +342,7 @@ export default function FeePenaltiesPage() {
             )}
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="fee-gl">
-                GL account
+                General Ledger Code
               </label>
               <Input id="fee-gl" value={glAccount} onChange={(event) => setGlAccount(event.target.value)} className="h-[var(--control-height)]" />
             </div>

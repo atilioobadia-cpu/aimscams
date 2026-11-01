@@ -6,11 +6,14 @@ AIMSCAMS route: `/settings/products/fee-penalties`
 
 ## Comparison
 
-The reference screenshot captures Product Setup with the Fee & Penalties tab active and an Add Charge dialog open. The modal fields are Charge Name, Charge Type, General Ledger Code, and Tax Rates. AIMSCAMS list route uses a standalone heading, search, Kind and Status filters, and no Product Setup tabs. The captured reference is a different interaction state from the default local page, so dialog geometry cannot be scored from the local capture.
+The local list now uses the shared Product Setup title/tabs, outlined Add Charge action, compact search/Add Filters toolbar, table column menu, and reference columns Account Number, Charge Name, Charge Type, General Ledger Code, Tax Rates, and Tax Inclusive. At 1280×720 the page has no horizontal overflow. The reference has four rows; the local organization has no fee or penalty records.
+
+Opened Add Charge in the visible browser and compared it with the reference modal without entering or saving data. The local modal now uses a Details title and reference-aligned Charge Name, Charge Type, and General Ledger Code labels. AIMSCAMS retains additional Code, Amount Type/Amount, Status, and Description fields needed by its current fee model. The schema has no Account Number, Tax Rates, or Tax Inclusive fields; rows show N/A for those values. The GL account control is still free text rather than an account selector.
 
 ## Recommendations
 
-- Put the fee/penalty page in the shared Product Setup tab shell.
-- Compare the create dialog in a matching state and ensure charge fields map to supported local fee data.
+- Add account selection, tax-rate associations, tax-inclusive behavior, and account-number relations to the fee model before replacing N/A fields.
+- Use a searchable ledger-account selector for General Ledger Code; preserve current amount and validation rules until the contract changes.
+- Populate records only through verified local/test fixtures; reference charge rows are not copied.
 
-Read-only browser review; no charge dialog was opened, and no fee or penalty was saved. Implementation commit: none.
+The Add Charge dialog was opened and closed with Cancel. No fee or penalty was created or changed. Web production build passed. Implementation commit: pending.

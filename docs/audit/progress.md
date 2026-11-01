@@ -425,3 +425,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Compared `/settings/products/interest-rates` in the visible browser with `F:\Wakandi\settings-products-interest-rate\FULL.png`; added the shared Product Setup frame, outlined Add new action, compact search/filter toolbar, column chooser, and Name/Start Date/End Date/Type columns.
 - At 1280×720 both local document/body widths are 1280px. Both local and reference lists are empty. The local API has no end-date field; no interest-rate record was created or changed.
 - Updated the page note, index, and I384. Fee & Penalties remains the next route in I384.
+
+## 2026-11-01 — Fees and Penalties layout
+
+- Compared `/settings/products/fee-penalties` with both the normal list and Add Charge reference captures. Added the shared Product Setup shell, reference list columns, Add Charge action, and Details modal title/core field labels.
+- At 1280×720 the local page/document/body width is 1280px. The reference shows four charges while the local organization has none. Add Charge was opened and canceled without entering data; nothing was saved.
+- Web production build passed. I384 remains open for account number, searchable GL account, tax rate, and tax-inclusive data support. Updated its note, index, and issue row.
