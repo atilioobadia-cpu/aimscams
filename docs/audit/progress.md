@@ -106,3 +106,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Web typecheck passed. Scoped lint remains blocked by the existing `react-hooks/set-state-in-effect` warning-as-error in the edit initialization effect.
 - Implementation commit: pending.
 - Implementation commit: `e86716c` (`feat(web): align loan application form with visual reference`).
+
+## 2026-11-01 — Loan application details and edit review
+
+- Reviewed both populated detail references and the edit reference without copying any record values into the audit.
+- The local API requires UUIDs; the supplied numeric route suffixes cannot load a local record. No local application rows are available for a populated comparison.
+- Recorded the missing four-stage review, assignment, approval-history, notes, score-history, audit-history, and document-tab model as a blocker.
+- Updated the shared edit wizard to open on Additional Details, use the Update title, and link Cancel to the application detail page. The edit state is not browser-verifiable until a local UUID record exists.
+- Web typecheck passed. Scoped lint passed with the existing edit-initialization `react-hooks/set-state-in-effect` rule suppressed for this check.

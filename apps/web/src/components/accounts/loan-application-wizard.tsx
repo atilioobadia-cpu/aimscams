@@ -114,14 +114,18 @@ function todayIso(): string {
 export function LoanApplicationWizard({
   initial,
   applicationId,
+  cancelHref,
+  cancelLabel = "Cancel",
 }: {
   initial?: LoanApplication;
   applicationId?: string;
+  cancelHref?: string;
+  cancelLabel?: string;
 } = {}) {
   const router = useRouter();
   const { pushToast } = useToast();
 
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(initial ? 1 : 0);
   const [stepError, setStepError] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saving, setSaving] = useState<"DRAFT" | "SUBMITTED" | null>(null);
@@ -520,12 +524,12 @@ export function LoanApplicationWizard({
         className="min-h-[88px]"
         variant="card"
         icon={<FileText className="size-6 shrink-0 text-primary" aria-hidden="true" />}
-        title={applicationId ? "Edit Loan Application" : "Create Loan Application"}
+        title={applicationId ? "Update Loan Application" : "Create Loan Application"}
         actions={
           <Button asChild variant="ghost" size="sm">
-            <Link href="/account-loan-application">
+            <Link href={cancelHref ?? "/account-loan-application"}>
               <ArrowLeft className="size-4" aria-hidden="true" />
-              Cancel
+              {cancelLabel}
             </Link>
           </Button>
         }

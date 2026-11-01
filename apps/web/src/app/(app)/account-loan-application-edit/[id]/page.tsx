@@ -103,16 +103,10 @@ export default function EditLoanApplicationPage() {
   }
 
   return (
-    <div className="space-y-5">
-      <div>
-        <Button asChild variant="outline" size="sm">
-          <Link href={`/account-loan-application-details/${application.id}`}>
-            <ArrowLeft className="size-4" aria-hidden="true" />
-            Back to application
-          </Link>
-        </Button>
-      </div>
-      <LoanApplicationWizard initial={application} applicationId={application.id} />
-    </div>
+    <LoanApplicationWizard
+      initial={application}
+      applicationId={application.id}
+      cancelHref={`/account-loan-application-details/${application.id}`}
+    />
   );
 }
