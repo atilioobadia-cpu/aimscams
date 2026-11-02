@@ -268,7 +268,7 @@ export function ClientProfile({ id }: { id: string }) {
           </section>
 
           <Tabs defaultValue="summary" className="gap-0">
-            <TabsList variant="line" className="h-[50px] w-full justify-start overflow-x-auto rounded-none border-b border-[#dee2e6] bg-white p-0">
+            <TabsList variant="line" className="h-[44.9px] w-full justify-start overflow-x-auto rounded-none border-b border-[#dee2e6] bg-white p-0">
               {["Summary", "Users", "Accounts", "Charges", "Residence", "KYC", "Income", "Assets", "Bank", "Verification History", "Statement", "History"].map((tab) => (
                 <TabsTrigger
                   key={tab}
