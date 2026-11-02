@@ -72,6 +72,14 @@ export type DashboardFixture = {
       value: string;
       tone: "in" | "out";
     }>;
+    bars: Array<{
+      id: string;
+      series: string;
+      label: string;
+      period: string;
+      value: string;
+      tone: "in" | "out";
+    }>;
   };
   portfolio: {
     title: string;
@@ -174,8 +182,18 @@ export const dashboardFixture: DashboardFixture = {
       step: "500000000",
     },
     series: [
-      { id: "funds-in", label: "Funds in", value: "4750000000", tone: "in" },
-      { id: "funds-out", label: "Funds out", value: "3825000000", tone: "out" },
+      { id: "funds-in", label: "Funds In", value: "4750000000", tone: "in" },
+      { id: "funds-out", label: "Funds Out", value: "3825000000", tone: "out" },
+    ],
+    bars: [
+      { id: "jun-in", series: "funds-in", label: "Funds In", period: "Jun", value: "133000000", tone: "in" },
+      { id: "jun-out", series: "funds-out", label: "Funds Out", period: "Jun", value: "359000000", tone: "out" },
+      { id: "jul-in", series: "funds-in", label: "Funds In", period: "Jul", value: "198000000", tone: "in" },
+      { id: "jul-out", series: "funds-out", label: "Funds Out", period: "Jul", value: "4750000000", tone: "out" },
+      { id: "aug-in", series: "funds-in", label: "Funds In", period: "Aug", value: "888000000", tone: "in" },
+      { id: "sep-in", series: "funds-in", label: "Funds In", period: "Sep", value: "629000000", tone: "in" },
+      { id: "oct-in", series: "funds-in", label: "Funds In", period: "Oct", value: "234000000", tone: "in" },
+      { id: "oct-out", series: "funds-out", label: "Funds Out", period: "Oct", value: "4750000000", tone: "out" },
     ],
   },
   portfolio: {

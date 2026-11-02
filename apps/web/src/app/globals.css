@@ -76,7 +76,7 @@ body {
   --sidebar-item-gap-group: 9.8px;
   --sidebar-item-radius: 5.33px;
   --sidebar-icon-size: 14px;
-  --sidebar-label-size: 13.44px;
+  --sidebar-label-size: 13.34px;
   --sidebar-scrollbar-width: 5.33px;
   --sidebar-toggle-size: 29px;
   --content-padding: 14.67px;
@@ -116,9 +116,10 @@ body {
   --accent-teal-bg: var(--primary-tint);
   --accent-red: var(--alert-danger);
   --accent-red-bg: var(--alert-danger-bg);
-  --accent-yellow: #e6c120;
+  --accent-yellow: #e6c01e;
   --accent-yellow-bg: #fcf7e3;
-  --chart-bar: #c75a43;
+  --chart-bar: #c85a44;
+  --chart-bar-dark: #a93a2b;
   --flag-green: #1eb53a;
   --flag-yellow: #fcd116;
   --flag-black: #000000;
@@ -208,6 +209,7 @@ body {
   --color-accent-yellow: var(--accent-yellow);
   --color-accent-yellow-bg: var(--accent-yellow-bg);
   --color-chart-bar: var(--chart-bar);
+  --color-chart-bar-dark: var(--chart-bar-dark);
 
   --color-flag-green: var(--flag-green);
   --color-flag-yellow: var(--flag-yellow);
@@ -291,7 +293,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
     border-color: var(--border);
     @apply border-border outline-ring/50;
   }
-  * { scrollbar-width: none; }
+  *:not(.sidebar-scroll) { scrollbar-width: none; }
   *::-webkit-scrollbar { display: none; }
 
   html {
@@ -380,7 +382,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 }
 
 .sidebar-footer-wordmark {
-  font-size: 11.33px;
+  font-size: 14.7px;
   line-height: 14px;
 }
 

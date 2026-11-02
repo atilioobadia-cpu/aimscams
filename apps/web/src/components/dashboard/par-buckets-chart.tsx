@@ -1,96 +1,121 @@
 "use client";
 
+import { useState } from "react";
+
 import { ChartCard } from "@/components/data/chart-card";
-import { formatCompactTzs } from "@/lib/format";
+import { formatCompactTzs, formatTzs } from "@/lib/format";
 import { cn } from "cn";
 
 const toneClasses = {
   current: "bg-brand",
   "1-30": "bg-accent-yellow",
   "31-90": "bg-chart-bar",
-  "90+": "bg-[#5d1a1a]",
+  "90+": "bg-chart-bar-dark",
 } as const;
 
-function percentageOfRange(value: number, max: number): number {
-  if (max <= 0) return 0;
-  return Math.min(100, Math.max(0, (value / max) * 100));
-}
-
 const categories = [
-  { id: "current", label: "Current", value: 5000000000, tone: "current" as const },
-  { id: "1-30", label: "1-30 Days", value: 1379000000, tone: "1-30" as const },
-  { id: "31-90", label: "31-90 Days", value: 2529000000, tone: "31-90" as const },
-  { id: "90+", label: "90+ Days", value: 464000000, tone: "90+" as const },
+  { id: "current", label: "Current", value: "5000000000", tone: "current" as const },
+  { id: "1-30", label: "1-30 Days", value: "1379000000", tone: "1-30" as const },
+  { id: "31-90", label: "31-90 Days", value: "2529000000", tone: "31-90" as const },
+  { id: "90+", label: "90+ Days", value: "464000000", tone: "90+" as const },
 ];
 
 const MAX_VALUE = 5000000000;
 
 export function ParBucketsChart() {
+  const [activeBar, setActiveBar] = useState<string | null>(null);
+
+  const ticks = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0].map((value) => value * 100000000);
+
   return (
-    <ChartCard
-      testId="par-buckets-chart"
-      title="Risk Snapshot: PAR Buckets"
-      className="px-5 pt-9 pb-5"
-    >
-      <div className="relative mt-7 h-[300px]">
-        <div className="absolute bottom-0 left-[80px] right-0 top-8">
-          {[50, 40, 30, 20, 10, 0].map((tick) => (
+    <ChartCard testId="par-buckets-chart" title="Risk Snapshot: PAR Buckets">
+      <div className="relative mt-4 h-[300px]">
+        <div className="absolute bottom-8 left-[100px] right-0 top-8">
+          {ticks.map((tick) => (
             <div
               key={tick}
               data-testid="par-gridline"
               className="absolute inset-x-0 border-t border-grid-line"
-              style={{ bottom: `${percentageOfRange(tick * 1e6, MAX_VALUE)}%` }}
+              style={{ bottom: `${(tick / MAX_VALUE) * 100}%` }}
             >
               <span
                 data-testid="par-axis-tick"
-                className="absolute -left-[76px] w-[72px] -translate-y-1/2 text-right fs-text leading-none text-axis"
+                className="absolute -left-[96px] w-[88px] -translate-y-1/2 text-right fs-text leading-none text-axis"
               >
-                TZS {tick}M
+                {tick === 0 ? "TZS 0" : `TZS ${tick / 100000000}M`}
               </span>
             </div>
           ))}
         </div>
 
-        <div className="absolute bottom-0 left-[80px] right-0 top-8 flex items-end justify-center gap-12">
+        <div className="absolute bottom-8 left-[100px] right-0 top-8 flex items-end justify-around">
           {categories.map((category) => {
-            const height = percentageOfRange(category.value, MAX_VALUE);
+            const height = (Number(category.value) / MAX_VALUE) * 100;
+            const isActive = activeBar === category.id;
             return (
-              <div key={category.id} className="relative h-full w-[64px]">
+              <div key={category.id} className="relative h-full w-[65.333px]">
                 <button
                   type="button"
                   data-testid="par-bar"
                   data-series={category.id}
-                  aria-label={`${category.label}: TZS ${formatCompactTzs(String(category.value))}`}
+                  aria-label={`${category.label}, ${category.label}: ${formatTzs(category.value)}`}
+                  onMouseEnter={() => setActiveBar(category.id)}
+                  onMouseLeave={() => setActiveBar(null)}
+                  onFocus={() => setActiveBar(category.id)}
+                  onBlur={() => setActiveBar(null)}
                   className={cn(
-                    "absolute bottom-0 left-0 w-[64px] rounded-none outline-none transition-opacity focus-visible:ring-3 focus-visible:ring-ring/50",
-                    toneClasses[category.tone as keyof typeof toneClasses],
-                    "opacity-100",
+                    "absolute bottom-0 left-0 w-[65.333px] rounded-none outline-none transition-opacity focus-visible:ring-3 focus-visible:ring-ring/50",
+                    toneClasses[category.tone],
+                    activeBar !== null && !isActive ? "opacity-70" : "opacity-100",
                   )}
-                  style={{ height: `${Math.max(height, 1)}%` }}
+                  style={{
+                    height: `${Math.max(height, 1)}%`,
+                    backgroundColor: isActive ? "#dc3a1a" : undefined,
+                  }}
                 >
+                  {isActive ? (
+                    <span
+                      role="tooltip"
+                      className="absolute left-1/2 top-3 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-strong px-3 py-1.5 fs-text font-medium text-surface shadow-sm"
+                    >
+                      <span data-testid="tooltip-swatch" className={cn("mr-2 inline-block h-2.5 w-2.5", toneClasses[category.tone])} />
+                      {category.label}
+                      <br />
+                      {category.label}: {formatTzs(category.value)}
+                    </span>
+                  ) : null}
                   <span
                     aria-hidden="true"
                     data-testid="par-value-label"
                     className="pointer-events-none absolute left-0 w-full text-center fs-text font-medium leading-none text-strong"
                     style={{ bottom: `calc(${Math.max(height, 1)}% + 10px)` }}
                   >
-                    {formatCompactTzs(String(category.value))}
+                    {formatCompactTzs(category.value)}
                   </span>
                 </button>
               </div>
             );
           })}
         </div>
+
+        <div className="absolute bottom-0 left-[100px] right-0 flex h-6 items-center justify-around text-center fs-text text-axis">
+          {categories.map((category) => (
+            <span key={category.id} data-testid="par-category">
+              {category.label}
+            </span>
+          ))}
+        </div>
       </div>
 
-      <ul className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 border-t border-card-border pt-5">
+      <ul className="mt-3 flex flex-wrap items-center justify-center gap-4 border-t border-card-border pt-4">
         {categories.map((category) => (
-          <li key={category.id} className="flex items-center gap-2.5 fs-text text-body">
+          <li key={category.id} className="flex items-center gap-2 fs-text text-body">
             <span
-              className={cn("size-3 shrink-0 rounded-sm", toneClasses[category.tone as keyof typeof toneClasses])}
+              className={cn("h-[16px] w-[40px] shrink-0", toneClasses[category.tone])}
               aria-hidden="true"
+              style={{ transform: "scaleY(0.6666666666666666)" }}
             />
-            <span>{category.label}</span>
+            <span>{category.id === "current" ? "Current" : category.id === "1-30" ? "Early arrears" : category.id === "31-90" ? "Mid arrears" : "Late arrears"}</span>
           </li>
         ))}
       </ul>

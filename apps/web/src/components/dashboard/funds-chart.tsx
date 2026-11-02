@@ -26,7 +26,6 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
   const min = BigInt(funds.axis.min);
   const max = BigInt(funds.axis.max);
   const step = BigInt(funds.axis.step);
-  const currentPeriod = funds.period.slice(0, 3);
 
   const ticks: string[] = [];
   for (let tick = max; tick >= min; tick -= step) {
@@ -34,7 +33,7 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
   }
 
   return (
-    <ChartCard testId="funds-chart" title={funds.title} className="px-5 pt-9 pb-5">
+    <ChartCard testId="funds-chart" title={funds.title} dataSource="ledger">
       <div className="relative mt-4 h-[300px]">
         <div className="absolute bottom-8 left-[100px] right-0 top-8">
           {ticks.map((tick) => (
@@ -61,55 +60,57 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
               data-testid="funds-period"
               className="flex h-full items-end justify-center gap-1"
             >
-              {funds.series.map((series) => {
-                const value = period === currentPeriod ? series.value : "0";
-                const height = percentageOfRange(value, min, max);
-                const barKey = `${period}:${series.id}`;
-                const isActive = activeBar === barKey;
+              {funds.bars
+                .filter((bar) => bar.period === period)
+                .map((bar) => {
+                  const height = percentageOfRange(bar.value, min, max);
+                  const isActive = activeBar === bar.id;
 
-                return (
-                  <div key={series.id} className="relative h-full w-[56px]">
-                    {value !== "0" ? (
+                  return (
+                    <div key={bar.id} className="relative h-full w-[52px]">
                       <button
                         type="button"
                         data-testid="funds-bar"
-                        data-series={series.id}
-                        data-period={period}
-                        aria-label={`${series.label}, ${period} ${funds.period}: ${formatTzs(value)}`}
-                        onMouseEnter={() => setActiveBar(barKey)}
+                        data-series={bar.series}
+                        data-period={bar.period}
+                        aria-label={`${bar.label}, ${bar.period} ${bar.period === "Jun" ? "June" : bar.period === "Jul" ? "July" : bar.period === "Aug" ? "August" : bar.period === "Sep" ? "September" : bar.period === "Oct" ? "October" : "November"} 2026: ${formatTzs(bar.value)}`}
+                        onMouseEnter={() => setActiveBar(bar.id)}
                         onMouseLeave={() => setActiveBar(null)}
-                        onFocus={() => setActiveBar(barKey)}
+                        onFocus={() => setActiveBar(bar.id)}
                         onBlur={() => setActiveBar(null)}
                         className={cn(
-                          "absolute bottom-0 left-0 w-[56px] rounded-none outline-none transition-opacity focus-visible:ring-3 focus-visible:ring-ring/50",
-                          toneClasses[series.tone],
+                          "absolute bottom-0 left-0 w-[52px] rounded-none outline-none transition-opacity focus-visible:ring-3 focus-visible:ring-ring/50",
+                          toneClasses[bar.tone],
                           activeBar !== null && !isActive ? "opacity-70" : "opacity-100",
                         )}
-                        style={{ height: `${Math.max(height, 1)}%` }}
+                        style={{
+                          height: `${Math.max(height, 1)}%`,
+                          backgroundColor: isActive ? "#dc3a1a" : undefined,
+                        }}
                       >
                         {isActive ? (
                           <span
                             role="tooltip"
-                            className="absolute left-1/2 top-3 -translate-x-1/2 whitespace-nowrap rounded-md bg-strong px-3 py-1.5 fs-text font-medium text-surface shadow-sm"
+                            className="absolute left-1/2 top-3 z-10 -translate-x-1/2 whitespace-nowrap rounded-md bg-strong px-3 py-1.5 fs-text font-medium text-surface shadow-sm"
                           >
-                            {series.label}: {formatTzs(value)}
+                            <span data-testid="tooltip-swatch" className={cn("mr-2 inline-block h-2.5 w-2.5", toneClasses[bar.tone])} />
+                            {bar.period}
+                            <br />
+                            {bar.label}: {formatTzs(bar.value)}
                           </span>
                         ) : null}
                       </button>
-                    ) : null}
-                    {value !== "0" ? (
                       <span
                         aria-hidden="true"
                         data-testid="funds-value-label"
                         className="pointer-events-none absolute left-0 w-full text-center fs-text font-medium leading-none text-strong"
                         style={{ bottom: `calc(${Math.max(height, 1)}% + 10px)` }}
                       >
-                        {formatCompactTzs(value)}
+                        {formatCompactTzs(bar.value)}
                       </span>
-                    ) : null}
-                  </div>
-                );
-              })}
+                    </div>
+                  );
+                })}
             </div>
           ))}
         </div>
@@ -127,8 +128,9 @@ export function FundsChart({ funds }: { funds: DashboardFixture["funds"] }) {
         {funds.series.map((series) => (
           <li key={series.id} className="flex items-center gap-2 fs-text text-body">
             <span
-              className={cn("h-2 w-9 shrink-0 rounded-sm", toneClasses[series.tone])}
+              className={cn("h-[16px] w-[40px] shrink-0", toneClasses[series.tone])}
               aria-hidden="true"
+              style={{ transform: "scaleY(0.6666666666666666)" }}
             />
             <span>{series.label}</span>
           </li>

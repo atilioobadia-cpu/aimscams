@@ -22,6 +22,8 @@ import {
   Grid2X2,
   Home,
   Inbox,
+  Mail,
+  MessageCircle,
   Landmark,
   Library,
   MessagesSquare,
@@ -36,6 +38,7 @@ import {
   Upload,
   UserCog,
   Users,
+  UsersRound,
   Wrench,
   type LucideIcon,
 } from "lucide-react";
@@ -46,12 +49,12 @@ import { navItems, type NavChild, type NavIcon, type NavItem } from "@/lib/nav";
 
 const navIcons: Record<NavIcon, LucideIcon> = {
   dashboard: Home,
-  clients: Users,
+  clients: UsersRound,
   accounts: Briefcase,
   transactions: Banknote,
   accounting: FileText,
-  requests: Inbox,
-  messages: MessagesSquare,
+  requests: Mail,
+  messages: MessageCircle,
   campaigns: Grid2X2,
   reports: BarChart3,
   import: Upload,
@@ -140,7 +143,7 @@ function SidebarItem({
   const content = (
     <>
       <Icon
-        className={cn("size-[var(--sidebar-icon-size)] shrink-0", active ? "text-on-primary" : "text-heading")}
+        className={cn("size-[var(--sidebar-icon-size)] shrink-0", active ? "text-on-primary" : "text-heading", item.icon === "messages" && "message-circle-search")}
         strokeWidth={1.8}
         aria-hidden="true"
       />
@@ -186,6 +189,7 @@ function SidebarItem({
         data-nav-label={item.label}
         tabIndex={-1}
         className={controlClass}
+        style={{ fontSize: "var(--sidebar-label-size)" }}
       >
         {content}
       </div>
@@ -201,6 +205,7 @@ function SidebarItem({
         data-nav-label={item.label}
         data-active={active ? "true" : undefined}
         className={controlClass}
+        style={{ fontSize: "var(--sidebar-label-size)" }}
       >
         {content}
       </Link>
@@ -233,8 +238,9 @@ function SidebarItem({
             data-active={isGroupActive ? "true" : undefined}
             aria-current={active ? "page" : undefined}
             className={groupLinkClass}
+            style={{ fontSize: "var(--sidebar-label-size)" }}
           >
-            <Icon className="size-[var(--sidebar-icon-size)] shrink-0 text-heading" strokeWidth={1.8} aria-hidden="true" />
+            <Icon className={cn("size-[var(--sidebar-icon-size)] shrink-0 text-heading", item.icon === "messages" && "message-circle-search")} strokeWidth={1.8} aria-hidden="true" />
             <span className="min-w-0 truncate">{item.label}</span>
           </Link>
           <button
@@ -269,14 +275,14 @@ function SidebarItem({
 
   if (!collapsed) {
     return (
-      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: "var(--sidebar-item-gap-link)" }}>
+      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: item.label === "Campaigns" ? "39.33px" : "var(--sidebar-item-gap-link)" }}>
         {control}
       </li>
     );
   }
 
   return (
-    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: "var(--sidebar-item-gap-link)" }}>
+    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: item.label === "Campaigns" ? "39.33px" : "var(--sidebar-item-gap-link)" }}>
       <Tooltip>
         <TooltipTrigger asChild>{control}</TooltipTrigger>
         <TooltipContent side="right" sideOffset={12}>

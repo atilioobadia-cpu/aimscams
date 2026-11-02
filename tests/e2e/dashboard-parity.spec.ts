@@ -176,7 +176,7 @@ test.describe("Round 4 Wakandi Dashboard parity", () => {
       height: element.getBoundingClientRect().height,
       radius: getComputedStyle(element).borderRadius,
     })));
-    expect(markers.every((marker) => marker.width === css(60) && marker.height === css(16) && marker.radius === "0px")).toBe(true);
+    expect(markers.every((marker) => marker.width === css(60) && Math.abs(marker.height - css(16)) < 0.001 && marker.radius === "0px")).toBe(true);
     const legend = await cards.locator("ul").allTextContents();
     expect(legend.join(" ")).not.toMatch(/\d/);
     expect((await page.getByTestId("ssl-axis-tick").last().innerText()).trim()).toBe("TZS 0");

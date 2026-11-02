@@ -47,16 +47,18 @@ export function formatInteger(value: string | number): string {
  */
 export function formatCompactTzs(value: string | bigint): string {
   const whole = toBigInt(value) / 100n;
-  const tenthsOfMillion = (whole * 10n + 500_000n) / 1_000_000n;
-  const millions = tenthsOfMillion / 10n;
-  const tenths = tenthsOfMillion % 10n;
+  const hundredths = (whole + 5000n) / 10000n;
+  const millions = hundredths / 100n;
+  const cents = hundredths % 100n;
 
-  return tenths === 0n ? `${millions}M` : `${millions}.${tenths}M`;
+  if (cents === 0n) return `${millions}M`;
+  if (cents % 10n === 0n) return `${millions}.${cents / 10n}M`;
+  return `${millions}.${cents.toString().padStart(2, "0")}M`;
 }
 
 export function formatAxisTzs(value: string | bigint): string {
   const millions = toBigInt(value) / 100n / 1_000_000n;
-  return `TZS ${millions}M`;
+  return millions === 0n ? "TZS 0" : `TZS ${millions}M`;
 }
 
 export function subtractMinor(left: string | bigint, right: string | bigint): string {

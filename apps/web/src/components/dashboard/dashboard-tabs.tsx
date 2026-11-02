@@ -459,10 +459,11 @@ export function DashboardTabs({ data }: DashboardViewProps) {
       <TabsContent value="overview" className="mt-[14px] space-y-[14px] outline-none">
         <KpiGrid kpis={data.kpis} />
         <FundsChart funds={data.funds} />
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2" style={{ gap: "14.667px" }}>
           <SavingsSharesLoansChart />
           <ParBucketsChart />
         </div>
+        <div data-testid="dashboard-bottom-strip" className="h-[25.33px] w-full border-t border-card-border bg-surface" />
       </TabsContent>
 
       <TabsContent value="members" className="outline-none">
