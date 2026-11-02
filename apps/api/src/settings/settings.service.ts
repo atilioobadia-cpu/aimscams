@@ -1635,6 +1635,28 @@ export class SettingsService {
     if (!before) throw new NotFoundException('Client not found.');
 
     const data: Prisma.ClientUpdateInput = {};
+    if (body.fullName !== undefined) {
+      const fullName = requiredText(body.fullName, 'Full name');
+      if (fullName.length > 160) throw new BadRequestException('Full name must be 160 characters or fewer.');
+      data.fullName = fullName;
+    }
+    if (body.phone !== undefined) {
+      const phone = optionalText(body.phone);
+      if (phone && phone.length > 32) throw new BadRequestException('Phone number must be 32 characters or fewer.');
+      data.phone = phone;
+    }
+    if (body.email !== undefined) {
+      const email = optionalText(body.email);
+      if (email && (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) {
+        throw new BadRequestException('Email address must be valid.');
+      }
+      data.email = email;
+    }
+    if (body.nationalId !== undefined) {
+      const nationalId = optionalText(body.nationalId);
+      if (nationalId && nationalId.length > 64) throw new BadRequestException('National ID must be 64 characters or fewer.');
+      data.nationalId = nationalId;
+    }
     if (body.status !== undefined) {
       const status = String(body.status).trim().toUpperCase();
       if (status !== 'ACTIVE' && status !== 'INACTIVE' && status !== 'PENDING') {

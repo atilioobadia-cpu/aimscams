@@ -418,7 +418,7 @@ export default function ClientsPage() {
                           label={`${item.referenceNo} ${item.fullName}`}
                           actions={[
                             { label: "View", icon: Eye, href: `/clients/${item.id}` },
-                            ...(data?.canEdit ? [{ label: "Edit", icon: UserCheck, href: `/clients/${item.id}?edit=true` }] : []),
+                            ...(data?.canEdit ? [{ label: "Edit", icon: UserCheck, href: `/clients/${item.id}/edit` }] : []),
                             ...(data?.canEdit
                               ? [
                                   {

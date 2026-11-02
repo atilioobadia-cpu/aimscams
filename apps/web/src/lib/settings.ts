@@ -773,7 +773,7 @@ export async function createClient(payload: {
     body: payload,
   });
 }
-export async function updateClient(id: string, payload: { status?: string; groupId?: string }): Promise<ClientResponse> {
+export async function updateClient(id: string, payload: { status?: string; groupId?: string; fullName?: string; phone?: string | null; email?: string | null; nationalId?: string | null }): Promise<ClientResponse> {
   return apiRequest<ClientResponse>(`/settings/clients/${encodeURIComponent(id)}`, {
     method: "PATCH",
     body: payload,
