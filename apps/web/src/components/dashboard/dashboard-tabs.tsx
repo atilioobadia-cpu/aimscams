@@ -1,6 +1,6 @@
 "use client";
 
-import { BarChart3, Landmark, Users } from "lucide-react";
+import { BarChart3, CreditCard, UsersRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { DashboardChartPanel } from "@/components/dashboard/dashboard-chart-panel";
@@ -19,8 +19,8 @@ import { cn } from "cn";
 
 const tabs = [
   { value: "overview", label: "Overview", icon: BarChart3 },
-  { value: "members", label: "Members", icon: Users },
-  { value: "loans", label: "Loans", icon: Landmark },
+  { value: "members", label: "Members", icon: UsersRound },
+  { value: "loans", label: "Loans", icon: CreditCard },
 ] as const;
 
 const initialFilters: DashboardFilters = {
@@ -425,7 +425,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     <Tabs value={tab} onValueChange={setTab} className="gap-0">
       <div
         data-testid="dashboard-tab-card"
-        className="flex h-[70px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5"
+        className="flex h-[69.33px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5"
       >
           <TabsList aria-label="Dashboard views" className="h-auto gap-2 bg-transparent p-0">
           {tabs.map((item) => {
@@ -437,17 +437,17 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                 value={item.value}
                 data-testid={`dashboard-tab-${item.value}`}
                 className={cn(
-                  "flex-none shrink-0 gap-2 rounded-[var(--pill-radius)] border-0 px-0 fs-text font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
-                  active ? "font-semibold" : "text-strong",
+                  "flex-none shrink-0 gap-2 rounded-[var(--pill-radius)] border-0 px-0 text-[13.44px] font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
+                  "text-strong",
                 )}
                 style={{
-                  width: 102,
-                  height: 30,
+                  width: item.value === "members" ? 85 : item.value === "overview" ? 102.67 : 102,
+                  height: 28.67,
                   backgroundColor: active ? "var(--primary)" : "transparent",
                   color: active ? "var(--text-on-primary)" : "var(--text-strong)",
                 }}
               >
-                <Icon className="size-4" strokeWidth={1.8} aria-hidden="true" />
+                <Icon className="size-[13.33px]" strokeWidth={1.8} aria-hidden="true" />
                 <span>{item.label}</span>
               </TabsTrigger>
             );

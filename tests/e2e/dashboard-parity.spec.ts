@@ -80,8 +80,10 @@ test.describe("Round 4 Wakandi Dashboard parity", () => {
     near(card.width, css(1476));
     near(card.height, css(104));
     const overview = await box(page.getByTestId("dashboard-tab-overview"));
+    const membersTab = await box(page.getByTestId("dashboard-tab-members"));
     near(overview.width, css(154));
     near(overview.height, css(43));
+    near(membersTab.width, css(127));
     expect(await page.getByTestId("dashboard-tab-overview").innerText()).toBe("Overview");
     expect(await page.getByTestId("dashboard-tab-members").innerText()).toBe("Members");
     expect(await page.getByTestId("dashboard-tab-loans").innerText()).toBe("Loans");
@@ -91,12 +93,18 @@ test.describe("Round 4 Wakandi Dashboard parity", () => {
       loansIcon: document.querySelector('[data-testid="dashboard-tab-loans"] svg')?.getAttribute("class") ?? "",
       membersWidth: document.querySelector('[data-testid="dashboard-tab-members"] span')!.getBoundingClientRect().width,
       loansWidth: document.querySelector('[data-testid="dashboard-tab-loans"] span')!.getBoundingClientRect().width,
+      membersToLoansGap: document.querySelector('[data-testid="dashboard-tab-loans"] svg')!.getBoundingClientRect().left - document.querySelector('[data-testid="dashboard-tab-members"] span')!.getBoundingClientRect().right,
+      iconSize: document.querySelector('[data-testid="dashboard-tab-members"] svg')!.getBoundingClientRect().width,
+      allWeights: [...document.querySelectorAll('[data-testid^="dashboard-tab-"] span')].map((element) => getComputedStyle(element).fontWeight),
     }));
     expect(icons.overviewWeight).toBe("500");
+    expect(icons.allWeights).toEqual(["500", "500", "500"]);
     expect(icons.membersIcon).toContain("users-round");
     expect(icons.loansIcon).toContain("credit-card");
     near(icons.membersWidth, css(83));
     near(icons.loansWidth, css(55));
+    near(icons.membersToLoansGap, css(51));
+    near(icons.iconSize, css(20));
   });
 
   test("3. KPI cards match the 4-card layout, labels, values, badges and accents", async ({ page }) => {
