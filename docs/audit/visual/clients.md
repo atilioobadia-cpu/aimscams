@@ -100,3 +100,11 @@ Clients remains the active page. Commit and proceed only after those client-spec
 - Opened one local sample profile and selected Residence. The browser still showed the empty state after reload. Added profile rendering for the residence fields when the API returns them; the stored profile response for this existing sample still needs verification before this result can be marked resolved.
 - The new conditional Residence view uses the existing font and spacing tokens. Focused ESLint and `tsc --noEmit --incremental false` passed. The regular workspace typecheck could not generate `.next/types/routes.d.ts` because the running dev server held the file open.
 - Other previously recorded Clients gaps remain open: Edit Client and document uploads, profile tabs backed by local records, unsupported production type/status values, invitation-link service, and table details. Keep Clients as the active page until these are resolved and browser-verified.
+
+## Live Individual membership policy check — 2026-11-02
+
+- Opened Wakandi's authenticated Settings > Policies > Membership Policy page in Chrome and viewed the Individual policy details. The production system remained read-only.
+- Wakandi lists the Individual policy as Approved. Savings, shares, fees, and self-onboarding are disabled; member activation is enabled.
+- The details require manual member verification, set dormancy at 365 days, allow withdrawals, activate members automatically upon deposit, and require one to two next of kin. No auto-debit rules are configured for this scope.
+- Queried only local policy configuration inside a `BEGIN READ ONLY` transaction, after confirming the database host and `APP_ENV` are local. AIMSCAMS already has an active `INDIVIDUAL` policy with matching member type, next-of-kin limits, dormancy, withdrawal, deposit activation, verification-required, and manual verification settings. No duplicate policy was created.
+- The local policy model does not represent savings, shares, fees, self-onboarding, approval status/history, or version history; those remain Settings/Policies parity gaps. The Create Client flow already requests active membership policies, so this record is available to local client creation.
