@@ -664,3 +664,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - npm run typecheck passed. Reviewed the authenticated local Dashboard in visible Chrome; the active tab, header, sidebar and KPI/chart content rendered after hot reload. Wakandi remained read-only.
 - Post-commit representative run of both E2E specs: 2 failed, 0 passed, 0 parity assertions evaluated. Each redirected to /login because the standalone ignored Playwright storage state is unauthenticated.
 
+
+## 2026-11-02 — Round 4 group 2: dashboard tabs
+
+- Implementation commit pushed: f386e11.
+- Replaced the Members and Loans icons with the two-person outline and credit-card symbols; set tab labels to medium weight, adjusted target tab/card heights and active-tab width, and tightened the Members-to-Loans icon spacing.
+- Post-commit full run of Dashboard and Clients specs: 49 failed, 0 passed; 0 parity assertions evaluated. Every case stopped in setup because the ignored Playwright storage state redirects to /login.
+- npm run typecheck passed. Reviewed the updated Dashboard in the visible Chrome window; the local page remains open. Wakandi was not changed.
