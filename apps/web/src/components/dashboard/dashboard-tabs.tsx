@@ -427,7 +427,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         data-testid="dashboard-tab-card"
         className="flex h-[69.33px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5"
       >
-          <TabsList aria-label="Dashboard views" className="h-auto gap-2 bg-transparent p-0">
+          <TabsList aria-label="Dashboard views" className="h-auto bg-transparent p-0" style={{ gap: "7.65px" }}>
           {tabs.map((item) => {
             const Icon = item.icon;
             const active = tab === item.value;
@@ -443,6 +443,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                 style={{
                   width: item.value === "members" ? 85 : item.value === "overview" ? 102.67 : 102,
                   height: 28.67,
+                  fontSize: "13.15px",
                   backgroundColor: active ? "var(--primary)" : "transparent",
                   color: active ? "var(--text-on-primary)" : "var(--text-strong)",
                 }}
