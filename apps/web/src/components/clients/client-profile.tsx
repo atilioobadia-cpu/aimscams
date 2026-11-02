@@ -187,6 +187,17 @@ export function ClientProfile({ id }: { id: string }) {
   const [statementEnd, setStatementEnd] = useState("");
 
   useEffect(() => {
+    const end = new Date();
+    const previousMonthDays = new Date(end.getFullYear(), end.getMonth(), 0).getDate();
+    const start = new Date(end.getFullYear(), end.getMonth() - 1, Math.min(end.getDate(), previousMonthDays));
+    const toDateInputValue = (date: Date) =>
+      [date.getFullYear(), String(date.getMonth() + 1).padStart(2, "0"), String(date.getDate()).padStart(2, "0")].join("-");
+
+    setStatementStart((current) => current || toDateInputValue(start));
+    setStatementEnd((current) => current || toDateInputValue(end));
+  }, []);
+
+  useEffect(() => {
     let active = true;
     void getClient(id)
       .then((response) => {
