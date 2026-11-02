@@ -41,3 +41,10 @@ The Clients list now follows Wakandi's filter interaction pattern for the values
 - Opened Type, Status, and Add filters. Type exposes `Is` with Individual/Group values; Status exposes `Is` with Active/Inactive/Pending values; Add filters exposes Member ID, Full Name, Reference Number, National ID, Phone number, Email address, KYC Status, DOJ, and Group Name.
 - Applied Group against the single existing local client and saw the no-match state. Cleared the filter and confirmed the existing row returned. This changed only the local filter state; no client data was edited or created.
 - The active Wakandi session is now on Clients. Its live accessibility tree confirms the column labels Member Id, Full Name, Reference Number, National Id, Type, Phone Number, Email Address, Status, KYC Status, DOJ, and Group Name. AIMSCAMS now uses those visible labels and the same Add Filters capitalization; the action column retains only an accessible Actions name. No screenshots were used for this re-review.
+
+## Live Wakandi filter recheck — 2026-11-02
+
+- Read the authenticated `/clients` route directly in Chrome. The Type condition is `Is`; its values are Company, Group, GroupMember, and Individual. The Status condition is `Is`; its values are Active, Blocked, Dormant, Exited, Inactive, Pending, Rejected, and Requested. Clear and Apply remain disabled until a value is selected.
+- No filter value was selected or applied. The production list and records were not changed.
+- AIMSCAMS' current database and API only support Individual/Group and Active/Inactive/Pending. The API silently ignores unsupported type or status query values, so adding the extra choices only in the web filter would return an unfiltered list. The remaining type/status parity requires an explicit model/API change and local list verification.
+- Chrome control stopped when opening a new local AIMSCAMS tab because the browser URL could not be verified safely. The live Wakandi observation is complete; comparison against the running local page and inspection of the Add Client/Add Group flows remain pending. Do not move to another page until this Client work is resolved.
