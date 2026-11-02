@@ -1,22 +1,30 @@
 # Client group details visual audit
 
-## Evidence
+## Reference evidence
 
-- Reference: `F:\Wakandi\clients-group-1789\FULL.png`.
-- Canonical AIMSCAMS route: `/clients/groups/[id]`.
-- Visible browser rendered the “Client group” page heading and group details area. The provided reference suffix is not treated as a local entity ID.
-- Route implementation reads a group and its members; data absence is separate from route availability.
+- F:\Wakandi\clients-group-1789\FULL.png and numbered captures 01 through 20.
+- Canonical AIMSCAMS route: /clients/groups/[id].
+- The reference page has a group summary card, a twelve-tab detail strip, membership/contact/meeting sections, a member list, and separate views for users, accounts, charges, residence, KYC, income, assets, bank, history, and statements.
+- The screenshots contain production data; only layout and behavior patterns are used as reference.
 
 ## Findings
 
-The route exists and is reachable. A reliable populated visual comparison requires a deterministic local synthetic group and linked member records. The reference record or tenant data must not be copied.
+The previous AIMSCAMS page showed only a small summary and member table. It did not reproduce the summary card, the tab navigation, or the detail sections. AIMSCAMS currently exposes group/member data plus membership, branch, and loan-officer lookups. It has no group-detail data endpoints for users, charges, residence, KYC, income, assets, bank, history, or statements.
 
-## Remaining work
+## Changes
 
-- Create/reuse isolated local test fixtures only after confirming the seed/API path and safe environment.
-- Compare the populated page structure and actions against the reference capture.
-- Check the empty, loading, error, and forbidden states.
+- Rebuilt the page summary with group name/reference, status, member count, meeting schedule, branch, and manager.
+- Added the reference tab order: Details, Members, Users, Accounts, Charges, Residence, KYC, Income, Assets, Bank, History, Statement.
+- Added membership, contact, and meeting detail sections populated from the AIMSCAMS group profile and available lookups.
+- Expanded the Members table to show the available AIMSCAMS member fields.
+- Kept text sizing and tab/control geometry on shared v1.2.0 tokens.
+- Tabs without a supporting AIMSCAMS data endpoint are marked unavailable; no production Wakandi data was copied or fabricated.
+
+## Verification
+
+- npm run typecheck --prefix apps/web passes.
+- Browser visual verification remains pending. The visible local browser is signed out at /login, and no local group record is available. No sample records were created.
 
 ## Status
 
-Route identity reconciled. Full visual and behavior gate pending local test data and measured screenshot comparison.
+Layout and available data are implemented. Full parity and interactive tab behavior remain incomplete until AIMSCAMS adds the corresponding group data endpoints and the local page can be verified with a signed-in synthetic group.
