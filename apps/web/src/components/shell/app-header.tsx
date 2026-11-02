@@ -96,7 +96,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               className="flex items-center rounded-md px-1.5 py-1.5 text-[12px] font-normal text-muted-foreground outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <TanzaniaFlag className="h-4 w-6" />
-              <span className="ml-[14.67px]">{language}</span>
+              <span className="ml-[14.67px]" style={{ fontSize: "11.5px" }}>{language}</span>
               <ChevronDown className="ml-[23.33px] size-4 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
@@ -117,7 +117,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
             <p className="translate-y-[1.33px] text-[11.76px] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className="-translate-y-[0.67px] mt-0.5 flex items-center gap-1 text-[9.33px] leading-none text-brand">
+            <p className="-translate-y-[0.67px] flex items-center gap-1 text-[9.33px] leading-none text-brand" style={{ marginTop: "4px" }}>
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
               {titleCase(branch.status)}
             </p>
