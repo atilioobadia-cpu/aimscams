@@ -2,16 +2,36 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Building2, UserRound } from "lucide-react";
+import {
+  ArrowLeftRight,
+  Building2,
+  ChevronDown,
+  CreditCard,
+  Edit2,
+  FileText,
+  Landmark,
+  LogOut,
+  PiggyBank,
+  Plus,
+  Repeat,
+  Send,
+  ShieldCheck,
+  UserRound,
+  UserX,
+  Wallet,
+  X,
+} from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiError } from "@/lib/api";
-import { getClient, type Client } from "@/lib/settings";
+import { getClient, listLoans, listSavingsAccounts, type Client, type Loan, type SavingsAccount } from "@/lib/settings";
 import { maskEmail, maskNationalId, maskPhone, titleCase } from "@/lib/privacy";
+import { cn } from "cn";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -21,12 +41,103 @@ function message(failure: unknown, fallback: string): string {
 
 function objectValue(value: unknown): Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value)
-    ? value as Record<string, unknown>
+    ? (value as Record<string, unknown>)
     : {};
 }
 
 function stringValue(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function numberValue(value: unknown): string {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value === "string" && value.trim()) return value.trim();
+  return "N/A";
+}
+
+function SectionCard({ title, icon: Icon, children }: { title: string; icon: typeof Building2; children: React.ReactNode }) {
+  return (
+    <section className="rounded-[6.72px] border border-card-border bg-surface p-[13.44px]">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Icon className="size-5 text-primary" aria-hidden="true" />
+          <h3 className="text-[15.12px] font-semibold leading-tight text-[#495057]">{title}</h3>
+        </div>
+        <button type="button" aria-label={`Edit ${title}`} className="grid h-[31px] w-[37px] place-items-center rounded text-primary hover:bg-primary-tint">
+          <Edit2 className="size-4" aria-hidden="true" />
+        </button>
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function Field({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-[150px_1fr] gap-2 py-1">
+      <dt className="text-[13.44px] font-normal text-muted-foreground">{label}</dt>
+      <dd className="text-[13.44px] font-semibold text-[#495057]">{value}</dd>
+    </div>
+  );
+}
+
+function EmptyTable({ columns, message: emptyMessage, icon: Icon = Building2 }: { columns: string[]; message: string; icon?: typeof Building2 }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[720px] text-left text-[13.44px]">
+        <thead className="bg-[#f8fafc]">
+          <tr>
+            {columns.map((column) => (
+              <th key={column} className="whitespace-nowrap px-[10.08px] py-[10.08px] text-[13.44px] font-bold text-[#495057]">
+                {column}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colSpan={columns.length} className="px-4 py-10 text-center">
+              <Icon className="mx-auto mb-2 size-8 text-muted-foreground" aria-hidden="true" />
+              <p className="fs-text text-muted-foreground">{emptyMessage}</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function TabTable({ columns, rows, emptyMessage }: { columns: string[]; rows: string[][]; emptyMessage: string }) {
+  return (
+    <div className="overflow-x-auto rounded-[6.72px] border border-card-border bg-surface">
+      <table className="w-full min-w-[720px] text-left text-[13.44px]">
+        <thead className="bg-[#f8fafc]">
+          <tr>
+            {columns.map((column) => (
+              <th key={column} className="whitespace-nowrap px-[10.08px] py-[10.08px] text-[13.44px] font-bold text-[#495057]">
+                {column}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length} className="px-4 py-10 text-center text-muted-foreground">{emptyMessage}</td>
+            </tr>
+          ) : (
+            rows.map((row, rowIndex) => (
+              <tr key={rowIndex} className="border-t border-card-border">
+                {row.map((cell, cellIndex) => (
+                  <td key={cellIndex} className="whitespace-nowrap px-[10.08px] py-[10.08px] text-[#495057]">{cell}</td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 export function ClientProfile({ id }: { id: string }) {
@@ -35,6 +146,11 @@ export function ClientProfile({ id }: { id: string }) {
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [savings, setSavings] = useState<SavingsAccount[]>([]);
+  const [showAllAccounts, setShowAllAccounts] = useState(false);
+  const [statementStart, setStatementStart] = useState("");
+  const [statementEnd, setStatementEnd] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -57,6 +173,32 @@ export function ClientProfile({ id }: { id: string }) {
       active = false;
     };
   }, [id]);
+
+  useEffect(() => {
+    if (!client) return;
+    let active = true;
+    void listLoans({})
+      .then((response) => {
+        if (!active) return;
+        setLoans(response.items.filter((loan) => loan.clientReference === client.referenceNo));
+      })
+      .catch(() => {
+        if (!active) return;
+        setLoans([]);
+      });
+    void listSavingsAccounts()
+      .then((response) => {
+        if (!active) return;
+        setSavings(response.items.filter((account) => account.clientReference === client.referenceNo));
+      })
+      .catch(() => {
+        if (!active) return;
+        setSavings([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [client]);
 
   if (forbidden) {
     return (
@@ -82,13 +224,17 @@ export function ClientProfile({ id }: { id: string }) {
   }
 
   const profile = objectValue(client?.profile);
+  const personal = objectValue(profile.personal);
+  const identity = objectValue(profile.identity);
+  const contact = objectValue(profile.contact);
   const residenceDetails = objectValue(profile.residenceDetails);
   const currentResidence = stringValue(residenceDetails.currentAddress) || stringValue(profile.residence);
   const lastResidence = stringValue(residenceDetails.lastAddress);
   const sameAsCurrentResidence = residenceDetails.sameAsCurrent === true;
+  const initials = client?.fullName.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "NA";
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 text-[13.44px] text-[#495057]">
       {loading ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={10} />
@@ -97,83 +243,275 @@ export function ClientProfile({ id }: { id: string }) {
         <ErrorPanel message={error} onRetry={() => window.location.reload()} />
       ) : client ? (
         <>
-          <section className="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
+          <section className="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
             <div className="flex min-w-0 flex-1 items-center gap-4">
-              <div className="flex size-[112px] shrink-0 items-center justify-center rounded-full border-2 border-primary bg-subtle text-xl font-medium text-body" aria-hidden="true">
-                {client.fullName.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || <UserRound className="size-7" />}
+              <div className="flex size-[40px] shrink-0 items-center justify-center rounded-full border-2 border-primary bg-subtle text-[13.44px] font-semibold text-body" aria-hidden="true">
+                {initials}
               </div>
               <div className="min-w-0">
-                <h1 className="truncate fs-heading font-semibold text-strong">{client.fullName}</h1>
-                <p className="mt-1 fs-text font-medium text-body">Member ID: {client.memberNo ?? client.referenceNo}</p>
+                <h1 className="truncate text-[13.44px] font-semibold text-[#495057]">{client.fullName}</h1>
+                <p className="mt-1 text-[13.44px] font-normal text-body">Member</p>
+                <a href="#" className="mt-1 inline-block text-[13.44px] font-medium text-primary underline">Signature</a>
               </div>
             </div>
-            <dl className="grid flex-1 grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
-              <div><dt className="fs-text font-medium text-muted-foreground">Status</dt><dd className="mt-1 fs-text text-strong">{titleCase(client.status)}</dd></div>
-              <div><dt className="fs-text font-medium text-muted-foreground">KYC Status</dt><dd className="mt-1 fs-text text-strong">{titleCase(client.kycStatus)}</dd></div>
-              <div><dt className="fs-text font-medium text-muted-foreground">Phone Number</dt><dd className="mt-1 fs-text text-strong">{maskPhone(client.phone)}</dd></div>
-              <div><dt className="fs-text font-medium text-muted-foreground">Type</dt><dd className="mt-1 fs-text text-strong">{titleCase(client.clientType)}</dd></div>
-            </dl>
+            <div className="flex flex-wrap items-center gap-4">
+              <div><span className="text-[13.44px] text-muted-foreground">Status</span><div className="mt-1"><span className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-[12px] font-semibold text-green-700">{titleCase(client.status)}</span></div></div>
+              <div><span className="text-[13.44px] text-muted-foreground">KYC Status</span><div className="mt-1"><span className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-[12px] font-semibold text-green-700">{titleCase(client.kycStatus)}</span></div></div>
+              <div><span className="text-[13.44px] text-muted-foreground">Phone Number</span><div className="mt-1 text-[13.44px] font-semibold text-[#495057]">{maskPhone(client.phone)}</div></div>
+              <div><span className="text-[13.44px] text-muted-foreground">Type</span><div className="mt-1 text-[13.44px] font-semibold text-[#495057]">{titleCase(client.clientType)}</div></div>
+            </div>
           </section>
 
-          <Tabs defaultValue="summary">
-            <TabsList className="max-w-full justify-start overflow-x-auto">
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-              <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="accounts">Accounts</TabsTrigger>
-              <TabsTrigger value="charges">Charges</TabsTrigger>
-              <TabsTrigger value="residence">Residence</TabsTrigger>
-              <TabsTrigger value="kyc">KYC</TabsTrigger>
-              <TabsTrigger value="income">Income</TabsTrigger>
-              <TabsTrigger value="assets">Assets</TabsTrigger>
-              <TabsTrigger value="bank">Bank</TabsTrigger>
-              <TabsTrigger value="verification-history">Verification History</TabsTrigger>
-              <TabsTrigger value="statement">Statement</TabsTrigger>
-              <TabsTrigger value="history">History</TabsTrigger>
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="ghost" className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
+              <Link href="/transactions"><ArrowLeftRight className="mr-1 size-4" aria-hidden="true" />Transaction</Link>
+            </Button>
+            <Button variant="ghost" disabled className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
+              <Send className="mr-1 size-4" aria-hidden="true" />Send USSD PIN OTP
+            </Button>
+            <Button variant="ghost" disabled className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
+              <UserX className="mr-1 size-4" aria-hidden="true" />Deactivate
+            </Button>
+            <Button variant="ghost" disabled className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
+              <LogOut className="mr-1 size-4" aria-hidden="true" />Exit
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-[13.44px] lg:grid-cols-[252px_1fr]">
+            <section className="rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <UserRound className="size-5 text-primary" aria-hidden="true" />
+                  <h3 className="text-[15.12px] font-semibold text-[#495057]">Profile</h3>
+                </div>
+                <button type="button" aria-label="Edit profile" className="grid h-[31px] w-[37px] place-items-center rounded text-primary hover:bg-primary-tint">
+                  <Edit2 className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-center">
+                <div className="flex size-[40px] items-center justify-center rounded-full border-2 border-primary bg-subtle text-[13.44px] font-semibold text-body" aria-hidden="true">
+                  {initials}
+                </div>
+                <h3 className="text-[13.44px] font-semibold text-[#495057]">{client.fullName}</h3>
+                <p className="text-[13.44px] text-muted-foreground">Member</p>
+                <a href="#" className="text-[13.44px] font-medium text-primary underline">Signature</a>
+              </div>
+            </section>
+
+            <section className="rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <UserRound className="size-5 text-primary" aria-hidden="true" />
+                  <h3 className="text-[15.12px] font-semibold text-[#495057]">Membership Details</h3>
+                </div>
+                <button type="button" aria-label="Edit membership details" className="grid h-[31px] w-[37px] place-items-center rounded text-primary hover:bg-primary-tint">
+                  <Edit2 className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+              <dl className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2">
+                <Field label="Member Id" value={client.memberNo ?? client.referenceNo} />
+                <Field label="Client Manager" value="N/A" />
+                <Field label="Type" value={titleCase(client.clientType)} />
+                <Field label="Reference Number" value={client.referenceNo} />
+                <Field label="Branch Name" value={client.branchName ?? "N/A"} />
+                <Field label="Policy" value="N/A" />
+                <Field label="Quick Loan Credit Limit" value="N/A" />
+                <Field label="Restricted from Quick Loan" value="N/A" />
+                <Field label="Date Of Joining" value={client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"} />
+                <Field label="Group Name" value={client.groupName ?? "N/A"} />
+              </dl>
+            </section>
+          </div>
+
+          <SectionCard title="Contact Information" icon={Building2}>
+            <dl>
+              <Field label="Email Address" value={maskEmail(client.email)} />
+              <Field label="Phone Number" value={maskPhone(client.phone)} />
+              <Field label="Physical Location" value={currentResidence || "N/A"} />
+              <Field label="MNO" value={stringValue(contact.mno) || "N/A"} />
+            </dl>
+          </SectionCard>
+
+          <SectionCard title="Personal Details" icon={UserRound}>
+            <dl>
+              <Field label="Full Name" value={client.fullName} />
+              <Field label="Gender" value={titleCase(stringValue(personal.gender) || "N/A")} />
+              <Field label="Age" value={numberValue(personal.age)} />
+              <Field label="Nationality" value={stringValue(personal.nationality) || "N/A"} />
+              <Field label="Date Of Birth" value={stringValue(personal.dateOfBirth) ? new Date(stringValue(personal.dateOfBirth)).toLocaleDateString() : "N/A"} />
+              <Field label="Marital Status" value={titleCase(stringValue(personal.maritalStatus) || "N/A")} />
+              <Field label="Father's Name" value={stringValue(personal.fatherName) || "N/A"} />
+              <Field label="Spouse's Name" value={stringValue(personal.spouseName) || "N/A"} />
+            </dl>
+          </SectionCard>
+
+          <SectionCard title="Identity Number" icon={ShieldCheck}>
+            <dl>
+              <Field label="National ID Number" value={maskNationalId(client.nationalId)} />
+              <Field label="Tax Number" value={stringValue(identity.tin) || "N/A"} />
+            </dl>
+          </SectionCard>
+
+          <SectionCard title="Socio-Economic Data" icon={Building2}>
+            <dl>
+              <Field label="Person with disability (PWD)" value={titleCase(stringValue(personal.disability) || "N/A")} />
+              <Field label="Number Of Dependents" value={numberValue(personal.dependents)} />
+            </dl>
+          </SectionCard>
+
+          <SectionCard title="Standing Instructions" icon={Repeat}>
+            <EmptyTable columns={["Rule", "Product/Charge Name", "Source Product", "Source Account", "Status"]} message="No data available" icon={Repeat} />
+          </SectionCard>
+
+          <SectionCard title="Next of Kin" icon={UserRound}>
+            <EmptyState icon={UserRound} title="No next of kin records found" description="No local next of kin records are available." />
+          </SectionCard>
+
+          <Tabs defaultValue="summary" className="space-y-4">
+            <TabsList className="h-[45px] w-full justify-start overflow-x-auto rounded-none border-0 bg-transparent p-0">
+              {["Summary", "Users", "Accounts", "Charges", "Residence", "KYC", "Income", "Assets", "Bank", "Verification History", "Statement", "History"].map((tab) => (
+                <TabsTrigger
+                  key={tab}
+                  value={tab.toLowerCase().replace(/\s+/g, "-")}
+                  className="h-[45px] rounded-none border-0 px-[13.44px] py-[16.8px] text-[13.33px] font-medium text-[#6c757d] data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-primary"
+                >
+                  {tab}
+                </TabsTrigger>
+              ))}
             </TabsList>
 
-            <TabsContent value="summary">
-              <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-                <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2 lg:grid-cols-3">
-                  <div><dt className="fs-text font-medium text-muted-foreground">Reference Number</dt><dd className="mt-1 fs-text text-strong">{client.referenceNo}</dd></div>
-                  <div><dt className="fs-text font-medium text-muted-foreground">Full Name</dt><dd className="mt-1 fs-text text-strong">{client.fullName}</dd></div>
-                  <div><dt className="fs-text font-medium text-muted-foreground">Email Address</dt><dd className="mt-1 fs-text text-strong">{maskEmail(client.email)}</dd></div>
-                  <div><dt className="fs-text font-medium text-muted-foreground">National ID</dt><dd className="mt-1 fs-text text-strong">{maskNationalId(client.nationalId)}</dd></div>
-                  <div><dt className="fs-text font-medium text-muted-foreground">Date Of Joining</dt><dd className="mt-1 fs-text text-strong">{client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"}</dd></div>
-                  <div><dt className="fs-text font-medium text-muted-foreground">Group Name</dt><dd className="mt-1 fs-text text-strong">{client.groupName ?? "N/A"}</dd></div>
-                  <div><dt className="fs-text font-medium text-muted-foreground">Branch</dt><dd className="mt-1 fs-text text-strong">{client.branchName ?? "N/A"}</dd></div>
-                </dl>
-              </section>
+            <TabsContent value="summary" className="space-y-4">
+              <p className="text-[13.44px] text-muted-foreground">Summary details are shown above.</p>
             </TabsContent>
 
-            {["kyc", "users", "accounts", "charges", "income", "assets", "bank", "verification-history", "statement", "history"].map((tab) => (
-              <TabsContent key={tab} value={tab}>
-                <EmptyState
-                  icon={Building2}
-                  title={`${tab.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ")} not available yet`}
-                  description="No local records are available for this section."
-                />
-              </TabsContent>
-            ))}
+            <TabsContent value="users">
+              <TabTable columns={["Full Name", "Email Address", "Country code", "Phone Number", "Role"]} rows={[]} emptyMessage="No local users available." />
+            </TabsContent>
+
+            <TabsContent value="accounts">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <label className="flex items-center gap-2 text-[13.44px] text-[#495057]">
+                    <input type="checkbox" checked={showAllAccounts} onChange={(event) => setShowAllAccounts(event.target.checked)} />
+                    Show All
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">New loan application</Button>
+                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add saving</Button>
+                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add share</Button>
+                  </div>
+                </div>
+
+                {[
+                  { title: "Loans", items: loans },
+                  { title: "Savings", items: savings },
+                  { title: "Shares", items: [] as SavingsAccount[] },
+                ].map((section) => (
+                  <details key={section.title} open className="rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
+                    <summary className="flex cursor-pointer list-none items-center justify-between">
+                      <span className="flex items-center gap-2 text-[15.12px] font-semibold text-[#495057]">
+                        {section.title}
+                        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-tint px-1 text-[11.76px] font-semibold text-primary">{section.items.length}</span>
+                      </span>
+                      <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
+                    </summary>
+                    <div className="mt-3 space-y-2">
+                      {section.items.length === 0 ? (
+                        <p className="text-[13.44px] text-muted-foreground">No local accounts available.</p>
+                      ) : (
+                        section.items.map((item) => (
+                          <div key={item.id} className="rounded-[6.72px] border border-[#e2e6f0] p-[10.08px]">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                              <div>
+                                <p className="text-[13.44px] font-semibold text-[#495057]">
+                                  {"loanNumber" in item ? item.loanNumber : item.accountNumber}{" "}
+                                  <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-[11.76px] font-semibold text-green-700">
+                                    {"status" in item ? titleCase(item.status) : titleCase(item.status)}
+                                  </span>
+                                </p>
+                                <p className="text-[13.44px] text-muted-foreground">
+                                  {"productName" in item ? item.productName : item.productName} • Amount: {"principalMinor" in item ? item.principalMinor : item.balanceMinor} • Tenure: {"tenureCount" in item ? `${item.tenureCount} ${item.tenurePeriod}` : "N/A"}
+                                </p>
+                                <p className="text-[13.44px] text-muted-foreground">
+                                  Interest: {"interestRateBp" in item ? `${(item.interestRateBp / 100).toFixed(2)}% per Month` : "N/A"}
+                                </p>
+                              </div>
+                              <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">View Balance</Button>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="charges">
+              <div className="mb-3 flex justify-end">
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Charge</Button>
+              </div>
+              <TabTable columns={["Charges Type", "Creation Date", "Due Date", "Outstanding Days", "Amount (TSh)", "Outstanding Amount (TSh)", "Status"]} rows={[]} emptyMessage="No data available" />
+            </TabsContent>
 
             <TabsContent value="residence">
-              {currentResidence || lastResidence ? (
-                <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
-                  <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2">
-                    <div>
-                      <dt className="fs-text font-medium text-muted-foreground">Current Residence Address</dt>
-                      <dd className="mt-1 fs-text text-strong">{currentResidence || "N/A"}</dd>
-                    </div>
-                    <div>
-                      <dt className="fs-text font-medium text-muted-foreground">Last Residence Address</dt>
-                      <dd className="mt-1 fs-text text-strong">
-                        {sameAsCurrentResidence ? "Same as current residence" : lastResidence || "N/A"}
-                      </dd>
-                    </div>
-                  </dl>
-                </section>
-              ) : (
-                <EmptyState icon={Building2} title="Residence not available yet" description="No local records are available for this section." />
-              )}
+              <div className="mb-3 flex justify-end">
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Residence</Button>
+              </div>
+              <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip"]} rows={currentResidence ? [[currentResidence, "", "", "", "", "", "", "", ""]] : []} emptyMessage="No data available" />
+            </TabsContent>
+
+            <TabsContent value="kyc">
+              <div className="mb-3 flex gap-2">
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add KYC</Button>
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
+              </div>
+              <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name"]} rows={[]} emptyMessage="No data available" />
+            </TabsContent>
+
+            <TabsContent value="income">
+              <div className="mb-3 flex justify-end">
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Income</Button>
+              </div>
+              <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number (Brela)", "Business License Number", "TIN Number", "Business Turn Over (weekly, yearly)"]} rows={[]} emptyMessage="No data available" />
+            </TabsContent>
+
+            <TabsContent value="assets">
+              <div className="mb-3 flex justify-end">
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Asset</Button>
+              </div>
+              <TabTable columns={["Type", "Value", "Location", "Comments / Notes"]} rows={[]} emptyMessage="No data available" />
+            </TabsContent>
+
+            <TabsContent value="bank">
+              <div className="mb-3 flex justify-end">
+                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Bank</Button>
+              </div>
+              <TabTable columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address"]} rows={[]} emptyMessage="No data available" />
+            </TabsContent>
+
+            <TabsContent value="verification-history">
+              <TabTable columns={["Date and Time", "Verification Type", "Verification Status", "Verification Identifier", "Performed By", "Reference ID / Source", "Error"]} rows={[]} emptyMessage="No data available" />
+            </TabsContent>
+
+            <TabsContent value="statement">
+              <div className="flex flex-wrap items-end gap-3">
+                <div>
+                  <label className="mb-1 block text-[13.44px] text-muted-foreground">Start Date</label>
+                  <Input type="date" value={statementStart} onChange={(event) => setStatementStart(event.target.value)} className="h-[var(--control-height)] w-[180px]" />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[13.44px] text-muted-foreground">End Date</label>
+                  <Input type="date" value={statementEnd} onChange={(event) => setStatementEnd(event.target.value)} className="h-[var(--control-height)] w-[180px]" />
+                </div>
+                <Button className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Submit</Button>
+                <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Print</Button>
+                <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Download</Button>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="history">
+              <TabTable columns={["Date and Time", "Action", "Description"]} rows={[]} emptyMessage="History is unavailable for this account." />
             </TabsContent>
           </Tabs>
         </>
