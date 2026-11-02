@@ -23,3 +23,11 @@ At first implementation, the in-app AIMSCAMS tab was on `/login` and the authent
 - Reopened AIMSCAMS `/dashboard` in the visible in-app browser and opened the account menu. It shows the authenticated email and phone links, `My Groups`, and `Logout`; the header shows institution name/registration, language, branch/status, avatar, and full user name.
 - Compared the supplied Wakandi Teller reference header (`F:\Wakandi\transaction-teller-transaction\FULL.png`): the reference account avatar uses a warm coral-to-peach fill. AIMSCAMS used a blue gradient, so the local avatar gradient now uses the matching warm range. Initials and account name remain dynamic because the authenticated identities differ.
 - No Wakandi control was submitted or changed. A fresh live profile-menu comparison remains limited by the Windows browser URL verification guard; the local menu was visually rechecked in the visible browser.
+
+## Live comparison — 2026-11-02
+
+- Compared the authenticated profile menu directly in the visible Wakandi Chrome session and local AIMSCAMS `/dashboard`; Wakandi was read-only.
+- Both menus are 280px wide and contain email, phone, a groups link, and logout. Wakandi uses `MyGroups` and lowercase `logout`; AIMSCAMS retains sentence-case labels (`My groups`, `Log out`) per the repository UI rule.
+- AIMSCAMS menu surface is aligned to the observed 6px corner radius and subtle `0 2px 12px rgba(0, 0, 0, 0.1)` shadow. The full name remains visible beside the avatar.
+- Verified visually in Chrome after the local hot refresh. No font, header, sidebar, or menu width tokens changed; v1.2.0 shell sizes remain 12.8px base type, 68px header, 204px sidebar, and 18px content inset.
+- Phase 1 (shared header/profile menu) is complete. Next: Phase 2 Dashboard content review, then Phase 3 Clients. Use at most one existing local sample record when a UI state needs data; add none during this header pass.

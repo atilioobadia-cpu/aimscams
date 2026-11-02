@@ -153,7 +153,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={10} className="w-[280px]">
+          <DropdownMenuContent align="end" sideOffset={10} className="w-[280px] rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.1)] ring-0">
             {user.email ? (
               <DropdownMenuItem asChild>
                 <a href={"mailto:" + user.email} aria-label={"Email " + user.email}>
@@ -174,7 +174,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             <DropdownMenuItem asChild>
               <Link href="/clients?type=GROUP">
                 <UsersRound aria-hidden="true" />
-                My Groups
+                My groups
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -193,7 +193,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               ) : (
                 <LogOut aria-hidden="true" />
               )}
-              {signingOut ? "Logging out" : "Logout"}
+              {signingOut ? "Logging out" : "Log out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -53,3 +53,7 @@ The user supplied 22 read-only reference screenshots from `F:\aimscams_snapshots
 At that point screenshots were excluded per an earlier user instruction, which the user has since superseded by supplying the screenshot set documented above. Read the active Wakandi `/dashboard` accessibility tree directly: it exposes Overview, Members, and Loans tabs, the institution/language/branch/user header, and the funds, savings/shares/loans, and PAR dashboard sections. The visible AIMSCAMS `/dashboard` exposes the same three views and corresponding sections. Members and Loans are data-limited locally as recorded above; no sample records were added.
 
 This historical session confirmed structural navigation and section labels. The current screenshot-based review is the source for visual measurements; production metric values were not copied.
+
+## Current audit policy update — 2026-11-02
+
+The earlier follow-up suggesting up to five sample records is superseded. UI review may use at most one existing local sample record when necessary; do not create additional records for visual parity. Wakandi remains read-only. The latest live Wakandi dashboard requests returned 401, so compare structure and styling only and do not treat production figures as a usable baseline.
