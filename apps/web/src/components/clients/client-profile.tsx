@@ -572,7 +572,7 @@ export function ClientProfile({ id }: { id: string }) {
                 <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add KYC</Button>
                 <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
               </div>
-              <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name"]} rows={[]} emptyMessage="No data available" />
+              <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={[]} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="income">
@@ -617,7 +617,15 @@ export function ClientProfile({ id }: { id: string }) {
             </TabsContent>
 
             <TabsContent value="history">
-              <TabTable columns={["Date and Time", "Action", "Description"]} rows={[]} emptyMessage="History is unavailable for this account." />
+              <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-[6.72px] border border-card-border bg-surface px-4 py-8 text-center">
+                <div className="grid size-10 place-items-center rounded-full bg-primary-tint text-primary">
+                  <FileText className="size-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <h2 className="text-[15.12px] font-semibold text-[#495057]">History</h2>
+                  <p className="mt-1 text-[13.44px] text-muted-foreground">No history records found.</p>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </>
