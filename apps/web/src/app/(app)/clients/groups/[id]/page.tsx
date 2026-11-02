@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Users } from "lucide-react";
+import { ArrowLeft, Search, Users } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
@@ -11,6 +11,8 @@ import { PageHeader } from "@/components/data/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { ApiError } from "@/lib/api";
 import {
   getClient,
@@ -21,6 +23,7 @@ import {
   listLoanApplications,
   listLoans,
   listSavingsAccounts,
+  updateClient,
   type Branch,
   type Client,
   type LoanOfficer,
@@ -81,6 +84,15 @@ export default function ClientGroupDetailPage() {
 
   const [group, setGroup] = useState<Client | null>(null);
   const [members, setMembers] = useState<Client[]>([]);
+  const [canEditGroup, setCanEditGroup] = useState(false);
+  const [addMemberOpen, setAddMemberOpen] = useState(false);
+  const [memberSearch, setMemberSearch] = useState("");
+  const [memberCandidates, setMemberCandidates] = useState<Client[]>([]);
+  const [memberCandidatesLoading, setMemberCandidatesLoading] = useState(false);
+  const [memberCandidatesError, setMemberCandidatesError] = useState<string | null>(null);
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
+  const [memberSaving, setMemberSaving] = useState(false);
+  const [memberSaveError, setMemberSaveError] = useState<string | null>(null);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [policies, setPolicies] = useState<MembershipPolicy[]>([]);
   const [managers, setManagers] = useState<LoanOfficer[]>([]);
@@ -122,6 +134,7 @@ export default function ClientGroupDetailPage() {
       .then(([clientResponse, memberResponse, branchResponse, policyResponse, managerResponse]) => {
         if (cancelled) return;
         setGroup(clientResponse.client.clientType === "GROUP" ? clientResponse.client : null);
+        setCanEditGroup(clientResponse.canEdit);
         setMembers(memberResponse.items);
         setBranches(branchResponse.items);
         setPolicies(policyResponse.items);
@@ -140,6 +153,38 @@ export default function ClientGroupDetailPage() {
       cancelled = true;
     };
   }, [id]);
+
+  useEffect(() => {
+    const query = memberSearch.trim();
+    if (!addMemberOpen || query.length < 2) {
+      setMemberCandidates([]);
+      setMemberCandidatesLoading(false);
+      setMemberCandidatesError(null);
+      return;
+    }
+
+    let cancelled = false;
+    setMemberCandidatesLoading(true);
+    setMemberCandidatesError(null);
+    const timeout = window.setTimeout(() => {
+      void listClients({ type: "INDIVIDUAL", q: query })
+        .then((response) => {
+          if (cancelled) return;
+          setMemberCandidates(response.items.filter((client) => !client.groupName));
+        })
+        .catch((failure: unknown) => {
+          if (!cancelled) setMemberCandidatesError(failureMessage(failure, "Could not search clients."));
+        })
+        .finally(() => {
+          if (!cancelled) setMemberCandidatesLoading(false);
+        });
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeout);
+    };
+  }, [addMemberOpen, memberSearch]);
 
   useEffect(() => {
     if (!group) return;
@@ -266,6 +311,26 @@ export default function ClientGroupDetailPage() {
     void loadStatement(1, statementStartDate, statementEndDate);
   }
 
+  async function addSelectedMember() {
+    if (!group || !selectedMemberId) return;
+    setMemberSaveError(null);
+    setMemberSaving(true);
+    try {
+      const response = await updateClient(selectedMemberId, { groupId: group.id });
+      setMembers((current) => [
+        ...current.filter((member) => member.id !== response.client.id),
+        response.client,
+      ]);
+      setAddMemberOpen(false);
+      setMemberSearch("");
+      setSelectedMemberId(null);
+    } catch (failure) {
+      setMemberSaveError(failureMessage(failure, "Could not add this client to the group."));
+    } finally {
+      setMemberSaving(false);
+    }
+  }
+
 
   if (forbidden) {
     return (
@@ -387,8 +452,9 @@ export default function ClientGroupDetailPage() {
 
         <TabsContent value="members">
           <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-            <div className="border-b border-card-border px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-card-border px-4 py-3">
               <p className="fs-text text-muted-foreground">{members.length} member{members.length === 1 ? "" : "s"}</p>
+              {canEditGroup ? <Button type="button" variant="outline" size="sm" onClick={() => { setMemberSearch(""); setSelectedMemberId(null); setMemberSaveError(null); setAddMemberOpen(true); }}>Add Group Member</Button> : null}
             </div>
             {members.length === 0 ? (
               <EmptyState icon={Users} title="No members yet" description="Members linked to this group will appear here." />
@@ -424,6 +490,51 @@ export default function ClientGroupDetailPage() {
             )}
           </section>
         </TabsContent>
+
+        <Dialog open={addMemberOpen} onOpenChange={setAddMemberOpen}>
+          <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Add Group Member</DialogTitle>
+              <DialogDescription>Search for an individual client who is not assigned to another group.</DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3">
+              <label className="relative block" htmlFor="group-member-search">
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                <Input id="group-member-search" value={memberSearch} onChange={(event) => setMemberSearch(event.target.value)} placeholder="Name, reference number, or phone" className="pl-9" />
+              </label>
+              <div aria-live="polite" className="max-h-64 overflow-y-auto rounded-[var(--card-radius)] border border-card-border">
+                {memberSearch.trim().length < 2 ? (
+                  <p className="px-4 py-8 text-center fs-text text-muted-foreground">Enter at least two characters to search.</p>
+                ) : memberCandidatesLoading ? (
+                  <p className="px-4 py-8 text-center fs-text text-muted-foreground">Searching clients...</p>
+                ) : memberCandidatesError ? (
+                  <p role="alert" className="px-4 py-8 text-center fs-text text-destructive">{memberCandidatesError}</p>
+                ) : memberCandidates.length === 0 ? (
+                  <p className="px-4 py-8 text-center fs-text text-muted-foreground">No unassigned individual clients found.</p>
+                ) : (
+                  <ul className="divide-y divide-card-border">
+                    {memberCandidates.map((candidate) => (
+                      <li key={candidate.id}>
+                        <button type="button" aria-pressed={selectedMemberId === candidate.id} onClick={() => setSelectedMemberId(candidate.id)} className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                          <span className="min-w-0">
+                            <span className="block truncate fs-text font-medium text-strong">{candidate.fullName}</span>
+                            <span className="mt-1 block truncate fs-text text-muted-foreground">{candidate.referenceNo}{candidate.phone ? ` · ${candidate.phone}` : ""}</span>
+                          </span>
+                          <span className="shrink-0 fs-text text-primary">{selectedMemberId === candidate.id ? "Selected" : "Select"}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              {memberSaveError ? <p role="alert" className="fs-text text-destructive">{memberSaveError}</p> : null}
+            </div>
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => setAddMemberOpen(false)} disabled={memberSaving}>Cancel</Button>
+              <Button type="button" onClick={() => void addSelectedMember()} disabled={!selectedMemberId || memberSaving}>{memberSaving ? "Adding..." : "Add Member"}</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         <TabsContent value="users"><ComingSoon label="Users" /></TabsContent>
         <TabsContent value="accounts">

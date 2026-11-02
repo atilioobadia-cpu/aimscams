@@ -767,7 +767,7 @@ export async function createClient(payload: {
     body: payload,
   });
 }
-export async function updateClient(id: string, payload: { status?: string }): Promise<ClientResponse> {
+export async function updateClient(id: string, payload: { status?: string; groupId?: string }): Promise<ClientResponse> {
   return apiRequest<ClientResponse>(`/settings/clients/${encodeURIComponent(id)}`, {
     method: "PATCH",
     body: payload,

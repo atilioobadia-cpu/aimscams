@@ -1637,6 +1637,24 @@ export class SettingsService {
       }
       data.status = status as 'ACTIVE' | 'INACTIVE' | 'PENDING';
     }
+    if (body.groupId !== undefined) {
+      const groupId = typeof body.groupId === 'string' ? body.groupId.trim() : '';
+      if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(groupId)) {
+        throw new BadRequestException('Group ID must be a valid identifier.');
+      }
+      if (before.clientType !== 'INDIVIDUAL') {
+        throw new BadRequestException('Only individual clients can be added to a group.');
+      }
+      if (before.groupId && before.groupId !== groupId) {
+        throw new BadRequestException('This client already belongs to another group.');
+      }
+      const group = await this.prisma.client.findFirst({
+        where: { id: groupId, organisationId, clientType: 'GROUP' },
+        select: { id: true },
+      });
+      if (!group) throw new NotFoundException('Group not found.');
+      data.group = { connect: { id: group.id } };
+    }
 
     const updated = await this.prisma.client.update({ where: { id }, data });
 
@@ -1645,7 +1663,7 @@ export class SettingsService {
       branchId: auth.user.branch?.id ?? null,
       actorUserId: auth.user.id,
       actorLabel: auth.user.email,
-      action: 'Client updated',
+      action: body.groupId !== undefined ? 'Client added to group' : 'Client updated',
       entityType: 'Client',
       entityId: id,
       before: this.serializeClient(before),
