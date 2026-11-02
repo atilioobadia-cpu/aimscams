@@ -198,7 +198,6 @@ function SidebarItem({
     control = (
       <Link
         href={item.href}
-        prefetch={false}
         aria-label={item.label}
         aria-current={active ? "page" : undefined}
         data-testid="nav-item"
@@ -230,19 +229,19 @@ function SidebarItem({
         className="shrink-0 overflow-visible"
       >
         <div className="flex h-[var(--sidebar-row-height)] items-center">
-          <Link
-            href={item.href}
-            prefetch={false}
+          <button
+            type="button"
             data-testid="nav-item"
             data-nav-label={item.label}
             data-active={isGroupActive ? "true" : undefined}
-            aria-current={active ? "page" : undefined}
+            aria-expanded={expanded}
+            onClick={onToggleExpand}
             className={groupLinkClass}
             style={{ fontSize: "var(--sidebar-label-size)" }}
           >
             <Icon className={cn("size-[var(--sidebar-icon-size)] shrink-0 text-heading", item.icon === "messages" && "message-circle-search")} strokeWidth={1.8} aria-hidden="true" />
             <span className="min-w-0 truncate">{item.label}</span>
-          </Link>
+          </button>
           <button
             type="button"
             aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
@@ -300,7 +299,6 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
     <li className="h-[var(--sidebar-subitem-height)] shrink-0">
       <Link
         href={child.href}
-        prefetch={false}
         aria-current={active ? "page" : undefined}
         data-testid="nav-subitem"
         data-nav-label={child.label}

@@ -60,7 +60,7 @@ export function StatCard({ kpi, className }: { kpi: KpiFixture; className?: stri
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className={cn("max-w-[160px] fs-text font-normal leading-[1.3]", accentText)}>{kpi.label}</h3>
+        <h3 className="max-w-[160px] fs-text font-normal leading-[1.3] text-primary">{kpi.label}</h3>
         <span
           className={cn(
             "grid size-[44px] shrink-0 place-items-center rounded-full border",

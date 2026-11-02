@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { InstitutionLogo } from "@/components/brand/institution-logo";
 import { TanzaniaFlag } from "@/components/brand/tanzania-flag";
@@ -40,8 +40,15 @@ type AppHeaderProps = {
 export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   const router = useRouter();
   const [language, setLanguage] = useState("English");
+  const [branchOpen, setBranchOpen] = useState(() => new Date().getHours() < 17);
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
+  useEffect(() => {
+    const syncBranchStatus = () => setBranchOpen(new Date().getHours() < 17);
+    syncBranchStatus();
+    const timer = window.setInterval(syncBranchStatus, 60000);
+    return () => window.clearInterval(timer);
+  }, []);
   const logoUrl = apiAssetUrl(institution.logoUrl);
 
   async function signOut() {
@@ -112,7 +119,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
         <div
           className="hidden items-center gap-3 lg:flex"
           data-testid="branch-context"
-          aria-label={`Branch: ${branch.name}, ${titleCase(branch.status)}`}
+          aria-label={`Branch: ${branch.name}, ${branchOpen ? "Open" : "Closed"}`}
         >
           <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
