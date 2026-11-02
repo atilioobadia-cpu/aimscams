@@ -719,6 +719,8 @@ export type Client = {
   clientType: ClientType;
   phone: string | null;
   email: string | null;
+  phoneVerified: boolean;
+  emailVerified: boolean;
   nationalId: string | null;
   status: ClientStatus;
   kycStatus: string;
@@ -742,12 +744,13 @@ export type ClientResponse = {
   canEdit: boolean;
 };
 
-export async function listClients(filter: { q?: string; status?: string; type?: string; groupId?: string } = {}): Promise<ClientListResponse> {
+export async function listClients(filter: { q?: string; status?: string; type?: string; groupId?: string; sort?: string } = {}): Promise<ClientListResponse> {
   const params = new URLSearchParams();
   if (filter.q?.trim()) params.set("q", filter.q.trim());
   if (filter.status) params.set("status", filter.status);
   if (filter.type) params.set("type", filter.type);
   if (filter.groupId) params.set("groupId", filter.groupId);
+  if (filter.sort) params.set("sort", filter.sort);
   const suffix = params.size > 0 ? `?${params.toString()}` : "";
   return apiRequest<ClientListResponse>(`/settings/clients${suffix}`);
 }

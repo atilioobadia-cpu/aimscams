@@ -18,11 +18,13 @@ import { Textarea } from "@/components/ui/textarea";
 const STORAGE_KEY = "aimscams:chat-fab-position";
 const FAB_SIZE = 60;
 // The drag handle (24) sits left of the button, separated by an 8px gap.
-const FAB_STACK_WIDTH = 24 + 8 + FAB_SIZE;
+const FAB_GAP = 1;
+const FAB_INSET = 45.33;
+const FAB_STACK_WIDTH = 24 + FAB_GAP + FAB_SIZE;
 
 function clampToViewport(x: number, y: number) {
-  const maxX = window.innerWidth - FAB_STACK_WIDTH - 8;
-  const maxY = window.innerHeight - FAB_SIZE - 8;
+  const maxX = window.innerWidth - FAB_STACK_WIDTH - FAB_INSET;
+  const maxY = window.innerHeight - FAB_SIZE - FAB_INSET;
   return {
     x: Math.max(8, Math.min(x, maxX)),
     y: Math.max(8, Math.min(y, maxY)),
@@ -92,12 +94,12 @@ export function ChatFab() {
 
   const style: React.CSSProperties = position
     ? { left: position.x, top: position.y, bottom: "auto", right: "auto" }
-    : { bottom: 16, right: 20 };
+    : { bottom: FAB_INSET, right: FAB_INSET };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div ref={rootRef} data-chat-fab-root className="fixed z-40 flex items-center gap-2" style={style}>
+        <div ref={rootRef} data-chat-fab-root className="fixed z-40 flex items-center gap-[1px]" style={style}>
           <button
             type="button"
             aria-label="Drag chat button"

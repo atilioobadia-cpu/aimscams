@@ -641,3 +641,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added a 38-check Playwright spec covering header, title layout, toolbar, table, sorting, sidebar and chat.
 - Read the live Wakandi Clients header/sidebar DevTools measurements and confirmed its table exposes 12 headers, including Status, KYC Status, DOJ and Group Name.
 - Baseline runner result: 0 parity assertions evaluated; 1 test failed in setup because the ignored AIMSCAMS storage state redirects to `/login`; remaining 37 checks were not evaluated. Details: `docs/audit/round3-failing.md`.
+
+## 2026-11-02 — Round 3 direct-measurement alignment
+
+- Updated Clients action, filter, table-row, and table-header geometry to the CSS pixel values read directly from Wakandi DevTools; screenshot scale estimates are retained only where no live measurement was captured.
+- Kept server sorting enabled only for the four implemented API fields, so every visible sort control performs a real server-side sort.
+- Added the verification-field defaults and sort query format to `docs/audit/NEEDS-HUMAN.md`.
+- Visible Chrome verification completed on the local Clients page after a hard refresh: page rendered, five existing rows remained visible, the row actions menu opened with View/Edit/Deactivate, and sort asc/desc/clear worked. Wakandi was not modified.
+- The standalone Playwright run remains blocked in `beforeEach`: its ignored storage state redirects to `/login`, so no parity assertions ran. No auth material was copied. `npm run typecheck` passes.

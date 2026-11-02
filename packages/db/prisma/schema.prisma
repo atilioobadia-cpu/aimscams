@@ -585,7 +585,9 @@ model Client {
   referenceNo       String
   fullName          String
   phone             String?
+  phoneVerified     Boolean      @default(false)
   email             String?
+  emailVerified     Boolean      @default(false)
   nationalId        String?
   status            ClientStatus @default(ACTIVE)
   kycStatus         KycStatus    @default(PENDING)

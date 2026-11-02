@@ -1516,7 +1516,7 @@ export class SettingsService {
     return { referenceNo: String(max + 1).padStart(6, '0') };
   }
 
-  async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string; groupId?: string }) {
+  async listClients(auth: AuthContext, filter: { q?: string; status?: string; clientType?: string; groupId?: string; sort?: string }) {
     const organisationId = auth.user.organisation.id;
     const where: Prisma.ClientWhereInput = { organisationId };
     if (filter.status) {
@@ -1537,10 +1537,15 @@ export class SettingsService {
         { nationalId: { contains: query, mode: 'insensitive' } },
       ];
     }
+    const [sortField, sortDirection] = (filter.sort ?? "").split(",");
+    const sortable = new Set(["memberNo", "fullName", "referenceNo", "clientType"]);
+    const direction = sortDirection === "DESC" ? "desc" : "asc";
     const items = await this.prisma.client.findMany({
       where,
       include: { group: { select: { fullName: true } } },
-      orderBy: [{ status: 'asc' }, { fullName: 'asc' }],
+      orderBy: sortable.has(sortField) && (sortDirection === "ASC" || sortDirection === "DESC")
+        ? [{ [sortField]: direction }, { id: "asc" }]
+        : [{ status: 'asc' }, { fullName: 'asc' }],
     });
     return {
       items: items.map((item) => this.serializeClient(item)),
@@ -1696,6 +1701,8 @@ export class SettingsService {
       clientType: item.clientType,
       phone: item.phone,
       email: item.email,
+      phoneVerified: item.phoneVerified,
+      emailVerified: item.emailVerified,
       nationalId: item.nationalId,
       status: item.status,
       kycStatus: item.kycStatus,

@@ -66,7 +66,7 @@ body {
   --space-32: 32px;
 
   /* Shared geometry */
-  --header-height: 68px;
+  --header-height: 64.67px;
   --sidebar-width: 200px;
   --sidebar-collapsed-width: 76px;
   --sidebar-footer-height: 73.9px;
@@ -79,7 +79,7 @@ body {
   --sidebar-label-size: 13.44px;
   --sidebar-scrollbar-width: 5.33px;
   --sidebar-toggle-size: 29px;
-  --content-padding: 18px;
+  --content-padding: 14.67px;
   --control-height: 33px;
   --control-compact-height: 28px;
   --icon-size: 20px;

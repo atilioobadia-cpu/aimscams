@@ -95,16 +95,16 @@ test.describe("Round 3 Wakandi Clients parity", () => {
       const names = ["Add Client", "Add Group", "Client Invitation Link"];
       const actions = page.locator('header[data-variant="card"] a,header[data-variant="card"] button').filter({ hasText: /Add Client|Add Group|Client Invitation Link/ });
       expect(await actions.allTextContents()).toEqual(names);
-      for (const action of await actions.all()) near((await box(action)).height, css(44));
+      for (const action of await actions.all()) near((await box(action)).height, 28.77);
     });
     test("title action widths and gaps match the reference", async ({ page }) => {
       const actions = page.locator('header[data-variant="card"] a,header[data-variant="card"] button').filter({ hasText: /Add Client|Add Group|Client Invitation Link/ });
       const values = await actions.evaluateAll((items) => items.map((e) => { const r=e.getBoundingClientRect(); return {x:r.x,width:r.width}; }));
-      values.forEach((v, i) => near(v.width, [css(137), css(139), css(218)][i]));
+      values.forEach((v, i) => near(v.width, [88.59, 89.74, 143.41][i]));
       expect(values[1].x - values[0].x - values[0].width).toBeCloseTo(css(11), 0);
     });
     test("invitation action uses the copy-sheet icon", async ({ page }) => {
-      const v = await page.getByRole("link", { name: "Client Invitation Link" }).locator("svg", {}).getAttribute("data-lucide");
+      const v = await page.getByRole("button", { name: "Client Invitation Link" }).locator("svg", {}).getAttribute("data-lucide");
       expect(v).toMatch(/copy|files|file/);
     });
   });
@@ -112,7 +112,7 @@ test.describe("Round 3 Wakandi Clients parity", () => {
   test.describe("3. Toolbar", () => {
     test("search control size and border match the reference", async ({ page }) => {
       const v = await page.locator("#client-search").evaluate((e) => { const r=e.getBoundingClientRect(),s=getComputedStyle(e); return {w:r.width,h:r.height,border:s.borderTopWidth,color:s.borderTopColor,radius:s.borderTopLeftRadius}; });
-      expect(v).toEqual({ w: css(286), h: css(50), border: "1px", color: "rgb(5, 117, 115)", radius: "6px" });
+      expect(v).toEqual({ w: 191, h: 34.13, border: "1px", color: "rgb(5, 117, 115)", radius: "6px" });
     });
     test("search text begins beyond the search icon", async ({ page }) => {
       const v = await page.evaluate(() => { const input=document.querySelector("#client-search")!;const icon=input.parentElement!.querySelector("svg")!;const r=icon.getBoundingClientRect(),s=getComputedStyle(input);return {iconRight:r.right,inputLeft:input.getBoundingClientRect().left,textLeft:input.getBoundingClientRect().left+parseFloat(s.paddingLeft)}; });
@@ -121,11 +121,14 @@ test.describe("Round 3 Wakandi Clients parity", () => {
     test("Type and Status filter controls match measured width and height", async ({ page }) => {
       const type = await box(page.getByRole("button", { name: /Filter by Type|Type/ }).first());
       const status = await box(page.getByRole("button", { name: /Filter by Status|Status/ }).first());
-      expect([type.width, type.height, status.width, status.height]).toEqual([css(99), css(50), css(112), css(50)]);
+      expect(type.width).toBeCloseTo(67.05, 0);
+      expect(status.width).toBeCloseTo(75.53, 0);
+      expect(type.height).toBeCloseTo(34.93, 0);
+      expect(status.height).toBeCloseTo(34.93, 0);
     });
     test("Add Filters control matches measured width and height", async ({ page }) => {
       const r = await box(page.getByRole("button", { name: /Add Filters/ }));
-      expect([r.width, r.height]).toEqual([css(197), css(50)]);
+      expect([r.width, r.height]).toEqual([131.33, 34.13]);
     });
     test("toolbar controls keep the reference gaps", async ({ page }) => {
       const v = await page.evaluate(() => { const a=[document.querySelector("#client-search")!,...document.querySelectorAll("button")].filter((e)=>e.closest("section")?.querySelector("#client-search")); return a.slice(0,4).map(e=>{const r=e.getBoundingClientRect();return {x:r.x,w:r.width};}); });
@@ -141,7 +144,7 @@ test.describe("Round 3 Wakandi Clients parity", () => {
     });
     test("header and body row heights match the measured reference", async ({ page }) => {
       const v = await page.evaluate(() => { const h=document.querySelector("thead tr")!,r=document.querySelector("tbody tr");return {header:h.getBoundingClientRect().height,row:r?.getBoundingClientRect().height??0}; });
-      expect(v).toEqual({ header: css(56), row: css(86) });
+      expect(v).toEqual({ header: 37.48, row: 57.77 });
     });
     test("Member Id is regular weight", async ({ page }) => {
       const v = await page.locator("tbody tr:first-child td:first-child").evaluate((e) => getComputedStyle(e).fontWeight);
@@ -156,7 +159,7 @@ test.describe("Round 3 Wakandi Clients parity", () => {
     });
     test("National Id values use a blue pill or plain N/A", async ({ page }) => {
       const v = await page.locator("tbody tr:first-child td:nth-child(4)").evaluate((e) => {const pill=e.querySelector("[data-national-id]");return {value:e.textContent?.trim(),pill:Boolean(pill),height:pill?.getBoundingClientRect().height??0,color:pill?getComputedStyle(pill).color:""};});
-      expect(v.value === "N/A" ? v.pill === false : v.pill && v.height === css(29) && v.color === "rgb(5, 117, 115)").toBe(true);
+      expect(v.value === "N/A" ? v.pill === false : v.pill && v.height === css(29) && v.color === "rgb(13, 110, 253)").toBe(true);
     });
     test("client type is rendered in title case", async ({ page }) => {
       const v = await page.locator("tbody tr:first-child td:nth-child(5)").innerText();
@@ -195,6 +198,8 @@ test.describe("Round 3 Wakandi Clients parity", () => {
       await header.click();
       await expect(page).toHaveURL(/sort=fullName%2CDESC|sort=fullName,DESC/);
       await expect(header).toHaveAttribute("data-sort", "DESC");
+      const descending = await page.locator("tbody tr td:nth-child(2)").allTextContents();
+      expect(descending.every((value, index) => index === 0 || descending[index - 1].localeCompare(value) >= 0)).toBe(true);
       await header.click();
       await expect(page).not.toHaveURL(/sort=fullName/);
     });

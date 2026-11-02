@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight, Eye, Link2, Plus, Search, UserCheck, UserPlus, UsersRound, UserX, X } from "lucide-react";
+import { Building2, ChevronDown, ChevronsLeft, ChevronsRight, ChevronLeft, ChevronRight, CopyPlus, Eye, Plus, Search, SlidersHorizontal, UserCheck, UserPlus, UsersRound, UserX, X } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
@@ -40,8 +40,16 @@ function matchesTextFilter(source: unknown, value: string, condition: FilterCond
   return field.includes(needle);
 }
 
+function clientInitials(fullName: string): string {
+  const words = fullName.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return "?";
+  return `${words[0][0]}${words.length > 1 ? words[words.length - 1][0] : words[0][1] ?? ""}`.toUpperCase();
+}
+
 export default function ClientsPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [data, setData] = useState<Awaited<ReturnType<typeof listClients>> | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,6 +57,10 @@ export default function ClientsPage() {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
   const [clientType, setClientType] = useState(() => searchParams.get("type") ?? "");
+  const [sort, setSort] = useState(() => searchParams.get("sort") ?? "");
+  const defaultColumns = ["memberNo", "fullName", "referenceNo", "nationalId", "clientType", "phone", "email", "status", "kycStatus", "joinedAt", "groupName", "actions"];
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(defaultColumns);
+  const [columnSettingsOpen, setColumnSettingsOpen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
   const { pushToast } = useToast();
@@ -68,13 +80,40 @@ export default function ClientsPage() {
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem("aimscams:clients:visible-columns");
+      if (stored) {
+        const parsed: unknown = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.every((value) => defaultColumns.includes(value))) setVisibleColumns(parsed);
+      }
+    } catch { /* ignore invalid local preference */ }
+  }, []);
+
+  function toggleColumn(key: string) {
+    setVisibleColumns((current) => {
+      const next = current.includes(key) ? current.filter((item) => item !== key) : [...current, key];
+      try { localStorage.setItem("aimscams:clients:visible-columns", JSON.stringify(next)); } catch { /* preference is optional */ }
+      return next;
+    });
+  }
+
+  function toggleSort(field: string) {
+    const [currentField, direction] = sort.split(",");
+    const next = currentField !== field ? `${field},ASC` : direction === "ASC" ? `${field},DESC` : "";
+    setSort(next);
+    const params = new URLSearchParams(searchParams.toString());
+    if (next) params.set("sort", next); else params.delete("sort");
+    router.push(`${pathname}${params.size ? `?${params.toString()}` : ""}`);
+  }
+
+  useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(
       () => {
         if (firstLoad.current) setLoading(true);
         setError(null);
 
-        void listClients({ q: query, status, type: clientType })
+        void listClients({ q: query, status, type: clientType, sort })
           .then((next) => {
             if (cancelled) return;
             setData(next);
@@ -102,9 +141,19 @@ export default function ClientsPage() {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [query, status, clientType, reloadKey]);
+  }, [query, status, clientType, sort, reloadKey]);
 
   const items = data?.items ?? [];
+  const [sortField, sortDirection] = sort.split(",");
+  const sortableFields = ["memberNo", "fullName", "referenceNo", "clientType"] as const;
+  const sortedItems = sortableFields.includes(sortField as (typeof sortableFields)[number])
+    ? [...items].sort((left, right) => {
+        const leftValue = sortField === "memberNo" ? left.memberNo ?? left.referenceNo : left[sortField as keyof Client];
+        const rightValue = sortField === "memberNo" ? right.memberNo ?? right.referenceNo : right[sortField as keyof Client];
+        const order = String(leftValue ?? "").localeCompare(String(rightValue ?? ""), undefined, { numeric: true, sensitivity: "base" });
+        return sortDirection === "DESC" ? -order : order;
+      })
+    : items;
   const extraFilterOptions = [
     { key: "memberNo", label: "Member ID" },
     { key: "fullName", label: "Full Name" },
@@ -116,7 +165,7 @@ export default function ClientsPage() {
     { key: "joinedAt", label: "DOJ" },
     { key: "groupName", label: "Group Name" },
   ] as const;
-  const visibleItems = items.filter((item) => {
+  const visibleItems = sortedItems.filter((item) => {
     if (clientType && item.clientType !== clientType) return false;
     if (status && item.status !== status) return false;
     return extraFilterFields.every((key) => {
@@ -149,29 +198,30 @@ export default function ClientsPage() {
   };
 
   return (
-    <div className="space-y-[18px]">
+    <div className="space-y-[15px]">
       <PageHeader
         variant="card"
-        icon={<UsersRound className="size-6 shrink-0 text-primary" aria-hidden="true" />}
+        icon={<UsersRound className="size-[19.33px] shrink-0 text-primary" aria-hidden="true" />}
         title="Clients"
+        className="min-h-[69.33px] px-[19.33px] py-0 sm:pl-[20.67px] sm:pr-[19.33px] [&>div:first-child]:gap-[10.67px]"
         actions={data?.canCreate ? (
           <>
-            <Button asChild variant="outline" className="!border-primary !gap-1 !px-2 font-semibold text-primary">
-              <Link href="/clients/create"><UserPlus aria-hidden="true" />Add client</Link>
+            <Button asChild variant="outline" className="!h-[28.77px] !w-[88.59px] !gap-[4px] !border-primary !px-2 text-[11.76px] font-semibold text-primary">
+              <Link href="/clients/create"><UserPlus aria-hidden="true" className="size-[14px]" />Add Client</Link>
             </Button>
-            <Button asChild variant="outline" className="!border-primary !gap-1 !px-2 font-semibold text-primary">
-              <Link href="/clients/create-group"><UsersRound aria-hidden="true" />Add group</Link>
+            <Button asChild variant="outline" className="!h-[28.77px] !w-[89.74px] !gap-[4px] !border-primary !px-2 text-[11.76px] font-semibold text-primary">
+              <Link href="/clients/create-group"><UsersRound aria-hidden="true" className="size-[14px]" />Add Group</Link>
             </Button>
-            <Button variant="outline" className="!border-primary !gap-1 !px-2 font-semibold text-primary" onClick={() => setClientActivationOpen(true)}>
-              <Link2 aria-hidden="true" />Client activation link
+            <Button variant="outline" className="!h-[28.77px] !w-[143.41px] !gap-[4px] !border-primary !px-2 text-[11.76px] font-semibold text-primary" onClick={() => setClientActivationOpen(true)}>
+              <CopyPlus aria-hidden="true" className="size-[14px]" />Client Invitation Link
             </Button>
           </>
         ) : null}
       />
 
-      <section className="rounded-t-[var(--card-radius)] border border-card-border bg-surface px-3 py-3">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <div className="relative w-full sm:w-[210px] sm:flex-none">
+      <section className="rounded-t-[var(--card-radius)] border border-card-border bg-surface px-[10.67px] py-[11.33px]">
+        <div className="flex flex-col gap-[7.33px] sm:flex-row sm:items-center">
+          <div className="relative w-full sm:w-[191px] sm:flex-none">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               id="client-search"
@@ -179,11 +229,11 @@ export default function ClientsPage() {
               value={query}
               onChange={(event) => { setQuery(event.target.value); setPage(1); }}
               placeholder="Search"
-              className="h-[var(--control-height)] !border-primary pl-9"
+              className="!h-[34.13px] !border-primary !pl-[33.6px]"
             />
           </div>
           <div className="relative shrink-0">
-            <Button type="button" variant="outline" aria-expanded={filterPopover === "type"} onClick={() => { setTypeDraft(clientType); setFilterPopover(filterPopover === "type" ? null : "type"); }} className="h-[var(--control-height)] w-[76px] justify-between gap-2 !border-primary !px-3 !text-primary">
+            <Button type="button" variant="outline" aria-expanded={filterPopover === "type"} onClick={() => { setTypeDraft(clientType); setFilterPopover(filterPopover === "type" ? null : "type"); }} className="h-[34.93px] w-[67.05px] justify-between gap-1 !border-primary !px-2 !text-primary">
               Type <ChevronDown aria-hidden="true" className="size-4" />
             </Button>
             {filterPopover === "type" ? (
@@ -205,7 +255,7 @@ export default function ClientsPage() {
             ) : null}
           </div>
           <div className="relative shrink-0">
-            <Button type="button" variant="outline" aria-expanded={filterPopover === "status"} onClick={() => { setStatusDraft(status); setFilterPopover(filterPopover === "status" ? null : "status"); }} className="h-[var(--control-height)] w-[84px] justify-between gap-2 !border-primary !px-3 !text-primary">
+            <Button type="button" variant="outline" aria-expanded={filterPopover === "status"} onClick={() => { setStatusDraft(status); setFilterPopover(filterPopover === "status" ? null : "status"); }} className="h-[34.93px] w-[75.53px] justify-between gap-1 !border-primary !px-2 !text-primary">
               Status <ChevronDown aria-hidden="true" className="size-4" />
             </Button>
             {filterPopover === "status" ? (
@@ -233,7 +283,7 @@ export default function ClientsPage() {
               variant="outline"
               aria-expanded={filterMenuOpen}
               aria-controls="client-extra-filters"
-              className="w-full justify-between !border-primary !text-primary"
+              className="h-[34.13px] w-[131.33px] justify-between !border-primary !text-primary"
               onClick={() => setFilterMenuOpen((open) => !open)}
             >
               <span className="inline-flex items-center gap-2"><Plus aria-hidden="true" />Add Filters</span>
@@ -321,42 +371,54 @@ export default function ClientsPage() {
             <table className="w-full min-w-[1495px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
                 <tr>
-                  <th className="px-4 py-3">Member Id</th>
-                  <th className="px-4 py-3">Full Name</th>
-                  <th className="px-4 py-3">Reference Number</th>
-                  <th className="px-4 py-3">National Id</th>
-                  <th className="px-4 py-3">Type</th>
-                  <th className="px-4 py-3">Phone Number</th>
-                  <th className="px-4 py-3">Email Address</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">KYC Status</th>
-                  <th className="px-4 py-3">DOJ</th>
-                  <th className="px-4 py-3">Group Name</th>
-                  <th scope="col" aria-label="Actions" className="px-4 py-3 text-right" />
+                  {([
+                    ["memberNo", "Member Id"], ["fullName", "Full Name"], ["referenceNo", "Reference Number"],
+                    ["nationalId", "National Id"], ["clientType", "Type"], ["phone", "Phone Number"],
+                    ["email", "Email Address"], ["status", "Status"], ["kycStatus", "KYC Status"],
+                    ["joinedAt", "DOJ"], ["groupName", "Group Name"],
+                  ] as const).map(([key, label]) => {
+                    const sortField = key;
+                    const sortable = ["memberNo", "fullName", "referenceNo", "clientType"].includes(sortField);
+                    const activeSort = sort.startsWith(`${sortField},`) ? sort.split(",")[1] : "";
+                    return <th key={key} hidden={!visibleColumns.includes(key)} className={`!h-[37.48px] whitespace-nowrap px-4 !py-0 ${activeSort ? "bg-[#e6f6f4] text-primary" : ""}`}>
+                      {sortable ? <button type="button" data-sortable="true" data-sort={activeSort || undefined} onClick={() => toggleSort(sortField)} className="inline-flex h-full w-full items-center justify-between gap-2 text-left font-semibold">
+                        {label}{activeSort ? <span aria-label={activeSort === "ASC" ? "Sort ascending" : "Sort descending"}>{activeSort === "ASC" ? "↑" : "↓"}</span> : null}
+                      </button> : <span className="font-semibold">{label}</span>}
+                    </th>;
+                  })}
+                  <th scope="col" aria-label="Actions" hidden={!visibleColumns.includes("actions")} className="sticky right-0 z-10 !h-[37.48px] min-w-[52px] bg-subtle px-3 !py-0 text-right">
+                    <div className="relative flex justify-end">
+                      <Button type="button" variant="ghost" size="icon-sm" aria-label="Column settings" aria-expanded={columnSettingsOpen} onClick={() => setColumnSettingsOpen((open) => !open)} className="size-7 text-muted-foreground hover:text-primary"><SlidersHorizontal className="size-4" aria-hidden="true" /></Button>
+                      {columnSettingsOpen ? <div role="group" aria-label="Columns" className="absolute right-0 top-full z-30 mt-1 w-52 rounded-md border border-card-border bg-surface p-2 shadow-lg">{([
+                        ["memberNo", "Member Id"], ["fullName", "Full Name"], ["referenceNo", "Reference Number"], ["nationalId", "National Id"], ["clientType", "Type"], ["phone", "Phone Number"], ["email", "Email Address"], ["status", "Status"], ["kycStatus", "KYC Status"], ["joinedAt", "DOJ"], ["groupName", "Group Name"], ["actions", "Actions"],
+                      ] as const).map(([key, label]) => <label key={key} className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 fs-text hover:bg-subtle"><input type="checkbox" checked={visibleColumns.includes(key)} onChange={() => toggleColumn(key)} />{label}</label>)}</div> : null}
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {pageItems.map((item: Client) => (
-                  <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="px-4 py-6 font-medium text-strong">{item.memberNo ?? item.referenceNo}</td>
-                    <td className="px-4 py-6 text-body">{item.fullName}</td>
-                    <td className="px-4 py-6 text-body">{item.referenceNo}</td>
-                    <td className="px-4 py-6 text-body">{maskNationalId(item.nationalId)}</td>
-                    <td className="px-4 py-6 text-body">{item.clientType}</td>
-                    <td className="px-4 py-6 text-body">{maskPhone(item.phone)}</td>
-                    <td className="px-4 py-6 text-body">{maskEmail(item.email)}</td>
-                    <td className="px-4 py-6">
+                  <tr key={item.id} className="!h-[57.77px] border-b border-card-border last:border-0">
+                    <td hidden={!visibleColumns.includes("memberNo")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 font-normal text-body">{item.memberNo ?? item.referenceNo}</td>
+                    <td hidden={!visibleColumns.includes("fullName")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body"><div className="flex items-center gap-[10.67px]"><span data-client-avatar className="grid size-[36px] shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#168888] to-[#377ab1] text-[13px] font-bold text-white">{clientInitials(item.fullName)}</span><span>{item.fullName}</span></div></td>
+                    <td hidden={!visibleColumns.includes("referenceNo")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{item.referenceNo}</td>
+                    <td hidden={!visibleColumns.includes("nationalId")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{item.nationalId ? <span data-national-id className="inline-flex h-[19.33px] items-center rounded-[4px] bg-[#e7f1ff] px-[6.67px] text-[11.76px] font-bold text-[#0d6efd]">{maskNationalId(item.nationalId)}</span> : "N/A"}</td>
+                    <td hidden={!visibleColumns.includes("clientType")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{titleCase(item.clientType)}</td>
+                    <td hidden={!visibleColumns.includes("phone")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{item.phone ? <span data-testid="verification-pill" data-verified={item.phoneVerified} className={`inline-flex h-[19.33px] items-center rounded-[4px] px-[6.67px] text-[11.76px] font-bold ${item.phoneVerified ? "bg-[#d1e7dd] text-[#146c43]" : "bg-[#f8d7da] text-[#b02a37]"}`}>{maskPhone(item.phone)}</span> : "N/A"}</td>
+                    <td hidden={!visibleColumns.includes("email")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{item.email ? <span data-testid="verification-pill" data-verified={item.emailVerified} className={`inline-flex h-[19.33px] items-center rounded-[4px] px-[6.67px] text-[11.76px] font-bold ${item.emailVerified ? "bg-[#d1e7dd] text-[#146c43]" : "bg-[#f8d7da] text-[#b02a37]"}`}>{maskEmail(item.email)}</span> : "N/A"}</td>
+                    <td hidden={!visibleColumns.includes("status")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0">
                       <Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge>
                     </td>
-                    <td className="px-4 py-6 text-body">{titleCase(item.kycStatus)}</td>
-                    <td className="px-4 py-6 text-body">{item.joinedAt ? new Date(item.joinedAt).toLocaleDateString() : "—"}</td>
-                    <td className="px-4 py-6 text-body">{item.groupName ?? "N/A"}</td>
-                    <td className="px-4 py-6">
+                    <td hidden={!visibleColumns.includes("kycStatus")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{titleCase(item.kycStatus)}</td>
+                    <td hidden={!visibleColumns.includes("joinedAt")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{item.joinedAt ? new Date(item.joinedAt).toLocaleDateString() : "—"}</td>
+                    <td hidden={!visibleColumns.includes("groupName")} className="whitespace-nowrap !h-[57.77px] px-4 !py-0 text-body">{item.groupName ?? "N/A"}</td>
+                    <td hidden={!visibleColumns.includes("actions")} className="sticky right-0 z-[1] whitespace-nowrap !h-[57.77px] bg-[#f8f9fa] px-3 !py-0">
                       <div className="flex justify-end">
                         <RowActionsMenu
                           label={`${item.referenceNo} ${item.fullName}`}
                           actions={[
-                            { label: "View client", icon: Eye, href: `/clients/${item.id}` },
+                            { label: "View", icon: Eye, href: `/clients/${item.id}` },
+                            ...(data?.canEdit ? [{ label: "Edit", icon: UserCheck, href: `/clients/${item.id}?edit=true` }] : []),
                             ...(data?.canEdit
                               ? [
                                   {
