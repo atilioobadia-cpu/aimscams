@@ -48,3 +48,29 @@ The Clients list now follows Wakandi's filter interaction pattern for the values
 - No filter value was selected or applied. The production list and records were not changed.
 - AIMSCAMS' current database and API only support Individual/Group and Active/Inactive/Pending. The API silently ignores unsupported type or status query values, so adding the extra choices only in the web filter would return an unfiltered list. The remaining type/status parity requires an explicit model/API change and local list verification.
 - Chrome control stopped when opening a new local AIMSCAMS tab because the browser URL could not be verified safely. The live Wakandi observation is complete; comparison against the running local page and inspection of the Add Client/Add Group flows remain pending. Do not move to another page until this Client work is resolved.
+
+## Full client reference pass — 2026-11-02
+
+- Reviewed all 42 images in `F:\client_snaps` for client list, client and group creation, client profile tabs, and client edit states. The captures include live customer details; this audit records no names, identifiers, contact details, or financial values from those records.
+- Rechecked the authenticated Wakandi Create Client form in Chrome. Its first section requires Policy, Date Of Joining, and Branch Name; Client Manager and Group Name are optional. Reference Number is generated in a six-digit format. AIMSCAMS already applies those required rules and uses a six-digit reference. The required date was present in the local component; the earlier missing asterisk in the local accessibility tree was not a product mismatch.
+
+### Verified form differences
+
+- **Create Client — Personal Details:** Wakandi separates First, Middle, and Last Name; derives a read-only Age from Date Of Birth; and exposes Gender, Marital Status, Nationality, Father's Name, Spouse's Name, Number Of Dependents, and a Person With Disability checkbox. AIMSCAMS currently has one Full Name field, editable Gender text, Date Of Birth, dependents, and disability text. The remaining fields and matching controls are missing.
+- **Create Client — Contact Details:** Wakandi uses required Country Code and Phone Number fields, plus MNO and Email Address. AIMSCAMS has Phone Number and Email Address, but has no Country Code or MNO. AIMSCAMS currently places Address, Region, District, and Ward in Contact Details; Wakandi places residence addresses in a separate Residence section.
+- **Create Client — Identity Number:** Wakandi shows National ID Number and Tax Number without a required marker in the captures. AIMSCAMS marks National ID required and blocks progression until its national-ID pattern passes. Requiredness and validation need an explicit parity decision before changing behavior.
+- **Create Client — Residence:** Wakandi captures Current Residence Address, a Last Residence Is Same As Of Current checkbox, and Last Residence Address. AIMSCAMS has one free-text Residence field.
+- **Create Client — Employment:** Wakandi captures Current Place Of Employment and Last Place Of Employment with a same-as-current checkbox. AIMSCAMS captures Occupation and Income instead.
+- **Create Group — Membership Details:** Required Policy and Branch Name plus optional Relationship Manager match the visible reference structure.
+- **Create Group — Group Details:** Wakandi requires Region/State, District/City, Group Name, Country Code, and Phone Number; it also exposes Ward, Office Number, and an optional Group Meeting Date section with a required Frequency and Add action. AIMSCAMS currently asks for Group Name and optional reference/date/meeting day/time/place only. The location, phone, office, and meeting-frequency controls are missing, and Group Name/Phone requiredness differs.
+- **Edit Client:** The reference has Membership Details, Personal Details, Contact Details, Identity Number, Next of Kins, and Upload Documents sections, with photo/signature upload controls. AIMSCAMS has no matching client edit form or document-upload workflow in the inspected route implementation.
+
+### Client profile parity
+
+- Wakandi's individual profile captures show Summary, Users, Accounts, Charges, Residence, KYC, Income, Assets, Bank, Verification History, Statement, and History tabs.
+- AIMSCAMS currently uses Details, KYC, Income, Residence, Assets, Bank, Members, Users, Charges, History, Statement, Transaction, and MNO. Details renders raw profile JSON; the other tabs render placeholder empty states. The visible tab names/order and the actual data/actions remain a major gap.
+- Production-only actions and data remain read-only. No client or group records were created, edited, or deleted. No sample data was added in AIMSCAMS during this pass.
+
+### Completion gate
+
+Clients is **not complete**. Close the personal/contact/identity/residence/employment fields, group details, edit/upload flow, profile tab labels/order/behavior, and local interaction states; then verify both desktop widths and the collapsed sidebar in the visible browser. Do not proceed to the next page until that verification passes. Chrome automation stopped after its Windows URL safety check, so the current pass is evidence and source review only; local visual re-verification and the completion commit for the page are still pending.
