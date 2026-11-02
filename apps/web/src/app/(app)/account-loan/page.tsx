@@ -54,7 +54,7 @@ export default function LoansPage() {
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
-  const [tab, setTab] = useState<LoanTab>("Closed");
+  const [tab, setTab] = useState<LoanTab>("Active");
   const [officerId, setOfficerId] = useState("");
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const [extraFilterFields, setExtraFilterFields] = useState<ExtraFilter[]>([]);
@@ -135,7 +135,7 @@ export default function LoansPage() {
 
   function clearFilters() {
     setQuery("");
-    setTab("Closed");
+    setTab("Active");
     setOfficerId("");
     setExtraFilterFields([]);
     setExtraFilters({ product: "", tenure: "" });
