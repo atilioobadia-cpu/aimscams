@@ -108,3 +108,19 @@ Clients remains the active page. Commit and proceed only after those client-spec
 - The details require manual member verification, set dormancy at 365 days, allow withdrawals, activate members automatically upon deposit, and require one to two next of kin. No auto-debit rules are configured for this scope.
 - Queried only local policy configuration inside a `BEGIN READ ONLY` transaction, after confirming the database host and `APP_ENV` are local. AIMSCAMS already has an active `INDIVIDUAL` policy with matching member type, next-of-kin limits, dormancy, withdrawal, deposit activation, verification-required, and manual verification settings. No duplicate policy was created.
 - The local policy model does not represent savings, shares, fees, self-onboarding, approval status/history, or version history; those remain Settings/Policies parity gaps. The Create Client flow already requests active membership policies, so this record is available to local client creation.
+
+## Visible list comparison and filter update — 2026-11-02
+
+- Inspected the authenticated Wakandi /clients page directly in visible Chrome. The page has a title/actions card, a single-row Search / Type / Status / Add Filters toolbar, and a horizontally scrollable table with Member Id, Full Name, Reference Number, National Id, Type, Phone Number, Email Address, Status, KYC Status, DOJ, Group Name, and row actions.
+- Opened Wakandi Type and Status popovers and the Status value menu. No value was selected or applied; no production row action was opened and no production record changed.
+- The reference Type and Status popovers are approximately 350 × 290 px at the observed browser scale. Before this change, AIMSCAMS rendered the same filters in a 256 px-wide, roughly 219 px-tall compact panel and left Clear and Apply enabled when no change was staged.
+- AIMSCAMS now uses a 350 px-wide, minimum 290 px-tall Type/Status panel, a footer divider, an outlined Clear action, and a muted disabled Apply action until the draft differs from the applied value. Clear is disabled when nothing is applied or staged. The current local type and status values remain limited to those supported by its API.
+- Reduced the list Search width to 210 px and Add Filters width to 144 px, and removed the Clients action buttons' one-off 14 px font override. The shared v1.2.0 text token (12.8 px), control height (33 px), header (68 px), and sidebar (204 px) remain unchanged. DevTools inspection confirmed the Search input uses the shared text and control-height tokens.
+- Reloaded and visually checked the updated AIMSCAMS list in Chrome. The panel footprint, list toolbar, title actions, and existing table remain visible. Browser control was interrupted during the final post-change click, so the final Clear/Apply color state was confirmed from the implementation rather than a second live open-panel screenshot.
+- The local list still contains the pre-existing member and QA rows. None were added, edited, or deleted during this comparison. No Wakandi customer values were copied into the local app or this audit.
+
+### Remaining Clients scope
+
+- The list still lacks supported API/model behavior for Wakandi's additional client type and status values; adding display-only choices would silently yield an unfiltered result.
+- The invitation-link action has no local activation-link service.
+- Client create/group, edit/upload, and profile tab behavior remain separate parity items recorded above. Clients remains the active area until those flows and table details are resolved.

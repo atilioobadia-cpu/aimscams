@@ -156,13 +156,13 @@ export default function ClientsPage() {
         title="Clients"
         actions={data?.canCreate ? (
           <>
-            <Button asChild variant="outline" className="!border-primary !gap-1 !px-[10px] !text-[14px] font-semibold text-primary">
+            <Button asChild variant="outline" className="!border-primary !gap-1 !px-2 font-semibold text-primary">
               <Link href="/clients/create"><UserPlus aria-hidden="true" />Add client</Link>
             </Button>
-            <Button asChild variant="outline" className="!border-primary !gap-1 !px-[10px] !text-[14px] font-semibold text-primary">
+            <Button asChild variant="outline" className="!border-primary !gap-1 !px-2 font-semibold text-primary">
               <Link href="/clients/create-group"><UsersRound aria-hidden="true" />Add group</Link>
             </Button>
-            <Button variant="outline" className="!border-primary !gap-1 !px-[10px] !text-[14px] font-semibold text-primary" onClick={() => setClientActivationOpen(true)}>
+            <Button variant="outline" className="!border-primary !gap-1 !px-2 font-semibold text-primary" onClick={() => setClientActivationOpen(true)}>
               <Link2 aria-hidden="true" />Client activation link
             </Button>
           </>
@@ -171,7 +171,7 @@ export default function ClientsPage() {
 
       <section className="rounded-t-[var(--card-radius)] border border-card-border bg-surface px-3 py-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <div className="relative w-full sm:w-[230px] sm:flex-none">
+          <div className="relative w-full sm:w-[210px] sm:flex-none">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               id="client-search"
@@ -183,11 +183,11 @@ export default function ClientsPage() {
             />
           </div>
           <div className="relative shrink-0">
-            <Button type="button" variant="outline" aria-expanded={filterPopover === "type"} onClick={() => { setTypeDraft(clientType); setFilterPopover(filterPopover === "type" ? null : "type"); }} className="h-[var(--control-height)] justify-between gap-2 !border-primary !px-3 !text-primary">
+            <Button type="button" variant="outline" aria-expanded={filterPopover === "type"} onClick={() => { setTypeDraft(clientType); setFilterPopover(filterPopover === "type" ? null : "type"); }} className="h-[var(--control-height)] w-[76px] justify-between gap-2 !border-primary !px-3 !text-primary">
               Type <ChevronDown aria-hidden="true" className="size-4" />
             </Button>
             {filterPopover === "type" ? (
-              <div role="dialog" aria-label="Filter by Type" className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-card-border bg-surface p-3 shadow-lg">
+              <div role="dialog" aria-label="Filter by Type" className="absolute left-0 top-full z-30 mt-1 flex min-h-[290px] w-[350px] flex-col rounded-md border border-card-border bg-surface p-6 shadow-lg">
                 <p className="mb-2 fs-text font-semibold text-strong">Type</p>
                 <label className="mb-1 block fs-text text-muted-foreground" htmlFor="client-type-condition">Condition</label>
                 <select id="client-type-condition" value="Is" disabled className="mb-3 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text"><option>Is</option></select>
@@ -197,19 +197,19 @@ export default function ClientsPage() {
                   <option value="INDIVIDUAL">Individual</option>
                   <option value="GROUP">Group</option>
                 </select>
-                <div className="mt-3 flex justify-end gap-2">
-                  <Button type="button" variant="ghost" size="sm" onClick={() => { setTypeDraft(""); setClientType(""); setPage(1); setFilterPopover(null); }}>Clear</Button>
-                  <Button type="button" size="sm" onClick={() => { setClientType(typeDraft); setPage(1); setFilterPopover(null); }}>Apply</Button>
+                <div className="mt-auto flex justify-end gap-2 border-t border-card-border pt-3">
+                  <Button type="button" variant="outline" className="!border-primary !text-primary" disabled={!clientType && !typeDraft} onClick={() => { setTypeDraft(""); setClientType(""); setPage(1); setFilterPopover(null); }}>Clear</Button>
+                  <Button type="button" className="disabled:!border-card-border disabled:!bg-subtle disabled:!text-muted-foreground disabled:!opacity-100" disabled={typeDraft === clientType} onClick={() => { setClientType(typeDraft); setPage(1); setFilterPopover(null); }}>Apply</Button>
                 </div>
               </div>
             ) : null}
           </div>
           <div className="relative shrink-0">
-            <Button type="button" variant="outline" aria-expanded={filterPopover === "status"} onClick={() => { setStatusDraft(status); setFilterPopover(filterPopover === "status" ? null : "status"); }} className="h-[var(--control-height)] justify-between gap-2 !border-primary !px-3 !text-primary">
+            <Button type="button" variant="outline" aria-expanded={filterPopover === "status"} onClick={() => { setStatusDraft(status); setFilterPopover(filterPopover === "status" ? null : "status"); }} className="h-[var(--control-height)] w-[84px] justify-between gap-2 !border-primary !px-3 !text-primary">
               Status <ChevronDown aria-hidden="true" className="size-4" />
             </Button>
             {filterPopover === "status" ? (
-              <div role="dialog" aria-label="Filter by Status" className="absolute left-0 top-full z-30 mt-1 w-64 rounded-md border border-card-border bg-surface p-3 shadow-lg">
+              <div role="dialog" aria-label="Filter by Status" className="absolute left-0 top-full z-30 mt-1 flex min-h-[290px] w-[350px] flex-col rounded-md border border-card-border bg-surface p-6 shadow-lg">
                 <p className="mb-2 fs-text font-semibold text-strong">Status</p>
                 <label className="mb-1 block fs-text text-muted-foreground" htmlFor="client-status-condition">Condition</label>
                 <select id="client-status-condition" value="Is" disabled className="mb-3 h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text"><option>Is</option></select>
@@ -220,14 +220,14 @@ export default function ClientsPage() {
                   <option value="INACTIVE">Inactive</option>
                   <option value="PENDING">Pending</option>
                 </select>
-                <div className="mt-3 flex justify-end gap-2">
-                  <Button type="button" variant="ghost" size="sm" onClick={() => { setStatusDraft(""); setStatus(""); setPage(1); setFilterPopover(null); }}>Clear</Button>
-                  <Button type="button" size="sm" onClick={() => { setStatus(statusDraft); setPage(1); setFilterPopover(null); }}>Apply</Button>
+                <div className="mt-auto flex justify-end gap-2 border-t border-card-border pt-3">
+                  <Button type="button" variant="outline" className="!border-primary !text-primary" disabled={!status && !statusDraft} onClick={() => { setStatusDraft(""); setStatus(""); setPage(1); setFilterPopover(null); }}>Clear</Button>
+                  <Button type="button" className="disabled:!border-card-border disabled:!bg-subtle disabled:!text-muted-foreground disabled:!opacity-100" disabled={statusDraft === status} onClick={() => { setStatus(statusDraft); setPage(1); setFilterPopover(null); }}>Apply</Button>
                 </div>
               </div>
             ) : null}
           </div>
-          <div className="relative w-full sm:w-[158px]">
+          <div className="relative w-full sm:w-[144px]">
             <Button
               type="button"
               variant="outline"
