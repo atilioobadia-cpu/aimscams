@@ -193,48 +193,49 @@ export default function LoansPage() {
         tabIndex={0}
         className="mx-5 !mt-[15px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface"
       >
-        <div className="border-b border-card-border p-3">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative w-full sm:w-[240px] sm:flex-none">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input
+        <div className="min-h-[56px] rounded-[6px] border border-[#dee2e6] bg-surface px-[10.08px] py-[10.08px]">
+          <div className="flex flex-wrap items-center gap-[6.72px]">
+            <div className="relative w-[191px] shrink-0">
+              <Search className="pointer-events-none absolute left-[10px] top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+              <input
                 id="loan-search"
                 aria-label="Search loans"
                 value={query}
                 onChange={(event) => { setQuery(event.target.value); setPage(1); }}
                 placeholder="Search"
-                className="h-[var(--control-height)] !border-primary pl-9"
+                className="h-[34px] w-[191px] rounded-[6px] border border-primary bg-background pl-[33.6px] pr-[10.08px] py-[8.4px] text-[13.44px] text-[#495057] outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               />
             </div>
-            <div className="relative w-full sm:w-[135px]">
+            <div className="relative w-[106px] shrink-0">
               <label className="sr-only" htmlFor="loan-officer">Loan officer</label>
               <select
                 id="loan-officer"
                 aria-label="Loan officer"
                 value={officerId}
                 onChange={(event) => { setOfficerId(event.target.value); setPage(1); }}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] !border-primary bg-background px-3 fs-text"
+                className="h-[35px] w-[106px] rounded-[6px] border border-transparent bg-transparent px-2 text-[11.76px] font-medium text-primary outline-none"
               >
                 <option value="">Loan officer</option>
                 {officers.map((officer) => <option key={officer.id} value={officer.id}>{officer.fullName}</option>)}
               </select>
+              <ChevronDown className="pointer-events-none absolute right-2 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
             </div>
-            <div className="relative w-full sm:w-[166px]">
+            <div className="relative w-[131.33px] shrink-0">
               <Button
                 type="button"
                 variant="outline"
                 aria-expanded={filterMenuOpen}
                 aria-controls="loan-extra-filters"
-                className="w-full justify-between !border-primary !text-primary"
+                className="h-[35px] w-[131.33px] justify-between gap-1 rounded-[6px] !border-primary !text-primary"
                 onClick={() => setFilterMenuOpen((open) => !open)}
               >
-                <span className="inline-flex items-center gap-2"><Plus aria-hidden="true" />Add filters</span>
+                <span className="inline-flex items-center gap-2"><Plus aria-hidden="true" />Add Filters</span>
                 <ChevronDown aria-hidden="true" />
               </Button>
               {filterMenuOpen ? (
                 <div id="loan-extra-filters" role="group" aria-label="Additional loan filters" className="absolute left-0 top-full z-20 mt-1 w-56 rounded-md border border-card-border bg-surface p-2 shadow-lg">
                   {extraFilterOptions.map(({ key, label }) => (
-                    <label key={key} className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 fs-text hover:bg-subtle">
+                    <label key={key} className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-[13.44px] hover:bg-subtle">
                       <input
                         type="checkbox"
                         checked={extraFilterFields.includes(key)}
@@ -250,30 +251,14 @@ export default function LoansPage() {
                 </div>
               ) : null}
             </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-lg"
-              aria-label="Save current filters"
-              title="Save current filters"
-              className="!size-[36px] !border-primary !text-primary"
-              onClick={() => setSaveDialogOpen(true)}
-            >
-              <Save aria-hidden="true" />
+            <Button type="button" variant="outline" size="icon" aria-label="Save current filters" title="Save current filters" className="h-[27px] w-[30px] rounded-[6px] !border-primary !text-primary">
+              <Save aria-hidden="true" className="size-4" />
             </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-lg"
-              aria-label="Clear filters"
-              title="Clear filters"
-              className="!size-[36px] !border-primary !text-primary"
-              onClick={clearFilters}
-            >
-              <FilterX aria-hidden="true" />
+            <Button type="button" variant="outline" size="icon" aria-label="Clear filters" title="Clear filters" className="h-[27px] w-[30px] rounded-[6px] !border-primary !text-primary" onClick={clearFilters}>
+              <FilterX aria-hidden="true" className="size-4" />
             </Button>
           </div>
-          {extraFilterFields.length > 0 ? (
+        {extraFilterFields.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
               {extraFilterOptions.filter(({ key }) => extraFilterFields.includes(key)).map(({ key, label }) => (
                 <Input
