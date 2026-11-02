@@ -31,6 +31,9 @@ import {
 } from "@/lib/settings";
 import { titleCase } from "@/lib/privacy";
 import { formatTzs } from "@/lib/format";
+import { listTransactions, type Transaction } from "@/lib/transactions";
+
+const STATEMENT_PAGE_SIZE = 100;
 
 type RecordValue = Record<string, unknown>;
 
@@ -88,6 +91,17 @@ export default function ClientGroupDetailPage() {
   const [accountsIssue, setAccountsIssue] = useState(false);
   const [canCreateLoanApplication, setCanCreateLoanApplication] = useState(false);
   const [canCreateSavingsAccount, setCanCreateSavingsAccount] = useState(false);
+  const [statementStartDate, setStatementStartDate] = useState("");
+  const [statementEndDate, setStatementEndDate] = useState("");
+  const [statementAppliedStartDate, setStatementAppliedStartDate] = useState("");
+  const [statementAppliedEndDate, setStatementAppliedEndDate] = useState("");
+  const [statementRows, setStatementRows] = useState<Transaction[]>([]);
+  const [statementTotal, setStatementTotal] = useState(0);
+  const [statementPage, setStatementPage] = useState(1);
+  const [statementLoaded, setStatementLoaded] = useState(false);
+  const [statementLoading, setStatementLoading] = useState(false);
+  const [statementDownloading, setStatementDownloading] = useState(false);
+  const [statementError, setStatementError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
@@ -168,6 +182,90 @@ export default function ClientGroupDetailPage() {
   const managerName = manager?.fullName ?? membership.relationshipManagerName;
   const groupName = groupDetails.name ?? group?.fullName;
   const meetingSchedule = [meeting.day, meeting.time].filter((value) => typeof value === "string" && value.trim()).join(" / ");
+
+  const statementPageCount = Math.max(1, Math.ceil(statementTotal / STATEMENT_PAGE_SIZE));
+
+  async function loadStatement(
+    pageNumber = 1,
+    startDate = statementAppliedStartDate,
+    endDate = statementAppliedEndDate,
+  ) {
+    if (!group) return;
+    setStatementError(null);
+    setStatementLoading(true);
+    try {
+      const response = await listTransactions({
+        clientId: group.id,
+        from: startDate || undefined,
+        to: endDate || undefined,
+        page: pageNumber,
+        pageSize: STATEMENT_PAGE_SIZE,
+      });
+      setStatementRows(response.items);
+      setStatementTotal(response.total);
+      setStatementPage(response.page);
+      setStatementAppliedStartDate(startDate);
+      setStatementAppliedEndDate(endDate);
+      setStatementLoaded(true);
+    } catch (failure) {
+      setStatementError(failureMessage(failure, "Could not load this statement."));
+    } finally {
+      setStatementLoading(false);
+    }
+  }
+
+  async function downloadStatement() {
+    if (!group || statementTotal === 0) return;
+    setStatementError(null);
+    setStatementDownloading(true);
+    try {
+      const pageCount = Math.ceil(statementTotal / STATEMENT_PAGE_SIZE);
+      const transactions: Transaction[] = [];
+      for (let page = 1; page <= pageCount; page += 1) {
+        const result = await listTransactions({
+          clientId: group.id,
+          from: statementAppliedStartDate || undefined,
+          to: statementAppliedEndDate || undefined,
+          page,
+          pageSize: STATEMENT_PAGE_SIZE,
+        });
+        transactions.push(...result.items);
+      }
+      const fields = [
+        ["Transaction No", "Value Date", "Type", "Narration", "Debit", "Credit", "Status"],
+        ...transactions.map((transaction) => [
+          transaction.transactionNo,
+          transaction.valueDate,
+          transaction.type,
+          transaction.narration,
+          transaction.drCr === "DR" ? formatTzs(transaction.amountMinor) : "",
+          transaction.drCr === "CR" ? formatTzs(transaction.amountMinor) : "",
+          transaction.status,
+        ]),
+      ];
+      const csv = fields.map((row) => row.map((value) => '"' + String(value).replaceAll('"', '""') + '"').join(",")).join("\r\n");
+      const objectUrl = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = "group-" + group.referenceNo + "-statement.csv";
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+    } catch (failure) {
+      setStatementError(failureMessage(failure, "Could not download this statement."));
+    } finally {
+      setStatementDownloading(false);
+    }
+  }
+
+  function submitStatement(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (statementStartDate && statementEndDate && statementStartDate > statementEndDate) {
+      setStatementError("Start Date must be on or before End Date.");
+      return;
+    }
+    void loadStatement(1, statementStartDate, statementEndDate);
+  }
+
 
   if (forbidden) {
     return (
@@ -416,7 +514,81 @@ export default function ClientGroupDetailPage() {
         <TabsContent value="assets"><ComingSoon label="Assets" /></TabsContent>
         <TabsContent value="bank"><ComingSoon label="Bank" /></TabsContent>
         <TabsContent value="history"><ComingSoon label="History" /></TabsContent>
-        <TabsContent value="statement"><ComingSoon label="Statement" /></TabsContent>
+        <TabsContent value="statement">
+          <div className="space-y-4">
+            <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-4">
+              <div className="flex flex-wrap items-end justify-between gap-4">
+                <form className="flex flex-wrap items-end gap-3" onSubmit={submitStatement}>
+                  <div>
+                    <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-statement-start">Start Date</label>
+                    <input id="group-statement-start" type="date" value={statementStartDate} onChange={(event) => setStatementStartDate(event.target.value)} className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text text-body" />
+                  </div>
+                  <div>
+                    <label className="mb-1 block fs-text font-medium text-body" htmlFor="group-statement-end">End Date</label>
+                    <input id="group-statement-end" type="date" value={statementEndDate} onChange={(event) => setStatementEndDate(event.target.value)} className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text text-body" />
+                  </div>
+                  <Button type="submit" variant="outline" disabled={statementLoading}>{statementLoading ? "Loading..." : "Submit"}</Button>
+                </form>
+                <div className="flex gap-2">
+                  <Button type="button" variant="outline" onClick={() => window.print()} disabled={!statementLoaded || statementRows.length === 0}>Print</Button>
+                  <Button type="button" variant="outline" onClick={() => void downloadStatement()} disabled={!statementLoaded || statementTotal === 0 || statementDownloading}>
+                    {statementDownloading ? "Preparing..." : "Download"}
+                  </Button>
+                </div>
+              </div>
+            </section>
+
+            {statementError ? <ErrorPanel message={statementError} /> : null}
+            <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+              {statementLoading ? <PanelSkeleton rows={6} /> : (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[980px] text-left fs-text">
+                      <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
+                        <tr>
+                          <th className="whitespace-nowrap px-4 py-3">Transaction No</th>
+                          <th className="whitespace-nowrap px-4 py-3">Date</th>
+                          <th className="whitespace-nowrap px-4 py-3">Type</th>
+                          <th className="px-4 py-3">Description</th>
+                          <th className="whitespace-nowrap px-4 py-3 text-right">Debit</th>
+                          <th className="whitespace-nowrap px-4 py-3 text-right">Credit</th>
+                          <th className="whitespace-nowrap px-4 py-3">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {!statementLoaded ? (
+                          <tr><td colSpan={7} className="px-4 py-12 text-center fs-text text-muted-foreground">Choose a date range and submit to view this group’s statement.</td></tr>
+                        ) : statementRows.length === 0 ? (
+                          <tr><td colSpan={7} className="px-4 py-12 text-center fs-text text-muted-foreground">No transactions found for the selected dates.</td></tr>
+                        ) : statementRows.map((transaction) => (
+                          <tr key={transaction.id} className="border-b border-card-border last:border-0">
+                            <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{transaction.transactionNo}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{transaction.valueDate}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{titleCase(transaction.type)}</td>
+                            <td className="min-w-[240px] px-4 py-3 text-body">{transaction.narration}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-body">{transaction.drCr === "DR" ? formatTzs(transaction.amountMinor) : "—"}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-body">{transaction.drCr === "CR" ? formatTzs(transaction.amountMinor) : "—"}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{titleCase(transaction.status)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {statementLoaded ? (
+                    <div className="flex flex-wrap items-center justify-between gap-3 border-t border-card-border px-4 py-3 fs-text text-muted-foreground">
+                      <p>Showing {statementRows.length} of {statementTotal} transactions</p>
+                      <div className="flex items-center gap-2">
+                        <Button type="button" variant="outline" size="sm" disabled={statementLoading || statementPage <= 1} onClick={() => void loadStatement(statementPage - 1, statementAppliedStartDate, statementAppliedEndDate)}>Previous</Button>
+                        <span>Page {statementPage} of {statementPageCount}</span>
+                        <Button type="button" variant="outline" size="sm" disabled={statementLoading || statementPage >= statementPageCount} onClick={() => void loadStatement(statementPage + 1, statementAppliedStartDate, statementAppliedEndDate)}>Next</Button>
+                      </div>
+                    </div>
+                  ) : null}
+                </>
+              )}
+            </section>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );

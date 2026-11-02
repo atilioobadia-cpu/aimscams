@@ -844,6 +844,7 @@ export class TransactionsService {
         auth.user.branch?.id ?? null,
       ),
     };
+    if (filters.clientId) where.clientId = filters.clientId;
     if (filters.status) where.status = filters.status;
     if (filters.accountingStatus)
       where.accountingStatus = filters.accountingStatus;

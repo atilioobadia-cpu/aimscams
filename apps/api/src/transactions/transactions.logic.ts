@@ -16,6 +16,7 @@ const REQUEST_STATUSES = [
 const MAX_PAGE_SIZE = 100;
 
 export interface TransactionFilters {
+  clientId?: string;
   q?: string;
   status?: (typeof TRANSACTION_STATUSES)[number];
   accountingStatus?: (typeof ACCOUNTING_STATUSES)[number];
@@ -127,6 +128,7 @@ export function parseTransactionFilters(
 
   return {
     q: optionalText(query, 'q'),
+    clientId: optionalUuid(query, 'clientId'),
     status: optionalChoice(query, 'status', TRANSACTION_STATUSES),
     accountingStatus: optionalChoice(
       query,

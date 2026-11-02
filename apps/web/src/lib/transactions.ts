@@ -69,6 +69,7 @@ export type RequestList = {
 };
 
 type TransactionFilters = {
+  clientId?: string;
   q?: string;
   status?: TransactionStatus;
   accountingStatus?: AccountingStatus;
