@@ -40,11 +40,17 @@ type AppHeaderProps = {
 export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   const router = useRouter();
   const [language, setLanguage] = useState("English");
-  const [branchOpen, setBranchOpen] = useState(() => (() => { const hour = new Date().getHours(); return hour >= 8 && hour < 17; })());
+  const [branchOpen, setBranchOpen] = useState(() => {
+    const hour = Number(new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Dar_es_Salaam", hour: "2-digit", hour12: false }).format(new Date()));
+    return hour >= 8 && hour < 17;
+  });
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
   useEffect(() => {
-    const syncBranchStatus = () => setBranchOpen((() => { const hour = new Date().getHours(); return hour >= 8 && hour < 17; })());
+    const syncBranchStatus = () => {
+      const hour = Number(new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Dar_es_Salaam", hour: "2-digit", hour12: false }).format(new Date()));
+      setBranchOpen(hour >= 8 && hour < 17);
+    };
     syncBranchStatus();
     const timer = window.setInterval(syncBranchStatus, 60000);
     return () => window.clearInterval(timer);
@@ -126,7 +132,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
             <p className="translate-y-[1.33px] text-[11.76px] font-semibold leading-tight text-brand">{branch.name}</p>
             <p className="-translate-y-[0.67px] flex items-center gap-1 text-[9.33px] leading-none text-brand" style={{ marginTop: "4px" }}>
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
-              {titleCase(branch.status)}
+              {branchOpen ? "Open" : "Closed"}
             </p>
           </div>
         </div>
