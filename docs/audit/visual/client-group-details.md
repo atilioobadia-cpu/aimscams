@@ -28,7 +28,8 @@ The previous AIMSCAMS page showed only a small summary and member table. It did 
 - `npm run typecheck --prefix apps/web` passes.
 - `npm run typecheck --prefix apps/api` passes.
 - `git diff --check` reports only a pre-existing trailing blank line at the end of `apps/web/src/lib/settings.ts`.
-- Browser visual verification remains pending. Wakandi is at its SSO sign-in page in the visible browser; AIMSCAMS is signed out, and no local group record is available. No sample records were created.
+- The group summary monogram is derived from the group name, and its record label is Group rather than Member.
+- Browser visual verification remains pending. Chrome UI control stopped because it could not verify the active page URL. The live Wakandi page and a signed-in AIMSCAMS group record were not inspected in this pass. No production data was changed and no sample records were created.
 
 ## Status
 

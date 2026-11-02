@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Search, Users } from "lucide-react";
+import { ArrowLeft, CalendarDays, Mail, Search, Users } from "lucide-react";
 import { useParams } from "next/navigation";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
@@ -47,6 +47,19 @@ function asRecord(value: unknown): RecordValue {
 function display(value: unknown): string {
   if (typeof value !== "string" || !value.trim()) return "N/A";
   return value;
+}
+
+function initialsFor(value: unknown): string {
+  const name = display(value);
+  if (name === "N/A") return "GR";
+  return name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
 }
 
 function matchesGroup<T extends { clientName: string | null; clientReference: string | null }>(items: T[], group: Client): T[] {
@@ -226,6 +239,8 @@ export default function ClientGroupDetailPage() {
   const policyName = policy?.name ?? membership.membershipPolicyName;
   const managerName = manager?.fullName ?? membership.relationshipManagerName;
   const groupName = groupDetails.name ?? group?.fullName;
+  const groupDisplayName = display(groupName);
+  const groupInitials = initialsFor(groupName);
   const meetingSchedule = [meeting.day, meeting.time].filter((value) => typeof value === "string" && value.trim()).join(" / ");
 
   const statementPageCount = Math.max(1, Math.ceil(statementTotal / STATEMENT_PAGE_SIZE));
@@ -369,7 +384,7 @@ export default function ClientGroupDetailPage() {
       <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-5 md:p-6">
         <div className="grid gap-5 lg:grid-cols-[minmax(0,2.2fr)_minmax(110px,0.65fr)_minmax(130px,0.8fr)_minmax(170px,1fr)]">
           <div className="flex min-w-0 items-center gap-4">
-            <div className="flex size-[64px] shrink-0 items-center justify-center rounded-full bg-subtle fs-title font-medium text-muted-foreground" aria-hidden="true">C1</div>
+            <div className="flex size-[64px] shrink-0 items-center justify-center rounded-full bg-subtle fs-title font-medium text-muted-foreground" aria-hidden="true">{groupInitials}</div>
             <div className="min-w-0">
               <h1 className="break-words fs-title font-bold leading-tight text-heading">{group.fullName}</h1>
               <p className="mt-1 fs-text text-body">{group.memberNo ?? group.referenceNo}</p>
@@ -411,41 +426,53 @@ export default function ClientGroupDetailPage() {
 
         <TabsContent value="details">
           <div className="space-y-4">
-            <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-4 md:p-5">
-              <h2 className="mb-4 fs-subtitle font-semibold text-heading">Membership Details</h2>
-              <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-                <DetailValue label="Member ID" value={group.memberNo ?? group.referenceNo} />
-                <DetailValue label="Status" value={titleCase(group.status)} />
-                <DetailValue label="Client Manager" value={managerName} />
-                <DetailValue label="Type" value="Group" />
-                <DetailValue label="Reference Number" value={group.referenceNo} />
-                <DetailValue label="Branch Name" value={branchName} />
-                <DetailValue label="Policy" value={policyName} />
-                <DetailValue label="Group Name" value={groupName} />
-                <DetailValue label="Group Type" value={groupDetails.type} />
-              </dl>
-            </section>
+            <div className="grid gap-4 lg:grid-cols-[minmax(220px,0.9fr)_minmax(0,2.8fr)]">
+              <section className="flex flex-col items-center justify-center rounded-[var(--card-radius)] border border-card-border bg-card p-5 text-center">
+                <div className="flex size-32 items-center justify-center rounded-full border-2 border-card-border bg-subtle fs-title font-medium text-muted-foreground" aria-hidden="true">{groupInitials}</div>
+                <h2 className="mt-4 max-w-full break-words fs-subtitle font-semibold text-heading">{groupDisplayName}</h2>
+                <p className="mt-1 fs-text text-muted-foreground">Group</p>
+              </section>
+
+              <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-4 md:p-5">
+                <h2 className="mb-4 flex items-center gap-2 fs-subtitle font-semibold text-heading"><Users className="size-4 text-primary" aria-hidden="true" />Membership Details</h2>
+                <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <DetailValue label="Member Id" value={group.memberNo ?? group.referenceNo} />
+                  <DetailValue label="Status" value={titleCase(group.status)} />
+                  <DetailValue label="Client Manager" value={managerName} />
+                  <DetailValue label="Type" value="Group" />
+                  <DetailValue label="Reference Number" value={group.referenceNo} />
+                  <DetailValue label="Branch Name" value={branchName} />
+                  <DetailValue label="Policy" value={policyName} />
+                  <DetailValue label="Group Name" value={groupName} />
+                  <DetailValue label="Group Type" value={groupDetails.type} />
+                </dl>
+              </section>
+            </div>
 
             <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-4 md:p-5">
-              <h2 className="mb-4 fs-subtitle font-semibold text-heading">Contact Information</h2>
-              <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-                <DetailValue label="Phone" value={group.phone ?? contact.phone} />
-                <DetailValue label="MNO" value={contact.mno} />
-                <DetailValue label="Office Number" value={contact.officeNumber} />
-                <DetailValue label="Region" value={contact.region} />
-                <DetailValue label="District" value={contact.district} />
-                <DetailValue label="Ward" value={contact.ward} />
-              </dl>
-            </section>
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div>
+                  <h2 className="mb-4 flex items-center gap-2 fs-subtitle font-semibold text-heading"><Mail className="size-4 text-primary" aria-hidden="true" />Contact Information</h2>
+                  <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+                    <DetailValue label="Phone" value={group.phone ?? contact.phone} />
+                    <DetailValue label="MNO" value={contact.mno} />
+                    <DetailValue label="Office Number" value={contact.officeNumber} />
+                    <DetailValue label="Region" value={contact.region} />
+                    <DetailValue label="District" value={contact.district} />
+                    <DetailValue label="Ward" value={contact.ward} />
+                  </dl>
+                </div>
 
-            <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-4 md:p-5">
-              <h2 className="mb-4 fs-subtitle font-semibold text-heading">Group Meeting Day</h2>
-              <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-                <DetailValue label="Frequency" value={meeting.frequency} />
-                <DetailValue label="Recurrence Day" value={meeting.day} />
-                <DetailValue label="Meeting Time" value={meeting.time} />
-                <DetailValue label="Meeting Place" value={meeting.place} />
-              </dl>
+                <div>
+                  <h2 className="mb-4 flex items-center gap-2 fs-subtitle font-semibold text-heading"><CalendarDays className="size-4 text-primary" aria-hidden="true" />Group Meeting Day</h2>
+                  <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
+                    <DetailValue label="Frequency" value={meeting.frequency} />
+                    <DetailValue label="Recurrence Day" value={meeting.day} />
+                    <DetailValue label="Meeting Time" value={meeting.time} />
+                    <DetailValue label="Meeting Place" value={meeting.place} />
+                  </dl>
+                </div>
+              </div>
             </section>
           </div>
         </TabsContent>
