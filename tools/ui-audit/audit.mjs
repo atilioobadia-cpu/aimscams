@@ -321,18 +321,24 @@ async function measureDashboard(page) {
           labelStyle: label
             ? {
                 text: label.textContent?.trim() ?? "",
+                width: Number(label.getBoundingClientRect().width.toFixed(2)),
                 ...styles(label, ["fontSize", "fontWeight", "color"]),
               }
             : null,
           color: getComputedStyle(item).color,
+          iconColor: icon ? getComputedStyle(icon).color : null,
           weight: getComputedStyle(item).fontWeight,
           radius: getComputedStyle(item).borderRadius,
           bg: getComputedStyle(item).backgroundColor,
           gap: getComputedStyle(item).columnGap,
           chevron: Boolean(chevron),
+          chevronColor: chevron ? getComputedStyle(chevron).color : null,
           soon: item.textContent?.includes("Soon") ?? false,
           parentChevron: Boolean(parentButton?.querySelector("svg.lucide-chevron-down")),
           parentChevronLabel: parentButton?.getAttribute("aria-label") ?? null,
+          parentChevronColor: parentButton?.querySelector("svg")
+            ? getComputedStyle(parentButton.querySelector("svg")).color
+            : null,
         };
       }),
       navGroups: [...document.querySelectorAll('[data-testid="nav-group"]')].map((group) => ({
@@ -352,6 +358,7 @@ async function measureDashboard(page) {
           color: getComputedStyle(item).color,
           weight: getComputedStyle(item).fontWeight,
           radius: getComputedStyle(item).borderRadius,
+          icon: box(item.querySelector("svg")),
           labelStyle: label
             ? {
                 text: label.textContent?.trim() ?? "",
@@ -373,7 +380,7 @@ async function measureDashboard(page) {
               return node
                 ? {
                     text: node.textContent?.trim() ?? "",
-                    ...styles(node, ["fontSize", "fontWeight", "color"]),
+                ...styles(node, ["fontSize", "fontWeight", "color", "lineHeight"]),
                   }
                 : null;
             })(),
@@ -382,7 +389,7 @@ async function measureDashboard(page) {
               return node
                 ? {
                     text: node.innerText,
-                    ...styles(node, ["fontSize", "fontWeight", "color"]),
+                ...styles(node, ["fontSize", "fontWeight", "color", "lineHeight"]),
                   }
                 : null;
             })(),
@@ -591,8 +598,9 @@ for (const viewport of viewports) {
     serverErrors.push({ url: response.url(), status: response.status() });
   });
 
-  await page.goto(target, { waitUntil: "networkidle" });
-  await page.waitForLoadState("networkidle");
+  // Authenticated routes may keep API polling or sockets active. DOM readiness is
+  // sufficient for the auth redirect check; network-idle can hang before auditing.
+  await page.goto(target, { waitUntil: "domcontentloaded" });
 
   if (new URL(page.url()).pathname.startsWith("/login")) {
     check(`${label} authenticated`, false, {
@@ -679,8 +687,8 @@ for (const viewport of viewports) {
   near(`${label} user trigger height`, measured.user?.h ?? 0, 46, 1);
 
   console.log("Sidebar");
-  near(`${label} sidebar width`, measured.sidebar?.w ?? 0, 240, 0.5);
-  near(`${label} sidebar starts below the header`, measured.sidebar?.y ?? 0, 76, 0.5);
+  near(`${label} sidebar width`, measured.sidebar?.w ?? 0, 200, 0.5);
+  near(`${label} sidebar starts below the header`, measured.sidebar?.y ?? 0, measured.header?.h ?? 0, 0.5);
   near(
     `${label} sidebar reaches the viewport bottom`,
     (measured.sidebar?.y ?? 0) + (measured.sidebar?.h ?? 0),
@@ -717,19 +725,19 @@ for (const viewport of viewports) {
     { actual: measured.nav.map((item) => ({ label: item.label, href: item.href })) },
   );
 
-  const groupLabels = ["Accounts", "Transactions", "Accounting", "Import", "Reports", "Settings"];
+  const groupLabels = ["Accounts", "Transactions", "Accounting", "Campaigns", "Import", "Reports", "Settings"];
   const standardRows = measured.nav.filter((item) => !groupLabels.includes(item.label));
   const settingsRow = measured.nav.find((item) => item.label === "Settings");
   check(
-    `${label} nav rows are 36px`,
-    standardRows.every((item) => Math.abs(item.h - 36) <= 0.5),
+    `${label} nav rows are 30px`,
+    standardRows.every((item) => Math.abs(item.h - 30) <= 0.5),
     { actual: standardRows.map((item) => ({ label: item.label, h: item.h })) },
   );
-  near(`${label} Settings group row height`, settingsRow?.h ?? 0, 34, 0.5);
+  near(`${label} Settings group row height`, settingsRow?.h ?? 0, 30, 0.5);
   check(
-    `${label} nav icons are 20px on x=28`,
+    `${label} nav icons are 14px on x=18`,
     measured.nav.every(
-      (item) => Math.abs(Number.parseFloat(item.icon?.size ?? "0") - 20) <= 0.5 && Math.abs((item.icon?.x ?? 0) - 28) <= 0.6,
+      (item) => Math.abs(Number.parseFloat(item.icon?.size ?? "0") - 14) <= 0.5 && Math.abs((item.icon?.x ?? 0) - 18) <= 0.7,
     ),
     {
       actual: measured.nav.map((item) => ({
@@ -739,19 +747,39 @@ for (const viewport of viewports) {
     },
   );
   check(
-    `${label} nav labels are 16px`,
-    measured.nav.every((item) => item.labelStyle?.fontSize === "16px"),
+    `${label} nav labels are 13.44px`,
+    measured.nav.every((item) => item.labelStyle?.fontSize === "13.44px"),
     { actual: measured.nav.map((item) => ({ label: item.label, size: item.labelStyle?.fontSize })) },
   );
+  const referenceLabelWidths = { Dashboard: 64.67, Accounting: 68, "Business Account": 107.33 };
+  check(
+    `${label} label widths match the calibrated reference`,
+    Object.entries(referenceLabelWidths).every(([name, width]) => {
+      const measuredWidth = measured.nav.find((item) => item.label === name)?.labelStyle?.width ?? 0;
+      return Math.abs(measuredWidth - width) <= 1;
+    }),
+    {
+      actual: Object.fromEntries(
+        Object.keys(referenceLabelWidths).map((name) => [
+          name,
+          measured.nav.find((item) => item.label === name)?.labelStyle?.width ?? null,
+        ]),
+      ),
+      expected: referenceLabelWidths,
+    },
+  );
+  near(`${label} first nav row starts under the header`, measured.nav[0]?.y - (measured.header?.h ?? 0), 6.67, 0.7);
   const groupLabelSet = new Set(groupLabels);
   check(
-    `${label} nav pitch is 40px`,
+    `${label} nav pitch follows link and group spacing`,
     measured.nav
       .slice(1)
       .every((item, index) => {
         const previous = measured.nav[index];
-        if (groupLabelSet.has(previous.label)) return true;
-        return Math.abs(item.y - previous.y - 40) <= 1.2;
+        const groupExpanded = measured.navGroups.find((group) => group.label === previous.label)?.expanded === "true";
+        if (groupExpanded) return true;
+        const expectedPitch = groupLabelSet.has(previous.label) ? 39.8 : 42.9;
+        return Math.abs(item.y - previous.y - expectedPitch) <= 1.2;
       }),
     {
       actual: measured.nav.slice(1).map((item, index) => ({
@@ -785,7 +813,7 @@ for (const viewport of viewports) {
   if (groupLabels.includes(expectedTop ?? "")) {
     const group = measured.navGroups.find((item) => item.label === expectedTop);
     check(`${label} ${expectedTop} group is active`, Boolean(group), { actual: measured.navGroups });
-    equal(`${label} ${expectedTop} group is tinted`, group?.bg, "rgb(230, 241, 241)");
+    equal(`${label} ${expectedTop} group background`, group?.bg, "rgba(0, 0, 0, 0)");
     equal(`${label} ${expectedTop} group is expanded`, group?.expanded, "true");
     const expectedChildLabels = { Settings: settingsChildLabels };
     const childLabels = expectedChildLabels[expectedTop] ?? {};
@@ -799,9 +827,8 @@ for (const viewport of viewports) {
         equal(`${label} active subitem background`, activeSub.bg, "rgb(5, 117, 115)");
         equal(`${label} active subitem text`, activeSub.color, "rgb(255, 255, 255)");
         equal(`${label} active subitem weight`, activeSub.weight, "600");
-        equal(`${label} active subitem radius`, activeSub.radius, "6px");
-        near(`${label} active subitem height`, activeSub.h, 28, 0.5);
-        near(`${label} active subitem width`, activeSub.w, 224, 1);
+        equal(`${label} active subitem radius`, activeSub.radius, "5.328px");
+        near(`${label} active subitem height`, activeSub.h, 30, 0.5);
       }
     }
   } else {
@@ -810,17 +837,22 @@ for (const viewport of viewports) {
       check(`${label} active pill has a visible background`, activeTop.bg !== "transparent" && activeTop.bg !== "rgba(0, 0, 0, 0)", { actual: activeTop.bg });
       equal(`${label} active pill text`, activeTop.color, "rgb(255, 255, 255)");
       equal(`${label} active pill weight`, activeTop.weight, "600");
-      equal(`${label} active pill radius`, activeTop.radius, "6px");
-      near(`${label} active pill height`, activeTop.h, 36, 0.5);
-      near(`${label} active pill width`, activeTop.w, 224, 1);
+      equal(`${label} active pill radius`, activeTop.radius, "5.328px");
+      near(`${label} active pill height`, activeTop.h, 30, 0.5);
+      near(`${label} active pill width`, activeTop.w, 176, 1);
     }
   }
   equal(`${label} inactive nav colour`, inactive?.color, "rgb(73, 80, 87)");
   equal(`${label} inactive nav weight`, inactive?.weight, "400");
-  equal(`${label} nav radius`, inactive?.radius, "6px");
-  equal(`${label} nav icon gap`, inactive?.gap, "8px");
+  equal(`${label} nav radius`, inactive?.radius, "5.328px");
+  equal(`${label} nav icon gap`, inactive?.gap, "7px");
+  check(
+    `${label} inactive nav icons use the label color`,
+    measured.nav.filter((item) => !item.active).every((item) => item.iconColor === "rgb(73, 80, 87)"),
+    { actual: measured.nav.map((item) => ({ label: item.label, active: item.active, iconColor: item.iconColor })) },
+  );
 
-  const chevronItems = [];
+  const chevronItems = ["Accounts", "Transactions", "Accounting", "Campaigns", "Reports", "Import"];
   check(
     `${label} chevrons are on the expandable rows`,
     measured.nav
@@ -836,43 +868,101 @@ for (const viewport of viewports) {
     settingsRow?.parentChevron === true && /Settings/.test(settingsRow?.parentChevronLabel ?? ""),
     { actual: { chevron: settingsRow?.parentChevron, label: settingsRow?.parentChevronLabel } },
   );
-  check(`${label} Campaigns is marked Soon`, measured.nav[7].soon === true);
+  check(
+    `${label} nav chevrons use the inactive label color`,
+    measured.nav
+      .filter((item) => item.chevron || item.parentChevron)
+      .every((item) => (item.chevronColor ?? item.parentChevronColor) === "rgb(73, 80, 87)"),
+    {
+      actual: measured.nav
+        .filter((item) => item.chevron || item.parentChevron)
+        .map((item) => ({ label: item.label, chevronColor: item.chevronColor, parentChevronColor: item.parentChevronColor })),
+    },
+  );
+  check(`${label} Campaigns has a chevron and no Soon badge`, measured.nav[7].chevron && !measured.nav[7].soon, {
+    actual: { chevron: measured.nav[7].chevron, soon: measured.nav[7].soon },
+  });
   check(
     `${label} Campaigns still resolves`,
     typeof measured.nav[7].href === "string" && measured.nav[7].href.startsWith("/"),
     { actual: measured.nav[7].href },
   );
 
-  near(`${label} sidebar footer height`, measured.footer?.h ?? 0, 73, 0.5);
+  near(`${label} sidebar footer height`, measured.footer?.h ?? 0, 73.9, 0.5);
   equal(`${label} sidebar footer padding`, measured.footer?.padding, "6px 8px");
-  equal(`${label} sidebar footer gap`, measured.footer?.gap, "4px");
+  equal(`${label} sidebar footer gap`, measured.footer?.gap, "3px");
   equal(`${label} footer wordmark`, measured.footer?.wordmark?.text, "AIMSCAMS");
   equal(`${label} footer wordmark colour`, measured.footer?.wordmark?.color, "rgb(71, 155, 146)");
   equal(`${label} footer wordmark weight`, measured.footer?.wordmark?.fontWeight, "700");
-  near(`${label} footer wordmark size`, Number.parseFloat(measured.footer?.wordmark?.fontSize ?? "0"), 16, 0.05);
+  near(`${label} footer wordmark size`, Number.parseFloat(measured.footer?.wordmark?.fontSize ?? "0"), 11.33, 0.05);
+  equal(`${label} footer wordmark line height`, measured.footer?.wordmark?.lineHeight, "14px");
   check(
-    `${label} footer copyright is two lines`,
-    /© 2026 AIMSCAMS\./.test(measured.footer?.copyright?.text ?? "") &&
-      /All rights reserved\./.test(measured.footer?.copyright?.text ?? ""),
+    `${label} footer copyright wraps after All rights`,
+    /© 2026 AIMSCAMS\. All rights/.test(measured.footer?.copyright?.text ?? "") &&
+      /reserved\./.test(measured.footer?.copyright?.text ?? ""),
     { actual: measured.footer?.copyright?.text },
   );
-  near(`${label} footer copyright size`, Number.parseFloat(measured.footer?.copyright?.fontSize ?? "0"), 16, 0.05);
+  near(`${label} footer copyright size`, Number.parseFloat(measured.footer?.copyright?.fontSize ?? "0"), 11.33, 0.05);
+  equal(`${label} footer copyright line height`, measured.footer?.copyright?.lineHeight, "14px");
 
-  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 44, 0.5);
-  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 44, 0.5);
+  near(`${label} collapse control size`, measured.toggle?.w ?? 0, 29, 0.5);
+  near(`${label} collapse control height`, measured.toggle?.h ?? 0, 29, 0.5);
   near(
-    `${label} collapse control straddles the rail`,
-    (measured.toggle?.x ?? 0) + (measured.toggle?.w ?? 0) / 2,
+    `${label} collapse control right edge meets the rail`,
+    (measured.toggle?.x ?? 0) + (measured.toggle?.w ?? 0),
     measured.sidebar?.w ?? 0,
-    1.5,
+    0.5,
   );
   near(
-    `${label} collapse control sits above the footer`,
-    (measured.footer?.y ?? 0) - ((measured.toggle?.y ?? 0) + (measured.toggle?.h ?? 0)),
-    12,
-    2,
+    `${label} collapse control center is 8px above the footer line`,
+    (measured.footer?.y ?? 0) - ((measured.toggle?.y ?? 0) + (measured.toggle?.h ?? 0) / 2),
+    8,
+    0.7,
   );
   equal(`${label} collapse control is expanded`, measured.toggle?.ariaExpanded, "true");
+
+  const hoveredRow = page.getByTestId("nav-item").filter({ hasText: "Requests" }).first();
+  await hoveredRow.hover();
+  const hoverStyle = await hoveredRow.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const style = getComputedStyle(element);
+    return { h: rect.height, radius: style.borderRadius, bg: style.backgroundColor };
+  });
+  near(`${label} hovered nav box matches active height`, hoverStyle.h, activeTop?.h ?? 30, 0.5);
+  equal(`${label} hovered nav box matches active radius`, hoverStyle.radius, "5.328px");
+  check(`${label} hovered nav box has visible background`, hoverStyle.bg !== "rgba(0, 0, 0, 0)", { actual: hoverStyle });
+
+  const accountsExpander = page.getByRole("button", { name: "Expand Accounts", exact: true });
+  await accountsExpander.click();
+  const accountChildren = page.locator('[data-testid="nav-group"][data-nav-label="Accounts"] [data-testid="nav-subitem"]');
+  const childRows = await accountChildren.evaluateAll((elements) =>
+    elements.map((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      const icon = element.querySelector("svg")?.getBoundingClientRect();
+      const label = element.querySelector("span");
+      return {
+        y: rect.y,
+        h: rect.height,
+        radius: style.borderRadius,
+        iconX: icon?.x ?? null,
+        iconW: icon?.width ?? null,
+        labelSize: label ? getComputedStyle(label).fontSize : null,
+      };
+    }),
+  );
+  check(`${label} expanded Accounts shows its three child rows`, childRows.length === 3, { actual: childRows.length });
+  check(
+    `${label} child rows use 30px height, 4px gaps, and the shared radius`,
+    childRows.every((row, index) =>
+      Math.abs(row.h - 30) <= 0.5 && row.radius === "5.328px" &&
+      Math.abs((row.iconX ?? 0) - 39.67) <= 0.7 && Math.abs((row.iconW ?? 0) - 14) <= 0.5 &&
+      row.labelSize === "13.44px" &&
+      (index === 0 || Math.abs(row.y - childRows[index - 1].y - 34) <= 0.7),
+    ),
+    { actual: childRows },
+  );
+  await page.getByRole("button", { name: "Collapse Accounts", exact: true }).click();
 
   check(`${label} page background`, measured.doc.bodyBg === "rgb(235, 233, 233)", {
     actual: measured.doc.bodyBg,
@@ -1219,7 +1309,7 @@ for (const viewport of viewports) {
   check(
     `${label} collapsed icons stay on x=28`,
     collapsed.items.every(
-      (item) => item.icon && Math.abs(item.icon.x - 28) <= 0.6 && Math.abs(item.icon.w - 20) <= 0.5,
+      (item) => item.icon && Math.abs(item.icon.x - 28) <= 0.6 && Math.abs(item.icon.w - 14) <= 0.5,
     ),
     { actual: collapsed.items.map((item) => ({ label: item.label, icon: item.icon })) },
   );
@@ -1232,10 +1322,10 @@ for (const viewport of viewports) {
     );
   }
   near(
-    `${label} collapsed toggle follows the rail`,
-    (collapsed.toggle?.x ?? 0) + (collapsed.toggle?.w ?? 0) / 2,
+    `${label} collapsed toggle right edge meets the rail`,
+    (collapsed.toggle?.x ?? 0) + (collapsed.toggle?.w ?? 0),
     collapsed.sidebar?.w ?? 0,
-    1.5,
+    0.5,
   );
   check(
     `${label} collapsed page has no horizontal overflow`,
@@ -1257,7 +1347,7 @@ for (const viewport of viewports) {
   near(
     `${label} sidebar expands again`,
     (await page.getByTestId("app-sidebar").boundingBox())?.width ?? 0,
-    240,
+    200,
     0.5,
   );
   equal(

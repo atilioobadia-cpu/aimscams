@@ -9,10 +9,10 @@ captures and checked on the running app at 100% zoom with Roboto loaded. Referen
 different pixel scales, so calibrate each screenshot from its header and sidebar edges before a
 pixel comparison. A value marked *about* has a **±2px tolerance**; a hex value has none.
 
-**Geometry note.** The app now uses the observed reference scale: **16px shared text, a 24px page
-title, a 76px header, a 240px rail, and 36px navigation rows**. The Clients reference was captured
-at DPR 1.25 (1838×1368 pixels = 1470×1094 CSS pixels); the Loans reference was captured at DPR 1
-(1838×1241 pixels). Shared shell dimensions agree after calibration.
+**Geometry note.** Sidebar values below were remeasured directly in Wakandi Chrome DevTools on
+2026-11-02 at DPR 1.5. The live header measured 64.67 CSS px, sidebar 200px, active row 29.4px,
+and standard navigation rows 175.9×29.4px. Other shell values remain governed by their page/phase
+measurements and must not be inferred from this sidebar check.
 
 ---
 
@@ -61,11 +61,11 @@ a near-match.
 
   /* Shared geometry */
   --header-height: 76px;
-  --sidebar-width: 240px;
+  --sidebar-width: 200px;
   --sidebar-collapsed-width: 76px;
-  --sidebar-footer-height: 73px;
-  --sidebar-row-height: 36px;
-  --sidebar-subitem-height: 28px;
+  --sidebar-footer-height: 73.9px;
+  --sidebar-row-height: 30px;
+  --sidebar-subitem-height: 30px;
   --content-padding: 18px;          /* vertical */
   --content-padding-x: 16px;
   --content-padding-y: 18px;
@@ -103,14 +103,12 @@ Fixed header across the full width, fixed left sidebar, scrollable main area on 
 ┌──────────────────────────── header 76px, fixed ────────────────────────────┐
 ├──────────────┬──────────────────────────────────────────────────────────────┤
 │  sidebar     │  main content (--page-bg)                                    │
-│  240px fixed │  16px horizontal / 18px vertical inset;                     │
+│  200px fixed │  page-specific content inset;                               │
 │  76px closed │  chart + portfolio; 76px bottom reserve for the chat button  │
 └──────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
-The content box starts at **x = 240 + 16 = 256**. The first card starts at
-**y = 76 + 18 = 94**. The sidebar and header are fixed; the main area scrolls. The bottom padding
-is **76px** so the floating chat button never covers the last card.
+The sidebar and header are fixed; the main area scrolls. Content insets remain page-specific.
 
 ---
 
@@ -166,23 +164,22 @@ upload shipped with ST-01 (`D-031`).
 
 | Element | Value |
 |---|---|
-| Width | **240px** |
+| Width | **200px** |
 | Collapsed width | **76px** |
 | Background | `--surface` |
 | Right border | 1px `--border` |
 | Scrollbar | own thin scrollbar, `--border` |
-| Item pitch | **40px** vertically |
-| Row | **36px** tall, **224px** wide at x=8 (Settings link is 34px tall) |
-| Sub-item | **28px** tall, 224px wide at x=8, text starts at x=45 |
-| Icon | **20px** outline, on axis **x=28** expanded *and* collapsed |
-| Label | **16px**, weight 400, `--text-heading` |
-| Icon-to-label gap | **8px** |
-| Left padding | **20px** inside the row (row x=8 + padding 20 = icon x=28) |
+| Item height | **30px**; links pitch 42.9px, expandable rows pitch 39.8px |
+| Row | **29.4px** live height, **175.9px** wide at x=6.7; target is 30px / 176px after CSS rounding |
+| Sub-item | **30px** tall, 4px gap, icon aligns with the parent label |
+| Icon | **14px** outline; expanded x≈18px, collapsed x=28px |
+| Label | **13.44px**, weight 400, `--text-heading`; measured text widths: Dashboard 64.67, Accounting 68, Business Account 107.33px |
+| Icon-to-label gap | **6.72px** in Wakandi; local CSS rounds to 7px |
+| Left inset | **6.7px** row inset; icon x≈18px |
 
-**Active item** — pill from x=8 to x=232, **36px** tall, radius **6px**, background the AIMSCAMS
-dark-green exception (exact token pending),
-white label at weight 600 and a white icon. Inactive rows are transparent with a `--text-heading`
-label and icon; hover uses `--tab-inactive-bg`.
+**Active item** — live Wakandi pill is 175.9×29.4px at x=6.7, with a 5.33px radius at DPR 1.5.
+Use those measured bounds for the rail. AIMSCAMS retains its requested dark-green active state;
+inactive rows use `--text-heading`, and hover uses `--tab-inactive-bg`.
 
 **Item order** (exactly):
 
@@ -195,28 +192,26 @@ label and icon; hover uses `--tab-inactive-bg`.
 | 5 | Accounting | yes | `/accounting` |
 | 6 | Requests | — | `/requests` |
 | 7 | Messages | — | `/messages` |
-| 8 | Campaigns | — | `/campaigns` |
+| 8 | Campaigns | yes | `/campaigns` |
 | 9 | Reports | yes | `/reports` |
 | 10 | Import | yes | `/import` |
 | 11 | Business Account | — | `/business-account` |
 | 12 | Settings | group chevron | `/settings/general` |
 
 Every row is an `<a href>` and resolves to a page or the shared `ComingSoon` placeholder
-(`D-027`). Campaigns is **not disabled**: it carries a plain `Soon` note at `--fs`, weight 400,
-`--text-heading`, and still links. Chevrons mark Accounts, Transactions, Accounting, Reports and
-Import; Settings has a separate group-chevron button in the remaining width of its row.
+(`D-027`). Campaigns keeps its route and chevron without a `Soon` label. Chevrons mark Accounts,
+Transactions, Accounting, Campaigns, Reports and Import; Settings has a separate group-chevron
+button in the remaining width of its row.
 
-**Settings submenu** — nine links at 28px pitch: General, Accounting, Branches, Products, Policies,
-Users, Roles, Services. The parent link is 155.3 × 34; the chevron button sits in the rest of the
-224px row. Clicking a sub-link navigates; clicking the chevron toggles.
+**Settings submenu** — visible links use 30px rows with 4px gaps. Clicking a sub-link navigates;
+clicking the parent chevron toggles the group.
 
-**Collapse control** — a **44px** white circle with a 1px `--border` border, chevron-left in
-`--primary`, straddling the sidebar's right edge. Its centre is **x=239.3** expanded and **x=75.3**
-collapsed; it sits **6px above the footer**.
+**Collapse control** — a **29px** white circle with a 1px `--border` border and 10px chevron. Its
+right edge meets the sidebar edge; its center sits 8px above the footer divider.
 
-**Footer**, fixed to the bottom above a 1px top line, **73px** tall, padding **6px 8px**, 4px row
-gap: centred wordmark **AIMSCAMS**, 16px, weight 700, `--brand-logo-teal`; copyright beneath it,
-16px, `--text-muted`, wrapping to two lines (`© 2026 AIMSCAMS.` / `All rights reserved.`).
+**Footer**, fixed to the bottom above a 1px top line, **73.9px** tall, padding **6px 8px**, 3px row
+gap: centered wordmark **AIMSCAMS**, 11.33px/14px, weight 700, `--brand-logo-teal`; copyright beneath
+it, 11.33px/14px, `--text-muted`, wrapping after “All rights”.
 
 **Collapsed rail** — 76px. Rows are 51.3px wide at x=12; icons stay on x=28, labels are removed,
 the active pill stays teal at radius 6, and hover/focus shows a tooltip with the item name. The
@@ -372,13 +367,13 @@ exits non-zero on any failed check.
 - [ ] Tenant logo: image, 28px tall, ≤190px wide, `object-contain`, x=14; 40px monogram fallback.
 - [ ] Institution name 16/600 `#495057`; detail 16/400 `#6c757d`.
 - [ ] Flag 24×16; language 105.4×31.2; branch 119.6×32; avatar 34; user trigger 209.2×46.
-- [ ] Sidebar 240 expanded / 76 collapsed; 12 items in the order above; pitch 40; rows 36
-      (Settings 34); sub-items 28; icons 20 on x=28; labels 16.
-- [ ] Active pill x=8→232, 36px tall, radius 6, AIMSCAMS dark green (hex pending), white 600.
-- [ ] Chevrons exactly on Accounts, Transactions, Accounting, Reports, Import; Settings group
-      chevron; Campaigns "Soon" and still a link.
-- [ ] Collapse control 44px, centred on the rail edge, 6px above the footer.
-- [ ] Footer 73px, wordmark 16/700 `#479b92`, copyright two lines at 16 `#6c757d`.
+- [ ] Sidebar 200 expanded / 76 collapsed; 12 items in the order above; standard links 30px high
+      with 12.9px spacing, group rows 30px with 9.8px spacing; child rows 30px with 4px gaps.
+- [ ] Active pill 176×30 at x≈6.7, radius 5.33, AIMSCAMS dark green, white 600.
+- [ ] Chevrons on Accounts, Transactions, Accounting, Campaigns, Reports, Import; Settings group
+      chevron; Campaigns has no Soon badge and remains linked.
+- [ ] Collapse control 29px, right edge aligned with the rail, center 8px above the footer divider.
+- [ ] Footer 73.9px, wordmark 11.33/14px 700 `#479b92`, copyright 11.33/14px `#6c757d`.
 - [ ] Tab card 54px, radius 8, padding 0 14; tabs 154×44, radius 6, 16; active teal, inactive
       `#111827` at weight 500; gap 6.
 - [ ] Eight KPI cards, 4 per row at both widths, 94.8px tall, gap 12, padding 14, radius 8;

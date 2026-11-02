@@ -67,11 +67,18 @@ body {
 
   /* Shared geometry */
   --header-height: 68px;
-  --sidebar-width: 204px;
+  --sidebar-width: 200px;
   --sidebar-collapsed-width: 76px;
-  --sidebar-footer-height: 73px;
-  --sidebar-subitem-height: 28px;
-  --sidebar-row-height: 36px;
+  --sidebar-footer-height: 73.9px;
+  --sidebar-subitem-height: 30px;
+  --sidebar-row-height: 30px;
+  --sidebar-item-gap-link: 12.9px;
+  --sidebar-item-gap-group: 9.8px;
+  --sidebar-item-radius: 5.33px;
+  --sidebar-icon-size: 14px;
+  --sidebar-label-size: 13.44px;
+  --sidebar-scrollbar-width: 5.33px;
+  --sidebar-toggle-size: 29px;
   --content-padding: 18px;
   --control-height: 33px;
   --control-compact-height: 28px;
@@ -81,7 +88,7 @@ body {
   --icon-sm: 18px;
   --icon-md: 22px;
   --icon-lg: 28px;
-  --active-pill-height: 32px;
+  --active-pill-height: 30px;
   --tab-strip-height: 32px;
   --card-radius: 8px;
   --control-radius: 5px;
@@ -325,7 +332,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
    ::-webkit-scrollbar as soon as a standard scrollbar property is set, so the
    standard properties are only declared for engines without the pseudo-element. */
 .sidebar-scroll::-webkit-scrollbar {
-  width: 6px;
+  width: var(--sidebar-scrollbar-width);
 }
 
 .sidebar-scroll::-webkit-scrollbar-track {
@@ -366,18 +373,18 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 .sidebar-footer {
   height: var(--sidebar-footer-height);
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 3px;
   padding: var(--space-6) var(--space-8);
 }
 
 .sidebar-footer-wordmark {
-  font-size: var(--fs);
-  line-height: 1.4;
+  font-size: 11.33px;
+  line-height: 14px;
 }
 
 .sidebar-footer-copyright {
-  font-size: var(--fs);
-  line-height: 1.4;
+  font-size: 11.33px;
+  line-height: 14px;
 }
 
 .sidebar-footer-copyright-short {

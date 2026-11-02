@@ -63,12 +63,12 @@ run only when the route ends in `/dashboard`.
 |---|---|
 | Header height | 76px |
 | Tenant logo | image, 28px tall, â‰¤190px wide, 40px monogram fallback |
-| Sidebar width, expanded | 240px |
+| Sidebar width, expanded | 200px |
 | Sidebar width, collapsed | 76px |
-| Active nav pill | 36px tall, 224px wide from x=8 to x=232, radius 6px; use the active-sidebar color exception in `docs/11` |
-| Sidebar row / sub-item | 36px (Settings link 34px) / 28px; icon 20px on x=28 |
+| Active nav pill | 29.4px measured (30px CSS target), 175.9px wide at x=6.7, 5.33px radius at DPR 1.5 |
+| Sidebar row / sub-item | 30px / 30px; 14px icon, 13.44px label, 6.72px icon gap |
 | Sidebar item count | exactly 12, in the order in `docs/11 Â§4` |
-| Sidebar footer | 73px; collapse control 44px on the rail edge |
+| Sidebar footer | 73.9px; 29px collapse control with right edge aligned to rail |
 | Tab card / tabs | 54px, radius 8px / 154Ã—44, radius 6px |
 | KPI grid | 8 cards, fixed 4 per row, 94.8px tall, 12px gap |
 | Page background | `#ebe9e9` |
@@ -122,7 +122,7 @@ feat(<module>): <page name>
 Route: /<route>
 - what was built
 - tests added
-- measured: header 76, sidebar 240, pill 36, bg #ebe9e9, no overflow, console clean
+  - measured: sidebar 200, active row 29.4, standard nav row 175.9×29.4 at DPR 1.5; record page-specific values
 ```
 
 **Cadence**
@@ -305,13 +305,13 @@ proven parts.
   components.
 - Primitives: Button, Input, Select, Checkbox, Radio, Textarea, Card, Table, Badge, Tabs, Dropdown,
   Dialog, Sheet, Tooltip, Pagination, EmptyState, StatCard, ChartCard, PageHeader, FilterBar.
-- Header (76px), sidebar (240px, 12 items, exact order, chevrons as specified), collapse control,
+- Header (76px), sidebar (200px expanded / 76px collapsed, 12 items, exact order, chevrons as specified), collapse control,
   footer wordmark, floating chat button (60px), content grid.
 - The collapsed sidebar is **76px** and keeps the icon axis at x=28; the value is recorded in
   `docs/11 Â§4` and enforced by the audit.
 - Dashboard from typed fixtures: 8 KPI tiles, funds in/out, portfolio composition, unposted
   transactions banner, branch context.
-- Campaigns is a real link with a plain `Soon` note; every sidebar destination resolves to a page
+- Campaigns is a real link with a chevron and no `Soon` badge; every sidebar destination resolves to a page
   or the shared `ComingSoon` placeholder (`D-027`).
 - `tools/ui-audit` complete; baseline screenshots at both widths, expanded and collapsed.
 

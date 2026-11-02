@@ -56,8 +56,8 @@ value and what was measured.
 
 ## What it asserts
 
-- Header 76, sidebar 240/76, active pill 224×36 at radius 6, 12 items in order, icon axis 28,
-  footer 73, collapse control 44 on the rail edge.
+- Header 76 (until its own measurement phase), sidebar 200/76, active pill about 176×30 at x=6.7,
+  12 items in order, 14px icons, 13.44px labels, footer 73.9, 29px collapse control flush to rail.
 - Tab card 54 with 154×44 tabs, eight KPI cards fixed at four per row, chart and portfolio geometry,
   60px chat button.
 - Shared text is 16px and page titles are 24px; utility text follows page-specific checks. No horizontal overflow at either viewport.

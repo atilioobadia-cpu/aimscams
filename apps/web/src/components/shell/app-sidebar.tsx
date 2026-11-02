@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import {
   ArrowLeftRight,
   BarChart3,
+  Banknote,
   BookOpen,
   Box,
   Briefcase,
@@ -15,15 +16,15 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ClipboardList,
   Clock,
   CreditCard,
   FileText,
+  Grid2X2,
   Home,
+  Inbox,
   Landmark,
   Library,
-  Megaphone,
-  MessageSquare,
+  MessagesSquare,
   Package,
   PiggyBank,
   Receipt,
@@ -46,12 +47,12 @@ import { navItems, type NavChild, type NavIcon, type NavItem } from "@/lib/nav";
 const navIcons: Record<NavIcon, LucideIcon> = {
   dashboard: Home,
   clients: Users,
-  accounts: Landmark,
-  transactions: ArrowLeftRight,
-  accounting: BookOpen,
-  requests: ClipboardList,
-  messages: MessageSquare,
-  campaigns: Megaphone,
+  accounts: Briefcase,
+  transactions: Banknote,
+  accounting: FileText,
+  requests: Inbox,
+  messages: MessagesSquare,
+  campaigns: Grid2X2,
   reports: BarChart3,
   import: Upload,
   "business-account": Briefcase,
@@ -135,12 +136,11 @@ function SidebarItem({
 }) {
   const Icon = navIcons[item.icon];
   const label = item.disabled ? `${item.label} (coming soon)` : item.label;
-  const activeChild = item.children?.find((child) => isActivePath(pathname, child.href));
 
   const content = (
     <>
       <Icon
-        className={cn("size-5 shrink-0", active ? "text-on-primary" : "text-heading")}
+        className={cn("size-[var(--sidebar-icon-size)] shrink-0", active ? "text-on-primary" : "text-heading")}
         strokeWidth={1.8}
         aria-hidden="true"
       />
@@ -155,7 +155,7 @@ function SidebarItem({
             ) : null}
             {item.chevron && !item.children ? (
               <ChevronDown
-                className={cn("size-4", active ? "text-on-primary" : "text-muted-foreground")}
+                className={cn("size-3", active ? "text-on-primary" : "text-heading")}
                 aria-hidden="true"
               />
             ) : null}
@@ -167,8 +167,8 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-9 min-w-0 flex-1 items-center gap-2 rounded-[6px] px-5 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
-    !collapsed && "mx-2",
+    "flex h-[var(--sidebar-row-height)] min-w-0 flex-1 items-center gap-[7px] rounded-[var(--sidebar-item-radius)] text-left text-[var(--sidebar-label-size)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    !collapsed && "ml-[6.67px] mr-3 pl-3",
     collapsed && "mx-3 justify-start pl-4",
     active
       ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
@@ -208,10 +208,12 @@ function SidebarItem({
   }
 
   if (item.children && !collapsed && item.href) {
-    const isGroupActive = active || activeChild !== undefined;
+    const isGroupActive = isActivePath(pathname, item.href);
     const groupLinkClass = cn(
-      "flex h-[34px] min-w-0 flex-1 items-center gap-2 rounded-[6px] pl-5 pr-1 text-left fs-text leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
-      isGroupActive ? "font-semibold text-primary" : "text-heading hover:text-primary",
+      "flex h-full min-w-0 flex-1 items-center gap-[7px] rounded-[var(--sidebar-item-radius)] pl-3 text-left text-[var(--sidebar-label-size)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+      isGroupActive
+        ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
+        : "text-heading hover:bg-tab-inactive",
     );
 
     return (
@@ -219,10 +221,8 @@ function SidebarItem({
         data-testid="nav-group"
         data-nav-label={item.label}
         data-expanded={expanded ? "true" : "false"}
-        className={cn(
-          "mx-2 shrink-0 overflow-hidden rounded-[var(--card-radius)]",
-          isGroupActive ? "bg-primary-tint" : "",
-        )}
+        style={{ marginLeft: "6.67px", marginRight: "12px", marginBottom: "var(--sidebar-item-gap-group)" }}
+        className="shrink-0 overflow-visible"
       >
         <div className="flex h-[var(--sidebar-row-height)] items-center">
           <Link
@@ -230,11 +230,11 @@ function SidebarItem({
             prefetch={false}
             data-testid="nav-item"
             data-nav-label={item.label}
-            data-active={active ? "true" : undefined}
+            data-active={isGroupActive ? "true" : undefined}
             aria-current={active ? "page" : undefined}
             className={groupLinkClass}
           >
-            <Icon className="size-5 shrink-0 text-primary" strokeWidth={1.8} aria-hidden="true" />
+            <Icon className="size-[var(--sidebar-icon-size)] shrink-0 text-heading" strokeWidth={1.8} aria-hidden="true" />
             <span className="min-w-0 truncate">{item.label}</span>
           </Link>
           <button
@@ -242,16 +242,16 @@ function SidebarItem({
             aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
             aria-expanded={expanded}
             onClick={onToggleExpand}
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-[8px] text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="grid h-6 w-6 shrink-0 place-items-center rounded-[var(--sidebar-item-radius)] text-heading outline-none transition-colors hover:bg-tab-inactive focus-visible:ring-2 focus-visible:ring-ring/50"
           >
             <ChevronDown
-              className={cn("size-4 transition-transform", expanded && "rotate-180")}
+              className={cn("size-3 transition-transform", expanded && "rotate-180")}
               aria-hidden="true"
             />
           </button>
         </div>
         {expanded ? (
-          <ul className="m-0 flex list-none flex-col gap-[2px] p-0">
+          <ul className="m-0 flex list-none flex-col gap-1 p-0">
             {item.children
               .filter((child) => !(child.href === "/system-logs" && !isAdmin))
               .map((child) => (
@@ -269,14 +269,14 @@ function SidebarItem({
 
   if (!collapsed) {
     return (
-      <li className="flex h-9 shrink-0 items-center">
+      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: "var(--sidebar-item-gap-link)" }}>
         {control}
       </li>
     );
   }
 
   return (
-    <li className="flex h-9 shrink-0 items-center">
+    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: "var(--sidebar-item-gap-link)" }}>
       <Tooltip>
         <TooltipTrigger asChild>{control}</TooltipTrigger>
         <TooltipContent side="right" sideOffset={12}>
@@ -291,7 +291,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
   const Icon = navIcons[child.icon];
 
   return (
-    <li className="h-7 shrink-0">
+    <li className="h-[var(--sidebar-subitem-height)] shrink-0">
       <Link
         href={child.href}
         prefetch={false}
@@ -300,13 +300,13 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-2 rounded-[6px] pl-[37px] pr-2 fs-text outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex h-full w-full items-center gap-[7px] rounded-[var(--sidebar-item-radius)] pl-[33px] pr-2 text-[var(--sidebar-label-size)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
             ? "bg-primary font-semibold text-primary-foreground"
             : "text-heading hover:bg-white/60",
         )}
       >
-        <Icon className="size-4 shrink-0" aria-hidden="true" />
+        <Icon className="size-[var(--sidebar-icon-size)] shrink-0" aria-hidden="true" />
         <span className="min-w-0 truncate">{child.label}</span>
       </Link>
     </li>
@@ -343,9 +343,9 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
       <nav
         id="app-sidebar-nav"
         aria-label="Primary"
-        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-2"
+        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-[6.67px]"
       >
-        <ul className="m-0 flex list-none flex-col gap-[var(--space-4)] p-0">
+        <ul className="m-0 flex list-none flex-col p-0">
           {navItems.map((item) => {
             const active = isItemActive(pathname, item);
             const expanded = isExpanded(item.label);
@@ -382,13 +382,13 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
             aria-expanded={!collapsed}
             aria-controls="app-sidebar-nav"
             onClick={onToggle}
-            style={{ bottom: "calc(var(--sidebar-footer-height) + 6px)", left: collapsed ? "calc(var(--sidebar-collapsed-width) - 22.7px)" : "calc(var(--sidebar-width) - 22.7px)" }}
-            className="absolute z-10 box-border grid h-11 w-11 min-h-11 min-w-11 place-items-center rounded-full border border-chrome bg-white text-primary shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none transition-colors duration-[120ms] hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer"
+            style={{ bottom: "calc(var(--sidebar-footer-height) - 6.5px)", left: collapsed ? "calc(var(--sidebar-collapsed-width) - var(--sidebar-toggle-size))" : "calc(var(--sidebar-width) - var(--sidebar-toggle-size))" }}
+            className="absolute z-10 box-border grid h-[var(--sidebar-toggle-size)] w-[var(--sidebar-toggle-size)] place-items-center rounded-full border border-chrome bg-white text-primary shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none transition-colors duration-[120ms] hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer"
           >
             {collapsed ? (
-              <ChevronRight className="h-[14px] w-[14px]" strokeWidth={1.75} aria-hidden="true" />
+              <ChevronRight className="h-[10px] w-[10px]" strokeWidth={1.75} aria-hidden="true" />
             ) : (
-              <ChevronLeft className="h-[14px] w-[14px]" strokeWidth={1.75} aria-hidden="true" />
+              <ChevronLeft className="h-[10px] w-[10px]" strokeWidth={1.75} aria-hidden="true" />
             )}
           </button>
         </TooltipTrigger>
@@ -415,7 +415,7 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
               aria-label="© 2026 AIMSCAMS. All rights reserved."
             >
               <span className="sidebar-footer-copyright-full">
-                © 2026 AIMSCAMS.<br />All rights reserved.
+                © 2026 AIMSCAMS. All rights<br />reserved.
               </span>
               <span className="sidebar-footer-copyright-short" aria-hidden="true">
                 © 2026
