@@ -57,13 +57,13 @@ function numberValue(value: unknown): string {
 
 function SectionCard({ title, icon: Icon, children }: { title: string; icon: typeof Building2; children: React.ReactNode }) {
   return (
-    <section className="rounded-[6.72px] border border-card-border bg-surface p-[13.44px]">
+    <section className="border-t border-[#e2e6f0] px-[13.44px] py-[13.44px]">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Icon className="size-5 text-primary" aria-hidden="true" />
           <h3 className="text-[15.12px] font-semibold leading-tight text-[#495057]">{title}</h3>
         </div>
-        <button type="button" aria-label={`Edit ${title}`} className="grid h-[31px] w-[37px] place-items-center rounded text-primary hover:bg-primary-tint">
+        <button type="button" aria-label={"Edit " + title} className="grid h-[31px] w-[37px] place-items-center rounded-[5px] border border-primary text-primary hover:bg-primary-tint">
           <Edit2 className="size-4" aria-hidden="true" />
         </button>
       </div>
@@ -74,13 +74,12 @@ function SectionCard({ title, icon: Icon, children }: { title: string; icon: typ
 
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[150px_1fr] gap-2 py-1">
-      <dt className="text-[13.44px] font-normal text-muted-foreground">{label}</dt>
-      <dd className="text-[13.44px] font-semibold text-[#495057]">{value}</dd>
+    <div className="flex min-w-0 flex-col gap-[2px] py-[6px]">
+      <dt className="text-[13.44px] font-normal leading-[1.4] text-muted-foreground">{label}</dt>
+      <dd className="break-words text-[13.44px] font-normal leading-[1.4] text-[#495057]">{value}</dd>
     </div>
   );
 }
-
 function EmptyTable({ columns, message: emptyMessage, icon: Icon = Building2 }: { columns: string[]; message: string; icon?: typeof Building2 }) {
   return (
     <div className="overflow-x-auto">
@@ -243,145 +242,155 @@ export function ClientProfile({ id }: { id: string }) {
         <ErrorPanel message={error} onRetry={() => window.location.reload()} />
       ) : client ? (
         <>
-          <section className="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
-            <div className="flex min-w-0 flex-1 items-center gap-4">
-              <div className="flex size-[40px] shrink-0 items-center justify-center rounded-full border-2 border-primary bg-subtle text-[13.44px] font-semibold text-body" aria-hidden="true">
+          <section className="flex min-h-[108px] flex-wrap items-center gap-x-6 gap-y-4 rounded-[8px] border border-[#dee2e6] bg-white px-[16px] py-[12px]">
+            <div className="flex min-w-[340px] flex-1 items-center gap-[16px]">
+              <div className="flex size-[80px] shrink-0 items-center justify-center rounded-full border-[3px] border-primary bg-[#e9ecef] text-[25px] font-normal text-[#6c757d]" aria-hidden="true">
                 {initials}
               </div>
               <div className="min-w-0">
-                <h1 className="truncate text-[13.44px] font-semibold text-[#495057]">{client.fullName}</h1>
-                <p className="mt-1 text-[13.44px] font-normal text-body">Member</p>
-                <a href="#" className="mt-1 inline-block text-[13.44px] font-medium text-primary underline">Signature</a>
+                <h1 className="truncate text-[18px] font-bold leading-[1.25] text-[#212529]">{client.fullName.toUpperCase()}</h1>
+                <p className="mt-[4px] text-[13.44px] leading-[1.4] text-[#495057]">Member ID: {client.memberNo ?? client.referenceNo}</p>
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-4">
-              <div><span className="text-[13.44px] text-muted-foreground">Status</span><div className="mt-1"><span className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-[12px] font-semibold text-green-700">{titleCase(client.status)}</span></div></div>
-              <div><span className="text-[13.44px] text-muted-foreground">KYC Status</span><div className="mt-1"><span className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-[12px] font-semibold text-green-700">{titleCase(client.kycStatus)}</span></div></div>
-              <div><span className="text-[13.44px] text-muted-foreground">Phone Number</span><div className="mt-1 text-[13.44px] font-semibold text-[#495057]">{maskPhone(client.phone)}</div></div>
-              <div><span className="text-[13.44px] text-muted-foreground">Type</span><div className="mt-1 text-[13.44px] font-semibold text-[#495057]">{titleCase(client.clientType)}</div></div>
+            <div className="grid min-w-[520px] flex-[1.2] grid-cols-2 gap-x-[24px] gap-y-[8px] lg:grid-cols-4">
+              {[
+                ["Status", titleCase(client.status)],
+                ["KYC Status", titleCase(client.kycStatus)],
+                ["Phone Number", maskPhone(client.phone)],
+                ["Type", titleCase(client.clientType)],
+              ].map(([label, value]) => (
+                <div key={label} className="min-w-0">
+                  <p className="text-[13.44px] leading-[1.35] text-[#6c757d]">{label}</p>
+                  <p className="truncate text-[13.44px] leading-[1.45] text-[#212529]">{value}</p>
+                </div>
+              ))}
             </div>
           </section>
 
-          <div className="flex flex-wrap gap-2">
-            <Button asChild variant="ghost" className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
-              <Link href="/transactions"><ArrowLeftRight className="mr-1 size-4" aria-hidden="true" />Transaction</Link>
-            </Button>
-            <Button variant="ghost" disabled className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
-              <Send className="mr-1 size-4" aria-hidden="true" />Send USSD PIN OTP
-            </Button>
-            <Button variant="ghost" disabled className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
-              <UserX className="mr-1 size-4" aria-hidden="true" />Deactivate
-            </Button>
-            <Button variant="ghost" disabled className="h-[30px] rounded-[6px] px-[8.4px] text-[11.76px] font-medium text-primary hover:bg-primary-tint">
-              <LogOut className="mr-1 size-4" aria-hidden="true" />Exit
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 gap-[13.44px] lg:grid-cols-[252px_1fr]">
-            <section className="rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <UserRound className="size-5 text-primary" aria-hidden="true" />
-                  <h3 className="text-[15.12px] font-semibold text-[#495057]">Profile</h3>
-                </div>
-                <button type="button" aria-label="Edit profile" className="grid h-[31px] w-[37px] place-items-center rounded text-primary hover:bg-primary-tint">
-                  <Edit2 className="size-4" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <div className="flex size-[40px] items-center justify-center rounded-full border-2 border-primary bg-subtle text-[13.44px] font-semibold text-body" aria-hidden="true">
-                  {initials}
-                </div>
-                <h3 className="text-[13.44px] font-semibold text-[#495057]">{client.fullName}</h3>
-                <p className="text-[13.44px] text-muted-foreground">Member</p>
-                <a href="#" className="text-[13.44px] font-medium text-primary underline">Signature</a>
-              </div>
-            </section>
-
-            <section className="rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <UserRound className="size-5 text-primary" aria-hidden="true" />
-                  <h3 className="text-[15.12px] font-semibold text-[#495057]">Membership Details</h3>
-                </div>
-                <button type="button" aria-label="Edit membership details" className="grid h-[31px] w-[37px] place-items-center rounded text-primary hover:bg-primary-tint">
-                  <Edit2 className="size-4" aria-hidden="true" />
-                </button>
-              </div>
-              <dl className="grid grid-cols-1 gap-x-6 gap-y-1 md:grid-cols-2">
-                <Field label="Member Id" value={client.memberNo ?? client.referenceNo} />
-                <Field label="Client Manager" value="N/A" />
-                <Field label="Type" value={titleCase(client.clientType)} />
-                <Field label="Reference Number" value={client.referenceNo} />
-                <Field label="Branch Name" value={client.branchName ?? "N/A"} />
-                <Field label="Policy" value="N/A" />
-                <Field label="Quick Loan Credit Limit" value="N/A" />
-                <Field label="Restricted from Quick Loan" value="N/A" />
-                <Field label="Date Of Joining" value={client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"} />
-                <Field label="Group Name" value={client.groupName ?? "N/A"} />
-              </dl>
-            </section>
-          </div>
-
-          <SectionCard title="Contact Information" icon={Building2}>
-            <dl>
-              <Field label="Email Address" value={maskEmail(client.email)} />
-              <Field label="Phone Number" value={maskPhone(client.phone)} />
-              <Field label="Physical Location" value={currentResidence || "N/A"} />
-              <Field label="MNO" value={stringValue(contact.mno) || "N/A"} />
-            </dl>
-          </SectionCard>
-
-          <SectionCard title="Personal Details" icon={UserRound}>
-            <dl>
-              <Field label="Full Name" value={client.fullName} />
-              <Field label="Gender" value={titleCase(stringValue(personal.gender) || "N/A")} />
-              <Field label="Age" value={numberValue(personal.age)} />
-              <Field label="Nationality" value={stringValue(personal.nationality) || "N/A"} />
-              <Field label="Date Of Birth" value={stringValue(personal.dateOfBirth) ? new Date(stringValue(personal.dateOfBirth)).toLocaleDateString() : "N/A"} />
-              <Field label="Marital Status" value={titleCase(stringValue(personal.maritalStatus) || "N/A")} />
-              <Field label="Father's Name" value={stringValue(personal.fatherName) || "N/A"} />
-              <Field label="Spouse's Name" value={stringValue(personal.spouseName) || "N/A"} />
-            </dl>
-          </SectionCard>
-
-          <SectionCard title="Identity Number" icon={ShieldCheck}>
-            <dl>
-              <Field label="National ID Number" value={maskNationalId(client.nationalId)} />
-              <Field label="Tax Number" value={stringValue(identity.tin) || "N/A"} />
-            </dl>
-          </SectionCard>
-
-          <SectionCard title="Socio-Economic Data" icon={Building2}>
-            <dl>
-              <Field label="Person with disability (PWD)" value={titleCase(stringValue(personal.disability) || "N/A")} />
-              <Field label="Number Of Dependents" value={numberValue(personal.dependents)} />
-            </dl>
-          </SectionCard>
-
-          <SectionCard title="Standing Instructions" icon={Repeat}>
-            <EmptyTable columns={["Rule", "Product/Charge Name", "Source Product", "Source Account", "Status"]} message="No data available" icon={Repeat} />
-          </SectionCard>
-
-          <SectionCard title="Next of Kin" icon={UserRound}>
-            <EmptyState icon={UserRound} title="No next of kin records found" description="No local next of kin records are available." />
-          </SectionCard>
-
-          <Tabs defaultValue="summary" className="space-y-4">
-            <TabsList className="h-[45px] w-full justify-start overflow-x-auto rounded-none border-0 bg-transparent p-0">
+          <Tabs defaultValue="summary" className="gap-0">
+            <TabsList variant="line" className="h-[50px] w-full justify-start overflow-x-auto rounded-none border-b border-[#dee2e6] bg-white p-0">
               {["Summary", "Users", "Accounts", "Charges", "Residence", "KYC", "Income", "Assets", "Bank", "Verification History", "Statement", "History"].map((tab) => (
                 <TabsTrigger
                   key={tab}
                   value={tab.toLowerCase().replace(/\s+/g, "-")}
-                  className="h-[45px] rounded-none border-0 px-[13.44px] py-[16.8px] text-[13.33px] font-medium text-[#6c757d] data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-primary"
+                  className="h-full flex-none rounded-none border-0 px-[16px] py-0 text-[13.44px] font-medium text-[#6c757d] after:bottom-0 after:h-[2px] after:bg-primary data-[state=active]:font-semibold data-[state=active]:text-primary"
                 >
                   {tab}
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            <TabsContent value="summary" className="space-y-4">
-              <p className="text-[13.44px] text-muted-foreground">Summary details are shown above.</p>
+            <TabsContent value="summary" className="mt-0 space-y-[12px]">
+              <div className="flex min-h-[42px] flex-wrap items-center justify-end gap-[8px]">
+                {[
+                  { label: "Transaction", icon: ArrowLeftRight, href: "/transactions" },
+                  { label: "Send USSD PIN OTP", icon: Send },
+                  { label: "Deactivate", icon: UserX },
+                  { label: "Exit", icon: LogOut },
+                ].map(({ label, icon: Icon, href }) => {
+                  const className = "h-[34px] rounded-[6px] border-primary px-[12px] text-[13.44px] font-medium text-primary hover:bg-primary-tint disabled:opacity-100 disabled:text-primary";
+                  const content = <><Icon className="mr-[6px] size-[14px]" aria-hidden="true" />{label}</>;
+                  return href ? (
+                    <Button key={label} asChild variant="outline" className={className}>
+                      <Link href={href}>{content}</Link>
+                    </Button>
+                  ) : (
+                    <Button key={label} variant="outline" disabled className={className}>{content}</Button>
+                  );
+                })}
+              </div>
+
+              <div className="overflow-hidden rounded-[10.08px] border border-[#dee2e6] bg-white">
+                <div className="grid grid-cols-1 gap-[13.44px] p-[13.44px] lg:grid-cols-[234px_minmax(0,1fr)]">
+                  <section className="rounded-[6.72px] border border-[#dee2e6] p-[13.44px]">
+                    <div className="mb-[12px] flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <UserRound className="size-5 text-primary" aria-hidden="true" />
+                        <h3 className="text-[15.12px] font-semibold text-[#495057]">Profile</h3>
+                      </div>
+                      <button type="button" aria-label="Edit profile" className="grid h-[31px] w-[37px] place-items-center rounded-[5px] border border-primary text-primary hover:bg-primary-tint">
+                        <Edit2 className="size-4" aria-hidden="true" />
+                      </button>
+                    </div>
+                    <div className="flex flex-col items-center gap-[8px] text-center">
+                      <div className="flex size-[120px] items-center justify-center rounded-full border-[2px] border-[#dee2e6] bg-[#e9ecef] text-[28px] font-normal text-[#6c757d]" aria-hidden="true">
+                        {initials}
+                      </div>
+                      <h3 className="text-[13.44px] font-semibold leading-[1.35] text-[#495057]">{client.fullName.toUpperCase()}</h3>
+                      <p className="text-[13.44px] text-muted-foreground">Member</p>
+                      <a href="#" className="rounded-[5px] bg-[#e9ecef] px-[18px] py-[8px] text-[13.44px] font-medium text-[#495057]">Signature</a>
+                    </div>
+                  </section>
+
+                  <section className="rounded-[6.72px] border border-[#dee2e6] p-[13.44px]">
+                    <div className="mb-[10px] flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <UserRound className="size-5 text-primary" aria-hidden="true" />
+                        <h3 className="text-[15.12px] font-semibold text-[#495057]">Membership Details</h3>
+                      </div>
+                      <button type="button" aria-label="Edit membership details" className="grid h-[31px] w-[37px] place-items-center rounded-[5px] border border-primary text-primary hover:bg-primary-tint">
+                        <Edit2 className="size-4" aria-hidden="true" />
+                      </button>
+                    </div>
+                    <dl className="grid grid-cols-1 gap-x-[16px] md:grid-cols-2 xl:grid-cols-3">
+                      <Field label="Member Id" value={client.memberNo ?? client.referenceNo} />
+                      <Field label="Client Manager" value="N/A" />
+                      <Field label="Type" value={titleCase(client.clientType)} />
+                      <Field label="Reference Number" value={client.referenceNo || "N/A"} />
+                      <Field label="Branch Name" value={client.branchName ?? "N/A"} />
+                      <Field label="Policy" value="N/A" />
+                      <Field label="Quick Loan Credit Limit" value="N/A" />
+                      <Field label="Restricted from Quick Loan" value="N/A" />
+                      <Field label="Date Of Joining" value={client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"} />
+                      <Field label="Group Name" value={client.groupName ?? "N/A"} />
+                    </dl>
+                  </section>
+                </div>
+
+                <SectionCard title="Contact Information" icon={Building2}>
+                  <dl className="grid grid-cols-1 gap-x-[18px] md:grid-cols-2 xl:grid-cols-3">
+                    <Field label="Email Address" value={maskEmail(client.email) || "N/A"} />
+                    <Field label="Phone Number" value={maskPhone(client.phone)} />
+                    <Field label="Physical Location" value={currentResidence || "N/A"} />
+                    <Field label="MNO" value={stringValue(contact.mno) || "N/A"} />
+                  </dl>
+                </SectionCard>
+
+                <SectionCard title="Personal Details" icon={UserRound}>
+                  <dl className="grid grid-cols-1 gap-x-[18px] md:grid-cols-2 xl:grid-cols-3">
+                    <Field label="Full Name" value={client.fullName.toUpperCase()} />
+                    <Field label="Gender" value={titleCase(stringValue(personal.gender) || "N/A")} />
+                    <Field label="Age" value={numberValue(personal.age)} />
+                    <Field label="Nationality" value={stringValue(personal.nationality) || "N/A"} />
+                    <Field label="Date Of Birth" value={stringValue(personal.dateOfBirth) ? new Date(stringValue(personal.dateOfBirth)).toLocaleDateString() : "N/A"} />
+                    <Field label="Marital Status" value={titleCase(stringValue(personal.maritalStatus) || "N/A")} />
+                    <Field label="Father's Name" value={stringValue(personal.fatherName) || "N/A"} />
+                    <Field label="Spouse's Name" value={stringValue(personal.spouseName) || "N/A"} />
+                  </dl>
+                </SectionCard>
+
+                <SectionCard title="Identity Number" icon={ShieldCheck}>
+                  <dl className="grid grid-cols-1 gap-x-[18px] md:grid-cols-2">
+                    <Field label="National ID Number" value={maskNationalId(client.nationalId)} />
+                    <Field label="Tax Number" value={stringValue(identity.tin) || "N/A"} />
+                  </dl>
+                </SectionCard>
+
+                <SectionCard title="Socio-Economic Data" icon={Building2}>
+                  <dl className="grid grid-cols-1 gap-x-[18px] md:grid-cols-2">
+                    <Field label="Person with disability (PWD)" value={titleCase(stringValue(personal.disability) || "N/A")} />
+                    <Field label="Number Of Dependents" value={numberValue(personal.dependents)} />
+                  </dl>
+                </SectionCard>
+
+                <SectionCard title="Standing Instructions" icon={Repeat}>
+                  <EmptyTable columns={["Rule", "Product/Charge Name", "Source Product", "Source Account", "Status"]} message="No data available" icon={Repeat} />
+                </SectionCard>
+
+                <SectionCard title="Next of Kin" icon={UserRound}>
+                  <EmptyState icon={UserRound} title="No next of kin records found" description="No local next of kin records are available." />
+                </SectionCard>
+              </div>
             </TabsContent>
 
             <TabsContent value="users">
@@ -426,11 +435,11 @@ export function ClientProfile({ id }: { id: string }) {
                                 <p className="text-[13.44px] font-semibold text-[#495057]">
                                   {"loanNumber" in item ? item.loanNumber : item.accountNumber}{" "}
                                   <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-[11.76px] font-semibold text-green-700">
-                                    {"status" in item ? titleCase(item.status) : titleCase(item.status)}
+                                    {titleCase(item.status)}
                                   </span>
                                 </p>
                                 <p className="text-[13.44px] text-muted-foreground">
-                                  {"productName" in item ? item.productName : item.productName} • Amount: {"principalMinor" in item ? item.principalMinor : item.balanceMinor} • Tenure: {"tenureCount" in item ? `${item.tenureCount} ${item.tenurePeriod}` : "N/A"}
+                                  {item.productName} • Amount: {"principalMinor" in item ? item.principalMinor : item.balanceMinor} • Tenure: {"tenureCount" in item ? `${item.tenureCount} ${item.tenurePeriod}` : "N/A"}
                                 </p>
                                 <p className="text-[13.44px] text-muted-foreground">
                                   Interest: {"interestRateBp" in item ? `${(item.interestRateBp / 100).toFixed(2)}% per Month` : "N/A"}
