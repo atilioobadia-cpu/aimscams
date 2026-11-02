@@ -649,3 +649,11 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added the verification-field defaults and sort query format to `docs/audit/NEEDS-HUMAN.md`.
 - Visible Chrome verification completed on the local Clients page after a hard refresh: page rendered, five existing rows remained visible, the row actions menu opened with View/Edit/Deactivate, and sort asc/desc/clear worked. Wakandi was not modified.
 - The standalone Playwright run remains blocked in `beforeEach`: its ignored storage state redirects to `/login`, so no parity assertions ran. No auth material was copied. `npm run typecheck` passes.
+## 2026-11-02 — Round 4 Dashboard parity baseline
+
+- Test-first baseline commit pushed: 75074a3.
+- The full Dashboard spec baseline ran 11 tests and all 11 stopped at the local auth gate; zero parity assertions ran. Playwright's ignored storage state redirects /dashboard to /login.
+- Post-commit representative run of both specs: 2 failed, 0 passed; one header test per spec confirmed the same /login setup redirect, and 0 parity assertions ran.
+- A combined all-49-test attempt was interrupted after five repeated Clients setup failures; it did not yield a complete runner summary and is not counted as a full suite result.
+- No dashboard or shared-shell source was changed in the baseline. No authentication data or Wakandi production data was copied or modified.
+
