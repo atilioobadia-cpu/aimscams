@@ -72,13 +72,13 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
         />
         <div className="min-w-0">
           <p
-            className="truncate fs-text font-semibold leading-tight text-[#495057]"
+            className="truncate text-[13.44px] font-semibold leading-tight text-[#495057]"
             title={institution.name}
           >
             {institution.name}
           </p>
           <p
-            className="truncate fs-text leading-tight text-[#6c757d]"
+            className="mt-[2.67px] truncate fs-text leading-tight text-[#6c757d]"
             title={`${institution.dialect} SACCOS`}
           >
             {institution.registrationNo ?? `${institution.dialect} SACCOS`}
@@ -93,11 +93,11 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
               type="button"
               data-testid="language-trigger"
               aria-label={`Language: ${language}`}
-              className="flex items-center rounded-md px-1.5 py-1.5 fs-text text-body outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex items-center rounded-md px-1.5 py-1.5 text-[12px] font-normal text-muted-foreground outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <TanzaniaFlag className="h-4 w-6" />
               <span className="ml-[14.67px]">{language}</span>
-              <ChevronDown className="ml-[28.67px] size-4 text-muted-foreground" aria-hidden="true" />
+              <ChevronDown className="ml-[23.33px] size-4 text-muted-foreground" aria-hidden="true" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={10} className="w-44">
@@ -116,8 +116,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
         >
           <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
-            <p className="text-[11.2px] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className="mt-0.5 flex items-center gap-1 text-[9.33px] leading-none text-brand">
+            <p className="translate-y-[1.33px] text-[11.76px] font-semibold leading-tight text-brand">{branch.name}</p>
+            <p className="-translate-y-[0.67px] mt-0.5 flex items-center gap-1 text-[9.33px] leading-none text-brand">
               <CheckCircle2 className="size-3.5" aria-hidden="true" />
               {titleCase(branch.status)}
             </p>
@@ -136,7 +136,7 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
                 data-testid="header-avatar"
                 className="grid size-[34px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
                 style={{
-                  background: "linear-gradient(135deg, #168888 0%, #377ab1 100%)",
+                  background: "linear-gradient(180deg, #2d78b8 0%, #1c4f93 100%)",
                   boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
                   outline: "2px solid #f7f7f7",
                   outlineOffset: "-2px",

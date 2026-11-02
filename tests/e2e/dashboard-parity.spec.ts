@@ -50,6 +50,26 @@ test.describe("Round 4 Wakandi Dashboard parity", () => {
     near(language.gap, css(35));
     expect(language.color).toBe("rgb(108, 117, 125)");
     expect(language.weight).toBe("400");
+    const headerCopy = await page.locator(".app-header").evaluate((element) => {
+      const paragraphs = [...element.querySelectorAll(":scope > div:first-child p")];
+      const branch = element.querySelector('[data-testid="branch-context"]')!;
+      const branchName = branch.querySelector("p")!;
+      const branchStatus = branch.querySelectorAll("p")[1]!;
+      const center = (node: Element) => {
+        const rect = node.getBoundingClientRect();
+        return rect.top + rect.height / 2;
+      };
+      return {
+        institutionWidth: paragraphs[0].getBoundingClientRect().width,
+        registrationOffset: center(paragraphs[1]) - center(paragraphs[0]),
+        branchWidth: branchName.getBoundingClientRect().width,
+        branchStatusOffset: center(branchStatus) - center(branchName),
+      };
+    });
+    near(headerCopy.institutionWidth, css(91));
+    near(headerCopy.registrationOffset, css(28));
+    near(headerCopy.branchWidth, css(126));
+    near(headerCopy.branchStatusOffset, css(24));
     const avatar = await page.getByTestId("header-avatar").evaluate((element) => getComputedStyle(element).backgroundImage);
     expect(avatar).toContain("rgb(45, 120, 184)");
     expect(avatar).toContain("rgb(28, 79, 147)");

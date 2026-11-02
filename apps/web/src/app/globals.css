@@ -80,6 +80,8 @@ body {
   --sidebar-scrollbar-width: 5.33px;
   --sidebar-toggle-size: 29px;
   --content-padding: 14.67px;
+  --content-padding-x: 13.33px;
+  --content-padding-y: 14px;
   --control-height: 33px;
   --control-compact-height: 28px;
   --icon-size: 20px;
