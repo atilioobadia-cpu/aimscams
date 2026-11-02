@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiError } from "@/lib/api";
-import { getClient, listLoans, listSavingsAccounts, type Client, type Loan, type SavingsAccount } from "@/lib/settings";
+import { getClient, listLoans, listMembershipPolicies, listSavingsAccounts, type Client, type Loan, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
 import { maskEmail, titleCase } from "@/lib/privacy";
 import { cn } from "cn";
 
@@ -182,6 +182,7 @@ export function ClientProfile({ id }: { id: string }) {
   const [notFound, setNotFound] = useState(false);
   const [loans, setLoans] = useState<Loan[]>([]);
   const [savings, setSavings] = useState<SavingsAccount[]>([]);
+  const [membershipPolicies, setMembershipPolicies] = useState<MembershipPolicy[]>([]);
   const [showAllAccounts, setShowAllAccounts] = useState(false);
   const [statementStart, setStatementStart] = useState("");
   const [statementEnd, setStatementEnd] = useState("");
@@ -246,6 +247,51 @@ export function ClientProfile({ id }: { id: string }) {
     };
   }, [client]);
 
+  useEffect(() => {
+    if (!client) return;
+    let active = true;
+    void listMembershipPolicies()
+      .then((response) => {
+        if (active) setMembershipPolicies(response.items);
+      })
+      .catch(() => {
+        if (active) setMembershipPolicies([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [client]);
+
+  useEffect(() => {
+    const tabList = tabListRef.current;
+    if (!tabList) return;
+
+    const updateOverflow = () => {
+      const needed = tabList.scrollWidth > tabList.clientWidth + 1;
+      const atEnd = tabList.scrollLeft + tabList.clientWidth >= tabList.scrollWidth - 1;
+      setTabOverflow((current) => current.needed === needed && current.atEnd === atEnd
+        ? current
+        : { needed, atEnd });
+    };
+
+    updateOverflow();
+    const observer = new ResizeObserver(updateOverflow);
+    observer.observe(tabList);
+    window.addEventListener("resize", updateOverflow);
+    tabList.addEventListener("scroll", updateOverflow, { passive: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateOverflow);
+      tabList.removeEventListener("scroll", updateOverflow);
+    };
+  }, [loading, client, forbidden, notFound]);
+
+  useEffect(() => {
+    tabListRef.current
+      ?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
+      ?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+  }, [activeTab, loading, client, forbidden, notFound]);
+
   if (forbidden) {
     return (
       <div className="space-y-5">
@@ -270,6 +316,7 @@ export function ClientProfile({ id }: { id: string }) {
   }
 
   const profile = objectValue(client?.profile);
+  const membership = objectValue(profile.membership);
   const personal = objectValue(profile.personal);
   const identity = objectValue(profile.identity);
   const contact = objectValue(profile.contact);
@@ -280,35 +327,21 @@ export function ClientProfile({ id }: { id: string }) {
   const initials = client?.fullName.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "NA";
   const editHref = canEdit && client ? `/clients/${encodeURIComponent(client.id)}/edit` : undefined;
 
-  useEffect(() => {
-    const tabList = tabListRef.current;
-    if (!tabList) return;
-
-    const updateOverflow = () => {
-      const needed = tabList.scrollWidth > tabList.clientWidth + 1;
-      const atEnd = tabList.scrollLeft + tabList.clientWidth >= tabList.scrollWidth - 1;
-      setTabOverflow((current) => current.needed === needed && current.atEnd === atEnd
-        ? current
-        : { needed, atEnd });
-    };
-
-    updateOverflow();
-    const observer = new ResizeObserver(updateOverflow);
-    observer.observe(tabList);
-    window.addEventListener("resize", updateOverflow);
-    tabList.addEventListener("scroll", updateOverflow, { passive: true });
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", updateOverflow);
-      tabList.removeEventListener("scroll", updateOverflow);
-    };
-  }, []);
-
-  useEffect(() => {
-    tabListRef.current
-      ?.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
-      ?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
-  }, [activeTab]);
+  const selectedPolicy = membershipPolicies.find((policy) =>
+    policy.id === membership.membershipPolicyId
+    || policy.id === membership.membershipPolicy
+    || policy.name === membership.membershipPolicy
+  );
+  const managerName = stringValue(membership.manager)
+    || stringValue(membership.relationshipManagerName)
+    || "N/A";
+  const policyName = stringValue(membership.membershipPolicyName)
+    || selectedPolicy?.name
+    || "N/A";
+  const quickLoanCreditLimit = numberValue(membership.quickLoanCreditLimit);
+  const restrictedFromQuickLoan = typeof membership.restrictedFromQuickLoan === "boolean"
+    ? (membership.restrictedFromQuickLoan ? "Yes" : "No")
+    : stringValue(membership.restrictedFromQuickLoan) || "N/A";
 
   function selectProfileTab(value: string) {
     const index = profileTabs.findIndex((tab) => tab.value === value);
@@ -442,13 +475,13 @@ export function ClientProfile({ id }: { id: string }) {
                     </div>
                     <dl className="grid grid-cols-1 gap-x-[16px] md:grid-cols-2 xl:grid-cols-3">
                       <Field label="Member Id" value={client.memberNo ?? client.referenceNo} />
-                      <Field label="Client Manager" value="N/A" />
+                      <Field label="Client Manager" value={managerName} />
                       <Field label="Type" value={titleCase(client.clientType)} />
                       <Field label="Reference Number" value={client.referenceNo || "N/A"} />
                       <Field label="Branch Name" value={client.branchName ?? "N/A"} />
-                      <Field label="Policy" value="N/A" />
-                      <Field label="Quick Loan Credit Limit" value="N/A" />
-                      <Field label="Restricted from Quick Loan" value="N/A" />
+                      <Field label="Policy" value={policyName} />
+                      <Field label="Quick Loan Credit Limit" value={quickLoanCreditLimit} />
+                      <Field label="Restricted from Quick Loan" value={restrictedFromQuickLoan} />
                       <Field label="Date Of Joining" value={client.joinedAt ? new Date(client.joinedAt).toLocaleDateString() : "N/A"} />
                       <Field label="Group Name" value={client.groupName ?? "N/A"} />
                     </dl>
@@ -615,11 +648,11 @@ export function ClientProfile({ id }: { id: string }) {
               <div className="flex flex-wrap items-end gap-3">
                 <div>
                   <label className="mb-1 block text-[13.44px] text-muted-foreground">Start Date</label>
-                  <Input type="date" value={statementStart} onChange={(event) => setStatementStart(event.target.value)} className="h-[var(--control-height)] w-[180px]" />
+                  <Input type="date" value={statementStart} onChange={(event) => setStatementStart(event.target.value)} className="h-[var(--control-height)] w-[220px]" />
                 </div>
                 <div>
                   <label className="mb-1 block text-[13.44px] text-muted-foreground">End Date</label>
-                  <Input type="date" value={statementEnd} onChange={(event) => setStatementEnd(event.target.value)} className="h-[var(--control-height)] w-[180px]" />
+                  <Input type="date" value={statementEnd} onChange={(event) => setStatementEnd(event.target.value)} className="h-[var(--control-height)] w-[220px]" />
                 </div>
                 <Button className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Submit</Button>
                 <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Print</Button>
