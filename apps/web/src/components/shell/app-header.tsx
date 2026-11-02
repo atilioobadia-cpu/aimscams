@@ -40,11 +40,11 @@ type AppHeaderProps = {
 export function AppHeader({ institution, branch, user }: AppHeaderProps) {
   const router = useRouter();
   const [language, setLanguage] = useState("English");
-  const [branchOpen, setBranchOpen] = useState(() => new Date().getHours() < 17);
+  const [branchOpen, setBranchOpen] = useState(() => (() => { const hour = new Date().getHours(); return hour >= 8 && hour < 17; })());
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
   useEffect(() => {
-    const syncBranchStatus = () => setBranchOpen(new Date().getHours() < 17);
+    const syncBranchStatus = () => setBranchOpen((() => { const hour = new Date().getHours(); return hour >= 8 && hour < 17; })());
     syncBranchStatus();
     const timer = window.setInterval(syncBranchStatus, 60000);
     return () => window.clearInterval(timer);
