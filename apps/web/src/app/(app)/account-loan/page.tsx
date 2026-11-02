@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Eye,
   FilterX,
+  FileText,
   Plus,
   Save,
   Search,
@@ -31,6 +32,12 @@ function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
   if (failure instanceof Error && failure.message) return failure.message;
   return fallback;
+}
+
+function initials(value: string | null | undefined): string {
+  const parts = String(value ?? "").trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "NA";
+  return parts.slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
 
 const statusGroups = {
@@ -191,7 +198,7 @@ export default function LoansPage() {
         role="tabpanel"
         aria-labelledby={`loan-tab-${tab.toLocaleLowerCase()}`}
         tabIndex={0}
-        className="mx-5 !mt-[15px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface"
+        className="mt-[8px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface"
       >
         <div className="min-h-[56px] rounded-[6px] border border-[#dee2e6] bg-surface px-[10.08px] py-[10.08px]">
           <div className="flex flex-wrap items-center gap-[6.72px]">
@@ -283,37 +290,37 @@ export default function LoansPage() {
         ) : (
           <>
             <div className="table-scroll overflow-x-auto">
-              <table className="w-full min-w-[1695px] text-left fs-text">
-                <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
-                  <tr>
-                    <th className="px-4 py-3">Account number</th>
-                    <th className="px-4 py-3">Member name</th>
-                    <th className="px-4 py-3">Product</th>
-                    <th className="px-4 py-3">Loan officer</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Tenure</th>
-                    <th className="px-4 py-3 text-right">Loan amount (TSh)</th>
-                    <th className="px-4 py-3 text-right">Balance (TSh)</th>
-                    <th className="px-4 py-3">Created date</th>
-                    <th className="px-4 py-3 text-right">Overdue days</th>
-                    <th className="px-4 py-3">Provisioning status</th>
-                    <th className="px-4 py-3 text-right">Actions</th>
+              <table className="w-full min-w-[1548px] text-left text-[13.44px]">
+                <thead className="border-b border-card-border bg-[#f8fafc] text-[13.44px] font-bold tracking-wide text-[#495057]">
+                  <tr className="h-[37px]">
+                    <th className="px-[13.44px] py-[10.08px]">Account number</th>
+                    <th className="px-[13.44px] py-[10.08px]">Member name</th>
+                    <th className="px-[13.44px] py-[10.08px]">Product</th>
+                    <th className="px-[13.44px] py-[10.08px]">Loan officer</th>
+                    <th className="px-[13.44px] py-[10.08px]">Status</th>
+                    <th className="px-[13.44px] py-[10.08px]">Tenure</th>
+                    <th className="px-[13.44px] py-[10.08px] text-right">Loan amount (TSh)</th>
+                    <th className="px-[13.44px] py-[10.08px] text-right">Balance (TSh)</th>
+                    <th className="px-[13.44px] py-[10.08px]">Created date</th>
+                    <th className="px-[13.44px] py-[10.08px] text-right">Overdue days</th>
+                    <th className="px-[13.44px] py-[10.08px]">Provisioning status</th>
+                    <th className="px-[13.44px] py-[10.08px] text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {pageItems.map((item: Loan) => (
                     <tr key={item.id} className="border-b border-card-border last:border-0">
-                      <td className="whitespace-nowrap px-4 py-6 font-medium text-strong">{item.loanNumber}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-body">{item.clientName ?? "N/A"}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-body">{item.productName ?? item.productCode ?? "N/A"}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-body">{item.loanOfficerName ?? "N/A"}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] font-medium text-[#495057]">{item.loanNumber}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]"><span className="inline-flex items-center gap-2"><span className="flex size-[24px] items-center justify-center rounded-full bg-primary-tint text-[11.76px] font-semibold text-primary">{initials(item.clientName)}</span>{item.clientName ?? "N/A"}</span></td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{item.productName ?? item.productCode ?? "N/A"}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]"><span className="inline-flex items-center gap-2"><span className="flex size-[24px] items-center justify-center rounded-full bg-primary-tint text-[11.76px] font-semibold text-primary">{initials(item.loanOfficerName)}</span>{item.loanOfficerName ?? "N/A"}</span></td>
                       <td className="whitespace-nowrap px-4 py-6"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td>
-                      <td className="whitespace-nowrap px-4 py-6 text-body">{item.tenureCount} {titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{formatMinorUnitsExact(item.principalMinor)}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{formatMinorUnitsExact(item.outstandingPrincipalMinor)}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-body">{new Date(item.createdAt).toLocaleDateString("en-GB").replaceAll("/", "-")}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{item.daysPastDue}</td>
-                      <td className="whitespace-nowrap px-4 py-6 text-body">N/A</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{item.tenureCount} {titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right tabular-nums text-[#495057]">{formatMinorUnitsExact(item.principalMinor)}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right"><button type="button" className="inline-flex items-center gap-1 rounded-[6px] border border-primary px-2 py-1 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Eye className="size-4" aria-hidden="true" />View Balance</button></td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{new Date(item.createdAt).toLocaleDateString("en-GB").replaceAll("/", "-")}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right tabular-nums text-[#495057]">{item.daysPastDue}</td>
+                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">N/A</td>
                       <td className="px-4 py-6">
                         <div className="flex justify-end">
                           <RowActionsMenu label={item.loanNumber} actions={[{ label: "View details", icon: Eye, href: `/account-loan-details/${item.id}` }]} />
@@ -323,8 +330,8 @@ export default function LoansPage() {
                   ))}
                   {visibleItems.length === 0 ? (
                     <tr>
-                      <td colSpan={12} className="h-[250px] px-4 text-center">
-                        <p className="fs-text font-semibold text-strong">{hasFilters ? "No loan matches" : `No ${tab.toLocaleLowerCase()} loans`}</p>
+                      <td colSpan={12} className="px-[13.44px] py-[10.08px] text-center">
+                        <p className="fs-text font-semibold text-[#495057]">{hasFilters ? "No loan matches" : `No ${tab.toLocaleLowerCase()} loans`}</p>
                         <p className="mt-1 fs-text text-muted-foreground">{hasFilters ? "Adjust or clear the filters to see other loans." : "Loans in this status group will appear here."}</p>
                       </td>
                     </tr>
@@ -351,7 +358,7 @@ export default function LoansPage() {
       </section>
 
       <Modal open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)} title="Save current filters" footer={<Button variant="outline" onClick={() => setSaveDialogOpen(false)}>Close</Button>}>
-        <p className="fs-text text-body">Saved filters are not available for this installation yet.</p>
+        <p className="fs-text text-[#495057]">Saved filters are not available for this installation yet.</p>
       </Modal>
     </div>
   );
