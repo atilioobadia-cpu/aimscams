@@ -7,6 +7,7 @@ import {
   UserMinus,
   Users,
   Wallet,
+  XCircle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -19,6 +20,7 @@ const kpiIcons: Record<KpiIcon, LucideIcon> = {
   principal: Wallet,
   "arrears-principal": TriangleAlert,
   "arrears-clients": UserMinus,
+  defaults: XCircle,
   "portfolio-risk": ShieldAlert,
   savings: PiggyBank,
   till: Banknote,

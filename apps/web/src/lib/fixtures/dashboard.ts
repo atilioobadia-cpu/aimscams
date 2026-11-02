@@ -5,6 +5,7 @@ export type KpiIcon =
   | "principal"
   | "arrears-principal"
   | "arrears-clients"
+  | "defaults"
   | "portfolio-risk"
   | "savings"
   | "till"

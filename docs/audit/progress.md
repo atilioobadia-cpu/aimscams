@@ -671,3 +671,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Replaced the Members and Loans icons with the two-person outline and credit-card symbols; set tab labels to medium weight, adjusted target tab/card heights and active-tab width, and tightened the Members-to-Loans icon spacing.
 - Post-commit full run of Dashboard and Clients specs: 49 failed, 0 passed; 0 parity assertions evaluated. Every case stopped in setup because the ignored Playwright storage state redirects to /login.
 - npm run typecheck passed. Reviewed the updated Dashboard in the visible Chrome window; the local page remains open. Wakandi was not changed.
+
+## 2026-11-02 - Members and Loans dashboard views
+
+- Implemented measured Members and Loans structures using local data and empty states.
+- Added shared chart components for growth, stacked bars, registration, churn, doughnuts, age bands, disbursements, application stages, and loan transactions.
+- npm run typecheck passed. Dashboard parity: 11 passed. Clients parity: 21 passed.
+
