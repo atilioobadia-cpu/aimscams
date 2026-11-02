@@ -9,7 +9,7 @@
 
 ## Findings
 
-The previous AIMSCAMS page showed only a small summary and member table. It did not reproduce the summary card, the tab navigation, or the detail sections. AIMSCAMS currently exposes group/member data plus membership, branch, and loan-officer lookups. It has no group-detail data endpoints for users, charges, residence, KYC, income, assets, bank, history, or statements.
+The previous AIMSCAMS page showed only a small summary and member table. It did not reproduce the summary card, the tab navigation, or the detail sections. AIMSCAMS exposes group/member data, membership/branch/loan-officer lookups, and loan, loan-application, and savings-account lists. It has no group-detail data endpoints for users, charges, residence, KYC, income, assets, bank, history, or statements.
 
 ## Changes
 
@@ -17,8 +17,9 @@ The previous AIMSCAMS page showed only a small summary and member table. It did 
 - Added the reference tab order: Details, Members, Users, Accounts, Charges, Residence, KYC, Income, Assets, Bank, History, Statement.
 - Added membership, contact, and meeting detail sections populated from the AIMSCAMS group profile and available lookups.
 - Expanded the Members table to show the available AIMSCAMS member fields.
+- Connected Accounts to loan, loan-application, and savings-account lists, with exact client-name/reference filtering and links that carry the selected group into new-account forms.
 - Kept text sizing and tab/control geometry on shared v1.2.0 tokens.
-- Tabs without a supporting AIMSCAMS data endpoint are marked unavailable; no production Wakandi data was copied or fabricated.
+- Tabs without a supporting AIMSCAMS data endpoint are marked unavailable; Accounts reads existing AIMSCAMS records. No production Wakandi data was copied or fabricated.
 
 ## Verification
 
@@ -27,4 +28,4 @@ The previous AIMSCAMS page showed only a small summary and member table. It did 
 
 ## Status
 
-Layout and available data are implemented. Full parity and interactive tab behavior remain incomplete until AIMSCAMS adds the corresponding group data endpoints and the local page can be verified with a signed-in synthetic group.
+The summary, Details, Members, and Accounts sections are connected to available AIMSCAMS data. Remaining tabs need their own data endpoints and workflows. Full visual parity remains pending a signed-in browser comparison with a local synthetic group.

@@ -183,6 +183,25 @@ export function LoanApplicationWizard({
   const [attachments, setAttachments] = useState<Attachment[]>([]);
 
   useEffect(() => {
+    if (initial) return;
+    const requestedClientId = new URLSearchParams(window.location.search).get("clientId");
+    if (!requestedClientId) return;
+    let active = true;
+    void listClients({})
+      .then((result) => {
+        if (!active) return;
+        setClients(result.items);
+        const requestedClient = result.items.find((client) => client.id === requestedClientId);
+        if (requestedClient) {
+          setClientId(requestedClient.id);
+          setClientQuery(requestedClient.fullName);
+        }
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, [initial]);
+
+  useEffect(() => {
     if (!initial) return;
     setClientId(initial.clientId ?? "");
     setProductId(initial.productId ?? "");

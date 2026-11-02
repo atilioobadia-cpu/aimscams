@@ -94,6 +94,12 @@ export default function SavingsAccountsPage() {
         if (!active) return;
         setClients(clientResult.items);
         setProducts(productResult.items);
+        const params = new URLSearchParams(window.location.search);
+        const requestedClientId = params.get("clientId");
+        if (requestedClientId && clientResult.items.some((client) => client.id === requestedClientId)) {
+          setClientId(requestedClientId);
+          if (params.get("open") === "1") setModalOpen(true);
+        }
       })
       .catch(() => {});
     return () => {

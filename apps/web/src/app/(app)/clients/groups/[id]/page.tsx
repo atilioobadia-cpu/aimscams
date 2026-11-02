@@ -18,12 +18,19 @@ import {
   listClients,
   listLoanOfficers,
   listMembershipPolicies,
+  listLoanApplications,
+  listLoans,
+  listSavingsAccounts,
   type Branch,
   type Client,
   type LoanOfficer,
   type MembershipPolicy,
+  type Loan,
+  type LoanApplication,
+  type SavingsAccount,
 } from "@/lib/settings";
 import { titleCase } from "@/lib/privacy";
+import { formatTzs } from "@/lib/format";
 
 type RecordValue = Record<string, unknown>;
 
@@ -34,6 +41,10 @@ function asRecord(value: unknown): RecordValue {
 function display(value: unknown): string {
   if (typeof value !== "string" || !value.trim()) return "N/A";
   return value;
+}
+
+function matchesGroup<T extends { clientName: string | null; clientReference: string | null }>(items: T[], group: Client): T[] {
+  return items.filter((item) => item.clientReference === group.referenceNo || item.clientName === group.fullName);
 }
 
 function failureMessage(failure: unknown, fallback: string): string {
@@ -70,6 +81,13 @@ export default function ClientGroupDetailPage() {
   const [branches, setBranches] = useState<Branch[]>([]);
   const [policies, setPolicies] = useState<MembershipPolicy[]>([]);
   const [managers, setManagers] = useState<LoanOfficer[]>([]);
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [applications, setApplications] = useState<LoanApplication[]>([]);
+  const [savingsAccounts, setSavingsAccounts] = useState<SavingsAccount[]>([]);
+  const [accountsLoading, setAccountsLoading] = useState(false);
+  const [accountsIssue, setAccountsIssue] = useState(false);
+  const [canCreateLoanApplication, setCanCreateLoanApplication] = useState(false);
+  const [canCreateSavingsAccount, setCanCreateSavingsAccount] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
@@ -89,7 +107,7 @@ export default function ClientGroupDetailPage() {
     ])
       .then(([clientResponse, memberResponse, branchResponse, policyResponse, managerResponse]) => {
         if (cancelled) return;
-        setGroup(clientResponse.client);
+        setGroup(clientResponse.client.clientType === "GROUP" ? clientResponse.client : null);
         setMembers(memberResponse.items);
         setBranches(branchResponse.items);
         setPolicies(policyResponse.items);
@@ -109,6 +127,34 @@ export default function ClientGroupDetailPage() {
     };
   }, [id]);
 
+  useEffect(() => {
+    if (!group) return;
+    let cancelled = false;
+    setAccountsLoading(true);
+    setAccountsIssue(false);
+
+    void Promise.all([
+      listLoans({ q: group.fullName }).catch(() => null),
+      listLoanApplications({ q: group.fullName }).catch(() => null),
+      listSavingsAccounts({ q: group.fullName }).catch(() => null),
+    ])
+      .then(([loanResponse, applicationResponse, savingsResponse]) => {
+        if (cancelled) return;
+        setLoans(loanResponse ? matchesGroup(loanResponse.items, group) : []);
+        setApplications(applicationResponse ? matchesGroup(applicationResponse.items, group) : []);
+        setSavingsAccounts(savingsResponse ? matchesGroup(savingsResponse.items, group) : []);
+        setCanCreateLoanApplication(Boolean(applicationResponse?.canCreate));
+        setCanCreateSavingsAccount(Boolean(savingsResponse?.canCreate));
+        setAccountsIssue(!loanResponse || !applicationResponse || !savingsResponse);
+      })
+      .finally(() => {
+        if (!cancelled) setAccountsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [group]);
   const profile = useMemo(() => asRecord(group?.profile), [group?.profile]);
   const membership = asRecord(profile.membership);
   const groupDetails = asRecord(profile.group);
@@ -282,7 +328,87 @@ export default function ClientGroupDetailPage() {
         </TabsContent>
 
         <TabsContent value="users"><ComingSoon label="Users" /></TabsContent>
-        <TabsContent value="accounts"><ComingSoon label="Accounts" /></TabsContent>
+        <TabsContent value="accounts">
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--card-radius)] border border-card-border bg-card p-4">
+              <div>
+                <h2 className="fs-subtitle font-semibold text-heading">Accounts</h2>
+                <p className="mt-1 fs-text text-muted-foreground">Accounts held by this group.</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {canCreateLoanApplication ? <Button asChild variant="outline" size="sm"><Link href={"/account-loan-application-create?clientId=" + encodeURIComponent(group.id)}>New loan application</Link></Button> : null}
+                {canCreateSavingsAccount ? <Button asChild variant="outline" size="sm"><Link href={"/account-saving?clientId=" + encodeURIComponent(group.id) + "&open=1"}>Add saving</Link></Button> : null}
+              </div>
+            </div>
+            {accountsIssue ? <p role="status" className="fs-text text-muted-foreground">Some account information could not be loaded with your current access.</p> : null}
+            {accountsLoading ? (
+              <section className="rounded-[var(--card-radius)] border border-card-border bg-surface"><PanelSkeleton rows={5} /></section>
+            ) : (
+              <>
+                <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+                  <h3 className="border-b border-card-border px-4 py-3 fs-text font-semibold text-heading">Loan Applications</h3>
+                  {applications.length === 0 ? <EmptyState icon={Users} title="No loan applications" description="Loan applications for this group will appear here." /> : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[720px] text-left fs-text">
+                        <thead className="border-b border-card-border bg-subtle font-semibold text-label"><tr><th className="px-4 py-3">Application</th><th className="px-4 py-3">Product</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Created</th><th className="px-4 py-3">Action</th></tr></thead>
+                        <tbody>{applications.map((application) => (
+                          <tr key={application.id} className="border-b border-card-border last:border-0">
+                            <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{application.applicationNo}</td>
+                            <td className="px-4 py-3 text-body">{display(application.productName)}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{formatTzs(application.principalMinor)}</td>
+                            <td className="px-4 py-3 text-body">{titleCase(application.status)}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{new Date(application.createdAt).toLocaleDateString()}</td>
+                            <td className="px-4 py-3"><Button asChild variant="outline" size="sm"><Link href={"/account-loan-application-details/" + application.id}>View</Link></Button></td>
+                          </tr>
+                        ))}</tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+
+                <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+                  <h3 className="border-b border-card-border px-4 py-3 fs-text font-semibold text-heading">Loans</h3>
+                  {loans.length === 0 ? <EmptyState icon={Users} title="No loans" description="Loans held by this group will appear here." /> : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[720px] text-left fs-text">
+                        <thead className="border-b border-card-border bg-subtle font-semibold text-label"><tr><th className="px-4 py-3">Loan Number</th><th className="px-4 py-3">Product</th><th className="px-4 py-3">Principal</th><th className="px-4 py-3">Outstanding</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Action</th></tr></thead>
+                        <tbody>{loans.map((loan) => (
+                          <tr key={loan.id} className="border-b border-card-border last:border-0">
+                            <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{loan.loanNumber}</td>
+                            <td className="px-4 py-3 text-body">{display(loan.productName)}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{formatTzs(loan.principalMinor)}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{formatTzs(loan.outstandingPrincipalMinor)}</td>
+                            <td className="px-4 py-3 text-body">{titleCase(loan.status)}</td>
+                            <td className="px-4 py-3"><Button asChild variant="outline" size="sm"><Link href={"/account-loan-details/" + loan.id}>View Balance</Link></Button></td>
+                          </tr>
+                        ))}</tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+
+                <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+                  <h3 className="border-b border-card-border px-4 py-3 fs-text font-semibold text-heading">Savings Accounts</h3>
+                  {savingsAccounts.length === 0 ? <EmptyState icon={Users} title="No savings accounts" description="Savings accounts held by this group will appear here." /> : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[640px] text-left fs-text">
+                        <thead className="border-b border-card-border bg-subtle font-semibold text-label"><tr><th className="px-4 py-3">Account Number</th><th className="px-4 py-3">Product</th><th className="px-4 py-3">Balance</th><th className="px-4 py-3">Status</th></tr></thead>
+                        <tbody>{savingsAccounts.map((account) => (
+                          <tr key={account.id} className="border-b border-card-border last:border-0">
+                            <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{account.accountNumber}</td>
+                            <td className="px-4 py-3 text-body">{display(account.productName)}</td>
+                            <td className="whitespace-nowrap px-4 py-3 text-body">{formatTzs(account.balanceMinor)}</td>
+                            <td className="px-4 py-3 text-body">{titleCase(account.status)}</td>
+                          </tr>
+                        ))}</tbody>
+                      </table>
+                    </div>
+                  )}
+                </section>
+              </>
+            )}
+          </div>
+        </TabsContent>
         <TabsContent value="charges"><ComingSoon label="Charges" /></TabsContent>
         <TabsContent value="residence"><ComingSoon label="Residence" /></TabsContent>
         <TabsContent value="kyc"><ComingSoon label="KYC" /></TabsContent>
