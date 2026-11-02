@@ -144,14 +144,15 @@ export default function LoansPage() {
   }
 
   return (
-    <div className="space-y-[18px]">
-      <PageHeader
-        variant="card"
-        icon={<Banknote className="size-6 shrink-0 text-primary" aria-hidden="true" />}
-        title="Loans"
-      />
+    <div className="space-y-[18px] text-[13.44px] text-[#495057]">
+      <header className="flex min-h-[84px] flex-col gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <Banknote className="size-6 shrink-0 text-primary" aria-hidden="true" />
+          <h2 className="text-[20.16px] font-semibold leading-tight text-[#495057]">Loans</h2>
+        </div>
+      </header>
 
-      <div role="tablist" aria-label="Loan status" className="flex h-[55px] items-stretch border-b border-card-border bg-surface px-2">
+      <div role="tablist" aria-label="Loan status" className="flex h-[45px] items-stretch bg-surface px-0">
         {(Object.keys(statusGroups) as LoanTab[]).map((label) => (
           <button
             key={label}
@@ -162,7 +163,7 @@ export default function LoansPage() {
             id={`loan-tab-${label.toLocaleLowerCase()}`}
             data-loan-tab={label}
             tabIndex={tab === label ? 0 : -1}
-            className={`min-w-[80px] border-b-2 px-4 fs-text font-medium transition-colors hover:bg-subtle ${tab === label ? "border-primary text-primary" : "border-transparent text-body"}`}
+            className={`min-w-[80px] px-[13.44px] py-[16.8px] text-[13.33px] font-medium transition-colors ${tab === label ? "bg-white font-semibold text-primary" : "bg-[#f8fafc] font-medium text-[#6c757d]"}`}
             onClick={() => { setTab(label); setPage(1); }}
             onKeyDown={(event) => {
               const labels = Object.keys(statusGroups) as LoanTab[];
