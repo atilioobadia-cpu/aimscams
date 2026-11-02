@@ -56,4 +56,19 @@ This historical session confirmed structural navigation and section labels. The 
 
 ## Current audit policy update — 2026-11-02
 
-The earlier follow-up suggesting up to five sample records is superseded. UI review may use at most one existing local sample record when necessary; do not create additional records for visual parity. Wakandi remains read-only. The latest live Wakandi dashboard requests returned 401, so compare structure and styling only and do not treat production figures as a usable baseline.
+The earlier follow-up suggesting up to five sample records is superseded. UI review may use at most one existing local sample record when necessary; do not create additional records for visual parity. Wakandi remains read-only. A previous live session returned 401 for dashboard requests; the authenticated live session was available again during the recheck below.
+
+
+## Live session recheck — 2026-11-02
+
+The authenticated Wakandi `/dashboard` was inspected directly in visible Chrome. No values were selected or applied in Wakandi. The Dashboard UI review is complete; data parity remains unscored because the production dashboard logged missing `cashFlowData`, `financialSummaryData`, and `parData`, and the local chart history is unavailable.
+
+- Overview shows four summary cards, the full-width funds chart, then the savings/shares/loans and PAR charts. AIMSCAMS renders those sections in the same order using its existing local fixture values; production metric values were not copied.
+- Members shows six filters, the cumulative growth chart, eight KPI cards, the member trend and demographic charts, and the churn table. AIMSCAMS exposes the same sections in the same order; unavailable local histories remain identified as local data gaps.
+- Loans shows three KPI cards, two charts in the first row, a full-width transaction chart, then loan insight tables. AIMSCAMS has the same structure; its empty loan history is shown with local empty states.
+- Wakandi's Gender panel is approximately 350 × 290 px. It opens with the value selector closed and has Condition, Value, Clear, and Apply controls. AIMSCAMS now uses a 350 px panel with a 292 px height at the inspected viewport, starts with the selector closed, stages a value until Apply, and disables Clear/Apply when there is no change.
+- Wakandi's Date panel is approximately 350 × 290 px; its calendar appears as a separate overlay of about 350 × 324 px. AIMSCAMS now uses a 350 × 292 px Date panel and a separate five-week calendar overlay of about 350 × 327 px, with the current day highlighted. Neither side's date was selected or applied.
+- Preserved v1.2.0 AIMSCAMS sizing: 12.8 px shared text and 33 px control height. The local screenshot was viewed at 1267 × 665 px with Chrome's vertical tab strip visible; those are the observed viewport dimensions, not a 1920 px parity claim.
+- Chrome DevTools showed repeated missing dashboard data warnings for `cashFlowData`, `financialSummaryData`, and `parData`, one 404 for the Wakandi manifest icon, and the deprecated `OverlayPanel` warning. These reference-side issues do not change AIMSCAMS.
+
+**Phase status:** shared header/profile complete; Dashboard visual structure and filter behavior complete; next page in order is Clients. No sample data was added.

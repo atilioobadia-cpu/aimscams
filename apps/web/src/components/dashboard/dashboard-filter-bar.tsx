@@ -61,26 +61,22 @@ function dateText(value: string): string {
 
 function DateFilter({ value, onApply }: { value: string; onApply: (value: string) => void }) {
   const existingDate = value.startsWith("ON:") ? value.slice(3) : "";
+  const [draftDate, setDraftDate] = useState(existingDate);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [month, setMonth] = useState(() => {
     const parsed = existingDate ? new Date(`${existingDate}T00:00:00`) : new Date();
     return new Date(parsed.getFullYear(), parsed.getMonth(), 1);
   });
-  const [draftDate, setDraftDate] = useState(existingDate);
-
+  const nextValue = draftDate ? `ON:${draftDate}` : "ALL";
+  const today = formatDate(new Date());
   const days = useMemo(() => {
     const offset = new Date(month.getFullYear(), month.getMonth(), 1).getDay();
     const daysInMonth = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
     const priorMonthDays = new Date(month.getFullYear(), month.getMonth(), 0).getDate();
-    return Array.from({ length: 42 }, (_, index) => {
+    return Array.from({ length: Math.ceil((offset + daysInMonth) / 7) * 7 }, (_, index) => {
       const day = index - offset + 1;
-      if (day < 1) {
-        const date = new Date(month.getFullYear(), month.getMonth() - 1, priorMonthDays + day);
-        return { date, outside: true };
-      }
-      if (day > daysInMonth) {
-        const date = new Date(month.getFullYear(), month.getMonth() + 1, day - daysInMonth);
-        return { date, outside: true };
-      }
+      if (day < 1) return { date: new Date(month.getFullYear(), month.getMonth() - 1, priorMonthDays + day), outside: true };
+      if (day > daysInMonth) return { date: new Date(month.getFullYear(), month.getMonth() + 1, day - daysInMonth), outside: true };
       return { date: new Date(month.getFullYear(), month.getMonth(), day), outside: false };
     });
   }, [month]);
@@ -90,45 +86,41 @@ function DateFilter({ value, onApply }: { value: string; onApply: (value: string
   }
 
   return (
-    <div className="w-[524px] max-w-[calc(100vw-32px)] rounded-md border border-card-border bg-surface p-5 shadow-lg">
-      <div className="flex h-10 items-center justify-between border-b border-card-border pb-3">
-        <button type="button" aria-label="Previous month" onClick={() => setMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))} className="grid size-8 place-items-center rounded-full text-primary hover:bg-primary-tint"><ChevronLeft className="size-4" /></button>
-        <div className="flex gap-8 fs-text font-semibold text-body">
-          <span>{month.toLocaleDateString("en-US", { month: "long" })}</span>
-          <span>{month.getFullYear()}</span>
-        </div>
-        <button type="button" aria-label="Next month" onClick={() => setMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))} className="grid size-8 place-items-center rounded-full text-primary hover:bg-primary-tint"><ChevronRight className="size-4" /></button>
+    <div className="w-[350px] max-w-[calc(100vw-32px)] px-7 py-6">
+      <h3 className="border-b border-card-border pb-4 fs-text font-semibold text-body">Date</h3>
+      <label className="mt-2 block fs-text font-semibold text-body" htmlFor="dashboard-date-condition">Condition</label>
+      <select id="dashboard-date-condition" defaultValue="ON" className="mt-2 h-[var(--control-height)] w-full appearance-none rounded-[var(--control-radius)] border border-input bg-surface px-4 fs-text text-body outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
+        <option value="ON">On</option>
+      </select>
+      <label className="mt-4 block fs-text font-semibold text-body" htmlFor="dashboard-date-value">Value</label>
+      <div className="mt-2 flex h-[var(--control-height)] overflow-hidden rounded-[var(--control-radius)] border border-input focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30">
+        <input id="dashboard-date-value" aria-label="Select Date" type="text" readOnly value={draftDate ? dateText(draftDate) : ""} placeholder="Select Date" onClick={() => setCalendarOpen(true)} className="h-full min-w-0 flex-1 cursor-pointer bg-surface px-3 fs-text text-body outline-none placeholder:text-label" />
+        <PopoverPrimitive.Root open={calendarOpen} onOpenChange={setCalendarOpen}>
+          <PopoverPrimitive.Trigger asChild>
+            <button type="button" aria-label="Choose Date" className="grid h-full w-10 shrink-0 place-items-center border-l border-input bg-subtle text-body hover:bg-primary-tint"><CalendarDays className="size-4" aria-hidden="true" /></button>
+          </PopoverPrimitive.Trigger>
+          <PopoverPrimitive.Portal>
+            <PopoverPrimitive.Content side="top" align="end" sideOffset={8} onOpenAutoFocus={(event) => event.preventDefault()} className="z-[60] w-[350px] max-w-[calc(100vw-32px)] rounded-md border border-card-border bg-surface p-[18px] text-body shadow-lg outline-none">
+              <div className="flex h-9 items-center justify-between border-b border-card-border pb-3">
+                <button type="button" aria-label="Previous month" onClick={() => setMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))} className="grid size-8 place-items-center rounded-full text-primary hover:bg-primary-tint"><ChevronLeft className="size-4" /></button>
+                <div className="flex gap-8 fs-text font-semibold text-body"><span>{month.toLocaleDateString("en-US", { month: "long" })}</span><span>{month.getFullYear()}</span></div>
+                <button type="button" aria-label="Next month" onClick={() => setMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))} className="grid size-8 place-items-center rounded-full text-primary hover:bg-primary-tint"><ChevronRight className="size-4" /></button>
+              </div>
+              <div className="mt-2 grid grid-cols-7 text-center fs-text font-semibold text-label">{["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => <span key={day} className="py-1">{day}</span>)}</div>
+              <div className="grid grid-cols-7 text-center">
+                {days.map(({ date, outside }) => {
+                  const dateValue = formatDate(date);
+                  const selected = dateValue === draftDate;
+                  return <button key={dateValue} type="button" aria-label={date.toLocaleDateString("en-US", { dateStyle: "full" })} aria-pressed={selected} onClick={() => { setDraftDate(dateValue); setMonth(new Date(date.getFullYear(), date.getMonth(), 1)); setCalendarOpen(false); }} className={`mx-auto my-1 grid size-9 place-items-center rounded-full fs-text transition-colors hover:bg-primary-tint ${selected ? "border border-primary bg-primary-tint text-primary" : dateValue === today ? "bg-primary-tint text-primary" : outside ? "text-muted-foreground/60" : "text-body"}`}>{date.getDate()}</button>;
+                })}
+              </div>
+            </PopoverPrimitive.Content>
+          </PopoverPrimitive.Portal>
+        </PopoverPrimitive.Root>
       </div>
-      <div className="mt-3 grid grid-cols-7 text-center fs-text font-semibold text-label">
-        {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => <span key={day} className="py-2">{day}</span>)}
-      </div>
-      <div className="grid grid-cols-7 text-center">
-        {days.map(({ date, outside }) => {
-          const dateValue = formatDate(date);
-          const selected = dateValue === draftDate;
-          return (
-            <button
-              key={dateValue}
-              type="button"
-              aria-label={date.toLocaleDateString("en-US", { dateStyle: "full" })}
-              aria-pressed={selected}
-              onClick={() => { setDraftDate(dateValue); setMonth(new Date(date.getFullYear(), date.getMonth(), 1)); }}
-              className={`mx-auto my-1 grid size-9 place-items-center rounded-full fs-text transition-colors hover:bg-primary-tint ${selected ? "border border-primary bg-primary-tint text-primary" : outside ? "text-muted-foreground/60" : "text-body"}`}
-            >
-              {date.getDate()}
-            </button>
-          );
-        })}
-      </div>
-      <div className="mt-2 border-t border-card-border pt-4">
-        <div className="flex h-[var(--control-height)] overflow-hidden rounded-[var(--control-radius)] border border-input focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30">
-          <input aria-label="Selected date" type="date" value={draftDate} onChange={(event) => setDraftDate(event.target.value)} className="min-w-0 flex-1 bg-surface px-3 fs-text text-body outline-none" />
-          <span className="grid w-12 place-items-center border-l border-input bg-subtle text-body"><CalendarDays className="size-4" /></span>
-        </div>
-        <div className="mt-4 flex justify-end gap-3 border-t border-card-border pt-4">
-          <Button type="button" variant="outline" className="h-[var(--control-height)] px-5 fs-text font-semibold text-primary" onClick={() => { setDraftDate(""); onApply("ALL"); }}>Clear</Button>
-          <Button type="button" disabled={!draftDate} className="h-[var(--control-height)] px-5 fs-text font-semibold" onClick={() => onApply(`ON:${draftDate}`)}>Apply</Button>
-        </div>
+      <div className="mt-3 flex justify-end gap-3 border-t border-card-border pt-4">
+        <Button type="button" variant="outline" disabled={nextValue === value || nextValue === "ALL"} className="h-[var(--control-height)] px-5 fs-text font-semibold text-primary disabled:border-primary disabled:text-primary disabled:opacity-100" onClick={() => { setDraftDate(""); onApply("ALL"); }}>Clear</Button>
+        <Button type="button" disabled={!draftDate || nextValue === value} className="h-[var(--control-height)] px-5 fs-text font-semibold disabled:bg-subtle disabled:text-label disabled:opacity-100" onClick={() => onApply(nextValue)}>Apply</Button>
       </div>
     </div>
   );
@@ -155,12 +147,13 @@ function FilterPopover({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [valueOpen, setValueOpen] = useState(false);
-  const active = options.find((option) => option.value === value);
+  const [draftValue, setDraftValue] = useState(value);
+  const active = options.find((option) => option.value === draftValue);
   const visibleOptions = options.filter((option) => option.label.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
   const isDate = filter.key === "date";
 
   return (
-    <PopoverPrimitive.Root open={open} onOpenChange={(next) => { setOpen(next); if (next) { setValueOpen(true); setSearch(""); } }}>
+    <PopoverPrimitive.Root open={open} onOpenChange={(next) => { setOpen(next); if (next) { setDraftValue(value); setValueOpen(false); setSearch(""); } }}>
       <PopoverPrimitive.Trigger asChild>
         <Button
           type="button"
@@ -179,18 +172,18 @@ function FilterPopover({
           align="start"
           sideOffset={7}
           onOpenAutoFocus={(event) => event.preventDefault()}
-          className={`z-50 rounded-md border border-card-border bg-surface p-0 text-body shadow-lg outline-none ${isDate ? "w-auto" : "w-[524px] max-w-[calc(100vw-32px)]"}`}
+          className={`z-50 rounded-md border border-card-border bg-surface p-0 text-body shadow-lg outline-none ${isDate ? "w-auto" : "w-[350px] max-w-[calc(100vw-32px)]"}`}
         >
           {isDate ? (
             <DateFilter value={value} onApply={(next) => { onChange(next); setOpen(false); }} />
           ) : (
-            <div className="p-7">
+            <div className="px-7 py-6">
               <h3 className="border-b border-card-border pb-4 fs-text font-semibold text-body">{filter.label}</h3>
-              <label className="mt-5 block fs-text font-semibold text-body" htmlFor={`condition-${filter.key}`}>Condition</label>
+              <label className="mt-2 block fs-text font-semibold text-body" htmlFor={`condition-${filter.key}`}>Condition</label>
               <select id={`condition-${filter.key}`} defaultValue="IS" className="mt-2 h-[var(--control-height)] w-full appearance-none rounded-[var(--control-radius)] border border-input bg-surface px-4 fs-text text-body outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
                 <option value="IS">Is</option>
               </select>
-              <label className="mt-5 block fs-text font-semibold text-body" htmlFor={`value-${filter.key}`}>Value</label>
+              <label className="mt-4 block fs-text font-semibold text-body" htmlFor={`value-${filter.key}`}>Value</label>
               <button
                 id={`value-${filter.key}`}
                 type="button"
@@ -213,9 +206,9 @@ function FilterPopover({
                         key={option.value}
                         type="button"
                         role="option"
-                        aria-selected={option.value === value}
-                        onClick={() => { onChange(option.value); setOpen(false); }}
-                        className={`block min-h-[48px] w-full px-4 text-left fs-text transition-colors hover:bg-primary-tint ${option.value === value ? "bg-primary text-white hover:bg-primary" : "text-body"}`}
+                        aria-selected={option.value === draftValue}
+                        onClick={() => { setDraftValue(option.value); setValueOpen(false); setSearch(""); }}
+                        className={`block min-h-[48px] w-full px-4 text-left fs-text transition-colors hover:bg-primary-tint ${option.value === draftValue ? "bg-primary text-white hover:bg-primary" : "text-body"}`}
                       >
                         {option.label}
                       </button>
@@ -224,6 +217,10 @@ function FilterPopover({
                   </div>
                 </div>
               ) : null}
+              <div className="mt-3 flex justify-end gap-3 border-t border-card-border pt-4">
+                <Button type="button" variant="outline" className="h-[var(--control-height)] px-5 fs-text font-semibold text-primary disabled:border-primary disabled:text-primary disabled:opacity-100" disabled={draftValue === "ALL"} onClick={() => { setDraftValue("ALL"); onChange("ALL"); setOpen(false); }}>Clear</Button>
+                <Button type="button" disabled={draftValue === value} className="h-[var(--control-height)] px-5 fs-text font-semibold disabled:bg-subtle disabled:text-label disabled:opacity-100" onClick={() => { onChange(draftValue); setOpen(false); }}>Apply</Button>
+              </div>
             </div>
           )}
         </PopoverPrimitive.Content>
