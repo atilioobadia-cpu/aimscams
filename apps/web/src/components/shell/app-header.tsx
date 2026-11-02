@@ -9,6 +9,7 @@ import {
   Mail,
   Phone,
   UsersRound,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -130,8 +131,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
           <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
           <div>
             <p className="translate-y-[1.33px] text-[11.76px] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className="-translate-y-[0.67px] flex items-center gap-1 text-[9.33px] leading-none text-brand" style={{ marginTop: "4px" }}>
-              <CheckCircle2 className="size-3.5" aria-hidden="true" />
+            <p className={`-translate-y-[0.67px] flex items-center gap-1 text-[9.33px] leading-none ${branchOpen ? "text-brand" : "text-accent-red"}`} style={{ marginTop: "4px" }}>
+              {branchOpen ? <CheckCircle2 className="size-3.5" aria-hidden="true" /> : <X className="size-3.5" aria-hidden="true" />}
               {branchOpen ? "Open" : "Closed"}
             </p>
           </div>
