@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, UserRoundPlus } from "lu
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchSelect } from "@/components/ui/search-select";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import {
@@ -21,7 +22,6 @@ import {
   type LoanOfficer,
   type MembershipPolicy,
 } from "@/lib/settings";
-import { nationalIdPattern } from "@/lib/privacy";
 
 type SectionProps = {
   id: string;
@@ -98,6 +98,23 @@ function message(failure: unknown, fallback: string): string {
 }
 
 const INPUT_CLASS = "h-[var(--control-height)] w-full";
+const COUNTRY_CODES = ["+255", "+254", "+256"];
+const MNO_OPTIONS = ["MPESA", "TIGOPESA", "HALOPESA", "AIRTEL MONEY", "TTCL PESA", "EASY PESA", "MTN", "AFRIMONEY"];
+const NATIONALITIES = ["Uganda", "Kenya", "Tanzania"];
+const GENDERS = ["Male", "Female", "Other"];
+const MARITAL_STATUSES = ["Divorced", "Married", "Separated", "Single", "Widowed"];
+
+function calculateAge(dateOfBirth: string): string {
+  if (!dateOfBirth) return "";
+  const birthDate = new Date(`${dateOfBirth}T00:00:00`);
+  if (Number.isNaN(birthDate.getTime())) return "";
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const beforeBirthday = today.getMonth() < birthDate.getMonth()
+    || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate());
+  if (beforeBirthday) age -= 1;
+  return age >= 0 ? String(age) : "";
+}
 
 export default function CreateClientPage() {
   const router = useRouter();
@@ -120,28 +137,34 @@ export default function CreateClientPage() {
   const [manager, setManager] = useState("");
   const [groupId, setGroupId] = useState("");
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [fatherName, setFatherName] = useState("");
+  const [spouseName, setSpouseName] = useState("");
   const [dependents, setDependents] = useState("");
-  const [disability, setDisability] = useState("");
+  const [disability, setDisability] = useState(false);
 
   const [phone, setPhone] = useState("");
+  const [countryCode, setCountryCode] = useState("+255");
+  const [mno, setMno] = useState("");
   const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [region, setRegion] = useState("");
-  const [district, setDistrict] = useState("");
-  const [ward, setWard] = useState("");
 
   const [nationalId, setNationalId] = useState("");
   const [tin, setTin] = useState("");
-  const [residence, setResidence] = useState("");
+  const [currentResidence, setCurrentResidence] = useState("");
+  const [lastResidence, setLastResidence] = useState("");
+  const [sameResidence, setSameResidence] = useState(false);
 
-  const [occupation, setOccupation] = useState("");
-  const [income, setIncome] = useState("");
-  const [nextOfKinName, setNextOfKinName] = useState("");
-  const [nextOfKinPhone, setNextOfKinPhone] = useState("");
-  const [nextOfKinPercent, setNextOfKinPercent] = useState("100");
+  const [currentEmployment, setCurrentEmployment] = useState("");
+  const [lastEmployment, setLastEmployment] = useState("");
+  const [sameEmployment, setSameEmployment] = useState(false);
+
+  const fullName = [firstName, middleName, lastName].map((part) => part.trim()).filter(Boolean).join(" ");
 
   useEffect(() => {
     let active = true;
@@ -202,16 +225,7 @@ export default function CreateClientPage() {
       if (referenceNo && !/^\d{6}$/.test(referenceNo.trim())) return "Reference number must contain 6 digits.";
     }
     if (index === 1 && !fullName.trim()) return "Full name is required.";
-    if (index === 3) {
-      if (!nationalId.trim()) return "National ID is required.";
-      if (!nationalIdPattern(nationalId)) return "National ID must be in format 19900101-12345-00001-01.";
-    }
-    if (index === 5) {
-      const percent = Number(nextOfKinPercent);
-      if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
-        return "Next of kin percentage must be between 0 and 100.";
-      }
-    }
+    if (index === 2 && !phone.trim()) return "Phone number is required.";
     return null;
   }
 
@@ -257,21 +271,47 @@ export default function CreateClientPage() {
         referenceNo: referenceNo.trim() || undefined,
         fullName: fullName.trim(),
         clientType: "INDIVIDUAL",
-        phone: phone.trim() || null,
-        email: email.trim() || null,
         nationalId: nationalId.trim() || null,
         branchId: branchId || null,
         membershipPolicyId: membershipPolicy || null,
         groupId: groupId || null,
         joinedAt: joiningDate || null,
+        phone: phone.trim() || null,
+        email: email.trim() || null,
         profile: {
           membership: { branchId, membershipPolicy, joiningDate, manager, groupId },
-          personal: { gender, dateOfBirth, dependents, disability },
-          contact: { address, region, district, ward },
+          personal: {
+            firstName: firstName.trim(),
+            middleName: middleName.trim(),
+            lastName: lastName.trim(),
+            gender,
+            dateOfBirth,
+            age: calculateAge(dateOfBirth),
+            maritalStatus,
+            nationality,
+            fatherName: fatherName.trim(),
+            spouseName: spouseName.trim(),
+            dependents: dependents === "" ? null : Number(dependents),
+            disability,
+          },
+          contact: {
+            countryCode,
+            phone: phone.trim(),
+            mno,
+            email: email.trim(),
+          },
           identity: { nationalId, tin },
-          residence,
-          employment: { occupation, income },
-          nextOfKin: { name: nextOfKinName, phone: nextOfKinPhone, percentage: Number(nextOfKinPercent) },
+          residence: currentResidence,
+          residenceDetails: {
+            currentAddress: currentResidence.trim(),
+            lastAddress: (sameResidence ? currentResidence : lastResidence).trim(),
+            sameAsCurrent: sameResidence,
+          },
+          employment: {
+            currentPlace: currentEmployment.trim(),
+            lastPlace: (sameEmployment ? currentEmployment : lastEmployment).trim(),
+            sameAsCurrent: sameEmployment,
+          },
         },
       });
       pushToast("Client created.");
@@ -285,10 +325,10 @@ export default function CreateClientPage() {
   }
 
   const membershipValid = Boolean(membershipPolicy && joiningDate && branchId && (!referenceNo || /^\d{6}$/.test(referenceNo.trim())));
-  const personalValid = Boolean(fullName.trim());
-  const identityValid = Boolean(nationalId.trim() && nationalIdPattern(nationalId));
-  const nextOfKinValid = Number.isFinite(Number(nextOfKinPercent)) && Number(nextOfKinPercent) >= 0 && Number(nextOfKinPercent) <= 100;
-  const requiredStepsValid = membershipValid && personalValid && identityValid && nextOfKinValid;
+  const personalValid = Boolean(firstName.trim() && lastName.trim());
+  const contactValid = Boolean(phone.trim());
+  const identityValid = true;
+  const requiredStepsValid = membershipValid && personalValid && contactValid && identityValid;
 
   return (
     <div className="space-y-[18px]">
@@ -307,7 +347,7 @@ export default function CreateClientPage() {
       />
 
       <form
-        className="space-y-4 rounded-[var(--card-radius)] border border-card-border bg-surface p-4 md:p-5"
+        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
           void submit();
@@ -324,18 +364,13 @@ export default function CreateClientPage() {
           canContinue={membershipValid}
         >
           <Field id="client-policy" label="Policy" required>
-            <select
+            <SearchSelect
               id="client-policy"
+              options={policies.map((policy) => ({ id: policy.id, label: policy.name }))}
               value={membershipPolicy}
-              onChange={(event) => setMembershipPolicy(event.target.value)}
-              required
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"
-            >
-              <option value="">Search...</option>
-              {policies.map((policy) => (
-                <option key={policy.id} value={policy.id}>{policy.name}</option>
-              ))}
-            </select>
+              placeholder="Search..."
+              onValueChange={setMembershipPolicy}
+            />
           </Field>
           <Field id="client-joining-date" label="Date Of Joining" required>
             <Input id="client-joining-date" type="date" value={joiningDate} onChange={(event) => setJoiningDate(event.target.value)} required className={INPUT_CLASS} />
@@ -356,42 +391,31 @@ export default function CreateClientPage() {
             </p>
           </Field>
           <Field id="client-branch" label="Branch Name" required>
-            <select
+            <SearchSelect
               id="client-branch"
+              options={branches.map((branch) => ({ id: branch.id, label: branch.name }))}
               value={branchId}
-              onChange={(event) => setBranchId(event.target.value)}
-              required
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"
-            >
-              <option value="">Search...</option>
-              {branches.map((branch) => (
-                <option key={branch.id} value={branch.id}>{branch.name}</option>
-              ))}
-            </select>
+              placeholder="Search..."
+              onValueChange={setBranchId}
+            />
           </Field>
           <Field id="client-manager" label="Client Manager">
-            <Input
+            <SearchSelect
               id="client-manager"
-              list="client-manager-options"
+              options={managers.map((item) => ({ id: item.fullName, label: item.fullName }))}
               value={manager}
-              onChange={(event) => setManager(event.target.value)}
               placeholder="Search..."
-              className={INPUT_CLASS}
+              onValueChange={setManager}
             />
-            <datalist id="client-manager-options">
-              {managers.map((item) => <option key={item.id} value={item.fullName} />)}
-            </datalist>
           </Field>
           <Field id="client-group" label="Group Name">
-            <select
+            <SearchSelect
               id="client-group"
+              options={groups.map((group) => ({ id: group.id, label: group.fullName }))}
               value={groupId}
-              onChange={(event) => setGroupId(event.target.value)}
-              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"
-            >
-              <option value="">Search...</option>
-              {groups.map((group) => <option key={group.id} value={group.id}>{group.fullName}</option>)}
-            </select>
+              placeholder="Search..."
+              onValueChange={setGroupId}
+            />
           </Field>
         </FormSection>
 
@@ -405,21 +429,43 @@ export default function CreateClientPage() {
           onNext={() => advance(1)}
           canContinue={personalValid}
         >
-          <Field id="client-full-name" label="Full Name" required>
-            <Input id="client-full-name" value={fullName} onChange={(event) => setFullName(event.target.value)} required className={INPUT_CLASS} />
+          <Field id="client-first-name" label="First Name" required>
+            <Input id="client-first-name" value={firstName} onChange={(event) => setFirstName(event.target.value)} required className={INPUT_CLASS} />
           </Field>
-          <Field id="client-gender" label="Gender">
-            <Input id="client-gender" value={gender} onChange={(event) => setGender(event.target.value)} className={INPUT_CLASS} />
+          <Field id="client-middle-name" label="Middle Name">
+            <Input id="client-middle-name" value={middleName} onChange={(event) => setMiddleName(event.target.value)} className={INPUT_CLASS} />
+          </Field>
+          <Field id="client-last-name" label="Last Name" required>
+            <Input id="client-last-name" value={lastName} onChange={(event) => setLastName(event.target.value)} required className={INPUT_CLASS} />
           </Field>
           <Field id="client-dob" label="Date Of Birth">
             <Input id="client-dob" type="date" value={dateOfBirth} onChange={(event) => setDateOfBirth(event.target.value)} className={INPUT_CLASS} />
           </Field>
+          <Field id="client-age" label="Age">
+            <Input id="client-age" value={calculateAge(dateOfBirth)} readOnly className={`${INPUT_CLASS} bg-muted`} />
+          </Field>
+          <Field id="client-gender" label="Gender">
+            <SearchSelect id="client-gender" options={GENDERS.map((item) => ({ id: item, label: item }))} value={gender} placeholder="Select Gender" onValueChange={setGender} />
+          </Field>
+          <Field id="client-marital-status" label="Marital Status">
+            <SearchSelect id="client-marital-status" options={MARITAL_STATUSES.map((item) => ({ id: item, label: item }))} value={maritalStatus} placeholder="Select Marital Status" onValueChange={setMaritalStatus} />
+          </Field>
+          <Field id="client-nationality" label="Nationality">
+            <SearchSelect id="client-nationality" options={NATIONALITIES.map((item) => ({ id: item, label: item }))} value={nationality} placeholder="Search..." onValueChange={setNationality} />
+          </Field>
+          <Field id="client-father-name" label="Father's Name">
+            <Input id="client-father-name" value={fatherName} onChange={(event) => setFatherName(event.target.value)} className={INPUT_CLASS} />
+          </Field>
+          <Field id="client-spouse-name" label="Spouse's Name">
+            <Input id="client-spouse-name" value={spouseName} onChange={(event) => setSpouseName(event.target.value)} className={INPUT_CLASS} />
+          </Field>
           <Field id="client-dependents" label="Number Of Dependents">
-            <Input id="client-dependents" value={dependents} onChange={(event) => setDependents(event.target.value)} className={INPUT_CLASS} />
+            <Input id="client-dependents" type="number" min={0} step={1} value={dependents} onChange={(event) => setDependents(event.target.value)} className={INPUT_CLASS} />
           </Field>
-          <Field id="client-disability" label="Person With Disability">
-            <Input id="client-disability" value={disability} onChange={(event) => setDisability(event.target.value)} className={INPUT_CLASS} />
-          </Field>
+          <label htmlFor="client-disability" className="flex min-h-[var(--control-height)] items-center gap-2 self-end fs-text text-body">
+            <input id="client-disability" type="checkbox" checked={disability} onChange={(event) => setDisability(event.target.checked)} className="size-4 accent-primary" />
+            This member is a Person with Disability (PWD)
+          </label>
         </FormSection>
 
         <FormSection
@@ -430,25 +476,19 @@ export default function CreateClientPage() {
           disabled={unlockedSection < 2}
           onToggle={() => toggleSection(2)}
           onNext={() => advance(2)}
-          canContinue={true}
+          canContinue={contactValid}
         >
-          <Field id="client-phone" label="Phone Number">
-            <Input id="client-phone" value={phone} onChange={(event) => setPhone(event.target.value)} className={INPUT_CLASS} />
+          <Field id="client-country-code" label="Country code" required>
+            <SearchSelect id="client-country-code" options={COUNTRY_CODES.map((item) => ({ id: item, label: item }))} value={countryCode} placeholder="Search..." onValueChange={setCountryCode} />
+          </Field>
+          <Field id="client-phone" label="Phone Number" required>
+            <Input id="client-phone" value={phone} onChange={(event) => setPhone(event.target.value)} required inputMode="tel" className={INPUT_CLASS} />
+          </Field>
+          <Field id="client-mno" label="MNO">
+            <SearchSelect id="client-mno" options={MNO_OPTIONS.map((item) => ({ id: item, label: item }))} value={mno} placeholder="Search..." onValueChange={setMno} />
           </Field>
           <Field id="client-email" label="Email Address">
             <Input id="client-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="client-address" label="Address">
-            <Input id="client-address" value={address} onChange={(event) => setAddress(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="client-region" label="Region">
-            <Input id="client-region" value={region} onChange={(event) => setRegion(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="client-district" label="District">
-            <Input id="client-district" value={district} onChange={(event) => setDistrict(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="client-ward" label="Ward">
-            <Input id="client-ward" value={ward} onChange={(event) => setWard(event.target.value)} className={INPUT_CLASS} />
           </Field>
         </FormSection>
 
@@ -462,10 +502,10 @@ export default function CreateClientPage() {
           onNext={() => advance(3)}
           canContinue={identityValid}
         >
-          <Field id="client-national-id" label="National ID" required>
-            <Input id="client-national-id" value={nationalId} onChange={(event) => setNationalId(event.target.value)} required className={INPUT_CLASS} />
+          <Field id="client-national-id" label="National ID Number">
+            <Input id="client-national-id" value={nationalId} onChange={(event) => setNationalId(event.target.value)} className={INPUT_CLASS} />
           </Field>
-          <Field id="client-tin" label="TIN">
+          <Field id="client-tin" label="Tax Number">
             <Input id="client-tin" value={tin} onChange={(event) => setTin(event.target.value)} className={INPUT_CLASS} />
           </Field>
         </FormSection>
@@ -480,8 +520,15 @@ export default function CreateClientPage() {
           onNext={() => advance(4)}
           canContinue={true}
         >
-          <Field id="client-residence" label="Residence">
-            <Input id="client-residence" value={residence} onChange={(event) => setResidence(event.target.value)} className={INPUT_CLASS} />
+          <Field id="client-current-residence" label="Current Residence Address">
+            <Input id="client-current-residence" value={currentResidence} onChange={(event) => setCurrentResidence(event.target.value)} className={INPUT_CLASS} />
+          </Field>
+          <label htmlFor="client-same-residence" className="flex min-h-[var(--control-height)] items-center gap-2 fs-text text-body">
+            <input id="client-same-residence" type="checkbox" checked={sameResidence} onChange={(event) => setSameResidence(event.target.checked)} className="size-4 accent-primary" />
+            Last Residence Is Same As Of Current
+          </label>
+          <Field id="client-last-residence" label="Last Residence Address">
+            <Input id="client-last-residence" value={lastResidence} onChange={(event) => setLastResidence(event.target.value)} disabled={sameResidence} className={INPUT_CLASS} />
           </Field>
         </FormSection>
 
@@ -493,25 +540,17 @@ export default function CreateClientPage() {
           disabled={unlockedSection < 5}
           onToggle={() => toggleSection(5)}
           onNext={() => advance(5)}
-          canContinue={nextOfKinValid}
+          canContinue={true}
         >
-          <Field id="client-occupation" label="Occupation">
-            <Input id="client-occupation" value={occupation} onChange={(event) => setOccupation(event.target.value)} className={INPUT_CLASS} />
+          <Field id="client-current-employment" label="Current Place Of Employment">
+            <Input id="client-current-employment" value={currentEmployment} onChange={(event) => setCurrentEmployment(event.target.value)} className={INPUT_CLASS} />
           </Field>
-          <Field id="client-income" label="Income">
-            <Input id="client-income" value={income} onChange={(event) => setIncome(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <div className="col-span-full border-t border-card-border pt-4">
-            <h2 className="fs-text font-semibold text-body">Next of kin</h2>
-          </div>
-          <Field id="client-nok-name" label="Next of kin name">
-            <Input id="client-nok-name" value={nextOfKinName} onChange={(event) => setNextOfKinName(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="client-nok-phone" label="Next of kin phone">
-            <Input id="client-nok-phone" value={nextOfKinPhone} onChange={(event) => setNextOfKinPhone(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="client-nok-percent" label="Next of kin percentage">
-            <Input id="client-nok-percent" type="number" min={0} max={100} value={nextOfKinPercent} onChange={(event) => setNextOfKinPercent(event.target.value)} className={INPUT_CLASS} />
+          <label htmlFor="client-same-employment" className="flex min-h-[var(--control-height)] items-center gap-2 fs-text text-body">
+            <input id="client-same-employment" type="checkbox" checked={sameEmployment} onChange={(event) => setSameEmployment(event.target.checked)} className="size-4 accent-primary" />
+            Last Place Of Employment Is Same As Of Current
+          </label>
+          <Field id="client-last-employment" label="Last Place Of Employment">
+            <Input id="client-last-employment" value={lastEmployment} onChange={(event) => setLastEmployment(event.target.value)} disabled={sameEmployment} className={INPUT_CLASS} />
           </Field>
         </FormSection>
 

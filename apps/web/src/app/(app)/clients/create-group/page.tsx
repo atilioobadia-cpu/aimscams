@@ -3,11 +3,12 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, UsersRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp, Plus, UsersRound } from "lucide-react";
 
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchSelect } from "@/components/ui/search-select";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
 import {
@@ -24,12 +25,13 @@ type FieldProps = {
   id: string;
   label: string;
   required?: boolean;
+  className?: string;
   children: ReactNode;
 };
 
-function Field({ id, label, required = false, children }: FieldProps) {
+function Field({ id, label, required = false, className, children }: FieldProps) {
   return (
-    <div className="min-w-0">
+    <div className={`min-w-0 ${className ?? ""}`}>
       <label htmlFor={id} className="mb-1 block fs-text font-medium text-body">
         {label}
         {required ? <span className="ml-0.5 text-accent-red" aria-hidden="true">*</span> : null}
@@ -91,46 +93,10 @@ function message(failure: unknown, fallback: string): string {
 
 const INPUT_CLASS = "h-[var(--control-height)] w-full";
 
-type SearchOption = { id: string; label: string };
-
-function SearchSelect({
-  id,
-  options,
-  disabled,
-  onSelect,
-}: {
-  id: string;
-  options: SearchOption[];
-  disabled: boolean;
-  onSelect: (id: string) => void;
-}) {
-  const [query, setQuery] = useState("");
-  const listId = `${id}-options`;
-
-  return (
-    <div className="relative">
-      <Input
-        id={id}
-        list={listId}
-        value={query}
-        onChange={(event) => {
-          const nextQuery = event.target.value;
-          setQuery(nextQuery);
-          const match = options.find((option) => option.label.toLocaleLowerCase() === nextQuery.trim().toLocaleLowerCase());
-          onSelect(match?.id ?? "");
-        }}
-        placeholder={disabled ? "Loading..." : "Search..."}
-        disabled={disabled}
-        autoComplete="off"
-        className={`${INPUT_CLASS} pr-8`}
-      />
-      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-      <datalist id={listId}>
-        {options.map((option) => <option key={option.id} value={option.label} />)}
-      </datalist>
-    </div>
-  );
-}
+const COUNTRY_CODES = ["+255", "+254", "+256"];
+const REGION_OPTIONS = ["Arusha", "Dar es Salaam", "Dodoma", "Geita", "Iringa", "KASKAZINI PEMBA"];
+const DISTRICT_OPTIONS = ["Dar es Salaam", "ILALA", "ILALA CBD", "KIGAMBONI", "KINONDONI", "Magomeni"];
+const WARD_OPTIONS = ["BUNJU", "HANANASIF", "KAWE", "KIGOGO", "KIJITONYAMA", "KINONDONI"];
 
 export default function CreateGroupPage() {
   const router = useRouter();
@@ -149,12 +115,16 @@ export default function CreateGroupPage() {
   const [expandedSection, setExpandedSection] = useState<"membership" | "group" | null>("membership");
   const [groupDetailsUnlocked, setGroupDetailsUnlocked] = useState(false);
 
-  const [referenceNo, setReferenceNo] = useState("");
+  const [region, setRegion] = useState("");
+  const [district, setDistrict] = useState("");
+  const [ward, setWard] = useState("");
   const [groupName, setGroupName] = useState("");
-  const [joiningDate, setJoiningDate] = useState("");
-  const [meetingDay, setMeetingDay] = useState("");
-  const [meetingTime, setMeetingTime] = useState("");
-  const [meetingPlace, setMeetingPlace] = useState("");
+  const [countryCode, setCountryCode] = useState("+255");
+  const [phone, setPhone] = useState("");
+  const [officeNumber, setOfficeNumber] = useState("");
+  const [meetingEnabled, setMeetingEnabled] = useState(false);
+  const [meetingFrequency, setMeetingFrequency] = useState("");
+  const [meetingFrequencies, setMeetingFrequencies] = useState<string[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -175,7 +145,23 @@ export default function CreateGroupPage() {
   }, []);
 
   const membershipValid = Boolean(membershipPolicyId && branchId);
-  const groupDetailsValid = Boolean(groupName.trim());
+  const groupDetailsValid = Boolean(
+    region.trim()
+    && district.trim()
+    && groupName.trim()
+    && countryCode.trim()
+    && phone.trim()
+    && (!meetingEnabled || meetingFrequencies.length > 0),
+  );
+  const districtOptions = region.toLocaleLowerCase() === "dar es salaam" ? DISTRICT_OPTIONS : [];
+  const wardOptions = district.toLocaleLowerCase() === "kinondoni" ? WARD_OPTIONS : [];
+
+  function addMeetingFrequency() {
+    const frequency = meetingFrequency.trim();
+    if (!frequency) return;
+    setMeetingFrequencies((current) => current.includes(frequency) ? current : [...current, frequency]);
+    setMeetingFrequency("");
+  }
 
   function advanceToGroupDetails() {
     if (!membershipValid) return;
@@ -190,16 +176,29 @@ export default function CreateGroupPage() {
     setSaving(true);
     try {
       await createClient({
-        referenceNo: referenceNo.trim() ? referenceNo.trim().toUpperCase() : undefined,
         fullName: groupName.trim(),
         clientType: "GROUP",
         branchId,
         membershipPolicyId,
-        joinedAt: joiningDate || null,
+        phone: `${countryCode.trim()} ${phone.trim()}`,
         profile: {
           membership: { branchId, membershipPolicyId, relationshipManagerId: relationshipManagerId || null },
-          group: { name: groupName.trim() },
-          meeting: { day: meetingDay, time: meetingTime, place: meetingPlace },
+          group: {
+            name: groupName.trim(),
+          },
+          contact: {
+            region: region.trim(),
+            district: district.trim(),
+            ward: ward.trim(),
+            countryCode: countryCode.trim(),
+            phone: `${countryCode.trim()} ${phone.trim()}`,
+            officeNumber: officeNumber.trim(),
+          },
+          meeting: {
+            enabled: meetingEnabled,
+            frequency: meetingFrequencies.join(", "),
+            frequencies: meetingFrequencies,
+          },
         },
       });
       pushToast("Group created.");
@@ -234,7 +233,7 @@ export default function CreateGroupPage() {
       />
 
       <form
-        className="space-y-4 rounded-[var(--card-radius)] border border-card-border bg-surface p-4 md:p-5"
+        className="space-y-4"
         onSubmit={(event) => { event.preventDefault(); void submit(); }}
       >
         <FormSection
@@ -251,7 +250,8 @@ export default function CreateGroupPage() {
               id="group-policy"
               options={policies.map((policy) => ({ id: policy.id, label: policy.name }))}
               disabled={loadingOptions}
-              onSelect={setMembershipPolicyId}
+              value={membershipPolicyId}
+              onValueChange={setMembershipPolicyId}
             />
           </Field>
           <Field id="group-branch" label="Branch Name" required>
@@ -259,7 +259,8 @@ export default function CreateGroupPage() {
               id="group-branch"
               options={branches.map((branch) => ({ id: branch.id, label: branch.name }))}
               disabled={loadingOptions}
-              onSelect={setBranchId}
+              value={branchId}
+              onValueChange={setBranchId}
             />
           </Field>
           <Field id="group-relationship-manager" label="Relationship Manager">
@@ -267,7 +268,8 @@ export default function CreateGroupPage() {
               id="group-relationship-manager"
               options={managers.map((manager) => ({ id: manager.id, label: manager.fullName }))}
               disabled={loadingOptions}
-              onSelect={setRelationshipManagerId}
+              value={relationshipManagerId}
+              onValueChange={setRelationshipManagerId}
             />
           </Field>
         </FormSection>
@@ -279,24 +281,53 @@ export default function CreateGroupPage() {
           disabled={!groupDetailsUnlocked}
           onToggle={() => toggleSection("group")}
         >
+          <Field id="group-region" label="Region / State" required className="md:col-span-2">
+            <SearchSelect id="group-region" options={REGION_OPTIONS.map((label) => ({ id: label, label }))} value={region} allowCustom placeholder="Select State" onValueChange={(value) => { setRegion(value); setDistrict(""); setWard(""); }} />
+          </Field>
+          <Field id="group-district" label="District / City" required className="md:col-span-2">
+            <SearchSelect id="group-district" options={districtOptions.map((label) => ({ id: label, label }))} value={district} allowCustom placeholder="Select City" onValueChange={(value) => { setDistrict(value); setWard(""); }} />
+          </Field>
+          <Field id="group-ward" label="Ward">
+            <SearchSelect id="group-ward" options={wardOptions.map((label) => ({ id: label, label }))} value={ward} allowCustom placeholder="Enter Ward" onValueChange={setWard} />
+          </Field>
           <Field id="group-name" label="Group Name" required>
             <Input id="group-name" value={groupName} onChange={(event) => setGroupName(event.target.value)} required className={INPUT_CLASS} />
           </Field>
-          <Field id="group-reference" label="Reference Number">
-            <Input id="group-reference" value={referenceNo} onChange={(event) => setReferenceNo(event.target.value)} maxLength={20} className={INPUT_CLASS} />
+          <Field id="group-country-code" label="Country code" required>
+            <SearchSelect id="group-country-code" options={COUNTRY_CODES.map((label) => ({ id: label, label }))} value={countryCode} placeholder="Select Country Code" onValueChange={setCountryCode} />
           </Field>
-          <Field id="group-joining-date" label="Date Of Joining">
-            <Input id="group-joining-date" type="date" value={joiningDate} onChange={(event) => setJoiningDate(event.target.value)} className={INPUT_CLASS} />
+          <Field id="group-phone" label="Phone Number" required>
+            <Input id="group-phone" type="tel" inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value)} required className={INPUT_CLASS} />
           </Field>
-          <Field id="group-meeting-day" label="Meeting Day">
-            <Input id="group-meeting-day" value={meetingDay} onChange={(event) => setMeetingDay(event.target.value)} className={INPUT_CLASS} />
+          <Field id="group-office-number" label="Office Number">
+            <Input id="group-office-number" type="tel" value={officeNumber} onChange={(event) => setOfficeNumber(event.target.value)} className={INPUT_CLASS} />
           </Field>
-          <Field id="group-meeting-time" label="Meeting Time">
-            <Input id="group-meeting-time" type="time" value={meetingTime} onChange={(event) => setMeetingTime(event.target.value)} className={INPUT_CLASS} />
-          </Field>
-          <Field id="group-meeting-place" label="Meeting Place">
-            <Input id="group-meeting-place" value={meetingPlace} onChange={(event) => setMeetingPlace(event.target.value)} className={INPUT_CLASS} />
-          </Field>
+          <div className="col-span-full border-t border-card-border pt-4">
+            <label htmlFor="group-meeting-enabled" className="flex items-center gap-2 fs-text font-medium text-body">
+              <input id="group-meeting-enabled" type="checkbox" checked={meetingEnabled} onChange={(event) => setMeetingEnabled(event.target.checked)} className="size-4 accent-primary" />
+              Group Meeting Date
+            </label>
+          </div>
+          {meetingEnabled ? (
+            <>
+              <Field id="group-meeting-frequency" label="Frequency" required>
+                <SearchSelect id="group-meeting-frequency" options={[]} value={meetingFrequency} allowCustom placeholder="Select Frequency" onValueChange={setMeetingFrequency} />
+              </Field>
+              <div className="flex items-end">
+                <Button type="button" variant="outline" disabled={!meetingFrequency.trim()} onClick={addMeetingFrequency} className="h-[var(--control-height)] gap-2 fs-text">
+                  <Plus className="size-4" aria-hidden="true" />
+                  Add
+                </Button>
+              </div>
+              {meetingFrequencies.length > 0 ? (
+                <ul className="col-span-full flex flex-wrap gap-2" aria-label="Added meeting frequencies">
+                  {meetingFrequencies.map((frequency) => (
+                    <li key={frequency} className="border border-card-border bg-subtle px-2 py-1 fs-text text-body">{frequency}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </>
+          ) : null}
         </FormSection>
 
         {error ? <p role="alert" className="fs-text text-accent-red">{error}</p> : null}
@@ -306,8 +337,7 @@ export default function CreateGroupPage() {
             <Link href="/clients">Cancel</Link>
           </Button>
           <Button type="submit" disabled={!groupDetailsUnlocked || !groupDetailsValid || saving} aria-busy={saving} className="h-[var(--control-height)] px-4 fs-text font-semibold">
-            {saving ? "Saving..." : "Continue"}
-            {!saving ? <ArrowRight className="size-4" aria-hidden="true" /> : null}
+            {saving ? "Creating..." : "Create"}
           </Button>
         </div>
       </form>

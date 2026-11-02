@@ -760,6 +760,9 @@ export async function createClient(payload: {
   email?: string | null;
   nationalId?: string | null;
   branchId?: string | null;
+  membershipPolicyId?: string | null;
+  groupId?: string | null;
+  joinedAt?: string | null;
   profile?: unknown;
 }): Promise<ClientResponse> {
   return apiRequest<ClientResponse>("/settings/clients", {

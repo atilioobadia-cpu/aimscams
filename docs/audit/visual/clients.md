@@ -73,4 +73,30 @@ The Clients list now follows Wakandi's filter interaction pattern for the values
 
 ### Completion gate
 
-Clients is **not complete**. Close the personal/contact/identity/residence/employment fields, group details, edit/upload flow, profile tab labels/order/behavior, and local interaction states; then verify both desktop widths and the collapsed sidebar in the visible browser. Do not proceed to the next page until that verification passes. Chrome automation stopped after its Windows URL safety check, so the current pass is evidence and source review only; local visual re-verification and the completion commit for the page are still pending.
+Clients is **not complete**. Close the personal/contact/identity/residence/employment fields, group details, edit/upload flow, profile tab labels/order/behavior, and local interaction states; then verify both desktop widths and the collapsed sidebar in the visible browser. Do not proceed to the next page until that verification passes.
+
+## Visible form comparison and implementation update — 2026-11-02
+
+- Restored the user-visible Chrome session, opened the blank Wakandi Create Client and Create Group forms, and compared the first membership sections. No production form values were entered; no records were created, edited, or deleted.
+- Compared the local Create Client membership step in Chrome. Its required Policy, Date Of Joining, and Branch Name, optional Client Manager and Group Name, generated six-digit reference, and original font/control scale remain intact. Removed the extra outer form frame and changed the title action to the reference close icon.
+- Added the captured Personal Details, Contact Details, Identity Number, Residence, and Employment fields to the local Create Client form. Age is calculated and read-only; disability and same-as-current controls are checkboxes; Identity Number fields are optional as shown in the captures. The create payload keeps the profile fields grouped under personal, contact, identity, residence, and employment.
+- Compared the local Create Group membership step in Chrome; it matches the reference Policy, Branch Name, and optional Relationship Manager structure. Replaced the previous unrelated reference/date/day/time/place inputs with the captured Region/State, District/City, Ward, Group Name, Country Code, Phone Number, Office Number, and optional Group Meeting Date/Frequency/Add controls. The payload uses the `contact` and `meeting.frequency` fields read by the existing group detail view.
+- The complete selectable values for Country Code, MNO, Nationality, and Group Meeting Frequency are not verified from the currently accessible blank production forms. Do not claim these option lists are exact; keep them open until the reference values can be observed without entering production data.
+- Focused ESLint and web TypeScript checks passed after the payload-shape adjustment. No client or group sample record has been added.
+
+### Still open before Clients can be committed as complete
+
+- Unlock and visually inspect the local Group Details step without submitting a record, then compare field dimensions and spacing at the standard and collapsed-sidebar layouts.
+- Verify country/MNO/nationality/frequency option values from the supplied reference captures or safe read-only controls.
+- Implement and verify the missing client edit/upload flow and align individual profile tabs and their content/actions with the reference.
+- Resolve the list type/status values and backend support, invitation-link service gap, and any remaining row/table differences recorded above.
+
+Clients remains the active page. Commit and proceed only after those client-specific checks pass.
+
+## Sample-data setup — 2026-11-02
+
+- The authenticated Wakandi Clients page and blank Add Client form were read in Chrome. Only the policy configuration and form structure were inspected; no production values were entered and no Wakandi records were created, edited, or deleted.
+- Added a matching active Individual membership policy in local AIMSCAMS and created four fictional QA members, bringing the local list to five total entries including its pre-existing row. Their personal details are synthetic and are not copied from Wakandi.
+- Opened one local sample profile and selected Residence. The browser still showed the empty state after reload. Added profile rendering for the residence fields when the API returns them; the stored profile response for this existing sample still needs verification before this result can be marked resolved.
+- The new conditional Residence view uses the existing font and spacing tokens. Focused ESLint and `tsc --noEmit --incremental false` passed. The regular workspace typecheck could not generate `.next/types/routes.d.ts` because the running dev server held the file open.
+- Other previously recorded Clients gaps remain open: Edit Client and document uploads, profile tabs backed by local records, unsupported production type/status values, invitation-link service, and table details. Keep Clients as the active page until these are resolved and browser-verified.
