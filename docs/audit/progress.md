@@ -657,3 +657,10 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - A combined all-49-test attempt was interrupted after five repeated Clients setup failures; it did not yield a complete runner summary and is not counted as a full suite result.
 - No dashboard or shared-shell source was changed in the baseline. No authentication data or Wakandi production data was copied or modified.
 
+## 2026-11-02 — Round 4 group 1: dashboard page shell and shared header
+
+- Implementation commit pushed: 52e5033.
+- Updated shared content inset tokens and AppShell to align the Dashboard content start; adjusted the English label/chevron, institution registration spacing, branch typography offsets, and profile-avatar gradient.
+- npm run typecheck passed. Reviewed the authenticated local Dashboard in visible Chrome; the active tab, header, sidebar and KPI/chart content rendered after hot reload. Wakandi remained read-only.
+- Post-commit representative run of both E2E specs: 2 failed, 0 passed, 0 parity assertions evaluated. Each redirected to /login because the standalone ignored Playwright storage state is unauthenticated.
+
