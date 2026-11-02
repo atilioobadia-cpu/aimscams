@@ -161,7 +161,7 @@ function FilterPopover({
           aria-label={filter.label}
           aria-expanded={open}
           data-testid={`dashboard-filter-${filter.key}`}
-          className="h-9 justify-between gap-3 rounded-[5px] border-primary px-3 fs-text font-normal text-primary hover:bg-primary-tint hover:text-primary"
+          className="h-[34.93px] justify-between gap-1 rounded-[5px] !border-primary !px-2 fs-text font-normal !text-primary transition-colors hover:bg-primary-tint hover:text-primary"
         >
           <span>{filter.label}{isDate && value.startsWith("ON:") ? `: ${dateText(value.slice(3))}` : ""}</span>
           <ChevronDown className="size-4" aria-hidden="true" />
