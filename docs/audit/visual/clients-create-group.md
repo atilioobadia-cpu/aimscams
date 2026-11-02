@@ -1,23 +1,27 @@
 # Create Group visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\clients-create-group\FULL.png`  
+Date: 2026-11-02
+Reference: `F:\Wakandi\clients-create-group\FULL.png` and the dated capture in the same folder
 AIMSCAMS route: `/clients/create-group`
 
-## Comparison
+## Reference observations
 
-The reference has a full-width Create New Group title card with a Cancel action. The first expanded Membership Details accordion contains required searchable Policy and Branch Name selectors, an optional Relationship Manager selector, and a Next button. A second Group Details accordion and persistent Cancel/Continue footer are also visible.
+The initial reference state has a full-width Create New Group title card with a Cancel action. Membership Details is open and contains required Policy and Branch Name searchable selectors in a two-column row, followed by an optional Relationship Manager selector. A Next button sits at the lower right of the section. Group Details is collapsed and disabled initially. Cancel and Continue actions remain at the bottom of the form.
 
-AIMSCAMS currently presents a three-step registration wizard. Its first step has Reference Number, Group Name, free-text Branch ID and Membership Policy fields, plus Joining Date and Back/Next controls. It has a progress bar, but not the reference accordion layout, searchable selectors, relationship-manager field, or visible second-section/footer composition. The title treatment is also plain breadcrumb/heading text rather than the reference title card.
+The reference does not show the inside of Group Details or any post-Next state, so those fields and interactions cannot be scored against the supplied capture.
 
-## Recommendations
+## AIMSCAMS changes
 
-- Rework the first step around the Membership Details accordion, using searchable policy, branch-name, and relationship-manager selectors backed by the local domain data.
-- Preserve the subsequent group details in the reference accordion/footer layout, and align the page title and cancel controls with the shared title card.
-- Keep the existing wizard's later workflow only where it maps to the reference sections; do not treat a progress bar as a substitute for the reference structure.
+- Replaced the three-step progress wizard with the reference title card and two accordion sections.
+- Added searchable Policy, Branch Name, and Relationship Manager controls backed by the existing local lookup APIs.
+- Kept Group Details locked until the required membership selections are made, with the bottom Continue action disabled until a group name is provided.
+- Preserved the existing group name, reference number, joining date, and meeting schedule fields under Group Details and passed the selected policy, branch, and manager through the existing group creation request.
+- Kept all control heights tied to the shared v1.2.0 size tokens.
 
-Browser review was read-only. No fields were entered and Next was not used.
+## Verification and remaining evidence
+
+TypeScript check passed after the implementation. A visible browser render is still pending: the local tab redirected to `/login` after the development server was restarted, and the user needs to sign in there. No values were entered and no group was created. The two supplied captures show only the initial state, leaving the expanded Group Details state unverified against Wakandi.
 
 ## Status
 
-Structure and field differences remain. No implementation change was made during this audit.
+Initial-state structure and fields are implemented. Browser verification and the post-Next comparison remain pending authentication and a Wakandi reference of the expanded Group Details state.
