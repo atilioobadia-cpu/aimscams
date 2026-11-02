@@ -19,6 +19,9 @@ test.use({
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/clients", { waitUntil: "domcontentloaded" });
+  if (new URL(page.url()).pathname === "/login") {
+    throw new Error("Clients parity assertions require an authenticated local storage state; this run was redirected to /login.");
+  }
   await expect(page.getByRole("heading", { name: "Clients" })).toBeVisible({ timeout: 500 });
 });
 
