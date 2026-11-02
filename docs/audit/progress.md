@@ -635,3 +635,9 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Replaced the three-step shell with Upload File, Field Mapping, Validation And Preview, and Result. Added CSV mapping for the fields supported by the local transaction API and preview checks before import.
 - Excel parsing is unavailable. No transaction file was uploaded and no ledger transaction was submitted; the action would post transactions.
 - Reviewed the initial screen in the visible in-app browser. The viewport is narrower than the reference. Production build passed.
+
+## 2026-11-02 — Round 3 Clients parity baseline
+
+- Added a 38-check Playwright spec covering header, title layout, toolbar, table, sorting, sidebar and chat.
+- Read the live Wakandi Clients header/sidebar DevTools measurements and confirmed its table exposes 12 headers, including Status, KYC Status, DOJ and Group Name.
+- Baseline runner result: 0 parity assertions evaluated; 1 test failed in setup because the ignored AIMSCAMS storage state redirects to `/login`; remaining 37 checks were not evaluated. Details: `docs/audit/round3-failing.md`.
