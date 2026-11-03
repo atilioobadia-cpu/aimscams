@@ -6,7 +6,7 @@ Reference: authenticated Wakandi production pages under `/accounting/*`. Inspect
 
 | Wakandi page | Reference UI | AIMSCAMS work |
 | --- | --- | --- |
-| Charts of Accounts | White title card; Add Groups/Add Ledgers actions; period selector; opening-balance warning; expandable account tree with code, type, opening/closing balances, and row actions. | Existing local chart view already follows the card/tree structure and keeps its local create/edit flows. No layout rewrite was needed in this pass. |
+| Charts of Accounts | White title card; Add Groups, Add Ledgers, and Manage categories actions; period selector; opening-balance warning; expandable account tree with code, type, opening/closing balances, and row actions. | The local title card, period, warning, and account tree are close to the reference. Local Add Groups/Add Ledgers are still toast-only placeholders, and Manage categories is missing. The local API currently has no matching group/category management operation, so these remain functional gaps. |
 | Entries | Page title and date period, Download PDF/Excel/CSV controls, and a dense table with Date, Entry ID, Details, Entry Type, Status, Ledger Code, Ledger Name, Debit, and Credit. Empty state and paging are shown when there are no rows. | Kept local journal creation, posting, reversal, and search/status/type/date filters. Removed the misleading Archived control because the local API has no archived-entry feature. The local Entries toolbar still differs: it does not yet provide the three reference export actions, and the extra local filters remain visible. |
 | Ledger Entries | Date period, ledger/type filters, Add Filters, and exports above a wide entries table; empty state when criteria return no rows. | Replaced the custom balance-summary dashboard and nested accounting tabs with a reference-shaped table, date/account/type controls, empty state, and paging. The local endpoint remains scoped to one ledger account and has no Add Filters/export controls. |
 | Asset Types | Two tabs: Asset Type and Asset Allocation. Type list uses name/ledger/action columns; allocations use a wide register with text and type filters. | Added both tabs, their corresponding columns, local search/type filtering, and horizontal scrolling for the wide allocation table. |
@@ -28,6 +28,7 @@ Updated Accounting submenu labels to match Wakandi: `Entries`, `Asset Types`, `F
 ## Verification
 
 - Compared the visible Chrome rendering of AIMSCAMS and Wakandi Accounting Reports at the same browser viewport; both show the same 4-column, 15-card arrangement and card ordering.
+- Compared both Chart of Accounts pages in the visible Chrome session; the local account tree columns and opening-balance warning match the reference structure, with the missing/placeholder actions listed above.
 - Opened the local Asset Allocation tab and confirmed the reference columns and horizontal overflow container are present.
 - Opened the local Fixed Assets and Ledger Entries pages and confirmed their reference-style headers, filters, columns, and empty states in the rendered UI.
 - Ran `npm run typecheck -w @aimscams/web` successfully after the implementation changes.
