@@ -6,9 +6,16 @@ AIMSCAMS route: `/business-account`
 
 ## Comparison
 
-The reference capture shows the Add Funds dialog open above the Business Account header, collection/disbursement section, and invoice table. AIMSCAMS now presents the same page structure and opens an Add Funds dialog with Top Up, Deposit, QuickLoan Top Up, Amount, Payer, Provider, Message, Cancel, and disabled Save controls. The local empty table uses the reference invoice columns without copying invoice records.
+The saved reference captures cover Collection and Disbursements, Quick Loan, Expenditure, Transactions, Fee Settings, Invoices, and the Add Funds dialog. AIMSCAMS had all six tab labels but always rendered the invoice table regardless of selection.
 
-The visible in-app browser review confirmed the route renders and the dialog opens. The in-app viewport was narrower and shorter than the reference image, so dialog geometry and page-wide pixel parity were not scored. The existing automated score measured a different state and is invalidated pending a canonical same-size recapture.
+## AIMSCAMS changes (2026-11-04)
+
+- Made all six tabs switch content and marked the selected tab accessibly.
+- Added the collection/quick-loan balance cards and transaction table, expenditure convenience-fee toggle and columns, transaction search/filter toolbar, fee-settings ledger sections, and complete invoice headings.
+- Kept data unavailable/empty because the local business-account API has no wallet, settlements, transaction history, ledger settings, invoices, or provider data. Did not copy values from the Wakandi captures.
+- Preserved the Add Funds dialog; its Save action remains disabled, and no financial operation was submitted.
+
+Reference screenshots were reviewed and the AIMSCAMS route was clicked in visible Chrome. The viewport differs from the saved capture, and live Wakandi DevTools measurements remain unavailable while SSO reCAPTCHA blocks login, so exact pixel parity is not claimed.
 
 ## Data and workflow limits
 

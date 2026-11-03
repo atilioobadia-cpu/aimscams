@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Download, Plus } from "lucide-react";
+import type { ReactNode } from "react";
+import { ChevronDown, Download, Info, Plus, Search, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,10 +28,35 @@ const FUND_TYPES = ["Top Up", "Deposit", "QuickLoan Top Up"] as const;
 
 type FundType = (typeof FUND_TYPES)[number];
 
+function BusinessAccountTable({ columns, search, filters = false, onSearch, toolbarEnd }: { columns: string[]; search: string; filters?: boolean; onSearch?: (value: string) => void; toolbarEnd?: ReactNode }) {
+  const [showFilterInfo, setShowFilterInfo] = useState(false);
+  return (
+    <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+      <div className="flex flex-wrap items-center gap-3 border-b border-card-border p-4">
+        <label className="relative block w-full max-w-[260px]">
+          <Search aria-hidden="true" className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Input aria-label="Search business account transactions" className="h-[42px] pl-9" placeholder="Search" value={search} onChange={(event) => onSearch?.(event.target.value)} readOnly={!onSearch} />
+        </label>
+        {filters ? <button type="button" onClick={() => setShowFilterInfo((open) => !open)} className="inline-flex h-[42px] items-center gap-2 rounded-[var(--control-radius)] border border-primary px-3 fs-text font-medium text-primary hover:bg-primary/5"><Plus aria-hidden="true" className="size-4" />Add Filters<ChevronDown aria-hidden="true" className="size-4" /></button> : null}
+        {toolbarEnd ? <div className="ml-auto">{toolbarEnd}</div> : null}
+        {showFilterInfo ? <span className="fs-small text-muted-foreground">Filters are unavailable until business transaction data is connected.</span> : null}
+      </div>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader><TableRow>{columns.map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}<TableHead className="w-12 text-center"><SlidersHorizontal aria-label="Table columns" className="mx-auto size-4" /></TableHead></TableRow></TableHeader>
+          <TableBody><TableRow><TableCell colSpan={columns.length + 1} className="h-48 text-center fs-text text-muted-foreground">No data available</TableCell></TableRow></TableBody>
+        </Table>
+      </div>
+    </section>
+  );
+}
+
 export default function BusinessAccountPage() {
   const [activeTab, setActiveTab] = useState(TABS[0]);
   const [fundType, setFundType] = useState<FundType>("Top Up");
   const [addFundsOpen, setAddFundsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [convenienceFee, setConvenienceFee] = useState(false);
 
   return (
     <div className="flex flex-col gap-[var(--space-8)]">
@@ -75,16 +101,17 @@ export default function BusinessAccountPage() {
         </div>
       </section>
 
-      <nav aria-label="Business account sections" className="flex flex-wrap gap-[var(--space-6)]">
+      <nav aria-label="Business account sections" role="tablist" className="flex flex-wrap border-b border-card-border bg-subtle">
         {TABS.map((tab) => {
           const selected = activeTab === tab;
           return (
             <button
-              aria-current={selected ? "page" : undefined}
+              aria-selected={selected}
+              role="tab"
               className={
                 selected
-                  ? "rounded-[var(--control-radius)] bg-primary px-[var(--space-12)] py-[var(--space-6)] fs-text font-semibold text-on-primary"
-                  : "rounded-[var(--control-radius)] bg-subtle px-[var(--space-12)] py-[var(--space-6)] fs-text font-medium text-heading hover:bg-muted"
+                  ? "border-b-2 border-primary bg-card px-5 py-3 fs-text font-semibold text-primary"
+                  : "border-b-2 border-transparent px-5 py-3 fs-text font-medium text-heading hover:bg-muted"
               }
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -96,32 +123,32 @@ export default function BusinessAccountPage() {
         })}
       </nav>
 
-      <section aria-label="Invoices" className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="pl-[var(--space-12)]">Invoice Date</TableHead>
-                <TableHead>Invoice Id</TableHead>
-                <TableHead>Invoice Number</TableHead>
-                <TableHead className="text-right">Invoice Amount (TSh)</TableHead>
-                <TableHead className="text-right">Discount (TSh)</TableHead>
-                <TableHead className="pr-[var(--space-16)] text-right">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={6} className="py-[var(--space-24)] text-center fs-text text-muted-foreground">
-                  No invoice data available
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+      {activeTab === "Invoices" ? <section aria-label="Invoices" className="space-y-4 rounded-[var(--card-radius)] border border-card-border bg-card p-4">
+        <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border">
+          <div className="overflow-x-auto"><Table><TableHeader><TableRow>{["Invoice Date", "Invoice Id", "Invoice Number", "Name", "Status", "Duration", "Created At", "Invoice Amount (TSh)", "Discount (TSh)", "Action"].map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}</TableRow></TableHeader><TableBody><TableRow><TableCell colSpan={10} className="h-32 text-center fs-text text-muted-foreground">No invoice data available</TableCell></TableRow></TableBody></Table></div>
         </div>
-        <div className="border-t border-card-border px-[var(--space-12)] py-[var(--space-8)] fs-text text-muted-foreground">
-          Tariffs and charges are unavailable.
-        </div>
-      </section>
+        <p className="fs-text text-muted-foreground">Tariffs and charges are unavailable.</p>
+      </section> : null}
+
+      {activeTab === "Collection and disbursements" ? <div className="space-y-4">
+        <div className="flex flex-wrap gap-3"><div className="min-w-56 rounded-[var(--card-radius)] border border-card-border bg-card p-4 text-right"><p className="fs-text text-muted-foreground">Balance</p><p className="fs-text font-semibold text-heading">Unavailable</p></div><div className="min-w-56 rounded-[var(--card-radius)] border border-card-border bg-card p-4 text-right"><p className="fs-text text-muted-foreground">Pending Settlement</p><p className="fs-text font-semibold text-heading">Unavailable</p></div></div>
+        <div role="status" className="flex items-center gap-2 rounded-[var(--control-radius)] bg-amber-50 px-4 py-3 fs-text text-amber-800"><Info aria-hidden="true" className="size-4 shrink-0" />Wallet settlement information is unavailable until the business account service is connected.</div>
+        <BusinessAccountTable search={search} onSearch={setSearch} columns={["Timestamp", "Transaction Id", "Status", "Settlement", "Type", "Description", "Amount (TSh)"]} />
+      </div> : null}
+
+      {activeTab === "Quick loan" ? <div className="space-y-4">
+        <div className="flex flex-wrap gap-3">{["Balance", "Pending Settlement"].map((label) => <div key={label} className="min-w-56 rounded-[var(--card-radius)] border border-card-border bg-card p-4 text-right"><p className="fs-text text-muted-foreground">{label}</p><p className="fs-text font-semibold text-heading">Unavailable</p></div>)}</div>
+        <BusinessAccountTable search={search} onSearch={setSearch} filters columns={["Timestamp", "Transaction Id", "Status", "Settlement", "Type", "Description", "Amount (TSh)"]} />
+      </div> : null}
+
+      {activeTab === "Expenditure" ? <BusinessAccountTable search={search} onSearch={setSearch} toolbarEnd={<label className="flex items-center gap-2 fs-text text-heading">Convenience Fee<input type="checkbox" checked={convenienceFee} onChange={(event) => setConvenienceFee(event.target.checked)} className="size-5 accent-primary" /></label>} columns={["Timestamp", "Transaction ID", "Status", "Type", "Client/Member", "Description", "Amount (TSh)"]} /> : null}
+
+      {activeTab === "Transactions" ? <BusinessAccountTable search={search} onSearch={setSearch} filters columns={["Timestamp", "Transaction ID", "Status", "Type", "Description", "Amount (TSh)"]} /> : null}
+
+      {activeTab === "Fee settings" ? <section aria-label="Fee settings" className="space-y-5 rounded-[var(--card-radius)] border border-card-border bg-card p-6">
+        <h2 className="fs-text font-semibold text-heading">Accounting Setting</h2>
+        {[{title:"Business account ledger",description:"Ledger used for inward business account transactions.",code:"Unavailable",name:"Unavailable"},{title:"Expense account",description:"Transaction charges paid by the institution are recorded under this ledger.",code:"Unavailable",name:"Unavailable"},{title:"Liability account",description:"Transaction charges paid by members are recorded under this ledger.",code:"Unavailable",name:"Unavailable"}].map((item) => <div key={item.title} className="space-y-4 border-b border-card-border pb-5 last:border-0"><div><h3 className="fs-text font-semibold text-heading">{item.title}</h3><p className="mt-1 flex items-center gap-2 fs-text text-muted-foreground"><Info aria-hidden="true" className="size-4" />{item.description}</p></div><div className="grid gap-4 md:grid-cols-2"><div><p className="fs-text font-semibold text-label">Ledger Code</p><p className="mt-1 fs-text text-body">{item.code}</p></div><div><p className="fs-text font-semibold text-label">Ledger Name</p><p className="mt-1 fs-text text-body">{item.name}</p></div></div>{item.title === "Expense account" ? <Button variant="outline" disabled>Move fees to system expense</Button> : null}</div>)}
+      </section> : null}
 
       <Dialog onOpenChange={setAddFundsOpen} open={addFundsOpen}>
         <DialogContent className="flex max-h-[calc(100vh-2rem)] max-w-2xl flex-col gap-0 overflow-hidden rounded-[12px] p-0 sm:max-w-2xl" showCloseButton={false}>
