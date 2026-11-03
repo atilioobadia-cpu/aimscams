@@ -10,11 +10,13 @@ The Wakandi page has a report title card with Download, a date-range preset and 
 
 AIMSCAMS shows only an as-of date and Refresh above the generic chart-of-accounts table (Code, Account, Type, Debit, Credit, Balance). The returned rows are account balances, not accrued installment records. This is a report data and filter-contract mismatch, beyond styling.
 
-## Recommendations
+## AIMSCAMS changes
 
-- Connect the route to an accrued-installments report query and its approved fields.
-- Add the reference filter and download controls once their data and permission contracts are available.
-- Recheck the full grid with approved populated report data before matching its column widths and horizontal scrolling.
+- Removed the unrelated Chart of Accounts request and table from this loan-report route.
+- Added the screenshot-based title/download card, date preset and range controls, portfolio filter row, submit/clear actions, sortable/filter-style column affordances, and horizontally scrollable result register.
+- Added the three reference fields for accrued, paid accrued, and outstanding accrued interest.
+- Kept the result state empty because AIMSCAMS has no accrued-installments query. Portfolio filter choices remain unavailable rather than being fabricated.
 
-Browser review was read-only; no report was submitted or downloaded.  
-Implementation commit: none; report query and filter contracts are absent.
+## Measurement and verification
+
+Compared the saved Wakandi capture against the route in the visible Chrome session. The local browser showed the date/filter controls and three report columns in order. SSO reCAPTCHA remained unavailable, so exact live DevTools CSS values could not be checked. No report query, export, or Wakandi action was submitted; the local CSV action exports the report headings only while no data endpoint exists.
