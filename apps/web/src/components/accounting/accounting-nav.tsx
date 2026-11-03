@@ -8,7 +8,7 @@ import { cn } from "cn";
 const links = [
   { href: "/accounting", label: "Overview" },
   { href: "/accounting-chart-of-accounts", label: "Chart of accounts" },
-  { href: "/accounting-entries", label: "Journal entries" },
+  { href: "/accounting-entries", label: "Entries" },
   { href: "/accounting-ledger-entries", label: "Ledger entries" },
 ];
 

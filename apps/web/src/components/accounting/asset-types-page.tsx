@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Box, Plus, Search } from "lucide-react";
+import { Box, Plus, Search, SlidersHorizontal } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { PageHeader } from "@/components/data/page-header";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { ApiError } from "@/lib/api";
-import { createAssetType, listAssetTypes, type AssetType } from "@/lib/accounting";
+import { createAssetType, listAssetTypes, listFixedAssets, type AssetType, type FixedAsset } from "@/lib/accounting";
 import { titleCase } from "@/lib/privacy";
 
 function failureMessage(failure: unknown): string {
@@ -21,6 +20,7 @@ function failureMessage(failure: unknown): string {
 
 export function AssetTypesPage() {
   const [items, setItems] = useState<AssetType[]>([]);
+  const [allocations, setAllocations] = useState<FixedAsset[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
@@ -34,26 +34,27 @@ export function AssetTypesPage() {
   const [createError, setCreateError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const [createOpen, setCreateOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"types" | "allocations">("types");
+  const [allocationType, setAllocationType] = useState("");
 
   useEffect(() => {
     let cancelled = false;
     const timer = window.setTimeout(() => {
       setLoading(true);
       setError(null);
-      void listAssetTypes()
-        .then((next) => {
+      void Promise.allSettled([listAssetTypes(), listFixedAssets()])
+        .then(([typesResult, allocationsResult]) => {
           if (cancelled) return;
-          setItems(next);
-          setForbidden(false);
-        })
-        .catch((failure: unknown) => {
-          if (cancelled) return;
-          if (failure instanceof ApiError && failure.status === 403) {
+          if (typesResult.status === "fulfilled") {
+            setItems(typesResult.value);
+            setForbidden(false);
+          } else if (typesResult.reason instanceof ApiError && typesResult.reason.status === 403) {
             setForbidden(true);
             setItems([]);
           } else {
-            setError(failureMessage(failure));
+            setError(failureMessage(typesResult.reason));
           }
+          setAllocations(allocationsResult.status === "fulfilled" ? allocationsResult.value : []);
         })
         .finally(() => {
           if (!cancelled) setLoading(false);
@@ -94,6 +95,11 @@ export function AssetTypesPage() {
     const q = query.trim().toLowerCase();
     if (!q) return true;
     return item.code.toLowerCase().includes(q) || item.name.toLowerCase().includes(q);
+  });
+  const filteredAllocations = allocations.filter((item) => {
+    const q = query.trim().toLowerCase();
+    const matchesText = !q || item.description.toLowerCase().includes(q) || item.assetNo.toLowerCase().includes(q);
+    return matchesText && (!allocationType || item.assetType?.name === allocationType);
   });
 
   if (forbidden) {
@@ -144,46 +150,37 @@ export function AssetTypesPage() {
         </form>
       </Modal>
 
-      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
-        <div className="mb-3 flex flex-wrap items-end gap-3">
-          <div className="flex-1">
-            <label className="mb-1 block fs-text font-medium text-body" htmlFor="asset-search">Search</label>
-            <div className="relative max-w-md">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-              <Input id="asset-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Code or name" className="h-[var(--control-height)] pl-9" />
-            </div>
-          </div>
+      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <div role="tablist" aria-label="Asset sections" className="flex h-[44px] items-stretch border-b border-chrome bg-subtle px-2">
+          <button type="button" role="tab" aria-selected={activeTab === "types"} onClick={() => { setActiveTab("types"); setQuery(""); }} className={`-mb-px border-b-2 px-4 fs-text font-medium transition-colors ${activeTab === "types" ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-strong"}`}>Asset Type</button>
+          <button type="button" role="tab" aria-selected={activeTab === "allocations"} onClick={() => { setActiveTab("allocations"); setQuery(""); }} className={`-mb-px border-b-2 px-4 fs-text font-medium transition-colors ${activeTab === "allocations" ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-strong"}`}>Asset Allocation</button>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 border-b border-chrome px-3 py-2.5">
+          <label className="relative min-w-[220px] flex-1 sm:max-w-[360px]">
+            <span className="sr-only">Search by {activeTab === "types" ? "name" : "name or asset ID"}</span>
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input id="asset-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={activeTab === "types" ? "Filter by Name" : "Search assets"} className="h-9 pl-9" />
+          </label>
+          {activeTab === "allocations" ? (
+            <>
+              <label className="sr-only" htmlFor="asset-type-filter">Filter by Asset Type</label>
+              <select id="asset-type-filter" value={allocationType} onChange={(event) => setAllocationType(event.target.value)} className="h-9 min-w-[150px] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text text-body">
+                <option value="">All asset types</option>
+                {items.map((item) => <option key={item.id} value={item.name}>{item.name}</option>)}
+              </select>
+            </>
+          ) : null}
         </div>
         {loading ? (
-          <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
-            <PanelSkeleton rows={6} />
-          </section>
+          <PanelSkeleton rows={6} />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[800px] text-left fs-text">
+            <table className={`w-full ${activeTab === "types" ? "min-w-[760px]" : "min-w-[1450px]"} text-left fs-text`}>
               <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
-                <tr>
-                  <th className="whitespace-nowrap px-4 py-3">Code</th>
-                  <th className="whitespace-nowrap px-4 py-3">Name</th>
-                  <th className="whitespace-nowrap px-4 py-3">Depreciation method</th>
-                  <th className="whitespace-nowrap px-4 py-3">Useful life (months)</th>
-                  <th className="whitespace-nowrap px-4 py-3">Status</th>
-                  <th className="whitespace-nowrap px-4 py-3">Description</th>
-                </tr>
+                {activeTab === "types" ? <tr><th className="whitespace-nowrap px-4 py-3">Name</th><th className="whitespace-nowrap px-4 py-3">Ledger</th><th className="w-12 px-4 py-3 text-center"><span className="sr-only">Actions</span><SlidersHorizontal className="mx-auto size-4" aria-hidden="true" /></th></tr> : <tr><th className="whitespace-nowrap px-4 py-3">External Asset ID</th><th className="whitespace-nowrap px-4 py-3">Name</th><th className="whitespace-nowrap px-4 py-3">Asset Type</th><th className="whitespace-nowrap px-4 py-3">Asset Status</th><th className="whitespace-nowrap px-4 py-3">Serial Number</th><th className="whitespace-nowrap px-4 py-3">Supplier Name</th><th className="whitespace-nowrap px-4 py-3">Supplier Address</th><th className="whitespace-nowrap px-4 py-3">Supplier Company</th><th className="whitespace-nowrap px-4 py-3">Entry Date</th><th className="whitespace-nowrap px-4 py-3">Department</th><th className="whitespace-nowrap px-4 py-3">User</th><th className="w-12 px-4 py-3 text-center"><span className="sr-only">Actions</span><SlidersHorizontal className="mx-auto size-4" aria-hidden="true" /></th></tr>}
               </thead>
               <tbody>
-                {filtered.length === 0 ? (
-                  <tr><td colSpan={6} className="px-4 py-16 text-center fs-text text-muted-foreground">{query ? "No data available for the selected search." : "No data available"}</td></tr>
-                ) : filtered.map((item) => (
-                  <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.code}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.name}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-body">{titleCase(item.depreciationMethod.replace(/_/g, " "))}</td>
-                    <td className="whitespace-nowrap px-4 py-3 tabular-nums text-body">{item.usefulLifeMonths}</td>
-                    <td className="whitespace-nowrap px-4 py-3"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td>
-                    <td className="px-4 py-3 text-body">{item.description ?? "N/A"}</td>
-                  </tr>
-                ))}
+                {activeTab === "types" ? filtered.length === 0 ? <tr><td colSpan={3} className="px-4 py-16 text-center fs-text text-muted-foreground">{query ? "No data available for the selected search." : "No data available"}</td></tr> : filtered.map((item) => <tr key={item.id} className="border-b border-card-border last:border-0"><td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.name}</td><td className="whitespace-nowrap px-4 py-3 text-body">—</td><td className="px-4 py-3" /></tr>) : filteredAllocations.length === 0 ? <tr><td colSpan={12} className="px-4 py-16 text-center fs-text text-muted-foreground">No data available</td></tr> : filteredAllocations.map((item) => <tr key={item.id} className="border-b border-card-border last:border-0"><td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.assetNo}</td><td className="whitespace-nowrap px-4 py-3 text-body">{item.description}</td><td className="whitespace-nowrap px-4 py-3 text-body">{item.assetType?.name ?? "—"}</td><td className="whitespace-nowrap px-4 py-3 text-body">{titleCase(item.status)}</td><td className="px-4 py-3 text-body">—</td><td className="px-4 py-3 text-body">—</td><td className="px-4 py-3 text-body">—</td><td className="px-4 py-3 text-body">—</td><td className="whitespace-nowrap px-4 py-3 text-body">{new Date(item.acquisitionDate).toLocaleDateString()}</td><td className="px-4 py-3 text-body">—</td><td className="px-4 py-3 text-body">—</td><td className="px-4 py-3" /></tr>)}
               </tbody>
             </table>
           </div>

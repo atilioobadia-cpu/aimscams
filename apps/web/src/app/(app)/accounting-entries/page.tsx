@@ -553,9 +553,6 @@ export default function JournalEntriesPage() {
           </Button>
         ) : null}
 
-        <Button type="button" variant="outline" onClick={() => pushToast("Archived journal entries are not supported by the current API.")} className="h-10 min-w-[90px] justify-between">
-          <span>Archived</span><ChevronDown className="size-4" aria-hidden="true" />
-        </Button>
       </FilterBar>
 
       {forbidden ? (
