@@ -1,20 +1,15 @@
 # Deferred Interest Report visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\reports-loan-DeferredInterestReport\FULL.png`  
+Date: 2026-11-03
+Reference: `F:\Wakandi\reports-loan-DeferredInterestReport\FULL.png`
 AIMSCAMS route: `/reports-loan-DeferredInterestReport`
 
-## Comparison
+## AIMSCAMS changes
 
-The reference has a Download title card and filters for loan officer, product, institution, region, and group. Its sortable/filterable wide grid reports total outstanding principal, total outstanding interest, and total outstanding charges.
+- Replaced the generic chart-of-accounts output with a report-specific title/download card, filters, and horizontally scrollable results grid.
+- Added account/client/product/portfolio columns plus total outstanding principal, interest, and charges from the saved reference audit.
+- No report rows are shown because a local deferred-interest endpoint is unavailable; no Wakandi data was copied.
 
-AIMSCAMS renders an as-of date and Refresh above a chart-of-accounts balance table (Code, Account, Type, Debit, Credit, Balance). No deferred loan amounts or portfolio filters are shown.
+## Measurement and verification
 
-## Recommendations
-
-- Add the deferred-interest query and approved report field mapping.
-- Implement the reference filters and download action when the data contract is available.
-- Verify the grid and overflow against populated report data.
-
-Browser review was read-only; no report was submitted or downloaded.  
-Implementation commit: none; report query and filter contracts are absent.
+Compared against the saved Wakandi capture and visible AIMSCAMS page. Live DevTools CSS values remain unverified while SSO reCAPTCHA is failing. Filters remain unavailable where local option APIs do not exist; no production data was changed.

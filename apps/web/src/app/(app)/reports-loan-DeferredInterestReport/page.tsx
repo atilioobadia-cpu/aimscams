@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { LoanOperationalReportPage } from "@/components/accounting/loan-operational-report-page";
 
 export const metadata: Metadata = { title: "Deferred interest report · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="Deferred interest report" description="Deferred interest report." />;
+  return <LoanOperationalReportPage title="Deferred Interest Report" filename="deferred-interest-report.csv" dateMode="as-of" columns={[
+    "Account Number", "Client Name", "Loan Product", "Loan Officer", "Branch", "Group",
+    "Total Outstanding Principal", "Total Outstanding Interest", "Total Outstanding Charges",
+  ]} />;
 }
