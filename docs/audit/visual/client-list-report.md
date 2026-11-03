@@ -21,3 +21,7 @@ Browser review was read-only. No report filters were submitted and no download w
 ## Status
 
 The current route is wired to the wrong report data shape and remains structurally different from the reference.
+
+## Implementation update (2026-11-03)
+
+Replaced the generic accounting balance page with the shared report title/download card, appropriate date and filter controls, Submit/Clear actions, and horizontally scrollable report table. Added columns based on the saved reference notes. Results remain empty where no matching local report endpoint exists; reference rows were not copied. AIMSCAMS was checked in the visible browser. Wakandi live DevTools values remain unverified because SSO reCAPTCHA blocks access.

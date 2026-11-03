@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { LoanOperationalReportPage } from "@/components/accounting/loan-operational-report-page";
 
 export const metadata: Metadata = { title: "Daily transaction report · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="Daily transaction report" description="Daily transaction report." />;
+  return <LoanOperationalReportPage title="Daily Transaction Report" filename="daily-transaction-report.csv" filters={["Group", "Region", "Branch"]} columns={[
+    "Transaction Id", "Transaction Date", "Transaction Type", "Product Name", "Client Name", "Account Number", "Debit", "Credit", "Reference Number", "Description", "Branch",
+  ]} />;
 }

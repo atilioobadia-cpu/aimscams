@@ -25,11 +25,15 @@ export function LoanOperationalReportPage({
   columns,
   filename,
   dateMode = "range",
+  filters,
+  queryField,
 }: {
   title: string;
   columns: string[];
   filename: string;
-  dateMode?: "range" | "as-of";
+  dateMode?: "range" | "as-of" | "none";
+  filters?: string[];
+  queryField?: { label: string; placeholder: string };
 }) {
   const initialDates = useMemo(() => {
     const end = new Date();
@@ -41,6 +45,9 @@ export function LoanOperationalReportPage({
   const [endDate, setEndDate] = useState(initialDates.end);
   const [period, setPeriod] = useState("Last 30 Days");
   const [, setApplied] = useState(0);
+  const filterLabels = filters ?? (dateMode === "as-of"
+    ? ["Group", "MFSL MWANZA", "Region", "Loan Officer", "Product Name"]
+    : ["MFSL MWANZA", "Group", "Region", "Loan Officer", "Product Name"]);
 
   function clearFilters() {
     const end = new Date();
@@ -84,20 +91,21 @@ export function LoanOperationalReportPage({
               </select>
             </>
           ) : null}
+          {dateMode !== "none" ? <>
           <label className="sr-only" htmlFor="accrued-start-date">{dateMode === "as-of" ? "As of date" : "Start date"}</label>
           <input id="accrued-start-date" type="date" value={dateMode === "as-of" ? endDate : startDate} onChange={(event) => { if (dateMode === "as-of") setEndDate(event.target.value); else { setStartDate(event.target.value); setPeriod("Custom Range"); } }} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" />
+          </> : null}
           {dateMode === "range" ? <>
             <label className="sr-only" htmlFor="accrued-end-date">End date</label>
             <input id="accrued-end-date" type="date" value={endDate} onChange={(event) => { setEndDate(event.target.value); setPeriod("Custom Range"); }} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" />
           </> : null}
-          {dateMode === "as-of" ? <FilterSelect label="Group" disabled /> : <FilterSelect label="MFSL MWANZA" disabled />}
-          {dateMode === "as-of" ? <FilterSelect label="MFSL MWANZA" disabled /> : <FilterSelect label="Group" disabled />}
-          <FilterSelect label="Region" disabled />
-          <FilterSelect label="Loan Officer" disabled />
-          <FilterSelect label="Product Name" disabled />
+          {queryField ? <input aria-label={queryField.label} placeholder={queryField.placeholder} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" /> : null}
+          {filterLabels.map((label) => <FilterSelect key={label} label={label} disabled />)}
           <div className="flex items-center gap-2">
-            <Button type="button" onClick={() => setApplied((value) => value + 1)} className="h-[42px] px-4">Submit</Button>
-            <Button type="button" variant="outline" onClick={clearFilters} className="h-[42px] border-primary px-4 text-primary hover:bg-primary/5 hover:text-primary">Clear</Button>
+            {dateMode !== "none" || queryField || filterLabels.length ? <>
+              <Button type="button" onClick={() => setApplied((value) => value + 1)} className="h-[42px] px-4">Submit</Button>
+              <Button type="button" variant="outline" onClick={clearFilters} className="h-[42px] border-primary px-4 text-primary hover:bg-primary/5 hover:text-primary">Clear</Button>
+            </> : null}
           </div>
         </div>
       </section>
