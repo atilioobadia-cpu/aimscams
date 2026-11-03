@@ -621,15 +621,15 @@ export function ClientProfile({ id }: { id: string }) {
                       aria-label="Show all client accounts"
                       aria-checked={showAllAccounts}
                       onClick={() => setShowAllAccounts((current) => !current)}
-                      className={cn("relative h-[26px] w-[46px] rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40", showAllAccounts ? "bg-primary" : "bg-[#adb5bd]")}
+                      className={cn("relative h-[22px] w-[38px] rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40", showAllAccounts ? "bg-primary" : "bg-[#cbd5e1]")}
                     >
-                      <span className={cn("absolute top-[3px] size-5 rounded-full bg-white shadow-sm transition-transform", showAllAccounts ? "translate-x-[23px]" : "translate-x-[3px]")} />
+                      <span className={cn("absolute left-[2px] top-[2px] size-[18px] rounded-full bg-white shadow-sm transition-transform", showAllAccounts ? "translate-x-[16px]" : "translate-x-0")} />
                     </button>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button asChild variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Link href={`/account-loan-application-create?clientId=${encodeURIComponent(client.id)}`}><Plus className="size-[14px]" aria-hidden="true" />New loan application</Link></Button>
-                    <Button asChild variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Link href={`/account-saving?clientId=${encodeURIComponent(client.id)}&open=1`}><Plus className="size-[14px]" aria-hidden="true" />Add saving</Link></Button>
-                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add share</Button>
+                    <Button asChild variant="outline" className="h-[30px] rounded-[6px] !border-primary !bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Link href={`/account-loan-application-create?clientId=${encodeURIComponent(client.id)}`}><Plus className="size-[14px]" aria-hidden="true" />New loan application</Link></Button>
+                    <Button asChild variant="outline" className="h-[30px] rounded-[6px] !border-primary !bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Link href={`/account-saving?clientId=${encodeURIComponent(client.id)}&open=1`}><Plus className="size-[14px]" aria-hidden="true" />Add saving</Link></Button>
+                    <Button variant="outline" className="h-[30px] rounded-[6px] !border-primary !bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add share</Button>
                   </div>
                 </div>
 
