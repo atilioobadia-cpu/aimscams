@@ -1,20 +1,15 @@
 # Expected Payment By Date Report visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\reports-loan-ExpectedPaymentByDateReport\FULL.png`  
+Date: 2026-11-03
+Reference: `F:\Wakandi\reports-loan-ExpectedPaymentByDateReport\FULL.png`
 AIMSCAMS route: `/reports-loan-ExpectedPaymentByDateReport`
 
-## Comparison
+## AIMSCAMS changes
 
-The reference includes a date-range preset and range, loan-officer/product/institution/group/region filters, Submit/Clear, and a Download action. Its sortable/filterable results grid shows principal due, interest due, fee due, total due, and total overdue.
+- Replaced the unrelated accounting balance table with the shared loan report title/download card, date range, portfolio filter row, Submit/Clear actions, and wide horizontally scrollable table.
+- Added due date, principal, interest, fee, total due, and total overdue columns from the saved reference audit.
+- Results remain empty because there is no local report endpoint. Unsupported filter option APIs remain disabled; no Wakandi financial values were copied.
 
-AIMSCAMS provides one as-of date and Refresh above generic chart-of-accounts balances. The page has neither the report filters nor expected/overdue payment fields.
+## Measurement and verification
 
-## Recommendations
-
-- Supply a date-range expected-payment query and its report filter model.
-- Map due and overdue components to the reference grid after the contract is agreed.
-- Add export and validate horizontal grid layout with approved report rows.
-
-Browser review was read-only; no report was submitted or downloaded.  
-Implementation commit: none; report query and filter contracts are absent.
+Checked the saved reference and local page in visible Chrome. Live Wakandi DevTools measurements remain unavailable while SSO reCAPTCHA is blocked. No production data was changed.

@@ -1,20 +1,15 @@
 # Fee Status Report visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\reports-loan-FeeStatusReport\FULL.png`  
+Date: 2026-11-03
+Reference: `F:\Wakandi\reports-loan-FeeStatusReport\FULL.png`
 AIMSCAMS route: `/reports-loan-FeeStatusReport`
 
-## Comparison
+## AIMSCAMS changes
 
-The reference provides a date-range preset and start/end dates, institution, region, charge, status, loan officer, product, and client-manager filters. Submit/Clear and Download actions accompany a sortable/filterable grid with outstanding fee, status, due date, payment date, and overdue days.
+- Added the report title/download card, range controls, filter row, Submit/Clear, and horizontally scrollable table.
+- Added outstanding fee, status, due date, payment date, and overdue day columns from the saved reference audit.
+- Results remain empty because no local fee-status report endpoint exists. Selectors without local option APIs remain disabled.
 
-AIMSCAMS shows only an as-of date and Refresh above chart-of-accounts balances. It has none of the fee-status fields or report filters.
+## Measurement and verification
 
-## Recommendations
-
-- Add the fee-status report query with charge/status dimensions and due/payment fields.
-- Implement the reference filters and export when the service contract is agreed.
-- Confirm empty and populated table states against permitted fee records.
-
-Browser review was read-only; no report was submitted or downloaded.  
-Implementation commit: none; fee report query/filter contract is absent.
+Compared saved reference details with the visible local page. Live Wakandi CSS measurements remain unavailable during the SSO reCAPTCHA error. No production or local financial records were modified.

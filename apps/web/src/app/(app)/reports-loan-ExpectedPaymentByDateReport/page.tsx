@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { LoanOperationalReportPage } from "@/components/accounting/loan-operational-report-page";
 
 export const metadata: Metadata = { title: "Expected payment by date report · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="Expected payment by date report" description="Expected payment by date report." />;
+  return <LoanOperationalReportPage title="Expected Payment By Date Report" filename="expected-payment-by-date-report.csv" columns={[
+    "Account Number", "Client Name", "Loan Product", "Loan Officer", "Branch", "Group", "Due Date",
+    "Principal Due", "Interest Due", "Fee Due", "Total Due", "Total Overdue",
+  ]} />;
 }

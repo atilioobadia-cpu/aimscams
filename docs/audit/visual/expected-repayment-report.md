@@ -1,20 +1,15 @@
 # Expected Repayment Report visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\reports-loan-ExpectedRepaymentReport\FULL.png`  
+Date: 2026-11-03
+Reference: `F:\Wakandi\reports-loan-ExpectedRepaymentReport\FULL.png`
 AIMSCAMS route: `/reports-loan-ExpectedRepaymentReport`
 
-## Comparison
+## AIMSCAMS changes
 
-The reference page has date-range controls, loan-officer/product/institution/group/region filters, Submit/Clear, and Download. Its wide table reports principal balance, principal due, interest due, penalty due, and total due with sortable and column-filter controls.
+- Replaced the generic accounting balances with the loan report shell, date range, portfolio filters, Submit/Clear controls, and horizontally scrollable results table.
+- Added the reference fields for principal balance, principal due, interest due, penalty due, and total due.
+- The report is empty because there is no local report endpoint; unsupported option lists remain disabled and no Wakandi rows were copied.
 
-AIMSCAMS shows a single as-of date with Refresh and the generic chart-of-accounts balance columns. No expected-repayment fields or loan filters are present.
+## Measurement and verification
 
-## Recommendations
-
-- Provide a dedicated expected-repayment data query and matching filters.
-- Map each balance/due/penalty amount from the approved response.
-- Add the reference export and grid interactions after the report data contract is defined.
-
-Browser review was read-only; no report was submitted or downloaded.  
-Implementation commit: none; report query and filter contracts are absent.
+Compared the saved reference capture with the visible local page. Wakandi DevTools measurements were not available because SSO reCAPTCHA is blocking login. No production data was changed.

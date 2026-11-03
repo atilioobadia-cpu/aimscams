@@ -1,20 +1,15 @@
-# Issued Loans and Arrears Report visual audit
+# Issued Loans And Arrears Report visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\reports-loan-IssuedLoansAndArrearsReport\FULL.png`  
+Date: 2026-11-03
+Reference: `F:\Wakandi\reports-loan-IssuedLoansAndArrearsReport\FULL.png`
 AIMSCAMS route: `/reports-loan-IssuedLoansAndArrearsReport`
 
-## Comparison
+## AIMSCAMS changes
 
-The reference uses date-range, loan-officer, product, institution, region, and group filters with Submit/Clear and Download. Its wide table has pagination (50 rows per page in the capture) and arrears columns including charges in arrears, outstanding penalty, penalty in arrears, and total in arrears.
+- Replaced the generic accounting balances with a loan report title/download card, date range, portfolio filters, Submit/Clear actions, and wide horizontally scrollable table.
+- Added disbursement, principal, charges-in-arrears, penalty, and total-arrears columns from the saved reference audit.
+- Results remain empty because no local report endpoint exists. The captured Wakandi page size is not represented as populated paging because no local rows exist.
 
-AIMSCAMS shows a single as-of date and Refresh above the chart-of-accounts balances; no issued-loan or arrears fields or paging controls are present.
+## Measurement and verification
 
-## Recommendations
-
-- Provide the issued-loans/arrears query, filter dimensions, and page-size contract.
-- Map arrears and penalty columns from the report response.
-- Recheck grid pagination and horizontal overflow with approved report data.
-
-Browser review was read-only; no report was submitted or downloaded.  
-Implementation commit: none; loan arrears report query/filter contract is absent.
+Compared saved reference details with the visible local page. Live Wakandi DevTools measurements remain unavailable while SSO reCAPTCHA blocks login. No production data changed.
