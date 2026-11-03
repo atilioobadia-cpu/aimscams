@@ -42,7 +42,7 @@ The visible Chrome session rendered Teller, Online, and All during this review. 
 
 - Shared the title card and the three measured Teller tabs across New Transaction, History, and Requests.
 - Reworked New Transaction into the same three stages as Wakandi: choose one of four categories, choose a category-specific type, then enter details. Till open/close controls appear only in Till Administration.
-- Teller History now uses the local transaction list and Wakandi's 13 transaction columns, with search, date range, and CSV export. Requests remains on its existing request table.
+- Teller History now uses the local transaction list and Wakandi's 12 transaction columns, with search, date range, and CSV export. Requests remains on its existing request table.
 - Reworked Online to the reference title/actions/filter/table structure. The existing create-collection flow remains available in a modal; Reconciliation links to its existing workspace.
 - Preserved the v1.2.0 global font-size tokens. Local tab/body text uses the existing app token rather than increasing global typography.
 - No Teller transaction, till opening/closing, reconciliation, or online collection was submitted.
@@ -53,3 +53,18 @@ The visible Chrome session rendered Teller, Online, and All during this review. 
 - The existing web client has no Teller account lookup endpoint. The savings form presents a required `Search Account` input using the account ID field; it cannot provide Wakandi's selectable account search until a local lookup API is available.
 - The local browser showed `Failed to fetch` for Teller till summary data during this pass, so the shared title card correctly displays unavailable local balance/session details. Layout verification was still possible.
 - The local reference dataset returned an empty history and requests table. No production row values were copied into notes.
+## Teller inspection detail (2026-11-03)
+
+The live Chrome session was inspected at a 1211 × 600 screenshot viewport. The Requests column picker was opened and closed without changing selections. It has six visible defaults (`Date`, `Request`, `Status`, `Requester`, `Current Assignee`, `Approved by`), an optional hidden `Id`, and `Reset` / `Save` controls. AIMSCAMS now uses the same fields and behavior. Its empty table row is 172px high, with the muted gray archive icon and label used by the reference.
+
+The live New Transaction category grid uses four 226 × 137px cards with an 8px radius and about 13.44px inner padding. The selected card uses a 2px teal border; unselected cards use a 1.33px light-gray border. Category pill is about 184 × 38px with a full radius. AIMSCAMS cards now follow this layout, use the reference category/type order, and show centered category icons.
+
+History has a 200px search field, two 153px date inputs, a 220px teller selector and a 38px filter button, with 32–34px control heights and 6px corners. The export control is a split teal Download button with Excel, CSV and PDF options. AIMSCAMS was updated to use these desktop widths and its column picker now controls the same 12 table fields. The live request menu and local menu were compared without saving changes.
+
+## Teller differences still unresolved
+
+- Local Teller history and Requests currently have no local rows. Layout can be compared, but row typography, populated row height, and person/account avatar styling cannot be parity-checked until local data exists.
+- Teller history API does not provide distinct account name, ledger text, or running balance fields; AIMSCAMS shows neutral `N/A` placeholders for those fields.
+- AIMSCAMS Teller summary cannot load its till/session balance endpoint in the current local environment. It therefore shows `Unavailable` in the title card while the app-wide branch badge reports Open.
+- Local transaction catalog has no top-up or teller pick-up support and no complete bulk transaction flow. The reference types are represented in the category flow, but unsupported operations must remain disabled or unavailable locally until the API supports them.
+- Wakandi's export and till actions were inspected only; no production export, filter, request update, till action, transaction, or data change was performed.

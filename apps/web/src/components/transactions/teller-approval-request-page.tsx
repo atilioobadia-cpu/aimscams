@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CheckCircle2, SlidersHorizontal, XCircle } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { Archive, CheckCircle2, XCircle } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
+import { ColumnPicker, type ColumnOption } from "@/components/data/column-picker";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,7 +30,20 @@ function failureMessage(failure: unknown, fallback: string): string {
   return fallback;
 }
 
+const REQUEST_COLUMNS = [
+  { key: "date", label: "Date" },
+  { key: "request", label: "Request" },
+  { key: "status", label: "Status" },
+  { key: "requester", label: "Requester" },
+  { key: "assignee", label: "Current Assignee" },
+  { key: "approvedBy", label: "Approved by" },
+  { key: "id", label: "Id" },
+] as const satisfies readonly ColumnOption<string>[];
+type RequestColumn = (typeof REQUEST_COLUMNS)[number]["key"];
+const DEFAULT_REQUEST_COLUMNS = Object.fromEntries(REQUEST_COLUMNS.map(({ key }) => [key, key !== "id"])) as Record<RequestColumn, boolean>;
+
 export function TellerApprovalRequestPage() {
+  const [visibleColumns, setVisibleColumns] = useState<Record<RequestColumn, boolean>>(DEFAULT_REQUEST_COLUMNS);
   const [queue, setQueue] = useState<RequestList | null>(null);
   const [till, setTill] = useState<TillInfo | null>(null);
   const [queueLoading, setQueueLoading] = useState(true);
@@ -176,55 +190,41 @@ export function TellerApprovalRequestPage() {
   const items = queue?.items ?? [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       <TellerWorkspaceHeader till={till} activeTab="requests" />
 
       {queueError ? <ErrorPanel message={queueError} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
       {error ? <ErrorPanel message={error} onRetry={() => setId(id)} /> : null}
       {result ? <p className="fs-text text-accent-teal" role="status">{result}</p> : null}
 
-      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+      <section className="-mt-[3px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         {queueLoading ? <PanelSkeleton rows={6} /> : null}
         {!queueLoading ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
                 <tr>
-                  <th className="whitespace-nowrap px-4 py-3">Date</th>
-                  <th className="whitespace-nowrap px-4 py-3">Request</th>
-                  <th className="whitespace-nowrap px-4 py-3">Status</th>
-                  <th className="whitespace-nowrap px-4 py-3">Requester</th>
-                  <th className="whitespace-nowrap px-4 py-3">Current assignee</th>
-                  <th className="whitespace-nowrap px-4 py-3">Approved by</th>
-                  <th className="w-12 px-2 py-3 text-center">
-                    <Button type="button" variant="ghost" size="icon-sm" disabled aria-label="Table columns" className="disabled:opacity-100 disabled:text-primary">
-                      <SlidersHorizontal className="size-4" aria-hidden="true" />
-                    </Button>
-                  </th>
+                  {REQUEST_COLUMNS.filter(({ key }) => key !== "id" && visibleColumns[key]).map(({ key, label }) => <th key={key} scope="col" className="h-[44px] whitespace-nowrap px-3 py-2">{label}</th>)}
+                  <th className="h-[44px] w-12 px-2 py-1 text-center"><ColumnPicker columns={[...REQUEST_COLUMNS]} visible={visibleColumns} onToggle={(key, checked) => setVisibleColumns((current) => ({ ...current, [key]: checked }))} onReset={() => setVisibleColumns(DEFAULT_REQUEST_COLUMNS)} /></th>
                 </tr>
               </thead>
               <tbody>
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-16 text-center fs-text text-muted-foreground">No data available</td>
+                    <td colSpan={REQUEST_COLUMNS.filter(({ key }) => key !== "id" && visibleColumns[key]).length + 1} className="h-[172px] px-4 text-center text-[rgb(108,117,125)]"><span className="flex flex-col items-center justify-center gap-3"><Archive className="size-9 text-[rgb(108,117,125)]" aria-hidden="true" /><span>No data available</span></span></td>
                   </tr>
-                ) : items.map((item) => (
-                  <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="whitespace-nowrap px-4 py-3 text-body">{new Date(item.createdAt).toLocaleDateString()}</td>
-                    <td className="whitespace-nowrap px-4 py-3 font-medium text-strong">{item.requestNo}</td>
-                    <td className="whitespace-nowrap px-4 py-3">
-                      <Badge variant={item.status === "PENDING" ? "outline" : "default"}>{titleCase(item.status)}</Badge>
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.requestedBy}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.currentAssignee}</td>
-                    <td className="whitespace-nowrap px-4 py-3 text-body">{item.approvedBy}</td>
-                    <td className="whitespace-nowrap px-2 py-3 text-center">
-                      <Button size="sm" variant="outline" onClick={() => selectRequest(item)}>
-                        Review
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                ) : items.map((item) => {
+                  const cells: Record<RequestColumn, ReactNode> = {
+                    date: new Date(item.createdAt).toLocaleDateString(),
+                    request: item.requestNo,
+                    status: <Badge variant={item.status === "PENDING" ? "outline" : "default"}>{titleCase(item.status)}</Badge>,
+                    requester: item.requestedBy,
+                    assignee: item.currentAssignee,
+                    approvedBy: item.approvedBy,
+                    id: item.id,
+                  };
+                  return <tr key={item.id} className="border-b border-card-border last:border-0">{REQUEST_COLUMNS.filter(({ key }) => key !== "id" && visibleColumns[key]).map(({ key }) => <td key={key} className="whitespace-nowrap px-3 py-3 text-body">{cells[key]}</td>)}<td className="whitespace-nowrap px-2 py-3 text-center"><Button size="sm" variant="outline" onClick={() => selectRequest(item)}>Review</Button></td></tr>;
+                })}
               </tbody>
             </table>
           </div>

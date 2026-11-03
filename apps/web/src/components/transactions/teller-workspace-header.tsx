@@ -23,7 +23,7 @@ export function TellerWorkspaceHeader({
 
   return (
     <div className="space-y-3">
-      <section className="flex min-h-[84px] flex-wrap items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-3">
+      <section className="flex min-h-[86px] flex-wrap items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5 py-3">
         <div className="flex min-w-0 items-center gap-3">
           <Wallet className="size-6 shrink-0 text-primary" aria-hidden="true" />
           <div className="min-w-0">
@@ -36,11 +36,17 @@ export function TellerWorkspaceHeader({
             </p>
           </div>
         </div>
-        <div className="min-w-[150px] text-right">
-          <p className="fs-caption font-semibold uppercase tracking-wide text-label">Balance</p>
-          <p className="mt-1 fs-text font-semibold text-primary">
-            {till?.session?.systemBalanceMinor ? formatTzs(till.session.systemBalanceMinor) : "Unavailable"}
-          </p>
+        <div className="flex min-w-[300px] items-center justify-end gap-12">
+          <div className="min-w-[120px] text-left">
+            <p className="fs-caption font-semibold uppercase tracking-wide text-label">Branch status</p>
+            <p className="mt-1 fs-text font-semibold text-primary">Unavailable</p>
+          </div>
+          <div className="min-w-[140px] text-left">
+            <p className="fs-caption font-semibold uppercase tracking-wide text-label">Balance</p>
+            <p className="mt-1 fs-text font-semibold text-primary">
+              {till?.session?.systemBalanceMinor ? formatTzs(till.session.systemBalanceMinor) : "Unavailable"}
+            </p>
+          </div>
         </div>
       </section>
 
