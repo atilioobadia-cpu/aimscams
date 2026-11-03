@@ -38,6 +38,7 @@ export interface EntrySummary {
   lineCount: number;
   debitMinor: bigint;
   creditMinor: bigint;
+  ledgerLines: EntryLine[];
 }
 
 export interface EntryLine {
@@ -121,6 +122,7 @@ function toSummary(row: RawEntry): EntrySummary {
     lineCount: Number(row.line_count ?? 0),
     debitMinor: toMinor(row.debit_minor),
     creditMinor: toMinor(row.credit_minor),
+    ledgerLines: [],
   };
 }
 
@@ -187,8 +189,50 @@ export async function listEntries(
     where.params,
   );
 
+  const entries = rows.rows.map(toSummary);
+  if (entries.length > 0) {
+    const lines = await db.query<{
+      entry_id: string;
+      id: string;
+      line_no: number;
+      account_id: string;
+      code: string;
+      name: string;
+      normal_balance: NormalBalance;
+      debit_minor: unknown;
+      credit_minor: unknown;
+      memo: string;
+    }>(
+      `select l.entry_id, l.id, l.line_no, l.account_id, a.code, a.name,
+              a.normal_balance, l.debit_minor, l.credit_minor, l.memo
+         from journal_line l
+         join gl_account a
+           on a.id = l.account_id and a.organisation_id = l.organisation_id
+        where l.organisation_id = $1 and l.entry_id = any($2::uuid[])
+        order by l.entry_id, l.line_no`,
+      [tenantId, entries.map((entry) => entry.id)],
+    );
+    const linesByEntry = new Map<string, EntryLine[]>();
+    for (const line of lines.rows) {
+      const group = linesByEntry.get(line.entry_id) ?? [];
+      group.push({
+        id: line.id,
+        lineNo: Number(line.line_no),
+        accountId: line.account_id,
+        accountCode: line.code,
+        accountName: line.name,
+        normalBalance: line.normal_balance,
+        debitMinor: toMinor(line.debit_minor),
+        creditMinor: toMinor(line.credit_minor),
+        memo: line.memo,
+      });
+      linesByEntry.set(line.entry_id, group);
+    }
+    for (const entry of entries) entry.ledgerLines = linesByEntry.get(entry.id) ?? [];
+  }
+
   return {
-    entries: rows.rows.map(toSummary),
+    entries,
     total: Number(count.rows[0]?.total ?? 0),
   };
 }

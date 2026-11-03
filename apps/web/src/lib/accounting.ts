@@ -65,6 +65,7 @@ export type JournalEntrySummary = {
   lineCount: number;
   debitMinor: MoneyString;
   creditMinor: MoneyString;
+  ledgerLines: JournalLine[];
 };
 
 export type JournalLine = {

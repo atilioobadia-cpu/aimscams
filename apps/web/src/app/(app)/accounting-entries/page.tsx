@@ -6,7 +6,14 @@ import {
   ArrowLeftRight,
   BookOpen,
   Calendar,
+  ChevronLeft,
   ChevronDown,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Download,
+  FileSpreadsheet,
+  FileText,
   Plus,
   Search,
   Trash2,
@@ -19,7 +26,6 @@ import {
   PanelSkeleton,
 } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
-import { FilterBar } from "@/components/data/filter-bar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,7 +57,7 @@ import {
 import { formatTzsExact } from "@/lib/format";
 import { cn } from "cn";
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 10;
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
   day: "2-digit",
@@ -66,7 +72,13 @@ function message(error: unknown, fallback: string): string {
 function displayDay(value: string | null): string {
   if (!value) return "—";
   const day = value.slice(0, 10);
-  return dateFormat.format(new Date(`${day}T00:00:00`));
+  return dateFormat.format(new Date(`${day}T00:00:00`)).replaceAll(" ", "-");
+}
+
+function displayLongDay(value: string): string {
+  const day = value.slice(0, 10);
+  return new Intl.DateTimeFormat("en-US", { day: "numeric", month: "short", year: "numeric" })
+    .format(new Date(`${day}T00:00:00`));
 }
 
 function entryAmount(value: string): string {
@@ -129,6 +141,7 @@ export default function JournalEntriesPage() {
   const [forbidden, setForbidden] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
 
   const [accounts, setAccounts] = useState<GlAccount[]>([]);
   const [policies, setPolicies] = useState<PostingPolicy[]>([]);
@@ -154,6 +167,7 @@ export default function JournalEntriesPage() {
   const [reverseDescription, setReverseDescription] = useState("");
   const [reverseError, setReverseError] = useState<string | null>(null);
   const [reverseSaving, setReverseSaving] = useState(false);
+  const [dateMode, setDateMode] = useState(searchParams.get("dateMode") ?? "between");
 
   const filters = useMemo(
     () => ({
@@ -162,10 +176,10 @@ export default function JournalEntriesPage() {
       from: from || undefined,
       to: to || undefined,
       q: q || undefined,
-      limit: PAGE_SIZE,
+      limit: pageSize,
       offset,
     }),
-    [status, eventCode, from, to, q, offset],
+    [status, eventCode, from, to, q, offset, pageSize],
   );
 
   useEffect(() => {
@@ -426,134 +440,149 @@ export default function JournalEntriesPage() {
   const periodStart = from || `${year}-01-01`;
   const periodEnd = to || `${year}-12-31`;
 
+  function downloadCsv() {
+    const quote = (value: string) => `"${value.replace(/"/g, '""')}"`;
+    const rows = [["Date", "Entry ID", "Details", "Entry Type", "Status", "Ledger Code", "Ledger Name", "Debit (TSh)", "Credit (TSh)"]];
+    for (const entry of entries) {
+      const entryLines = entry.ledgerLines ?? [];
+      const lines = entryLines.length ? entryLines : [{ accountCode: "", accountName: "", debitMinor: "0", creditMinor: "0" }];
+      for (const [index, line] of lines.entries()) {
+        rows.push([
+          index === 0 ? displayDay(entry.entryDate) : "",
+          index === 0 ? entry.entryNo : "",
+          index === 0 ? `${entry.sourceType} · ${entry.sourceId}${entry.description ? ` | ${entry.description}` : ""}` : "",
+          index === 0 ? entryTypeLabel(entry.eventCode) : "",
+          index === 0 ? entry.status === "posted" ? "Posted" : "Draft" : "",
+          line.accountCode,
+          line.accountName,
+          line.debitMinor === "0" ? "-" : entryAmount(line.debitMinor),
+          line.creditMinor === "0" ? "-" : entryAmount(line.creditMinor),
+        ]);
+      }
+    }
+    const blob = new Blob([`\uFEFF${rows.map((row) => row.map((cell) => quote(String(cell))).join(",")).join("\r\n")}`], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "journal-entries.csv";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function downloadExcel() {
+    const headings = ["Date", "Entry ID", "Details", "Entry Type", "Status", "Ledger Code", "Ledger Name", "Debit (TSh)", "Credit (TSh)"];
+    const esc = (value: string) => value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const body = entries.flatMap((entry) => {
+      const entryLines = entry.ledgerLines ?? [];
+      const lines = entryLines.length ? entryLines : [{ accountCode: "", accountName: "", debitMinor: "0", creditMinor: "0" }];
+      return lines.map((line, index) => `<tr><td>${index === 0 ? esc(displayDay(entry.entryDate)) : ""}</td><td>${index === 0 ? esc(entry.entryNo) : ""}</td><td>${index === 0 ? esc(`${entry.sourceType} · ${entry.sourceId}${entry.description ? ` | ${entry.description}` : ""}`) : ""}</td><td>${index === 0 ? esc(entryTypeLabel(entry.eventCode)) : ""}</td><td>${index === 0 ? (entry.status === "posted" ? "Posted" : "Draft") : ""}</td><td>${esc(line.accountCode)}</td><td>${esc(line.accountName)}</td><td>${line.debitMinor === "0" ? "-" : esc(entryAmount(line.debitMinor))}</td><td>${line.creditMinor === "0" ? "-" : esc(entryAmount(line.creditMinor))}</td></tr>`);
+    }).join("");
+    const html = `<html><head><meta charset="utf-8"></head><body><table><thead><tr>${headings.map((heading) => `<th>${heading}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></body></html>`;
+    const url = URL.createObjectURL(new Blob([html], { type: "application/vnd.ms-excel;charset=utf-8" }));
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "journal-entries.xls";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
-    <div className="space-y-4">
-      <header className="flex min-h-[94px] flex-col justify-center gap-3 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="entries-page">
+      <header className="flex min-h-[90px] flex-col justify-center gap-3 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
         <div className="flex min-w-0 items-center gap-3">
           <BookOpen className="size-6 shrink-0 text-primary" aria-hidden="true" />
           <div className="min-w-0">
             <h1 className="fs-title font-semibold text-heading">Entries</h1>
-            <p className="mt-1 fs-text text-muted-foreground">Entries from {displayDay(`${year}-01-01`)} to {displayDay(today())}</p>
+            <p className="mt-1 fs-text text-muted-foreground">Entries from {displayLongDay(`${year}-01-01`)} to {displayLongDay(today())}</p>
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
-          <button type="button" onClick={() => document.getElementById("entry-from")?.focus()} className="flex h-9 items-center gap-2 rounded-[var(--control-radius)] border border-primary bg-card px-3 fs-text text-primary transition-colors hover:bg-primary-tint">
+        <div className="entries-actions flex shrink-0 items-center gap-2">
+          <button type="button" className="entries-export" onClick={() => window.print()}>
+            <FileText className="size-3.5" aria-hidden="true" /> Download PDF
+          </button>
+          <button type="button" className="entries-export" onClick={downloadExcel}>
+            <FileSpreadsheet className="size-3.5" aria-hidden="true" /> Download Excel
+          </button>
+          <button type="button" className="entries-export" onClick={downloadCsv}>
+            <Download className="size-3.5" aria-hidden="true" /> Download CSV
+          </button>
+          <button type="button" onClick={() => document.getElementById("entry-from")?.focus()} className="entries-period">
             <Calendar className="size-4" aria-hidden="true" />
             <span>{displayDay(periodStart)} to {displayDay(periodEnd)}</span>
             <ChevronDown className="size-4" aria-hidden="true" />
           </button>
-          <Button
-            onClick={openCompose}
-            disabled={!accountsLoaded || accountsBlocked || accounts.length === 0}
-            className="gap-1.5"
-            title={
-              accountsBlocked
-                ? "Requires Settings Accounting : View to list ledger accounts."
-                : undefined
-            }
-          >
-            <Plus className="size-4" aria-hidden="true" />
-            New entry
-          </Button>
         </div>
       </header>
+
+      <div className="entries-toolbar">
+        <form className="entries-search" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); setParams({ q: String(data.get("q") ?? "").trim() || null }); }}>
+          <Search className="size-4" aria-hidden="true" />
+          <Input key={q} name="q" defaultValue={q} placeholder="Search" aria-label="Search entries" />
+          <Button type="submit" size="icon" className="sr-only" aria-label="Apply search"><Search className="size-4" aria-hidden="true" /></Button>
+        </form>
+
+        <details className="entries-filter">
+          <summary><span>Date Range</span><ChevronDown className="size-3.5" /></summary>
+          <form className="entries-popover" onSubmit={(event) => {
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            const first = String(data.get("date") ?? "");
+            const second = String(data.get("dateEnd") ?? "");
+            let nextFrom: string | null = null; let nextTo: string | null = null;
+            if (dateMode === "between") { nextFrom = first || null; nextTo = second || null; }
+            else if (dateMode === "on") { nextFrom = first || null; nextTo = first || null; }
+            else if (dateMode === "before") nextTo = first ? new Date(new Date(`${first}T00:00:00Z`).getTime() - 86400000).toISOString().slice(0, 10) : null;
+            else if (dateMode === "after") nextFrom = first ? new Date(new Date(`${first}T00:00:00Z`).getTime() + 86400000).toISOString().slice(0, 10) : null;
+            setParams({ from: nextFrom, to: nextTo, dateMode });
+            event.currentTarget.closest("details")?.removeAttribute("open");
+          }}>
+            <label>Condition<select value={dateMode} onChange={(event) => setDateMode(event.target.value)}><option value="on">On</option><option value="before">Before</option><option value="after">After</option><option value="between">Between</option></select></label>
+            <label>{dateMode === "before" ? "Before" : dateMode === "after" ? "After" : dateMode === "on" ? "Date" : "Start date"}<Input id="entry-from" name="date" type="date" defaultValue={from} /></label>
+            {dateMode === "between" ? <label>End date<Input name="dateEnd" type="date" defaultValue={to} /></label> : null}
+            <div className="entries-popover-actions"><button type="button" onClick={(event) => { setDateMode("between"); setParams({ from: null, to: null, dateMode: null }); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Clear</button><button type="submit">Apply</button></div>
+          </form>
+        </details>
+
+        <details className="entries-filter">
+          <summary><span>Entry Type</span><ChevronDown className="size-3.5" /></summary>
+          <form className="entries-popover" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); setParams({ eventCode: String(data.get("eventCode") ?? "") || null }); event.currentTarget.closest("details")?.removeAttribute("open"); }}>
+            <label>Condition<select defaultValue="is" disabled><option value="is">Is</option></select></label>
+            <label>Value<select name="eventCode" defaultValue={eventCode}><option value="">All types</option>{eventOptions.map((code) => <option key={code} value={code}>{entryTypeLabel(code)}</option>)}</select></label>
+            <div className="entries-popover-actions"><button type="button" onClick={(event) => { setParams({ eventCode: null }); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Clear</button><button type="submit">Apply</button></div>
+          </form>
+        </details>
+
+        <details className="entries-filter">
+          <summary><span>Status</span><ChevronDown className="size-3.5" /></summary>
+          <form className="entries-popover" onSubmit={(event) => { event.preventDefault(); const data = new FormData(event.currentTarget); setParams({ status: String(data.get("status") ?? "") || null }); event.currentTarget.closest("details")?.removeAttribute("open"); }}>
+            <label>Condition<select defaultValue="is" disabled><option value="is">Is</option></select></label>
+            <label>Value<select name="status" defaultValue={status}><option value="">All statuses</option><option value="posted">Posted</option><option value="draft">Draft</option></select></label>
+            <div className="entries-popover-actions"><button type="button" onClick={(event) => { setParams({ status: null }); event.currentTarget.closest("details")?.removeAttribute("open"); }}>Clear</button><button type="submit">Apply</button></div>
+          </form>
+        </details>
+
+        <details className="entries-filter">
+          <summary><span>Archived</span><ChevronDown className="size-3.5" /></summary>
+          <div className="entries-popover entries-archive-note">AIMSCAMS journal entries do not currently have an archive status.</div>
+        </details>
+        <button
+          type="button"
+          aria-label="New entry"
+          title="New manual journal entry"
+          disabled={!accountsLoaded || accountsBlocked || accounts.length === 0}
+          onClick={openCompose}
+          className="entries-create"
+        >
+          <Plus className="size-4" aria-hidden="true" />
+        </button>
+        {hasFilters ? <button className="entries-clear" type="button" onClick={() => setParams({ status: null, eventCode: null, from: null, to: null, dateMode: null, q: null })}>Clear filters</button> : null}
+      </div>
 
       {accountsBlocked ? (
         <p className="fs-text text-muted-foreground">
           Your role can read entries but cannot list ledger accounts, so new entries are disabled.
         </p>
       ) : null}
-
-      <FilterBar label="Entry filters" className="gap-2 rounded-[var(--card-radius)] p-3">
-        <form
-          className="flex items-end gap-2"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const data = new FormData(event.currentTarget);
-            setParams({ q: String(data.get("q") ?? "").trim() || null });
-          }}
-        >
-          <label className="flex flex-col gap-1">
-            <span className="sr-only">Search</span>
-            <Input
-              key={q}
-              name="q"
-              defaultValue={q}
-              placeholder="Search"
-              className="w-[160px]"
-            />
-          </label>
-          <Button type="submit" size="icon" className="size-9" aria-label="Apply search">
-            <Search className="size-4" aria-hidden="true" />
-          </Button>
-        </form>
-
-        <label className="flex flex-col gap-1">
-          <span className="sr-only">Status</span>
-          <NativeSelect
-            value={status}
-            onChange={(event) => setParams({ status: event.target.value || null })}
-            aria-label="Filter by status"
-            className="!w-[120px] !min-w-0"
-          >
-            <option value="">All statuses</option>
-            <option value="draft">Draft</option>
-            <option value="posted">Posted</option>
-          </NativeSelect>
-        </label>
-
-        <label className="flex flex-col gap-1">
-          <span className="sr-only">Entry type</span>
-          <NativeSelect
-            value={eventCode}
-            onChange={(event) => setParams({ eventCode: event.target.value || null })}
-            aria-label="Filter by entry type"
-            className="!w-[125px] !min-w-0"
-          >
-            <option value="">All types</option>
-            {eventOptions.map((code) => (
-              <option key={code} value={code}>
-                {entryTypeLabel(code)}
-              </option>
-            ))}
-          </NativeSelect>
-        </label>
-
-        <label className="flex min-w-0 flex-col gap-1">
-          <span className="sr-only">From</span>
-          <Input
-            id="entry-from"
-            type="date"
-            value={from}
-            onChange={(event) => setParams({ from: event.target.value || null })}
-            aria-label="Filter from date"
-            className="!w-[130px] !min-w-0"
-          />
-        </label>
-
-        <label className="flex min-w-0 flex-col gap-1">
-          <span className="sr-only">To</span>
-          <Input
-            type="date"
-            value={to}
-            onChange={(event) => setParams({ to: event.target.value || null })}
-            aria-label="Filter to date"
-            className="!w-[130px] !min-w-0"
-          />
-        </label>
-
-        {hasFilters ? (
-          <Button
-            variant="ghost"
-            onClick={() =>
-              setParams({ status: null, eventCode: null, from: null, to: null, q: null })
-            }
-          >
-            Clear filters
-          </Button>
-        ) : null}
-
-      </FilterBar>
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view journal entries. Ask an administrator for Journal Entry : View." />
@@ -562,7 +591,7 @@ export default function JournalEntriesPage() {
       ) : error ? (
         <ErrorPanel message={error} onRetry={() => setRefresh((value) => value + 1)} />
       ) : (
-        <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+        <section className="entries-register rounded-[var(--card-radius)] border border-card-border bg-card">
           {entries.length === 0 ? (
             <div className="p-[var(--space-16)]">
               <EmptyState
@@ -604,78 +633,55 @@ export default function JournalEntriesPage() {
             </div>
           ) : (
             <>
-              <div className="overflow-x-auto">
-              <Table className="min-w-[960px] table-fixed">
+              <Table className="entries-table min-w-[1024px] table-fixed">
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[12%] pl-[var(--space-16)]">Date</TableHead>
-                    <TableHead className="w-[15%]">Entry ID</TableHead>
-                    <TableHead className="w-[14%]">Entry Type</TableHead>
-                    <TableHead className="w-[10%]">Status</TableHead>
-                    <TableHead className="w-[21%]">Details</TableHead>
-                    <TableHead className="w-[14%] text-right">Debit (TSh)</TableHead>
-                    <TableHead className="w-[14%] pr-[var(--space-16)] text-right">Credit (TSh)</TableHead>
+                    <TableHead className="w-[6%]">Date</TableHead>
+                    <TableHead className="w-[13.16%]">Entry ID</TableHead>
+                    <TableHead className="w-[15.33%]">Details</TableHead>
+                    <TableHead className="w-[7.85%]">Entry Type</TableHead>
+                    <TableHead className="w-[6.74%]">Status</TableHead>
+                    <TableHead className="w-[6.95%]">Ledger Code</TableHead>
+                    <TableHead className="w-[23.76%]">Ledger Name</TableHead>
+                    <TableHead className="w-[10.12%] text-right">Debit (TSh)</TableHead>
+                    <TableHead className="w-[10.12%] text-right">Credit (TSh)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {entries.map((entry) => (
-                    <TableRow key={entry.id}>
-                      <TableCell className="pl-[var(--space-16)]">{displayDay(entry.entryDate)}</TableCell>
-                      <TableCell className="font-medium text-strong">
-                        <button
-                          type="button"
-                          onClick={() => setEntryParam(entry.id)}
-                          className="text-brand hover:underline focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
-                        >
-                          {entry.entryNo}
-                        </button>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{entryTypeLabel(entry.eventCode)}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={entry.status === "posted" ? "default" : "outline"}>
-                          {entry.status === "posted" ? "Posted" : "Draft"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="max-w-[360px] truncate" title={entry.description}>
-                        {entry.description || "N/A"}
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">
-                        {entry.debitMinor === "0" ? "-" : entryAmount(entry.debitMinor)}
-                      </TableCell>
-                      <TableCell className="pr-[var(--space-16)] text-right tabular-nums">
-                        {entry.creditMinor === "0" ? "-" : entryAmount(entry.creditMinor)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {entries.map((entry, entryIndex) => {
+                    const entryLines = entry.ledgerLines ?? [];
+                    const lines = entryLines.length ? entryLines : [{ accountCode: "—", accountName: "—", debitMinor: "0", creditMinor: "0" }];
+                    const rowSpan = lines.length;
+                    return lines.map((line, index) => (
+                      <TableRow key={`${entry.id}-${index}`} className={entryIndex % 2 === 0 ? "entries-striped" : ""}>
+                        {index === 0 ? <TableCell rowSpan={rowSpan} className="entries-group-cell">{displayDay(entry.entryDate)}</TableCell> : null}
+                        {index === 0 ? <TableCell rowSpan={rowSpan} className="entries-group-cell font-medium text-strong"><button type="button" onClick={() => setEntryParam(entry.id)} className="text-brand hover:underline focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none">{entry.entryNo}</button></TableCell> : null}
+                        {index === 0 ? <TableCell rowSpan={rowSpan} className="entries-group-cell"><div>{entry.sourceType} · {entry.sourceId}</div><div>{entry.description || "N/A"}</div></TableCell> : null}
+                        {index === 0 ? <TableCell rowSpan={rowSpan} className="entries-group-cell">{entryTypeLabel(entry.eventCode)}</TableCell> : null}
+                        {index === 0 ? <TableCell rowSpan={rowSpan} className="entries-group-cell">{entry.status === "posted" ? "Posted" : "Draft"}</TableCell> : null}
+                        <TableCell>{line.accountCode ? `[${line.accountCode}]` : "—"}</TableCell>
+                        <TableCell>{line.accountName || "—"}</TableCell>
+                        <TableCell className="text-right tabular-nums">{line.debitMinor === "0" ? "-" : entryAmount(line.debitMinor)}</TableCell>
+                        <TableCell className="text-right tabular-nums">{line.creditMinor === "0" ? "-" : entryAmount(line.creditMinor)}</TableCell>
+                      </TableRow>
+                    ));
+                  })}
                 </TableBody>
               </Table>
-              </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-chrome px-[var(--space-16)] py-[var(--space-10)] fs-text text-muted-foreground">
-                <span>
-                  Showing {pageStart}–{pageEnd} of {total}
-                </span>
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={offset === 0}
-                    onClick={() =>
-                      setParams({ offset: offset - PAGE_SIZE <= 0 ? null : String(offset - PAGE_SIZE) })
-                    }
-                  >
-                    Previous
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={offset + PAGE_SIZE >= total}
-                    onClick={() => setParams({ offset: String(offset + PAGE_SIZE) })}
-                  >
-                    Next
-                  </Button>
+              <div className="entries-pagination">
+                <span>Showing {pageStart} to {pageEnd} of {total} entries</span>
+                <div className="entries-page-controls">
+                  <button type="button" aria-label="First Page" disabled={offset === 0} onClick={() => setParams({ offset: null })}><ChevronsLeft className="size-4" /></button>
+                  <button type="button" aria-label="Previous Page" disabled={offset === 0} onClick={() => setParams({ offset: offset - pageSize <= 0 ? null : String(offset - pageSize) })}><ChevronLeft className="size-4" /></button>
+                  {Array.from({ length: Math.min(5, Math.ceil(total / pageSize)) }, (_, index) => {
+                    const page = index + 1;
+                    const selected = Math.floor(offset / pageSize) + 1 === page;
+                    return <button key={page} type="button" aria-current={selected ? "page" : undefined} onClick={() => setParams({ offset: page === 1 ? null : String((page - 1) * pageSize) })}>{page}</button>;
+                  })}
+                  <button type="button" aria-label="Next Page" disabled={offset + pageSize >= total} onClick={() => setParams({ offset: String(offset + pageSize) })}><ChevronRight className="size-4" /></button>
+                  <button type="button" aria-label="Last Page" disabled={offset + pageSize >= total} onClick={() => setParams({ offset: String(Math.floor((total - 1) / pageSize) * pageSize) })}><ChevronsRight className="size-4" /></button>
+                  <label className="entries-page-size"><span className="sr-only">Rows per page</span><select aria-label="Rows per page" value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setParams({ offset: null }); }}><option value={10}>10</option><option value={25}>25</option><option value={50}>50</option><option value={100}>100</option></select><ChevronDown className="size-4" aria-hidden="true" /></label>
                 </div>
               </div>
             </>

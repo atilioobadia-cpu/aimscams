@@ -559,6 +559,11 @@ export class AccountingService {
           ...entry,
           debitMinor: entry.debitMinor.toString(),
           creditMinor: entry.creditMinor.toString(),
+          ledgerLines: entry.ledgerLines.map((line) => ({
+            ...line,
+            debitMinor: line.debitMinor.toString(),
+            creditMinor: line.creditMinor.toString(),
+          })),
         })),
       };
     } finally {
