@@ -17,3 +17,7 @@ AIMSCAMS displays an as-of date, Refresh, and the generic chart-of-accounts bala
 
 Browser review was read-only; no report was submitted or downloaded.  
 Implementation commit: none; Write-off report source and access contract missing.
+
+## Implementation update (2026-11-03)
+
+Replaced the generic accounting balance page with the shared loan report title/download card, date/filter toolbar, Submit/Clear actions, and horizontally scrollable table. Added report-specific columns based on the saved reference notes. Results are empty because a matching local report endpoint is unavailable; no Wakandi rows were copied. The AIMSCAMS route was checked in visible Chrome. Live Wakandi DevTools dimensions remain unverified while SSO reCAPTCHA blocks login.
