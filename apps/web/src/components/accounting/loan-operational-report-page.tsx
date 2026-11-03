@@ -24,10 +24,12 @@ export function LoanOperationalReportPage({
   title,
   columns,
   filename,
+  dateMode = "range",
 }: {
   title: string;
   columns: string[];
   filename: string;
+  dateMode?: "range" | "as-of";
 }) {
   const initialDates = useMemo(() => {
     const end = new Date();
@@ -74,16 +76,22 @@ export function LoanOperationalReportPage({
 
       <section aria-label={`${title} filters`} className="rounded-[var(--card-radius)] border border-card-border bg-card p-4">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-6">
-          <label className="sr-only" htmlFor="accrued-period">Date range</label>
-          <select id="accrued-period" value={period} onChange={(event) => setPeriod(event.target.value)} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body">
-            <option>Last 30 Days</option><option>Today</option><option>This Week</option><option>This Month</option><option>Custom Range</option>
-          </select>
-          <label className="sr-only" htmlFor="accrued-start-date">Start date</label>
-          <input id="accrued-start-date" type="date" value={startDate} onChange={(event) => { setStartDate(event.target.value); setPeriod("Custom Range"); }} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" />
-          <label className="sr-only" htmlFor="accrued-end-date">End date</label>
-          <input id="accrued-end-date" type="date" value={endDate} onChange={(event) => { setEndDate(event.target.value); setPeriod("Custom Range"); }} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" />
-          <FilterSelect label="MFSL MWANZA" disabled />
-          <FilterSelect label="Group" disabled />
+          {dateMode === "range" ? (
+            <>
+              <label className="sr-only" htmlFor="accrued-period">Date range</label>
+              <select id="accrued-period" value={period} onChange={(event) => setPeriod(event.target.value)} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body">
+                <option>Last 30 Days</option><option>Today</option><option>This Week</option><option>This Month</option><option>Custom Range</option>
+              </select>
+            </>
+          ) : null}
+          <label className="sr-only" htmlFor="accrued-start-date">{dateMode === "as-of" ? "As of date" : "Start date"}</label>
+          <input id="accrued-start-date" type="date" value={dateMode === "as-of" ? endDate : startDate} onChange={(event) => { if (dateMode === "as-of") setEndDate(event.target.value); else { setStartDate(event.target.value); setPeriod("Custom Range"); } }} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" />
+          {dateMode === "range" ? <>
+            <label className="sr-only" htmlFor="accrued-end-date">End date</label>
+            <input id="accrued-end-date" type="date" value={endDate} onChange={(event) => { setEndDate(event.target.value); setPeriod("Custom Range"); }} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body" />
+          </> : null}
+          {dateMode === "as-of" ? <FilterSelect label="Group" disabled /> : <FilterSelect label="MFSL MWANZA" disabled />}
+          {dateMode === "as-of" ? <FilterSelect label="MFSL MWANZA" disabled /> : <FilterSelect label="Group" disabled />}
           <FilterSelect label="Region" disabled />
           <FilterSelect label="Loan Officer" disabled />
           <FilterSelect label="Product Name" disabled />
