@@ -139,18 +139,18 @@ export default function ChartOfAccountsPage() {
   }, [accounts]);
 
   const visibleRows = useMemo(() => {
-    const result: Account[] = [];
-    const walk = (parentId: string | null) => {
+    const result: { account: Account; depth: number }[] = [];
+    const walk = (parentId: string | null, depth: number) => {
       const key = parentId ?? "__root__";
       const children = childrenOf.get(key) ?? [];
       for (const account of children) {
-        result.push(account);
+        result.push({ account, depth });
         if (account.is_group && expanded.has(account.id)) {
-          walk(account.id);
+          walk(account.id, depth + 1);
         }
       }
     };
-    walk(null);
+    walk(null, 0);
     return result;
   }, [childrenOf, expanded]);
 
@@ -203,32 +203,32 @@ export default function ChartOfAccountsPage() {
   const dateRange = `01-Jan-${year} to 31-Dec-${year}`;
 
   return (
-    <div className="mx-2 mt-2 flex flex-col">
-      <section className="flex h-[88px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-16)]">
-        <h1 className="flex min-w-0 items-center gap-3 truncate fs-title font-semibold text-heading">
+    <div className="mx-[6.87px] mt-[6.13px] flex flex-col font-[family-name:var(--font-roboto)] text-[13.44px]">
+      <section className="mb-[13.48px] mr-[15.27px] flex h-[70.4px] shrink-0 items-center rounded-[8px] border border-card-border bg-card px-[20.16px]">
+        <h1 className="relative -top-[2px] flex h-[24.67px] min-w-0 items-center gap-[6.86px] truncate text-[20.16px] [line-height:24.67px] font-semibold text-[#495057]">
           <Network className="size-5 shrink-0 text-brand" aria-hidden="true" />
-          Chart of Accounts
+          <span>Chart of Accounts</span>
         </h1>
-        <div className="ml-auto flex shrink-0 items-center gap-[9px]">
+        <div className="ml-auto mr-[6.72px] flex shrink-0 items-center gap-[6.72px]">
           <button
             type="button"
             onClick={() => pushToast("Adding groups arrives with the Accounting phase.")}
-            className="flex h-9 items-center gap-[8px] rounded-[var(--control-radius)] border border-brand px-[var(--space-12)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="flex h-[28.77px] w-[105.42px] items-center gap-[6.72px] rounded-[6px] border border-brand px-[8.4px] py-[6.72px] text-[11.76px] leading-normal font-medium text-brand outline-none transition-[background-color,color,border-color,outline-color,box-shadow] duration-200 hover:bg-[#057573] hover:text-white focus-visible:ring-2 focus-visible:ring-ring/50"
           >
-            <FolderPlus className="size-4" aria-hidden="true" />
+            <FolderPlus className="size-[13.44px]" aria-hidden="true" />
             Add Groups
           </button>
           <button
             type="button"
             onClick={() => pushToast("Adding ledgers arrives with the Accounting phase.")}
-            className="flex h-9 items-center gap-[8px] rounded-[var(--control-radius)] border border-brand px-[var(--space-12)] fs-text font-medium text-brand outline-none transition-colors hover:bg-primary-tint focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="flex h-[28.77px] w-[110.15px] items-center gap-[6.72px] rounded-[6px] border border-brand px-[8.4px] py-[6.72px] text-[11.76px] leading-normal font-medium text-brand outline-none transition-[background-color,color,border-color,outline-color,box-shadow] duration-200 hover:bg-[#057573] hover:text-white focus-visible:ring-2 focus-visible:ring-ring/50"
           >
-            <BookOpen className="size-4" aria-hidden="true" />
+            <BookOpen className="size-[13.44px]" aria-hidden="true" />
             Add Ledgers
           </button>
-          <div className="flex h-9 w-[268px] items-center justify-between gap-[var(--space-8)] rounded-[var(--control-radius)] border border-input bg-card px-[var(--space-12)] fs-text text-brand">
+          <div className="flex h-[28.77px] w-[280px] items-center justify-between gap-[8.4px] rounded-[6px] border border-input bg-card px-[8.4px] text-[11.76px] leading-normal text-brand">
             <span className="truncate">{dateRange}</span>
-            <Calendar className="size-4 shrink-0" aria-hidden="true" />
+            <Calendar className="size-[13.44px] shrink-0" aria-hidden="true" />
           </div>
         </div>
       </section>
@@ -255,7 +255,7 @@ export default function ChartOfAccountsPage() {
       ) : (
         <>
           {openingDifference !== 0n ? (
-            <div className="mt-4 flex h-[45px] items-center rounded-[var(--card-radius)] bg-accent-red-bg px-[var(--space-12)] fs-text text-accent-red">
+            <div className="mb-[14.1px] mr-[15.27px] flex h-[36.15px] items-center rounded-[6px] bg-[rgb(254_242_242_/_0.95)] px-[13.44px] py-[10.08px] text-[13.44px] leading-normal text-[#dc2626]">
               There is a difference in opening balance of{" "}
               {formatBalance(
                 (openingDifference > 0n ? -openingDifference : openingDifference).toString(),
@@ -263,38 +263,41 @@ export default function ChartOfAccountsPage() {
               )}
             </div>
           ) : null}
-          <section className="mt-4 overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card pb-[var(--space-12)]">
-            <Table className="table-fixed">
+          <section className="ml-[0.64px] mr-[15.97px] overflow-visible border-0 bg-card">
+            <Table className="coa-table coa-header-table table-fixed text-[13.44px] leading-normal text-[#495057]">
               <TableHeader>
-                <TableRow>
-                  <TableHead className="h-[48px] w-[35%] pl-[var(--space-12)]">Account Name</TableHead>
-                  <TableHead className="h-[48px] w-[10%]">Code</TableHead>
-                  <TableHead className="h-[48px] w-[12%]">Type</TableHead>
-                  <TableHead className="h-[48px] w-[17%] text-right">O/P Balance (TSh)</TableHead>
-                  <TableHead className="h-[48px] w-[18%] text-right">C/L Balance (TSh)</TableHead>
-                  <TableHead className="h-[48px] w-[8%] pr-[var(--space-16)] text-right">
+                <TableRow className="h-[36.81px] border-b-0 hover:bg-transparent">
+                  <TableHead className="h-[36.81px] w-[34.66%] bg-white px-[10.08px] py-[10.08px] text-left text-[13.44px] leading-normal font-bold text-[#495057]">Account Name</TableHead>
+                  <TableHead className="h-[36.81px] w-[7.92%] bg-white px-[10.08px] py-[10.08px] text-[13.44px] leading-normal font-bold text-[#495057]">Code</TableHead>
+                  <TableHead className="h-[36.81px] w-[5.95%] bg-white px-[10.08px] py-[10.08px] text-[13.44px] leading-normal font-bold text-[#495057]">Type</TableHead>
+                  <TableHead className="h-[36.81px] w-[21.8%] bg-white px-[10.08px] py-[10.08px] text-right text-[13.44px] leading-normal font-bold text-[#495057]">O/P Balance (TSh)</TableHead>
+                  <TableHead className="h-[36.81px] w-[21.8%] bg-white px-[10.08px] py-[10.08px] text-right text-[13.44px] leading-normal font-bold text-[#495057]">C/L Balance (TSh)</TableHead>
+                  <TableHead className="h-[36.81px] w-[6.93%] bg-white px-[10.08px] py-[10.08px] pr-[10.08px] text-right text-[13.44px] leading-normal font-bold text-[#495057]">
                     Actions
                   </TableHead>
                 </TableRow>
               </TableHeader>
+            </Table>
+            <Table className="coa-table coa-body-table table-fixed text-[13.44px] leading-normal text-[#495057]">
               <TableBody>
-                {visibleRows.map((account) => {
+                {visibleRows.map(({ account, depth }) => {
                   const isExpandedRow = isExpanded(account.id);
                   return (
-                    <TableRow key={account.id} className="h-[45px]">
-                      <TableCell className="pl-[var(--space-12)]">
+                    <TableRow key={account.id} className="h-[44.32px] border-b border-[#dee2e6] bg-white text-[13.44px] leading-normal hover:bg-white">
+                      <TableCell className="px-[10.08px] py-[10.08px]">
                         <div className="flex items-center">
+                          <span aria-hidden="true" className="shrink-0" style={{ width: `${depth * 16}px` }} />
                           {account.is_group ? (
                             <button
                               type="button"
                               onClick={() => toggle(account.id)}
-                              className="grid size-5 shrink-0 place-items-center rounded text-muted-foreground hover:text-strong"
+                              className="relative -top-[0.33px] grid size-[23.51px] shrink-0 place-items-center rounded px-[6px] py-[1px] text-muted-foreground hover:text-strong"
                               aria-label={isExpandedRow ? "Collapse group" : "Expand group"}
                             >
                               {isExpandedRow ? (
-                                <ChevronDown className="size-3" />
+                                <ChevronDown className="size-[14px]" />
                               ) : (
-                                <ChevronRight className="size-3" />
+                                <ChevronRight className="size-[14px]" />
                               )}
                             </button>
                           ) : (
@@ -306,7 +309,7 @@ export default function ChartOfAccountsPage() {
                                 ? `/accounting-ledger-entries?group=${account.code}`
                                 : `/accounting-ledger-entries?account=${account.code}`
                             }
-                            className="ml-[var(--space-16)] truncate text-body hover:underline"
+                            className="truncate text-[#495057] hover:underline"
                           >
                             {sentenceCase(account.name)}
                           </Link>
@@ -320,17 +323,17 @@ export default function ChartOfAccountsPage() {
                           ) : null}
                         </div>
                       </TableCell>
-                      <TableCell className="whitespace-nowrap text-body">{account.code}</TableCell>
-                      <TableCell className="text-body">
+                      <TableCell className="whitespace-nowrap px-[10.08px] py-[10.08px] text-[#495057]">{account.code}</TableCell>
+                      <TableCell className="px-[10.08px] py-[10.08px] text-[#495057]">
                         {account.is_group ? "Group" : "Ledger"}
                       </TableCell>
-                      <TableCell className="text-right tabular-nums text-body">
+                      <TableCell className="px-[10.08px] py-[10.08px] text-right tabular-nums text-[#495057]">
                         {formatBalance(account.opening_balance_minor, account.normal_balance)}
                       </TableCell>
-                      <TableCell className="text-right tabular-nums text-body">
+                      <TableCell className="px-[10.08px] py-[10.08px] text-right tabular-nums text-[#495057]">
                         {formatBalance(account.closing_balance_minor, account.normal_balance)}
                       </TableCell>
-                      <TableCell className="pr-[var(--space-16)] text-right">
+                      <TableCell className="px-[10.08px] py-[10.08px] pr-[10.08px] text-right">
                         {!account.is_group ? (
                           <RowActionsMenu
                             label={`${account.code} ${account.name}`}

@@ -484,6 +484,42 @@ table td {
   color: var(--text-strong);
 }
 
+/* COA follows the compact Roboto table rhythm measured from the reference UI. */
+.coa-table th {
+  height: 36.81px;
+  padding: 10.08px;
+  background: #fff;
+  color: #495057;
+  font: 700 13.44px/normal var(--font-roboto), Roboto, sans-serif;
+}
+.coa-table td {
+  height: 44.32px;
+  padding: 10.08px;
+  color: #495057;
+  font: 400 13.44px/normal var(--font-roboto), Roboto, sans-serif;
+}
+.coa-table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+.coa-header-table th:nth-child(1) { width: 35%; }
+.coa-header-table th:nth-child(2) { width: 8%; }
+.coa-header-table th:nth-child(3) { width: 6%; }
+.coa-header-table th:nth-child(4),
+.coa-header-table th:nth-child(5) { width: 22%; }
+.coa-header-table th:nth-child(6) { width: 7%; }
+.coa-body-table td:nth-child(1) { width: 35.72%; }
+.coa-body-table td:nth-child(2),
+.coa-body-table td:nth-child(3) { width: 6.12%; }
+.coa-body-table td:nth-child(4),
+.coa-body-table td:nth-child(5) { width: 22.45%; }
+.coa-body-table td:nth-child(6) { width: 7.14%; }
+.coa-body-table td { padding: 10.08px 13.44px; }
+.coa-header-table,
+.coa-body-table {
+  width: 100%;
+}
+
 /* Form grids: children must be able to shrink. */
 .grid > * {
   min-width: 0;
