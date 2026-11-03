@@ -27,6 +27,7 @@ const reports = [
   { href: "/reports-loan-LoanOfficerIncomeReport", title: "Loan Officer Income Report" },
   { href: "/reports-loan-LoanOutstandingReport", title: "Loan Outstanding Report" },
   { href: "/reports-loan-LoanRepaymentReport", title: "Loan Repayment Report" },
+  { href: "/reports-loan-LoanRepaymentScheduleReport", title: "Loan Repayment Schedule Report" },
   { href: "/reports-loan-PaidOffLoansReport", title: "Paid Off Loans Report" },
   { href: "/reports-loan-PendingLoanApplications", title: "Pending Loan Applications" },
   { href: "/reports-loan-PortfolioRiskReport", title: "Portfolio Risk Report" },
@@ -59,3 +60,5 @@ export default function LoanReportHubPage() {
     </div>
   );
 }
+
+
