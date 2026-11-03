@@ -6,12 +6,6 @@ import { ArrowDownUp, ChevronDown, Download, Filter, SlidersHorizontal } from "l
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 
-const columns = [
-  "Accrued Interest Amount",
-  "Paid Accrued Interest Amount",
-  "Outstanding Accrued Interest Amount",
-];
-
 function isoDate(date: Date) {
   const offset = date.getTimezoneOffset();
   return new Date(date.getTime() - offset * 60_000).toISOString().slice(0, 10);
@@ -26,7 +20,15 @@ function FilterSelect({ label, disabled = false }: { label: string; disabled?: b
   );
 }
 
-export function AccruedInstallmentsReportPage() {
+export function LoanOperationalReportPage({
+  title,
+  columns,
+  filename,
+}: {
+  title: string;
+  columns: string[];
+  filename: string;
+}) {
   const initialDates = useMemo(() => {
     const end = new Date();
     const start = new Date(end);
@@ -53,7 +55,7 @@ export function AccruedInstallmentsReportPage() {
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "accrued-installments-report.csv";
+    anchor.download = filename;
     anchor.click();
     URL.revokeObjectURL(url);
   }
@@ -62,7 +64,7 @@ export function AccruedInstallmentsReportPage() {
     <div className="space-y-4">
       <PageHeader
         variant="card"
-        title="Accrued Installments Report"
+        title={title}
         actions={(
           <Button type="button" variant="outline" onClick={downloadCsv} className="h-[42px] gap-2 border-primary px-4 text-primary hover:bg-primary/5 hover:text-primary">
             <Download aria-hidden="true" />Download<ChevronDown className="size-4" aria-hidden="true" />
@@ -70,7 +72,7 @@ export function AccruedInstallmentsReportPage() {
         )}
       />
 
-      <section aria-label="Accrued installments report filters" className="rounded-[var(--card-radius)] border border-card-border bg-card p-4">
+      <section aria-label={`${title} filters`} className="rounded-[var(--card-radius)] border border-card-border bg-card p-4">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-6">
           <label className="sr-only" htmlFor="accrued-period">Date range</label>
           <select id="accrued-period" value={period} onChange={(event) => setPeriod(event.target.value)} className="h-[42px] w-full rounded-[var(--control-radius)] border border-card-border bg-background px-3 fs-text text-body">
@@ -92,7 +94,7 @@ export function AccruedInstallmentsReportPage() {
         </div>
       </section>
 
-      <section aria-label="Accrued installments results" className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+      <section aria-label={`${title} results`} className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[960px] table-fixed text-left fs-text">
             <thead className="border-b border-card-border bg-subtle font-semibold text-label">
@@ -109,7 +111,7 @@ export function AccruedInstallmentsReportPage() {
               </tr>
             </thead>
             <tbody>
-              <tr><td colSpan={4} className="h-[132px] px-4 text-center text-muted-foreground">No Accrued Installments Report data found.</td></tr>
+              <tr><td colSpan={columns.length + 1} className="h-[132px] px-4 text-center text-muted-foreground">No {title} data found.</td></tr>
             </tbody>
           </table>
         </div>
