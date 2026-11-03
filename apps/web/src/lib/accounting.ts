@@ -156,10 +156,7 @@ export function getAccountingSettings(): Promise<AccountingSettings> {
   return apiRequest<AccountingSettings>("/accounting/settings");
 }
 
-export function updateAccountingSettings(body: {
-  taxRateBp: number;
-  interBranchEnabled: boolean;
-}) {
+export function updateAccountingSettings(body: { taxRateBp: number; interBranchEnabled: boolean }) {
   return apiRequest<{ taxRateBp: number; interBranchEnabled: boolean }>("/accounting/settings", {
     method: "PATCH",
     body,
@@ -180,7 +177,10 @@ export function updateFiscalPeriod(id: string, body: { status: "open" | "closed"
   });
 }
 
-export function updatePostingPolicy(eventCode: string, body: { lines: PolicyLine[]; note?: string }) {
+export function updatePostingPolicy(
+  eventCode: string,
+  body: { lines: PolicyLine[]; note?: string },
+) {
   return apiRequest<PostingPolicy | null>(`/accounting/posting-policies/${eventCode}`, {
     method: "PUT",
     body,
@@ -217,10 +217,7 @@ export function postJournalEntry(id: string) {
   });
 }
 
-export function reverseJournalEntry(
-  id: string,
-  body: { entryDate: string; description?: string },
-) {
+export function reverseJournalEntry(id: string, body: { entryDate: string; description?: string }) {
   return apiRequest<JournalEntryDetail>(`/accounting/entries/${id}/reverse`, {
     method: "POST",
     body,
@@ -262,6 +259,10 @@ export type AssetType = {
   code: string;
   name: string;
   description: string | null;
+  ledgerAccountId: string | null;
+  depreciationLedgerAccountId: string | null;
+  residualValueMinor: string | null;
+  rate: string | null;
   depreciationMethod: string;
   usefulLifeMonths: number;
   status: string;
@@ -274,11 +275,11 @@ export function listAssetTypes() {
 }
 
 export function createAssetType(body: {
-  code: string;
   name: string;
-  description?: string;
-  depreciationMethod?: string;
-  usefulLifeMonths?: number;
+  residualValue: string;
+  rate: string;
+  ledgerAccountId: string;
+  depreciationLedgerAccountId: string;
 }) {
   return apiRequest<AssetType>("/accounting/asset-types", { method: "POST", body });
 }

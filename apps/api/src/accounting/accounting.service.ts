@@ -5,6 +5,7 @@ import {
   NotFoundException,
   Inject,
 } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import { fromMajor } from '@aimscams/domain';
 import { Prisma } from '@aimscams/db';
 import {
@@ -46,6 +47,12 @@ const AMOUNT_KEYS: readonly PolicyLineInput['amount'][] = [
   'charges',
 ];
 
+function stringValue(value: unknown): string {
+  return typeof value === 'string' || typeof value === 'number'
+    ? String(value)
+    : '';
+}
+
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 function text(value: unknown, field: string): string {
@@ -71,7 +78,9 @@ function money(value: unknown, field: string): bigint {
   try {
     return fromMajor(value).minor;
   } catch {
-    throw new BadRequestException(`${field} must be an amount with at most two decimals.`);
+    throw new BadRequestException(
+      `${field} must be an amount with at most two decimals.`,
+    );
   }
 }
 
@@ -85,7 +94,11 @@ function mapLedgerError(error: unknown): never {
     if (/no fiscal period covers/.test(error.message)) {
       throw new BadRequestException(error.message);
     }
-    if (/unbalanced|at least two|exactly one|not in the chart|cannot be modified|is closed|outside period|immutable/.test(error.message)) {
+    if (
+      /unbalanced|at least two|exactly one|not in the chart|cannot be modified|is closed|outside period|immutable/.test(
+        error.message,
+      )
+    ) {
       throw new BadRequestException(error.message);
     }
   }
@@ -140,7 +153,9 @@ export class AccountingService {
         const debit = BigInt(row.debit_minor ?? '0');
         const credit = BigInt(row.credit_minor ?? '0');
         const closing =
-          row.normal_balance === 'debit' ? opening + debit - credit : opening + credit - debit;
+          row.normal_balance === 'debit'
+            ? opening + debit - credit
+            : opening + credit - debit;
         return {
           id: row.id,
           code: row.code,
@@ -163,19 +178,38 @@ export class AccountingService {
   async listFixedAssets(organisationId: string) {
     return this.prisma.fixedAsset.findMany({
       where: { organisationId },
-      include: { assetType: { select: { name: true, depreciationMethod: true, usefulLifeMonths: true } }, branch: { select: { name: true } } },
+      include: {
+        assetType: {
+          select: {
+            name: true,
+            depreciationMethod: true,
+            usefulLifeMonths: true,
+          },
+        },
+        branch: { select: { name: true } },
+      },
       orderBy: [{ status: 'asc' }, { assetNo: 'asc' }],
     });
   }
 
-  async createFixedAsset(organisationId: string, body: Record<string, unknown>) {
+  async createFixedAsset(
+    organisationId: string,
+    body: Record<string, unknown>,
+  ) {
     const assetNo = String(body.assetNo ?? '').trim();
     const description = String(body.description ?? '').trim();
-    if (!assetNo || !description) throw new BadRequestException('Asset number and description are required.');
+    if (!assetNo || !description)
+      throw new BadRequestException(
+        'Asset number and description are required.',
+      );
     const acquisitionDate = String(body.acquisitionDate ?? '').trim();
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(acquisitionDate)) throw new BadRequestException('Acquisition date must use YYYY-MM-DD.');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(acquisitionDate))
+      throw new BadRequestException('Acquisition date must use YYYY-MM-DD.');
     const cost = String(body.acquisitionCostMinor ?? '').trim();
-    if (!/^\\d+$/.test(cost)) throw new BadRequestException('Acquisition cost must be a whole number of minor units.');
+    if (!/^\\d+$/.test(cost))
+      throw new BadRequestException(
+        'Acquisition cost must be a whole number of minor units.',
+      );
     return this.prisma.fixedAsset.create({
       data: {
         organisationId,
@@ -191,30 +225,82 @@ export class AccountingService {
   }
 
   async listAssetTypes(organisationId: string) {
-    return this.prisma.assetType.findMany({
+    const rows = await this.prisma.assetType.findMany({
       where: { organisationId },
       orderBy: [{ status: 'asc' }, { name: 'asc' }],
     });
+    return rows.map((row) => ({
+      ...row,
+      residualValueMinor: row.residualValueMinor?.toString() ?? null,
+      rate: row.rate?.toString() ?? null,
+    }));
   }
 
   async createAssetType(organisationId: string, body: Record<string, unknown>) {
-    const code = String(body.code ?? '').trim().toUpperCase();
-    const name = String(body.name ?? '').trim();
-    if (!code || !name) throw new BadRequestException('Code and name are required.');
-    const method = String(body.depreciationMethod ?? 'STRAIGHT_LINE').trim().toUpperCase();
+    const name = stringValue(body.name).trim();
+    if (!name) throw new BadRequestException('Asset name is required.');
+    const residualValue = stringValue(body.residualValue ?? '0').trim();
+    let residualValueMinor: bigint;
+    try {
+      residualValueMinor = fromMajor(residualValue).minor;
+    } catch {
+      throw new BadRequestException(
+        'Residual value must be a non-negative amount with up to two decimal places.',
+      );
+    }
+    if (residualValueMinor < 0n)
+      throw new BadRequestException('Residual value cannot be negative.');
+    const rateText = stringValue(body.rate ?? '').trim();
+    if (!/^\d{1,3}(?:\.\d{1,4})?$/.test(rateText) || Number(rateText) > 100) {
+      throw new BadRequestException('Rate must be between 0 and 100.');
+    }
+    const ledgerAccountId = stringValue(body.ledgerAccountId ?? '').trim();
+    const depreciationLedgerAccountId = stringValue(
+      body.depreciationLedgerAccountId ?? '',
+    ).trim();
+    if (!ledgerAccountId || !depreciationLedgerAccountId) {
+      throw new BadRequestException(
+        'Ledger and depreciation ledger are required.',
+      );
+    }
+    const ledgerDb = await this.dbService.getDb(organisationId);
+    const ledgerIds = [ledgerAccountId, depreciationLedgerAccountId];
+    const validLedgers = await ledgerDb.query<{ id: string }>(
+      `select id from gl_account where organisation_id = $1 and id = any($2::uuid[]) and is_postable = true`,
+      [organisationId, ledgerIds],
+    );
+    if (
+      ledgerIds.some((id) => !validLedgers.rows.some((row) => row.id === id))
+    ) {
+      throw new BadRequestException('Select valid postable ledger accounts.');
+    }
+    const method = stringValue(body.depreciationMethod ?? 'STRAIGHT_LINE')
+      .trim()
+      .toUpperCase();
     const life = Number(body.usefulLifeMonths ?? 0);
-    if (!Number.isInteger(life) || life < 0) throw new BadRequestException('Useful life must be a whole number.');
-    return this.prisma.assetType.create({
+    if (!Number.isInteger(life) || life < 0)
+      throw new BadRequestException('Useful life must be a whole number.');
+    const created = await this.prisma.assetType.create({
       data: {
         organisationId,
-        code,
+        code: `ASSET-${randomUUID().slice(0, 8).toUpperCase()}`,
         name,
-        description: body.description ? String(body.description).trim() : null,
+        description:
+          typeof body.description === 'string' ? body.description.trim() : null,
+        ledgerAccountId,
+        depreciationLedgerAccountId,
+        residualValueMinor,
+        rate: new Prisma.Decimal(rateText),
         depreciationMethod: method,
         usefulLifeMonths: life,
         status: 'ACTIVE',
       },
     });
+    return {
+      ...created,
+      residualValueMinor: created.residualValueMinor?.toString() ?? null,
+      rate: created.rate?.toString() ?? null,
+    };
   }
 
   async getTrialBalance(organisationId: string, asOf: string) {
@@ -249,7 +335,9 @@ export class AccountingService {
         code: string;
         name: string;
         dialect: string;
-      }>(`select id, code, name, dialect from organisation where id = $1`, [organisationId]);
+      }>(`select id, code, name, dialect from organisation where id = $1`, [
+        organisationId,
+      ]);
 
       await db.query(
         `insert into accounting_setting (organisation_id) values ($1)
@@ -322,8 +410,14 @@ export class AccountingService {
     const taxRateBp = body.taxRateBp;
     const interBranchEnabled = body.interBranchEnabled;
 
-    if (!Number.isInteger(taxRateBp) || (taxRateBp as number) < 0 || (taxRateBp as number) > 10000) {
-      throw new BadRequestException('Tax rate must be a whole percentage between 0 and 100.');
+    if (
+      !Number.isInteger(taxRateBp) ||
+      (taxRateBp as number) < 0 ||
+      (taxRateBp as number) > 10000
+    ) {
+      throw new BadRequestException(
+        'Tax rate must be a whole percentage between 0 and 100.',
+      );
     }
     if (typeof interBranchEnabled !== 'boolean') {
       throw new BadRequestException('Inter-branch ledger must be on or off.');
@@ -331,9 +425,10 @@ export class AccountingService {
 
     const db = await this.dbService.getDb(organisationId);
     try {
-      const before = await db.query(`select * from accounting_setting where organisation_id = $1`, [
-        organisationId,
-      ]);
+      const before = await db.query(
+        `select * from accounting_setting where organisation_id = $1`,
+        [organisationId],
+      );
 
       await db.query(
         `insert into accounting_setting (organisation_id, tax_rate_bp, inter_branch_enabled, updated_at)
@@ -387,7 +482,9 @@ export class AccountingService {
         [organisationId, endsOn, startsOn],
       );
       if (overlap.rows[0]) {
-        throw new ConflictException('That period overlaps an existing fiscal period.');
+        throw new ConflictException(
+          'That period overlaps an existing fiscal period.',
+        );
       }
 
       const created = await db.query<{
@@ -453,7 +550,9 @@ export class AccountingService {
           [organisationId, periodId],
         );
         if (Number(drafts.rows[0]?.count ?? 0) > 0) {
-          throw new ConflictException('Post or delete every draft in this period before closing it.');
+          throw new ConflictException(
+            'Post or delete every draft in this period before closing it.',
+          );
         }
       }
 
@@ -466,7 +565,10 @@ export class AccountingService {
         organisationId,
         actorUserId: auth.user.id,
         actorLabel: auth.user.email,
-        action: status === 'closed' ? 'Fiscal period closed' : 'Fiscal period reopened',
+        action:
+          status === 'closed'
+            ? 'Fiscal period closed'
+            : 'Fiscal period reopened',
         entityType: 'Accounting Period',
         entityId: periodId,
         before: { status: period.status },
@@ -500,21 +602,28 @@ export class AccountingService {
         [organisationId, code],
       );
       const current = existing.rows[0];
-      if (!current) throw new NotFoundException(`No posting policy for ${code}.`);
+      if (!current)
+        throw new NotFoundException(`No posting policy for ${code}.`);
 
       const accounts = await db.query<{ code: string; is_postable: boolean }>(
         `select code, is_postable from gl_account
           where organisation_id = $1 and code = any($2::text[])`,
         [organisationId, [...new Set(lines.map((line) => line.account))]],
       );
-      const known = new Map(accounts.rows.map((row) => [row.code, row.is_postable]));
+      const known = new Map(
+        accounts.rows.map((row) => [row.code, row.is_postable]),
+      );
 
       for (const line of lines) {
         if (!known.has(line.account)) {
-          throw new BadRequestException(`Account ${line.account} is not in the chart of accounts.`);
+          throw new BadRequestException(
+            `Account ${line.account} is not in the chart of accounts.`,
+          );
         }
         if (!known.get(line.account)) {
-          throw new BadRequestException(`Account ${line.account} is not postable.`);
+          throw new BadRequestException(
+            `Account ${line.account} is not postable.`,
+          );
         }
       }
 
@@ -522,7 +631,13 @@ export class AccountingService {
       await db.query(
         `insert into posting_policy (organisation_id, event_code, version, lines, note)
          values ($1, $2, $3, $4::jsonb, $5)`,
-        [organisationId, code, nextVersion, JSON.stringify(lines), 'Edited from accounting settings'],
+        [
+          organisationId,
+          code,
+          nextVersion,
+          JSON.stringify(lines),
+          'Edited from accounting settings',
+        ],
       );
 
       await this.audit.record({
@@ -533,7 +648,10 @@ export class AccountingService {
         entityType: 'Posting Policy',
         entityId: `${code}:v${nextVersion}`,
         before: { version: Number(current.version) },
-        after: { version: nextVersion, lines } as unknown as Prisma.InputJsonValue,
+        after: {
+          version: nextVersion,
+          lines,
+        } as unknown as Prisma.InputJsonValue,
         ipAddress: context.ipAddress,
         userAgent: context.userAgent,
       });
@@ -592,7 +710,8 @@ export class AccountingService {
     const input = {
       tenantId: organisationId,
       entryDate: date(body.entryDate, 'Entry date'),
-      description: typeof body.description === 'string' ? body.description.trim() : '',
+      description:
+        typeof body.description === 'string' ? body.description.trim() : '',
       eventCode: typeof body.eventCode === 'string' ? body.eventCode : 'MANUAL',
       sourceType: 'manual',
       sourceId: `manual:${Date.now()}`,
@@ -633,7 +752,11 @@ export class AccountingService {
     }
   }
 
-  async postEntry(auth: AuthContext, entryId: string, context: MutationContext) {
+  async postEntry(
+    auth: AuthContext,
+    entryId: string,
+    context: MutationContext,
+  ) {
     const organisationId = auth.user.organisation.id;
     const db = await this.dbService.getDb(organisationId);
     try {
@@ -642,7 +765,9 @@ export class AccountingService {
         organisationId,
         actorUserId: auth.user.id,
         actorLabel: auth.user.email,
-        action: result.reused ? 'Journal entry post repeated' : 'Journal entry posted',
+        action: result.reused
+          ? 'Journal entry post repeated'
+          : 'Journal entry posted',
         entityType: 'Journal Entry',
         entityId: entryId,
         ipAddress: context.ipAddress,
@@ -673,14 +798,17 @@ export class AccountingService {
       const result = await reverseEntry(db, entryId, {
         tenantId: organisationId,
         entryDate,
-        description: typeof body.description === 'string' ? body.description : undefined,
+        description:
+          typeof body.description === 'string' ? body.description : undefined,
       });
 
       await this.audit.record({
         organisationId,
         actorUserId: auth.user.id,
         actorLabel: auth.user.email,
-        action: result.reused ? 'Journal entry reversal repeated' : 'Journal entry reversed',
+        action: result.reused
+          ? 'Journal entry reversal repeated'
+          : 'Journal entry reversed',
         entityType: 'Journal Entry',
         entityId: entryId,
         after: { reversalEntryId: result.id, entryDate },
@@ -828,7 +956,9 @@ export class AccountingService {
 
   private parsePolicyLines(value: unknown): PolicyLineInput[] {
     if (!Array.isArray(value) || value.length < 2) {
-      throw new BadRequestException('A posting policy needs at least two lines.');
+      throw new BadRequestException(
+        'A posting policy needs at least two lines.',
+      );
     }
 
     return value.map((raw, index) => {
@@ -841,10 +971,14 @@ export class AccountingService {
       const amount = line.amount;
 
       if (side !== 'debit' && side !== 'credit') {
-        throw new BadRequestException(`Policy line ${index + 1} must be debit or credit.`);
+        throw new BadRequestException(
+          `Policy line ${index + 1} must be debit or credit.`,
+        );
       }
       if (!AMOUNT_KEYS.includes(amount as PolicyLineInput['amount'])) {
-        throw new BadRequestException(`Policy line ${index + 1} has an unknown amount key.`);
+        throw new BadRequestException(
+          `Policy line ${index + 1} has an unknown amount key.`,
+        );
       }
 
       return { account, side, amount: amount as PolicyLineInput['amount'] };
@@ -886,7 +1020,9 @@ export class AccountingService {
     const credits = lines.reduce((total, line) => total + line.creditMinor, 0n);
 
     if (debits !== credits) {
-      throw new BadRequestException('The entry is unbalanced: total debits must equal total credits.');
+      throw new BadRequestException(
+        'The entry is unbalanced: total debits must equal total credits.',
+      );
     }
 
     return lines;
