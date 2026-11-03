@@ -20,3 +20,7 @@ Read-only review; no report actions were used and no reference financial values 
 ## Status
 
 The current route is a generic account report rather than the monthly MSP04 form.
+
+## Implementation update (2026-11-04)
+
+Replaced the generic Chart of Accounts screen with a dedicated regulatory schedule layout: reporting-period selectors, Submit/Clear, Saved Reports/Save affordances, grouped schedule sections, comparative or sector measure columns, and horizontal scrolling. Values are blank because the local regulatory report service is not available; saved-report controls are disabled to avoid claiming persistence. No Wakandi values were copied. Local route verified in visible browser; live Wakandi DevTools remained unavailable due to SSO reCAPTCHA.

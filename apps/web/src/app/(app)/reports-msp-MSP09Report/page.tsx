@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { RegulatorySchedulePage } from "@/components/accounting/regulatory-schedule-page";
 
 export const metadata: Metadata = { title: "MSP09 report · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="MSP09 report" description="MSP09 report." />;
+  return <RegulatorySchedulePage title="MSP09 Report" measures={["Amount", "Ratio"]} sections={[
+    {title:"Capital Adequacy",rows:["Core capital","Institutional capital","Net institutional capital","Total assets"]},
+    {title:"Capital Ratios",rows:["Core capital to total assets","Institutional capital to total assets","Total capital adequacy ratio"]},
+  ]} />;
 }

@@ -21,3 +21,7 @@ Browser review was read-only. No report was submitted, saved, or exported; refer
 ## Status
 
 The route remains a generic account report and does not match the reference report's structure or data contract.
+
+## Implementation update (2026-11-04)
+
+Replaced the generic Chart of Accounts screen with a dedicated regulatory schedule layout: reporting-period selectors, Submit/Clear, Saved Reports/Save affordances, grouped schedule sections, comparative or sector measure columns, and horizontal scrolling. Values are blank because the local regulatory report service is not available; saved-report controls are disabled to avoid claiming persistence. No Wakandi values were copied. Local route verified in visible browser; live Wakandi DevTools remained unavailable due to SSO reCAPTCHA.

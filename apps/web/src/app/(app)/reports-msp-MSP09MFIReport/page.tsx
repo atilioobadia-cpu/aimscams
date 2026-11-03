@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { RegulatorySchedulePage } from "@/components/accounting/regulatory-schedule-page";
 
 export const metadata: Metadata = { title: "MSP09 mfireport · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="MSP09 mfireport" description="MSP09 mfireport." />;
+  return <RegulatorySchedulePage title="MSP09 MFI Report" period="quarter" measures={["Female Loans", "Female Amount", "Male Loans", "Male Amount", "Total Loans", "Total Amount"]} sections={[
+    {title:"Sector Loan Disbursements",rows:["Agriculture","Trade and commerce","Manufacturing","Services","Other sectors","Total"]},
+  ]} />;
 }
