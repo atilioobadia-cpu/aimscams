@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { LoanOperationalReportPage } from "@/components/accounting/loan-operational-report-page";
 
 export const metadata: Metadata = { title: "Portfolio risk report · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="Portfolio risk report" description="Portfolio risk report." />;
+  return <LoanOperationalReportPage title="Portfolio Risk Report" filename="portfolio-risk-report.csv" dateMode="as-of" columns={[
+    "Branch", "Group", "Loan Officer", "Loan Product", "Outstanding Principal", "Arrears", "Arrears Rate", "Risk Percentage", "Last Repayment Amount",
+  ]} />;
 }

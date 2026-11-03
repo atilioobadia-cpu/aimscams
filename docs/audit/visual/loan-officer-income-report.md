@@ -18,3 +18,7 @@ AIMSCAMS uses the as-of date control and chart-of-accounts balance grid; it has 
 
 Browser review was read-only; no report was submitted or downloaded.  
 Implementation commit: none; officer-income query and access contract are absent.
+
+## Implementation update (2026-11-03)
+
+Replaced the unrelated generic accounting balance page with the shared loan report title/download card, date/filter toolbar, Submit/Clear actions, and horizontally scrollable table. Added report-specific columns based on the saved reference notes. Results are empty because a matching local report endpoint is unavailable; no Wakandi rows were copied. Checked the visible AIMSCAMS page. Wakandi live DevTools dimensions are unverified because SSO reCAPTCHA blocks the session.

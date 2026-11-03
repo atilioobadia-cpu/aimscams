@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 
-import { GenericReportPage } from "@/components/accounting/generic-report-page";
+import { LoanOperationalReportPage } from "@/components/accounting/loan-operational-report-page";
 
 export const metadata: Metadata = { title: "Loan insurance report · AIMSCAMS" };
 
 export default function Route() {
-  return <GenericReportPage title="Loan insurance report" description="Loan insurance report." />;
+  return <LoanOperationalReportPage title="Loan Insurance Report" filename="loan-insurance-report.csv" columns={[
+    "Account Number", "Client Name", "Loan Product", "Loan Officer", "Branch", "Group", "Tenure Type", "Tenure",
+    "Insurance Premium", "Reference Number", "Service Provider",
+  ]} />;
 }
