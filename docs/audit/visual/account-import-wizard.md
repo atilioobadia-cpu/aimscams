@@ -1,18 +1,16 @@
 # Account Import Wizard visual audit
 
-Date: 2026-11-01  
-Reference: `F:\Wakandi\import-account-new\FULL.png`  
+Date: 2026-11-04
+Reference: `F:\Wakandi\import-account-new\FULL.png`
 AIMSCAMS route: `/import-account-new`
 
-## Comparison
+## AIMSCAMS changes
 
-The reference uses a four-step upload, field-mapping, validation/preview, and result flow, with CSV or Excel file selection in a large centered panel. AIMSCAMS uses a three-step Upload/Preview/Commit flow, accepts CSV only, and exposes a generated batch reference and CSV schema text.
+- Replaced the former three-step Upload/Preview/Commit indicator with the reference four-step Upload File, Field Mapping, Validation And Preview, and Result progress row.
+- Added an auto-detected local field mapping review before row validation.
+- Kept commit isolated at the final Result step. This still creates savings accounts through the local API; no file was uploaded and no records were created during this audit.
+- CSV parsing remains supported; Excel parsing and editable source-column mapping are unavailable in the current local implementation.
 
-## Recommendations
+## Verification
 
-- Match the four visible stages and upload panel after field mapping and validation are implemented.
-- Support CSV/Excel only when parsing and validation handle both formats.
-- Keep commit gated behind a validated preview.
-
-Browser review was read-only. The file chooser was not opened; no upload or commit occurred.  
-Implementation commit: none; workflow/state mismatch.
+Compared the saved Wakandi capture with the AIMSCAMS route in visible Chrome. Live Wakandi DevTools measurements remain unavailable while SSO reCAPTCHA blocks the session. No account or balance data was added.

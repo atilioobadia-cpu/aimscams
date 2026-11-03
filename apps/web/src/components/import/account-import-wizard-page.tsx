@@ -1,17 +1,13 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Upload, CheckCircle2, AlertTriangle } from "lucide-react";
+import { useId, useRef, useState } from "react";
+import { CheckCircle2, AlertTriangle } from "lucide-react";
 
-import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
-import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ApiError } from "@/lib/api";
 import { createSavingsAccount } from "@/lib/settings";
 import { createImportBatch, completeImportBatch } from "@/lib/settings";
-import { titleCase } from "@/lib/privacy";
 
 type ParsedRow = {
   accountNumber: string;
@@ -54,7 +50,8 @@ export function AccountImportWizardPage() {
   const [committing, setCommitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<{ success: number; failed: number; errors: string[] } | null>(null);
-  const [reference, setReference] = useState(`ACC-IMP-${Date.now()}`);
+  const generatedId = useId().replaceAll(":", "").toUpperCase();
+  const [reference, setReference] = useState(`ACC-IMP-${generatedId}`);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -133,13 +130,16 @@ export function AccountImportWizardPage() {
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
         <div className="mb-3 flex items-center gap-2">
           <span className={`grid size-8 place-items-center rounded-full ${step >= 1 ? "bg-primary text-white" : "bg-subtle text-muted-foreground"} fs-text font-bold`}>1</span>
-          <span className="fs-text font-medium text-body">Upload</span>
+          <span className="fs-text font-medium text-body">Upload File</span>
           <span className="mx-2 text-muted-foreground">→</span>
           <span className={`grid size-8 place-items-center rounded-full ${step >= 2 ? "bg-primary text-white" : "bg-subtle text-muted-foreground"} fs-text font-bold`}>2</span>
-          <span className="fs-text font-medium text-body">Preview</span>
+          <span className="fs-text font-medium text-body">Field Mapping</span>
           <span className="mx-2 text-muted-foreground">→</span>
           <span className={`grid size-8 place-items-center rounded-full ${step >= 3 ? "bg-primary text-white" : "bg-subtle text-muted-foreground"} fs-text font-bold`}>3</span>
-          <span className="fs-text font-medium text-body">Commit</span>
+          <span className="fs-text font-medium text-body">Validation And Preview</span>
+          <span className="mx-2 text-muted-foreground">→</span>
+          <span className={`grid size-8 place-items-center rounded-full ${step >= 4 ? "bg-primary text-white" : "bg-subtle text-muted-foreground"} fs-text font-bold`}>4</span>
+          <span className="fs-text font-medium text-body">Result</span>
         </div>
       </section>
 
@@ -158,13 +158,29 @@ export function AccountImportWizardPage() {
           {rows.length > 0 ? (
             <div className="flex flex-wrap items-center gap-3">
               <span className="fs-text text-body">{rows.length} rows parsed · {validRows.length} valid · {invalidRows.length} invalid</span>
-              <Button type="button" onClick={() => setStep(2)}>Preview</Button>
+              <Button type="button" onClick={() => setStep(2)}>Next</Button>
             </div>
           ) : null}
         </section>
       ) : null}
 
       {step === 2 ? (
+        <section className="space-y-3 rounded-[var(--card-radius)] border border-card-border bg-surface p-4">
+          <h2 className="fs-text font-bold text-strong">Field Mapping</h2>
+          <p className="fs-text text-muted-foreground">AIMSCAMS detected these CSV fields. Review the mapping before validating the rows.</p>
+          <dl className="grid gap-3 sm:grid-cols-2">
+            {[["Account number", "accountNumber"], ["Client ID", "clientId"], ["Account type", "accountType"]].map(([label, field]) => (
+              <div key={field} className="rounded-[var(--control-radius)] border border-card-border bg-background p-3">
+                <dt className="fs-small text-muted-foreground">{label}</dt>
+                <dd className="mt-1 fs-text font-medium text-body">{field}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="flex gap-2"><Button type="button" variant="outline" onClick={() => setStep(1)}>Back</Button><Button type="button" onClick={() => setStep(3)} disabled={rows.length === 0}>Next</Button></div>
+        </section>
+      ) : null}
+
+      {step === 3 ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4 space-y-3">
           <h2 className="fs-text font-bold text-strong">Preview and validate</h2>
           <div className="overflow-x-auto">
@@ -198,14 +214,14 @@ export function AccountImportWizardPage() {
           <div className="flex flex-wrap items-center gap-3">
             <span className="fs-text text-body">{validRows.length} valid · {invalidRows.length} invalid</span>
             <Button type="button" variant="outline" onClick={() => setStep(1)}>Back</Button>
-            <Button type="button" onClick={() => setStep(3)} disabled={validRows.length === 0}>Commit</Button>
+            <Button type="button" onClick={() => setStep(4)} disabled={validRows.length === 0}>Next</Button>
           </div>
         </section>
       ) : null}
 
-      {step === 3 ? (
+      {step === 4 ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-4 space-y-3">
-          <h2 className="fs-text font-bold text-strong">Commit import</h2>
+          <h2 className="fs-text font-bold text-strong">Import result</h2>
           <p className="fs-text text-body">{validRows.length} valid rows will be imported.</p>
           {committing ? (
             <div className="space-y-2">
@@ -228,7 +244,7 @@ export function AccountImportWizardPage() {
             </div>
           ) : (
             <div className="flex flex-wrap gap-2">
-              <Button type="button" variant="outline" onClick={() => setStep(2)} disabled={committing}>Back</Button>
+              <Button type="button" variant="outline" onClick={() => setStep(3)} disabled={committing}>Back</Button>
               <Button type="button" onClick={handleCommit} disabled={committing}>{committing ? "Importing..." : "Commit import"}</Button>
             </div>
           )}
