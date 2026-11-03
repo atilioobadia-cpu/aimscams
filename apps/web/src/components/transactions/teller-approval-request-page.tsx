@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { CheckCircle2, SlidersHorizontal, Wallet, XCircle } from "lucide-react";
+import { CheckCircle2, SlidersHorizontal, XCircle } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { TellerWorkspaceHeader } from "@/components/transactions/teller-workspace-header";
 import { ApiError } from "@/lib/api";
 import { formatTzs } from "@/lib/format";
 import { titleCase } from "@/lib/privacy";
@@ -167,7 +167,7 @@ export function TellerApprovalRequestPage() {
   if (forbidden) {
     return (
       <div className="space-y-5">
-        <TellerRequestWorkspaceHeader till={till} />
+        <TellerWorkspaceHeader till={till} activeTab="requests" />
         <ForbiddenPanel message="Your role cannot view teller requests. Ask an administrator for Transaction : View." />
       </div>
     );
@@ -177,7 +177,7 @@ export function TellerApprovalRequestPage() {
 
   return (
     <div className="space-y-4">
-      <TellerRequestWorkspaceHeader till={till} />
+      <TellerWorkspaceHeader till={till} activeTab="requests" />
 
       {queueError ? <ErrorPanel message={queueError} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
       {error ? <ErrorPanel message={error} onRetry={() => setId(id)} /> : null}
@@ -312,54 +312,5 @@ export function TellerApprovalRequestPage() {
         </section>
       ) : id ? null : null}
     </div>
-  );
-}
-
-function TellerRequestWorkspaceHeader({ till }: { till: TillInfo | null }) {
-  const isOpen = till?.session?.status === "OPEN";
-
-  return (
-    <>
-      <section className="flex min-h-[84px] flex-wrap items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <Wallet className="size-6 shrink-0 text-primary" aria-hidden="true" />
-          <div className="min-w-0">
-            <h1 className="fs-title font-bold leading-tight text-heading">Teller Transaction</h1>
-            <p className="mt-1 fs-text text-muted-foreground">
-              <span className={isOpen ? "font-semibold text-accent-teal" : "font-semibold text-accent-red"}>
-                {isOpen ? "Open" : "Closed"}
-              </span>
-              {till?.session?.branchName ? ` · ${till.session.branchName}` : " · Teller account unavailable"}
-            </p>
-          </div>
-        </div>
-        <div className="min-w-[150px] text-right">
-          <p className="fs-caption font-semibold uppercase tracking-wide text-label">Balance</p>
-          <p className="mt-1 fs-text font-semibold text-primary">
-            {till?.session?.systemBalanceMinor ? formatTzs(till.session.systemBalanceMinor) : "Unavailable"}
-          </p>
-        </div>
-      </section>
-
-      <nav aria-label="Teller transaction sections" className="flex min-h-[56px] items-stretch gap-1 border-b border-card-border bg-surface px-4">
-        <TellerRequestTab href="/transaction-teller-transaction" label="New Transaction" />
-        <TellerRequestTab href="/transaction-teller-transaction-history" label="History" />
-        <TellerRequestTab href="/transaction-teller-transaction-request" label="Requests" active />
-      </nav>
-    </>
-  );
-}
-
-function TellerRequestTab({ href, label, active = false }: { href: string; label: string; active?: boolean }) {
-  return (
-    <Link
-      href={href}
-      aria-current={active ? "page" : undefined}
-      className={`inline-flex min-w-[112px] items-center justify-center border-b-2 px-4 fs-text font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none ${
-        active ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-primary"
-      }`}
-    >
-      {label}
-    </Link>
   );
 }
