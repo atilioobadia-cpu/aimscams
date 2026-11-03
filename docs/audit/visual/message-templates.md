@@ -4,15 +4,13 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\messages-template-list\FULL.png`  
 AIMSCAMS route: `/messages-template-list` (confirmed in the visible browser; heading “Templates”).
 
-## Comparison
+## Changes
 
-The reference shows the shared Message Service header/actions and Messages tab with Name/Type filters, enable controls, costing, template version, and a paged list. AIMSCAMS instead places an Add template form above a search field and a template list. The local API had no template rows in the captured state. The reference-map “create” identifier resolves to this same page; template creation is supported by the page and `createMessageTemplate` API call.
+- Added the shared Message Service header and tabs, Name/Type filters, and reference column sequence.
+- Moved template entry into a Create Message Template dialog; the button opens and closes correctly, and submitting remains API-backed.
+- Retained only AIMSCAMS template rows. The current model does not expose costing or version history, so these values remain unavailable rather than being inferred.
+- Empty results retain the column header and empty-state row.
 
-## Recommendations
+## Verification and limitations
 
-- Add the shared service header and template list structure from the reference.
-- Keep template creation as a separate action/form and preserve the current empty-data state.
-- Add enable, costing, and version fields only when they are supported by the local template model.
-
-Browser review was read-only. No template was added or changed.  
-Route reconciliation: complete. Local data/model and shared-shell differences remain in the visual queue.
+Reviewed the list and dialog in the visible local Chrome tab. The Wakandi visual baseline came from the saved capture; exact live CSS measurements were not available because Wakandi SSO reCAPTCHA failed. No template was created.

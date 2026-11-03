@@ -4,20 +4,13 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\messages-users-list\FULL.png`  
 AIMSCAMS route: `/messages-users-list`
 
-## Comparison
+## Changes
 
-The reference is the Users tab of the shared Message Service workspace. It includes the credit/action header, four message-service tabs, Name/Phone/Add Filters controls, and a populated, paginated table with Name, Phone, Email ID, Enable/Disable SMS, and Enable/Disable Email columns. The supplied capture also has a Create Message Template modal over the users table; this is an overlay state rather than part of the Users page's base layout.
+- Added the shared Message Service header and section tabs to the Users route.
+- Added the Name/Phone search field and reference table columns: Name, Phone, Email ID, Enable / Disable SMS, and Enable / Disable Email.
+- Kept the table empty because AIMSCAMS does not yet expose a message-user or notification-preference API; no user records or channel controls were fabricated.
+- The Create Template action remains separate from the Users register and opens the template workspace.
 
-AIMSCAMS displays an In Build badge and a centered “not enabled yet” placeholder. The shared service header, tabs, user filters, table, and pager are absent. No user rows or contact details from the reference capture are reproduced here.
+## Verification and limitations
 
-## Recommendations
-
-- Implement the shared Message Service header and tab navigation on the users route.
-- Add the name/phone filters, user table, and pager, including the two channel-preference controls where supported by the local user messaging model.
-- Treat the template modal as a separate overlay state associated with the Create Template action; do not show it as the default users-page state.
-
-Browser review was read-only. No message-preference controls or template actions were used.
-
-## Status
-
-This route remains a placeholder and has no visual or functional parity with the referenced Users workspace.
+Reviewed the Users route in visible Chrome and confirmed the tab, controls, table headings and empty state. Wakandi evidence was the saved screenshot; live DevTools measurements were unavailable while SSO reCAPTCHA was failing. No message-user settings were changed.
