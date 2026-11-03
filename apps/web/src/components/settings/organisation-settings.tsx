@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Building2, Globe2, Info, Palette, RotateCcw, Save, Wrench } from "lucide-react";
+import { Building2, Palette, RotateCcw, Save, Wrench } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -170,15 +170,17 @@ export function OrganisationSettingsPage() {
 
   return (
     <div className="space-y-[var(--space-14)]">
-      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-        <header className="flex items-center gap-3 px-[var(--space-16)] py-[var(--space-12)]">
+      <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <header className="flex items-center gap-3 px-[var(--space-16)] py-[var(--space-16)]">
           <Wrench className="size-5 text-brand" aria-hidden="true" />
           <div>
             <h1 className="fs-title font-bold text-strong">General</h1>
             <p className="fs-text text-muted-foreground">General Settings</p>
           </div>
         </header>
-        <div role="tablist" aria-label="General settings sections" className="flex border-t border-chrome bg-tab-inactive">
+      </section>
+      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <div role="tablist" aria-label="General settings sections" className="flex bg-tab-inactive">
           <button type="button" role="tab" id="general-info-tab" aria-selected={activeTab === "info"} aria-controls="general-info-panel" onClick={() => setActiveTab("info")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "info" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
             Info
           </button>
@@ -212,6 +214,7 @@ export function OrganisationSettingsPage() {
                 <InfoField label="Locale" value={data.locale} />
                 <InfoField label="Branch count" value={String(data.branches.length)} />
                 <InfoField label="Transaction PIN" value="Not available" />
+                <InfoField label="Last updated" value={updatedLabel(data.updatedAt, data.timezone)} />
               </dl>
             </section>
           ) : null}
@@ -382,49 +385,6 @@ export function OrganisationSettingsPage() {
             </div>
           </section>
 
-          <aside className="space-y-[var(--space-14)]">
-            <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
-              <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
-                <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
-                  <Globe2 className="size-4 text-brand" aria-hidden="true" />
-                  Installation
-                </h2>
-              </header>
-              <dl className="grid gap-[var(--space-10)] px-[var(--space-16)] py-[var(--space-14)]">
-                <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="fs-text text-muted-foreground">Institution code</dt>
-                  <dd className="fs-text font-semibold text-strong">{data.code}</dd>
-                </div>
-                <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="fs-text text-muted-foreground">Locale</dt>
-                  <dd className="fs-text font-semibold text-strong">{data.locale}</dd>
-                </div>
-                <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="fs-text text-muted-foreground">Branches</dt>
-                  <dd className="fs-text font-semibold text-strong">{data.branches.length}</dd>
-                </div>
-                <div className="flex items-start justify-between gap-[var(--space-10)]">
-                  <dt className="fs-text text-muted-foreground">Last updated</dt>
-                  <dd className="text-right fs-text font-semibold text-strong">
-                    {updatedLabel(data.updatedAt, data.timezone)}
-                  </dd>
-                </div>
-              </dl>
-            </section>
-
-            <section className="rounded-[var(--card-radius)] border border-card-border bg-subtle">
-              <div className="flex gap-[var(--space-10)] px-[var(--space-16)] py-[var(--space-14)]">
-                <Info className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
-                <div>
-                  <h2 className="fs-text font-bold text-strong">One tenant per installation</h2>
-                  <p className="mt-1 fs-text leading-[1.45] text-muted-foreground">
-                    The legal name, registration number and time zone apply to every branch.
-                    Branch-specific addresses and hours live under Branches.
-                  </p>
-                </div>
-              </div>
-            </section>
-          </aside>
         </div>
       ) : activeTab === "appearance" ? (
         <div id="general-appearance-panel" role="tabpanel" aria-labelledby="general-appearance-tab" className="space-y-[var(--space-14)]">

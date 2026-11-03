@@ -12,7 +12,7 @@ These observations come from the saved capture. Wakandi's current live session i
 
 ## AIMSCAMS changes in progress
 
-- Added the General Settings header and Info/Appearance tabs.
+- Added a standalone General title card followed by a separate Info/Appearance tab strip.
 - Info now defaults to read-only fields, opens the existing server-backed organisation form with Edit, and keeps the existing save/cancel behavior.
 - Added local Appearance preference controls for presets, dark mode, accent color, and UI scale. Default scale remains the v1.2.0 compact value.
 - Added an Online Collections section that states the preference is unsupported by the AIMSCAMS organisation settings API; Edit remains disabled. No fake routing behavior was introduced.
