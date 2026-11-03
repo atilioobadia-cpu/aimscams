@@ -67,12 +67,9 @@ export const navItems: NavItem[] = [
     href: "/transactions",
     chevron: true,
     children: [
-      { label: "All transactions", icon: "receipt", href: "/transaction-all-transaction" },
-      { label: "Teller console", icon: "card", href: "/transaction-teller-transaction" },
-      { label: "Teller history", icon: "clock", href: "/transaction-teller-transaction-history" },
-      { label: "Teller approval request", icon: "check", href: "/transaction-teller-transaction-request" },
-      { label: "Online collections", icon: "refresh", href: "/transaction-online-transaction" },
-      { label: "Reconciliation", icon: "box", href: "/transaction-online-payment-reconciliation" },
+      { label: "Teller", icon: "card", href: "/transaction-teller-transaction" },
+      { label: "Online", icon: "refresh", href: "/transaction-online-transaction" },
+      { label: "All", icon: "receipt", href: "/transaction-all-transaction" },
     ],
   },
   {
