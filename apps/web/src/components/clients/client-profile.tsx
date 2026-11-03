@@ -5,19 +5,18 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeftRight,
+  Banknote,
   Building2,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Check,
-  CreditCard,
   Clock3,
   Download,
   Edit2,
   Eye,
-  FileText,
+  FilePenLine,
   Inbox,
-  Landmark,
   LogOut,
   PiggyBank,
   Printer,
@@ -137,10 +136,10 @@ function EmptyTable({ columns, message: emptyMessage, icon: Icon = Building2 }: 
   );
 }
 
-function TabTable({ columns, rows, emptyMessage, emptyHeight }: { columns: string[]; rows: string[][]; emptyMessage: string; emptyHeight?: number }) {
+function TabTable({ columns, rows, emptyMessage, emptyHeight, minTableWidth = 720 }: { columns: string[]; rows: string[][]; emptyMessage: string; emptyHeight?: number; minTableWidth?: number }) {
   return (
-    <div className="overflow-x-auto bg-white">
-      <table className="w-full min-w-[720px] text-left text-[13.44px]">
+    <div className="table-scroll overflow-x-auto bg-white">
+      <table className="w-full text-left text-[13.44px]" style={{ minWidth: minTableWidth }}>
         <thead className="bg-[#f1f5f9]">
           <tr>
             {columns.map((column, index) => (
@@ -164,7 +163,7 @@ function TabTable({ columns, rows, emptyMessage, emptyHeight }: { columns: strin
             </tr>
           ) : (
             rows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
+              <tr key={rowIndex} className="bg-[#f8fafc]">
                 {row.map((cell, cellIndex) => (
                   <td key={cellIndex} className="whitespace-nowrap border-t border-[#e2e8f0] px-4 py-[14px] text-[#495057]">{cell}</td>
                 ))}
@@ -369,8 +368,8 @@ export function ClientProfile({ id }: { id: string }) {
   const accountSections = [
     {
       title: "Loan Applications",
-      icon: FileText,
-      items: visibleIfRequested(loanApplications).map((item) => ({
+      icon: FilePenLine,
+      items: (showAllAccounts ? loanApplications : []).map((item) => ({
         id: item.id,
         reference: item.applicationNo,
         status: item.status,
@@ -384,7 +383,7 @@ export function ClientProfile({ id }: { id: string }) {
     },
     {
       title: "Loans",
-      icon: CreditCard,
+      icon: Banknote,
       items: visibleIfRequested(loans).map((item) => ({
         id: item.id,
         reference: item.loanNumber,
@@ -635,14 +634,14 @@ export function ClientProfile({ id }: { id: string }) {
                 </div>
 
                 {accountSections.map((section) => (
-                  <details key={section.title} open className="rounded-[8px] border border-[#e2e8f0] bg-[#f1f5f9] p-[14px]">
-                    <summary className="flex cursor-pointer list-none items-center justify-between">
+                  <details key={section.title} open className="group rounded-[8px] border border-[#e2e8f0] bg-[#f1f5f9] px-[18px] py-[14px]">
+                    <summary className="flex cursor-pointer list-none items-center justify-between py-[4px]">
                       <span className="flex items-center gap-2 text-[15.12px] font-semibold text-[#495057]">
                         <section.icon className="size-5 text-[#495057]" aria-hidden="true" />
                         {section.title}
                         <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1 text-[11.76px] font-semibold text-white">{section.items.length}</span>
                       </span>
-                      <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
+                      <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden="true" />
                     </summary>
                     <div className="mt-3 space-y-2">
                       {section.items.map((item) => (
@@ -685,17 +684,17 @@ export function ClientProfile({ id }: { id: string }) {
                 <div className="mb-3 flex justify-end">
                   <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Residence</Button>
                 </div>
-                <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={[]} emptyMessage="No data available" />
+                <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={currentResidence ? [[currentResidence, "", "", "", "", "", "", "", "", ""]] : []} emptyMessage="No data available" minTableWidth={1080} />
               </div>
             </TabsContent>
 
             <TabsContent value="kyc">
-              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+              <div className="min-h-[260px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex gap-2">
                   <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add KYC</Button>
                   <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
                 </div>
-                <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={[]} emptyMessage="No data available" />
+                <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={[]} emptyMessage="No data available" emptyHeight={150} />
               </div>
             </TabsContent>
 
@@ -704,7 +703,7 @@ export function ClientProfile({ id }: { id: string }) {
                 <div className="mb-3 flex justify-end">
                   <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Income</Button>
                 </div>
-                <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number(Brela)", "Business License Number", "TIN Number", "Business Turn Over(weekly,yearly)", "Actions"]} rows={[]} emptyMessage="No data available" />
+                <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number(Brela)", "Business License Number", "TIN Number", "Business Turn Over(weekly,yearly)", "Actions"]} rows={[]} emptyMessage="No data available" minTableWidth={1500} />
               </div>
             </TabsContent>
 
@@ -728,7 +727,7 @@ export function ClientProfile({ id }: { id: string }) {
 
             <TabsContent value="verification-history">
               <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
-                <TabTable columns={["Date and Time", "Verification Type", "Verification Status", "Verification Identifier", "Performed By", "Reference ID / Source", "Error", "Actions"]} rows={[]} emptyMessage="No data available" />
+                <TabTable columns={["Date and Time", "Verification Type", "Verification Status", "Verification Identifier", "Performed By", "Reference ID / Source", "Error", "Actions"]} rows={[]} emptyMessage="No data available" emptyHeight={140} minTableWidth={1024} />
               </div>
             </TabsContent>
 
