@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type SyntheticEvent } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { BookOpen, Inbox, Scale } from "lucide-react";
+import { BookOpen, ChevronDown, Download, FileSpreadsheet, FileText, Scale } from "lucide-react";
 
 import {
   ErrorPanel,
@@ -11,8 +11,6 @@ import {
   PanelSkeleton,
 } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
-import { FilterBar } from "@/components/data/filter-bar";
-import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,6 +40,7 @@ const dateFormat = new Intl.DateTimeFormat("en-GB", {
   month: "short",
   year: "numeric",
 });
+const longDateFormat = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
 
 function message(error: unknown, fallback: string): string {
   return error instanceof Error && error.message ? error.message : fallback;
@@ -62,6 +61,10 @@ function yearStart(): string {
   return `${new Date().getFullYear()}-01-01`;
 }
 
+function yearEnd(): string {
+  return `${new Date().getFullYear()}-12-31`;
+}
+
 export default function LedgerEntriesPage() {
   const router = useRouter();
   const pathname = usePathname();
@@ -78,6 +81,10 @@ export default function LedgerEntriesPage() {
 
   const [accounts, setAccounts] = useState<GlAccount[]>([]);
   const [entryType, setEntryType] = useState("");
+  const [entryTypeDraft, setEntryTypeDraft] = useState("");
+  const [accountDraft, setAccountDraft] = useState("");
+  const [dateMode, setDateMode] = useState("on");
+  const dateFilterRef = useRef<HTMLDetailsElement>(null);
   const [accountsLoaded, setAccountsLoaded] = useState(false);
   const [accountsForbidden, setAccountsForbidden] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -177,70 +184,93 @@ export default function LedgerEntriesPage() {
   const pageStart = total === 0 ? 0 : offset + 1;
   const pageEnd = Math.min(offset + rows.length, total);
   const filteredRows = entryType ? rows.filter((row) => row.eventCode === entryType) : rows;
-  const entryTypes = [...new Set(rows.map((row) => row.eventCode))].sort();
+  const entryTypes = [...new Set([
+    "ADJUSTMENT", "FEE_INCOME", "LOAN_DISBURSEMENT", "LOAN_REPAYMENT", "LOAN_WRITE_OFF",
+    "MANUAL", "OPENING_BALANCE", "REVERSAL", "SAVINGS_DEPOSIT", "SAVINGS_WITHDRAWAL", "SHARE_CAPITAL",
+    ...rows.map((row) => row.eventCode),
+  ])].sort();
+
+  function closeFilter(event: SyntheticEvent<HTMLElement>) {
+    event.currentTarget.closest("details")?.removeAttribute("open");
+  }
+
+  function exportRows(format: "csv" | "excel") {
+    const headings = ["Date", "Entry ID", "Details", "Entry Type", "Status", "Ledger Code", "Ledger Name", "Debit (TSh)", "Credit (TSh)"];
+    const values = filteredRows.map((row) => [
+      displayDay(row.entryDate), row.entryNo, row.description || "N/A", row.eventCode.replace(/_/g, " "), "Posted", account?.code ?? "", account?.name ?? "",
+      row.debitMinor === "0" ? "-" : formatTzsExact(row.debitMinor).replace(/^TZS\s*/, ""),
+      row.creditMinor === "0" ? "-" : formatTzsExact(row.creditMinor).replace(/^TZS\s*/, ""),
+    ]);
+    const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
+    const csv = [headings, ...values].map((row) => row.map(escape).join(",")).join("\r\n");
+    const content = format === "csv"
+      ? new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8" })
+      : new Blob([`<html><head><meta charset="utf-8"></head><body><table><thead><tr>${headings.map((heading) => `<th>${heading}</th>`).join("")}</tr></thead><tbody>${values.map((row) => `<tr>${row.map((cell) => `<td>${cell.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>`).join("")}</tr>`).join("")}</tbody></table></body></html>`], { type: "application/vnd.ms-excel;charset=utf-8" });
+    const url = URL.createObjectURL(content);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `ledger-entries.${format === "csv" ? "csv" : "xls"}`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
 
   return (
-    <div className="space-y-4">
-      <PageHeader
-        variant="card"
-        title="Ledger Entries"
-        icon={<BookOpen className="size-6 text-primary" aria-hidden="true" />}
-      />
+    <div className="entries-page ledger-entries-page">
+      <header className="ledger-page-header">
+        <div className="ledger-heading">
+          <BookOpen className="size-5 shrink-0 text-primary" aria-hidden="true" />
+          <div><h1>Ledger Entries</h1><p>Ledger Entries from Jan 1, {new Date().getFullYear()} to {longDateFormat.format(new Date(`${today()}T00:00:00`))}</p></div>
+        </div>
+        <div className="entries-actions">
+          <button type="button" className="entries-export" onClick={() => window.print()}><FileText className="size-3.5" aria-hidden="true" />Download PDF</button>
+          <button type="button" className="entries-export" onClick={() => exportRows("excel")}><FileSpreadsheet className="size-3.5" aria-hidden="true" />Download Excel</button>
+          <button type="button" className="entries-export" onClick={() => exportRows("csv")}><Download className="size-3.5" aria-hidden="true" />Download CSV</button>
+          <button type="button" className="entries-period" onClick={() => { dateFilterRef.current?.setAttribute("open", ""); document.getElementById("ledger-from")?.focus(); }}>
+            <span>{displayDay(fromParam || yearStart()).replace(/ /g, "-")} to {displayDay(toParam || yearEnd()).replace(/ /g, "-")}</span><ChevronDown className="size-4" aria-hidden="true" />
+          </button>
+        </div>
+      </header>
 
-      <FilterBar label="Ledger filters" className="gap-2 rounded-[var(--card-radius)] p-3">
-        <label className="flex flex-col gap-1">
-          <span className="sr-only">Ledger account</span>
-          <NativeSelect
-            value={selectedAccountId}
-            onChange={(event) => setParams({ accountId: event.target.value || null })}
-            aria-label="Ledger account"
-            className="w-[220px]"
-          >
-            <option value="">Select an account</option>
-            {accounts.map((account) => (
-              <option key={account.id} value={account.id}>
-                {account.code} · {account.name}
-              </option>
-            ))}
-          </NativeSelect>
-        </label>
+      <section className="ledger-content-card" aria-label="Ledger entries">
+        <div className="entries-toolbar ledger-entries-toolbar" role="search" aria-label="Ledger filters">
+          <details className="entries-filter ledger-filter-date" ref={dateFilterRef}>
+            <summary><span>Date Range</span><ChevronDown className="size-3.5" aria-hidden="true" /></summary>
+            <form className="entries-popover" onSubmit={(event) => {
+              event.preventDefault();
+              const data = new FormData(event.currentTarget);
+              const first = String(data.get("date") ?? ""); const second = String(data.get("dateEnd") ?? "");
+              let nextFrom: string | null = null; let nextTo: string | null = null;
+              if (dateMode === "between") { nextFrom = first || null; nextTo = second || null; }
+              else if (dateMode === "on") { nextFrom = first || null; nextTo = first || null; }
+              else if (dateMode === "before") nextTo = first ? new Date(new Date(`${first}T00:00:00Z`).getTime() - 86400000).toISOString().slice(0, 10) : null;
+              else if (dateMode === "after") nextFrom = first ? new Date(new Date(`${first}T00:00:00Z`).getTime() + 86400000).toISOString().slice(0, 10) : null;
+              setParams({ from: nextFrom, to: nextTo }); closeFilter(event);
+            }}>
+              <strong>Date Range</strong><label>Condition<select value={dateMode} onChange={(event) => setDateMode(event.target.value)}><option value="on">On</option><option value="before">Before</option><option value="after">After</option><option value="between">Between</option></select></label>
+              <label>{dateMode === "on" ? "Date" : dateMode === "before" ? "Before" : dateMode === "after" ? "After" : "Start date"}<Input id="ledger-from" name="date" type="date" defaultValue={fromValue} /></label>
+              {dateMode === "between" ? <label>End date<Input name="dateEnd" type="date" defaultValue={toValue} /></label> : null}
+              <div className="entries-popover-actions"><button type="button" onClick={(event) => { setDateMode("on"); setParams({ from: null, to: null }); closeFilter(event); }}>Clear</button><button type="submit">Apply</button></div>
+            </form>
+          </details>
 
-        <label className="flex flex-col gap-1">
-          <span className="sr-only">From</span>
-          <Input
-            type="date"
-            value={fromValue}
-            onChange={(event) => setParams({ from: event.target.value || null })}
-            aria-label="Ledger from date"
-            className="w-[145px]"
-          />
-        </label>
+          <details className="entries-filter ledger-filter-account" onToggle={(event) => { if (event.currentTarget.open) setAccountDraft(selectedAccountId); }}>
+            <summary><span>Ledger Account</span><ChevronDown className="size-3.5" aria-hidden="true" /></summary>
+            <form className="entries-popover" onSubmit={(event) => { event.preventDefault(); setParams({ accountId: accountDraft || null }); closeFilter(event); }}>
+              <strong>Ledger Account</strong><label>Condition<select value="Is" disabled><option>Is</option></select></label>
+              <label>Value<NativeSelect value={accountDraft || selectedAccountId} onChange={(event) => setAccountDraft(event.target.value)} aria-label="Ledger account filter"><option value="">Select an account</option>{accounts.map((item) => <option key={item.id} value={item.id}>{item.code} · {item.name}</option>)}</NativeSelect></label>
+              <div className="entries-popover-actions"><button type="button" onClick={(event) => { setAccountDraft(""); setParams({ accountId: null }); closeFilter(event); }}>Clear</button><button type="submit">Apply</button></div>
+            </form>
+          </details>
 
-        <label className="flex flex-col gap-1">
-          <span className="sr-only">To</span>
-          <Input
-            type="date"
-            value={toValue}
-            onChange={(event) => setParams({ to: event.target.value || null })}
-            aria-label="Ledger to date"
-            className="w-[145px]"
-          />
-        </label>
-
-        <label className="flex flex-col gap-1">
-          <span className="sr-only">Entry type</span>
-          <NativeSelect value={entryType} onChange={(event) => setEntryType(event.target.value)} aria-label="Entry type" className="w-[170px]">
-            <option value="">All entry types</option>
-            {entryTypes.map((type) => <option key={type} value={type}>{type.replace(/_/g, " ")}</option>)}
-          </NativeSelect>
-        </label>
-
-        {fromParam || toParam ? (
-          <Button variant="ghost" onClick={() => setParams({ from: null, to: null })}>
-            Reset dates
-          </Button>
-        ) : null}
-      </FilterBar>
+          <details className="entries-filter ledger-filter-type">
+            <summary><span>Entry Type</span><ChevronDown className="size-3.5" aria-hidden="true" /></summary>
+            <form className="entries-popover" onSubmit={(event) => { event.preventDefault(); setEntryType(entryTypeDraft); closeFilter(event); }}>
+              <strong>Entry Type</strong><label>Condition<select value="Is" disabled><option>Is</option></select></label>
+              <label>Value<select value={entryTypeDraft} onChange={(event) => setEntryTypeDraft(event.target.value)}><option value="">Select value</option>{entryTypes.map((type) => <option key={type} value={type}>{type.replace(/_/g, " ")}</option>)}</select></label>
+              <div className="entries-popover-actions"><button type="button" onClick={(event) => { setEntryTypeDraft(""); setEntryType(""); closeFilter(event); }}>Clear</button><button type="submit">Apply</button></div>
+            </form>
+          </details>
+        </div>
 
       {accountsForbidden || forbidden ? (
         <ForbiddenPanel
@@ -261,7 +291,8 @@ export default function LedgerEntriesPage() {
           description="Pick an account above to see its opening balance, movements and closing balance."
         />
       ) : page && account ? (
-        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+        filteredRows.length === 0 ? <div className="ledger-empty-state"><h3>No Entries Found</h3><p>No entries match your current filter criteria.</p></div> :
+        <div className="ledger-results">
           <div className="overflow-x-auto">
             <Table className="min-w-[1120px]">
               <TableHeader><TableRow>
@@ -276,7 +307,7 @@ export default function LedgerEntriesPage() {
                 <TableHead className="pr-[var(--space-16)] text-right">Credit (TSh)</TableHead>
               </TableRow></TableHeader>
               <TableBody>
-                {filteredRows.length === 0 ? <TableRow><TableCell colSpan={9} className="p-0"><div className="flex min-h-[250px] flex-col items-center justify-center gap-3 text-center fs-text text-muted-foreground"><Inbox className="size-10 text-label" aria-hidden="true" /><span>No Entries Found</span><span className="text-label">No entries match your current filter criteria.</span></div></TableCell></TableRow> : filteredRows.map((row) => <TableRow key={row.lineId}>
+              {filteredRows.map((row) => <TableRow key={row.lineId}>
                   <TableCell className="whitespace-nowrap pl-[var(--space-16)]">{displayDay(row.entryDate)}</TableCell>
                   <TableCell><Link href={`/accounting-entries?entry=${row.entryId}`} className="font-medium text-brand hover:underline">{row.entryNo}</Link></TableCell>
                   <TableCell className="max-w-[260px] truncate" title={row.description}>{row.description || "N/A"}</TableCell>
@@ -298,8 +329,9 @@ export default function LedgerEntriesPage() {
               <Button size="sm" variant="outline" disabled={offset + PAGE_SIZE >= total} onClick={() => setParams({ offset: String(offset + PAGE_SIZE) })}>Next</Button>
             </div>
           </div>
-        </section>
+        </div>
       ) : null}
+      </section>
     </div>
   );
 }
