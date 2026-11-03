@@ -8,6 +8,7 @@ import {
   Eye,
   FileText,
   FilterX,
+  Inbox,
   Plus,
   Save,
   Search,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
+import { ColumnPicker } from "@/components/data/column-picker";
 import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
@@ -60,6 +62,14 @@ const extraFilterOptions: Array<{ key: ExtraFilter; label: string }> = [
 
 const applicationStatuses: LoanApplicationStatus[] = ["DRAFT", "SUBMITTED", "APPROVED", "REJECTED", "CANCELLED"];
 
+type ApplicationColumnKey = "memberName" | "product" | "loanOfficer" | "stage" | "status" | "tenure" | "tenurePeriod" | "createdDate" | "loanAmount";
+const applicationColumnDefaults: Record<ApplicationColumnKey, boolean> = { memberName: true, product: true, loanOfficer: true, stage: true, status: true, tenure: true, tenurePeriod: true, createdDate: true, loanAmount: true };
+const applicationColumns: Array<{ key: ApplicationColumnKey; label: string }> = [
+  { key: "memberName", label: "Member Name" }, { key: "product", label: "Product" }, { key: "loanOfficer", label: "Loan Officer" },
+  { key: "stage", label: "Stage" }, { key: "status", label: "Status" }, { key: "tenure", label: "Tenure" },
+  { key: "tenurePeriod", label: "Tenure Period" }, { key: "createdDate", label: "Created Date" }, { key: "loanAmount", label: "Loan Amount" },
+];
+
 export default function LoanApplicationsPage() {
   const [data, setData] = useState<Awaited<ReturnType<typeof listLoanApplications>> | null>(null);
   const [officers, setOfficers] = useState<LoanOfficer[]>([]);
@@ -74,6 +84,7 @@ export default function LoanApplicationsPage() {
   const [extraFilterFields, setExtraFilterFields] = useState<ExtraFilter[]>(["status"]);
   const [extraFilters, setExtraFilters] = useState<Record<ExtraFilter, string>>({ status: "", product: "", tenure: "" });
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState<Record<ApplicationColumnKey, boolean>>(applicationColumnDefaults);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
   const router = useRouter();
@@ -145,19 +156,20 @@ export default function LoanApplicationsPage() {
   }
 
   return (
-    <div className="space-y-[18px]">
+    <div className="space-y-[15px]">
       <PageHeader
         variant="card"
-        icon={<FileText className="size-6 shrink-0 text-primary" aria-hidden="true" />}
-        title="Loan applications"
+        icon={<FileText className="size-[19.33px] shrink-0 text-primary" aria-hidden="true" />}
+        title="Loan Applications"
+        className="min-h-[69.33px] px-[19.33px] py-0 sm:pl-[20.67px] sm:pr-[19.33px] [&>div:first-child]:gap-[10.67px] [&_h1]:!font-semibold [&_h2]:!font-semibold"
         actions={data?.canCreate ? (
-          <Button asChild variant="outline" className="!border-primary !gap-1 !px-[10px] !text-[14px] font-semibold text-primary">
-            <Link href="/account-loan-application-create"><Plus aria-hidden="true" />New loan application</Link>
+          <Button asChild variant="outline" className="!h-[28.77px] !gap-[4px] !rounded-[6px] !border-primary !px-[8.4px] !text-[11.76px] font-medium text-primary">
+            <Link href="/account-loan-application-create"><Plus className="size-[14px]" aria-hidden="true" />New Loan Application</Link>
           </Button>
         ) : null}
       />
 
-      <div role="tablist" aria-label="Loan application status" className="flex h-[55px] items-stretch border-b border-card-border bg-surface px-2">
+      <div role="tablist" aria-label="Loan application status" className="flex h-[45px] items-stretch border-b border-card-border bg-surface px-0">
         {(Object.keys(statusGroups) as ApplicationTab[]).map((label) => (
           <button
             key={label}
@@ -167,7 +179,7 @@ export default function LoanApplicationsPage() {
             aria-selected={tab === label}
             aria-controls="loan-application-list-panel"
             tabIndex={tab === label ? 0 : -1}
-            className={`min-w-[80px] border-b-2 px-4 fs-text font-medium transition-colors hover:bg-subtle ${tab === label ? "border-primary text-primary" : "border-transparent text-body"}`}
+            className={`h-[45px] min-w-[80px] border-b-2 px-[16.8px] py-0 text-[13.33px] font-medium transition-colors hover:bg-subtle ${tab === label ? "border-primary bg-white font-semibold text-primary" : "border-transparent bg-[#f8fafc] text-[#6c757d]"}`}
             onClick={() => setTab(label)}
             onKeyDown={(event) => {
               const labels = Object.keys(statusGroups) as ApplicationTab[];
@@ -196,9 +208,9 @@ export default function LoanApplicationsPage() {
         tabIndex={0}
         className="mx-5 !mt-[15px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface"
       >
-        <div className="border-b border-card-border p-3">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative w-full sm:w-[240px] sm:flex-none">
+        <div className="min-h-[56px] border-b border-card-border p-[10.08px]">
+          <div className="flex flex-col gap-[6.72px] sm:flex-row sm:items-center">
+            <div className="relative w-full sm:w-[191px] sm:flex-none">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <Input
                 id="loan-application-search"
@@ -206,27 +218,27 @@ export default function LoanApplicationsPage() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search"
-                className="h-[var(--control-height)] !border-primary pl-9"
+                className="!h-[34px] !rounded-[6px] !border-primary !pl-[33.6px] !pr-[10.08px] !py-[8.4px]"
               />
             </div>
-            <div className="w-full sm:w-[130px]">
+            <div className="w-full sm:w-[106px]">
               <label className="sr-only" htmlFor="loan-application-officer">Loan officer</label>
-              <select id="loan-application-officer" aria-label="Loan officer" value={officerId} onChange={(event) => setOfficerId(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] !border-primary bg-background px-3 fs-text">
+              <select id="loan-application-officer" aria-label="Loan officer" value={officerId} onChange={(event) => setOfficerId(event.target.value)} className="h-[35px] w-full rounded-[6px] !border-primary bg-background px-[8.4px] text-[11.76px] font-medium text-primary">
                 <option value="">Loan officer</option>
                 {officers.map((officer) => <option key={officer.id} value={officer.id}>{officer.fullName}</option>)}
               </select>
             </div>
             {extraFilterFields.includes("status") ? (
-              <div className="flex w-full sm:w-[130px]">
+              <div className="flex w-full sm:w-[131px]">
                 <label className="sr-only" htmlFor="loan-application-status">Status</label>
-                <select id="loan-application-status" aria-label="Status" value={status} onChange={(event) => setStatus(event.target.value as LoanApplicationStatus | "")} className="h-[var(--control-height)] min-w-0 flex-1 rounded-l-[var(--control-radius)] rounded-r-none !border-primary bg-background px-3 fs-text">
+                <select id="loan-application-status" aria-label="Status" value={status} onChange={(event) => setStatus(event.target.value as LoanApplicationStatus | "")} className="h-[35px] min-w-0 flex-1 rounded-l-[6px] rounded-r-none !border-primary bg-background px-[8.4px] text-[11.76px] font-medium text-primary">
                   <option value="">Status</option>
                   {applicationStatuses.map((value) => <option key={value} value={value}>{titleCase(value)}</option>)}
                 </select>
-                <Button type="button" variant="outline" size="icon-lg" aria-label="Remove Status filter" title="Remove Status filter" className="!size-[42px] !rounded-l-none !border-primary !border-l-0 !text-primary" onClick={() => { setExtraFilterFields((current) => current.filter((field) => field !== "status")); setStatus(""); }}><X aria-hidden="true" /></Button>
+                <Button type="button" variant="outline" size="icon-lg" aria-label="Remove Status filter" title="Remove Status filter" className="!h-[27px] !w-[30px] !rounded-l-none !border-primary !border-l-0 !text-primary" onClick={() => { setExtraFilterFields((current) => current.filter((field) => field !== "status")); setStatus(""); }}><X aria-hidden="true" /></Button>
               </div>
             ) : null}
-            <div className="relative w-full sm:w-[130px]">
+            <div className="relative w-full sm:w-[90px]">
               <Button type="button" variant="outline" aria-label="Add filters" title="Add filters" aria-expanded={filterMenuOpen} aria-controls="loan-application-extra-filters" className="w-full justify-between !border-primary !text-primary" onClick={() => setFilterMenuOpen((open) => !open)}>
                 <span>{extraFilterFields.length} added</span><ChevronDown aria-hidden="true" />
               </Button>
@@ -247,8 +259,8 @@ export default function LoanApplicationsPage() {
                 </div>
               ) : null}
             </div>
-            <Button type="button" variant="outline" size="icon-lg" aria-label="Save current filters" title="Save current filters" className="!size-[36px] !border-primary !text-primary" onClick={() => setSaveDialogOpen(true)}><Save aria-hidden="true" /></Button>
-            <Button type="button" variant="outline" size="icon-lg" aria-label="Clear filters" title="Clear filters" className="!size-[36px] !border-primary !text-primary" onClick={clearFilters}><FilterX aria-hidden="true" /></Button>
+            <Button type="button" variant="outline" size="icon-lg" aria-label="Save current filters" title="Save current filters" className="!h-[27px] !w-[30px] !rounded-[6px] !border-primary !text-primary" onClick={() => setSaveDialogOpen(true)}><Save aria-hidden="true" /></Button>
+            <Button type="button" variant="outline" size="icon-lg" aria-label="Clear filters" title="Clear filters" className="!h-[27px] !w-[30px] !rounded-[6px] !border-primary !text-primary" onClick={clearFilters}><FilterX aria-hidden="true" /></Button>
           </div>
           {extraFilterFields.length > 0 ? (
             <div className="mt-3 flex flex-wrap gap-2">
@@ -267,33 +279,33 @@ export default function LoanApplicationsPage() {
           <PanelSkeleton rows={8} />
         ) : (
           <div className="table-scroll overflow-x-auto">
-            <table className="w-full min-w-[1515px] text-left fs-text">
-              <thead className="border-b border-card-border bg-subtle fs-text font-semibold tracking-wide text-label">
+            <table className="w-full min-w-full text-left fs-text">
+              <thead className="border-b border-card-border bg-[#f8fafc] fs-text font-bold tracking-wide text-[#495057]">
                 <tr>
-                  <th className="px-4 py-3">Member name</th>
-                  <th className="px-4 py-3">Product</th>
-                  <th className="px-4 py-3">Loan officer</th>
-                  <th className="px-4 py-3">Stage</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Tenure</th>
-                  <th className="px-4 py-3">Tenure period</th>
-                  <th className="px-4 py-3">Created date</th>
-                  <th className="px-4 py-3 text-right">Loan amount (TSh)</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                  <th hidden={!visibleColumns.memberName} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Member Name</th>
+                  <th hidden={!visibleColumns.product} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Product</th>
+                  <th hidden={!visibleColumns.loanOfficer} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Loan Officer</th>
+                  <th hidden={!visibleColumns.stage} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Stage</th>
+                  <th hidden={!visibleColumns.status} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Status</th>
+                  <th hidden={!visibleColumns.tenure} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Tenure</th>
+                  <th hidden={!visibleColumns.tenurePeriod} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Tenure Period</th>
+                  <th hidden={!visibleColumns.createdDate} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057]">Created Date</th>
+                  <th hidden={!visibleColumns.loanAmount} className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057] text-right">Loan Amount (TSh)</th>
+                  <th className="!h-[37px] !px-[13.44px] !py-[10.08px] !font-bold !text-[#495057] text-right"><ColumnPicker columns={applicationColumns} visible={visibleColumns} onToggle={(key, checked) => setVisibleColumns((current) => ({ ...current, [key]: checked }))} onReset={() => setVisibleColumns(applicationColumnDefaults)} /></th>
                 </tr>
               </thead>
               <tbody>
                 {visibleItems.map((item: LoanApplication) => (
                   <tr key={item.id} className="border-b border-card-border last:border-0">
-                    <td className="whitespace-nowrap px-4 py-6 text-body"><span className="inline-flex items-center gap-3"><span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-tint fs-text font-semibold text-primary">{initials(item.clientName)}</span>{item.clientName ?? "N/A"}</span></td>
-                    <td className="whitespace-nowrap px-4 py-6 text-body">{item.productName ?? item.productCode ?? "N/A"}</td>
-                    <td className="whitespace-nowrap px-4 py-6 text-body">{item.loanOfficerName ? <span className="inline-flex items-center gap-3"><span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-tint fs-text font-semibold text-primary">{initials(item.loanOfficerName)}</span>{item.loanOfficerName}</span> : "—"}</td>
-                    <td className="whitespace-nowrap px-4 py-6 text-body">—</td>
-                    <td className="whitespace-nowrap px-4 py-6"><Badge variant={item.status === "APPROVED" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td>
-                    <td className="whitespace-nowrap px-4 py-6 text-body">{item.tenureCount}</td>
-                    <td className="whitespace-nowrap px-4 py-6 text-body">{titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
-                    <td className="whitespace-nowrap px-4 py-6 text-body">{dateLabel(item.createdAt)}</td>
-                    <td className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{formatMinorUnitsExact(item.principalMinor)}</td>
+                    <td hidden={!visibleColumns.memberName} className="whitespace-nowrap px-4 py-6 text-body"><span className="inline-flex items-center gap-3"><span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-tint fs-text font-semibold text-primary">{initials(item.clientName)}</span>{item.clientName ?? "N/A"}</span></td>
+                    <td hidden={!visibleColumns.product} className="whitespace-nowrap px-4 py-6 text-body">{item.productName ?? item.productCode ?? "N/A"}</td>
+                    <td hidden={!visibleColumns.loanOfficer} className="whitespace-nowrap px-4 py-6 text-body">{item.loanOfficerName ? <span className="inline-flex items-center gap-3"><span aria-hidden="true" className="grid size-10 shrink-0 place-items-center rounded-full bg-primary-tint fs-text font-semibold text-primary">{initials(item.loanOfficerName)}</span>{item.loanOfficerName}</span> : "—"}</td>
+                    <td hidden={!visibleColumns.stage} className="whitespace-nowrap px-4 py-6 text-body">—</td>
+                    <td hidden={!visibleColumns.status} className="whitespace-nowrap px-4 py-6"><Badge variant={item.status === "APPROVED" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td>
+                    <td hidden={!visibleColumns.tenure} className="whitespace-nowrap px-4 py-6 text-body">{item.tenureCount}</td>
+                    <td hidden={!visibleColumns.tenurePeriod} className="whitespace-nowrap px-4 py-6 text-body">{titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
+                    <td hidden={!visibleColumns.createdDate} className="whitespace-nowrap px-4 py-6 text-body">{dateLabel(item.createdAt)}</td>
+                    <td hidden={!visibleColumns.loanAmount} className="whitespace-nowrap px-4 py-6 text-right tabular-nums text-body">{formatMinorUnitsExact(item.principalMinor)}</td>
                     <td className="px-4 py-6"><div className="flex justify-end"><RowActionsMenu label={item.applicationNo} actions={[
                       { label: "View details", icon: Eye, onSelect: () => router.push(`/account-loan-application-details/${item.id}`) },
                       ...(item.status === "DRAFT" || item.status === "SUBMITTED" ? [{ label: "Edit application", icon: Eye, onSelect: () => router.push(`/account-loan-application-edit/${item.id}`) }] : []),
@@ -301,7 +313,7 @@ export default function LoanApplicationsPage() {
                   </tr>
                 ))}
                 {visibleItems.length === 0 ? (
-                  <tr><td colSpan={10} className="h-[250px] px-4 text-center"><p className="fs-text font-semibold text-strong">{hasFilters ? "No loan application matches" : `No ${tab.toLocaleLowerCase()} applications`}</p><p className="mt-1 fs-text text-muted-foreground">{hasFilters ? "Adjust or clear the filters to see other applications." : "Applications in this status group will appear here."}</p></td></tr>
+                  <tr><td colSpan={Object.values(visibleColumns).filter(Boolean).length + 1} className="h-[172px] px-[13.44px] text-center"><div className="flex flex-col items-center justify-center gap-2 text-[#6c757d]"><Inbox className="size-[40px]" aria-hidden="true" /><p className="fs-text">No data available</p></div></td></tr>
                 ) : null}
               </tbody>
             </table>

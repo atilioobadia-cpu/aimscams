@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Eye,
   FilterX,
+  Inbox,
   FileText,
   Plus,
   Save,
@@ -17,6 +18,7 @@ import {
 } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
+import { ColumnPicker } from "@/components/data/column-picker";
 import { PageHeader } from "@/components/data/page-header";
 import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Badge } from "@/components/ui/badge";
@@ -48,6 +50,20 @@ const statusGroups = {
 
 type LoanTab = keyof typeof statusGroups;
 type ExtraFilter = "product" | "tenure";
+type LoanColumnKey = "accountNumber" | "memberName" | "product" | "loanOfficer" | "status" | "tenure" | "loanAmount" | "balance" | "createdDate" | "overdueDays" | "provisioningStatus";
+
+const loanColumnDefaults: Record<LoanColumnKey, boolean> = {
+  accountNumber: true, memberName: true, product: true, loanOfficer: true, status: true, tenure: true,
+  loanAmount: true, balance: true, createdDate: true, overdueDays: true, provisioningStatus: true,
+};
+const loanColumns: Array<{ key: LoanColumnKey; label: string }> = [
+  { key: "accountNumber", label: "Account Number" }, { key: "memberName", label: "Member Name" },
+  { key: "product", label: "Product" }, { key: "loanOfficer", label: "Loan Officer" },
+  { key: "status", label: "Status" }, { key: "tenure", label: "Tenure" },
+  { key: "loanAmount", label: "Loan Amount" }, { key: "balance", label: "Balance" },
+  { key: "createdDate", label: "Created Date" }, { key: "overdueDays", label: "Overdue Days" },
+  { key: "provisioningStatus", label: "Provisioning Status" },
+];
 
 const extraFilterOptions: Array<{ key: ExtraFilter; label: string }> = [
   { key: "product", label: "Product" },
@@ -67,6 +83,7 @@ export default function LoansPage() {
   const [extraFilterFields, setExtraFilterFields] = useState<ExtraFilter[]>([]);
   const [extraFilters, setExtraFilters] = useState<Record<ExtraFilter, string>>({ product: "", tenure: "" });
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState<Record<LoanColumnKey, boolean>>(loanColumnDefaults);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [reloadKey, setReloadKey] = useState(0);
@@ -151,10 +168,10 @@ export default function LoansPage() {
   }
 
   return (
-    <div className="space-y-[18px] text-[13.44px] text-[#495057]">
-      <header className="flex min-h-[84px] flex-col gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-3 sm:flex-row sm:items-center sm:justify-between">
+    <div className="space-y-[15px] fs-text text-[#495057]">
+      <header className="flex min-h-[69.33px] flex-col gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-[19.33px] py-0 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex min-w-0 items-center gap-3">
-          <Banknote className="size-6 shrink-0 text-primary" aria-hidden="true" />
+          <Banknote className="size-[19.33px] shrink-0 text-primary" aria-hidden="true" />
           <h2 className="text-[20.16px] font-semibold leading-tight text-[#495057]">Loans</h2>
         </div>
       </header>
@@ -170,7 +187,7 @@ export default function LoansPage() {
             id={`loan-tab-${label.toLocaleLowerCase()}`}
             data-loan-tab={label}
             tabIndex={tab === label ? 0 : -1}
-            className={`min-w-[80px] px-[13.44px] py-[16.8px] text-[13.33px] font-medium transition-colors ${tab === label ? "bg-white font-semibold text-primary" : "bg-[#f8fafc] font-medium text-[#6c757d]"}`}
+            className={`h-[45px] min-w-[80px] px-[16.8px] py-0 text-[13.33px] font-medium transition-colors ${tab === label ? "border-b-2 border-primary bg-white font-semibold text-primary" : "border-b-2 border-transparent bg-[#f8fafc] font-medium text-[#6c757d]"}`}
             onClick={() => { setTab(label); setPage(1); }}
             onKeyDown={(event) => {
               const labels = Object.keys(statusGroups) as LoanTab[];
@@ -210,7 +227,7 @@ export default function LoansPage() {
                 value={query}
                 onChange={(event) => { setQuery(event.target.value); setPage(1); }}
                 placeholder="Search"
-                className="h-[34px] w-[191px] rounded-[6px] border border-primary bg-background pl-[33.6px] pr-[10.08px] py-[8.4px] text-[13.44px] text-[#495057] outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="h-[34px] w-[191px] rounded-[6px] border border-primary bg-background pl-[33.6px] pr-[10.08px] py-[8.4px] fs-text text-[#495057] outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               />
             </div>
             <div className="relative w-[106px] shrink-0">
@@ -290,37 +307,37 @@ export default function LoansPage() {
         ) : (
           <>
             <div className="table-scroll overflow-x-auto">
-              <table className="w-full min-w-[1548px] text-left text-[13.44px]">
-                <thead className="border-b border-card-border bg-[#f8fafc] text-[13.44px] font-bold tracking-wide text-[#495057]">
+              <table className="w-full min-w-[1548px] text-left fs-text">
+                <thead className="border-b border-card-border bg-[#f8fafc] fs-text font-bold tracking-wide text-[#495057] [&_th]:!h-[37px] [&_th]:!px-[13.44px] [&_th]:!py-[10.08px] [&_th]:!font-bold [&_th]:!text-[#495057]">
                   <tr className="h-[37px]">
-                    <th className="px-[13.44px] py-[10.08px]">Account number</th>
-                    <th className="px-[13.44px] py-[10.08px]">Member name</th>
-                    <th className="px-[13.44px] py-[10.08px]">Product</th>
-                    <th className="px-[13.44px] py-[10.08px]">Loan officer</th>
-                    <th className="px-[13.44px] py-[10.08px]">Status</th>
-                    <th className="px-[13.44px] py-[10.08px]">Tenure</th>
-                    <th className="px-[13.44px] py-[10.08px] text-right">Loan amount (TSh)</th>
-                    <th className="px-[13.44px] py-[10.08px] text-right">Balance (TSh)</th>
-                    <th className="px-[13.44px] py-[10.08px]">Created date</th>
-                    <th className="px-[13.44px] py-[10.08px] text-right">Overdue days</th>
-                    <th className="px-[13.44px] py-[10.08px]">Provisioning status</th>
-                    <th className="px-[13.44px] py-[10.08px] text-right">Actions</th>
+                    <th hidden={!visibleColumns.accountNumber} className="px-[13.44px] py-[10.08px]">Account Number</th>
+                    <th hidden={!visibleColumns.memberName} className="px-[13.44px] py-[10.08px]">Member Name</th>
+                    <th hidden={!visibleColumns.product} className="px-[13.44px] py-[10.08px]">Product</th>
+                    <th hidden={!visibleColumns.loanOfficer} className="px-[13.44px] py-[10.08px]">Loan Officer</th>
+                    <th hidden={!visibleColumns.status} className="px-[13.44px] py-[10.08px]">Status</th>
+                    <th hidden={!visibleColumns.tenure} className="px-[13.44px] py-[10.08px]">Tenure</th>
+                    <th hidden={!visibleColumns.loanAmount} className="px-[13.44px] py-[10.08px] text-right">Loan Amount (TSh)</th>
+                    <th hidden={!visibleColumns.balance} className="px-[13.44px] py-[10.08px] text-right">Balance (TSh)</th>
+                    <th hidden={!visibleColumns.createdDate} className="px-[13.44px] py-[10.08px]">Created Date</th>
+                    <th hidden={!visibleColumns.overdueDays} className="px-[13.44px] py-[10.08px] text-right">Overdue Days</th>
+                    <th hidden={!visibleColumns.provisioningStatus} className="px-[13.44px] py-[10.08px]">Provisioning Status</th>
+                    <th className="px-[13.44px] py-[10.08px] text-right"><ColumnPicker columns={loanColumns} visible={visibleColumns} onToggle={(key, checked) => setVisibleColumns((current) => ({ ...current, [key]: checked }))} onReset={() => setVisibleColumns(loanColumnDefaults)} /></th>
                   </tr>
                 </thead>
                 <tbody>
                   {pageItems.map((item: Loan) => (
                     <tr key={item.id} className="border-b border-card-border last:border-0">
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] font-medium text-[#495057]">{item.loanNumber}</td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]"><span className="inline-flex items-center gap-2"><span className="flex size-[24px] items-center justify-center rounded-full bg-primary-tint text-[11.76px] font-semibold text-primary">{initials(item.clientName)}</span>{item.clientName ?? "N/A"}</span></td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{item.productName ?? item.productCode ?? "N/A"}</td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]"><span className="inline-flex items-center gap-2"><span className="flex size-[24px] items-center justify-center rounded-full bg-primary-tint text-[11.76px] font-semibold text-primary">{initials(item.loanOfficerName)}</span>{item.loanOfficerName ?? "N/A"}</span></td>
-                      <td className="whitespace-nowrap px-4 py-6"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{item.tenureCount} {titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right tabular-nums text-[#495057]">{formatMinorUnitsExact(item.principalMinor)}</td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right"><button type="button" className="inline-flex items-center gap-1 rounded-[6px] border border-primary px-2 py-1 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Eye className="size-4" aria-hidden="true" />View Balance</button></td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{new Date(item.createdAt).toLocaleDateString("en-GB").replaceAll("/", "-")}</td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right tabular-nums text-[#495057]">{item.daysPastDue}</td>
-                      <td className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">N/A</td>
+                      <td hidden={!visibleColumns.accountNumber} className="whitespace-nowrap px-[13.44px] py-[10.08px] font-medium text-[#495057]">{item.loanNumber}</td>
+                      <td hidden={!visibleColumns.memberName} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]"><span className="inline-flex items-center gap-2"><span className="flex size-[24px] items-center justify-center rounded-full bg-primary-tint text-[11.76px] font-semibold text-primary">{initials(item.clientName)}</span>{item.clientName ?? "N/A"}</span></td>
+                      <td hidden={!visibleColumns.product} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{item.productName ?? item.productCode ?? "N/A"}</td>
+                      <td hidden={!visibleColumns.loanOfficer} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]"><span className="inline-flex items-center gap-2"><span className="flex size-[24px] items-center justify-center rounded-full bg-primary-tint text-[11.76px] font-semibold text-primary">{initials(item.loanOfficerName)}</span>{item.loanOfficerName ?? "N/A"}</span></td>
+                      <td hidden={!visibleColumns.status} className="whitespace-nowrap px-[13.44px] py-[10.08px]"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td>
+                      <td hidden={!visibleColumns.tenure} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{item.tenureCount} {titleCase(item.tenurePeriod.toLocaleLowerCase())}</td>
+                      <td hidden={!visibleColumns.loanAmount} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right tabular-nums text-[#495057]">{formatMinorUnitsExact(item.principalMinor)}</td>
+                      <td hidden={!visibleColumns.balance} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right"><button type="button" className="inline-flex items-center gap-1 rounded-[6px] border border-primary px-2 py-1 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Eye className="size-4" aria-hidden="true" />View Balance</button></td>
+                      <td hidden={!visibleColumns.createdDate} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">{new Date(item.createdAt).toLocaleDateString("en-GB").replaceAll("/", "-")}</td>
+                      <td hidden={!visibleColumns.overdueDays} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-right tabular-nums text-[#495057]">{item.daysPastDue}</td>
+                      <td hidden={!visibleColumns.provisioningStatus} className="whitespace-nowrap px-[13.44px] py-[10.08px] text-[#495057]">N/A</td>
                       <td className="px-4 py-6">
                         <div className="flex justify-end">
                           <RowActionsMenu label={item.loanNumber} actions={[{ label: "View details", icon: Eye, href: `/account-loan-details/${item.id}` }]} />
@@ -330,10 +347,7 @@ export default function LoansPage() {
                   ))}
                   {visibleItems.length === 0 ? (
                     <tr>
-                      <td colSpan={12} className="px-[13.44px] py-[10.08px] text-center">
-                        <p className="fs-text font-semibold text-[#495057]">{hasFilters ? "No loan matches" : `No ${tab.toLocaleLowerCase()} loans`}</p>
-                        <p className="mt-1 fs-text text-muted-foreground">{hasFilters ? "Adjust or clear the filters to see other loans." : "Loans in this status group will appear here."}</p>
-                      </td>
+                      <td colSpan={Object.values(visibleColumns).filter(Boolean).length + 1} className="px-[13.44px] text-center"><div className="flex min-h-[168px] flex-col items-center justify-center gap-2 text-[#6c757d]"><Inbox className="size-[40px]" aria-hidden="true" /><p className="fs-text">No data available</p></div></td>
                     </tr>
                   ) : null}
                 </tbody>
