@@ -9,17 +9,23 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Check,
   CreditCard,
+  Clock3,
+  Download,
   Edit2,
+  Eye,
   FileText,
   Inbox,
   Landmark,
   LogOut,
   PiggyBank,
+  Printer,
   Plus,
   Repeat,
   Send,
   ShieldCheck,
+  SlidersHorizontal,
   UserRound,
   UserX,
   Wallet,
@@ -33,7 +39,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ApiError } from "@/lib/api";
-import { getClient, listLoans, listMembershipPolicies, listSavingsAccounts, type Client, type Loan, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
+import { getClient, listLoanApplications, listLoans, listMembershipPolicies, listSavingsAccounts, type Client, type Loan, type LoanApplication, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
 import { maskEmail, titleCase } from "@/lib/privacy";
 import { cn } from "cn";
 
@@ -131,15 +137,19 @@ function EmptyTable({ columns, message: emptyMessage, icon: Icon = Building2 }: 
   );
 }
 
-function TabTable({ columns, rows, emptyMessage }: { columns: string[]; rows: string[][]; emptyMessage: string }) {
+function TabTable({ columns, rows, emptyMessage, emptyHeight }: { columns: string[]; rows: string[][]; emptyMessage: string; emptyHeight?: number }) {
   return (
-    <div className="overflow-x-auto rounded-[6.72px] border border-card-border bg-surface">
+    <div className="overflow-x-auto bg-white">
       <table className="w-full min-w-[720px] text-left text-[13.44px]">
-        <thead className="bg-[#f8fafc]">
+        <thead className="bg-[#f1f5f9]">
           <tr>
-            {columns.map((column) => (
-              <th key={column} className="whitespace-nowrap px-[10.08px] py-[10.08px] text-[13.44px] font-bold text-[#495057]">
-                {column}
+            {columns.map((column, index) => (
+              <th key={column} className={cn("whitespace-nowrap px-4 py-[10.08px] text-[13.44px] font-bold text-[#495057]", column === "Actions" && index === columns.length - 1 && "w-[64px] px-2 text-center")}>
+                {column === "Actions" && index === columns.length - 1 ? (
+                  <button type="button" aria-label="Column settings" className="inline-grid size-8 place-items-center rounded text-[#495057] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                    <SlidersHorizontal className="size-4" aria-hidden="true" />
+                  </button>
+                ) : column}
               </th>
             ))}
           </tr>
@@ -147,16 +157,16 @@ function TabTable({ columns, rows, emptyMessage }: { columns: string[]; rows: st
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-10 text-center">
-                <Inbox className="mx-auto mb-2 size-8 text-muted-foreground" aria-hidden="true" />
+              <td colSpan={columns.length} className="px-4 py-10 text-center" style={emptyHeight ? { height: emptyHeight } : undefined}>
+                <Inbox className="mx-auto mb-2 size-10 text-muted-foreground" aria-hidden="true" />
                 <p className="text-[13.44px] text-muted-foreground">{emptyMessage}</p>
               </td>
             </tr>
           ) : (
             rows.map((row, rowIndex) => (
-              <tr key={rowIndex} className="border-t border-card-border">
+              <tr key={rowIndex}>
                 {row.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="whitespace-nowrap px-[10.08px] py-[10.08px] text-[#495057]">{cell}</td>
+                  <td key={cellIndex} className="whitespace-nowrap border-t border-[#e2e8f0] px-4 py-[14px] text-[#495057]">{cell}</td>
                 ))}
               </tr>
             ))
@@ -181,9 +191,10 @@ export function ClientProfile({ id }: { id: string }) {
   const [canEdit, setCanEdit] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [loans, setLoans] = useState<Loan[]>([]);
+  const [loanApplications, setLoanApplications] = useState<LoanApplication[]>([]);
   const [savings, setSavings] = useState<SavingsAccount[]>([]);
   const [membershipPolicies, setMembershipPolicies] = useState<MembershipPolicy[]>([]);
-  const [showAllAccounts, setShowAllAccounts] = useState(false);
+  const [showAllAccounts, setShowAllAccounts] = useState(true);
   const [statementStart, setStatementStart] = useState("");
   const [statementEnd, setStatementEnd] = useState("");
 
@@ -241,6 +252,17 @@ export function ClientProfile({ id }: { id: string }) {
       .catch(() => {
         if (!active) return;
         setSavings([]);
+      });
+    void listLoanApplications()
+      .then((response) => {
+        if (!active) return;
+        setLoanApplications(response.items.filter((application) =>
+          application.clientReference === client.referenceNo || application.clientId === client.id
+        ));
+      })
+      .catch(() => {
+        if (!active) return;
+        setLoanApplications([]);
       });
     return () => {
       active = false;
@@ -342,6 +364,56 @@ export function ClientProfile({ id }: { id: string }) {
   const restrictedFromQuickLoan = typeof membership.restrictedFromQuickLoan === "boolean"
     ? (membership.restrictedFromQuickLoan ? "Yes" : "No")
     : stringValue(membership.restrictedFromQuickLoan) || "N/A";
+  const visibleIfRequested = <T extends { status: string }>(items: T[]) =>
+    items.filter((item) => showAllAccounts || !["CLOSED", "INACTIVE", "REJECTED", "CANCELLED"].includes(item.status));
+  const accountSections = [
+    {
+      title: "Loan Applications",
+      icon: FileText,
+      items: visibleIfRequested(loanApplications).map((item) => ({
+        id: item.id,
+        reference: item.applicationNo,
+        status: item.status,
+        productName: item.productName || "N/A",
+        amount: item.principalMinor,
+        tenure: `${item.tenureCount} ${titleCase(item.tenurePeriod)}`,
+        interest: null,
+        kind: "application" as const,
+        href: null,
+      })),
+    },
+    {
+      title: "Loans",
+      icon: CreditCard,
+      items: visibleIfRequested(loans).map((item) => ({
+        id: item.id,
+        reference: item.loanNumber,
+        status: item.status,
+        productName: item.productName || "N/A",
+        amount: item.principalMinor,
+        tenure: `${item.tenureCount} ${titleCase(item.tenurePeriod)}`,
+        interest: `${(item.interestRateBp / 100).toFixed(2)}% per Month`,
+        kind: "loan" as const,
+        href: `/account-loan-details/${encodeURIComponent(item.id)}`,
+      })),
+    },
+    {
+      title: "Savings",
+      icon: PiggyBank,
+      items: visibleIfRequested(savings).map((item) => ({
+        id: item.id,
+        reference: item.accountNumber,
+        status: item.status,
+        productName: item.productName || item.accountType,
+        amount: item.balanceMinor,
+        tenure: "",
+        interest: null,
+        kind: "savings" as const,
+        href: null,
+      })),
+    },
+    { title: "Shares", icon: Wallet, items: [] },
+  ].filter((section) => section.items.length > 0);
 
   function selectProfileTab(value: string) {
     const index = profileTabs.findIndex((tab) => tab.value === value);
@@ -354,7 +426,7 @@ export function ClientProfile({ id }: { id: string }) {
   }
 
   return (
-    <div className="space-y-5 text-[13.44px] text-[#495057]">
+    <div className="space-y-3 text-[13.44px] text-[#495057]">
       {loading ? (
         <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
           <PanelSkeleton rows={10} />
@@ -390,15 +462,14 @@ export function ClientProfile({ id }: { id: string }) {
 
           <Tabs value={activeTab} onValueChange={selectProfileTab} className="gap-0">
             <div className={cn(
-              "flex h-[44.9px] w-full items-stretch border-[#dee2e6] bg-white",
-              activeTab === "summary" ? "rounded-t-[8px] border-x border-t" : "rounded-[8px] border",
+              "flex h-[44.9px] w-full items-stretch bg-[#f8fafc]",
             )}>
               <TabsList ref={tabListRef} id="client-profile-tabs" variant="line" className="h-full min-w-0 flex-1 justify-start overflow-x-auto rounded-none border-0 bg-transparent p-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {profileTabs.map(({ label: tab, value }) => (
                 <TabsTrigger
                   key={tab}
                   value={value}
-                  className="h-full flex-none rounded-none border-0 px-[16px] py-0 text-[13.44px] font-medium text-[#6c757d] after:bottom-0 after:h-[2px] after:bg-primary data-[state=active]:font-semibold data-[state=active]:text-primary"
+                  className="h-full flex-none rounded-none border-0 px-[16px] py-0 text-[13.44px] font-medium text-[#6c757d] after:bottom-0 after:h-[2px] after:bg-primary data-[state=active]:bg-white data-[state=active]:font-semibold data-[state=active]:text-primary"
                 >
                   {tab}
                 </TabsTrigger>
@@ -535,116 +606,134 @@ export function ClientProfile({ id }: { id: string }) {
             </TabsContent>
 
             <TabsContent value="users">
-              <TabTable columns={["Full Name", "Email Address", "Country code", "Phone Number", "Role", "Actions"]} rows={[]} emptyMessage="No local users available." />
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <TabTable columns={["Full Name", "Email Address", "Country code", "Phone Number", "Role", "Actions"]} rows={[]} emptyMessage="No local users available." />
+              </div>
             </TabsContent>
 
             <TabsContent value="accounts">
-              <div className="space-y-4">
+              <div className="min-h-[410px] space-y-4 rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="flex flex-wrap items-center justify-between gap-3">
-                  <label className="flex items-center gap-2 text-[13.44px] text-[#495057]">
-                    <input type="checkbox" checked={showAllAccounts} onChange={(event) => setShowAllAccounts(event.target.checked)} />
-                    Show All
-                  </label>
+                  <div className="flex items-center gap-[10px] text-[13.44px] text-[#495057]">
+                    <span>Show All</span>
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-label="Show all client accounts"
+                      aria-checked={showAllAccounts}
+                      onClick={() => setShowAllAccounts((current) => !current)}
+                      className={cn("relative h-[26px] w-[46px] rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40", showAllAccounts ? "bg-primary" : "bg-[#adb5bd]")}
+                    >
+                      <span className={cn("absolute top-[3px] size-5 rounded-full bg-white shadow-sm transition-transform", showAllAccounts ? "translate-x-[23px]" : "translate-x-[3px]")} />
+                    </button>
+                  </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">New loan application</Button>
-                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add saving</Button>
-                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add share</Button>
+                    <Button asChild variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Link href={`/account-loan-application-create?clientId=${encodeURIComponent(client.id)}`}><Plus className="size-[14px]" aria-hidden="true" />New loan application</Link></Button>
+                    <Button asChild variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Link href={`/account-saving?clientId=${encodeURIComponent(client.id)}&open=1`}><Plus className="size-[14px]" aria-hidden="true" />Add saving</Link></Button>
+                    <Button variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add share</Button>
                   </div>
                 </div>
 
-                {[
-                  { title: "Loans", items: loans },
-                  { title: "Savings", items: savings },
-                  { title: "Shares", items: [] as SavingsAccount[] },
-                ].map((section) => (
-                  <details key={section.title} open className="rounded-[6.72px] border border-[#e2e6f0] bg-surface p-[13.44px]">
+                {accountSections.map((section) => (
+                  <details key={section.title} open className="rounded-[8px] border border-[#e2e8f0] bg-[#f1f5f9] p-[14px]">
                     <summary className="flex cursor-pointer list-none items-center justify-between">
                       <span className="flex items-center gap-2 text-[15.12px] font-semibold text-[#495057]">
+                        <section.icon className="size-5 text-[#495057]" aria-hidden="true" />
                         {section.title}
-                        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-tint px-1 text-[11.76px] font-semibold text-primary">{section.items.length}</span>
+                        <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1 text-[11.76px] font-semibold text-white">{section.items.length}</span>
                       </span>
                       <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
                     </summary>
                     <div className="mt-3 space-y-2">
-                      {section.items.length === 0 ? (
-                        <p className="text-[13.44px] text-muted-foreground">No local accounts available.</p>
-                      ) : (
-                        section.items.map((item) => (
-                          <div key={item.id} className="rounded-[6.72px] border border-[#e2e6f0] p-[10.08px]">
-                            <div className="flex flex-wrap items-center justify-between gap-3">
-                              <div>
-                                <p className="text-[13.44px] font-semibold text-[#495057]">
-                                  {"loanNumber" in item ? item.loanNumber : item.accountNumber}{" "}
-                                  <span className="ml-2 rounded-full bg-green-100 px-2 py-0.5 text-[11.76px] font-semibold text-green-700">
-                                    {titleCase(item.status)}
-                                  </span>
-                                </p>
-                                <p className="text-[13.44px] text-muted-foreground">
-                                  {item.productName} • Amount: {"principalMinor" in item ? item.principalMinor : item.balanceMinor} • Tenure: {"tenureCount" in item ? `${item.tenureCount} ${item.tenurePeriod}` : "N/A"}
-                                </p>
-                                <p className="text-[13.44px] text-muted-foreground">
-                                  Interest: {"interestRateBp" in item ? `${(item.interestRateBp / 100).toFixed(2)}% per Month` : "N/A"}
-                                </p>
-                              </div>
-                              <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">View Balance</Button>
-                            </div>
+                      {section.items.map((item) => (
+                        <div key={item.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-[8px] border border-[#e2e8f0] bg-[#f8fafc] px-[16px] py-[14px]">
+                          <section.icon className="size-5 shrink-0 text-[#495057]" aria-hidden="true" />
+                          <span className="min-w-[120px] flex-1 text-[13.44px] text-[#495057]">{item.reference}</span>
+                          <span className={cn("rounded-full px-[10px] py-[4px] text-[11.76px] font-semibold", item.kind === "loan" ? "bg-[#dcfce7] text-[#166534]" : "bg-[#f3f4f6] text-[#495057]")}>{titleCase(item.status)}</span>
+                          <div className="min-w-[210px] flex-[1.5]">
+                            <p className="text-[13.44px] text-[#495057]">{item.productName}</p>
+                            <p className="mt-1 text-[11.76px] text-[#6c757d]">Amount: {item.amount}{item.tenure ? ` • Tenure: ${item.tenure}` : ""}</p>
+                            {item.interest ? <p className="text-[11.76px] text-[#6c757d]">Interest: {item.interest}</p> : null}
                           </div>
-                        ))
-                      )}
+                          {item.href ? (
+                            <Button asChild variant="link" className="ml-auto h-auto px-1 text-[11.76px] font-semibold text-[#495057]">
+                              <Link href={item.href}><Eye aria-hidden="true" />View Balance</Link>
+                            </Button>
+                          ) : null}
+                        </div>
+                      ))}
                     </div>
                   </details>
                 ))}
+                {accountSections.length === 0 ? (
+                  <p className="py-8 text-center text-[13.44px] text-[#6c757d]">No accounts available.</p>
+                ) : null}
               </div>
             </TabsContent>
 
             <TabsContent value="charges">
-              <div className="mb-3 flex justify-end">
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Charge</Button>
+              <div className="min-h-[312px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <div className="mb-3 flex justify-end">
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Charge</Button>
+                </div>
+                <TabTable columns={["Charges Type", "Creation Date", "Due Date", "Outstanding Days", "Amount (TSh)", "Outstanding Amount (TSh)", "Status", "Actions"]} rows={[]} emptyMessage="No data available" emptyHeight={220} />
               </div>
-              <TabTable columns={["Charges Type", "Creation Date", "Due Date", "Outstanding Days", "Amount (TSh)", "Outstanding Amount (TSh)", "Status", "Actions"]} rows={[]} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="residence">
-              <div className="mb-3 flex justify-end">
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Residence</Button>
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <div className="mb-3 flex justify-end">
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Residence</Button>
+                </div>
+                <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={[]} emptyMessage="No data available" />
               </div>
-              <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={currentResidence ? [[currentResidence, "", "", "", "", "", "", "", "", ""]] : []} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="kyc">
-              <div className="mb-3 flex gap-2">
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add KYC</Button>
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <div className="mb-3 flex gap-2">
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add KYC</Button>
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
+                </div>
+                <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={[]} emptyMessage="No data available" />
               </div>
-              <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={[]} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="income">
-              <div className="mb-3 flex justify-end">
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Income</Button>
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <div className="mb-3 flex justify-end">
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Income</Button>
+                </div>
+                <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number(Brela)", "Business License Number", "TIN Number", "Business Turn Over(weekly,yearly)", "Actions"]} rows={[]} emptyMessage="No data available" />
               </div>
-              <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number(Brela)", "Business License Number", "TIN Number", "Business Turn Over(weekly,yearly)", "Actions"]} rows={[]} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="assets">
-              <div className="mb-3 flex justify-end">
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Asset</Button>
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <div className="mb-3 flex justify-end">
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Asset</Button>
+                </div>
+                <TabTable columns={["Type", "Value", "Location", "Comments / Notes", "Actions"]} rows={[]} emptyMessage="No data available" />
               </div>
-              <TabTable columns={["Type", "Value", "Location", "Comments / Notes", "Actions"]} rows={[]} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="bank">
-              <div className="mb-3 flex justify-end">
-                <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Add Bank</Button>
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <div className="mb-3 flex justify-end">
+                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Bank</Button>
+                </div>
+                <TabTable columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address", "Actions"]} rows={[]} emptyMessage="No data available" />
               </div>
-              <TabTable columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address", "Actions"]} rows={[]} emptyMessage="No data available" />
             </TabsContent>
 
             <TabsContent value="verification-history">
-              <TabTable columns={["Date and Time", "Verification Type", "Verification Status", "Verification Identifier", "Performed By", "Reference ID / Source", "Error", "Actions"]} rows={[]} emptyMessage="No data available" />
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
+                <TabTable columns={["Date and Time", "Verification Type", "Verification Status", "Verification Identifier", "Performed By", "Reference ID / Source", "Error", "Actions"]} rows={[]} emptyMessage="No data available" />
+              </div>
             </TabsContent>
 
             <TabsContent value="statement">
+              <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
               <div className="flex flex-wrap items-end gap-3">
                 <div>
                   <label className="mb-1 block text-[13.44px] text-muted-foreground">Start Date</label>
@@ -654,21 +743,18 @@ export function ClientProfile({ id }: { id: string }) {
                   <label className="mb-1 block text-[13.44px] text-muted-foreground">End Date</label>
                   <Input type="date" value={statementEnd} onChange={(event) => setStatementEnd(event.target.value)} className="h-[var(--control-height)] w-[220px]" />
                 </div>
-                <Button className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Submit</Button>
-                <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Print</Button>
-                <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium">Download</Button>
+                <Button className="h-[var(--control-height)] px-5 text-[11.76px] font-medium"><Check className="size-4" aria-hidden="true" />Submit</Button>
+                <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium"><Printer className="size-4" aria-hidden="true" />Print</Button>
+                <Button variant="outline" disabled className="h-[var(--control-height)] px-5 text-[11.76px] font-medium"><Download className="size-4" aria-hidden="true" />Download<ChevronDown className="size-3.5" aria-hidden="true" /></Button>
+              </div>
               </div>
             </TabsContent>
 
             <TabsContent value="history">
-              <div className="flex min-h-[220px] flex-col items-center justify-center gap-3 rounded-[6.72px] border border-card-border bg-surface px-4 py-8 text-center">
-                <div className="grid size-10 place-items-center rounded-full bg-primary-tint text-primary">
-                  <FileText className="size-5" aria-hidden="true" />
-                </div>
-                <div>
-                  <h2 className="text-[15.12px] font-semibold text-[#495057]">History</h2>
-                  <p className="mt-1 text-[13.44px] text-muted-foreground">No history records found.</p>
-                </div>
+              <div className="flex min-h-[260px] flex-col items-center justify-center gap-2 rounded-b-[8px] bg-white px-4 py-8 text-center">
+                <Clock3 className="size-10 text-[#6c757d]" aria-hidden="true" />
+                <h2 className="text-[15.12px] font-semibold text-[#495057]">History</h2>
+                <p className="text-[13.44px] text-muted-foreground">No history records found.</p>
               </div>
             </TabsContent>
           </Tabs>
