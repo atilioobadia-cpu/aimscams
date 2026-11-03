@@ -53,13 +53,18 @@ The visible Chrome session rendered Teller, Online, and All during this review. 
 - The existing web client has no Teller account lookup endpoint. The savings form presents a required `Search Account` input using the account ID field; it cannot provide Wakandi's selectable account search until a local lookup API is available.
 - The local browser showed `Failed to fetch` for Teller till summary data during this pass, so the shared title card correctly displays unavailable local balance/session details. Layout verification was still possible.
 - The local reference dataset returned an empty history and requests table. No production row values were copied into notes.
+
 ## Teller inspection detail (2026-11-03)
 
 The live Chrome session was inspected at a 1211 × 600 screenshot viewport. The Requests column picker was opened and closed without changing selections. It has six visible defaults (`Date`, `Request`, `Status`, `Requester`, `Current Assignee`, `Approved by`), an optional hidden `Id`, and `Reset` / `Save` controls. AIMSCAMS now uses the same fields and behavior. Its empty table row is 172px high, with the muted gray archive icon and label used by the reference.
 
 The live New Transaction category grid uses four 226 × 137px cards with an 8px radius and about 13.44px inner padding. The selected card uses a 2px teal border; unselected cards use a 1.33px light-gray border. Category pill is about 184 × 38px with a full radius. AIMSCAMS cards now follow this layout, use the reference category/type order, and show centered category icons.
 
+The live category flow uses two independent accordion steps. Initially Step 1 is expanded as `Choose Category` with an up chevron. Choosing a category collapses Step 1 and relabels it with the chosen category; Step 2 appears expanded as `Choose Type` with an up chevron. Selecting a type collapses Step 2 and relabels it with that type while showing its detail form. Reopening Step 1 exposes the four categories; reopening Step 2 exposes that category's type list. The observed type lists are: Client Transaction (Shares Deposit, Shares Withdrawal, Savings Deposit, Savings Withdrawal, Loan Repayment, Disburse Loan, Apply Fee / Penalty, Reverse Fee/Penalty, Loan Application Fee, Error Correction); General Ledger (Record Receipt, Other Income, Record Payment, Record Expense, Pay Corporate Tax, Journal Entry, Bank/Cash Transfer (Contra), Reverse General ledger entry); Till Administration (Till Opening, Till Closing, Till Top-Up, Teller Pick-Up, Till Balance); Bulk Transaction (Bulk Deposit, Bulk New Loan Disbursement). The three non-opening till choices were visibly unavailable while Wakandi's current till session was closed.
+
 History has a 200px search field, two 153px date inputs, a 220px teller selector and a 38px filter button, with 32–34px control heights and 6px corners. The export control is a split teal Download button with Excel, CSV and PDF options. AIMSCAMS was updated to use these desktop widths and its column picker now controls the same 12 table fields. The live request menu and local menu were compared without saving changes.
+
+The local History filter toolbar and table now share one bordered card. The prior separate cards were joined using negative top margins, which caused the toolbar and table surfaces to overlap; these margin hacks were removed. The table viewport is keyboard focusable and explicitly labeled for horizontal scrolling, with the full 12-column table retaining its minimum width. A bottom gap separates Download from the table header, following the live page's spacing.
 
 ## Teller differences still unresolved
 
