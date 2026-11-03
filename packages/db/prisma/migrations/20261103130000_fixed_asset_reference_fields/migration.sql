@@ -1,0 +1,17 @@
+ALTER TABLE "fixed_asset"
+  ADD COLUMN "entryDate" date NOT NULL DEFAULT CURRENT_DATE,
+  ADD COLUMN "assetStatus" text NOT NULL DEFAULT 'PURCHASED',
+  ADD COLUMN "serialNumber" text,
+  ADD COLUMN "warrantyExpiry" date,
+  ADD COLUMN "creditorLedgerId" text,
+  ADD COLUMN "paymentMode" text NOT NULL DEFAULT 'CASH',
+  ADD COLUMN "increaseInValueMinor" bigint,
+  ADD COLUMN "increaseInValueEntryDate" date,
+  ADD COLUMN "depreciationMethod" text,
+  ADD COLUMN "averagingMethod" text,
+  ADD COLUMN "effectiveLifeYears" integer,
+  ADD COLUMN "depreciationDuringYearMinor" bigint,
+  ADD COLUMN "bookValueMinor" bigint,
+  ADD COLUMN "supplierName" text,
+  ADD COLUMN "supplierCompany" text,
+  ADD COLUMN "supplierAddress" text;

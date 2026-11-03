@@ -941,9 +941,26 @@ model FixedAsset {
   assetTypeId               String?  @db.Uuid
   assetNo                   String
   description               String
+  notes                     String?
   acquisitionDate           DateTime @db.Date
+  entryDate                 DateTime @default(now()) @db.Date
+  assetStatus               String   @default("PURCHASED")
   acquisitionCostMinor      BigInt
+  serialNumber              String?
+  warrantyExpiry            DateTime? @db.Date
+  creditorLedgerId          String?
+  paymentMode               String   @default("CASH")
+  increaseInValueMinor      BigInt?
+  increaseInValueEntryDate  DateTime? @db.Date
+  depreciationMethod        String?
+  averagingMethod           String?
+  effectiveLifeYears        Int?
+  depreciationDuringYearMinor BigInt?
   accumulatedDepreciationMinor BigInt @default(0)
+  bookValueMinor            BigInt?
+  supplierName              String?
+  supplierCompany           String?
+  supplierAddress           String?
   status                    String   @default("ACTIVE")
   disposalDate              DateTime? @db.Date
   disposalProceedsMinor     BigInt?

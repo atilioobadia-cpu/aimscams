@@ -176,7 +176,7 @@ export class AccountingService {
   }
 
   async listFixedAssets(organisationId: string) {
-    return this.prisma.fixedAsset.findMany({
+    const rows = await this.prisma.fixedAsset.findMany({
       where: { organisationId },
       include: {
         assetType: {
@@ -190,6 +190,15 @@ export class AccountingService {
       },
       orderBy: [{ status: 'asc' }, { assetNo: 'asc' }],
     });
+    return rows.map((row) => ({
+      ...row,
+      acquisitionCostMinor: row.acquisitionCostMinor.toString(),
+      increaseInValueMinor: row.increaseInValueMinor?.toString() ?? null,
+      depreciationDuringYearMinor:
+        row.depreciationDuringYearMinor?.toString() ?? null,
+      accumulatedDepreciationMinor: row.accumulatedDepreciationMinor.toString(),
+      bookValueMinor: row.bookValueMinor?.toString() ?? null,
+    }));
   }
 
   async createFixedAsset(
@@ -205,11 +214,66 @@ export class AccountingService {
     const acquisitionDate = String(body.acquisitionDate ?? '').trim();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(acquisitionDate))
       throw new BadRequestException('Acquisition date must use YYYY-MM-DD.');
+    const entryDate = date(body.entryDate ?? acquisitionDate, 'Asset entry date');
     const cost = String(body.acquisitionCostMinor ?? '').trim();
     if (!/^\\d+$/.test(cost))
       throw new BadRequestException(
         'Acquisition cost must be a whole number of minor units.',
       );
+    const assetStatus = stringValue(body.assetStatus ?? 'PURCHASED')
+      .trim()
+      .toUpperCase();
+    if (!['PURCHASED', 'FIXED_GRANT'].includes(assetStatus)) {
+      throw new BadRequestException('Select a valid asset status.');
+    }
+    const paymentMode = stringValue(body.paymentMode ?? 'CASH').trim().toUpperCase();
+    if (!['CASH', 'JOURNAL'].includes(paymentMode)) {
+      throw new BadRequestException('Select Cash or Journal.');
+    }
+    const depreciationMethod = stringValue(body.depreciationMethod ?? '')
+      .trim()
+      .toUpperCase();
+    if (
+      !['NO_DEPRECIATION', 'STRAIGHT_LINE', 'DIMINISHING_BALANCE'].includes(
+        depreciationMethod,
+      )
+    ) {
+      throw new BadRequestException('Select a valid depreciation method.');
+    }
+    const averagingMethod = stringValue(body.averagingMethod ?? '').trim().toUpperCase();
+    if (averagingMethod && !['MONTHLY', 'YEARLY'].includes(averagingMethod)) {
+      throw new BadRequestException('Select a valid averaging method.');
+    }
+    const effectiveLifeYears =
+      body.effectiveLifeYears === '' || body.effectiveLifeYears === null ||
+      body.effectiveLifeYears === undefined
+        ? null
+        : Number(body.effectiveLifeYears);
+    if (
+      effectiveLifeYears !== null &&
+      (!Number.isInteger(effectiveLifeYears) || effectiveLifeYears < 0)
+    ) {
+      throw new BadRequestException('Effective life must be a non-negative whole number.');
+    }
+    const creditorLedgerId = stringValue(body.creditorLedgerId ?? '').trim();
+    if (creditorLedgerId) {
+      const ledgerDb = await this.dbService.getDb(organisationId);
+      const validLedger = await ledgerDb.query<{ id: string }>(
+        `select id from gl_account where organisation_id = $1 and id = $2::uuid and is_postable = true`,
+        [organisationId, creditorLedgerId],
+      );
+      if (!validLedger.rows.length) {
+        throw new BadRequestException('Select a valid postable creditor ledger.');
+      }
+    }
+    const optionalDate = (value: unknown, field: string) => {
+      if (value === null || value === undefined || value === '') return null;
+      return new Date(`${date(value, field)}T00:00:00.000Z`);
+    };
+    const optionalMoney = (value: unknown, field: string) =>
+      value === null || value === undefined || value === ''
+        ? null
+        : money(value, field);
     return this.prisma.fixedAsset.create({
       data: {
         organisationId,
@@ -217,8 +281,37 @@ export class AccountingService {
         assetTypeId: body.assetTypeId ? String(body.assetTypeId) : null,
         assetNo,
         description,
+        notes: stringValue(body.notes).trim() || null,
         acquisitionDate: new Date(`${acquisitionDate}T00:00:00.000Z`),
+        entryDate: new Date(`${entryDate}T00:00:00.000Z`),
+        assetStatus,
         acquisitionCostMinor: BigInt(cost),
+        serialNumber: stringValue(body.serialNumber).trim() || null,
+        warrantyExpiry: optionalDate(body.warrantyExpiry, 'Warranty expiry'),
+        creditorLedgerId: creditorLedgerId || null,
+        paymentMode,
+        increaseInValueMinor: optionalMoney(
+          body.increaseInValue,
+          'Increase in value',
+        ),
+        increaseInValueEntryDate: optionalDate(
+          body.increaseInValueEntryDate,
+          'Increase in value entry date',
+        ),
+        depreciationMethod,
+        averagingMethod: averagingMethod || null,
+        effectiveLifeYears,
+        depreciationDuringYearMinor: optionalMoney(
+          body.depreciationDuringYear,
+          'Depreciation during the year',
+        ),
+        accumulatedDepreciationMinor:
+          optionalMoney(body.accumulatedDepreciation, 'Accumulated depreciation') ??
+          0n,
+        bookValueMinor: optionalMoney(body.bookValue, 'Fair or book value'),
+        supplierName: stringValue(body.supplierName).trim() || null,
+        supplierCompany: stringValue(body.supplierCompany).trim() || null,
+        supplierAddress: stringValue(body.supplierAddress).trim() || null,
         status: 'ACTIVE',
       },
     });

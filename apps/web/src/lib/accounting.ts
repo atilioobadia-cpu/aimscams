@@ -288,9 +288,26 @@ export type FixedAsset = {
   id: string;
   assetNo: string;
   description: string;
+  notes: string | null;
   acquisitionDate: string;
+  entryDate: string;
+  assetStatus: string;
   acquisitionCostMinor: string;
+  serialNumber: string | null;
+  warrantyExpiry: string | null;
+  creditorLedgerId: string | null;
+  paymentMode: string;
+  increaseInValueMinor: string | null;
+  increaseInValueEntryDate: string | null;
+  depreciationMethod: string | null;
+  averagingMethod: string | null;
+  effectiveLifeYears: number | null;
+  depreciationDuringYearMinor: string | null;
   accumulatedDepreciationMinor: string;
+  bookValueMinor: string | null;
+  supplierName: string | null;
+  supplierCompany: string | null;
+  supplierAddress: string | null;
   status: string;
   disposalDate: string | null;
   disposalProceedsMinor: string | null;
@@ -305,10 +322,28 @@ export function listFixedAssets() {
 export function createFixedAsset(body: {
   assetNo: string;
   description: string;
+  notes?: string;
   acquisitionDate: string;
+  entryDate?: string;
   acquisitionCostMinor: string;
   assetTypeId?: string;
   branchId?: string;
+  assetStatus?: string;
+  serialNumber?: string;
+  warrantyExpiry?: string;
+  creditorLedgerId?: string;
+  paymentMode?: string;
+  increaseInValue?: string;
+  increaseInValueEntryDate?: string;
+  depreciationMethod?: string;
+  averagingMethod?: string;
+  effectiveLifeYears?: string;
+  depreciationDuringYear?: string;
+  accumulatedDepreciation?: string;
+  bookValue?: string;
+  supplierName?: string;
+  supplierCompany?: string;
+  supplierAddress?: string;
 }) {
   return apiRequest<FixedAsset>("/accounting/fixed-assets", { method: "POST", body });
 }
