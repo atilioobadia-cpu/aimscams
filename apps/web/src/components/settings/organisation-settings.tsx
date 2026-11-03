@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Building2, Globe2, ImageUp, Info, Save, Trash2 } from "lucide-react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { Building2, Globe2, Info, Palette, RotateCcw, Save, Wrench } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-import { InstitutionLogo } from "@/components/brand/institution-logo";
 import {
   ErrorPanel,
   ForbiddenPanel,
@@ -12,23 +11,27 @@ import {
   PanelSkeleton,
   SuccessNote,
 } from "@/components/accounting/states";
-import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
-import { ApiError, apiAssetUrl } from "@/lib/api";
+import { ApiError } from "@/lib/api";
+import {
+  APPEARANCE_COLORS,
+  DEFAULT_APPEARANCE,
+  presetColor,
+  readAppearancePreferences,
+  saveAppearancePreferences,
+  subscribeAppearancePreferences,
+  type AppearancePreferences,
+  type AppearancePreset,
+} from "@/lib/appearance";
 import {
   COMMON_TIMEZONES,
-  deleteOrganisationLogo,
   getOrganisation,
   updateOrganisation,
-  uploadOrganisationLogo,
   type InstitutionDialect,
   type OrganisationSettings,
 } from "@/lib/settings";
-
-const MAX_LOGO_BYTES = 48 * 1024;
-const LOGO_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
 type OrganisationForm = {
   name: string;
@@ -54,22 +57,6 @@ function formFrom(data: OrganisationSettings): OrganisationForm {
   };
 }
 
-function externalLogo(data: OrganisationSettings): string {
-  return data.logoUrl && /^https?:\/\//i.test(data.logoUrl) ? data.logoUrl : "";
-}
-
-function readFileAsDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") resolve(reader.result);
-      else reject(new Error("Could not read that file."));
-    };
-    reader.onerror = () => reject(new Error("Could not read that file."));
-    reader.readAsDataURL(file);
-  });
-}
-
 function updatedLabel(iso: string, timezone: string): string {
   try {
     return new Intl.DateTimeFormat("en-GB", {
@@ -83,7 +70,6 @@ function updatedLabel(iso: string, timezone: string): string {
 }
 
 export function OrganisationSettingsPage() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { pushToast } = useToast();
   const router = useRouter();
   const [data, setData] = useState<OrganisationSettings | null>(null);
@@ -96,6 +82,16 @@ export function OrganisationSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"info" | "appearance">("info");
+  const [editingInfo, setEditingInfo] = useState(false);
+  const savedAppearance = useSyncExternalStore(
+    subscribeAppearancePreferences,
+    readAppearancePreferences,
+    () => DEFAULT_APPEARANCE,
+  );
+  const [appearanceDraft, setAppearanceDraft] = useState(DEFAULT_APPEARANCE);
+  const [appearanceDirty, setAppearanceDirty] = useState(false);
+  const appearance = appearanceDirty ? appearanceDraft : savedAppearance;
 
 
   useEffect(() => {
@@ -134,6 +130,7 @@ export function OrganisationSettingsPage() {
   function applyData(next: OrganisationSettings) {
     setData(next);
     setForm(formFrom(next));
+    setEditingInfo(false);
     router.refresh();
   }
 
@@ -173,11 +170,23 @@ export function OrganisationSettingsPage() {
 
   return (
     <div className="space-y-[var(--space-14)]">
-      <PageHeader
-        title="General"
-        description="The institution's legal identity, branding and operating defaults."
-        breadcrumb="Settings"
-      />
+      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <header className="flex items-center gap-3 px-[var(--space-16)] py-[var(--space-12)]">
+          <Wrench className="size-5 text-brand" aria-hidden="true" />
+          <div>
+            <h1 className="fs-title font-bold text-strong">General</h1>
+            <p className="fs-text text-muted-foreground">General Settings</p>
+          </div>
+        </header>
+        <div role="tablist" aria-label="General settings sections" className="flex border-t border-chrome bg-tab-inactive">
+          <button type="button" role="tab" id="general-info-tab" aria-selected={activeTab === "info"} aria-controls="general-info-panel" onClick={() => setActiveTab("info")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "info" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
+            Info
+          </button>
+          <button type="button" role="tab" id="general-appearance-tab" aria-selected={activeTab === "appearance"} aria-controls="general-appearance-panel" onClick={() => setActiveTab("appearance")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "appearance" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
+            Appearance
+          </button>
+        </div>
+      </section>
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view organisation settings. Ask an administrator for Settings Organisation : View." />
@@ -185,11 +194,30 @@ export function OrganisationSettingsPage() {
         <PanelSkeleton rows={10} />
       ) : error ? (
         <ErrorPanel message={error} onRetry={retry} />
-      ) : data && form ? (
-        <div className="grid items-start gap-[var(--space-14)] xl:grid-cols-[minmax(0,1fr)_360px]">
+      ) : data && form && activeTab === "info" ? (
+        <div id="general-info-panel" role="tabpanel" aria-labelledby="general-info-tab" className="space-y-[var(--space-14)]">
+          {!editingInfo ? (
+            <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
+                <h2 className="fs-text font-bold text-strong">Institution information</h2>
+                {data.canEdit ? <Button type="button" variant="outline" size="sm" onClick={() => setEditingInfo(true)}>Edit</Button> : null}
+              </div>
+              <dl className="grid gap-x-8 gap-y-4 px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2 lg:grid-cols-3">
+                <InfoField label="Institution name" value={data.name} />
+                <InfoField label="Registration number" value={data.registrationNo || "N/A"} />
+                <InfoField label="Board dialect" value={data.dialect} />
+                <InfoField label="Time zone" value={data.timezone} />
+                <InfoField label="Default branch" value={data.branches.find((branch) => branch.id === data.defaultBranchId)?.name ?? "N/A"} />
+                <InfoField label="Institution code" value={data.code} />
+                <InfoField label="Locale" value={data.locale} />
+                <InfoField label="Branch count" value={String(data.branches.length)} />
+                <InfoField label="Transaction PIN" value="Not available" />
+              </dl>
+            </section>
+          ) : null}
           <form
             noValidate
-            className="space-y-[var(--space-14)]"
+            className={`space-y-[var(--space-14)] ${editingInfo ? "" : "hidden"}`}
             onSubmit={(event) => void saveOrganisation(event)}
           >
             <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
@@ -204,8 +232,8 @@ export function OrganisationSettingsPage() {
                 </p>
               </header>
 
-              <div className="grid gap-[var(--space-12)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2">
-                <div className="sm:col-span-2">
+              <div className="grid gap-[var(--space-12)] px-[var(--space-16)] py-[var(--space-14)] sm:grid-cols-2 lg:grid-cols-3">
+                <div className="lg:col-span-3">
                   <label htmlFor="org-name" className="mb-1 block fs-text font-medium text-strong">
                     Legal name
                   </label>
@@ -332,16 +360,27 @@ export function OrganisationSettingsPage() {
                     </p>
                   ) : null}
                 </div>
-                {data.canEdit ? (
-                  <Button type="submit" disabled={saving}>
-                    <Save className="size-4" aria-hidden="true" />
-                    {saving ? "Saving" : "Save changes"}
-                  </Button>
-                ) : null}
+                {data.canEdit ? <div className="flex items-center gap-2">
+                  <Button type="button" variant="outline" onClick={() => { setForm(formFrom(data)); setEditingInfo(false); setSaveError(null); setSaved(null); }} disabled={saving}>Cancel</Button>
+                  <Button type="submit" disabled={saving}><Save className="size-4" aria-hidden="true" />{saving ? "Saving" : "Save changes"}</Button>
+                </div> : null}
               </div>
             </section>
 
           </form>
+
+          <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+            <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
+              <h2 className="fs-text font-bold text-strong">Online Collections</h2>
+            </header>
+            <div className="flex flex-wrap items-start justify-between gap-4 px-[var(--space-16)] py-[var(--space-14)]">
+              <div>
+                <p className="fs-text font-semibold text-strong">Preferred savings product for online payments</p>
+                <p className="mt-1 fs-text text-muted-foreground">Not configured in AIMSCAMS. Online payment routing is not part of the current organisation settings API.</p>
+              </div>
+              <Button type="button" variant="outline" size="sm" disabled title="Online collection routing is not supported by the local settings API">Edit</Button>
+            </div>
+          </section>
 
           <aside className="space-y-[var(--space-14)]">
             <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
@@ -387,7 +426,100 @@ export function OrganisationSettingsPage() {
             </section>
           </aside>
         </div>
+      ) : activeTab === "appearance" ? (
+        <div id="general-appearance-panel" role="tabpanel" aria-labelledby="general-appearance-tab" className="space-y-[var(--space-14)]">
+          <AppearanceSettings value={appearance} onChange={(next) => {
+            setAppearanceDraft(next);
+            setAppearanceDirty(true);
+          }} />
+          <div className="flex flex-wrap items-center gap-[var(--space-10)]">
+            <Button type="button" variant="outline" onClick={() => {
+              setAppearanceDraft(DEFAULT_APPEARANCE);
+              setAppearanceDirty(false);
+              saveAppearancePreferences(DEFAULT_APPEARANCE);
+              pushToast("Appearance reset to defaults.");
+            }}>
+              <RotateCcw className="size-4" aria-hidden="true" />
+              Reset to defaults
+            </Button>
+            <Button type="button" onClick={() => {
+              saveAppearancePreferences(appearanceDraft);
+              setAppearanceDirty(false);
+              pushToast("Appearance settings saved.");
+            }} disabled={!appearanceDirty}>
+              <Save className="size-4" aria-hidden="true" />
+              Save settings
+            </Button>
+          </div>
+        </div>
       ) : null}
     </div>
+  );
+}
+
+function InfoField({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="fs-text font-semibold text-strong">{label}</dt>
+      <dd className="mt-1 fs-text text-strong">{value}</dd>
+    </div>
+  );
+}
+
+function AppearanceSettings({ value, onChange }: { value: AppearancePreferences; onChange: (value: AppearancePreferences) => void }) {
+  const presets: { id: AppearancePreset; label: string; description: string }[] = [
+    { id: "mfsl", label: "Wakandi", description: "Teal and white" },
+    { id: "blue", label: "Modern", description: "Blue and white" },
+    { id: "classic", label: "Classic", description: "Warm neutral accents" },
+  ];
+
+  return (
+    <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+      <header className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
+        <h2 className="flex items-center gap-2 fs-text font-bold text-strong"><Palette className="size-4 text-brand" aria-hidden="true" />Appearance Settings</h2>
+      </header>
+      <div className="space-y-[var(--space-18)] px-[var(--space-16)] py-[var(--space-16)]">
+        <fieldset className="space-y-2">
+          <legend className="fs-text font-semibold text-strong">Theme</legend>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {presets.map((preset) => (
+              <button key={preset.id} type="button" aria-pressed={value.preset === preset.id} onClick={() => onChange({ ...value, preset: preset.id, primaryColor: presetColor(preset.id) })} className={`rounded-[var(--card-radius)] border p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${value.preset === preset.id ? "border-primary bg-primary-tint" : "border-card-border hover:border-primary"}`}>
+                <span className="mb-2 block h-9 rounded border border-card-border" style={{ background: `linear-gradient(90deg, ${presetColor(preset.id)} 0 22%, #f8fafc 22% 100%)` }} aria-hidden="true" />
+                <span className="block fs-text font-semibold text-strong">{preset.label}</span>
+                <span className="block fs-text text-muted-foreground">{preset.description}</span>
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="flex items-center justify-between gap-4 border-t border-chrome pt-4">
+          <div>
+            <p className="fs-text font-semibold text-strong">Dark Mode</p>
+            <p className="fs-text text-muted-foreground">Use a dark application surface.</p>
+          </div>
+          <button type="button" role="switch" aria-checked={value.darkMode} aria-label="Dark mode" onClick={() => onChange({ ...value, darkMode: !value.darkMode })} className={`relative h-5 w-9 shrink-0 rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${value.darkMode ? "border-primary bg-primary" : "border-border bg-muted"}`}>
+            <span className={`absolute top-0.5 size-[14px] rounded-full bg-surface shadow-sm transition-all ${value.darkMode ? "left-[18px]" : "left-0.5"}`} />
+          </button>
+        </div>
+
+        <fieldset className="space-y-2 border-t border-chrome pt-4">
+          <legend className="fs-text font-semibold text-strong">Primary Color</legend>
+          <div className="flex flex-wrap gap-2">
+            {APPEARANCE_COLORS.map((color) => (
+              <button key={color} type="button" aria-label={`Choose primary color ${color}`} aria-pressed={value.primaryColor === color} onClick={() => onChange({ ...value, primaryColor: color })} className={`size-7 rounded-full border-2 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${value.primaryColor === color ? "scale-110 border-strong" : "border-transparent hover:scale-110"}`} style={{ backgroundColor: color }} />
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="space-y-2 border-t border-chrome pt-4">
+          <div className="flex items-center justify-between gap-4">
+            <label htmlFor="appearance-scale" className="fs-text font-semibold text-strong">UI Scale</label>
+            <span className="fs-text text-muted-foreground">{value.scale}/20 · {Math.round(((value.scale - 2) / 18) * 100)}%</span>
+          </div>
+          <input id="appearance-scale" type="range" min="2" max="20" step="1" value={value.scale} onChange={(event) => onChange({ ...value, scale: Number(event.target.value) })} className="w-full accent-[var(--primary)]" />
+          <div className="flex justify-between fs-text text-muted-foreground"><span>Compact</span><span>Comfortable</span></div>
+        </div>
+      </div>
+    </section>
   );
 }

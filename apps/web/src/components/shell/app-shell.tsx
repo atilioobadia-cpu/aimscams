@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/shell/app-sidebar";
 import { ChatFab } from "@/components/shell/chat-fab";
 import { ToastProvider } from "@/components/ui/toast";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
+import { applyAppearancePreferences, readAppearancePreferences } from "@/lib/appearance";
 
 const SIDEBAR_WIDTH = {
   expanded: 200,
@@ -31,6 +32,10 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
     syncCollapsedState();
     narrowViewport.addEventListener("change", syncCollapsedState);
     return () => narrowViewport.removeEventListener("change", syncCollapsedState);
+  }, []);
+
+  useEffect(() => {
+    applyAppearancePreferences(readAppearancePreferences());
   }, []);
 
   const width = collapsed ? SIDEBAR_WIDTH.collapsed : SIDEBAR_WIDTH.expanded;

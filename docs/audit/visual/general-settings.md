@@ -4,14 +4,21 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\settings-account\FULL.png`
 AIMSCAMS route: `/settings/general` (the `/settings` route redirects here)
 
-## Comparison
+## Reference observations
 
-The reference uses a General title card with Info and Appearance tabs. Its Info state shows institution identity details and online collection routing; the captured overlay edits the preferred savings product for online payments. AIMSCAMS shows editable legal name, registration number, board dialect, timezone, and default branch in an Institution identity card, plus Installation metadata and a tenant-scope explanation. There is no Info/Appearance tab set, online collections section, preferred savings product editor, or matching modal state. The local page has a strong two-column card layout and the same general settings purpose, but a different contract and composition.
+The saved Wakandi capture has a General title card with Info and Appearance tabs. Info presents institution details as read-only values in a multi-column layout, followed by Online Collections and an Edit action for the preferred savings product. A centered dialog contains the product selector, explanatory copy, Cancel, and disabled Save when unchanged. Appearance has three theme presets, a Dark Mode switch, primary-color swatches, a compact-to-comfortable scale slider, Reset to Defaults, and Save Settings.
 
-## Recommendations
+These observations come from the saved capture. Wakandi's current live session is at SSO with a reCAPTCHA service error, so current live computed pixel measurements were not captured.
 
-- Add the Info/Appearance tab structure and the online collections preference where supported by the organisation settings model.
-- Preserve installation identity/timezone/default-branch controls as AIMSCAMS-specific requirements, placed within a clear settings hierarchy.
-- Compare editable modal geometry only with matching local dialog state; this review did not open or save the preference editor.
+## AIMSCAMS changes in progress
 
-Read-only browser review; no institution settings were changed or saved. Implementation commit: none.
+- Added the General Settings header and Info/Appearance tabs.
+- Info now defaults to read-only fields, opens the existing server-backed organisation form with Edit, and keeps the existing save/cancel behavior.
+- Added local Appearance preference controls for presets, dark mode, accent color, and UI scale. Default scale remains the v1.2.0 compact value.
+- Added an Online Collections section that states the preference is unsupported by the AIMSCAMS organisation settings API; Edit remains disabled. No fake routing behavior was introduced.
+
+## Remaining gaps / verification
+
+- The local organisation contract has no preferred savings product/online routing field and no transaction PIN update flow.
+- Exact live F12 comparison is pending because Wakandi could not pass SSO in this browser session.
+- Chrome automation timed out while focusing the local tab, so post-change visual verification is pending. Typecheck and targeted lint passed.
