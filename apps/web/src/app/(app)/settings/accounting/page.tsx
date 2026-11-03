@@ -5,13 +5,13 @@ import {
   CalendarCheck,
   CalendarRange,
   CalendarX,
+  Calculator,
   Pencil,
   Plus,
   Scale,
   SlidersHorizontal,
 } from "lucide-react";
 
-import { AccountingNav } from "@/components/accounting/accounting-nav";
 import {
   ErrorPanel,
   ForbiddenPanel,
@@ -143,7 +143,8 @@ export default function AccountingSettingsPage() {
   }, []);
 
   useEffect(() => {
-    void load(true);
+    const timer = window.setTimeout(() => void load(true), 0);
+    return () => window.clearTimeout(timer);
   }, [load]);
 
   const postableAccounts = (data?.accounts ?? []).filter((account) => account.isPostable);
@@ -271,12 +272,16 @@ export default function AccountingSettingsPage() {
   return (
     <div className="space-y-[var(--space-14)]">
       <PageHeader
-        title="Accounting settings"
-        description="The statutory rate, the fiscal calendar and how each business event reaches the general ledger."
-        breadcrumb="Settings"
+        variant="card"
+        title="Accounting"
+        icon={<Calculator className="ml-[2px] mr-1 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />}
       />
 
-      <AccountingNav />
+      <nav aria-label="Accounting settings" className="flex min-h-[54px] items-stretch border-b border-chrome bg-card">
+        <span aria-current="page" className="inline-flex items-center border-b-2 border-primary px-4 fs-text font-semibold text-primary">
+          Inter Branch Setting
+        </span>
+      </nav>
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view accounting settings. Ask an administrator for Settings Accounting : View." />

@@ -4,14 +4,13 @@ Date: 2026-11-01
 Reference: `F:\Wakandi\settings-accounting-settings\FULL.png`  
 AIMSCAMS route: `/settings/accounting`
 
-## Comparison
+## Reference and local comparison
 
-The reference uses an Accounting title card and an Inter Branch Setting tab with a tax-rate list/search and an Add Tax Rates dialog. The dialog groups rate name, code, description, active status, and one or more tax components with rate and ledger code. AIMSCAMS shows statutory tax rate and inter-branch ledger controls, a Fiscal periods table, and a Posting policies section. The route currently uses a plain heading/description and includes accounting navigation links rather than a tax-rate manager. The settings concepts overlap, but the reference tax-component catalog is absent.
+The reference uses an Accounting title card and an Inter Branch Setting tab with a tax-rate list/search and an Add Tax Rates dialog. The dialog groups rate name, code, description, active status, and one or more tax components with rate and ledger code. AIMSCAMS has been updated to use the reference title card and tab label. The page still shows statutory tax rate and inter-branch ledger controls, a Fiscal periods table, and a Posting policies section rather than the reference tax-rate catalog.
 
-## Recommendations
+The saved screenshot is the reference source. Wakandi live F12 values were unavailable because the current session is stopped at SSO.
 
-- Add the tax-rate catalog and component editor with reference list/modal hierarchy, backed by a dedicated tax-rate model.
-- Keep inter-branch posting configuration separate from tax-rate editing, and preserve the local fiscal-period workflow if it is part of AIMSCAMS's approved contract.
-- Use the shared settings title-card treatment and remove unrelated accounting links from this page's primary content.
+## Remaining gaps
 
-Read-only browser review. No tax, ledger, fiscal period, or posting policy setting was changed. Implementation commit: none.
+- Add a tax-rate catalog and component editor backed by a dedicated tax-rate model; the API currently stores only one organisation tax percentage and an inter-branch flag.
+- Move local fiscal-period and posting-policy workflows into clearly separate AIMSCAMS sections after the reference tab content.
