@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function CampaignsPage() {
   return (
     <ComingSoon
-      title="Campaigns"
+      title="Run Campaign"
       description="Loan and savings campaigns offered to clients."
       detail="Campaign setup, targeting and results arrive after the core modules. The entry stays visible so the navigation matches the measured reference."
     />
