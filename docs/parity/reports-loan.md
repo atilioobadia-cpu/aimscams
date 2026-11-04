@@ -1,23 +1,20 @@
 # Loan Reports parity pass
 
-Status: report category grid adjusted and verified in the visible AIMSCAMS tab.
+Status: compared against the authenticated, live Wakandi Loan Reports hub and aligned in AIMSCAMS.
 
-## Wakandi reference
+## Live reference and measurements
 
-Reference: `F:\Wakandi\reports-loan\FULL.png` and `docs/audit/wakandi-spec/reports-loan.md`. The Wakandi Loan Reports hub uses a full-width title card followed by a four-column grid of report links. Cards have consistent height, white surfaces, light borders, small shadows, bold labels, and an info icon aligned at the right. The saved reference does not include interactive hover/keyboard states, and the live Wakandi tab could not be reattached after SSO expired; no production changes were made.
+Reference: `https://cams.wakandi.co.tz/reports/loan` (read-only). At a 1225 by 567 CSS-pixel viewport, the Wakandi title card is at x=213.44, y=78.10, w=983.13, h=59.58px. It uses an 8px radius, a 1px `#dee2e6` border, approximately 20px horizontal padding, and a 20.16px Roboto semibold title with a 20.16px icon.
 
-## AIMSCAMS finding
+The four-column report grid begins at y=151.13px with 13.44px column and row gaps. Cards measure 235.70 by 63.83px, have an 8px radius, no visible border, and a subtle `0 1.68px 3.36px rgba(0,0,0,.075)` shadow. Labels use bold 13.44px text. Long titles wrap to two compact lines. Each card has a separate right-aligned info action; selecting the report title opens that report.
 
-At a 1225 by 623 CSS-pixel local browser viewport, the Loan Reports card grid rendered two columns because its four-column rule began at the `xl` breakpoint. The visible Wakandi reference at its corresponding desktop view uses four columns. This made each local card about 491px wide and pushed the page down much farther than the reference layout.
+## AIMSCAMS comparison and change
 
-## Change and verification
+- The shared report-category component now uses the four-column layout from the desktop `lg` breakpoint and the measured 13.44px gaps.
+- The header uses the measured 59.58px height, 8px radius, `#dee2e6` border, and title styling.
+- Cards use a 63.83px minimum height, measured radius and shadow, and compact 1.2 line-height so two-line labels fit without growing the card. The info action remains separate from the report link.
+- The local visible browser was reviewed beside the live Wakandi view at the same viewport. Their title and card grid positions, widths, heights, wrapping, icon placement, and overall row rhythm now align. AIMSCAMS retains the user-requested v1.2.0 body type scale (12.8px).
 
-- Changed the Loan Reports and shared report-category grid breakpoints to use four columns from `lg` upward.
-- Rechecked `/reports-loan` in the visible local Chrome tab after reload. The grid now has four 237.7px columns at the measured viewport, with 16px gaps and 82px card heights.
-- The title card remains 84px high, with an 8px radius and the existing v1.2.0 text sizing. The local page now follows Wakandi’s four-column row structure at this viewport.
+## Remaining scope
 
-## Remaining differences
-
-- Some long report titles wrap because the AIMSCAMS content column is narrower at this viewport. Preserve the current v1.2.0 text size; revisit only if the shared shell width is adjusted against a fresh same-viewport Wakandi DevTools measurement.
-- Hover state and report-card actions were not checked live because the Wakandi session redirected to SSO. The saved screenshots show links and info icons but do not document their interactive behavior.
-- This pass covers the Loan Reports category page. Savings, Transactions, Client, MSP, Statement, and individual report detail pages remain in the ordered audit queue.
+This record covers the Loan Reports category hub only. Report detail pages still need direct comparison for filters, table columns, export actions, and empty states. The other report category hubs and detail pages are tracked in `reports.md`.

@@ -1118,6 +1118,18 @@ table.dashboard-parity-table td {
   color: #6c757d;
 }
 .message-filter-value > button:hover { background: #f8fafc; color: #057573; }
+.report-category-header > div:first-child { gap: 6.72px !important; }
+.report-category-header h1 {
+  color: #495057 !important;
+  font-size: 20.16px !important;
+  font-weight: 600 !important;
+  line-height: normal !important;
+}
+.report-category-card {
+  border: 0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1.68px 3.36px rgb(0 0 0 / 7.5%) !important;
+}
 .requests-apply-filter {
   display: inline-flex;
   width: 30.24px;

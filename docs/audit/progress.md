@@ -678,3 +678,16 @@ AIMSCAMS brand teal for links and titles. No new palette needed except the alert
 - Added shared chart components for growth, stacked bars, registration, churn, doughnuts, age bands, disbursements, application stages, and loan transactions.
 - npm run typecheck passed. Dashboard parity: 11 passed. Clients parity: 21 passed.
 
+## 2026-11-04 — Dashboard and Messages continuation
+
+- Re-measured the visible Wakandi Dashboard and AIMSCAMS Dashboard in the user-visible Chrome session. Aligned the shared content shell, dashboard tabs, KPI cards, chart panels, member/loan layouts, filters, empty states, and scroll extent while preserving the v1.2.0 12.8px body scale. `npm run typecheck` passed; Dashboard changes pushed in `cd0c594`.
+- Continued the Messages module using the live read-only Wakandi session. Added optional Date and Template Key filters to the AIMSCAMS template register and Email to Users. Verified menu choices, visible controls, removal, Escape and outside-click dismissal, and confirmed no browser console warnings/errors. `npm run typecheck` passed; changes pushed in `d198fbc`.
+- Campaigns and report-category hubs have parity notes from previous passes. Individual report pages, remaining Import routes, Business Account, and Settings still require their ordered review and any remaining fixes.
+- Wakandi's read-only session was restored by the user and the live Loan Reports hub is available. No production data was changed.
+
+## 2026-11-04 — Loan Reports hub sizing correction
+
+- Compared the live Wakandi Loan Reports page and local AIMSCAMS `/reports-loan` in visible Chrome at a 1225 by 567 CSS-pixel viewport.
+- Corrected the shared category-card typography and vertical padding so two-line labels fit within the 63.83px reference card height. Kept the v1.2.0 12.8px body typography.
+- Updated the Loan Reports and shared Reports parity records with the current live measurements. Individual report details, Import, Business Account, and Settings remain in scope.
+

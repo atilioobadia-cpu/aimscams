@@ -4,9 +4,9 @@ Status: category hubs compared against live Wakandi and aligned in AIMSCAMS.
 
 ## Live reference measurements
 
-At a 1225 by 567 CSS-pixel viewport, Wakandi report hubs use a title card at x=213.44, y=78.10, w=998.46, h=59.58. The card has an 8px radius, 20px horizontal padding, a 20.16px Roboto title, and a 20.16px icon. The report grid begins at y=151.13 with 13.44px gaps. Each four-column report card measures 239.53 by 63.83px, has an 8px radius and subtle shadow, and uses a 13.44px bold label. Wakandi uses a separate info action in each card; the action reveals a report description on hover. Clicking the rest of a card opens the report.
+At a 1225 by 567 CSS-pixel viewport, Wakandi report hubs use an 8px-radius title card at y=78.10 with 59.58px height, a 20.16px Roboto title and icon, and approximately 20px horizontal padding. Grid cards have 13.44px gaps, 8px radius, subtle shadow, and 13.44px bold labels. The Loan hub is 983.13px wide with 235.70 by 63.83px cards; Savings is 998.46px wide with 239.53 by 63.83px cards because the Loan page's scrollbar reduces its content width. Wakandi uses a separate info action in each card; the action reveals a report description on hover. Clicking the rest of a card opens the report.
 
-The AIMSCAMS app keeps the v1.2.0 text scale requested by the user. Its report hub header is now 59px high and the local grid uses the measured 13.44px gap. At the same viewport, card positions and widths align within 1px, and card heights are 65.17px. The info control is separate from the report link and exposes the live description as a native help tooltip. Statement Reports now use the same shared hub as the other categories.
+The AIMSCAMS app keeps the v1.2.0 body text scale requested by the user (12.8px). The shared report hub uses the measured 59.58px header height, 13.44px grid gap, 63.83px card height, 8px radius, and subtle shadow. The info control is separate from the report link and exposes the description through its help tooltip. Statement Reports use the same shared hub as the other categories.
 
 ## Categories inspected
 
