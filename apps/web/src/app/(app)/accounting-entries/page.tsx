@@ -188,9 +188,6 @@ export default function JournalEntriesPage() {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setError(null);
-    setForbidden(false);
     listJournalEntries(filters)
       .then((page) => {
         if (!active) return;
@@ -234,12 +231,7 @@ export default function JournalEntriesPage() {
   }, []);
 
   useEffect(() => {
-    if (!entryId) {
-      setDetail(null);
-      setDetailError(null);
-      setPostError(null);
-      return;
-    }
+    if (!entryId) return;
     let active = true;
     setDetailLoading(true);
     setDetailError(null);
