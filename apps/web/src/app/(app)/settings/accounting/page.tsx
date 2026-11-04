@@ -60,6 +60,14 @@ const AMOUNT_LABELS: Record<PolicyAmount, string> = {
 };
 
 const AMOUNT_KEYS = Object.keys(AMOUNT_LABELS) as PolicyAmount[];
+const ACCOUNTING_TABS = [
+  "Inter Branch Setting",
+  "Financial Year",
+  "General Settings",
+  "Manage categories",
+  "Cash/Bank Accounts",
+  "Tax Rates",
+] as const;
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
   day: "2-digit",
@@ -99,6 +107,7 @@ export default function AccountingSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [forbidden, setForbidden] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<(typeof ACCOUNTING_TABS)[number]>(ACCOUNTING_TABS[0]);
 
   const [taxRate, setTaxRate] = useState("0");
   const [interBranch, setInterBranch] = useState(false);
@@ -277,10 +286,24 @@ export default function AccountingSettingsPage() {
         icon={<Calculator className="ml-[2px] mr-1 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />}
       />
 
-      <nav aria-label="Accounting settings" className="flex min-h-[54px] items-stretch border-b border-chrome bg-card">
-        <span aria-current="page" className="inline-flex items-center border-b-2 border-primary px-4 fs-text font-semibold text-primary">
-          Inter Branch Setting
-        </span>
+      <nav aria-label="Accounting settings" role="tablist" className="flex min-h-[45px] overflow-x-auto border-b border-chrome bg-subtle">
+        {ACCOUNTING_TABS.map((tab) => (
+          <button
+            key={tab}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === tab}
+            className={cn(
+              "inline-flex h-[45px] shrink-0 items-center border-b-2 px-4 text-[13.33px] font-medium",
+              activeTab === tab
+                ? "border-primary bg-card font-semibold text-primary"
+                : "border-transparent text-heading hover:bg-muted",
+            )}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </button>
+        ))}
       </nav>
 
       {forbidden ? (
@@ -291,26 +314,26 @@ export default function AccountingSettingsPage() {
         <ErrorPanel message={error} onRetry={() => void load(true)} />
       ) : data ? (
         <>
-          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+          {(activeTab === "Inter Branch Setting" || activeTab === "Tax Rates") ? <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
             <header className="flex flex-wrap items-start justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div>
                 <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <SlidersHorizontal className="size-4 text-brand" aria-hidden="true" />
-                  Statutory settings
+                  {activeTab === "Tax Rates" ? "Tax Rates" : "Inter Branch Setting"}
                 </h2>
                 <p className="mt-1 fs-text text-muted-foreground">
                   Applies to every branch of {data.organisation?.name ?? "this institution"}.
                 </p>
               </div>
-              <span className="fs-text text-muted-foreground">
+              {activeTab === "Tax Rates" ? <span className="fs-text text-muted-foreground">
                 {data.settings.updatedAt
                   ? `Updated ${displayDay(data.settings.updatedAt.slice(0, 10))}`
                   : "Never updated"}
-              </span>
+              </span> : null}
             </header>
 
             <div className="grid gap-[var(--space-18)] px-[var(--space-16)] py-[var(--space-14)] lg:grid-cols-2">
-              <div>
+              {activeTab === "Tax Rates" ? <div>
                 <label htmlFor="tax-rate" className="mb-1 block fs-text font-medium text-strong">
                   Tax rate (%)
                 </label>
@@ -327,9 +350,9 @@ export default function AccountingSettingsPage() {
                 <p className="mt-1 fs-text text-muted-foreground">
                   Whole or two-decimal percentage applied to taxable charges. Set 0 to disable.
                 </p>
-              </div>
+              </div> : null}
 
-              <div>
+              {activeTab === "Inter Branch Setting" ? <div>
                 <span className="mb-1 block fs-text font-medium text-strong">
                   Inter-branch ledger
                 </span>
@@ -362,7 +385,7 @@ export default function AccountingSettingsPage() {
                 <p className="mt-1 fs-text text-muted-foreground">
                   Keep this on only when each branch keeps its own due-to and due-from ledger.
                 </p>
-              </div>
+              </div> : null}
             </div>
 
             <div className="flex flex-wrap items-center gap-[var(--space-10)] border-t border-chrome px-[var(--space-16)] py-[var(--space-12)]">
@@ -372,9 +395,9 @@ export default function AccountingSettingsPage() {
               <FormError message={settingsError} />
               <SuccessNote message={settingsSaved} />
             </div>
-          </section>
+          </section> : null}
 
-          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+          {activeTab === "Financial Year" ? <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
             <header className="flex flex-wrap items-center justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div>
                 <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
@@ -451,14 +474,14 @@ export default function AccountingSettingsPage() {
                 </TableBody>
               </Table>
             )}
-          </section>
+          </section> : null}
 
-          <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+          {activeTab === "General Settings" ? <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
             <header className="flex flex-wrap items-center justify-between gap-[var(--space-10)] border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
               <div>
                 <h2 className="flex items-center gap-2 fs-text font-bold text-strong">
                   <Scale className="size-4 text-brand" aria-hidden="true" />
-                  Posting policies
+                  General Settings
                 </h2>
                 <p className="mt-1 fs-text text-muted-foreground">
                   Every edit adds a new version. Posted entries keep the version they used.
@@ -522,7 +545,18 @@ export default function AccountingSettingsPage() {
                 </TableBody>
               </Table>
             )}
-          </section>
+          </section> : null}
+
+          {activeTab === "Manage categories" || activeTab === "Cash/Bank Accounts" ? (
+            <section className="rounded-[var(--card-radius)] border border-card-border bg-card">
+              <div className="border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
+                <h2 className="fs-text font-bold text-strong">{activeTab}</h2>
+              </div>
+              <p className="px-[var(--space-16)] py-[var(--space-16)] fs-text text-muted-foreground">
+                This section is not available in the local accounting API yet.
+              </p>
+            </section>
+          ) : null}
         </>
       ) : null}
 

@@ -82,7 +82,7 @@ export function OrganisationSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"info" | "appearance">("info");
+  const [activeTab, setActiveTab] = useState<"info" | "security" | "appearance">("info");
   const [editingInfo, setEditingInfo] = useState(false);
   const savedAppearance = useSyncExternalStore(
     subscribeAppearancePreferences,
@@ -183,6 +183,9 @@ export function OrganisationSettingsPage() {
         <div role="tablist" aria-label="General settings sections" className="flex bg-tab-inactive">
           <button type="button" role="tab" id="general-info-tab" aria-selected={activeTab === "info"} aria-controls="general-info-panel" onClick={() => setActiveTab("info")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "info" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
             Info
+          </button>
+          <button type="button" role="tab" id="general-security-tab" aria-selected={activeTab === "security"} aria-controls="general-security-panel" onClick={() => setActiveTab("security")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "security" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
+            Security
           </button>
           <button type="button" role="tab" id="general-appearance-tab" aria-selected={activeTab === "appearance"} aria-controls="general-appearance-panel" onClick={() => setActiveTab("appearance")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "appearance" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
             Appearance
@@ -411,6 +414,15 @@ export function OrganisationSettingsPage() {
               Save settings
             </Button>
           </div>
+        </div>
+      ) : activeTab === "security" ? (
+        <div id="general-security-panel" role="tabpanel" aria-labelledby="general-security-tab" className="space-y-[var(--space-14)]">
+          <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+            <header className="flex flex-wrap items-center justify-between gap-3 border-b border-chrome px-[var(--space-16)] py-[var(--space-12)]">
+              <h2 className="fs-text font-bold text-strong">Security</h2>
+              <Button type="button" variant="outline" size="sm" disabled title="Security management is not available in the local settings API">New Security</Button>
+            </header>
+          </section>
         </div>
       ) : null}
     </div>

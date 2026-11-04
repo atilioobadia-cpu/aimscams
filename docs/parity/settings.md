@@ -20,3 +20,8 @@ Wakandi Settings navigation exposes General, Accounting, Branches, Products, Pol
 - Services: the reference page exposed its heading but no stable body content during this pass.
 
 The remaining subpages still need a per-page computed-style comparison and local verification. In particular, AIMSCAMS Accounting Settings has not yet been matched field by field with Wakandi's six tabs, and the Services body was not stable enough to measure. Do not treat the Settings navigation audit as complete until those comparisons and data-dependent row actions are verified.
+
+## Local implementation status
+
+- General now exposes the same Info, Security, and Appearance tab names. AIMSCAMS has no security-management endpoint, so its New Security control is visibly disabled rather than implying that it saves a record.
+- Accounting now exposes Wakandi's six tab names and keeps existing local behavior under Inter Branch Setting, Financial Year, General Settings, and Tax Rates. Manage categories and Cash/Bank Accounts show an explicit local-API availability state because the corresponding operations are missing. This improves navigation parity, but their content and actions still need backend support and a fresh live comparison.
