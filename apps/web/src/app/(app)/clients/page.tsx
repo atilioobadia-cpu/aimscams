@@ -80,14 +80,17 @@ export default function ClientsPage() {
   const [pageSize, setPageSize] = useState(10);
 
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("aimscams:clients:visible-columns");
+    const timer = window.setTimeout(() => {
+      try {
+        const stored = localStorage.getItem("aimscams:clients:visible-columns");
       if (stored) {
         const parsed: unknown = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.every((value) => defaultColumns.includes(value))) setVisibleColumns(parsed);
       }
-    } catch { /* ignore invalid local preference */ }
-  }, []);
+      } catch { /* ignore invalid local preference */ }
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [defaultColumns]);
 
   function toggleColumn(key: string) {
     setVisibleColumns((current) => {
