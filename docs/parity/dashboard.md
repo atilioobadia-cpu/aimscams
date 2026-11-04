@@ -34,3 +34,13 @@ The current chart heading's rendered text is `FundsInVsFundsOut` without spaces.
 4. Fix and remeasure until the objective's per-page thresholds are met; then attach final evidence and commit this page separately.
 
 This page is not complete or certified as a parity match.
+
+## AIMSCAMS interactive states observed
+
+- Overview tab: four KPI cards and charts render; the chart heading is exposed as `FundsInVsFundsOut` in the local UI tree. See the local issue candidate above.
+- Members tab: six filters render (Branch, Gender, Age, Client Type, Product, Date), eight KPI cards render, and the growth, recurring-member, registered-user, churn, demographic and churn-by-gender panels render. Local churn history and churn table show unavailable/empty states.
+- Branch filter: opened without applying. Condition is `Is`; value options are `All` and `Mwanza Demo Branch`; Clear and Apply are disabled until a selection is made. The popover was closed with Escape.
+- Loans tab: three KPI cards render; Disbursements by Product, Loan Application Stages and Loans Transactions Amount show local history-unavailable states; product-insights and PAR tables are empty; loss ratios show em dashes; guarantor exposure table is empty.
+- No Wakandi interactions or data mutations were performed in this local state check.
+
+The user goal still requires both apps' state and geometry to be measured at matching viewports, including hover, focus, keyboard/mouse interaction, and error/loading/empty states. The observations above are only the local side and do not meet that gate.
