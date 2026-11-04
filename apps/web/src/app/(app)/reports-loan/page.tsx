@@ -45,7 +45,7 @@ export default function LoanReportHubPage() {
         title="Loan Reports"
         icon={<BarChart3 className="size-6 text-primary" aria-hidden="true" />}
       />
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {reports.map((report) => (
           <Link
             key={report.href}
