@@ -31,3 +31,10 @@ At this viewport the document has no horizontal overflow: client width 1211px an
 5. Repeat at 1536 × 864 and 1920 × 1080; verify no horizontal overflow and capture console warnings/errors.
 
 This baseline does not certify any page or shared component as complete.
+
+## Additional AIMSCAMS shell states observed
+
+- Collapsed sidebar: 76px wide at x=0, y=64.67, h=494.67; footer remains 73.90px high. Main begins at x=76. The collapse control is 29 × 29px at x=47, y=462.94. At this state document width remains 1211px with no horizontal overflow.
+- Profile menu: 280px wide × 134.79px high at x=917.33, y=65.33; white surface, 6px radius, 4px padding, Roboto 12.8px/19.2px, and 0 2px 12px shadow. Its four menu items are each 272 × 27.20px with 4px 6px padding.
+- Pressing Escape closed the profile menu and restored focus to its trigger.
+- No Wakandi menu or collapsed-sidebar state was available for comparison in this pass; do not infer parity from the AIMSCAMS-only values.
