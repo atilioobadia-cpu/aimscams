@@ -62,7 +62,9 @@ export function TellerApprovalRequestPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const value = params.get("id");
-    if (value) setId(value);
+    if (!value) return;
+    const timer = window.setTimeout(() => setId(value), 0);
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -110,10 +112,7 @@ export function TellerApprovalRequestPage() {
   }, []);
 
   useEffect(() => {
-    if (!id) {
-      setRequest(null);
-      return;
-    }
+    if (!id) return;
     let cancelled = false;
     const timer = window.setTimeout(() => {
       setLoading(true);
