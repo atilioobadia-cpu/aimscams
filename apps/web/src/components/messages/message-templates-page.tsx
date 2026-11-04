@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Plus, Search, SlidersHorizontal } from "lucide-react";
+import { FileText, Search, SlidersHorizontal } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { MessageServiceShell } from "@/components/messages/message-service-shell";
@@ -99,21 +99,18 @@ export function MessageTemplatesPage() {
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 
       <section aria-label="Messages" className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-        <div className="flex min-h-[72px] flex-wrap items-center gap-2 border-b border-card-border p-3">
+        <div className="flex min-h-[64px] flex-wrap items-center gap-2 border-b border-card-border p-3">
           <label className="sr-only" htmlFor="template-name-filter">Name</label>
-          <div className="relative w-full max-w-[260px]">
+          <div className="relative w-[73px] max-w-[73px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input id="template-name-filter" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name" className="h-[42px] pl-9" />
+            <Input id="template-name-filter" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Name" className="h-[34px] !rounded-[6px] !border-primary pl-9" />
           </div>
           <label className="sr-only" htmlFor="template-type-filter">Type</label>
-          <select id="template-type-filter" value={channelFilter} onChange={(event) => setChannelFilter(event.target.value)} className="h-[42px] rounded-[var(--control-radius)] border border-primary bg-background px-3 fs-text font-medium text-primary">
-            <option>All types</option><option>SMS</option><option>Email</option>
+          <select id="template-type-filter" value={channelFilter} onChange={(event) => setChannelFilter(event.target.value)} style={{ width: 67 }} className="h-[34px] rounded-[6px] !border-primary bg-background px-2 fs-text font-medium text-primary">
+            <option value="All types">Type</option><option value="SMS">SMS</option><option value="Email">Email</option>
           </select>
-          <Button type="button" variant="outline" className="h-[42px] gap-2 border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary">
+          <Button type="button" variant="outline" className="h-[34px] gap-2 !rounded-[6px] !border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary">
             <SlidersHorizontal aria-hidden="true" />Add Filters
-          </Button>
-          <Button type="button" onClick={() => setCreateOpen(true)} variant="outline" className="ml-auto h-[42px] gap-2 border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary">
-            <Plus aria-hidden="true" />Create Template
           </Button>
         </div>
         {loading ? <div className="p-4"><PanelSkeleton rows={5} /></div> : null}
@@ -148,7 +145,7 @@ export function MessageTemplatesPage() {
         </form>
         </Modal>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1100px] text-left fs-text">
+          <table className="w-full min-w-[1160px] text-left fs-text">
               <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
                 <tr>
                   <th scope="col" className="whitespace-nowrap px-4 py-3">Name</th>

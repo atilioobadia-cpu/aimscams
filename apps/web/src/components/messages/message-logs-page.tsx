@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Inbox, Search } from "lucide-react";
+import { Inbox, Search, SlidersHorizontal } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { MessageServiceShell } from "@/components/messages/message-service-shell";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ApiError } from "@/lib/api";
 import { titleCase } from "@/lib/privacy";
@@ -25,6 +26,7 @@ export function MessageLogsPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All statuses");
   const [dateOrder, setDateOrder] = useState("Newest first");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -76,19 +78,32 @@ export function MessageLogsPage() {
       {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 
       <section aria-label="Delivery logs" className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-        <div className="flex min-h-[72px] flex-wrap items-center gap-2 border-b border-card-border p-3">
+        <div className="relative flex min-h-[64px] flex-wrap items-center gap-2 border-b border-card-border p-3">
           <label className="sr-only" htmlFor="message-log-date-filter">Date</label>
-          <select id="message-log-date-filter" value={dateOrder} onChange={(event) => setDateOrder(event.target.value)} className="h-[42px] rounded-[var(--control-radius)] border border-primary bg-background px-3 fs-text font-medium text-primary">
-            <option>Newest first</option><option>Oldest first</option>
+          <select id="message-log-date-filter" value={dateOrder} onChange={(event) => setDateOrder(event.target.value)} style={{ width: 72 }} className="h-[34px] rounded-[6px] !border-primary bg-background px-2 fs-text font-medium text-primary">
+            <option value="Newest first">Date</option><option value="Oldest first">Oldest first</option>
           </select>
-          <div className="relative w-full max-w-[260px]">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-            <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Recipient" aria-label="Filter message logs by recipient" className="h-[42px] pl-9" />
+          <div className="relative w-[160px]">
+            <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Recipient" aria-label="Filter message logs by recipient" className="h-[34px] !rounded-[6px] !border-primary pl-7" />
           </div>
-          <label className="sr-only" htmlFor="message-log-status-filter">Status filter</label>
-          <select id="message-log-status-filter" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="h-[42px] rounded-[var(--control-radius)] border border-primary bg-background px-3 fs-text font-medium text-primary">
-            <option>All statuses</option><option>Queued</option><option>Sent</option><option>Delivered</option><option>Failed</option>
-          </select>
+          <div className="relative">
+            <Button type="button" variant="outline" aria-expanded={filtersOpen} aria-haspopup="dialog" onClick={() => setFiltersOpen((open) => !open)} className="h-[34px] gap-2 !rounded-[6px] !border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary">
+              <SlidersHorizontal aria-hidden="true" />Add Filters
+            </Button>
+            {filtersOpen ? (
+              <div role="dialog" aria-label="Message log filters" className="absolute left-0 top-full z-20 mt-2 w-[260px] rounded-[6px] border border-card-border bg-card p-3 shadow-lg">
+                <label className="mb-1 block fs-text font-medium text-label" htmlFor="message-log-status-filter">Sending Status</label>
+                <select id="message-log-status-filter" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="h-[34px] w-full rounded-[6px] !border-primary bg-background px-2 fs-text text-body">
+                  <option>All statuses</option><option>Queued</option><option>Sent</option><option>Delivered</option><option>Failed</option>
+                </select>
+                <div className="mt-3 flex justify-end gap-2">
+                  <Button type="button" variant="ghost" onClick={() => setStatusFilter("All statuses")} className="h-[30px] px-2 text-primary">Clear</Button>
+                  <Button type="button" onClick={() => setFiltersOpen(false)} className="h-[30px] px-3">Apply</Button>
+                </div>
+              </div>
+            ) : null}
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1100px] text-left fs-text">
