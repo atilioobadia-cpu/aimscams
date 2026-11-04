@@ -33,8 +33,6 @@ export default function LoanDocumentsPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     void getLoan(id)
       .then(async (response) => {
         if (cancelled) return;
