@@ -1,4 +1,8 @@
-const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000").replace(/\/$/, "");
+const configuredApiBase = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:4000";
+// The local API binds to IPv4; normalizing localhost avoids browsers resolving it to ::1.
+const API_BASE = configuredApiBase
+  .replace(/^http:\/\/localhost(?=:\d|\/|$)/i, "http://127.0.0.1")
+  .replace(/\/$/, "");
 
 /**
  * Resolve an asset path returned by the API. Uploaded tenant logos are served from an
