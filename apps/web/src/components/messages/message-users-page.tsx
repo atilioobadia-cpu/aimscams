@@ -1,15 +1,21 @@
 "use client";
 
-import { Inbox, Search, SlidersHorizontal } from "lucide-react";
+import { Inbox, Search } from "lucide-react";
 import { useState } from "react";
 
 import { MessageServiceShell } from "@/components/messages/message-service-shell";
-import { Button } from "@/components/ui/button";
+import { MessageAdditionalFilters, type MessageFilterOption } from "@/components/messages/message-additional-filters";
 import { Input } from "@/components/ui/input";
+
+const USER_FILTER_OPTIONS: MessageFilterOption[] = [
+  { id: "email", label: "Email", placeholder: "Email" },
+];
 
 export function MessageUsersPage() {
   const [nameQuery, setNameQuery] = useState("");
   const [phoneQuery, setPhoneQuery] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [additionalFilterValues, setAdditionalFilterValues] = useState<Record<string, string>>({});
 
   return (
     <MessageServiceShell activeTab="Users">
@@ -23,9 +29,13 @@ export function MessageUsersPage() {
             <Search className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input value={phoneQuery} onChange={(event) => setPhoneQuery(event.target.value)} placeholder="Phone" aria-label="Filter message users by phone" className="h-[34px] !rounded-[6px] !border-primary pl-7" />
           </div>
-          <Button type="button" variant="outline" className="h-[34px] gap-2 !rounded-[6px] !border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary">
-            <SlidersHorizontal aria-hidden="true" />Add Filters
-          </Button>
+          <MessageAdditionalFilters
+            options={USER_FILTER_OPTIONS}
+            selected={selectedFilters}
+            values={additionalFilterValues}
+            onSelectedChange={setSelectedFilters}
+            onValueChange={(id, value) => setAdditionalFilterValues((current) => ({ ...current, [id]: value }))}
+          />
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[980px] text-left fs-text">

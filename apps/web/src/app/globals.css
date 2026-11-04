@@ -1059,6 +1059,65 @@ table.dashboard-parity-table td {
 }
 .requests-filter-option:hover { background: #f1f5f9; }
 .requests-filter-option input { width: 13px; height: 13px; accent-color: #057573; }
+.message-additional-filters {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.message-filter-options {
+  position: absolute;
+  top: calc(100% + 2.542px);
+  left: 0.792px;
+  z-index: 35;
+  display: flex;
+  width: 160.166px;
+  max-height: 243.864px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 0.667px solid #dee2e6;
+  border-radius: 4px;
+  background: #fff;
+  padding: 6.72px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+  color: #495057;
+  font: 400 13.44px/1.25 var(--font-roboto), Roboto, sans-serif;
+}
+.message-filter-option-list {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-top: 3px;
+}
+.message-filter-option {
+  display: flex;
+  min-height: 28px;
+  flex: 0 0 28px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 3px;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.message-filter-option:hover { background: #f1f5f9; }
+.message-filter-option input { width: 13px; height: 13px; accent-color: #057573; }
+.message-filter-value {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.message-filter-value > button {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 4px;
+  color: #6c757d;
+}
+.message-filter-value > button:hover { background: #f8fafc; color: #057573; }
 .requests-apply-filter {
   display: inline-flex;
   width: 30.24px;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText, Search, SlidersHorizontal } from "lucide-react";
+import { FileText, Search } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { MessageServiceShell } from "@/components/messages/message-service-shell";
@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { MessageAdditionalFilters, type MessageFilterOption } from "@/components/messages/message-additional-filters";
 import { ApiError } from "@/lib/api";
 import { titleCase } from "@/lib/privacy";
 import { createMessageTemplate, listMessageTemplates, type MessageTemplate, type MessageTemplateList } from "@/lib/messages";
@@ -19,6 +20,11 @@ function failureMessage(failure: unknown): string {
   return "Could not load templates.";
 }
 
+const TEMPLATE_FILTER_OPTIONS: MessageFilterOption[] = [
+  { id: "date", label: "Date", placeholder: "Date", type: "date" },
+  { id: "templateKey", label: "Template Key", placeholder: "Template Key" },
+];
+
 export function MessageTemplatesPage() {
   const [data, setData] = useState<MessageTemplateList | null>(null);
   const [loading, setLoading] = useState(true);
@@ -26,6 +32,8 @@ export function MessageTemplatesPage() {
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
   const [channelFilter, setChannelFilter] = useState("All types");
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [additionalFilterValues, setAdditionalFilterValues] = useState<Record<string, string>>({});
   const [name, setName] = useState("");
   const [key, setKey] = useState("");
   const [body, setBody] = useState("");
@@ -87,7 +95,9 @@ export function MessageTemplatesPage() {
     const q = query.trim().toLowerCase();
     const matchesQuery = !q || item.name.toLowerCase().includes(q) || item.key.toLowerCase().includes(q);
     const matchesChannel = channelFilter === "All types" || item.channel.toLowerCase() === channelFilter.toLowerCase();
-    return matchesQuery && matchesChannel;
+    const matchesTemplateKey = !selectedFilters.includes("templateKey") || !additionalFilterValues.templateKey || item.key.toLowerCase().includes(additionalFilterValues.templateKey.trim().toLowerCase());
+    const matchesDate = !selectedFilters.includes("date") || !additionalFilterValues.date || item.updatedAt.slice(0, 10) === additionalFilterValues.date;
+    return matchesQuery && matchesChannel && matchesTemplateKey && matchesDate;
   });
 
   if (forbidden) {
@@ -109,9 +119,13 @@ export function MessageTemplatesPage() {
           <select id="template-type-filter" value={channelFilter} onChange={(event) => setChannelFilter(event.target.value)} style={{ width: 67 }} className="h-[34px] rounded-[6px] !border-primary bg-background px-2 fs-text font-medium text-primary">
             <option value="All types">Type</option><option value="SMS">SMS</option><option value="Email">Email</option>
           </select>
-          <Button type="button" variant="outline" className="h-[34px] gap-2 !rounded-[6px] !border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary">
-            <SlidersHorizontal aria-hidden="true" />Add Filters
-          </Button>
+          <MessageAdditionalFilters
+            options={TEMPLATE_FILTER_OPTIONS}
+            selected={selectedFilters}
+            values={additionalFilterValues}
+            onSelectedChange={setSelectedFilters}
+            onValueChange={(id, value) => setAdditionalFilterValues((current) => ({ ...current, [id]: value }))}
+          />
         </div>
         {loading ? <div className="p-4"><PanelSkeleton rows={5} /></div> : null}
         <Modal open={createOpen} onClose={() => setCreateOpen(false)} title="Create Message Template" size="large" unsaved={Boolean(name || key || body)}>
