@@ -5,7 +5,7 @@ import { LoanOperationalReportPage } from "@/components/accounting/loan-operatio
 export const metadata: Metadata = { title: "Expected payment by date report · AIMSCAMS" };
 
 export default function Route() {
-  return <LoanOperationalReportPage title="Expected Payment By Date Report" filename="expected-payment-by-date-report.csv" columns={[
+  return <LoanOperationalReportPage catalogFilters title="Expected Payment By Date Report" filename="expected-payment-by-date-report.csv" columns={[
     "Account Number", "Client Name", "Loan Product", "Loan Officer", "Branch", "Group", "Due Date",
     "Principal Due", "Interest Due", "Fee Due", "Total Due", "Total Overdue",
   ]} />;

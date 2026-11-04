@@ -13,3 +13,11 @@ AIMSCAMS route: `/reports-loan-AccruedInterestReport`
 ## Measurement and verification
 
 Used the saved Wakandi capture and visible local Chrome route for structure and column ordering. Exact live DevTools measurements remain unavailable during the Wakandi SSO reCAPTCHA failure. No report data or production information was changed. Download exports only the known column headings while data is unavailable.
+
+- Enabled the branch, group, region, loan officer, and product selectors from local read-only catalogs to match the reference toolbar. The report data endpoint remains unavailable, so the result table stays empty and selections cannot query report rows yet.
+
+## Filter alignment update (2026-11-04)
+
+- Enabled the available local catalog-backed filter controls. Reference captures show these controls enabled.
+- Live Wakandi measurements remain unverified; the saved reference capture is dated 2026-10-29.
+- The local accrued-interest report endpoint is still missing, so filter submissions cannot return report rows.

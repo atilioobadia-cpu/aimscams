@@ -5,7 +5,7 @@ import { LoanOperationalReportPage } from "@/components/accounting/loan-operatio
 export const metadata: Metadata = { title: "Pending loan applications · AIMSCAMS" };
 
 export default function Route() {
-  return <LoanOperationalReportPage title="Pending Loan Applications" filename="pending-loan-applications.csv" dateMode="as-of" columns={[
+  return <LoanOperationalReportPage catalogFilters title="Pending Loan Applications" filename="pending-loan-applications.csv" dateMode="as-of" columns={[
     "Application Number", "Client Name", "Loan Product", "Loan Officer", "Branch", "Application Status", "Loan Status", "Application Stage Type", "Debt Capacity", "Description",
   ]} />;
 }

@@ -5,7 +5,7 @@ import { LoanOperationalReportPage } from "@/components/accounting/loan-operatio
 export const metadata: Metadata = { title: "Loan repayment schedule report · AIMSCAMS" };
 
 export default function Route() {
-  return <LoanOperationalReportPage
+  return <LoanOperationalReportPage catalogFilters
     title="Loan Repayment Schedule Report"
     filename="loan-repayment-schedule-report.csv"
     columns={[
