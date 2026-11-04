@@ -6,8 +6,8 @@ import { ArrowDownUp, ChevronDown, Download, Filter, SlidersHorizontal } from "l
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { listClients, listLoanOfficers, listLoanProducts } from "@/lib/settings";
-import { listBranches } from "@/lib/users";
+import { listClients, listLoanOfficers, listLoanProducts, listSavingsProducts } from "@/lib/settings";
+import { listBranches, listUsers } from "@/lib/users";
 
 function isoDate(date: Date) {
   const offset = date.getTimezoneOffset();
@@ -74,7 +74,7 @@ export function LoanOperationalReportPage({
   dateMode?: "range" | "as-of" | "none";
   filters?: string[];
   queryField?: { label: string; placeholder: string };
-  catalogFilters?: boolean;
+  catalogFilters?: boolean | "savings";
 }) {
   const initialDates = useMemo(() => {
     return getPeriodDates("Last 30 Days");
@@ -92,18 +92,41 @@ export function LoanOperationalReportPage({
   useEffect(() => {
     if (!catalogFilters) return;
     let active = true;
-    void Promise.allSettled([
-      listBranches(),
-      listClients({ type: "GROUP" }),
-      listLoanOfficers(),
-      listLoanProducts({ status: "ACTIVE" }),
-    ]).then(([branchesResult, groupsResult, officersResult, productsResult]) => {
-      if (!active) return;
+    void (async () => {
+      const [branchesResult, groupsResult] = await Promise.allSettled([
+        listBranches(),
+        listClients({ type: "GROUP" }),
+      ]);
       const branches = branchesResult.status === "fulfilled" ? branchesResult.value : [];
       const groups = groupsResult.status === "fulfilled" ? groupsResult.value.items : [];
-      const officers = officersResult.status === "fulfilled" ? officersResult.value.items : [];
-      const products = productsResult.status === "fulfilled" ? productsResult.value.items : [];
       const distinctRegions = [...new Set(branches.map((branch) => branch.region).filter(Boolean))];
+
+      if (catalogFilters === "savings") {
+        const [managersResult, savingsProductsResult] = await Promise.allSettled([
+          listUsers({ status: "ACTIVE", role: "BRANCH_MANAGER" }),
+          listSavingsProducts({ status: "ACTIVE" }),
+        ]);
+        if (!active) return;
+        const managers = managersResult.status === "fulfilled" ? managersResult.value : [];
+        const products = savingsProductsResult.status === "fulfilled" ? savingsProductsResult.value.items : [];
+        setFilterOptions({
+          Branch: branches.map((branch) => ({ value: branch.id, label: branch.name })),
+          Group: groups.map((group) => ({ value: group.id, label: group.fullName })),
+          Region: distinctRegions.map((region) => ({ value: region, label: region })),
+          Manager: managers.map((manager) => ({ value: manager.id, label: manager.fullName })),
+          Product: products.map((product) => ({ value: product.id, label: product.name })),
+          "Product Type": [],
+        });
+        return;
+      }
+
+      const [officersResult, loanProductsResult] = await Promise.allSettled([
+        listLoanOfficers(),
+        listLoanProducts({ status: "ACTIVE" }),
+      ]);
+      if (!active) return;
+      const officers = officersResult.status === "fulfilled" ? officersResult.value.items : [];
+      const products = loanProductsResult.status === "fulfilled" ? loanProductsResult.value.items : [];
       setFilterOptions({
         "MFSL MWANZA": branches.map((branch) => ({ value: branch.id, label: branch.name })),
         Group: groups.map((group) => ({ value: group.id, label: group.fullName })),
@@ -113,7 +136,7 @@ export function LoanOperationalReportPage({
         Branch: branches.map((branch) => ({ value: branch.id, label: branch.name })),
         Product: products.map((product) => ({ value: product.id, label: product.name })),
       });
-    });
+    })();
     return () => { active = false; };
   }, [catalogFilters]);
 
@@ -182,7 +205,7 @@ export function LoanOperationalReportPage({
               value={selectedFilters[label] ?? ""}
               options={filterOptions[label] ?? []}
               onChange={(value) => setSelectedFilters((current) => ({ ...current, [label]: value }))}
-              disabled={!catalogFilters}
+              disabled={!catalogFilters || (filterOptions[label] ?? []).length === 0}
             />
           ))}
           <div className="flex items-center gap-2">

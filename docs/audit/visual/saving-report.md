@@ -25,3 +25,7 @@ The current route does not implement the reference report structure and data con
 ## Implementation update (2026-11-03)
 
 Replaced the generic accounting balance page with the shared report title/download card, appropriate date and filter controls, Submit/Clear actions, and horizontally scrollable report table. Added columns based on the saved reference notes. Results remain empty where no matching local report endpoint exists; reference rows were not copied. AIMSCAMS was checked in the visible browser. Wakandi live DevTools values remain unverified because SSO reCAPTCHA blocks access.
+
+## Update (2026-11-04)
+
+Connected the Manager, Product, Branch, and Region selectors to the local active user, savings product, branch, and region catalogs. Added the Product Type control in the reference toolbar order; it is disabled because the local savings product API has no product-type field. The report query/data endpoint, sorting, and paging are still missing, so the table remains an empty presentation and selected filters do not fetch results. Current live Wakandi DevTools measurements were not captured in this pass; the saved reference is dated 2026-10-29.
