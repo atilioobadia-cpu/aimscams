@@ -148,7 +148,7 @@ export default function UsersPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, status, role, branchId]);
 
-  useEffect(() => setPage(1), [q, status, role, branchId, pageSize]);
+  useEffect(() => { const timer = window.setTimeout(() => setPage(1), 0); return () => window.clearTimeout(timer); }, [q, status, role, branchId, pageSize]);
 
   async function toggleStatus(user: UserSummary) {
     const next = user.status === "ACTIVE" ? "INACTIVE" : "ACTIVE";
