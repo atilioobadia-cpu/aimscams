@@ -133,9 +133,6 @@ export default function ClientGroupDetailPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
-    setForbidden(false);
 
     void Promise.all([
       getClient(id),
@@ -169,12 +166,7 @@ export default function ClientGroupDetailPage() {
 
   useEffect(() => {
     const query = memberSearch.trim();
-    if (!addMemberOpen || query.length < 2) {
-      setMemberCandidates([]);
-      setMemberCandidatesLoading(false);
-      setMemberCandidatesError(null);
-      return;
-    }
+    if (!addMemberOpen || query.length < 2) return;
 
     let cancelled = false;
     setMemberCandidatesLoading(true);
