@@ -126,18 +126,19 @@ export default function LedgerEntriesPage() {
   useEffect(() => {
     if (!accountsLoaded) return;
     if (!selectedAccountId) {
-      setPage({ account: null, openingMinor: "0", closingMinor: "0", total: 0, rows: [] });
-      setLoading(false);
-      return;
+      const timer = window.setTimeout(() => {
+        setPage({ account: null, openingMinor: "0", closingMinor: "0", total: 0, rows: [] });
+        setLoading(false);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
     let active = true;
-    setLoading(true);
-    setError(null);
-    setForbidden(false);
     if (fromValue > toValue) {
-      setError("The start date must be on or before the end date.");
-      setLoading(false);
-      return;
+      const timer = window.setTimeout(() => {
+        setError("The start date must be on or before the end date.");
+        setLoading(false);
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
     getLedger({
       accountId: selectedAccountId,
