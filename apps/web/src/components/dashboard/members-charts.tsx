@@ -271,16 +271,14 @@ export function ChurnedUsersChart() {
 
 function Doughnut({ title, segments }: { title: string; segments: Array<{ label: string; value: number; color: string }> }) {
   const total = segments.reduce((sum, segment) => sum + segment.value, 0);
-  let offset = 0;
   return (
     <ChartCard title={title} className="px-5 pt-9 pb-5">
       <div className="relative mt-4 flex h-[260px] items-center justify-center">
         {total > 0 ? (
           <svg viewBox="0 0 120 120" className="h-[220px] w-[220px] -rotate-90">
-            {segments.map((segment) => {
+            {segments.map((segment, index) => {
               const length = (segment.value / total) * 376.99;
-              const dashOffset = offset;
-              offset += length;
+              const dashOffset = segments.slice(0, index).reduce((sum, item) => sum + (item.value / total) * 376.99, 0);
               return <circle key={segment.label} cx="60" cy="60" r="60" fill="none" stroke={segment.color} strokeWidth="24" strokeDasharray={`${length} 376.99`} strokeDashoffset={-dashOffset} />;
             })}
             <circle cx="60" cy="60" r="48" fill="var(--bg-surface)" />
