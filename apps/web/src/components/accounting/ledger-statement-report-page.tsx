@@ -38,7 +38,7 @@ export function LedgerStatementReportPage() {
   }, []);
 
   useEffect(() => {
-    if (!accountId) { setData(null); return; }
+    if (!accountId) return;
     let cancelled = false;
     const timer = window.setTimeout(() => {
       setLoading(true);
