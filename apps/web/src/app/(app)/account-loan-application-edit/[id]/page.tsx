@@ -29,8 +29,6 @@ export default function EditLoanApplicationPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     void getLoanApplication(id)
       .then((response) => {
         if (cancelled) return;
