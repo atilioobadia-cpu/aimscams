@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AlertTriangle, BookText, CheckCircle2, CloudUpload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -110,16 +110,17 @@ export function TransactionImportWizardPage() {
   const [committing, setCommitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ImportResult | null>(null);
-  const [reference, setReference] = useState(`TXN-IMP-${Date.now()}`);
+  const [reference, setReference] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const rows = mapTransactionRows(dataRows, fieldMap);
+  const rows = useMemo(() => mapTransactionRows(dataRows, fieldMap), [dataRows, fieldMap]);
   const validRows = rows.filter((row) => row.valid);
   const invalidRows = rows.filter((row) => !row.valid);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
+    setReference((current) => current || `TXN-IMP-${Date.now()}`);
     setParseError(null);
     setFileName(null);
     setHeaders([]);
