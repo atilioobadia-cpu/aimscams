@@ -50,6 +50,16 @@ function message(failure: unknown, fallback: string): string {
   return fallback;
 }
 
+const branchHeaderCellStyle = {
+  height: "17px",
+  paddingTop: "4px",
+  paddingBottom: "4px",
+  lineHeight: "normal",
+  fontSize: "13.44px",
+  fontWeight: 700,
+  color: "#495057",
+} as const;
+
 export function BranchListPage() {
   const [data, setData] = useState<BranchListResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -130,28 +140,28 @@ export function BranchListPage() {
   }
 
   return (
-    <div className="space-y-[var(--space-14)]">
-      <section className="flex min-h-[90px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-24)]">
-        <Building2 className="mr-3 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />
-        <h1 className="fs-title font-semibold text-heading">Branches</h1>
+    <div className="space-y-[8px]">
+      <div className="space-y-[25px]">
+      <section className="flex min-h-[65px] shrink-0 items-center pl-[50px] pr-5">
+        <h1 className="fs-title text-[20.16px] font-semibold text-heading">Branches</h1>
         {canCreate ? (
-          <Button asChild variant="outline" className="ml-auto h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary">
+          <Button asChild variant="outline" className="ml-auto h-[29px] rounded-[6px] border-primary px-3 text-[11.76px] text-primary hover:bg-primary-tint hover:text-primary">
             <Link href="/settings/branches/new"><Plus className="size-4" aria-hidden="true" />New Branch</Link>
           </Button>
         ) : null}
       </section>
 
-      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-        <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
-          <label className="relative block w-[240px] max-w-full">
+      <section className="overflow-visible">
+        <div className="flex min-h-[42px] flex-wrap items-center gap-2 px-[10px]">
+          <label className="relative block w-[191px] max-w-full">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
-            <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" aria-label="Search branches" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" />
+            <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" aria-label="Search branches" className="h-[34px] rounded-[6px] border-primary pl-10 text-[13.44px] text-primary placeholder:text-primary" />
           </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button type="button" variant="outline" className="h-[42px] min-w-[168px] justify-between border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary">
-                <span className="flex items-center gap-2"><Plus className="size-4" aria-hidden="true" />Add Filters</span>
-                <ChevronDown className="size-4" aria-hidden="true" />
+              <Button type="button" variant="outline" className="h-[32px] w-[132px] min-w-[132px] justify-between gap-1 rounded-[6px] border-primary px-2 text-[11.76px] text-primary hover:bg-primary-tint hover:text-primary">
+                <span className="flex items-center gap-1"><Plus className="size-3.5" aria-hidden="true" />Add Filters</span>
+                <ChevronDown className="size-3.5" aria-hidden="true" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
@@ -169,6 +179,7 @@ export function BranchListPage() {
           </div>
         ) : null}
       </section>
+      </div>
 
       {forbidden ? (
         <ForbiddenPanel message="Your role cannot view branches. Ask an administrator for Settings Branch : View." />
@@ -203,18 +214,18 @@ export function BranchListPage() {
           }
         />
       ) : (
-        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
+          <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
             <Table className="min-w-[980px]">
-              <TableHeader className="bg-subtle fs-text font-semibold text-label">
-                <TableRow className="h-[44px] hover:bg-subtle">
-                  <TableHead className="w-[22%] px-4 !py-2">Branch Name</TableHead>
-                  <TableHead className="w-[13%] px-4 !py-2">Branch Code</TableHead>
-                  <TableHead className="w-[19%] px-4 !py-2">Address</TableHead>
-                  {showRegion ? <TableHead className="px-4 !py-2">Region</TableHead> : null}
-                  {showDistrict ? <TableHead className="px-4 !py-2">District</TableHead> : null}
-                  {showWard ? <TableHead className="px-4 !py-2">Ward</TableHead> : null}
-                  <TableHead className="w-14 !py-2 text-right">
+              <TableHeader className="bg-subtle text-[13.44px] font-bold text-[#495057]">
+                <TableRow className="h-[37px] hover:bg-subtle">
+                  <TableHead className="w-[22%] px-4" style={branchHeaderCellStyle}>Branch Name</TableHead>
+                  <TableHead className="w-[13%] px-4" style={branchHeaderCellStyle}>Branch Code</TableHead>
+                  <TableHead className="w-[19%] px-4" style={branchHeaderCellStyle}>Address</TableHead>
+                  {showRegion ? <TableHead className="px-4" style={branchHeaderCellStyle}>Region</TableHead> : null}
+                  {showDistrict ? <TableHead className="px-4" style={branchHeaderCellStyle}>District</TableHead> : null}
+                  {showWard ? <TableHead className="px-4" style={branchHeaderCellStyle}>Ward</TableHead> : null}
+                  <TableHead className="w-14 text-right" style={branchHeaderCellStyle}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button type="button" variant="ghost" size="icon-sm" aria-label="Table columns" className="text-primary"><SlidersHorizontal className="size-4" aria-hidden="true" /></Button>
@@ -230,16 +241,16 @@ export function BranchListPage() {
               </TableHeader>
               <TableBody>
                 {branches.map((branch) => (
-                  <TableRow key={branch.id} className="h-[67px] border-b border-chrome [&>td]:!py-3">
-                    <TableCell className="px-4 fs-text text-body">
+                  <TableRow key={branch.id} className="h-[52px] border-b border-chrome [&>td]:!py-2">
+                    <TableCell className="px-4 text-[13.44px] text-body">
                       <Link href={`/settings/branches/${branch.id}`} className="font-medium text-body hover:text-primary hover:underline">{branch.name}</Link>
-                      {branch.isDefault ? <span className="ml-2 fs-text text-primary">(default)</span> : null}
+                      {branch.isDefault ? <span className="ml-2 text-[13.44px] text-primary">(default)</span> : null}
                     </TableCell>
-                    <TableCell className="px-4 fs-text text-body">{branch.code || "N/A"}</TableCell>
-                    <TableCell className="px-4 fs-text text-body">{branch.addressLine || "N/A"}</TableCell>
-                    {showRegion ? <TableCell className="px-4 fs-text text-body">{branch.region || "N/A"}</TableCell> : null}
-                    {showDistrict ? <TableCell className="px-4 fs-text text-body">{branch.district || "N/A"}</TableCell> : null}
-                    {showWard ? <TableCell className="px-4 fs-text text-body">{branch.ward || "N/A"}</TableCell> : null}
+                    <TableCell className="px-4 text-[13.44px] text-body">{branch.code || "N/A"}</TableCell>
+                    <TableCell className="px-4 text-[13.44px] text-body">{branch.addressLine || "N/A"}</TableCell>
+                    {showRegion ? <TableCell className="px-4 text-[13.44px] text-body">{branch.region || "N/A"}</TableCell> : null}
+                    {showDistrict ? <TableCell className="px-4 text-[13.44px] text-body">{branch.district || "N/A"}</TableCell> : null}
+                    {showWard ? <TableCell className="px-4 text-[13.44px] text-body">{branch.ward || "N/A"}</TableCell> : null}
                     <TableCell className="w-14 bg-subtle/40 px-2 text-right"><RowActionsMenu label={branch.name} actions={actionsFor(branch)} /></TableCell>
                   </TableRow>
                 ))}

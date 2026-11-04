@@ -25,6 +25,21 @@ function formatDate(value: string): string {
 type ImportKind = "MEMBER" | "ACCOUNT" | "TRANSACTION";
 type ImportEntity = "Member" | "Account" | "Transaction";
 
+const IMPORT_STATUS_FILTERS = ["Uploaded", "In Progress", "New", "Verified", "Submitted", "Error", "Success", "Archive", "Deleted", "Deleting", "Pending"];
+
+function importStatusLabel(value: string): string {
+  const normalized = value.trim().toUpperCase().replaceAll(/[ _-]+/g, " ");
+  const aliases: Record<string, string> = {
+    COMPLETED: "Success",
+    COMPLETE: "Success",
+    FAILED: "Error",
+    PROCESSING: "In Progress",
+    "IN PROGRESS": "In Progress",
+    ARCHIVED: "Archive",
+  };
+  return aliases[normalized] ?? titleCase(value.replaceAll("_", " "));
+}
+
 function downloadTemplate(entity: ImportEntity) {
   const headers = entity === "Member" ? "referenceNo,fullName,clientType,phone,nationalId" : entity === "Account" ? "accountNumber,clientId,accountType,balanceMinor" : "transactionNo,type,amountMinor,clientId";
   const blob = new Blob([`${headers}\n`], { type: "text/csv;charset=utf-8" });
@@ -44,6 +59,7 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
   const [reloadKey, setReloadKey] = useState(0);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("");
+  const [draftStatus, setDraftStatus] = useState("");
   const [visibleColumns, setVisibleColumns] = useState<Set<string> | null>(null);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -81,7 +97,7 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
   const items = useMemo(() => (data?.items ?? []).filter((item) => {
     const search = query.trim().toLowerCase();
     const matchesSearch = !search || [item.reference, item.fileName, item.id].some((value) => value.toLowerCase().includes(search));
-    const matchesStatus = !status || titleCase(item.status) === status;
+    const matchesStatus = !status || importStatusLabel(item.status) === status;
     const created = new Date(item.createdAt);
     const matchesFrom = !fromDate || created >= new Date(`${fromDate}T00:00:00`);
     const toDateExclusive = toDate ? new Date(`${toDate}T00:00:00`) : null;
@@ -113,27 +129,42 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col">
       <PageTitle entity={entity} />
 
-      {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
+      {error ? <div className="mt-4"><ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /></div> : null}
 
-      <section aria-label={`${entity} import batches`} className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-        <div className="flex min-h-[72px] flex-wrap items-center gap-2 border-b border-card-border p-3">
-          <div className="relative w-full max-w-[240px]">
+      <section aria-label={`${entity} import batches`} className="mt-[35px] overflow-x-hidden">
+        <div className="flex min-h-[56px] flex-wrap items-center gap-[7.5px] rounded-[6px] border border-card-border bg-card p-2.5">
+          <div className="relative w-full max-w-[191px]">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
-            <Input aria-label={`Search ${entity.toLowerCase()} imports`} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" />
+            <Input aria-label={`Search ${entity.toLowerCase()} imports`} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[35px] border-primary pl-10 text-primary placeholder:text-primary" />
           </div>
-          <label className="sr-only" htmlFor="member-import-status">Status filter</label>
-          <select id={`import-${kind.toLowerCase()}-status`} value={status} onChange={(event) => setStatus(event.target.value)} style={{ width: 96 }} className="h-[42px] rounded-[var(--control-radius)] border border-primary bg-background px-3 fs-text font-medium text-primary outline-none transition-colors hover:bg-primary/5 focus-visible:ring-2 focus-visible:ring-ring/50">
-            <option value="">Status</option>
-            {[...new Set((data?.items ?? []).map((item) => titleCase(item.status)))].map((value) => <option key={value}>{value}</option>)}
-          </select>
           <details className="relative">
-            <summary className="flex h-[42px] cursor-pointer list-none items-center gap-2 rounded-[var(--control-radius)] border border-primary bg-background px-3 fs-text font-medium text-primary transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
-              <Plus className="size-4" aria-hidden="true" />Add Filters<ChevronDown className="size-4" aria-hidden="true" />
+            <summary aria-label="Filter by Status" className="flex h-[35px] w-[75.53px] cursor-pointer list-none items-center justify-between gap-[6.72px] rounded-[6px] border border-primary !bg-white px-[8.4px] text-[11.76px] font-medium leading-[17.64px] text-primary transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
+              Status<ChevronDown className="size-3.5" aria-hidden="true" />
             </summary>
-            <div className="absolute left-0 top-full z-20 mt-2 w-[260px] space-y-3 rounded-md border border-card-border bg-card p-3 shadow-lg">
+            <div className="absolute left-0 top-full z-30 mt-1 w-[260px] rounded-md border border-card-border bg-card p-3 shadow-lg">
+              <label className="mb-3 block space-y-1 fs-caption text-label">Condition
+                <select aria-label="Status condition" value="Is" disabled className="h-[35px] w-full rounded-[6px] border border-card-border bg-background px-2.5 fs-text text-body"><option>Is</option></select>
+              </label>
+              <label className="block space-y-1 fs-caption text-label">Value
+                <select aria-label="Status value" value={draftStatus} onChange={(event) => setDraftStatus(event.target.value)} className="h-[35px] w-full rounded-[6px] border border-card-border bg-background px-2.5 fs-text text-body">
+                  <option value="">Select value</option>
+                  {IMPORT_STATUS_FILTERS.map((value) => <option key={value} value={value}>{value}</option>)}
+                </select>
+              </label>
+              <div className="mt-3 flex justify-end gap-2">
+                <button type="button" disabled={!status && !draftStatus} onClick={(event) => { setStatus(""); setDraftStatus(""); event.currentTarget.closest("details")?.removeAttribute("open"); }} className="h-[29px] rounded-[6px] border border-card-border px-2.5 fs-caption text-body disabled:cursor-not-allowed disabled:opacity-50">Clear</button>
+                <button type="button" disabled={!draftStatus} onClick={(event) => { setStatus(draftStatus); event.currentTarget.closest("details")?.removeAttribute("open"); }} className="h-[29px] rounded-[6px] border border-primary bg-primary px-2.5 fs-caption font-medium text-white disabled:cursor-not-allowed disabled:opacity-50">Apply</button>
+              </div>
+            </div>
+          </details>
+          <details className="relative">
+            <summary className="flex h-[35px] w-[132.1px] cursor-pointer list-none items-center justify-between gap-[6.72px] rounded-[6px] border border-primary !bg-white px-[8.4px] text-[11.76px] font-medium leading-[17.64px] text-primary transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50">
+              <Plus className="size-3.5" aria-hidden="true" />Add Filters<ChevronDown className="size-3.5" aria-hidden="true" />
+            </summary>
+            <div className="absolute left-0 top-full z-20 mt-1 w-[260px] space-y-3 rounded-md border border-card-border bg-card p-3 shadow-lg">
               <label className="block space-y-1 fs-caption text-label">From date<Input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="h-[38px]" /></label>
               <label className="block space-y-1 fs-caption text-label">To date<Input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="h-[38px]" /></label>
             </div>
@@ -143,14 +174,14 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
         {loading ? (
           <PanelSkeleton rows={6} />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1180px] table-fixed text-left fs-text">
+          <div className="overflow-x-auto bg-card">
+            <table className="w-full min-w-[997px] table-fixed text-left fs-text">
               <thead className="border-b border-card-border bg-subtle font-semibold text-label">
                 <tr>
-                  {displayedColumns.map((column) => <th key={column.label} scope="col" className={`${column.widthClass} px-4 py-3`}>{column.label}</th>)}
+                  {displayedColumns.map((column) => <th key={column.label} scope="col" style={{ height: 38.95, padding: "8.45px 13.44px" }} className={`${column.widthClass}`}>{column.label}</th>)}
                   <th scope="col" className="relative w-[4%] px-2 py-1 text-center"><span className="sr-only">Actions</span>
                     <details className="relative inline-block text-left">
-                      <summary className="flex size-7 cursor-pointer list-none items-center justify-center rounded-[var(--control-radius)] text-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50" aria-label="Table columns"><SlidersHorizontal className="size-4" aria-hidden="true" /></summary>
+                      <summary className="flex size-4 cursor-pointer list-none items-center justify-center rounded-[var(--control-radius)] text-primary hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50" aria-label="Table columns"><SlidersHorizontal className="size-4" aria-hidden="true" /></summary>
                       <div className="absolute right-0 top-full z-30 mt-1 w-52 rounded-md border border-card-border bg-card p-2 shadow-lg">
                         {columns.map((column) => <label key={column.label} className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 fs-caption text-body hover:bg-subtle"><input type="checkbox" checked={shownColumns.has(column.label)} onChange={() => setVisibleColumns((current) => { const next = new Set(current ?? columns.map((item) => item.label)); next.has(column.label) ? next.delete(column.label) : next.add(column.label); return next; })} />{column.label}</label>)}
                       </div>
@@ -160,10 +191,10 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
               </thead>
               <tbody>
                 {items.length === 0 ? (
-                  <tr><td colSpan={displayedColumns.length + 1} className="h-[216px] px-4 text-center text-muted-foreground"><div className="mx-auto flex max-w-sm flex-col items-center gap-4"><Upload className="size-12" aria-hidden="true" /><span>{query || status || fromDate || toDate ? "No import batches match these filters." : "No data available"}</span></div></td></tr>
+                  <tr><td colSpan={displayedColumns.length + 1} style={{ height: 171.2, padding: "10.08px 13.44px" }} className="text-center text-muted-foreground"><div className="mx-auto flex max-w-sm flex-col items-center gap-3"><Upload className="size-9" aria-hidden="true" /><span>{query || status || fromDate || toDate ? "No import batches match these filters." : "No data available"}</span></div></td></tr>
                 ) : items.map((item: ImportBatch) => (
-                  <tr key={item.id} className="h-[67px] border-b border-card-border last:border-0">
-                    {displayedColumns.map((column) => <td key={column.label} className={`${column.widthClass} whitespace-nowrap px-4 py-3 text-body ${column.className ?? ""}`} title={column.label === "File" ? item.fileName : column.label === "Batch Reference Id" ? item.reference : undefined}>{column.render(item)}</td>)}
+                  <tr key={item.id} className="h-[52px] border-b border-card-border last:border-0">
+                    {displayedColumns.map((column) => <td key={column.label} style={{ padding: "10.08px 13.44px" }} className={`${column.widthClass} whitespace-nowrap text-body ${column.className ?? ""}`} title={column.label === "File" ? item.fileName : column.label === "Batch Reference Id" ? item.reference : undefined}>{column.render(item)}</td>)}
                     <td className="px-3 py-3 text-right text-muted-foreground">—</td>
                   </tr>
                 ))}
@@ -179,12 +210,12 @@ export function ImportBatchesPage({ kind, entity }: { kind: ImportKind; entity: 
 function PageTitle({ entity }: { entity: ImportEntity }) {
   const TitleIcon = entity === "Account" ? Wallet : entity === "Transaction" ? ReceiptText : UserRound;
   return (
-    <section className="flex min-h-[88px] flex-wrap items-center justify-between gap-4 rounded-[var(--card-radius)] border border-card-border bg-card px-5 py-4">
-      <div className="flex items-center gap-3"><TitleIcon className="size-6 shrink-0 text-primary" aria-hidden="true" /><h1 className="fs-title font-semibold text-heading">{entity} Import</h1></div>
+    <header className="mt-5 flex h-[29px] flex-wrap items-center justify-between gap-4 px-5">
+      <div className="flex items-center gap-2.5"><TitleIcon className="size-5 shrink-0 text-primary" aria-hidden="true" /><h1 className="relative -top-0.5 fs-title font-semibold text-heading">{entity} Import</h1></div>
       <div className="flex flex-wrap items-center gap-2">
-        <Button asChild type="button" variant="outline" className="border-primary text-primary hover:bg-primary/5 hover:text-primary"><Link href={`/import-${entity.toLowerCase()}-new`}><Upload aria-hidden="true" />Upload {entity}</Link></Button>
-        <Button type="button" variant="outline" onClick={() => downloadTemplate(entity)} className="border-primary text-primary hover:bg-primary/5 hover:text-primary"><Download aria-hidden="true" />{entity} Template</Button>
+        <Button asChild type="button" variant="outline" className="h-[29px] rounded-[6px] !border-primary !px-[8.4px] !text-[11.76px] !leading-[14px] !gap-[6.72px] text-primary hover:bg-primary/5 hover:text-primary [&_svg]:!size-[11.76px]"><Link href={`/import-${entity.toLowerCase()}-new`}><Upload aria-hidden="true" />Upload {entity}</Link></Button>
+        <Button type="button" variant="outline" onClick={() => downloadTemplate(entity)} className="h-[29px] rounded-[6px] !border-primary !px-[8.4px] !text-[11.76px] !leading-[14px] !gap-[6.72px] text-primary hover:bg-primary/5 hover:text-primary [&_svg]:!size-[11.76px]"><Download aria-hidden="true" />{entity} Template</Button>
       </div>
-    </section>
+    </header>
   );
 }
