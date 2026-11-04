@@ -34,7 +34,7 @@ function TablePanel({ title, columns, rows, search = false, emptyMessage = "No l
         ) : null}
       </div>
       <div className="overflow-x-auto px-5 pb-5">
-        <table className="w-full min-w-[540px] text-left fs-text">
+        <table className="dashboard-parity-table w-full min-w-[540px] text-left fs-text">
           <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
             <tr>
               {columns.map((column) => (
@@ -128,17 +128,17 @@ export function LoansView({
   const chargeOff = hasDisbursed ? `${((defaultedPrincipal * 10000n) / amountDisbursed / 100n)}%` : "—";
 
   return (
-    <div className="mt-[14px] space-y-[14px]">
+    <div className="mt-[20.16px] flex flex-col gap-[13.44px] pb-[26.88px]">
       <DashboardFilterBar filters={filters} branches={branches} products={products} onChange={onFilterChange} />
-      <section className="grid grid-cols-1 gap-[14.667px] sm:grid-cols-3" aria-label="Loan metrics">
+      <section className="grid grid-cols-1 gap-[13.44px] sm:grid-cols-3" aria-label="Loan metrics">
         {kpis.map((kpi) => <StatCard key={kpi.id} kpi={kpi} />)}
       </section>
-      <div className="grid grid-cols-1 gap-[14.667px] lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-[20.16px] lg:grid-cols-2">
         <DisbursementsByProductChart />
         <LoanApplicationStagesChart />
       </div>
       <LoansTransactionsAmountChart loans={loans} />
-      <div className="space-y-[14px]">
+      <div className="space-y-[13.44px]">
         <TablePanel
           title="Loan Product Insights"
           columns={["Product(s)", "Number of Loans", "Number of Defaults", "Average Period"]}

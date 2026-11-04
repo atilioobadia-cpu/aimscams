@@ -25,7 +25,7 @@ export function ChartCard({
     <section
       data-testid={testId}
       data-source={dataSource}
-      className={cn("rounded-[var(--card-radius)] border border-card-border bg-surface px-[21.33px] py-[21.33px] min-h-[494.67px]", className)}
+      className={cn("rounded-[6px] border border-card-border bg-surface p-[20.16px] min-h-[495.58px]", className)}
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>

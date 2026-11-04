@@ -132,25 +132,25 @@ export function MembersView({
   ];
 
   return (
-    <div className="mt-[14px] space-y-[14px]">
+    <div className="mt-[20.16px] flex flex-col gap-[13.44px] pb-[26.88px]">
       <DashboardFilterBar filters={filters} branches={branches} products={products} onChange={onFilterChange} />
       <MemberGrowthChart clients={clients} />
       <KpiGrid kpis={kpis} />
       <NewVsRecurringChart clients={clients} />
       <RegisteredUsersChart clients={clients} />
       <ChurnedUsersChart />
-      <div className="grid grid-cols-1 gap-[14.667px] lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-[20.16px] lg:grid-cols-2">
         <GenderDoughnut clients={clients} />
         <AgeBandsChart clients={clients} />
         <DisabilityDoughnut clients={clients} />
         <ImpairmentDoughnut clients={clients} />
       </div>
-      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+      <section className="min-h-[254.77px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="flex min-h-[58px] flex-wrap items-center justify-between gap-3 px-5 pt-4">
           <h2 className="fs-text font-bold text-strong">Churned Members by Gender</h2>
         </div>
         <div className="overflow-x-auto px-5 pb-5">
-          <table className="w-full min-w-[540px] text-left fs-text">
+          <table className="dashboard-parity-table w-full min-w-[540px] text-left fs-text">
             <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
               <tr>
                 <th className="whitespace-nowrap px-3 py-2.5 text-left">Gender</th>

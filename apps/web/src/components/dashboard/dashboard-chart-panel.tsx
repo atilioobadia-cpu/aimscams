@@ -46,7 +46,7 @@ export function DashboardChartPanel({
     : "";
 
   return (
-    <ChartCard title={title} className="px-5 pt-9 pb-5">
+    <ChartCard title={title} className="p-[20.16px]">
       <div className={`relative mt-4 ${chartHeight}`}>
         <div className="absolute inset-y-3 left-[68px] right-0 flex flex-col justify-between">
           {[0, 1, 2, 3, 4].map((line) => (

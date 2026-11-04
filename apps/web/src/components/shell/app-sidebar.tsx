@@ -342,7 +342,7 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
       data-state={collapsed ? "collapsed" : "expanded"}
       aria-label="Sidebar"
       style={{ width: "var(--sidebar-width)" }}
-      className="fixed bottom-0 left-0 top-[var(--header-height)] z-40 flex flex-col border-r border-chrome bg-surface transition-[width] duration-200"
+      className="fixed bottom-0 left-0 top-[var(--header-height)] z-40 flex flex-col border-r border-chrome bg-surface transition-[width] duration-300"
     >
       <nav
         id="app-sidebar-nav"

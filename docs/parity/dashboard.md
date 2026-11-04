@@ -1,46 +1,42 @@
-# Dashboard parity baseline
+# Dashboard parity pass
 
-Status: incomplete. AIMSCAMS was inspected live, but no current Wakandi dashboard comparison could be made in this pass because the available Wakandi tab is at SSO. The local values below are evidence for the AIMSCAMS side only.
+Status: measured layout match at the available desktop width; typography and live data remain intentionally different or data-dependent. Wakandi was inspected read-only in visible Chrome. AIMSCAMS uses local sample data only.
 
-## AIMSCAMS live baseline
+## Live measurement conditions
 
-Route: `/dashboard`
-CSS viewport: 1211.33 × 559.33 px
-Device pixel ratio: 1.5
-Measurement method: visible Chrome tab, `getBoundingClientRect()` and `getComputedStyle()`.
+Routes: `/dashboard` in both applications. Measurement used `getBoundingClientRect()` and `getComputedStyle()` in the visible Chrome tabs. Both CSS viewports were 1225px wide; Wakandi was 567px tall at DPR 1, AIMSCAMS was 623px tall at DPR 1.5. The viewport control did not align their heights, so vertical shell heights are not directly comparable. Content y positions and widths are comparable.
 
-| Element | AIMSCAMS rect (x, y, w, h) | AIMSCAMS computed values | Wakandi | Difference |
-|---|---:|---|---|---|
-| Main content | 200, 0, 1011.33, 1425.97 | left margin 200px; top padding 64.67px | Not measured this pass | Not available |
-| Dashboard content wrapper | 200, 64.67, 1011.33, 1361.30 | padding 14px 13.33px 84px | Not measured this pass | Not available |
-| View tabs | 233.99, 97.32, 304.96, 32 | 5px radius; 7.65px gap | Not measured this pass | Not available |
-| Active overview panel | 213.32, 161.99, 984.69, 1179.98 | top margin 14px | Not measured this pass | Not available |
-| KPI cards (each) | first: 213.32, 161.99, 235.17, 123.32; four in row | white; 0.67px `#dee2e6` border; 8px radius; 20px padding | Not measured this pass | Not available |
-| Funds in/out chart card | 213.32, 299.31, 984.69, 494.67 | white; 0.67px `#dee2e6` border; 8px radius; 21.33px padding | Not measured this pass | Not available |
-| Savings/loans card | 213.32, 807.98, 485.01, 494.67 | white; 0.67px border; 8px radius; 21.33px padding | Not measured this pass | Not available |
-| PAR card | 713, 807.98, 485.01, 494.67 | white; 0.67px border; 8px radius; 21.33px padding | Not measured this pass | Not available |
+## Reference geometry and AIMSCAMS verification
 
-The document has no horizontal overflow at this viewport (client/scroll width 1211px). The page scroll height is 1426px. No warning/error entries were returned by the visible tab's collected console log window. This is not proof that all dashboard states or breakpoints are clean.
+| Element | Wakandi | AIMSCAMS after fix |
+|---|---:|---:|
+| Header | `(0, 0, 1225.33, 64.67)` | same |
+| Expanded sidebar | `(0, 64.67, 200, 502.67)` | `(0, 64.67, 200, 558.67)` due viewport height |
+| Main content viewport | `x=200, y=64.67, w=1025.33`, internal content width 1010px | same x/y/width and 1010px content width |
+| Overview tabs card | `(213.44, 78.10, 983.13, 70.42)` | same |
+| KPI cards | 4 × `(235.7 × 123.75)`, first at `(213.44, 161.96)` | same within 0.01px |
+| Main chart card | `(213.44, 299.15, 983.13, 495.58)` | same within 0.01px |
+| Lower chart cards | first `(213.44, 808.17, 484.84, 495.58)`, second x `711.72` | same within 0.02px |
+| Filter card (Members/Loans) | `(220.16, 168.68, 969.69, 76.57)` | same within 0.01px |
+| Members Growth card | `(213.44, 251.97, 983.13, 495.58)` | same within 0.01px |
+| Loans metrics row | first `(213.44, 251.97, 318.75, 123.75)`; 13.44px gaps | same within 0.01px |
+| Loans chart pair | first `(213.44, 389.16, 481.48, 495.58)`; second x `715.07` | same within 0.01px |
+| Loans table panels | y/heights: `1407.20/279.65`, `1700.28/316.46`, `2030.18/279.65`, `2323.26/290.40` | same within 0.02px |
 
-## Local issue candidate
+Dashboard internal scroll heights match at the measured states: Overview 1279px, Members 3818px, Loans 2589px. AIMSCAMS has a fixed main viewport with an internal vertical scrollbar and no document-level scroll. The local dashboard filter popover width is 350px and its top is within 0.17px of the Wakandi popover. The Guarantor search field now matches Wakandi's 268.8px width, 34.125px height, placeholder, border, padding, and position.
 
-The current chart heading's rendered text is `FundsInVsFundsOut` without spaces. Confirm the expected reference text in the live Wakandi page before changing it; this pass did not establish a visual parity difference.
+The v1.2.0 typography instruction remains in force: AIMSCAMS body text is 12.8px with a 16px root, while the live Wakandi page uses 13.44px body text. This means glyph sizes, some text widths, and a few label-driven control widths are intentionally not exact. Dashboard metric values and table rows differ because Wakandi is production and AIMSCAMS uses local data; no Wakandi data was changed.
 
-## Required comparison before completion
+## Changes made
 
-1. Compare against the authenticated Wakandi dashboard at 1280 × 590, 1536 × 864, and 1920 × 1080 with equal CSS viewport and DPR.
-2. Measure all matching KPI, chart, legend, axis, tab, and chat elements, plus hover/focus/empty/loading/error states.
-3. Verify both dashboard tabs (Members and Loans), data-state parity, keyboard/mouse navigation, console output, and horizontal overflow.
-4. Fix and remeasure until the objective's per-page thresholds are met; then attach final evidence and commit this page separately.
+- Constrained the main content to the area below the header and restored the internal scrollbar.
+- Matched shared dashboard card borders, radius, padding, tab geometry, chart heights, and spacing.
+- Matched Members/Loans filter panel inset, height, popover offset, dashboard gutters, and table row density.
+- Removed the extra Overview bottom strip and matched internal scroll extents.
+- Kept the font scale at the user's v1.2.0 size.
 
-This page is not complete or certified as a parity match.
+## Verification and remaining work
 
-## AIMSCAMS interactive states observed
-
-- Overview tab: four KPI cards and charts render; the chart heading is exposed as `FundsInVsFundsOut` in the local UI tree. See the local issue candidate above.
-- Members tab: six filters render (Branch, Gender, Age, Client Type, Product, Date), eight KPI cards render, and the growth, recurring-member, registered-user, churn, demographic and churn-by-gender panels render. Local churn history and churn table show unavailable/empty states.
-- Branch filter: opened without applying. Condition is `Is`; value options are `All` and `Mwanza Demo Branch`; Clear and Apply are disabled until a selection is made. The popover was closed with Escape.
-- Loans tab: three KPI cards render; Disbursements by Product, Loan Application Stages and Loans Transactions Amount show local history-unavailable states; product-insights and PAR tables are empty; loss ratios show em dashes; guarantor exposure table is empty.
-- No Wakandi interactions or data mutations were performed in this local state check.
-
-The user goal still requires both apps' state and geometry to be measured at matching viewports, including hover, focus, keyboard/mouse interaction, and error/loading/empty states. The observations above are only the local side and do not meet that gate.
+- Visible Chrome comparison completed for Overview, Members, and Loans; clicked tabs and opened the Gender filter without choosing or applying values.
+- Typecheck passed. `git diff --check` passed. Targeted ESLint could not run because ESLint 9 could not find an `eslint.config.*` file in the repository.
+- Responsive widths, all filter option menus, keyboard/focus/hover states, chat placement, and console output remain to be checked before calling the Dashboard fully complete.

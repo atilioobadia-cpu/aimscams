@@ -144,33 +144,44 @@ function DashboardTablePanel({
   rows,
   emptyMessage = "No local records available.",
   search,
+  minHeight,
 }: {
   title: string;
   columns: string[];
   rows: string[][];
   emptyMessage?: string;
   search?: boolean;
+  minHeight?: number;
 }) {
   const [query, setQuery] = useState("");
   const visibleRows = rows.filter((row) => row.join(" ").toLocaleLowerCase().includes(query.toLocaleLowerCase()));
 
   return (
-    <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-      <div className="flex min-h-[58px] flex-wrap items-center justify-between gap-3 px-5 pt-4">
-        <h2 className="fs-text font-bold text-strong">{title}</h2>
-        {search ? (
-          <input
-            type="search"
-            aria-label={`Search ${title}`}
-            placeholder="Search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            className="h-8 w-[190px] rounded-[var(--control-radius)] border border-card-border bg-surface px-2.5 fs-text text-body outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-          />
-        ) : null}
-      </div>
+    <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface" style={minHeight ? { minHeight: `${minHeight}px` } : undefined}>
+      {search ? (
+        <>
+          <div className="px-[20.16px] pt-[35.28px]">
+            <h2 className="mb-[20.16px] fs-text font-bold leading-[18.67px] text-strong">{title}</h2>
+          </div>
+          <div className="mb-[13.44px] px-[20.16px]">
+            <input
+              type="search"
+              aria-label={`Search ${title}`}
+              placeholder="Search guarantor name"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              style={{ width: "268.8px", height: "34.125px", padding: "8.4px 10.08px", borderRadius: "6px", borderColor: "#ced4da" }}
+              className="rounded-[6px] border border-card-border bg-surface px-[10.08px] fs-text text-body outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            />
+          </div>
+        </>
+      ) : (
+        <div className="flex min-h-[58px] flex-wrap items-center justify-between gap-3 px-5 pt-4">
+          <h2 className="fs-text font-bold text-strong">{title}</h2>
+        </div>
+      )}
       <div className="overflow-x-auto px-5 pb-5">
-        <table className="w-full min-w-[540px] text-left fs-text">
+        <table className="dashboard-parity-table w-full min-w-[540px] text-left fs-text">
           <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
             <tr>
               {columns.map((column) => (
@@ -267,9 +278,10 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     <Tabs value={tab} onValueChange={setTab} className="gap-0">
       <div
         data-testid="dashboard-tab-card"
-        className="flex h-[69.33px] items-center gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-5"
+        className="flex h-[70.42px] items-center gap-[6.72px] rounded-[6px] border border-card-border bg-surface"
+        style={{ padding: "20.16px" }}
       >
-          <TabsList aria-label="Dashboard views" className="h-auto bg-transparent p-0" style={{ gap: "7.65px" }}>
+          <TabsList aria-label="Dashboard views" className="h-auto bg-transparent p-0" style={{ gap: "6.72px" }}>
           {tabs.map((item) => {
             const Icon = item.icon;
             const active = tab === item.value;
@@ -279,13 +291,16 @@ export function DashboardTabs({ data }: DashboardViewProps) {
                 value={item.value}
                 data-testid={`dashboard-tab-${item.value}`}
                 className={cn(
-                  "flex-none shrink-0 gap-2 rounded-[var(--pill-radius)] border-0 px-0 text-[13.44px] font-medium shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
+                  "flex-none shrink-0 rounded-[6px] border-0 shadow-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50 data-active:shadow-none",
                   "text-strong",
                 )}
                 style={{
-                  width: item.value === "members" ? 85 : item.value === "overview" ? 102.67 : 102,
-                  height: 28.67,
-                  fontSize: "13.15px",
+                  width: item.value === "loans" ? 83.375 : 102.615,
+                  height: 28.771,
+                  gap: "6.72px",
+                  padding: "6.72px 13.44px",
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "13.333px",
                   backgroundColor: active ? "var(--primary)" : "transparent",
                   color: active ? "var(--text-on-primary)" : "var(--text-strong)",
                 }}
@@ -298,14 +313,13 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         </TabsList>
       </div>
 
-      <TabsContent value="overview" className="mt-[14px] space-y-[14px] outline-none">
+      <TabsContent value="overview" className="mt-[13.44px] space-y-[13.44px] pb-[26.88px] outline-none">
         <KpiGrid kpis={data.kpis} />
         <FundsChart funds={data.funds} />
-        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2" style={{ gap: "14.667px" }}>
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2" style={{ gap: "13.44px" }}>
           <SavingsSharesLoansChart />
           <ParBucketsChart />
         </div>
-        <div data-testid="dashboard-bottom-strip" className="h-[25.33px] w-full border-t border-card-border bg-surface" />
       </TabsContent>
 
       <TabsContent value="members" className="outline-none">
@@ -339,25 +353,25 @@ export function DashboardTabs({ data }: DashboardViewProps) {
             onFilterChange={changeFilter}
           />
         ) : (
-          <div className="mt-[14px] space-y-[14px]">
+          <div className="mt-[20.16px] flex flex-col gap-[13.44px] pb-[26.88px]">
             <DashboardFilterBar filters={filters} branches={branchOptions} products={productOptions} onChange={changeFilter} />
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3" aria-label="Loan metrics">
+            <div className="grid grid-cols-1 gap-[13.44px] sm:grid-cols-3" aria-label="Loan metrics">
               <StatCard kpi={metric("loans-disbursed", "Loans Disbursed", "0", "principal")} />
               <StatCard kpi={metric("amount-disbursed", "Amount Disbursed", formatTzs("0"), "till")} />
               <StatCard kpi={metric("total-defaults", "Total Defaults", "0", "portfolio-risk", "red")} />
             </div>
-            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-[20.16px] lg:grid-cols-2">
               <DashboardChartPanel title="Disbursements by Product" />
               <DashboardChartPanel title="Loan Application Stages" />
             </div>
             <DashboardChartPanel title="Loans Transactions Amount" height="large" />
-            <div className="space-y-[14px]">
-              <DashboardTablePanel title="Loan Product Insights" columns={["Product(s)", "Number of Loans", "Number of Defaults", "Average Period"]} rows={[]} />
-              <DashboardTablePanel title="Loan PAR Summary" columns={["Bucket (DPD)", "Number of Members", "Number of Loans", "Amount at Risk", "PAR %", "Overdue Amount"]} rows={[]} />
+            <div className="space-y-[13.44px]">
+              <DashboardTablePanel title="Loan Product Insights" columns={["Product(s)", "Number of Loans", "Number of Defaults", "Average Period"]} rows={[]} minHeight={279.65} />
+              <DashboardTablePanel title="Loan PAR Summary" columns={["Bucket (DPD)", "Number of Members", "Number of Loans", "Amount at Risk", "PAR %", "Overdue Amount"]} rows={[]} minHeight={316.46} />
               <DashboardTablePanel title="Loan Loss Ratios" columns={["Ratio", "Value"]} rows={[
                 ["Charge-off Ratio", "—"], ["Recovery Ratio", "—"], ["Net Charge-off Ratio", "—"], ["Annual Loss Rate", "—"],
-              ]} />
-              <DashboardTablePanel title="Loan Guarantor Exposure" columns={["Guarantor", "Loans Guaranteed", "Self Loans Guaranteed", "Total Exposure", "Loans In Arrears"]} rows={[]} search />
+              ]} minHeight={279.65} />
+              <DashboardTablePanel title="Loan Guarantor Exposure" columns={["Guarantor", "Loans Guaranteed", "Self Loans Guaranteed", "Total Exposure", "Loans In Arrears"]} rows={[]} search minHeight={290.4} />
             </div>
           </div>
         )}

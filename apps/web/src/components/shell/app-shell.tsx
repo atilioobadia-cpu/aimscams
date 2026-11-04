@@ -62,10 +62,10 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
 
         <main
           id="main-content"
-          style={{ marginLeft: width, paddingTop: "var(--header-height)" }}
-          className="min-h-screen transition-[padding-left] duration-200"
+          style={{ left: width }}
+          className="fixed bottom-0 right-0 top-[var(--header-height)] overflow-auto transition-[left] duration-300"
         >
-          <div className="content-fade px-[var(--content-padding-x)] pb-[76px] pt-[var(--content-padding-y)]">
+          <div className="content-fade min-h-full px-[var(--content-padding-x)] py-[var(--content-padding-y)]">
             {children}
           </div>
         </main>

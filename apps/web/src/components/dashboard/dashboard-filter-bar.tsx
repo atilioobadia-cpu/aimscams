@@ -170,7 +170,7 @@ function FilterPopover({
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
           align="start"
-          sideOffset={7}
+          sideOffset={10.08}
           onOpenAutoFocus={(event) => event.preventDefault()}
           className={`z-50 rounded-md border border-card-border bg-surface p-0 text-body shadow-lg outline-none ${isDate ? "w-auto" : "w-[350px] max-w-[calc(100vw-32px)]"}`}
         >
@@ -233,7 +233,7 @@ export function DashboardFilterBar({ filters: currentFilters, branches, products
   return (
     <div
       data-testid="dashboard-filter-bar"
-      className="flex min-h-[72px] flex-wrap items-center gap-2 rounded-[var(--card-radius)] border border-card-border bg-surface px-5 py-3"
+      className="mx-[6.72px] mb-[-6.72px] flex flex-wrap items-center gap-2 rounded-[var(--card-radius)] border border-card-border bg-surface px-[20.16px] py-[20.16px]"
     >
       {filters.map((filter) => (
         <FilterPopover

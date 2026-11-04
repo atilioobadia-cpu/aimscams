@@ -96,7 +96,7 @@ export function applyAppearancePreferences(value: AppearancePreferences): void {
   root.style.setProperty("--text-heading", dark ? "#e5e7eb" : "#495057");
   root.style.setProperty("--text-strong", dark ? "#f9fafb" : "#111827");
   root.style.setProperty("--text-muted", dark ? "#9ca3af" : "#6c757d");
-  root.style.setProperty("--border", dark ? "#374151" : "#dee2e6");
+  root.style.setProperty("--border", dark ? "#374151" : "#e2e8f0");
   root.style.setProperty("--border-header", dark ? "#4b5563" : "#c3c6ca");
   root.style.setProperty("--tab-inactive-bg", dark ? "#273449" : "#f8fafc");
   root.style.setProperty("--fs", `${12.8 + scaleDelta * 0.3}px`);

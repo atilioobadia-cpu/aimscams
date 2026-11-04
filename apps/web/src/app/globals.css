@@ -11,8 +11,7 @@
 }
 
 html {
-  /* Root stays at the browser default so rem-based spacing utilities render at
-     their nominal pixel values. Shared text uses the measured --fs scale. */
+  /* Preserve the v1.2.0 root scale used by the existing rem-based layout. */
   font-size: 16px;
 }
 
@@ -31,7 +30,7 @@ body {
   --primary-fab: #037674;
   --page-bg: #ebe9e9;
   --surface: #ffffff;
-  --border: #dee2e6;
+  --border: #e2e8f0;
   --border-header: #c3c6ca;
   --text-heading: #495057;
   --text-strong: #111827;
@@ -44,7 +43,7 @@ body {
   --table-scroll-thumb: #8b8b8b;
   --tab-inactive-bg: #f8fafc;
 
-  /* Type scale: everything is 12.8px */
+  /* Shared text scale retained from release v1.2.0: 12.8px */
   --font-size-micro: var(--fs);
   --font-size-helper: var(--fs);
   --font-size-secondary: var(--fs);
@@ -80,8 +79,8 @@ body {
   --sidebar-scrollbar-width: 5.33px;
   --sidebar-toggle-size: 29px;
   --content-padding: 14.67px;
-  --content-padding-x: 13.33px;
-  --content-padding-y: 14px;
+  --content-padding-x: 13.44px;
+  --content-padding-y: 13.44px;
   --control-height: 33px;
   --control-compact-height: 28px;
   --icon-size: 20px;
@@ -92,7 +91,7 @@ body {
   --icon-lg: 28px;
   --active-pill-height: 30px;
   --tab-strip-height: 32px;
-  --card-radius: 8px;
+  --card-radius: 6px;
   --control-radius: 5px;
   --pill-radius: 6px;
 
@@ -461,9 +460,29 @@ textarea[aria-invalid="true"] {
 main {
   scroll-padding-bottom: 84px;
 }
-.app-content,
-main > div {
+.app-content {
   padding-bottom: 84px;
+}
+main > div {
+  padding-bottom: var(--content-padding-y);
+}
+
+/* The application body scrolls inside the fixed-height main viewport. */
+#main-content {
+  scrollbar-width: auto;
+  scrollbar-color: var(--table-scroll-thumb) transparent;
+}
+#main-content::-webkit-scrollbar {
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+#main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+#main-content::-webkit-scrollbar-thumb {
+  background-color: var(--table-scroll-thumb);
+  border-radius: 9999px;
 }
 
 /* Keep table content on one line; horizontal scroll handles overflow. */
@@ -482,6 +501,11 @@ table td {
   padding: 18px 16px;
   font-size: var(--fs);
   color: var(--text-strong);
+}
+table.dashboard-parity-table th,
+table.dashboard-parity-table td {
+  padding: 10.08px 13.44px;
+  line-height: 16.65px;
 }
 
 /* COA follows the compact Roboto table rhythm measured from the reference UI. */

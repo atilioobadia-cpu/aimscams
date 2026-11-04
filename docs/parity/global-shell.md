@@ -1,40 +1,27 @@
-# Global shell parity baseline
+# Global shell parity pass
 
-Status: incomplete. This pass captured AIMSCAMS live values only; a current Wakandi comparison is not available because the only open Wakandi tab is at SSO. Do not treat these local values as proof of parity.
+Status: shell geometry verified at the current desktop width. The available Chrome tabs had different viewport heights, so the vertical viewport dimensions and typography are documented as differences rather than certified as identical.
 
-## AIMSCAMS live baseline
+## Live shell measurements
 
-Route: `/active-campaigns`
-CSS viewport: 1211.33 × 559.33 px
-Device pixel ratio: 1.5
-Measurement method: visible Chrome tab, `getBoundingClientRect()` and `getComputedStyle()`.
+Measurement method: visible Chrome tabs; `getBoundingClientRect()` and `getComputedStyle()`. Wakandi was read-only.
 
-| Element | AIMSCAMS rect (x, y, w, h) | AIMSCAMS computed values | Wakandi | Difference |
-|---|---:|---|---|---|
-| `html` | 0, 0, 1211.33, 559.33 | background `rgb(235, 233, 233)`; root font 16px | Not measured this pass | Not available |
-| `body` | 0, 0, 1211.33, 559.33 | background `rgb(235, 233, 233)`; Roboto 12.8px / 19.2px; text `rgb(73, 80, 87)` | Not measured this pass | Not available |
-| app header | 0, 0, 1211.33, 64.67 | white; Roboto 12.8px / 19.2px; horizontal padding 14px; shadow `rgb(195, 198, 202) 0px 1px 0px 0px` | Not measured this pass | Not available |
-| header user name | 1086.94, 25.59, 72.40, 12.80 | Roboto 12.8px / 12.8px, weight 700; clipped overflow | Not measured this pass | Not available |
-| sidebar (`aside`) | 0, 64.67, 200, 494.67 | white; Roboto 12.8px / 19.2px | Not measured this pass | Not available |
-| sidebar footer | 0, 485.44, 199.33, 73.90 | transparent; padding 6px 8px; flex gap 3px | Not measured this pass | Not available |
-| main region | 200, 0, 1011.33, 559.33 | left margin 200px; top padding 64.67px; transparent background | Not measured this pass | Not available |
-| chat button | 1105.67, 453.67, 60, 60 | background `rgb(5, 117, 115)`; white; pill radius; shadow `0 10px 15px -3px` plus `0 4px 6px -4px` | Not measured this pass | Not available |
+| Element | Wakandi | AIMSCAMS |
+|---|---:|---:|
+| Header | `(0, 0, 1225.33, 64.67)` | same |
+| Expanded sidebar | `(0, 64.67, 200, 502.67)` | `(0, 64.67, 200, 558.67)` |
+| Main viewport | `x=200, y=64.67, w=1025.33, h=502.67`; overflow hidden | `x=200, y=64.67, w=1025.33, h=558.67`; fixed below header, internal overflow |
+| Main content width | 1010px visible width after scrollbar; 13.44px content inset | 1010px visible width after scrollbar; 13.44px inset |
+| Page scroll | document stays at viewport height; main content scrolls | document stays at viewport height; main content scrolls |
 
-At this viewport the document has no horizontal overflow: client width 1211px and scroll width 1211px. Visible page console returned no warning/error entries in the collected log window. These are AIMSCAMS-only results.
+Both tabs were 1225px wide. Wakandi measured 567px high at DPR 1; AIMSCAMS measured 623px high at DPR 1.5. This difference affects only the available vertical space in the current browser windows, not the measured header/sidebar widths or dashboard card positions.
 
-## Required next comparison
+The AIMSCAMS main content now uses a fixed viewport below the 64.67px header, reserves a 15px scrollbar, and scrolls internally. The sidebar and main width transitions are 0.3s. The light border token is `#e2e8f0`; the header separator remains `#c3c6ca`.
 
-1. Restore an authenticated Wakandi session in the visible Chrome tab. Keep Wakandi read-only.
-2. Set both apps to the same CSS viewport and DPR, beginning at 1280 × 590 and 1.5 DPR.
-3. Measure matching header, sidebar (expanded and collapsed), footer, main content offset, and chat control with bounding boxes and computed styles.
-4. Record state and hover/focus differences, then fix shared tokens/components and remeasure before marking this section complete.
-5. Repeat at 1536 × 864 and 1920 × 1080; verify no horizontal overflow and capture console warnings/errors.
+Typography remains at the user's requested v1.2.0 scale: 16px root and 12.8px body. Wakandi measured 13.44px body text in its live session. The text-size difference is deliberate under the current instruction.
 
-This baseline does not certify any page or shared component as complete.
+## Remaining shell checks
 
-## Additional AIMSCAMS shell states observed
-
-- Collapsed sidebar: 76px wide at x=0, y=64.67, h=494.67; footer remains 73.90px high. Main begins at x=76. The collapse control is 29 × 29px at x=47, y=462.94. At this state document width remains 1211px with no horizontal overflow.
-- Profile menu: 280px wide × 134.79px high at x=917.33, y=65.33; white surface, 6px radius, 4px padding, Roboto 12.8px/19.2px, and 0 2px 12px shadow. Its four menu items are each 272 × 27.20px with 4px 6px padding.
-- Pressing Escape closed the profile menu and restored focus to its trigger.
-- No Wakandi menu or collapsed-sidebar state was available for comparison in this pass; do not infer parity from the AIMSCAMS-only values.
+- Compare collapsed and expanded sidebar at the same height and verify scroll position/transition.
+- Compare profile menu, language menu, branch state, footer, chat button, hover/focus, and keyboard navigation.
+- Check shell horizontal overflow and console output at desktop and narrow widths.
