@@ -203,41 +203,44 @@ export function LoanApplicationWizard({
 
   useEffect(() => {
     if (!initial) return;
-    setClientId(initial.clientId ?? "");
-    setProductId(initial.productId ?? "");
-    setPrincipal((BigInt(initial.principalMinor) / 100n).toString());
-    setTenure(String(initial.tenureCount));
-    setTenurePeriod(initial.tenurePeriod);
-    setGracePeriod(String(initial.gracePeriodMonths));
-    setInterestRate((initial.interestRateBp / 100).toFixed(2));
-    setInterestMethod(initial.interestMethod);
-    setInterestOnGrace(initial.interestOnGrace);
-    setInstallmentStartDate(initial.installmentStartDate ?? todayIso());
-    setLoanOfficerId(initial.loanOfficerId ?? "");
-    setDebtCapacity(
-      initial.debtCapacityMinor ? (BigInt(initial.debtCapacityMinor) / 100n).toString() : "",
-    );
-    setEconomicSector(initial.economicSector ?? "");
-    setSubEconomicSector(initial.subEconomicSector ?? "");
-    setSubSubEconomicSector(initial.subSubEconomicSector ?? "");
-    setDescription(initial.description ?? "");
-    setPurpose(initial.purpose ?? "");
-    setHasGuarantor(initial.hasGuarantor);
-    setHasCollateral(initial.hasCollateral);
-    setDisbursementPreference(initial.disbursementPreference ?? "Cash at branch");
-    setRemarks(initial.remarks ?? "");
-    setNomineeName(initial.nomineeName ?? "");
-    setNomineeRelation(initial.nomineeRelation ?? "");
-    setNomineePhone(initial.nomineePhone ?? "");
-    setNomineeIdNumber(initial.nomineeIdNumber ?? "");
-    setNomineePercentage(initial.nomineePercentage !== null ? String(initial.nomineePercentage) : "");
-    setPaymentDestination(initial.paymentDestination ?? "CASH");
-    setBankName(initial.bankName ?? "");
-    setBankAccountName(initial.bankAccountName ?? "");
-    setBankAccountNumber(initial.bankAccountNumber ?? "");
-    setMnoProvider(initial.mnoProvider ?? "");
-    setMnoWalletNumber(initial.mnoWalletNumber ?? "");
-    void listClients({}).then((result) => setClients(result.items)).catch(() => {});
+    const timer = window.setTimeout(() => {
+      setClientId(initial.clientId ?? "");
+      setProductId(initial.productId ?? "");
+      setPrincipal((BigInt(initial.principalMinor) / 100n).toString());
+      setTenure(String(initial.tenureCount));
+      setTenurePeriod(initial.tenurePeriod);
+      setGracePeriod(String(initial.gracePeriodMonths));
+      setInterestRate((initial.interestRateBp / 100).toFixed(2));
+      setInterestMethod(initial.interestMethod);
+      setInterestOnGrace(initial.interestOnGrace);
+      setInstallmentStartDate(initial.installmentStartDate ?? todayIso());
+      setLoanOfficerId(initial.loanOfficerId ?? "");
+      setDebtCapacity(
+        initial.debtCapacityMinor ? (BigInt(initial.debtCapacityMinor) / 100n).toString() : "",
+      );
+      setEconomicSector(initial.economicSector ?? "");
+      setSubEconomicSector(initial.subEconomicSector ?? "");
+      setSubSubEconomicSector(initial.subSubEconomicSector ?? "");
+      setDescription(initial.description ?? "");
+      setPurpose(initial.purpose ?? "");
+      setHasGuarantor(initial.hasGuarantor);
+      setHasCollateral(initial.hasCollateral);
+      setDisbursementPreference(initial.disbursementPreference ?? "Cash at branch");
+      setRemarks(initial.remarks ?? "");
+      setNomineeName(initial.nomineeName ?? "");
+      setNomineeRelation(initial.nomineeRelation ?? "");
+      setNomineePhone(initial.nomineePhone ?? "");
+      setNomineeIdNumber(initial.nomineeIdNumber ?? "");
+      setNomineePercentage(initial.nomineePercentage !== null ? String(initial.nomineePercentage) : "");
+      setPaymentDestination(initial.paymentDestination ?? "CASH");
+      setBankName(initial.bankName ?? "");
+      setBankAccountName(initial.bankAccountName ?? "");
+      setBankAccountNumber(initial.bankAccountNumber ?? "");
+      setMnoProvider(initial.mnoProvider ?? "");
+      setMnoWalletNumber(initial.mnoWalletNumber ?? "");
+      void listClients({}).then((result) => setClients(result.items)).catch(() => {});
+    }, 0);
+    return () => window.clearTimeout(timer);
   }, [initial]);
 
   useEffect(() => {
