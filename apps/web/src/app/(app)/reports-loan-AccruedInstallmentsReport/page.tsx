@@ -7,7 +7,13 @@ export const metadata: Metadata = { title: "Accrued installments report · AIMSC
 export default function Route() {
   return <LoanOperationalReportPage
     title="Accrued Installments Report"
-    columns={["Accrued Interest Amount", "Paid Accrued Interest Amount", "Outstanding Accrued Interest Amount"]}
+    catalogFilters
+    columns={[
+      "Loan Number", "Account Number", "Membership Policy", "Client Name", "Branch", "Number Of Dependents",
+      "Person With Disability", "Impairment Type", "Group", "Due On", "Loan Product", "Accrual Type",
+      "Principal Amount", "Interest Amount", "Accrued Interest Amount", "Paid Accrued Interest Amount",
+      "Outstanding Accrued Interest Amount",
+    ]}
     filename="accrued-installments-report.csv"
   />;
 }
