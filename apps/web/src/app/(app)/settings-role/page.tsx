@@ -130,7 +130,7 @@ export default function RolesPage() {
   const lastEntry = Math.min(page * pageSize, filteredRoles.length);
   const grouped = useMemo(() => groupPermissions(permissions), [permissions]);
 
-  useEffect(() => setPage(1), [search, filterField, pageSize]);
+  useEffect(() => { const timer = window.setTimeout(() => setPage(1), 0); return () => window.clearTimeout(timer); }, [search, filterField, pageSize]);
 
   function openEditor(role: RoleSummary) {
     setEditor(role);
