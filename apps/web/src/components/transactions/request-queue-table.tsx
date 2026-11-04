@@ -41,10 +41,10 @@ export function RequestQueueTable({
   ];
 
   return (
-    <section id="request-results" className="overflow-hidden border-b border-card-border bg-surface">
+    <section id="request-results" className="request-results overflow-hidden border-b border-card-border bg-surface">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[980px] table-auto text-left fs-text">
-          <thead className="h-[47px] border-b border-card-border bg-subtle text-heading">
+        <table className="request-results-table w-full min-w-[980px] table-auto text-left fs-text">
+          <thead className="border-b border-card-border bg-subtle text-heading">
             <tr>
               {columns.map((column) => (
                 <th key={column} scope="col" className="whitespace-nowrap px-4 font-semibold">
@@ -60,8 +60,8 @@ export function RequestQueueTable({
           <tbody>
             {stateContent ? (
               <tr>
-                <td colSpan={9} className="p-0 text-center">
-                  {stateContent}
+                <td colSpan={9} className="request-state-cell text-center">
+                  <div className="request-empty-state">{stateContent}</div>
                 </td>
               </tr>
             ) : items.map((item) => (

@@ -122,7 +122,21 @@ export class TransactionsService {
       auth.user.branch?.id ?? null,
     );
     const where: Prisma.RequestWhereInput = { ...scope };
-    if (filters.status) where.status = filters.status;
+    if (filters.status) {
+      switch (filters.statusCondition ?? 'IS') {
+        case 'IS_NOT':
+          where.status = { not: filters.status };
+          break;
+        case 'IS_NONE_OF':
+          where.status = { notIn: [filters.status] };
+          break;
+        case 'IS_ANY_OF':
+          where.status = { in: [filters.status] };
+          break;
+        default:
+          where.status = filters.status;
+      }
+    }
     if (filters.requestType) where.requestType = filters.requestType;
     if (filters.assignedToMe) where.currentAssigneeId = auth.user.id;
     if (filters.q) {

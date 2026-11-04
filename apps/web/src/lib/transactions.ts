@@ -84,6 +84,7 @@ type TransactionFilters = {
 type RequestFilters = {
   q?: string;
   status?: RequestStatus;
+  statusCondition?: "IS" | "IS_ANY_OF" | "IS_NOT" | "IS_NONE_OF";
   requestType?: string;
   assignedToMe?: boolean;
   page?: number;

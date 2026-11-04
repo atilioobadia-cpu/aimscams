@@ -13,6 +13,12 @@ const REQUEST_STATUSES = [
   'REJECTED',
   'CANCELLED',
 ] as const;
+const REQUEST_STATUS_CONDITIONS = [
+  'IS',
+  'IS_ANY_OF',
+  'IS_NOT',
+  'IS_NONE_OF',
+] as const;
 const MAX_PAGE_SIZE = 100;
 
 export interface TransactionFilters {
@@ -31,6 +37,7 @@ export interface TransactionFilters {
 export interface RequestFilters {
   q?: string;
   status?: (typeof REQUEST_STATUSES)[number];
+  statusCondition?: (typeof REQUEST_STATUS_CONDITIONS)[number];
   requestType?: string;
   assignedToMe: boolean;
   page: number;
@@ -156,6 +163,11 @@ export function parseRequestFilters(query: FilterQuery): RequestFilters {
   return {
     q: optionalText(query, 'q'),
     status: optionalChoice(query, 'status', REQUEST_STATUSES),
+    statusCondition: optionalChoice(
+      query,
+      'statusCondition',
+      REQUEST_STATUS_CONDITIONS,
+    ),
     requestType: optionalText(query, 'requestType'),
     assignedToMe: assignedToMeValue === 'true',
     page: paginationValue(query, 'page', 1, 1_000_000),

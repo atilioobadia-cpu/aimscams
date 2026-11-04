@@ -11,6 +11,7 @@ import { listRequests, type RequestList, type RequestStatus } from "@/lib/transa
 import { RequestQueueTable } from "@/components/transactions/request-queue-table";
 
 type RequestTab = "assigned" | "active" | "all";
+type RequestStatusCondition = "IS" | "IS_ANY_OF" | "IS_NOT" | "IS_NONE_OF";
 
 const REQUEST_TABS: { id: RequestTab; label: string }[] = [
   { id: "assigned", label: "Assigned Requests" },
@@ -23,6 +24,23 @@ const REQUEST_STATUSES: { value: RequestStatus; label: string }[] = [
   { value: "APPROVED", label: "Approved" },
   { value: "REJECTED", label: "Rejected" },
   { value: "CANCELLED", label: "Cancelled" },
+];
+
+const REQUEST_STATUS_CONDITIONS: { value: RequestStatusCondition; label: string }[] = [
+  { value: "IS", label: "Is" },
+  { value: "IS_ANY_OF", label: "Is any of" },
+  { value: "IS_NOT", label: "Is not" },
+  { value: "IS_NONE_OF", label: "Is none of" },
+];
+
+const REQUEST_FILTER_OPTIONS = [
+  { id: "RequestByUserId", label: "Request by User" },
+  { id: "RequestType", label: "Request Type" },
+  { id: "Amount", label: "Amount" },
+  { id: "Requests_CurrentAssignee", label: "Current Assignee" },
+  { id: "Requests_ApprovedBy", label: "Approved by" },
+  { id: "ApprovalDate", label: "Approval Date" },
+  { id: "CreatedDate", label: "Created Date" },
 ];
 
 function failureMessage(failure: unknown): string {
@@ -39,10 +57,15 @@ export function RequestCentrePage() {
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState<RequestTab>("all");
   const [statusFilter, setStatusFilter] = useState<RequestStatus | "">("");
+  const [statusCondition, setStatusCondition] = useState<RequestStatusCondition>("IS");
+  const [statusDraft, setStatusDraft] = useState<RequestStatus | "">("");
+  const [statusConditionDraft, setStatusConditionDraft] = useState<RequestStatusCondition>("IS");
   const [requestType, setRequestType] = useState("");
   const [requestTypeDraft, setRequestTypeDraft] = useState("");
   const [statusOpen, setStatusOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [filterSearch, setFilterSearch] = useState("");
+  const [selectedFilterFields, setSelectedFilterFields] = useState<string[]>([]);
   const [requestTypeFilterOpen, setRequestTypeFilterOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
@@ -55,6 +78,7 @@ export function RequestCentrePage() {
       void listRequests({
         q: query,
         status: statusFilter || (tab === "active" ? "PENDING" : undefined),
+        statusCondition: statusFilter ? statusCondition : undefined,
         assignedToMe: tab === "assigned" ? true : undefined,
         requestType: requestType || undefined,
         page,
@@ -85,22 +109,9 @@ export function RequestCentrePage() {
 
   const items = data?.items ?? [];
   const pageCount = Math.max(1, Math.ceil((data?.total ?? 0) / (data?.pageSize ?? 20)));
-  const selectedStatusLabel = REQUEST_STATUSES.find((item) => item.value === statusFilter)?.label;
-
   function chooseTab(nextTab: RequestTab) {
     setTab(nextTab);
     setPage(1);
-  }
-
-  function clearFilters() {
-    setQuery("");
-    setStatusFilter("");
-    setRequestType("");
-    setRequestTypeDraft("");
-    setPage(1);
-    setStatusOpen(false);
-    setFiltersOpen(false);
-    setRequestTypeFilterOpen(false);
   }
 
   let tableState: React.ReactNode = null;
@@ -112,7 +123,7 @@ export function RequestCentrePage() {
     tableState = <PanelSkeleton rows={4} />;
   } else if (items.length === 0) {
     tableState = (
-      <div className="flex min-h-[212px] flex-col items-center justify-center gap-3 text-muted-foreground">
+      <div className="flex flex-col items-center justify-center gap-3 text-muted-foreground">
         <Inbox className="size-11 stroke-[1.8]" aria-hidden="true" />
         <span className="fs-text">No data available</span>
       </div>
@@ -120,28 +131,30 @@ export function RequestCentrePage() {
   }
 
   return (
-    <div className="space-y-[18px]">
-      <section className="grid min-h-[94px] grid-cols-2 items-center gap-x-6 gap-y-3 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-4 sm:grid-cols-3 lg:grid-cols-[minmax(170px,1.15fr)_repeat(5,minmax(125px,1fr))]">
-        <div className="flex items-center gap-3">
+    <div className="requests-page">
+      <section className="requests-summary rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <div className="requests-summary-title flex items-center">
           <Mail className="size-6 shrink-0 text-primary" aria-hidden="true" />
           <h1 className="fs-title font-semibold text-heading">Requests</h1>
         </div>
-        {[
+        <div className="requests-summary-stats">
+          {[
           ["Total Requests", data?.counts.total ?? 0],
           ["Pending Requests", data?.counts.pending ?? 0],
           ["Approved Requests", data?.counts.approved ?? 0],
           ["Rejected Requests", data?.counts.rejected ?? 0],
           ["Cancelled Requests", data?.counts.cancelled ?? 0],
-        ].map(([label, value]) => (
-          <div key={label} className="min-w-0">
-            <div className="fs-text font-semibold text-heading">{label}</div>
-            <div className="mt-0.5 fs-text tabular-nums text-strong">{value}</div>
-          </div>
-        ))}
+          ].map(([label, value]) => (
+            <div key={label} className="requests-summary-stat">
+              <div className="requests-summary-label">{label}</div>
+              <div className="requests-summary-value">{value}</div>
+            </div>
+          ))}
+        </div>
       </section>
 
-      <section className="overflow-visible rounded-[var(--card-radius)] border border-card-border bg-surface">
-        <div role="tablist" aria-label="Request queue" className="flex min-h-[55px] items-stretch overflow-x-auto border-b border-card-border bg-subtle">
+      <section className="requests-queue rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <div role="tablist" aria-label="Request queue" className="requests-tabs">
           {REQUEST_TABS.map((item) => (
             <button
               key={item.id}
@@ -151,9 +164,7 @@ export function RequestCentrePage() {
               aria-selected={tab === item.id}
               aria-controls="request-table-panel"
               onClick={() => chooseTab(item.id)}
-              className={tab === item.id
-                ? "min-h-[55px] whitespace-nowrap border-b-2 border-primary px-5 fs-text font-semibold text-primary"
-                : "min-h-[55px] whitespace-nowrap border-b-2 border-transparent px-5 fs-text text-label hover:bg-surface hover:text-primary"}
+              className={tab === item.id ? "requests-tab requests-tab-active" : "requests-tab"}
             >
               {item.label}
             </button>
@@ -161,62 +172,69 @@ export function RequestCentrePage() {
         </div>
 
         <div id="request-table-panel" role="tabpanel" aria-labelledby={"request-tab-" + tab}>
-          <div className="flex min-h-[72px] flex-wrap items-center gap-2.5 border-b border-card-border px-[18px] py-[14px]">
-            <div className="relative w-[240px] max-w-full">
+          <div className="requests-toolbar">
+            <div className="requests-search">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
               <Input
                 aria-label="Search requests"
                 value={query}
                 onChange={(event) => { setQuery(event.target.value); setPage(1); }}
                 placeholder="Search"
-                className="h-[44px] rounded-[6px] border-primary pl-9 fs-text"
+                className="requests-search-input"
               />
             </div>
 
             <div className="relative">
-              <div className="flex h-[44px] min-w-[185px] items-center rounded-[6px] border border-primary bg-surface text-primary">
+              <div className="requests-status-filter">
                 <button
                   type="button"
                   aria-expanded={statusOpen}
-                  onClick={() => { setStatusOpen((open) => !open); setFiltersOpen(false); }}
-                  className="flex h-full flex-1 items-center justify-between gap-3 px-3 fs-text"
+                  onClick={() => {
+                    setStatusOpen((open) => !open);
+                    setStatusDraft(statusFilter);
+                    setStatusConditionDraft(statusCondition);
+                    setFiltersOpen(false);
+                  }}
+                  className="requests-status-trigger"
                 >
-                  <span>{selectedStatusLabel ?? "Request Status"}</span>
+                  <span>Request Status</span>
                   <ChevronDown className={statusOpen ? "size-4 rotate-180 transition-transform" : "size-4 transition-transform"} aria-hidden="true" />
                 </button>
-                <button
+                {statusFilter ? <button
                   type="button"
                   aria-label="Clear request status filter"
                   onClick={() => { setStatusFilter(""); setPage(1); }}
-                  className="grid size-9 place-items-center border-l border-primary/30 hover:bg-primary-tint"
+                  className="requests-status-clear"
                 >
                   <X className="size-4" aria-hidden="true" />
-                </button>
+                </button> : null}
               </div>
               {statusOpen ? (
-                <div role="menu" aria-label="Request status" className="absolute left-0 top-[48px] z-30 min-w-full rounded-[6px] border border-card-border bg-surface p-1 shadow-lg">
-                  {REQUEST_STATUSES.map((item) => (
-                    <button
-                      key={item.value}
-                      type="button"
-                      role="menuitemradio"
-                      aria-checked={statusFilter === item.value}
-                      onClick={() => { setStatusFilter(item.value); setPage(1); setStatusOpen(false); }}
-                      className={statusFilter === item.value
-                        ? "block w-full rounded px-3 py-2 text-left fs-text font-semibold text-primary hover:bg-primary-tint"
-                        : "block w-full rounded px-3 py-2 text-left fs-text text-body hover:bg-primary-tint"}
+                <div role="dialog" aria-label="Request Status filter" className="requests-status-popover">
+                  <h2>Request Status</h2>
+                  <div className="requests-status-rule">
+                    <label htmlFor="request-status-condition">Condition</label>
+                    <select
+                      id="request-status-condition"
+                      value={statusConditionDraft}
+                      onChange={(event) => setStatusConditionDraft(event.target.value as RequestStatusCondition)}
                     >
-                      {item.label}
-                    </button>
-                  ))}
-                  <button
-                    type="button"
-                    role="menuitem"
-                    onClick={() => { setStatusFilter(""); setPage(1); setStatusOpen(false); }}
-                    className="block w-full rounded px-3 py-2 text-left fs-text text-muted-foreground hover:bg-subtle"
-                  >
-                    Clear status
-                  </button>
+                      {REQUEST_STATUS_CONDITIONS.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+                    </select>
+                    <label htmlFor="request-status-value">Value</label>
+                    <select
+                      id="request-status-value"
+                      value={statusDraft}
+                      onChange={(event) => setStatusDraft(event.target.value as RequestStatus | "")}
+                    >
+                      <option value="">Select status</option>
+                      {REQUEST_STATUSES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+                    </select>
+                  </div>
+                  <div className="requests-status-actions">
+                    <button type="button" onClick={() => { setStatusDraft(""); setStatusFilter(""); setStatusCondition("IS"); setStatusConditionDraft("IS"); setPage(1); setStatusOpen(false); }}>Clear</button>
+                    <button type="button" onClick={() => { setStatusFilter(statusDraft); setStatusCondition(statusConditionDraft); setPage(1); setStatusOpen(false); }}>Apply</button>
+                  </div>
                 </div>
               ) : null}
             </div>
@@ -227,22 +245,40 @@ export function RequestCentrePage() {
                 variant="outline"
                 aria-expanded={filtersOpen}
                 onClick={() => { setFiltersOpen((open) => !open); setStatusOpen(false); }}
-                className="h-[44px] min-w-[168px] justify-between rounded-[6px] border-primary px-3 text-primary"
+                className="requests-add-filter"
               >
                 <span className="inline-flex items-center gap-2"><Plus className="size-4" aria-hidden="true" />Add Filters</span>
                 <ChevronDown className={filtersOpen ? "size-4 rotate-180 transition-transform" : "size-4 transition-transform"} aria-hidden="true" />
               </Button>
               {filtersOpen ? (
-                <div role="menu" aria-label="Available request filters" className="absolute left-0 top-[48px] z-30 min-w-[190px] rounded-[6px] border border-card-border bg-surface p-1 shadow-lg">
-                  <button
-                    type="button"
-                    role="menuitemcheckbox"
-                    aria-checked={requestTypeFilterOpen}
-                    onClick={() => { setRequestTypeFilterOpen(true); setFiltersOpen(false); }}
-                    className="block w-full rounded px-3 py-2 text-left fs-text text-body hover:bg-primary-tint"
-                  >
-                    Request Type
-                  </button>
+                <div role="dialog" aria-label="Available request filters" className="requests-filter-options">
+                  <label className="sr-only" htmlFor="request-filter-search">Search filters</label>
+                  <input
+                    id="request-filter-search"
+                    type="search"
+                    value={filterSearch}
+                    onChange={(event) => setFilterSearch(event.target.value)}
+                    placeholder="Search"
+                    className="requests-filter-search"
+                  />
+                  <div role="listbox" aria-label="Option List" aria-multiselectable="true" className="requests-filter-option-list">
+                    {REQUEST_FILTER_OPTIONS.filter((item) => item.label.toLowerCase().includes(filterSearch.toLowerCase())).map((item) => {
+                      const checked = selectedFilterFields.includes(item.id);
+                      return (
+                        <label key={item.id} className="requests-filter-option">
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => {
+                              setSelectedFilterFields((fields) => checked ? fields.filter((field) => field !== item.id) : [...fields, item.id]);
+                              if (item.id === "RequestType") setRequestTypeFilterOpen(!checked);
+                            }}
+                          />
+                          <span>{item.label}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
                 </div>
               ) : null}
             </div>
@@ -253,7 +289,7 @@ export function RequestCentrePage() {
               aria-label="Apply request filters"
               title="Apply filters"
               onClick={() => { setPage(1); setReloadKey((value) => value + 1); setFiltersOpen(false); setStatusOpen(false); }}
-              className="size-[40px] rounded-[6px] border-primary p-0 text-primary"
+              className="requests-apply-filter"
             >
               <Funnel className="size-4" aria-hidden="true" />
             </Button>
@@ -279,11 +315,6 @@ export function RequestCentrePage() {
               </div>
             ) : null}
 
-            {query || statusFilter || requestType ? (
-              <button type="button" onClick={clearFilters} className="px-2 fs-text text-primary underline underline-offset-2 hover:text-primary/80">
-                Clear all
-              </button>
-            ) : null}
           </div>
 
           <RequestQueueTable
