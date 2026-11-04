@@ -4,9 +4,9 @@ Status: incomplete. AIMSCAMS was inspected live, but no current Wakandi dashboar
 
 ## AIMSCAMS live baseline
 
-Route: `/dashboard`  
-CSS viewport: 1211.33 × 559.33 px  
-Device pixel ratio: 1.5  
+Route: `/dashboard`
+CSS viewport: 1211.33 × 559.33 px
+Device pixel ratio: 1.5
 Measurement method: visible Chrome tab, `getBoundingClientRect()` and `getComputedStyle()`.
 
 | Element | AIMSCAMS rect (x, y, w, h) | AIMSCAMS computed values | Wakandi | Difference |
