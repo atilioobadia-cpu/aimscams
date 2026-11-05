@@ -87,10 +87,10 @@ export default function MembershipPoliciesPage() {
   return (
     <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
       <PolicySetupHeader active="membership" />
-      {data?.canEdit ? <div className="flex justify-end px-4 py-3"><Button asChild variant="outline" className="h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership/new"><Plus className="size-4" aria-hidden="true" />Add New</Link></Button></div> : null}
+      {data?.canEdit ? <div className="flex justify-end px-[13.44px] py-[6.72px]"><Button asChild variant="outline" className="h-[28.77px] rounded-[6px] border-primary !bg-transparent px-[8.4px] py-[6.72px] !text-[11.76px] text-center text-primary hover:bg-primary-tint hover:text-primary"><Link href="/settings/policies/membership/new"><Plus className="size-4" aria-hidden="true" />Add New</Link></Button></div> : null}
 
       <section className="overflow-hidden border-t border-card-border">
-        <div className="flex min-h-[68px] flex-wrap items-center gap-3 border-b border-chrome px-3 py-3">
+        <div className="flex min-h-[56px] flex-wrap items-center gap-4 border-b border-chrome px-[13.44px] py-[6.72px]">
           <label className="relative block w-[240px] max-w-full"><Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" /><Input id="membership-policy-search" aria-label="Search membership policies" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" /></label>
           <DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="outline" className="h-[42px] min-w-[150px] justify-between border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"><span className="flex items-center gap-2"><Plus className="size-4" aria-hidden="true" />Add Filters</span><ChevronDown className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="start"><DropdownMenuCheckboxItem checked={showStatusFilter} onCheckedChange={setShowStatusFilter}>Status</DropdownMenuCheckboxItem></DropdownMenuContent></DropdownMenu>
           {showStatusFilter ? <select aria-label="Filter by status" value={status} onChange={(event) => setStatus(event.target.value)} className="h-[42px] min-w-[180px] rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="">All statuses</option><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select> : null}
@@ -126,15 +126,15 @@ export default function MembershipPoliciesPage() {
                     { label: "View policy", icon: Eye, href: `/settings/policies/membership/${item.id}` },
                     ...(data?.canEdit ? [{ label: "Edit policy", icon: Pencil, href: `/settings/policies/membership/${item.id}/edit` }] : []),
                   ];
-                  return <tr key={item.id} className="h-[67px] border-b border-card-border last:border-0">
-                    <td className="min-w-0 px-4 py-3 font-medium"><div className="max-w-full truncate" title={item.name}>{item.name}</div></td>
-                    {showMemberType ? <td className="px-4 py-3">{titleCase(item.memberType)}</td> : null}
-                    {showSavings ? <td className="px-4 py-3">—</td> : null}
-                    {showShares ? <td className="px-4 py-3">—</td> : null}
-                    {showFees ? <td className="px-4 py-3">—</td> : null}
-                    {showActivation ? <td className="px-4 py-3">—</td> : null}
-                    {showOnboarding ? <td className="px-4 py-3">—</td> : null}
-                    {showStatusColumn ? <td className="px-4 py-3"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td> : null}
+                  return <tr key={item.id} className="h-[52.27px] border-b border-card-border bg-white last:border-0">
+                    <td className="min-w-0 px-4 py-3 font-normal"><div className="max-w-full truncate" title={item.name}>{item.name}</div></td>
+                    {showMemberType ? <td className="px-4 py-3 font-normal">{titleCase(item.memberType)}</td> : null}
+                    {showSavings ? <td className="px-4 py-3 font-normal">—</td> : null}
+                    {showShares ? <td className="px-4 py-3 font-normal">—</td> : null}
+                    {showFees ? <td className="px-4 py-3 font-normal">—</td> : null}
+                    {showActivation ? <td className="px-4 py-3 font-normal">—</td> : null}
+                    {showOnboarding ? <td className="px-4 py-3 font-normal">—</td> : null}
+                    {showStatusColumn ? <td className="px-4 py-3 font-normal"><Badge variant={item.status === "ACTIVE" ? "default" : "outline"}>{titleCase(item.status)}</Badge></td> : null}
                     <td className="w-14 bg-subtle/40 px-2 py-3"><div className="flex justify-end"><RowActionsMenu label={`${item.code} ${item.name}`} actions={actions} /></div></td>
                   </tr>;
                 })}

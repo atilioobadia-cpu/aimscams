@@ -1,0 +1,158 @@
+{
+  "id": "P01-T05-policies",
+  "page": "Settings \u00e2\u2020\u2019 Policies (membership)",
+  "state": "default list view",
+  "groups": {
+    "geom": [
+      "box.x",
+      "box.y",
+      "box.w",
+      "box.h"
+    ],
+    "geomY": [
+      "box.y",
+      "box.h"
+    ],
+    "flex": [
+      "display",
+      "alignItems",
+      "justifyContent",
+      "gap"
+    ],
+    "type": [
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "text": [
+      "box.y",
+      "box.h",
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "surf": [
+      "backgroundColor",
+      "padding.top",
+      "padding.right",
+      "padding.bottom",
+      "padding.left",
+      "border.topWidth",
+      "border.radius",
+      "boxShadow"
+    ]
+  },
+  "slots": [
+    {
+      "name": "page-card",
+      "wakandi": ".card",
+      "aimscams": "section.overflow-hidden",
+      "use": [
+        "display",
+        "backgroundColor",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "add-new-btn",
+      "wakandi": "button.p-button-secondary",
+      "aimscams": "a[data-slot='button']",
+      "use": [
+        "geomY",
+        "flex",
+        "surf",
+        "type"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "table",
+      "wakandi": "table",
+      "aimscams": "table",
+      "use": [
+        "display",
+        "backgroundColor",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "thead",
+      "wakandi": ".p-datatable-thead",
+      "aimscams": "thead",
+      "use": [
+        "geomY",
+        "surf"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "th",
+      "wakandi": "th",
+      "aimscams": "th",
+      "use": [
+        "geomY",
+        "surf",
+        "type"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "tbody",
+      "wakandi": "tbody",
+      "aimscams": "tbody",
+      "use": [
+        "display",
+        "backgroundColor",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "tr-first",
+      "wakandi": "tbody tr:first-child",
+      "aimscams": "tbody tr:first-child",
+      "use": [
+        "geomY",
+        "surf"
+      ],
+      "tolerance": 80
+    },
+    {
+      "name": "td",
+      "wakandi": "td",
+      "aimscams": "td",
+      "use": [
+        "geomY",
+        "surf",
+        "type"
+      ],
+      "tolerance": 80
+    }
+  ]
+}
