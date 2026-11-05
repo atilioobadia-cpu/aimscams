@@ -206,7 +206,8 @@ export default function ClientsPage() {
         variant="card"
         icon={<UsersRound className="size-[19.33px] shrink-0 text-primary" aria-hidden="true" />}
         title="Clients"
-        className="min-h-[69.33px] px-[19.33px] py-0 sm:pl-[20.67px] sm:pr-[19.33px] [&>div:first-child]:gap-[10.67px]"
+        titleClassName="text-[20.16px] font-semibold leading-[normal] tracking-[normal]"
+        className="min-h-[69.33px] px-[19.33px] py-[20.16px] sm:pl-[20.67px] sm:pr-[19.33px] [&>div:first-child]:gap-[10.67px]"
         actions={data?.canCreate ? (
           <>
             <Button asChild variant="outline" className="!h-[28.77px] !w-[88.59px] !gap-[4px] !border-primary !px-2 text-[11.76px] font-semibold text-primary">
