@@ -161,7 +161,7 @@ function DashboardTablePanel({
       {search ? (
         <>
           <div className="px-[20.16px] pt-[35.28px]">
-            <h2 className="mb-[20.16px] fs-text font-bold leading-[18.67px] text-strong">{title}</h2>
+            <h2 className="mb-[20.16px] text-[15.12px] font-semibold leading-[normal] text-heading">{title}</h2>
           </div>
           <div className="mb-[13.44px] px-[20.16px]">
             <input
