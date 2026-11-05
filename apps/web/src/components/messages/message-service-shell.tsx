@@ -35,7 +35,7 @@ export function MessageServiceShell({
         <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2">
           <div className="flex min-w-[185px] items-center gap-3">
             <Mail className="size-6 shrink-0 text-primary" aria-hidden="true" />
-            <h1 className="fs-title font-semibold text-heading">Message Service</h1>
+            <h1 className="text-[20.16px] font-semibold leading-[normal] text-heading">Message Service</h1>
           </div>
           <dl className="flex min-w-0 items-center gap-4 fs-text">
             <div className="space-y-1"><dt className="font-medium text-label">SMS Credits</dt><dd className="text-body">Unavailable</dd></div>

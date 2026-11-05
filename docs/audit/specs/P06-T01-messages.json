@@ -1,0 +1,76 @@
+{
+  "id": "P06-T01-messages",
+  "page": "Messages",
+  "state": "default view",
+  "groups": {
+    "geom": [
+      "box.x",
+      "box.y",
+      "box.w",
+      "box.h"
+    ],
+    "geomY": [
+      "box.y",
+      "box.h"
+    ],
+    "flex": [
+      "display",
+      "alignItems",
+      "justifyContent",
+      "gap"
+    ],
+    "type": [
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "text": [
+      "box.y",
+      "box.h",
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "surf": [
+      "backgroundColor",
+      "padding.top",
+      "padding.right",
+      "padding.bottom",
+      "padding.left",
+      "border.topWidth",
+      "border.radius",
+      "boxShadow"
+    ]
+  },
+  "slots": [
+    {
+      "name": "page-title",
+      "wakandi": "p.head-title",
+      "aimscams": "h1",
+      "use": [
+        "box.y",
+        "box.h",
+        "fontWeight",
+        "lineHeight",
+        "letterSpacing",
+        "color",
+        "textAlign",
+        "backgroundColor",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow"
+      ],
+      "tolerance": 20
+    }
+  ]
+}

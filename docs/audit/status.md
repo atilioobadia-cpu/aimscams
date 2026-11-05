@@ -7,7 +7,7 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 - `NOT_CHECKED`: 0
 - `DIFFERENCES_OPEN`: 0
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 14
+- `VERIFIED_MATCH`: 15
 - BLOCKED: 2
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
@@ -46,3 +46,4 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 | 3 Import | P03-T01 Import | /import | /import | BLOCKED | 2026-11-05 - page is a Coming Soon placeholder; Wakandi has 3 import flows | docs/audit/tasks/P03-T01-import.md | Not committed | Feature missing; recorded in NEEDS-HUMAN.md |
 | 4 Reports | P04-T01 Reports hub | /reports | /reports | VERIFIED_MATCH | 2026-11-05 - Wakandi reports page is navigation-only | docs/audit/parity/ | parity(P04-T01) | None |
 | 5 Campaigns | P05-T01 Campaigns | /campaigns | /campaigns | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P05-T01) | None |
+| 6 Messages | P06-T01 Messages | /messages | /messages | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P06-T01) | None |
