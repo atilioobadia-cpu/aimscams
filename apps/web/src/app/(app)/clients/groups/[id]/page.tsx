@@ -169,9 +169,9 @@ export default function ClientGroupDetailPage() {
     if (!addMemberOpen || query.length < 2) return;
 
     let cancelled = false;
-    setMemberCandidatesLoading(true);
-    setMemberCandidatesError(null);
     const timeout = window.setTimeout(() => {
+      setMemberCandidatesLoading(true);
+      setMemberCandidatesError(null);
       void listClients({ type: "INDIVIDUAL", q: query })
         .then((response) => {
           if (cancelled) return;
