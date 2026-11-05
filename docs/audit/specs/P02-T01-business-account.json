@@ -50,33 +50,6 @@
   },
   "slots": [
     {
-      "name": "nav",
-      "wakandi": ".p-tablist-tab-list",
-      "aimscams": "nav[aria-label='Business account sections']",
-      "use": [
-        "flex",
-        "surf",
-        "display",
-        "alignItems",
-        "justifyContent",
-        "gap",
-        "backgroundColor",
-        "padding.top",
-        "padding.right",
-        "padding.bottom",
-        "padding.left",
-        "border.topWidth",
-        "border.radius",
-        "boxShadow",
-        "fontSize",
-        "fontWeight",
-        "lineHeight",
-        "letterSpacing",
-        "color"
-      ],
-      "tolerance": 5
-    },
-    {
       "name": "table",
       "wakandi": "table",
       "aimscams": "table",

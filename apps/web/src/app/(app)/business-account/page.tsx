@@ -6,6 +6,12 @@ import { ChevronDown, Download, Info, Inbox, Plus, Search, SlidersHorizontal } f
 
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -30,6 +36,9 @@ type FundType = (typeof FUND_TYPES)[number];
 
 function BusinessAccountTable({ columns, search, filters = false, onSearch, toolbarEnd }: { columns: string[]; search: string; filters?: boolean; onSearch?: (value: string) => void; toolbarEnd?: ReactNode }) {
   const [showFilterInfo, setShowFilterInfo] = useState(false);
+  const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(() => Object.fromEntries(columns.map((column) => [column, true])));
+  const toggleColumn = (column: string) => setVisibleColumns((current) => ({ ...current, [column]: !current[column] }));
+  const displayedColumns = columns.filter((column) => visibleColumns[column]);
   return (
     <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
       <div className="flex flex-wrap items-center gap-3 border-b border-card-border p-4">
@@ -43,8 +52,8 @@ function BusinessAccountTable({ columns, search, filters = false, onSearch, tool
       </div>
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader className="bg-subtle"><TableRow>{columns.map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}<TableHead className="w-12 text-center"><SlidersHorizontal aria-label="Table columns" className="mx-auto size-4" /></TableHead></TableRow></TableHeader>
-          <TableBody><TableRow className="bg-white"><TableCell colSpan={columns.length + 1} className="h-48 text-center fs-text text-muted-foreground"><div className="flex flex-col items-center gap-2"><Inbox className="size-8 text-muted-foreground" aria-hidden="true" /><span>No data available</span></div></TableCell></TableRow></TableBody>
+          <TableHeader className="bg-subtle"><TableRow>{displayedColumns.map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}<TableHead className="w-12 text-center"><DropdownMenu><DropdownMenuTrigger asChild><Button type="button" variant="ghost" size="icon-sm" aria-label="Table columns" className="text-primary"><SlidersHorizontal className="size-4" aria-hidden="true" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">{columns.map((column) => <DropdownMenuCheckboxItem checked={visibleColumns[column]} key={column} onCheckedChange={() => toggleColumn(column)}>{column}</DropdownMenuCheckboxItem>)}</DropdownMenuContent></DropdownMenu></TableHead></TableRow></TableHeader>
+          <TableBody><TableRow className="bg-white"><TableCell colSpan={displayedColumns.length + 1} className="h-48 text-center fs-text text-muted-foreground"><div className="flex flex-col items-center gap-2"><Inbox className="size-8 text-muted-foreground" aria-hidden="true" /><span>No data available</span></div></TableCell></TableRow></TableBody>
         </Table>
       </div>
     </section>

@@ -4,9 +4,9 @@ Viewport: **1536×864@1.25**
 
 | | Wakandi | AIMSCAMS |
 |---|---|---|
-| Page | https://cams.wakandi.co.tz/core/wba/business-account?tab=2 | http://localhost:3000/business-account |
+| Page | https://cams.wakandi.co.tz/clients | http://localhost:3000/business-account |
 
-- slots: **7**, properties compared: **77**
+- slots: **6**, properties compared: **60**
 - differences: **0**
 - missing selectors: **0**
 
