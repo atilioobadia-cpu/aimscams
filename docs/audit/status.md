@@ -4,10 +4,10 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 
 ## Status counts
 
-- `NOT_CHECKED`: 2
+- `NOT_CHECKED`: 0
 - `DIFFERENCES_OPEN`: 0
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 10
+- `VERIFIED_MATCH`: 11
 - `BLOCKED`: 1
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
@@ -36,7 +36,7 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 
 
 
-| 1 Settings | P01-T12 Accounting settings | /settings/accounting-settings | /settings/accounting | NOT_CHECKED | Not inspected | vidence/P01-T12-accounting-settings/ | Not committed | Pending live comparison |
+| 1 Settings | P01-T12 Accounting settings | /settings/accounting-settings | /settings/accounting | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T12-accounting*.md` | `parity(P01-T12): match settings accounting to live Wakandi` | None |
 
 
 | 1 Settings | P01-T13 General settings | /settings/account | /settings/general | NOT_CHECKED | Not inspected | vidence/P01-T13-general-settings/ | Not committed | Pending live comparison |

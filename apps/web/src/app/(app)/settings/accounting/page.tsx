@@ -286,7 +286,7 @@ export default function AccountingSettingsPage() {
         icon={<Calculator className="ml-[2px] mr-1 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />}
       />
 
-      <nav aria-label="Accounting settings" role="tablist" className="flex min-h-[45px] overflow-x-auto border-b border-chrome bg-subtle">
+      <nav aria-label="Accounting settings" role="tablist" className="flex min-h-[45px] overflow-x-auto border-b border-chrome bg-white text-heading">
         {ACCOUNTING_TABS.map((tab) => (
           <button
             key={tab}
