@@ -202,16 +202,16 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="flex flex-col gap-[18px]">
-      <section className="flex min-h-[90px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-24)]">
+    <div className="flex flex-col gap-[13.44px]">
+      <section className="flex min-h-[70px] shrink-0 items-start rounded-[var(--card-radius)] border border-card-border bg-card px-[20.16px] py-[20.16px]">
         <UserRound className="mr-3 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />
-        <h1 className="fs-title font-semibold text-heading">User Management</h1>
+        <h1 className="text-[20.16px] font-semibold leading-[normal] text-heading">User Management</h1>
         {!forbidden ? (
           <Button
             type="button"
             variant="outline"
             onClick={() => router.push("/settings-administrator-add")}
-            className="ml-auto h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"
+            className="ml-auto h-[28.77px] rounded-[6px] border-primary bg-transparent px-[8.4px] py-[6.72px] !text-[11.76px] text-primary hover:bg-primary-tint hover:text-primary"
           >
             <Plus className="size-4" aria-hidden="true" />
             New User
@@ -229,7 +229,7 @@ export default function UsersPage() {
         </section>
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-          <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
+          <div className="flex min-h-[56px] flex-wrap items-center gap-4 border-b border-chrome px-[13.44px] py-[6.72px]">
             <label className="relative block w-[240px] max-w-full">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
               <Input
@@ -280,7 +280,7 @@ export default function UsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[980px] text-left fs-text">
               <thead className="border-b border-chrome bg-subtle fs-text font-semibold text-label">
-                <tr className="h-[46px]">
+                <tr className="h-[37.48px]">
                   <th className="w-[17%] px-4 py-2">Email Address</th>
                   <th className="w-[21%] px-4 py-2">Full Name</th>
                   <th className="w-[15%] px-4 py-2">Phone Number</th>
@@ -295,7 +295,7 @@ export default function UsersPage() {
                 ) : pageUsers.map((user, index) => {
                   const initials = user.fullName.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
                   return (
-                    <tr key={user.id} className="h-[73px] border-b border-chrome last:border-0">
+                    <tr key={user.id} className="h-[57.77px] border-b border-chrome last:border-0 bg-white">
                       <td className="px-4 py-3 text-body">{maskEmail(user.email)}</td>
                       <td className="px-4 py-3 text-body">
                         <span className="flex items-center gap-3">
@@ -316,7 +316,7 @@ export default function UsersPage() {
             </table>
           </div>
 
-          <div className="flex min-h-[60px] flex-wrap items-center justify-center gap-2 border-t border-chrome px-4 py-2 fs-text text-muted-foreground">
+          <div className="flex min-h-[48px] flex-wrap items-center justify-center gap-[3.36px] border-t border-chrome bg-white px-[13.44px] py-[6.72px] fs-text text-heading" style={{borderRadius:"6px"}}>
             <span className="mr-2">Showing {firstEntry} to {lastEntry} of {users.length} entries</span>
             <Button type="button" variant="ghost" size="icon-sm" className="size-[42px] rounded-full" aria-label="First page" onClick={() => setPage(1)} disabled={page <= 1}><ChevronFirst className="size-4" /></Button>
             <Button type="button" variant="ghost" size="icon-sm" className="size-[42px] rounded-full" aria-label="Previous page" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1}><ChevronLeft className="size-4" /></Button>

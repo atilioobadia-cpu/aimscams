@@ -1,0 +1,156 @@
+{
+  "id": "P01-T03-users",
+  "page": "Settings \u00e2\u2020\u2019 Users",
+  "state": "default list view",
+  "groups": {
+    "geom": [
+      "box.x",
+      "box.y",
+      "box.w",
+      "box.h"
+    ],
+    "geomY": [
+      "box.y",
+      "box.h"
+    ],
+    "flex": [
+      "display",
+      "alignItems",
+      "justifyContent",
+      "gap"
+    ],
+    "type": [
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "text": [
+      "box.y",
+      "box.h",
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "surf": [
+      "backgroundColor",
+      "padding.top",
+      "padding.right",
+      "padding.bottom",
+      "padding.left",
+      "border.topWidth",
+      "border.radius",
+      "boxShadow"
+    ]
+  },
+  "slots": [
+    {
+      "name": "page-title",
+      "wakandi": ".header-title",
+      "aimscams": "h1",
+      "use": [
+        "text",
+        "surf"
+      ],
+      "tolerance": 2
+    },
+    {
+      "name": "table",
+      "wakandi": "table",
+      "aimscams": "table",
+      "use": [
+        "display",
+        "backgroundColor",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left"
+      ],
+      "tolerance": 50
+    },
+    {
+      "name": "thead",
+      "wakandi": ".p-datatable-thead",
+      "aimscams": "thead",
+      "use": [
+        "geomY",
+        "surf"
+      ],
+      "tolerance": 12
+    },
+    {
+      "name": "th",
+      "wakandi": "th",
+      "aimscams": "th",
+      "use": [
+        "geomY",
+        "surf",
+        "type"
+      ],
+      "tolerance": 12
+    },
+    {
+      "name": "tbody",
+      "wakandi": "tbody",
+      "aimscams": "tbody",
+      "use": [
+        "display",
+        "backgroundColor",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left"
+      ],
+      "tolerance": 50
+    },
+    {
+      "name": "tr-first",
+      "wakandi": "tbody tr:first-child",
+      "aimscams": "tbody tr:first-child",
+      "use": [
+        "geomY",
+        "surf"
+      ],
+      "tolerance": 50
+    },
+    {
+      "name": "td",
+      "wakandi": "td",
+      "aimscams": "td",
+      "use": [
+        "geomY",
+        "surf",
+        "type"
+      ],
+      "tolerance": 50
+    },
+    {
+      "name": "paginator",
+      "wakandi": ".p-paginator",
+      "aimscams": "div[class*='min-h-[48px]']",
+      "use": [
+        "display",
+        "backgroundColor",
+        "border.topWidth",
+        "border.radius",
+        "boxShadow",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left"
+      ],
+      "tolerance": 50
+    }
+  ]
+}
