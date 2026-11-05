@@ -9,6 +9,7 @@ type PageHeaderProps = {
   actions?: ReactNode;
   icon?: ReactNode;
   variant?: "plain" | "card";
+  titleClassName?: string;
   className?: string;
 };
 
@@ -19,6 +20,7 @@ export function PageHeader({
   actions,
   icon,
   variant = "plain",
+  titleClassName,
   className,
 }: PageHeaderProps) {
   if (variant === "card") {
@@ -43,7 +45,11 @@ export function PageHeader({
               {icon}
               <h1
                 data-parity="page-title"
-                className="fs-title block font-bold tracking-[-0.36288px] text-heading"
+                className={cn(
+                  titleClassName
+                    ? cn(titleClassName, "text-heading")
+                    : "fs-title block font-bold tracking-[-0.36288px] text-heading",
+                )}
               >
                 {title}
               </h1>

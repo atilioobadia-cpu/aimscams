@@ -14,7 +14,8 @@ export default function CampaignsPage() {
         variant="card"
         title="Campaigns"
         icon={<Megaphone className="size-5 text-primary" aria-hidden="true" />}
-        className="!min-h-[66px] !px-5 !py-3"
+        titleClassName="text-[20.16px] font-semibold leading-[normal] tracking-[normal]"
+        className="!min-h-[66px] !px-5 !py-[20.16px]"
       />
 
       <section aria-labelledby="recommended-campaigns-heading" className="flex min-h-[264px] flex-col rounded-[8px] border border-card-border bg-card px-[20.16px] py-[20.16px]">
