@@ -233,8 +233,6 @@ export default function JournalEntriesPage() {
   useEffect(() => {
     if (!entryId) return;
     let active = true;
-    setDetailLoading(true);
-    setDetailError(null);
     getJournalEntry(entryId)
       .then((entry) => {
         if (!active) return;
