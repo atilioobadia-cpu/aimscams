@@ -28,6 +28,7 @@ function message(failure: unknown, fallback: string): string {
 type FilterCondition = "Contains" | "Equals" | "Starts with" | "Ends with" | "Does not contain";
 
 const textConditions: FilterCondition[] = ["Contains", "Equals", "Starts with", "Ends with", "Does not contain"];
+const DEFAULT_CLIENT_COLUMNS = ["memberNo", "fullName", "referenceNo", "nationalId", "clientType", "phone", "email", "status", "kycStatus", "joinedAt", "groupName", "actions"];
 
 function matchesTextFilter(source: unknown, value: string, condition: FilterCondition): boolean {
   const field = String(source ?? "").toLocaleLowerCase();
@@ -58,8 +59,7 @@ export default function ClientsPage() {
   const [status, setStatus] = useState("");
   const [clientType, setClientType] = useState(() => searchParams.get("type") ?? "");
   const [sort, setSort] = useState(() => searchParams.get("sort") ?? "");
-  const defaultColumns = ["memberNo", "fullName", "referenceNo", "nationalId", "clientType", "phone", "email", "status", "kycStatus", "joinedAt", "groupName", "actions"];
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(defaultColumns);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(DEFAULT_CLIENT_COLUMNS);
   const [columnSettingsOpen, setColumnSettingsOpen] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const firstLoad = useRef(true);
@@ -85,12 +85,12 @@ export default function ClientsPage() {
         const stored = localStorage.getItem("aimscams:clients:visible-columns");
       if (stored) {
         const parsed: unknown = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.every((value) => defaultColumns.includes(value))) setVisibleColumns(parsed);
+        if (Array.isArray(parsed) && parsed.every((value) => DEFAULT_CLIENT_COLUMNS.includes(value))) setVisibleColumns(parsed);
       }
       } catch { /* ignore invalid local preference */ }
     }, 0);
     return () => window.clearTimeout(timer);
-  }, [defaultColumns]);
+  }, []);
 
   function toggleColumn(key: string) {
     setVisibleColumns((current) => {
