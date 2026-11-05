@@ -7,7 +7,7 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 - `NOT_CHECKED`: 0
 - `DIFFERENCES_OPEN`: 0
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 16
+- `VERIFIED_MATCH`: 17
 - BLOCKED: 2
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
@@ -48,3 +48,4 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 | 5 Campaigns | P05-T01 Campaigns | /campaigns | /campaigns | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P05-T01) | None |
 | 6 Messages | P06-T01 Messages | /messages | /messages | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P06-T01) | None |
 | 7 Requests | P07-T01 Requests | /requests | /requests | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P07-T01) | None |
+| 8 Transactions | P08-T01 Transactions - All | /transaction/all-transaction | /transaction-all-transaction | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P08-T01) | None |

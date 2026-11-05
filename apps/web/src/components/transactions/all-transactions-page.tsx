@@ -123,6 +123,7 @@ export function AllTransactionsPage() {
         variant="card"
         title="Transactions"
         icon={<Receipt className="size-6 shrink-0 text-primary" aria-hidden="true" />}
+        titleClassName="text-[20.16px] font-semibold leading-[normal] tracking-[normal]"
       />
 
       {(data?.summary.unposted ?? 0) > 0 ? (
