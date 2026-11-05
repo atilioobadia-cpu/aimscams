@@ -81,9 +81,8 @@ export default function LoanApplicationDetailPage() {
     const timer = window.setTimeout(() => {
       setLoading(true);
       setError(null);
-    }, 0);
-    void Promise.all([getLoanApplication(id), listEconomicSectors()])
-      .then(([response, sectorResponse]) => {
+      void Promise.all([getLoanApplication(id), listEconomicSectors()])
+        .then(([response, sectorResponse]) => {
         if (cancelled) return;
         setState({
           application: response.application,
@@ -95,18 +94,19 @@ export default function LoanApplicationDetailPage() {
         setSectors(sectorResponse.items);
         setForbidden(false);
       })
-      .catch((failure: unknown) => {
-        if (cancelled) return;
-        if (failure instanceof ApiError && failure.status === 403) {
-          setForbidden(true);
-        } else {
-          setError(message(failure, "Could not load this loan application."));
-        }
-      })
-      .finally(() => {
-        if (cancelled) return;
-        setLoading(false);
-      });
+        .catch((failure: unknown) => {
+          if (cancelled) return;
+          if (failure instanceof ApiError && failure.status === 403) {
+            setForbidden(true);
+          } else {
+            setError(message(failure, "Could not load this loan application."));
+          }
+        })
+        .finally(() => {
+          if (cancelled) return;
+          setLoading(false);
+        });
+    }, 0);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
