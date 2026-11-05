@@ -5,9 +5,9 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 ## Status counts
 
 - `NOT_CHECKED`: 1
-- `DIFFERENCES_OPEN`: 4
+- `DIFFERENCES_OPEN`: 3
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 8
+- `VERIFIED_MATCH`: 9
 - `BLOCKED`: 1
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
@@ -29,7 +29,7 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 
 | 1 Settings | P01-T09 Products — Fee & Penalties | `/settings/products/fee-penalties` | `/settings/products/fee-penalties` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T09-fees*.md` | `parity(P01-T09): match settings products fees to live Wakandi` | None |
 
-| 1 Settings | P01-T10 Products — Loan Provisioning | `/settings/products/loan-provisioning` | `/settings/products/provisioning-rules` | DIFFERENCES_OPEN | 2026-11-05 — list and blank create flow compared | `evidence/P01-T10-products-provisioning/` | Not committed | Local create flow exposes unsupported criteria inline; extra Add Filters; CSS and responsive checks pending |
+| 1 Settings | P01-T10 Products — Loan Provisioning | `/settings/products/loan-provisioning` | `/settings/products/provisioning-rules` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T10-provisioning*.md` | `parity(P01-T10): match settings products provisioning to live Wakandi` | None |
 
 | 1 Settings | P01-T11 Branches | /settings/branch | /settings/branches | NOT_CHECKED | Not inspected | vidence/P01-T11-branches/ | Not committed | Pending live comparison |
 
