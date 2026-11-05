@@ -38,6 +38,7 @@ export default function AccountingPage() {
     <div className="space-y-[var(--space-14)]">
       <PageHeader
         title="Accounting"
+        titleClassName="text-[20.16px] font-semibold leading-[normal] tracking-[normal]"
         description="The ledger behind every balance: one chart of accounts, append-only journal entries and a per-account ledger."
         breadcrumb="Accounting"
       />

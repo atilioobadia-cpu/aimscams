@@ -69,7 +69,7 @@ export function PageHeader({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           {icon}
-          <h1 className="fs-title font-bold tracking-[-0.36288px] text-heading">{title}</h1>
+          <h1 className={cn(titleClassName ? cn(titleClassName, "text-heading") : "fs-title font-bold tracking-[-0.36288px] text-heading")}>{title}</h1>
         </div>
         {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
