@@ -85,7 +85,7 @@ export default function InterestRatesPage() {
     <div className="space-y-3">
       <ProductSetupHeader active="interest-rates" />
       {data?.canEdit ? (
-        <div className="flex justify-end px-[var(--space-16)]">
+        <div className="flex justify-end px-[13.44px] py-[6.72px]">
           <Button asChild variant="outline" className="h-[42px] border-primary px-4 text-primary hover:bg-primary-tint hover:text-primary">
             <Link href="/settings/products/interest-rates/new"><Plus className="size-4" aria-hidden="true" />Add new</Link>
           </Button>
@@ -103,7 +103,7 @@ export default function InterestRatesPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
+            <div className="flex min-h-[56px] flex-wrap items-center gap-4 border-b border-chrome px-[13.44px] py-[6.72px]">
               <label className="relative block w-[240px] max-w-full">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
                 <Input id="interest-rate-search" aria-label="Search interest rates" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" />
@@ -129,7 +129,7 @@ export default function InterestRatesPage() {
               <tbody className="text-body">
                 {rates.length === 0 ? <tr><td colSpan={columnCount} className="h-[216px] px-4 text-center text-muted-foreground"><div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-lg bg-subtle text-muted-foreground"><Search className="size-6" aria-hidden="true" /></div>{hasFilters ? "No interest rates match these filters." : "No data available"}</td></tr> : null}
                 {rates.map((rate) => (
-                  <tr key={rate.id} className="h-[67px] border-b border-card-border last:border-0">
+                  <tr key={rate.id} className="h-[52.27px] border-b border-card-border bg-white last:border-0">
                     <td className="px-4 py-3 font-medium">{rate.name}</td>
                     {showStartDate ? <td className="px-4 py-3">{rate.effectiveFrom ? new Date(rate.effectiveFrom).toLocaleDateString() : "N/A"}</td> : null}
                     {showEndDate ? <td className="px-4 py-3">N/A</td> : null}

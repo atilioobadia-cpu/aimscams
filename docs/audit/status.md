@@ -5,9 +5,9 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 ## Status counts
 
 - `NOT_CHECKED`: 1
-- `DIFFERENCES_OPEN`: 6
+- `DIFFERENCES_OPEN`: 5
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 6
+- `VERIFIED_MATCH`: 7
 - `BLOCKED`: 1
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
@@ -25,7 +25,7 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 
 | 1 Settings | P01-T07 Products — Loan | `/settings/products/loan` | `/settings/products/loan` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T07-loan*.md` | `parity(P01-T07): match settings products loan to live Wakandi` | None |
 
-| 1 Settings | P01-T08 Products — Interest Rate | `/settings/products/interest-rate` | `/settings/products/interest-rates` | DIFFERENCES_OPEN | 2026-11-05 — list and create form compared | `evidence/P01-T08-products-interest-rates/` | Not committed | Extra Add Filters; create workflow and model support differ; CSS pending |
+| 1 Settings | P01-T08 Products — Interest Rate | `/settings/products/interest-rate` | `/settings/products/interest-rates` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T08-interest-rates*.md` | `parity(P01-T08): match settings products interest rates to live Wakandi` | None |
 
 | 1 Settings | P01-T09 Products — Fee & Penalties | `/settings/products/fee-penalties` | `/settings/products/fee-penalties` | DIFFERENCES_OPEN | 2026-11-05 — list and Add Charge form compared | `evidence/P01-T09-products-fees/` | Not committed | Extra local controls and additional fee fields; CSS and reference headers pending |
 
