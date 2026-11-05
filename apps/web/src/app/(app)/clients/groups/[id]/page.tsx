@@ -194,8 +194,6 @@ export default function ClientGroupDetailPage() {
   useEffect(() => {
     if (!group) return;
     let cancelled = false;
-    setAccountsLoading(true);
-    setAccountsIssue(false);
 
     void Promise.all([
       listLoans({ q: group.fullName }).catch(() => null),
