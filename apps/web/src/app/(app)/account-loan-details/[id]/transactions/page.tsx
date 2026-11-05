@@ -22,7 +22,8 @@ export default function LoanTransactionsPage() {
   const params = useParams<{ id: string }>();
   const id = params?.id ?? "";
 
-  const [loading, setLoading] = useState(true);
+  const isValidLoanId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+  const [loading, setLoading] = useState(isValidLoanId);
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [forbidden, setForbidden] = useState(false);
@@ -30,7 +31,7 @@ export default function LoanTransactionsPage() {
 
   useEffect(() => {
     let cancelled = false;
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) return;
+    if (!isValidLoanId) return;
 
     void getLoan(id)
       .then((response) => {
@@ -80,7 +81,7 @@ export default function LoanTransactionsPage() {
     );
   }
 
-  if (notFound || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
+  if (notFound || !isValidLoanId) {
     return (
       <div className="space-y-5">
         <PageHeader breadcrumb="Accounts" title="Loan transactions" description="Transaction ledger for this loan." />
