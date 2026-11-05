@@ -211,15 +211,15 @@ export default function RolesPage() {
   ] as const;
 
   return (
-    <div className="flex flex-col gap-[18px]">
-      <section className="flex min-h-[90px] shrink-0 items-center rounded-[var(--card-radius)] border border-card-border bg-card px-[var(--space-24)]">
+    <div className="flex flex-col gap-[13.44px]">
+      <section className="flex min-h-[70px] shrink-0 items-start rounded-[var(--card-radius)] border border-card-border bg-card px-[20.16px] py-[20.16px]">
         <Shield className="mr-3 size-6 text-primary" strokeWidth={1.8} aria-hidden="true" />
-        <h1 className="fs-title font-semibold text-heading">Role Management</h1>
+        <h1 className="text-[20.16px] font-semibold leading-[normal] text-heading">Role Management</h1>
         <Button
           type="button"
           variant="outline"
           onClick={() => { setCreateOpen(true); setFormError(null); }}
-          className="ml-auto h-[38px] border-primary px-3 text-primary hover:bg-primary-tint hover:text-primary"
+          className="ml-auto h-[28.77px] rounded-[6px] border-primary !bg-transparent px-[8.4px] py-[6.72px] !text-[11.76px] text-primary hover:bg-primary-tint hover:text-primary"
         >
           <Plus className="size-4" aria-hidden="true" />
           New Role
@@ -227,7 +227,7 @@ export default function RolesPage() {
       </section>
 
       <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
-        <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
+        <div className="flex min-h-[56px] flex-wrap items-center gap-4 border-b border-chrome px-[13.44px] py-[6.72px]">
           <label className="relative block w-[240px] max-w-full">
             <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
             <Input
@@ -265,11 +265,11 @@ export default function RolesPage() {
         ) : (
           <>
             <Table>
-              <TableHeader>
-                <TableRow className="h-[43px] bg-subtle hover:bg-subtle">
-                  <TableHead className="w-[44%] px-4 !py-2 fs-text font-semibold text-heading">Role Name</TableHead>
-                  {showDisplayName ? <TableHead className="px-4 !py-2 fs-text font-semibold text-heading">Display Name</TableHead> : null}
-                  <TableHead className="w-20 !py-2 text-right">
+              <TableHeader className="bg-subtle">
+                <TableRow className="h-[37.48px] bg-subtle hover:bg-subtle">
+                  <TableHead className="w-[44%] !px-[13.44px] !py-[10.08px] fs-text !font-bold !text-heading leading-[normal]" style={{height:"37.48px",minHeight:"37.48px",maxHeight:"37.48px",lineHeight:"normal",overflow:"hidden"}}>Role Name</TableHead>
+                  {showDisplayName ? <TableHead className="!px-[13.44px] !py-[10.08px] fs-text !font-bold !text-heading leading-[normal]" style={{height:"37.48px",minHeight:"37.48px",maxHeight:"37.48px",lineHeight:"normal",overflow:"hidden"}}>Display Name</TableHead> : null}
+                  <TableHead className="w-20 !px-[13.44px] !py-[10.08px] text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button type="button" variant="ghost" size="icon-sm" aria-label="Table columns" className="text-primary">
@@ -285,10 +285,10 @@ export default function RolesPage() {
               </TableHeader>
               <TableBody>
                 {pageRoles.map((role) => (
-                  <TableRow key={role.id} className="h-[67px] border-b border-chrome [&>td]:!py-3">
-                    <TableCell className="px-4 !py-3 fs-text text-body">{role.isSystem ? role.name : codeLabel(role.code)}</TableCell>
-                    {showDisplayName ? <TableCell className="px-4 !py-3 fs-text text-body">{role.name}</TableCell> : null}
-                    <TableCell className="w-20 bg-subtle/40 px-3 !py-3 text-right">
+                  <TableRow key={role.id} className="h-[52.27px] border-b border-chrome bg-white [&>td]:!py-[10.08px]">
+                    <TableCell className="!px-[13.44px] !py-[10.08px] fs-text !text-heading">{role.isSystem ? role.name : codeLabel(role.code)}</TableCell>
+                    {showDisplayName ? <TableCell className="!px-[13.44px] !py-[10.08px] fs-text !text-heading">{role.name}</TableCell> : null}
+                    <TableCell className="w-20 bg-subtle/40 px-[13.44px] !py-[10.08px] text-right">
                       <RowActionsMenu
                         label={role.name}
                         actions={[
@@ -305,7 +305,7 @@ export default function RolesPage() {
               </TableBody>
             </Table>
 
-            <div className="flex min-h-[60px] flex-wrap items-center justify-center gap-2 border-t border-chrome px-4 py-2 fs-text text-muted-foreground">
+            <div className="flex min-h-[48px] flex-wrap items-center justify-center gap-[3.36px] border-t border-chrome bg-white px-[13.44px] py-[6.72px] fs-text text-heading" style={{borderRadius:"6px"}}>
               <span className="mr-2">Showing {firstEntry} to {lastEntry} of {filteredRoles.length} entries</span>
               <Button variant="ghost" size="icon-sm" className="size-[42px] rounded-full" aria-label="First page" onClick={() => setPage(1)} disabled={page <= 1}><ChevronFirst className="size-4" /></Button>
               <Button variant="ghost" size="icon-sm" className="size-[42px] rounded-full" aria-label="Previous page" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1}><ChevronLeft className="size-4" /></Button>

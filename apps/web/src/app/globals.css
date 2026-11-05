@@ -503,15 +503,17 @@ table td {
 }
 table th {
   background-color: #f8fafc;
-  font-weight: 600;
-  color: #6c757d;
+  font-weight: 700;
+  color: #495057;
   font-size: var(--fs);
-  padding: 10px 16px;
+  padding: 10.08px 13.44px;
+  line-height: normal;
 }
 table td {
-  padding: 18px 16px;
+  padding: 10.08px 13.44px;
   font-size: var(--fs);
-  color: var(--text-strong);
+  color: #495057;
+  line-height: normal;
 }
 table.dashboard-parity-table th,
 table.dashboard-parity-table td {
