@@ -180,7 +180,7 @@ export function OrganisationSettingsPage() {
         </header>
       </section>
       <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-        <div role="tablist" aria-label="General settings sections" className="flex bg-tab-inactive">
+        <div role="tablist" aria-label="General settings sections" className="flex bg-white text-heading">
           <button type="button" role="tab" id="general-info-tab" aria-selected={activeTab === "info"} aria-controls="general-info-panel" onClick={() => setActiveTab("info")} className={`min-h-10 border-b-2 px-4 fs-text font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${activeTab === "info" ? "border-primary bg-surface text-primary" : "border-transparent text-muted-foreground hover:text-strong"}`}>
             Info
           </button>

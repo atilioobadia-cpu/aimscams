@@ -1,0 +1,16 @@
+{
+  "id": "P01-T13-general",
+  "page": "Settings → General settings",
+  "state": "default view",
+  "groups": {
+    "geom": ["box.x", "box.y", "box.w", "box.h"],
+    "geomY": ["box.y", "box.h"],
+    "flex": ["display", "alignItems", "justifyContent", "gap"],
+    "type": ["fontSize", "fontWeight", "lineHeight", "letterSpacing", "color", "textAlign"],
+    "text": ["box.y", "box.h", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "color", "textAlign"],
+    "surf": ["backgroundColor", "padding.top", "padding.right", "padding.bottom", "padding.left", "border.topWidth", "border.radius", "boxShadow"]
+  },
+  "slots": [
+    {"name":"nav","wakandi":".p-tablist-tab-list","aimscams":"div[role='tablist']","use":["geomY","flex","surf","type"],"tolerance":5}
+  ]
+}
