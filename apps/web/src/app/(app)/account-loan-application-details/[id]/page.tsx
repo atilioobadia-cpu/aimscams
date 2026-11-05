@@ -78,8 +78,10 @@ export default function LoanApplicationDetailPage() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
+    const timer = window.setTimeout(() => {
+      setLoading(true);
+      setError(null);
+    }, 0);
     void Promise.all([getLoanApplication(id), listEconomicSectors()])
       .then(([response, sectorResponse]) => {
         if (cancelled) return;
@@ -107,6 +109,7 @@ export default function LoanApplicationDetailPage() {
       });
     return () => {
       cancelled = true;
+      window.clearTimeout(timer);
     };
   }, [id]);
 
