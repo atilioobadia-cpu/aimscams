@@ -358,8 +358,14 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
                 isAdmin={isAdmin}
                 onToggleExpand={() => {
                   if (activeGroup?.label === item.label) {
+                    const shouldCollapse = isExpanded(item.label);
+                    setExpandedGroups((current) => {
+                      const next = new Set(current);
+                      next.delete(item.label);
+                      return next;
+                    });
                     setCollapsedActiveGroup(
-                      isExpanded(item.label) ? { label: item.label, pathname } : null,
+                      shouldCollapse ? { label: item.label, pathname } : null,
                     );
                     return;
                   }
