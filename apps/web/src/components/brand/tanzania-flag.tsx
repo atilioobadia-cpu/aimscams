@@ -3,8 +3,8 @@ import { cn } from "cn";
 export function TanzaniaFlag({ className }: { className?: string }) {
   return (
     <svg
-      width="23"
-      height="15"
+      width="24"
+      height="16"
       viewBox="0 0 30 20"
       role="img"
       aria-label="Tanzania"

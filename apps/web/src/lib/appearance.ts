@@ -96,13 +96,13 @@ export function applyAppearancePreferences(value: AppearancePreferences): void {
   root.style.setProperty("--text-heading", dark ? "#e5e7eb" : "#495057");
   root.style.setProperty("--text-strong", dark ? "#f9fafb" : "#111827");
   root.style.setProperty("--text-muted", dark ? "#9ca3af" : "#6c757d");
-  root.style.setProperty("--border", dark ? "#374151" : "#e2e8f0");
+  root.style.setProperty("--border", dark ? "#374151" : "#dee2e6");
   root.style.setProperty("--border-header", dark ? "#4b5563" : "#c3c6ca");
   root.style.setProperty("--tab-inactive-bg", dark ? "#273449" : "#f8fafc");
-  root.style.setProperty("--fs", `${12.8 + scaleDelta * 0.3}px`);
-  root.style.setProperty("--fs-body", `${12.8 + scaleDelta * 0.3}px`);
-  root.style.setProperty("--sidebar-label-size", `${13.34 + scaleDelta * 0.3}px`);
-  root.style.setProperty("--fs-title", `${20 + scaleDelta * 0.5}px`);
+  root.style.setProperty("--fs", `${13.44 + scaleDelta * 0.3}px`);
+  root.style.setProperty("--fs-body", `${13.44 + scaleDelta * 0.3}px`);
+  root.style.setProperty("--sidebar-label-size", `${13.44 + scaleDelta * 0.3}px`);
+  root.style.setProperty("--fs-title", `${18.144 + scaleDelta * 0.5}px`);
 }
 
 export function presetColor(preset: AppearancePreset): string {
@@ -111,6 +111,6 @@ export function presetColor(preset: AppearancePreset): string {
 
 function tint(hex: string): string {
   const rgb = hex.slice(1).match(/.{2}/g)?.map((part) => parseInt(part, 16)) ?? [5, 117, 115];
-  const mix = (channel: number) => Math.round(channel * 0.08 + 255 * 0.92);
+  const mix = (channel: number) => Math.round(channel * 0.1 + 255 * 0.9);
   return `#${rgb.map((channel) => mix(channel).toString(16).padStart(2, "0")).join("")}`;
 }

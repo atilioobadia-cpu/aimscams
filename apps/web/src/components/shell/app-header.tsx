@@ -21,21 +21,25 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { apiAssetUrl, apiRequest } from "@/lib/api";
+import { listBranches } from "@/lib/users";
 
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
-import { titleCase } from "@/lib/privacy";
 
 type AppHeaderProps = {
   institution: DashboardFixture["institution"];
   branch: DashboardFixture["branch"];
   user: DashboardFixture["user"];
+};
+
+type BranchOption = { id: string; name: string };
+
+const LANGUAGE_LABEL: Record<string, string> = {
+  English: "English",
+  Kiswahili: "Kiswahili",
 };
 
 export function AppHeader({ institution, branch, user }: AppHeaderProps) {
@@ -45,6 +49,8 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
     const hour = Number(new Intl.DateTimeFormat("en-US", { timeZone: "Africa/Dar_es_Salaam", hour: "2-digit", hour12: false }).format(new Date()));
     return hour >= 8 && hour < 17;
   });
+  const [branchOptions, setBranchOptions] = useState<BranchOption[] | null>(null);
+  const [selectedBranch, setSelectedBranch] = useState<string | null>(null);
   const [signingOut, setSigningOut] = useState(false);
   const [signOutError, setSignOutError] = useState<string | null>(null);
   useEffect(() => {
@@ -57,6 +63,16 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
     return () => window.clearInterval(timer);
   }, []);
   const logoUrl = apiAssetUrl(institution.logoUrl);
+
+  async function loadBranches(open: boolean) {
+    if (!open || branchOptions !== null) return;
+    try {
+      const rows = await listBranches();
+      setBranchOptions(rows.map((row) => ({ id: row.id, name: row.name })));
+    } catch {
+      setBranchOptions([]);
+    }
+  }
 
   async function signOut() {
     if (signingOut) return;
@@ -72,145 +88,261 @@ export function AppHeader({ institution, branch, user }: AppHeaderProps) {
     }
   }
 
+  const options: BranchOption[] =
+    branchOptions && branchOptions.length
+      ? branchOptions
+      : [{ id: "current", name: branch.name }];
+  const branchName = selectedBranch ?? branch.name;
+
   return (
     <header
       data-testid="app-header"
-      className="app-header fixed inset-x-0 top-0 z-50 flex h-[var(--header-height)] items-center border-b bg-surface px-[14px]"
-      style={{ borderBottomColor: "var(--border-header)" }}
+      data-parity="header"
+      className="app-header fixed inset-x-0 top-0 z-50 block h-[var(--header-height)] border-b-[0.666667px] border-[#dee2e6] bg-surface pt-[8.15px]"
     >
-      <div className="flex min-w-0 flex-[1_1_auto] items-center gap-[6.67px]">
-        <InstitutionLogo
-          src={logoUrl}
-          alt={institution.name}
-          monogram={initialsFor(institution.name)}
-        />
-        <div className="min-w-0">
-          <p
-            className="truncate text-[13.44px] font-semibold leading-tight text-[#495057]"
-            title={institution.name}
-          >
-            {institution.name}
-          </p>
-          <p
-            className="mt-[2.67px] truncate fs-text leading-tight text-[#6c757d]"
-            title={`${institution.dialect} SACCOS`}
-          >
-            {institution.registrationNo ?? `${institution.dialect} SACCOS`}
-          </p>
-        </div>
-      </div>
-
-      <div className="ml-auto flex shrink-0 items-center gap-6">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              data-testid="language-trigger"
-              aria-label={`Language: ${language}`}
-              className="flex items-center rounded-md px-1.5 py-1.5 text-[12px] font-normal text-muted-foreground outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
-            >
-              <TanzaniaFlag className="h-4 w-6" />
-              <span className="ml-[14.67px]" style={{ fontSize: "11.5px" }}>{language}</span>
-              <ChevronDown className="ml-[23.33px] size-4 text-muted-foreground" aria-hidden="true" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={10} className="w-44">
-            <DropdownMenuLabel>Language</DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
-              <DropdownMenuRadioItem value="English">English</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="Kiswahili">Kiswahili</DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
+      <div
+        data-parity="header-toolbar"
+        className="flex h-[47.03px] w-full items-center justify-between gap-[13.44px] px-[13.44px]"
+      >
         <div
-          className="hidden items-center gap-3 lg:flex"
-          data-testid="branch-context"
-          aria-label={`Branch: ${branch.name}, ${branchOpen ? "Open" : "Closed"}`}
+          data-parity="header-start"
+          className="flex min-w-0 flex-1 items-center justify-start gap-[13.44px] overflow-hidden"
         >
-          <Building2 className="size-4 shrink-0 text-brand" aria-hidden="true" />
-          <div>
-            <p className="translate-y-[1.33px] text-[11.76px] font-semibold leading-tight text-brand">{branch.name}</p>
-            <p className={`-translate-y-[0.67px] flex items-center gap-1 text-[9.33px] leading-none ${branchOpen ? "text-brand" : "text-accent-red"}`} style={{ marginTop: "4px" }}>
-              {branchOpen ? <CheckCircle2 className="size-3.5" aria-hidden="true" /> : <X className="size-3.5" aria-hidden="true" />}
-              {branchOpen ? "Open" : "Closed"}
-            </p>
+          <div
+            data-parity="header-tenant-block"
+            className="flex min-w-0 flex-1 items-center gap-[6.72px] max-w-[376.31px]"
+          >
+            <InstitutionLogo
+              src={logoUrl}
+              alt={institution.name}
+              monogram={initialsFor(institution.name)}
+              size={40.31}
+              dataParity="header-tenant"
+            />
+            <div className="flex min-w-0 flex-1 flex-col justify-center gap-[3.36px]">
+              <p
+                data-parity="header-tenant-name"
+                className="truncate text-[13.44px] font-medium leading-[16.8px] text-[#495057]"
+                title={institution.name}
+              >
+                {institution.name}
+              </p>
+              <p
+                data-parity="header-tenant-id"
+                className="truncate text-[11.76px] leading-[normal] text-[#6c757d]"
+                title={`${institution.dialect} SACCOS`}
+              >
+                {institution.registrationNo ?? `${institution.dialect} SACCOS`}
+              </p>
+            </div>
           </div>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              data-testid="user-menu-trigger"
-              aria-label={`Account menu for ${user.name}`}
-              className="flex items-center gap-3 rounded-md py-1.5 pl-2 pr-[10px] outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
-            >
-              <span
-                data-testid="header-avatar"
-                className="grid size-[34px] shrink-0 place-items-center rounded-full fs-text font-bold text-on-primary"
-                style={{
-                  background: "linear-gradient(180deg, #2d78b8 0%, #1c4f93 100%)",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-                  outline: "2px solid #f7f7f7",
-                  outlineOffset: "-2px",
-                }}
+        <div data-parity="header-end" className="flex shrink-0 items-center gap-[13.44px]">
+          <div data-parity="header-user-menu" className="flex items-center">
+          <span
+            data-parity="header-flag"
+            className="box-border flex shrink-0 items-center justify-center"
+            style={{ width: "33.4px", height: "22.71px" }}
+          >
+            <TanzaniaFlag />
+          </span>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                data-testid="language-trigger"
+                data-parity="header-language"
+                aria-label={`Language: ${language}`}
+                className="flex shrink-0 items-center rounded-[6px] bg-white p-0 text-left text-[13.44px] text-[#495057] outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                style={{ width: "94.07px", height: "30.79px" }}
               >
-                {user.initials}
-              </span>
-              <span
-                data-testid="header-user-name"
-                className="max-w-[112px] truncate fs-text font-bold leading-none text-body lg:max-w-none"
-              >
-                {user.name}
-              </span>
-              <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={10} className="w-[280px] rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.1)] ring-0">
-            {user.email ? (
-              <DropdownMenuItem asChild>
-                <a href={"mailto:" + user.email} aria-label={"Email " + user.email}>
-                  <Mail aria-hidden="true" />
-                  <span className="min-w-0 truncate">{user.email}</span>
-                </a>
-              </DropdownMenuItem>
-            ) : null}
-            {user.phone ? (
-              <DropdownMenuItem asChild>
-                <a href={"tel:" + user.phone} aria-label={"Call " + user.phone}>
-                  <Phone aria-hidden="true" />
-                  <span>{user.phone}</span>
-                </a>
-              </DropdownMenuItem>
-            ) : null}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/clients?type=GROUP">
-                <UsersRound aria-hidden="true" />
-                My groups
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {signOutError ? (
-              <p className="px-1.5 py-1 fs-text leading-4 text-accent-red" role="alert">
-                {signOutError}
-              </p>
-            ) : null}
-            <DropdownMenuItem
-              data-testid="sign-out"
-              disabled={signingOut}
-              onSelect={() => void signOut()}
+                <span
+                  data-parity="header-language-label"
+                  className="block flex-1 truncate text-[11.76px] leading-[normal]"
+                  style={{ padding: "8.4px 10.08px" }}
+                >
+                  {LANGUAGE_LABEL[language] ?? language}
+                </span>
+                <span
+                  data-parity="header-language-chevron-cell"
+                  className="flex items-center justify-center"
+                  style={{ width: "33.59px", height: "30.79px", color: "rgb(100,116,139)", fontSize: "13.44px" }}
+                >
+                  <ChevronDown data-parity="header-language-chevron" className="size-[13.44px]" aria-hidden="true" />
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              sideOffset={2.21}
+              className="w-[94.07px] min-w-0 rounded-[6px] border-[0.666667px] border-[#e2e8f0] bg-white p-0 shadow-[0_2px_12px_rgba(0,0,0,0.1)] ring-0"
             >
-              {signingOut ? (
-                <LoaderCircle className="animate-spin" aria-hidden="true" />
-              ) : (
-                <LogOut aria-hidden="true" />
-              )}
-              {signingOut ? "Logging out" : "Log out"}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+              <div className="py-[6.72px]">
+                {Object.keys(LANGUAGE_LABEL).map((key) => (
+                  <DropdownMenuItem
+                    key={key}
+                    onSelect={() => setLanguage(key)}
+                    aria-checked={language === key}
+                    data-checked={language === key}
+                    className="h-[32.79px] rounded-none py-0 pl-[13.44px] pr-[13.44px] text-[13.44px] leading-[normal] text-[#495057] focus:bg-[#057573] focus:text-white data-[checked=true]:bg-[#057573] data-[checked=true]:text-white"
+                  >
+                    {LANGUAGE_LABEL[key]}
+                  </DropdownMenuItem>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu onOpenChange={(open) => void loadBranches(open)}>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                data-testid="branch-context"
+                data-parity="header-branch"
+                aria-label={`Branch: ${branchName}, ${branchOpen ? "Open" : "Closed"}`}
+                className="flex shrink-0 items-center justify-center rounded-[8px] border-[0.666667px] border-transparent bg-transparent text-primary outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+                style={{ height: "41.78px", padding: "6.72px 10.08px", gap: "6.72px", fontWeight: 500 }}
+              >
+                <Building2
+                  data-parity="header-branch-icon"
+                  className="size-[15.13px] shrink-0 text-primary"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
+                <span
+                  data-parity="header-branch-info"
+                  className="flex flex-col items-start gap-[1.68px]"
+                >
+                  <span
+                    data-parity="header-branch-name"
+                    className="whitespace-nowrap text-[11.76px] font-medium leading-[normal] text-primary"
+                  >
+                    {branchName}
+                  </span>
+                  <span
+                    data-parity="header-branch-status"
+                    className={`flex items-center gap-[5.04px] font-normal text-[9.408px] leading-[normal] ${branchOpen ? "text-primary" : "text-accent-red"}`}
+                  >
+                    {branchOpen ? (
+                      <CheckCircle2 data-parity="header-branch-status-icon" className="size-[9.42px]" strokeWidth={2} aria-hidden="true" />
+                    ) : (
+                      <X data-parity="header-branch-status-icon" className="size-[9.42px]" strokeWidth={2} aria-hidden="true" />
+                    )}
+                    {branchOpen ? "Open" : "Closed"}
+                  </span>
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="start"
+              sideOffset={10.22}
+              alignOffset={-15.33}
+              className="w-[200px] min-w-0 rounded-[6px] border-[0.666667px] border-[#e2e8f0] bg-white p-[4.704px_0] shadow-[0_1px_3px_rgba(0,0,0,0.1)] ring-0"
+            >
+              <div className="p-[13.44px]">
+                <div className="flex flex-col">
+                  {options.map((option) => (
+                    <DropdownMenuItem
+                      key={option.id}
+                      onSelect={() => setSelectedBranch(option.name)}
+                      aria-checked={branchName === option.name}
+                      className="flex h-[34.15px] items-center rounded-none px-[13.44px] py-[10.08px] text-[11.76px] font-semibold leading-[normal] text-primary focus:bg-[#e6f1f1] focus:text-primary"
+                    >
+                      {option.name}
+                    </DropdownMenuItem>
+                  ))}
+                </div>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                data-testid="user-menu-trigger"
+                data-parity="header-user"
+                aria-label={`Account menu for ${user.name}`}
+                className="flex shrink-0 items-center rounded-[8px] bg-transparent text-start outline-none transition-colors hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring/50"
+                style={{ height: "47.03px", padding: "6.72px", gap: "6.72px" }}
+              >
+                <span
+                  data-testid="header-avatar"
+                  data-parity="header-user-avatar"
+                  className="flex shrink-0 items-center justify-center rounded-full text-start font-semibold text-on-primary"
+                  style={{
+                    width: "33.59px",
+                    height: "33.59px",
+                    background: "linear-gradient(180deg, #2d78b8 0%, #1c4f93 100%)",
+                    boxShadow: "rgba(0,0,0,0.15) 0px 2px 8px 0px",
+                    fontSize: "13.44px",
+                  }}
+                >
+                  {user.initials}
+                </span>
+                <span
+                  data-testid="header-user-name"
+                  data-parity="header-user-name"
+                  className="max-w-[112px] truncate text-start text-[11.76px] font-semibold leading-[14.112px] text-[#495057] lg:max-w-none"
+                >
+                  {user.name}
+                </span>
+                <ChevronDown
+                  data-parity="header-user-chevron"
+                  className="size-[10.08px] shrink-0"
+                  style={{ color: "rgb(108,117,125)" }}
+                  aria-hidden="true"
+                />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={10} className="w-[280px] rounded-[6px] shadow-[0_2px_12px_rgba(0,0,0,0.1)] ring-0">
+              {user.email ? (
+                <DropdownMenuItem asChild>
+                  <a href={"mailto:" + user.email} aria-label={"Email " + user.email}>
+                    <Mail aria-hidden="true" />
+                    <span className="min-w-0 truncate">{user.email}</span>
+                  </a>
+                </DropdownMenuItem>
+              ) : null}
+              {user.phone ? (
+                <DropdownMenuItem asChild>
+                  <a href={"tel:" + user.phone} aria-label={"Call " + user.phone}>
+                    <Phone aria-hidden="true" />
+                    <span>{user.phone}</span>
+                  </a>
+                </DropdownMenuItem>
+              ) : null}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/clients?type=GROUP">
+                  <UsersRound aria-hidden="true" />
+                  My groups
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              {signOutError ? (
+                <p className="px-1.5 py-1 fs-text leading-4 text-accent-red" role="alert">
+                  {signOutError}
+                </p>
+              ) : null}
+              <DropdownMenuItem
+                data-testid="sign-out"
+                disabled={signingOut}
+                onSelect={() => void signOut()}
+              >
+                {signingOut ? (
+                  <LoaderCircle className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <LogOut aria-hidden="true" />
+                )}
+                {signingOut ? "Logging out" : "Log out"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          </div>
+        </div>
       </div>
     </header>
   );

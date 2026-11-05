@@ -4,8 +4,8 @@
 
 /* Type scale restored from release v1.2.0. */
 :root {
-  --fs: 12.8px;
-  --fs-title: 20px;                 /* page h1 only; see D-033 */
+  --fs: 13.44px;
+  --fs-title: 18.144px;             /* page h1 only; see D-033 */
   --fs-kpi: var(--fs);
   --fs-body: var(--fs);
 }
@@ -17,8 +17,9 @@ html {
 
 body {
   font-size: var(--fs);
+  line-height: normal;
   background-color: var(--page-bg);
-  color: var(--text-heading);
+  color: #000;
 }
 
 :root {
@@ -30,7 +31,7 @@ body {
   --primary-fab: #037674;
   --page-bg: #ebe9e9;
   --surface: #ffffff;
-  --border: #e2e8f0;
+  --border: #dee2e6;
   --border-header: #c3c6ca;
   --text-heading: #495057;
   --text-strong: #111827;
@@ -68,16 +69,18 @@ body {
   --header-height: 64.67px;
   --sidebar-width: 200px;
   --sidebar-collapsed-width: 76px;
-  --sidebar-footer-height: 73.9px;
-  --sidebar-subitem-height: 30px;
-  --sidebar-row-height: 30px;
-  --sidebar-item-gap-link: 8px;
-  --sidebar-item-gap-group: 9.8px;
-  --sidebar-item-radius: 5.33px;
-  --sidebar-icon-size: 14px;
-  --sidebar-label-size: 13.34px;
-  --sidebar-scrollbar-width: 5.33px;
-  --sidebar-toggle-size: 29px;
+  --sidebar-footer-height: 73.88px;
+  --sidebar-subitem-height: 28.77px;
+  --sidebar-link-row-height: 32.79px;
+  --sidebar-row-height: 29.44px;
+  --sidebar-item-gap-link: 10.08px;
+  --sidebar-item-gap-group: 10.08px;
+  --sidebar-item-radius: 6px;
+  --sidebar-icon-size: 16px;
+  --sidebar-label-size: 13.44px;
+  --sidebar-subitem-label-size: 12.768px;
+  --sidebar-scrollbar-width: 10px;
+  --sidebar-toggle-size: 30px;
   --content-padding: 14.67px;
   --content-padding-x: 13.44px;
   --content-padding-y: 13.44px;
@@ -91,7 +94,7 @@ body {
   --icon-lg: 28px;
   --active-pill-height: 30px;
   --tab-strip-height: 32px;
-  --card-radius: 6px;
+  --card-radius: 8px;
   --control-radius: 5px;
   --pill-radius: 6px;
 
@@ -197,6 +200,7 @@ body {
 
   --color-strong: var(--text-strong);
   --color-body: var(--text-body);
+  --color-heading: var(--text-heading);
   --color-label: var(--text-label);
   --color-axis: var(--text-axis);
   --color-on-primary: var(--text-on-primary);
@@ -284,7 +288,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 
 .fs-title {
   font-size: var(--fs-title);
-  line-height: 24px;
+  line-height: 21.7728px;
 }
 
 @layer base {
@@ -313,7 +317,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
   html,
   body {
     background-color: var(--bg-page);
-    color: var(--text-body);
+    color: #000;
   }
 
   body {
@@ -336,6 +340,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
    standard properties are only declared for engines without the pseudo-element. */
 .sidebar-scroll::-webkit-scrollbar {
   width: var(--sidebar-scrollbar-width);
+  display: block;
 }
 
 .sidebar-scroll::-webkit-scrollbar-track {
@@ -376,18 +381,24 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 .sidebar-footer {
   height: var(--sidebar-footer-height);
   flex-direction: column;
-  gap: 3px;
-  padding: var(--space-6) var(--space-8);
+  gap: 0;
+  padding: 13.44px;
+  border-top: 0.666667px solid #e2e8f0;
+  background: #fff;
 }
 
 .sidebar-footer-wordmark {
-  font-size: 14.7px;
-  line-height: 14px;
+  margin: 0 0 6.72px;
+  font-size: 11.61px;
+  line-height: 11.61px;
 }
 
 .sidebar-footer-copyright {
-  font-size: 11.33px;
-  line-height: 14px;
+  width: 100%;
+  margin: 0;
+  font-size: 11.76px;
+  line-height: normal;
+  color: #6c757d;
 }
 
 .sidebar-footer-copyright-short {
@@ -395,7 +406,7 @@ body[data-modal-open="true"] [data-chat-fab-root] {
 }
 
 .app-header {
-  box-shadow: 0 1px 0 var(--border-header);
+  box-shadow: none;
 }
 
 /* Form controls: consistent look across the app. */

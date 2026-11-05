@@ -58,14 +58,18 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
         </a>
 
         <AppHeader institution={institution} branch={branch} user={user} />
-        <AppSidebar collapsed={collapsed} onToggle={toggleSidebar} isAdmin={user.role.includes("Admin")} />
+        <AppSidebar collapsed={collapsed} onToggle={toggleSidebar} isAdmin={user.role.toLowerCase().includes("admin")} />
 
         <main
           id="main-content"
+          data-parity="main"
           style={{ left: width }}
-          className="fixed bottom-0 right-0 top-[var(--header-height)] overflow-auto transition-[left] duration-300"
+          className="fixed bottom-0 right-0 top-[var(--header-height)] flex flex-col overflow-auto bg-[var(--page-bg)] transition-[left] duration-300"
         >
-          <div className="content-fade min-h-full px-[var(--content-padding-x)] py-[var(--content-padding-y)]">
+          <div
+            data-parity="content"
+            className="content-fade min-h-full w-full bg-[var(--page-bg)] px-[var(--content-padding-x)] py-[var(--content-padding-y)]"
+          >
             {children}
           </div>
         </main>

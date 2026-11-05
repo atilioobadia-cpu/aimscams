@@ -1,0 +1,689 @@
+{
+  "id": "P01-T01-services",
+  "page": "Settings \u00e2\u2020\u2019 Services",
+  "state": "settings group expanded, sidebar expanded, scroll at top",
+  "groups": {
+    "geom": [
+      "box.x",
+      "box.y",
+      "box.w",
+      "box.h"
+    ],
+    "geomX": [
+      "box.x",
+      "box.y",
+      "box.h"
+    ],
+    "flex": [
+      "display",
+      "alignItems",
+      "justifyContent",
+      "gap"
+    ],
+    "type": [
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "text": [
+      "box.x",
+      "box.y",
+      "box.h",
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "icon": [
+      "box.x",
+      "box.y",
+      "box.w",
+      "box.h",
+      "color"
+    ],
+    "surf": [
+      "backgroundColor",
+      "padding.top",
+      "padding.right",
+      "padding.bottom",
+      "padding.left",
+      "border.topWidth",
+      "border.radius",
+      "boxShadow"
+    ],
+    "geomY": [
+      "box.y",
+      "box.h"
+    ],
+    "textY": [
+      "box.y",
+      "box.h",
+      "fontSize",
+      "fontWeight",
+      "lineHeight",
+      "letterSpacing",
+      "color",
+      "textAlign"
+    ],
+    "iconY": [
+      "box.y",
+      "box.h",
+      "color"
+    ]
+  },
+  "slots": [
+    {
+      "name": "header",
+      "wakandi": "header.main-header",
+      "aimscams": "[data-parity=header]",
+      "use": [
+        "geomY",
+        "display",
+        "backgroundColor",
+        "boxShadow"
+      ]
+    },
+    {
+      "name": "header-toolbar",
+      "wakandi": ".header-toolbar",
+      "aimscams": "[data-parity=header-toolbar]",
+      "use": [
+        "geomY",
+        "flex",
+        "surf"
+      ]
+    },
+    {
+      "name": "header-start",
+      "wakandi": ".header-start",
+      "aimscams": "[data-parity=header-start]",
+      "use": [
+        "geomY",
+        "flex"
+      ],
+      "tolerance": 2
+    },
+    {
+      "name": "tenant-block",
+      "wakandi": ".header-sacco-info",
+      "aimscams": "[data-parity=header-tenant-block]",
+      "use": [
+        "geomY",
+        "flex"
+      ],
+      "tolerance": 2
+    },
+    {
+      "name": "tenant-avatar",
+      "wakandi": ".header-sacco-info .p-avatar",
+      "aimscams": "[data-parity=header-tenant]",
+      "use": [
+        "geomY",
+        "flex",
+        "surf",
+        "border.topColor"
+      ]
+    },
+    {
+      "name": "tenant-avatar-img",
+      "wakandi": ".header-sacco-info .p-avatar img",
+      "aimscams": "[data-parity=header-tenant] img",
+      "use": [
+        "geomY"
+      ]
+    },
+    {
+      "name": "tenant-name",
+      "wakandi": ".sacco-name",
+      "aimscams": "[data-parity=header-tenant-name]",
+      "use": [
+        "textY"
+      ]
+    },
+    {
+      "name": "tenant-id",
+      "wakandi": ".sacco-id-subtle",
+      "aimscams": "[data-parity=header-tenant-id]",
+      "use": [
+        "textY"
+      ]
+    },
+    {
+      "name": "header-end",
+      "wakandi": ".header-end",
+      "aimscams": "[data-parity=header-end]",
+      "use": [
+        "geomY",
+        "flex"
+      ]
+    },
+    {
+      "name": "header-user-menu",
+      "wakandi": ".user-menu",
+      "aimscams": "[data-parity=header-user-menu]",
+      "use": [
+        "geomY",
+        "flex"
+      ]
+    },
+    {
+      "name": "flag-wrapper",
+      "wakandi": ".country-badge-wrapper",
+      "aimscams": "[data-parity=header-flag]",
+      "use": [
+        "geomY",
+        "display",
+        "surf"
+      ]
+    },
+    {
+      "name": "flag-img",
+      "wakandi": ".country-badge-wrapper img",
+      "aimscams": "[data-parity=header-flag] svg",
+      "use": [
+        "geomY"
+      ]
+    },
+    {
+      "name": "language",
+      "wakandi": ".header-language-select",
+      "aimscams": "[data-parity=header-language]",
+      "use": [
+        "geomY",
+        "display",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "language-label",
+      "wakandi": ".header-language-select .p-select-label",
+      "aimscams": "[data-parity=header-language-label]",
+      "use": [
+        "textY",
+        "display",
+        "padding.top",
+        "padding.right",
+        "padding.bottom",
+        "padding.left",
+        "backgroundColor"
+      ]
+    },
+    {
+      "name": "language-chevron-cell",
+      "wakandi": ".header-language-select .p-select-dropdown",
+      "aimscams": "[data-parity=header-language-chevron-cell]",
+      "use": [
+        "geomY",
+        "flex",
+        "type",
+        "backgroundColor"
+      ]
+    },
+    {
+      "name": "language-chevron",
+      "wakandi": ".header-language-select .p-select-dropdown .p-icon",
+      "aimscams": "[data-parity=header-language-chevron]",
+      "use": [
+        "iconY"
+      ]
+    },
+    {
+      "name": "branch",
+      "wakandi": ".branch-selector-btn",
+      "aimscams": "[data-parity=header-branch]",
+      "use": [
+        "geomY",
+        "flex",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "branch-icon",
+      "wakandi": ".branch-selector-btn .branch-icon",
+      "aimscams": "[data-parity=header-branch-icon]",
+      "use": [
+        "iconY"
+      ]
+    },
+    {
+      "name": "branch-info",
+      "wakandi": ".branch-selector-btn .branch-info-container",
+      "aimscams": "[data-parity=header-branch-info]",
+      "use": [
+        "geomY",
+        "flex",
+        "type"
+      ]
+    },
+    {
+      "name": "branch-name",
+      "wakandi": ".branch-selector-btn .branch-name",
+      "aimscams": "[data-parity=header-branch-name]",
+      "use": [
+        "textY"
+      ]
+    },
+    {
+      "name": "branch-status",
+      "wakandi": ".branch-selector-btn .branch-status-row",
+      "aimscams": "[data-parity=header-branch-status]",
+      "use": [
+        "geomY",
+        "display",
+        "alignItems",
+        "gap",
+        "type"
+      ]
+    },
+    {
+      "name": "branch-status-icon",
+      "wakandi": ".branch-selector-btn .branch-status-row > i",
+      "aimscams": "[data-parity=header-branch-status-icon]",
+      "use": [
+        "iconY"
+      ]
+    },
+    {
+      "name": "user",
+      "wakandi": ".user-profile-section",
+      "aimscams": "[data-parity=header-user]",
+      "use": [
+        "geomY",
+        "flex",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "user-avatar",
+      "wakandi": ".custom-avatar-wrapper",
+      "aimscams": "[data-parity=header-user-avatar]",
+      "use": [
+        "geomY",
+        "flex",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "user-name",
+      "wakandi": ".user-name",
+      "aimscams": "[data-parity=header-user-name]",
+      "use": [
+        "textY"
+      ]
+    },
+    {
+      "name": "user-chevron",
+      "wakandi": ".user-dropdown-icon",
+      "aimscams": "[data-parity=header-user-chevron]",
+      "use": [
+        "icon"
+      ]
+    },
+    {
+      "name": "sidebar",
+      "wakandi": ".sidebar-container",
+      "aimscams": "[data-parity=sidebar]",
+      "use": [
+        "geom",
+        "display",
+        "backgroundColor"
+      ]
+    },
+    {
+      "name": "sidebar-nav",
+      "wakandi": ".sidebar-scroll-area",
+      "aimscams": "[data-parity=sidebar-nav]",
+      "use": [
+        "geom",
+        "display"
+      ]
+    },
+    {
+      "name": "sidebar-menu",
+      "wakandi": ".sidebar-menu",
+      "aimscams": "[data-parity=sidebar-menu]",
+      "use": [
+        "geom",
+        "display",
+        "surf"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "nav-link-header",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(1) > .menu-header",
+      "aimscams": "a[data-nav-label=\"Dashboard\"]",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "nav-link-glyph",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(1) > .menu-header > i",
+      "aimscams": "a[data-nav-label=\"Dashboard\"] > span[data-parity=\"nav-glyph\"]",
+      "use": [
+        "icon"
+      ]
+    },
+    {
+      "name": "nav-link-label",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(1) > .menu-header > span",
+      "aimscams": "a[data-nav-label=\"Dashboard\"] > span:last-child",
+      "use": [
+        "text"
+      ]
+    },
+    {
+      "name": "nav-group-row",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(3)",
+      "aimscams": "li[data-nav-label=\"Accounts\"]",
+      "use": [
+        "geom",
+        "display",
+        "margin.top",
+        "margin.bottom"
+      ]
+    },
+    {
+      "name": "nav-group-header",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(3) > .menu-header",
+      "aimscams": "li[data-nav-label=\"Accounts\"] > div > button",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "nav-group-glyph",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(3) > .menu-header > i:not(.collapse-toggle)",
+      "aimscams": "li[data-nav-label=\"Accounts\"] > div > button > span[data-parity=\"nav-glyph\"]",
+      "use": [
+        "icon"
+      ]
+    },
+    {
+      "name": "nav-group-label",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(3) > .menu-header > span",
+      "aimscams": "li[data-nav-label=\"Accounts\"] > div > button > span:last-child",
+      "use": [
+        "text"
+      ]
+    },
+    {
+      "name": "nav-group-chevron",
+      "wakandi": ".sidebar-menu > .menu-section:nth-of-type(3) > .menu-header > .collapse-toggle",
+      "aimscams": "li[data-nav-label=\"Accounts\"] > div > span[data-parity=\"nav-chevron\"]",
+      "use": [
+        "color"
+      ]
+    },
+    {
+      "name": "settings-row",
+      "wakandi": ".sidebar-menu > .active-section",
+      "aimscams": "li[data-nav-label=\"Settings\"]",
+      "use": [
+        "geom",
+        "display",
+        "surf",
+        "margin.top",
+        "margin.bottom"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "settings-header",
+      "wakandi": ".active-section > .menu-header",
+      "aimscams": "li[data-nav-label=\"Settings\"] > div > button",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "settings-glyph",
+      "wakandi": ".active-section > .menu-header > i:not(.collapse-toggle)",
+      "aimscams": "li[data-nav-label=\"Settings\"] > div > button > span[data-parity=\"nav-glyph\"]",
+      "use": [
+        "icon"
+      ]
+    },
+    {
+      "name": "settings-label",
+      "wakandi": ".active-section > .menu-header > span",
+      "aimscams": "li[data-nav-label=\"Settings\"] > div > button > span:last-child",
+      "use": [
+        "text"
+      ]
+    },
+    {
+      "name": "settings-chevron",
+      "wakandi": ".active-section > .menu-header > .collapse-toggle",
+      "aimscams": "li[data-nav-label=\"Settings\"] > div > span[data-parity=\"nav-chevron\"]",
+      "use": [
+        "color"
+      ]
+    },
+    {
+      "name": "nav-submenu",
+      "wakandi": ".active-section > .menu-items",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul[data-parity=\"nav-submenu\"]",
+      "use": [
+        "geom",
+        "display",
+        "surf",
+        "margin.top",
+        "margin.left"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "subitem-first",
+      "wakandi": ".active-section .menu-item:first-child",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul > li:first-child > a",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "type",
+        "margin.top",
+        "margin.bottom"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "subitem-first-glyph",
+      "wakandi": ".active-section .menu-item:first-child > i",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul > li:first-child > a > span[data-parity=\"nav-subitem-glyph\"]",
+      "use": [
+        "icon"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "subitem-first-label",
+      "wakandi": ".active-section .menu-item:first-child > span",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul > li:first-child > a > span:last-child",
+      "use": [
+        "text"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "subitem-active",
+      "wakandi": ".active-section .active-menu-item",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul > li > a[data-active=\"true\"]",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "type",
+        "margin.top",
+        "margin.bottom",
+        "border.topColor"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "subitem-active-glyph",
+      "wakandi": ".active-section .active-menu-item > i",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul > li > a[data-active=\"true\"] > span[data-parity=\"nav-subitem-glyph\"]",
+      "use": [
+        "icon"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "subitem-active-label",
+      "wakandi": ".active-section .active-menu-item > span",
+      "aimscams": "li[data-nav-label=\"Settings\"] ul > li > a[data-active=\"true\"] > span:last-child",
+      "use": [
+        "text"
+      ],
+      "tolerance": 3
+    },
+    {
+      "name": "sidebar-footer",
+      "wakandi": ".sidebar-footer",
+      "aimscams": "[data-parity=sidebar-footer]",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "border.topColor"
+      ]
+    },
+    {
+      "name": "footer-copyright",
+      "wakandi": ".sidebar-footer > span",
+      "aimscams": "[data-parity=sidebar-copyright]",
+      "use": [
+        "geom",
+        "display",
+        "type"
+      ]
+    },
+    {
+      "name": "sidebar-toggle",
+      "wakandi": ".sidebar-toggle-btn button",
+      "aimscams": "[data-parity=sidebar-toggle]",
+      "use": [
+        "geom",
+        "flex",
+        "surf",
+        "type",
+        "border.topColor"
+      ]
+    },
+    {
+      "name": "sidebar-toggle-glyph",
+      "wakandi": ".sidebar-toggle-btn button > span",
+      "aimscams": "[data-parity=sidebar-toggle-glyph]",
+      "use": [
+        "color"
+      ]
+    },
+    {
+      "name": "main",
+      "wakandi": "main.main-content",
+      "aimscams": "[data-parity=main]",
+      "use": [
+        "geom",
+        "display",
+        "backgroundColor"
+      ]
+    },
+    {
+      "name": "content",
+      "wakandi": ".content-body",
+      "aimscams": "[data-parity=content]",
+      "use": [
+        "geom",
+        "display",
+        "surf"
+      ]
+    },
+    {
+      "name": "page-card",
+      "wakandi": ".pageHeaderMain",
+      "aimscams": "[data-parity=page-card]",
+      "use": [
+        "geom",
+        "display",
+        "surf",
+        "margin.top",
+        "margin.bottom",
+        "border.topColor"
+      ]
+    },
+    {
+      "name": "page-card-body",
+      "wakandi": ".pageHeaderMain .mainContent",
+      "aimscams": "[data-parity=page-card-body]",
+      "use": [
+        "geom",
+        "display"
+      ]
+    },
+    {
+      "name": "page-card-row",
+      "wakandi": ".pageHeaderMain .detail-item-header",
+      "aimscams": "[data-parity=page-card-row]",
+      "use": [
+        "geom",
+        "flex"
+      ]
+    },
+    {
+      "name": "page-hero",
+      "wakandi": ".services-hero",
+      "aimscams": "[data-parity=page-hero]",
+      "use": [
+        "geom",
+        "flex"
+      ]
+    },
+    {
+      "name": "page-icon-tile",
+      "wakandi": ".services-hero__icon",
+      "aimscams": "[data-parity=page-icon-tile]",
+      "use": [
+        "geom",
+        "display",
+        "surf",
+        "type"
+      ]
+    },
+    {
+      "name": "page-icon",
+      "wakandi": ".services-hero__icon i",
+      "aimscams": "[data-parity=page-icon-tile] > svg",
+      "use": [
+        "icon"
+      ]
+    },
+    {
+      "name": "page-title",
+      "wakandi": ".services-hero__title",
+      "aimscams": "[data-parity=page-title]",
+      "use": [
+        "text"
+      ]
+    }
+  ]
+}

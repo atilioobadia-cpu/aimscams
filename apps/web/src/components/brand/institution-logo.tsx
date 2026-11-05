@@ -7,30 +7,46 @@ type InstitutionLogoProps = {
   alt: string;
   /** Two or three letters shown if the asset cannot be loaded. */
   monogram: string;
-  width?: number;
-  height?: number;
-  className?: string;
+  /** Outer diameter in rendered pixels. */
+  size?: number;
+  /** Hook used by the parity probe. */
+  dataParity?: string;
 };
 
 /**
  * Tenant (institution) logo in the application chrome.
  *
- * Rendered as a 40px perfect circle: 2px ring #057573 on a #29aae3 fill, overflow
- * hidden, content centered. A tenant logo image fits inside with object-fit contain;
- * otherwise the tenant initials are shown in white, bold, 12.8px.
+ * Rendered as a perfect circle with a 2px #057573 ring on a transparent fill.
+ * A tenant logo image fits inside (outer size minus the ring); otherwise the
+ * tenant initials are shown.
  */
-export function InstitutionLogo({ src, alt, monogram }: InstitutionLogoProps) {
+export function InstitutionLogo({
+  src,
+  alt,
+  monogram,
+  size = 40.31,
+  dataParity,
+}: InstitutionLogoProps) {
   const [failed, setFailed] = useState(false);
   const imageSrc = src || "/brand/mfsl_logo_systm.jpg";
-  const showImage = !failed;
+  const showImage = !failed && Boolean(imageSrc);
+  const inner = size - 4;
 
   return (
     <span
       role="img"
       aria-label={alt}
       data-testid="tenant-logo"
-      className="grid h-[40px] w-[40px] min-h-[40px] min-w-[40px] max-h-[40px] max-w-[40px] shrink-0 place-items-center overflow-hidden rounded-full border-2 border-[#057573] bg-[#29aae3] box-border"
-      style={{ flex: "0 0 40px", aspectRatio: "1 / 1" }}
+      data-parity={dataParity}
+      className="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-[#057573] bg-transparent box-border"
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        minWidth: `${size}px`,
+        maxWidth: `${size}px`,
+        flex: `0 0 ${size}px`,
+        aspectRatio: "1 / 1",
+      }}
     >
       {showImage ? (
         <img
@@ -38,10 +54,16 @@ export function InstitutionLogo({ src, alt, monogram }: InstitutionLogoProps) {
           alt={alt}
           loading="eager"
           onError={() => setFailed(true)}
-          className="max-h-full max-w-full object-contain p-[3px]"
+          className="block rounded-full object-cover"
+          style={{ width: `${inner}px`, height: `${inner}px` }}
         />
       ) : (
-        <span className="text-[12.8px] font-bold leading-none text-white">{monogram}</span>
+        <span
+          className="font-bold leading-none text-[#057573]"
+          style={{ fontSize: `${Math.round(inner * 0.34 * 100) / 100}px` }}
+        >
+          {monogram}
+        </span>
       )}
     </span>
   );

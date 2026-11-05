@@ -7,13 +7,15 @@ export const metadata: Metadata = { title: "Services · AIMSCAMS" };
 
 export default function ServiceProvidersPage() {
   return (
-    <div className="space-y-[18px]">
+    <div>
       <PageHeader
         variant="card"
-        className="min-h-[94px]"
         icon={
-          <span className="ml-[2px] mr-[4px] grid size-[42px] shrink-0 place-items-center rounded-[12px] border border-primary/25 bg-primary-tint">
-            <LayoutGrid className="size-5 text-primary" aria-hidden="true" />
+          <span
+            data-parity="page-icon-tile"
+            className="grid size-[33.59px] shrink-0 place-items-center rounded-[10.08px] border-[0.666667px] border-[#aecacd] bg-[#e1eeee] text-primary"
+          >
+            <LayoutGrid className="size-[14.112px] text-primary" strokeWidth={2} aria-hidden="true" />
           </span>
         }
         title="Services"

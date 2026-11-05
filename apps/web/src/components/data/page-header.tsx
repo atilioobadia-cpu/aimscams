@@ -25,33 +25,49 @@ export function PageHeader({
     return (
       <header
         data-variant="card"
+        data-parity="page-card"
         className={cn(
-          "flex min-h-[84px] flex-col gap-4 rounded-[var(--card-radius)] border border-card-border bg-surface px-6 py-3 sm:flex-row sm:items-center sm:justify-between",
+          "mb-[13.44px] block rounded-[var(--card-radius)] border-[0.666667px] border-card-border bg-surface p-[20.16px]",
           className,
         )}
       >
-        <div className="flex min-w-0 items-center gap-3">
-          {icon}
-          <h1 className="fs-title font-bold leading-tight text-heading">{title}</h1>
+        <div data-parity="page-card-body" className="block">
+          <div
+            data-parity="page-card-row"
+            className="flex items-center justify-between gap-[13.44px]"
+          >
+            <div
+              data-parity="page-hero"
+              className="flex min-w-0 items-center gap-[12.096px]"
+            >
+              {icon}
+              <h1
+                data-parity="page-title"
+                className="fs-title block font-bold tracking-[-0.36288px] text-heading"
+              >
+                {title}
+              </h1>
+            </div>
+            {actions ? (
+              <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>
+            ) : null}
+          </div>
         </div>
-        {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </header>
     );
   }
 
   return (
-    <div
-      className={cn("flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between", className)}
-    >
-      <div className="min-w-0">
-        {breadcrumb ? <div className="mb-2 fs-text text-muted-foreground">{breadcrumb}</div> : null}
-        <h1 className="fs-title font-bold leading-tight text-heading">{title}</h1>
-        {description ? (
-          <p className="mt-1 max-w-3xl fs-text text-muted-foreground">{description}</p>
-        ) : null}
+    <header className={cn("flex flex-col gap-1", className)}>
+      {breadcrumb}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-2">
+          {icon}
+          <h1 className="fs-title font-bold tracking-[-0.36288px] text-heading">{title}</h1>
+        </div>
+        {actions ? <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
-    </div>
+      {description ? <p className="fs-text text-muted-foreground">{description}</p> : null}
+    </header>
   );
 }
-

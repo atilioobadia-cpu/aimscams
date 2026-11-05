@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-  ArrowLeftRight,
   BarChart3,
   Banknote,
   BookOpen,
@@ -21,13 +20,11 @@ import {
   FileText,
   Grid2X2,
   Home,
-  Inbox,
-  Mail,
-  MessageCircle,
   Landmark,
   Library,
-  MessagesSquare,
-  Package,
+  Mail,
+  MessageCircle,
+  Package as PackageIcon,
   PiggyBank,
   Receipt,
   RefreshCw,
@@ -37,7 +34,6 @@ import {
   Shield,
   Upload,
   UserCog,
-  Users,
   UsersRound,
   Wrench,
   type LucideIcon,
@@ -62,7 +58,7 @@ const navIcons: Record<NavIcon, LucideIcon> = {
   settings: Settings,
   book: BookOpen,
   building: Building2,
-  package: Package,
+  package: PackageIcon,
   shield: Shield,
   users: UserCog,
   scroll: ScrollText,
@@ -120,6 +116,32 @@ function isItemActive(pathname: string, item: NavItem): boolean {
   );
 }
 
+/** Wakandi renders its nav glyphs inside a 16 × 13.44 box; icons are 13.44 square. */
+function NavGlyph({
+  Icon,
+  tone,
+  dataParity,
+}: {
+  Icon: LucideIcon;
+  tone: "default" | "tinted" | "inverse";
+  dataParity: string;
+}) {
+  return (
+    <span
+      data-parity={dataParity}
+      className={cn(
+        "flex shrink-0 items-center justify-center",
+        tone === "inverse" && "text-primary-foreground",
+        tone === "tinted" && "text-primary",
+        tone === "default" && "text-heading",
+      )}
+      style={{ width: "16px", height: "13.44px" }}
+    >
+      <Icon className="size-[13.44px]" strokeWidth={1.8} aria-hidden="true" />
+    </span>
+  );
+}
+
 function SidebarItem({
   item,
   pathname,
@@ -128,8 +150,7 @@ function SidebarItem({
   expanded,
   onToggleExpand,
   isAdmin,
-}: {
-  item: NavItem;
+}: {  item: NavItem;
   pathname: string;
   collapsed: boolean;
   active: boolean;
@@ -142,27 +163,19 @@ function SidebarItem({
 
   const content = (
     <>
-      <Icon
-        className={cn("size-[var(--sidebar-icon-size)] shrink-0", active ? "text-on-primary" : "text-heading", item.icon === "messages" && "message-circle-search")}
-        strokeWidth={1.8}
-        aria-hidden="true"
+      <NavGlyph
+        Icon={Icon}
+        tone={active && !item.children ? "inverse" : "default"}
+        dataParity="nav-glyph"
       />
       {!collapsed ? (
         <>
-          <span className="min-w-0 whitespace-nowrap">{item.label}</span>
-          <span className="ml-auto flex shrink-0 items-center gap-2">
-            {item.badge ? (
-              <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 fs-text font-semibold text-primary">
-                {item.badge}
-              </span>
-            ) : null}
-            {item.chevron && !item.children ? (
-              <ChevronDown
-                className={cn("size-3", active ? "text-on-primary" : "text-heading")}
-                aria-hidden="true"
-              />
-            ) : null}
-          </span>
+          <span className="min-w-0 flex-1 truncate">{item.label}</span>
+          {item.badge ? (
+            <span className="shrink-0 rounded-[4px] bg-primary-tint px-1.5 py-0.5 fs-text font-semibold text-primary">
+              {item.badge}
+            </span>
+          ) : null}
         </>
       ) : null}
     </>
@@ -170,9 +183,8 @@ function SidebarItem({
 
   let control: ReactNode;
   const controlClass = cn(
-    "flex h-[var(--sidebar-row-height)] min-w-0 flex-1 items-center gap-[7px] rounded-[var(--sidebar-item-radius)] text-left text-[var(--sidebar-label-size)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
-    !collapsed && "ml-[6.67px] mr-3 pl-3",
-    collapsed && "mx-3 justify-start pl-4",
+    "flex h-[var(--sidebar-row-height)] min-w-0 items-center rounded-[var(--sidebar-item-radius)] text-left text-[var(--sidebar-label-size)] leading-[normal] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+    collapsed ? "mx-auto justify-center" : "w-full gap-[6.72px] px-[10.08px] py-[6.72px]",
     active
       ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
       : "text-heading hover:bg-tab-inactive",
@@ -189,7 +201,6 @@ function SidebarItem({
         data-nav-label={item.label}
         tabIndex={-1}
         className={controlClass}
-        style={{ fontSize: "var(--sidebar-label-size)" }}
       >
         {content}
       </div>
@@ -204,7 +215,6 @@ function SidebarItem({
         data-nav-label={item.label}
         data-active={active ? "true" : undefined}
         className={controlClass}
-        style={{ fontSize: "var(--sidebar-label-size)" }}
       >
         {content}
       </Link>
@@ -212,51 +222,65 @@ function SidebarItem({
   }
 
   if (item.children && !collapsed && item.href) {
-    const isGroupActive = isActivePath(pathname, item.href);
-    const groupLinkClass = cn(
-      "flex h-full min-w-0 flex-1 items-center gap-[7px] rounded-[var(--sidebar-item-radius)] pl-3 text-left text-[var(--sidebar-label-size)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
-      isGroupActive
-        ? "bg-primary font-semibold text-primary-foreground hover:bg-primary"
-        : "text-heading hover:bg-tab-inactive",
-    );
-
+    // Only the group that owns the current route is tinted; an expanded but
+    // inactive group stays flat and insets its children (measured on Wakandi).
+    const tinted = active;
     return (
       <li
         data-testid="nav-group"
         data-nav-label={item.label}
         data-expanded={expanded ? "true" : "false"}
-        style={{ marginLeft: "6.67px", marginRight: "12px", marginBottom: "var(--sidebar-item-gap-group)" }}
-        className="shrink-0 overflow-visible"
+        data-active={tinted ? "true" : undefined}
+        className="block shrink-0"
+        style={{
+          margin: tinted ? "3.36px 0" : "0 0 10.08px",
+          padding: tinted ? "6.72px 0" : undefined,
+          background: tinted ? "var(--primary-tint)" : undefined,
+          borderRadius: tinted ? "8px" : undefined,
+        }}
       >
-        <div className="flex h-[var(--sidebar-row-height)] items-center">
+        <div className="relative mb-[3.36px]">
           <button
             type="button"
             data-testid="nav-item"
             data-nav-label={item.label}
-            data-active={isGroupActive ? "true" : undefined}
+            data-active={tinted ? "true" : undefined}
             aria-expanded={expanded}
             onClick={onToggleExpand}
-            className={groupLinkClass}
-            style={{ fontSize: "var(--sidebar-label-size)" }}
+            style={{
+              fontSize: "13.44px",
+              height: "29.44px",
+              boxShadow: tinted ? "rgba(0,0,0,0.05) 0px 1px 2px 0px" : "none",
+            }}
+            className={cn(
+              "flex w-full min-w-0 items-center gap-[6.72px] rounded-[var(--sidebar-item-radius)] px-[10.08px] py-[6.72px] text-left leading-[normal] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+              tinted
+                ? "bg-primary-tint font-semibold text-primary shadow-[rgba(0,0,0,0.05)_0_1px_2px_0]"
+                : "text-heading hover:bg-tab-inactive",
+            )}
           >
-            <Icon className={cn("size-[var(--sidebar-icon-size)] shrink-0 text-heading", item.icon === "messages" && "message-circle-search")} strokeWidth={1.8} aria-hidden="true" />
-            <span className="min-w-0 truncate">{item.label}</span>
+            <NavGlyph Icon={Icon} tone={tinted ? "tinted" : "default"} dataParity="nav-glyph" />
+            <span className="min-w-0 flex-1 truncate">{item.label}</span>
           </button>
-          <button
-            type="button"
-            aria-label={`${expanded ? "Collapse" : "Expand"} ${item.label}`}
-            aria-expanded={expanded}
-            onClick={onToggleExpand}
-            className="grid h-6 w-6 shrink-0 place-items-center rounded-[var(--sidebar-item-radius)] text-heading outline-none transition-colors hover:bg-tab-inactive focus-visible:ring-2 focus-visible:ring-ring/50"
+          <span
+            data-parity="nav-chevron"
+            className="pointer-events-none absolute right-[10.08px] top-1/2 flex -translate-y-1/2 items-center justify-center"
+            style={{ width: "16px", height: "10.75px", color: "#6c757d" }}
+            aria-hidden="true"
           >
-            <ChevronDown
-              className={cn("size-3 transition-transform", expanded && "rotate-180")}
-              aria-hidden="true"
-            />
-          </button>
+            {expanded ? (
+              <ChevronRight className="size-[10.752px]" strokeWidth={3} />
+            ) : (
+              <ChevronDown className="size-[10.752px]" strokeWidth={3} />
+            )}
+          </span>
         </div>
         {expanded ? (
-          <ul className="m-0 flex list-none flex-col gap-1 p-0">
+          <ul
+            data-parity="nav-submenu"
+            className="m-0 block list-none p-0"
+            style={{ marginLeft: tinted ? undefined : "10.08px", marginRight: tinted ? undefined : "10.08px" }}
+          >
             {item.children
               .filter((child) => !(child.href === "/system-logs" && !isAdmin))
               .map((child) => (
@@ -274,14 +298,20 @@ function SidebarItem({
 
   if (!collapsed) {
     return (
-      <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: item.label === "Campaigns" ? "39.33px" : "var(--sidebar-item-gap-link)" }}>
+      <li
+        className="block shrink-0"
+        style={{ height: "var(--sidebar-link-row-height)", marginBottom: "var(--sidebar-item-gap-link)" }}
+      >
         {control}
       </li>
     );
   }
 
   return (
-    <li className="flex h-[var(--sidebar-row-height)] shrink-0 items-center" style={{ marginBottom: item.label === "Campaigns" ? "39.33px" : "var(--sidebar-item-gap-link)" }}>
+    <li
+      className="block shrink-0"
+      style={{ height: "var(--sidebar-link-row-height)", marginBottom: "var(--sidebar-item-gap-link)" }}
+    >
       <Tooltip>
         <TooltipTrigger asChild>{control}</TooltipTrigger>
         <TooltipContent side="right" sideOffset={12}>
@@ -296,7 +326,7 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
   const Icon = navIcons[child.icon];
 
   return (
-    <li className="h-[var(--sidebar-subitem-height)] shrink-0">
+    <li className="block shrink-0" style={{ margin: "1px 0" }}>
       <Link
         href={child.href}
         aria-current={active ? "page" : undefined}
@@ -304,14 +334,15 @@ function SidebarChild({ child, active }: { child: NavChild; active: boolean }) {
         data-nav-label={child.label}
         data-active={active ? "true" : undefined}
         className={cn(
-          "flex h-full w-full items-center gap-[7px] rounded-[var(--sidebar-item-radius)] pl-[33px] pr-2 text-[var(--sidebar-label-size)] leading-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
+          "flex w-full items-center gap-[6.72px] rounded-[var(--sidebar-item-radius)] px-[10.08px] py-[6.72px] leading-[normal] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring/50",
           active
-            ? "bg-primary font-semibold text-primary-foreground"
+            ? "border-[0.666667px] border-primary bg-primary font-semibold text-primary-foreground shadow-[rgba(0,0,0,0.1)_0_1px_3px_0]"
             : "text-heading hover:bg-white/60",
         )}
+        style={{ height: active ? "30.1px" : "var(--sidebar-subitem-height)", fontSize: "12.768px", boxShadow: active ? "rgba(0,0,0,0.1) 0px 1px 3px 0px" : "none" }}
       >
-        <Icon className="size-[var(--sidebar-icon-size)] shrink-0" aria-hidden="true" />
-        <span className="min-w-0 truncate">{child.label}</span>
+        <NavGlyph Icon={Icon} tone={active ? "inverse" : "default"} dataParity="nav-subitem-glyph" />
+        <span className="min-w-0 flex-1 truncate">{child.label}</span>
       </Link>
     </li>
   );
@@ -332,17 +363,19 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
   return (
     <aside
       data-testid="app-sidebar"
+      data-parity="sidebar"
       data-state={collapsed ? "collapsed" : "expanded"}
       aria-label="Sidebar"
       style={{ width: "var(--sidebar-width)" }}
-      className="fixed bottom-0 left-0 top-[var(--header-height)] z-40 flex flex-col border-r border-chrome bg-surface transition-[width] duration-300"
+      className="fixed bottom-0 left-0 top-[var(--header-height)] z-40 flex flex-col overflow-hidden bg-surface transition-[width] duration-300"
     >
       <nav
         id="app-sidebar-nav"
+        data-parity="sidebar-nav"
         aria-label="Primary"
-        className="sidebar-scroll flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain pt-[6.67px]"
+        className="sidebar-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain"
       >
-        <ul className="m-0 flex list-none flex-col p-0">
+        <ul data-parity="sidebar-menu" className="m-0 block list-none p-[6.72px]">
           {navItems.map((item) => {
             const active = isItemActive(pathname, item);
             const expanded = isExpanded(item.label);
@@ -387,18 +420,32 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
           <button
             type="button"
             data-testid="sidebar-toggle"
+            data-parity="sidebar-toggle"
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-expanded={!collapsed}
             aria-controls="app-sidebar-nav"
             onClick={onToggle}
-            style={{ bottom: "calc(var(--sidebar-footer-height) - 6.5px)", left: collapsed ? "calc(var(--sidebar-collapsed-width) - var(--sidebar-toggle-size))" : "calc(var(--sidebar-width) - var(--sidebar-toggle-size))" }}
-            className="absolute z-10 box-border grid h-[var(--sidebar-toggle-size)] w-[var(--sidebar-toggle-size)] place-items-center rounded-full border border-chrome bg-white text-primary shadow-[0_1px_3px_rgba(0,0,0,0.12)] outline-none transition-colors duration-[120ms] hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer"
+            style={{
+              bottom: "calc(var(--sidebar-footer-height) - 6.88px)",
+              left: "calc(var(--sidebar-width) - var(--sidebar-toggle-size) - 0.67px)",
+              fontSize: "11.76px",
+              fontWeight: 500,
+              padding: "6.72px 8.4px",
+              boxShadow: "rgba(0,0,0,0.1) 0px 2px 4px 0px",
+            }}
+            className="absolute z-10 box-border inline-flex h-[var(--sidebar-toggle-size)] w-[var(--sidebar-toggle-size)] items-center justify-center gap-0 overflow-hidden rounded-full border-[0.666667px] border-[#dee2e6] bg-transparent text-primary shadow-[rgba(0,0,0,0.1)_0_2px_4px_0] outline-none transition-colors duration-[120ms] hover:bg-subtle focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
           >
-            {collapsed ? (
-              <ChevronRight className="h-[10px] w-[10px]" strokeWidth={1.75} aria-hidden="true" />
-            ) : (
-              <ChevronLeft className="h-[10px] w-[10px]" strokeWidth={1.75} aria-hidden="true" />
-            )}
+            <span
+              data-parity="sidebar-toggle-glyph"
+              className="block shrink-0"
+              style={{ width: "11.76px", height: "12px", color: "#057573" }}
+            >
+              {collapsed ? (
+                <ChevronRight className="size-[11.76px]" strokeWidth={2} aria-hidden="true" />
+              ) : (
+                <ChevronLeft className="size-[11.76px]" strokeWidth={2} aria-hidden="true" />
+              )}
+            </span>
           </button>
         </TooltipTrigger>
         <TooltipContent side="right" sideOffset={8}>
@@ -408,18 +455,27 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
 
       <div
         data-testid="sidebar-footer"
-        className="sidebar-footer flex shrink-0 items-center justify-center border-t border-chrome text-center"
+        data-parity="sidebar-footer"
+        className="sidebar-footer flex shrink-0 items-center text-center"
       >
         {collapsed ? (
-          <p className="sidebar-footer-wordmark font-bold text-brand-logo" aria-label="AIMSCAMS">
+          <p
+            data-parity="sidebar-wordmark"
+            className="sidebar-footer-wordmark font-bold text-brand-logo"
+            aria-label="AIMSCAMS"
+          >
             A
           </p>
         ) : (
           <>
-            <p className="sidebar-footer-wordmark font-bold tracking-wide text-brand-logo fs-text">
+            <p
+              data-parity="sidebar-wordmark"
+              className="sidebar-footer-wordmark font-bold text-brand-logo"
+            >
               AIMSCAMS
             </p>
             <p
+              data-parity="sidebar-copyright"
               className="sidebar-footer-copyright text-muted-foreground"
               aria-label="© 2026 AIMSCAMS. All rights reserved."
             >
