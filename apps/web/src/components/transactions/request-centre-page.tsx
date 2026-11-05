@@ -55,10 +55,10 @@ export function RequestCentrePage() {
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [query, setQuery] = useState("");
-  const [tab, setTab] = useState<RequestTab>("all");
-  const [statusFilter, setStatusFilter] = useState<RequestStatus | "">("");
+  const [tab, setTab] = useState<RequestTab>("assigned");
+  const [statusFilter, setStatusFilter] = useState<RequestStatus | "">("PENDING");
   const [statusCondition, setStatusCondition] = useState<RequestStatusCondition>("IS");
-  const [statusDraft, setStatusDraft] = useState<RequestStatus | "">("");
+  const [statusDraft, setStatusDraft] = useState<RequestStatus | "">("PENDING");
   const [statusConditionDraft, setStatusConditionDraft] = useState<RequestStatusCondition>("IS");
   const [requestType, setRequestType] = useState("");
   const [requestTypeDraft, setRequestTypeDraft] = useState("");

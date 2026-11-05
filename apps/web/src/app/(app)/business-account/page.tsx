@@ -125,7 +125,7 @@ export default function BusinessAccountPage() {
 
       {activeTab === "Invoices" ? <section aria-label="Invoices" className="space-y-4 rounded-[var(--card-radius)] border border-card-border bg-card p-4">
         <div className="overflow-hidden rounded-[var(--card-radius)] border border-card-border">
-          <div className="overflow-x-auto"><Table><TableHeader><TableRow>{["Invoice Date", "Invoice Id", "Invoice Number", "Name", "Status", "Duration", "Created At", "Invoice Amount (TSh)", "Discount (TSh)", "Action"].map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}</TableRow></TableHeader><TableBody><TableRow><TableCell colSpan={10} className="h-32 text-center fs-text text-muted-foreground">No invoice data available</TableCell></TableRow></TableBody></Table></div>
+          <div className="overflow-x-auto"><Table><TableHeader><TableRow>{["Invoice Date", "Invoice Id", "Invoice Number", "Name", "Status", "Duration", "Action"].map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}</TableRow></TableHeader><TableBody><TableRow><TableCell colSpan={7} className="h-32 text-center fs-text text-muted-foreground">No data available</TableCell></TableRow></TableBody></Table></div>
         </div>
         <p className="fs-text text-muted-foreground">Tariffs and charges are unavailable.</p>
       </section> : null}
