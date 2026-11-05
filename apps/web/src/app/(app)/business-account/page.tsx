@@ -43,8 +43,8 @@ function BusinessAccountTable({ columns, search, filters = false, onSearch, tool
       </div>
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader><TableRow>{columns.map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}<TableHead className="w-12 text-center"><SlidersHorizontal aria-label="Table columns" className="mx-auto size-4" /></TableHead></TableRow></TableHeader>
-          <TableBody><TableRow><TableCell colSpan={columns.length + 1} className="h-48 text-center fs-text text-muted-foreground">No data available</TableCell></TableRow></TableBody>
+          <TableHeader className="bg-subtle"><TableRow>{columns.map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}<TableHead className="w-12 text-center"><SlidersHorizontal aria-label="Table columns" className="mx-auto size-4" /></TableHead></TableRow></TableHeader>
+          <TableBody><TableRow className="bg-white"><TableCell colSpan={columns.length + 1} className="h-48 text-center fs-text text-muted-foreground">No data available</TableCell></TableRow></TableBody>
         </Table>
       </div>
     </section>
@@ -101,7 +101,7 @@ export default function BusinessAccountPage() {
         </div>
       </section>
 
-      <nav aria-label="Business account sections" role="tablist" className="flex flex-wrap rounded-t-[6px] border-b border-card-border bg-subtle">
+      <nav aria-label="Business account sections" role="tablist" className="flex flex-wrap border-b border-card-border bg-white text-heading">
         {TABS.map((tab) => {
           const selected = activeTab === tab;
           return (
