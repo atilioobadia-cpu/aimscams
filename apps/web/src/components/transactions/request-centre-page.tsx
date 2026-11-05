@@ -105,7 +105,7 @@ export function RequestCentrePage() {
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [query, tab, statusFilter, requestType, page, reloadKey]);
+  }, [query, tab, statusFilter, statusCondition, requestType, page, reloadKey]);
 
   const items = data?.items ?? [];
   const pageCount = Math.max(1, Math.ceil((data?.total ?? 0) / (data?.pageSize ?? 20)));

@@ -100,9 +100,6 @@ export default function ChartOfAccountsPage() {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
-    setForbidden(false);
-    setError(null);
     apiRequest<Account[]>("/accounting/chart-of-accounts")
       .then((data) => {
         if (!active) return;

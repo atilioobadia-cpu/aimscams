@@ -323,18 +323,11 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
     item.children && isItemActive(pathname, item),
   );
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
-  // Auto-expand the active group on navigation.
-  useEffect(() => {
-    if (activeGroup?.label) {
-      setExpandedGroups((current) => {
-        if (current.has(activeGroup.label)) return current;
-        const next = new Set(current);
-        next.add(activeGroup.label);
-        return next;
-      });
-    }
-  }, [activeGroup?.label, pathname]);
-  const isExpanded = (label: string) => expandedGroups.has(label);
+  const [collapsedActiveGroup, setCollapsedActiveGroup] = useState<{ label: string; pathname: string } | null>(null);
+  const isExpanded = (label: string) =>
+    expandedGroups.has(label) ||
+    (activeGroup?.label === label &&
+      !(collapsedActiveGroup?.label === label && collapsedActiveGroup.pathname === pathname));
 
   return (
     <aside
@@ -363,14 +356,26 @@ export function AppSidebar({ collapsed, onToggle, isAdmin }: AppSidebarProps) {
                 active={active}
                 expanded={expanded}
                 isAdmin={isAdmin}
-                onToggleExpand={() =>
+                onToggleExpand={() => {
+                  if (activeGroup?.label === item.label) {
+                    const shouldCollapse = isExpanded(item.label);
+                    setExpandedGroups((current) => {
+                      const next = new Set(current);
+                      next.delete(item.label);
+                      return next;
+                    });
+                    setCollapsedActiveGroup(
+                      shouldCollapse ? { label: item.label, pathname } : null,
+                    );
+                    return;
+                  }
                   setExpandedGroups((current) => {
                     const next = new Set(current);
                     if (next.has(item.label)) next.delete(item.label);
                     else next.add(item.label);
                     return next;
-                  })
-                }
+                  });
+                }}
               />
             );
           })}

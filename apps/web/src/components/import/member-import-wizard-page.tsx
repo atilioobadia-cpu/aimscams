@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { AlertTriangle, CheckCircle2, CloudUpload, UsersRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -71,16 +71,17 @@ export function MemberImportWizardPage() {
   const [committing, setCommitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ImportResult | null>(null);
-  const [reference, setReference] = useState(`IMP-${Date.now()}`);
+  const [reference, setReference] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const rows = mapMemberRows(dataRows, fieldMap);
+  const rows = useMemo(() => mapMemberRows(dataRows, fieldMap), [dataRows, fieldMap]);
   const validRows = rows.filter((row) => row.valid);
   const invalidRows = rows.filter((row) => !row.valid);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
+    setReference((current) => current || `IMP-${Date.now()}`);
     setParseError(null);
     setFileName(null);
     setHeaders([]);

@@ -22,7 +22,8 @@ export default function LoanTransactionsPage() {
   const params = useParams<{ id: string }>();
   const id = params?.id ?? "";
 
-  const [loading, setLoading] = useState(true);
+  const isValidLoanId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id);
+  const [loading, setLoading] = useState(isValidLoanId);
   const [error, setError] = useState<string | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [forbidden, setForbidden] = useState(false);
@@ -30,15 +31,8 @@ export default function LoanTransactionsPage() {
 
   useEffect(() => {
     let cancelled = false;
-    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
-      setLoading(false);
-      setNotFound(true);
-      setError(null);
-      return () => { cancelled = true; };
-    }
-    setLoading(true);
-    setNotFound(false);
-    setError(null);
+    if (!isValidLoanId) return;
+
     void getLoan(id)
       .then((response) => {
         if (cancelled) return;
@@ -56,7 +50,7 @@ export default function LoanTransactionsPage() {
         setLoading(false);
       });
     return () => { cancelled = true; };
-  }, [id]);
+  }, [id, isValidLoanId]);
 
   if (forbidden) {
     return (
@@ -87,7 +81,7 @@ export default function LoanTransactionsPage() {
     );
   }
 
-  if (notFound) {
+  if (notFound || !isValidLoanId) {
     return (
       <div className="space-y-5">
         <PageHeader breadcrumb="Accounts" title="Loan transactions" description="Transaction ledger for this loan." />
