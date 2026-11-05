@@ -111,7 +111,7 @@ export default function LoanProductsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
+            <div className="flex min-h-[56px] flex-wrap items-center gap-4 border-b border-chrome px-[13.44px] py-[6.72px]">
               <label className="relative block w-[240px] max-w-full">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
                 <Input id="loan-product-search" aria-label="Search loan products" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" />
@@ -163,7 +163,7 @@ export default function LoanProductsPage() {
                   <tr><td colSpan={columnCount} className="h-[100px] px-4 text-center text-muted-foreground">{hasFilters ? "No loan products match these filters." : "No loan products are configured for this organization."}</td></tr>
                 ) : null}
                 {products.map((product) => (
-                  <tr key={product.id} className="h-[67px] border-b border-card-border last:border-0">
+                  <tr key={product.id} className="h-[52.27px] border-b border-card-border bg-white last:border-0">
                     <td className="px-4 py-3 font-medium">{product.name}</td>
                     {showInterestRate ? <td className="px-4 py-3 tabular-nums">{(product.interestRateBp / 100).toLocaleString("en-US", { maximumFractionDigits: 2 })}%</td> : null}
                     {showLoanAmount ? <td className="px-4 py-3 tabular-nums">{formatMinorAmount(product.minPrincipalMinor)} to {formatMinorAmount(product.maxPrincipalMinor)}</td> : null}
