@@ -97,8 +97,8 @@ export default function SavingsProductsPage() {
     <div className="space-y-3">
       <ProductSetupHeader active="savings" />
       {data?.canEdit ? (
-        <div className="flex justify-end px-[var(--space-16)]">
-          <Button asChild variant="outline" className="h-[42px] border-primary px-4 text-primary hover:bg-primary-tint hover:text-primary">
+        <div className="flex justify-end px-[13.44px] py-[6.72px]">
+          <Button asChild variant="outline" className="h-[28.77px] rounded-[6px] border-primary bg-transparent px-[8.4px] py-[6.72px] !text-[11.76px] text-center text-primary hover:bg-primary-tint hover:text-primary">
             <Link href="/settings/products/savings/new"><Plus className="size-4" aria-hidden="true" />Add new</Link>
           </Button>
         </div>
@@ -115,7 +115,7 @@ export default function SavingsProductsPage() {
       ) : (
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-card">
           <div className="overflow-x-auto">
-            <div className="flex min-h-[71px] flex-wrap items-center gap-4 border-b border-chrome px-[var(--space-12)] py-3">
+            <div className="flex min-h-[56px] flex-wrap items-center gap-4 border-b border-chrome px-[13.44px] py-[6.72px]">
               <label className="relative block w-[240px] max-w-full">
                 <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary" aria-hidden="true" />
                 <Input id="savings-product-search" aria-label="Search savings products" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search" className="h-[42px] border-primary pl-10 text-primary placeholder:text-primary" />
@@ -183,7 +183,7 @@ export default function SavingsProductsPage() {
                       ]
                     : [];
                   return (
-                    <tr key={product.id} className="h-[67px] border-b border-card-border last:border-0">
+                    <tr key={product.id} className="h-[52.27px] border-b border-card-border bg-white last:border-0">
                       <td className="px-4 py-3 font-medium">{product.name}</td>
                       {showType ? <td className="px-4 py-3">Savings</td> : null}
                       {showAccountNumber ? <td className="px-4 py-3">N/A</td> : null}

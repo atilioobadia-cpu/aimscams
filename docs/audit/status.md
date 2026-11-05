@@ -5,9 +5,9 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 ## Status counts
 
 - `NOT_CHECKED`: 1
-- `DIFFERENCES_OPEN`: 8
+- `DIFFERENCES_OPEN`: 7
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 4
+- `VERIFIED_MATCH`: 5
 - `BLOCKED`: 1
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
@@ -21,7 +21,7 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 
 | 1 Settings | P01-T05 Policies | `/settings/policies` | `/settings/policies` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T05-policies*.md` | `parity(P01-T05): match settings policies to live Wakandi` | None |
 
-| 1 Settings | P01-T06 Products — Savings | `/settings/products/savings` | `/settings/products/savings` | DIFFERENCES_OPEN | 2026-11-05 — list and create form compared | `evidence/P01-T06-products-savings/` | Not committed | Create flow differs; model-incomplete controls; computed CSS pending |
+| 1 Settings | P01-T06 Products — Savings | `/settings/products/savings` | `/settings/products/savings` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T06-savings*.md` | `parity(P01-T06): match settings products savings to live Wakandi` | None |
 
 | 1 Settings | P01-T07 Products — Loan | `/settings/products/loan` | `/settings/products/loan` | DIFFERENCES_OPEN | 2026-11-05 — list and empty state compared | `evidence/P01-T07-products-loan/` | Not committed | Extra local Add Filters and different empty-state copy; CSS pending |
 
