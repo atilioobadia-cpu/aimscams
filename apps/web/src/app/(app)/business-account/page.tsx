@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { ChevronDown, Download, Info, Plus, Search, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, Download, Info, Inbox, Plus, Search, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,7 +44,7 @@ function BusinessAccountTable({ columns, search, filters = false, onSearch, tool
       <div className="overflow-x-auto">
         <Table>
           <TableHeader className="bg-subtle"><TableRow>{columns.map((column) => <TableHead className="whitespace-nowrap" key={column}>{column}</TableHead>)}<TableHead className="w-12 text-center"><SlidersHorizontal aria-label="Table columns" className="mx-auto size-4" /></TableHead></TableRow></TableHeader>
-          <TableBody><TableRow className="bg-white"><TableCell colSpan={columns.length + 1} className="h-48 text-center fs-text text-muted-foreground">No data available</TableCell></TableRow></TableBody>
+          <TableBody><TableRow className="bg-white"><TableCell colSpan={columns.length + 1} className="h-48 text-center fs-text text-muted-foreground"><div className="flex flex-col items-center gap-2"><Inbox className="size-8 text-muted-foreground" aria-hidden="true" /><span>No data available</span></div></TableCell></TableRow></TableBody>
         </Table>
       </div>
     </section>
@@ -141,7 +141,7 @@ export default function BusinessAccountPage() {
         <BusinessAccountTable search={search} onSearch={setSearch} filters columns={["Timestamp", "Transaction Id", "Status", "Settlement", "Type", "Description", "Amount (TSh)"]} />
       </div> : null}
 
-      {activeTab === "Expenditure" ? <BusinessAccountTable search={search} onSearch={setSearch} toolbarEnd={<label className="flex items-center gap-2 fs-text text-heading">Convenience Fee<input type="checkbox" checked={convenienceFee} onChange={(event) => setConvenienceFee(event.target.checked)} className="size-5 accent-primary" /></label>} columns={["Timestamp", "Transaction ID", "Status", "Type", "Client/Member", "Description", "Amount (TSh)"]} /> : null}
+      {activeTab === "Expenditure" ? <BusinessAccountTable search={search} onSearch={setSearch} toolbarEnd={<label className="flex items-center gap-2 fs-text text-heading">Convenience Fee<button type="button" role="switch" aria-checked={convenienceFee} onClick={() => setConvenienceFee((v) => !v)} className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full border transition-colors focus-visible:ring-2 focus-visible:ring-ring/50 ${convenienceFee ? "border-primary bg-primary" : "border-border bg-muted"}`}><span className={`absolute size-[14px] rounded-full bg-surface shadow-sm transition-all ${convenienceFee ? "left-[18px]" : "left-0.5"}`} /></button></label>} columns={["Timestamp", "Transaction ID", "Status", "Type", "Client/Member", "Description", "Amount (TSh)"]} /> : null}
 
       {activeTab === "Transactions" ? <BusinessAccountTable search={search} onSearch={setSearch} filters columns={["Timestamp", "Transaction ID", "Status", "Type", "Description", "Amount (TSh)"]} /> : null}
 
