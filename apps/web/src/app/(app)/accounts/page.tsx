@@ -34,6 +34,7 @@ export default function AccountsPage() {
     <div className="space-y-[var(--space-14)]">
       <PageHeader
         title="Accounts"
+        titleClassName="text-[20.16px] font-semibold leading-[normal] tracking-[normal]"
         description="Client accounts: loan applications, loans and savings."
         breadcrumb="Accounts"
       />
