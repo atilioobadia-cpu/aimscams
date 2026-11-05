@@ -50,7 +50,7 @@ export default function LoanTransactionsPage() {
         setLoading(false);
       });
     return () => { cancelled = true; };
-  }, [id]);
+  }, [id, isValidLoanId]);
 
   if (forbidden) {
     return (
