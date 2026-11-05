@@ -1,0 +1,16 @@
+{
+  "id": "P07-T01-requests",
+  "page": "Requests",
+  "state": "default view",
+  "groups": {
+    "geom": ["box.x", "box.y", "box.w", "box.h"],
+    "geomY": ["box.y", "box.h"],
+    "flex": ["display", "alignItems", "justifyContent", "gap"],
+    "type": ["fontSize", "fontWeight", "lineHeight", "letterSpacing", "color", "textAlign"],
+    "text": ["box.y", "box.h", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "color", "textAlign"],
+    "surf": ["backgroundColor", "padding.top", "padding.right", "padding.bottom", "padding.left", "border.topWidth", "border.radius", "boxShadow"]
+  },
+  "slots": [
+    {"name":"page-title","wakandi":"h2,h1","aimscams":"h1,h2","use":["text","surf"],"tolerance":2}
+  ]
+}
