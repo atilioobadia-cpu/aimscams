@@ -8,6 +8,8 @@ type PageHeaderProps = {
   breadcrumb?: ReactNode;
   actions?: ReactNode;
   icon?: ReactNode;
+  /** Render the icon as a bare glyph with the measured 10.08px gap instead of an icon tile. */
+  iconPlain?: boolean;
   variant?: "plain" | "card";
   titleClassName?: string;
   className?: string;
@@ -19,6 +21,7 @@ export function PageHeader({
   breadcrumb,
   actions,
   icon,
+  iconPlain = false,
   variant = "plain",
   titleClassName,
   className,
@@ -40,7 +43,10 @@ export function PageHeader({
           >
             <div
               data-parity="page-hero"
-              className="flex min-w-0 items-center gap-[12.096px]"
+              className={cn(
+                "flex min-w-0 items-center",
+                iconPlain ? "gap-[10.08px]" : "gap-[12.096px]",
+              )}
             >
               {icon}
               <h1

@@ -463,6 +463,84 @@ export async function updateFeePenalty(id: string, payload: Partial<{
     body: payload,
   });
 }
+export type AutoDebitRuleStatus = "ACTIVE" | "INACTIVE";
+
+export type AutoDebitRule = {
+  id: string;
+  code: string;
+  name: string;
+  productName: string;
+  sourceProduct: string;
+  triggerEvents: string[];
+  priority: number;
+  requiresConsent: boolean;
+  overridable: boolean;
+  status: AutoDebitRuleStatus;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AutoDebitRuleListResponse = {
+  items: AutoDebitRule[];
+  canView: boolean;
+  canEdit: boolean;
+};
+
+export type AutoDebitRuleResponse = {
+  item: AutoDebitRule;
+  canEdit: boolean;
+};
+
+export async function listAutoDebitRules(
+  filter: { q?: string; status?: string } = {},
+): Promise<AutoDebitRuleListResponse> {
+  const params = new URLSearchParams();
+  if (filter.q?.trim()) params.set("q", filter.q.trim());
+  if (filter.status) params.set("status", filter.status);
+  const suffix = params.size > 0 ? `?${params.toString()}` : "";
+  return apiRequest<AutoDebitRuleListResponse>(`/settings/auto-debit-rules${suffix}`);
+}
+
+export async function createAutoDebitRule(payload: {
+  code: string;
+  name: string;
+  productName: string;
+  sourceProduct: string;
+  triggerEvents: string[];
+  priority: number;
+  requiresConsent: boolean;
+  overridable: boolean;
+  status?: AutoDebitRuleStatus;
+  description?: string | null;
+}): Promise<AutoDebitRuleResponse> {
+  return apiRequest<AutoDebitRuleResponse>("/settings/auto-debit-rules", {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function updateAutoDebitRule(
+  id: string,
+  payload: Partial<{
+    code: string;
+    name: string;
+    productName: string;
+    sourceProduct: string;
+    triggerEvents: string[];
+    priority: number;
+    requiresConsent: boolean;
+    overridable: boolean;
+    status: AutoDebitRuleStatus;
+    description: string | null;
+  }>,
+): Promise<AutoDebitRuleResponse> {
+  return apiRequest<AutoDebitRuleResponse>(`/settings/auto-debit-rules/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: payload,
+  });
+}
+
 export type ProvisioningRuleStatus = "ACTIVE" | "INACTIVE";
 
 export type ProvisioningRule = {

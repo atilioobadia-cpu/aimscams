@@ -7,8 +7,8 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 - `NOT_CHECKED`: 0
 - `DIFFERENCES_OPEN`: 0
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 20
-- BLOCKED: 2
+- `VERIFIED_MATCH`: 21
+- BLOCKED: 1
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
 
@@ -17,7 +17,7 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 | 1 Settings | P01-T01 Services | `/settings/service-provider` | `/settings-service-provider` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T01-services*.md` | `parity(P01-T01): match settings services to live Wakandi` | None |
 | 1 Settings | P01-T02 Roles | `/settings/role` | `/settings-role` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T02-roles*.md` | `parity(P01-T02): match settings roles to live Wakandi` | None |
 | 1 Settings | P01-T03 Users | `/settings/administrator` | `/settings-administrator` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T03-users*.md` | `parity(P01-T03): match settings users to live Wakandi` | None |
-| 1 Settings | P01-T04 Auto Debit | `/settings/auto-debit` | `/settings/auto-debit` | BLOCKED | 2026-11-05 — reference table empty; local page is a 404 (route missing) | `docs/audit/tasks/P01-T04-settings-auto-debit.md` | Not committed | Feature missing entirely; recorded in NEEDS-HUMAN.md |
+| 1 Settings | P01-T04 Auto Debit | `/settings/auto-debit` | `/settings/auto-debit` | VERIFIED_MATCH | 2026-11-06 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/tasks/P01-T04-settings-auto-debit.md` | `parity(P01-T04): match auto debit to live Wakandi` | None |
 
 | 1 Settings | P01-T05 Policies | `/settings/policies` | `/settings/policies` | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P01-T05-policies*.md` | `parity(P01-T05): match settings policies to live Wakandi` | None |
 

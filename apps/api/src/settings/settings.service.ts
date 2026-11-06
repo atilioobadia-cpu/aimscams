@@ -854,6 +854,175 @@ export class SettingsService {
     };
   }
 
+  async listAutoDebitRules(auth: AuthContext, filter: { q?: string; status?: string }) {
+    const organisationId = auth.user.organisation.id;
+    const where: Prisma.AutoDebitRuleWhereInput = { organisationId };
+    if (filter.status) {
+      const status = filter.status.trim().toUpperCase();
+      if (status === 'ACTIVE' || status === 'INACTIVE') where.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    const query = filter.q?.trim();
+    if (query) {
+      where.OR = [
+        { code: { contains: query, mode: 'insensitive' } },
+        { name: { contains: query, mode: 'insensitive' } },
+        { productName: { contains: query, mode: 'insensitive' } },
+        { sourceProduct: { contains: query, mode: 'insensitive' } },
+      ];
+    }
+    const items = await this.prisma.autoDebitRule.findMany({
+      where,
+      orderBy: [{ priority: 'asc' }, { name: 'asc' }],
+    });
+    return {
+      items: items.map((item) => this.serializeAutoDebitRule(item)),
+      canView: this.can(auth, 'Settings Auto Debit : View'),
+      canEdit: this.can(auth, 'Settings Auto Debit : Edit'),
+    };
+  }
+
+  async createAutoDebitRule(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = String(body.code ?? '').trim().toUpperCase();
+    const name = String(body.name ?? '').trim();
+    const productName = String(body.productName ?? '').trim();
+    const sourceProduct = String(body.sourceProduct ?? '').trim();
+    if (!code) throw new BadRequestException('Code is required.');
+    if (!name) throw new BadRequestException('Name is required.');
+    if (!productName) throw new BadRequestException('Product or charge name is required.');
+    if (!sourceProduct) throw new BadRequestException('Source product is required.');
+    const triggerEvents = Array.isArray(body.triggerEvents)
+      ? body.triggerEvents.map((event) => String(event).trim()).filter(Boolean)
+      : [];
+    if (triggerEvents.length === 0) throw new BadRequestException('At least one trigger event is required.');
+    const priority = Number(body.priority ?? 1);
+    if (!Number.isInteger(priority) || priority < 1) throw new BadRequestException('Priority must be a whole number of 1 or more.');
+    const status = String(body.status ?? 'ACTIVE').trim().toUpperCase();
+    if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+
+    const existing = await this.prisma.autoDebitRule.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('An auto debit rule with that code already exists.');
+
+    const item = await this.prisma.autoDebitRule.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        productName,
+        sourceProduct,
+        triggerEvents,
+        priority,
+        requiresConsent: body.requiresConsent === undefined ? true : Boolean(body.requiresConsent),
+        overridable: body.overridable === undefined ? false : Boolean(body.overridable),
+        status: status as 'ACTIVE' | 'INACTIVE',
+        description: body.description ? String(body.description).trim() : null,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Auto debit rule created',
+      entityType: 'AutoDebitRule',
+      entityId: item.id,
+      before: undefined,
+      after: this.serializeAutoDebitRule(item),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeAutoDebitRule(item), canEdit: this.can(auth, 'Settings Auto Debit : Edit') };
+  }
+
+  async updateAutoDebitRule(auth: AuthContext, id: string, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const before = await this.prisma.autoDebitRule.findFirst({ where: { id, organisationId } });
+    if (!before) throw new NotFoundException('Auto debit rule not found.');
+
+    const data: Prisma.AutoDebitRuleUpdateInput = {};
+    if (body.code !== undefined) {
+      const code = String(body.code).trim().toUpperCase();
+      if (!code) throw new BadRequestException('Code is required.');
+      data.code = code;
+    }
+    if (body.name !== undefined) {
+      const name = String(body.name).trim();
+      if (!name) throw new BadRequestException('Name is required.');
+      data.name = name;
+    }
+    if (body.productName !== undefined) {
+      const productName = String(body.productName).trim();
+      if (!productName) throw new BadRequestException('Product or charge name is required.');
+      data.productName = productName;
+    }
+    if (body.sourceProduct !== undefined) {
+      const sourceProduct = String(body.sourceProduct).trim();
+      if (!sourceProduct) throw new BadRequestException('Source product is required.');
+      data.sourceProduct = sourceProduct;
+    }
+    if (body.triggerEvents !== undefined) {
+      const triggerEvents = Array.isArray(body.triggerEvents)
+        ? body.triggerEvents.map((event) => String(event).trim()).filter(Boolean)
+        : [];
+      if (triggerEvents.length === 0) throw new BadRequestException('At least one trigger event is required.');
+      data.triggerEvents = triggerEvents;
+    }
+    if (body.priority !== undefined) {
+      const priority = Number(body.priority);
+      if (!Number.isInteger(priority) || priority < 1) throw new BadRequestException('Priority must be a whole number of 1 or more.');
+      data.priority = priority;
+    }
+    if (body.requiresConsent !== undefined) data.requiresConsent = Boolean(body.requiresConsent);
+    if (body.overridable !== undefined) data.overridable = Boolean(body.overridable);
+    if (body.status !== undefined) {
+      const status = String(body.status).trim().toUpperCase();
+      if (status !== 'ACTIVE' && status !== 'INACTIVE') throw new BadRequestException('Status must be ACTIVE or INACTIVE.');
+      data.status = status as 'ACTIVE' | 'INACTIVE';
+    }
+    if (body.description !== undefined) data.description = body.description ? String(body.description).trim() : null;
+
+    const updated = await this.prisma.autoDebitRule.update({ where: { id }, data });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Auto debit rule updated',
+      entityType: 'AutoDebitRule',
+      entityId: id,
+      before: this.serializeAutoDebitRule(before),
+      after: this.serializeAutoDebitRule(updated),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { item: this.serializeAutoDebitRule(updated), canEdit: this.can(auth, 'Settings Auto Debit : Edit') };
+  }
+
+  private serializeAutoDebitRule(item: Prisma.AutoDebitRuleGetPayload<Record<string, never>>) {
+    return {
+      id: item.id,
+      code: item.code,
+      name: item.name,
+      productName: item.productName,
+      sourceProduct: item.sourceProduct,
+      triggerEvents: item.triggerEvents,
+      priority: item.priority,
+      requiresConsent: item.requiresConsent,
+      overridable: item.overridable,
+      status: item.status,
+      description: item.description,
+      createdAt: item.createdAt.toISOString(),
+      updatedAt: item.updatedAt.toISOString(),
+    };
+  }
+
   async listProvisioningRules(auth: AuthContext, filter: { q?: string; status?: string }) {
     const organisationId = auth.user.organisation.id;
     const where: Prisma.ProvisioningRuleWhereInput = { organisationId };

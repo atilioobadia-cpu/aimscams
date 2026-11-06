@@ -143,6 +143,75 @@ try {
     ].map((hour) => ({ ...hour, branchId: branch.id })),
   });
 
+  const autoDebitRules = [
+    {
+      code: "AD-DUE-01",
+      name: "Salary loan standing order",
+      productName: "Salary advance recovery",
+      sourceProduct: "Salary account",
+      triggerEvents: ["Due date", "Grace period end"],
+      priority: 1,
+      requiresConsent: true,
+      overridable: false,
+      status: "ACTIVE" as const,
+      description: "Collects the instalment from the salary account on the due date.",
+    },
+    {
+      code: "AD-SAV-02",
+      name: "Savings auto sweep",
+      productName: "Mandatory savings contribution",
+      sourceProduct: "Business account",
+      triggerEvents: ["Monthly cycle"],
+      priority: 2,
+      requiresConsent: true,
+      overridable: true,
+      status: "ACTIVE" as const,
+      description: "Moves the monthly savings contribution into the member savings account.",
+    },
+    {
+      code: "AD-FEE-03",
+      name: "Monthly service fee collection",
+      productName: "Monthly service fee",
+      sourceProduct: "Savings account",
+      triggerEvents: ["Fee posting"],
+      priority: 3,
+      requiresConsent: false,
+      overridable: false,
+      status: "ACTIVE" as const,
+      description: "Debits the monthly service fee when the charge is posted.",
+    },
+    {
+      code: "AD-PEN-04",
+      name: "Late repayment penalty",
+      productName: "Late repayment penalty",
+      sourceProduct: "Loan account",
+      triggerEvents: ["Missed instalment"],
+      priority: 4,
+      requiresConsent: false,
+      overridable: true,
+      status: "INACTIVE" as const,
+      description: "Suspended penalty collection pending a policy review.",
+    },
+  ];
+
+  for (const rule of autoDebitRules) {
+    await prisma.autoDebitRule.upsert({
+      where: { organisationId_code: { organisationId: organisation.id, code: rule.code } },
+      update: {
+        name: rule.name,
+        productName: rule.productName,
+        sourceProduct: rule.sourceProduct,
+        triggerEvents: rule.triggerEvents,
+        priority: rule.priority,
+        requiresConsent: rule.requiresConsent,
+        overridable: rule.overridable,
+        status: rule.status,
+        description: rule.description,
+      },
+      create: { organisationId: organisation.id, ...rule },
+    });
+  }
+
   const admin = await prisma.user.upsert({
     where: {
       organisationId_email: { organisationId: organisation.id, email: "admin@aimscams.local" },

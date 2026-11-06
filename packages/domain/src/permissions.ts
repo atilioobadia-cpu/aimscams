@@ -39,6 +39,7 @@ export const PERMISSION_ENTITIES = [
   "Settings Product",
   "Settings Policy",
   "Settings Accounting",
+  "Settings Auto Debit",
   "System Log",
   "Audit Event",
 ] as const;

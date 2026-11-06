@@ -356,6 +356,37 @@ export class SettingsController {
     return this.settings.updateFeePenalty(auth, id, body, requestContext(request));
   }
 
+  @Get('auto-debit-rules')
+  @RequirePermissions('Settings Auto Debit : View')
+  async listAutoDebitRules(
+    @CurrentAuth() auth: AuthContext,
+    @Query('q') q?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.settings.listAutoDebitRules(auth, { q, status });
+  }
+
+  @Post('auto-debit-rules')
+  @RequirePermissions('Settings Auto Debit : Create')
+  async createAutoDebitRule(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createAutoDebitRule(auth, body, requestContext(request));
+  }
+
+  @Patch('auto-debit-rules/:id')
+  @RequirePermissions('Settings Auto Debit : Edit')
+  async updateAutoDebitRule(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.updateAutoDebitRule(auth, id, body, requestContext(request));
+  }
+
   @Get('products/provisioning-rules')
   @RequirePermissions('Settings Product : View')
   async listProvisioningRules(
