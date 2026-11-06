@@ -18,6 +18,7 @@ import { TellerWorkspaceHeader } from "@/components/transactions/teller-workspac
 import { ApiError } from "@/lib/api";
 import { formatTzs } from "@/lib/format";
 import { createTransaction, getTill, type TillInfo } from "@/lib/transactions";
+import { listLoans, type Loan } from "@/lib/settings";
 
 const TELLER_CATEGORIES = [
   {
@@ -169,6 +170,8 @@ export function TellerConsolePage() {
   const [clientId, setClientId] = useState("");
   const [savingsAccountId, setSavingsAccountId] = useState("");
   const [loanId, setLoanId] = useState("");
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [loanQuery, setLoanQuery] = useState("");
   const [counterAccountCode, setCounterAccountCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [narration, setNarration] = useState("");
@@ -179,6 +182,21 @@ export function TellerConsolePage() {
   const [countedCash, setCountedCash] = useState("");
   const [tillActionError, setTillActionError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    if (type !== "LOAN_DISBURSEMENT") return;
+    let cancelled = false;
+    void listLoans({})
+      .then((response) => {
+        if (!cancelled) setLoans(response.items);
+      })
+      .catch(() => {
+        if (!cancelled) setLoans([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [type]);
 
   useEffect(() => {
     let cancelled = false;
@@ -609,16 +627,39 @@ export function TellerConsolePage() {
                           className="mb-1 block fs-caption font-medium text-body"
                           htmlFor="transaction-loan"
                         >
-                          Loan ID *
+                          Loan account *
                         </label>
                         <Input
+                          id="transaction-loan-search"
+                          value={loanQuery}
+                          onChange={(event) => setLoanQuery(event.target.value)}
+                          placeholder="Search account number or member name"
+                          className="mb-2 h-[var(--control-height)]"
+                        />
+                        <select
                           id="transaction-loan"
                           value={loanId}
                           onChange={(event) => setLoanId(event.target.value)}
-                          placeholder="Enter loan ID"
-                          className="h-[var(--control-height)]"
+                          className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
                           required
-                        />
+                        >
+                          <option value="">Select approved loan</option>
+                          {loans
+                            .filter((loan) => {
+                              const q = loanQuery.trim().toLowerCase();
+                              if (!q) return true;
+                              return (
+                                (loan.loanNumber ?? "").toLowerCase().includes(q) ||
+                                (loan.clientName ?? "").toLowerCase().includes(q) ||
+                                (loan.clientReference ?? "").toLowerCase().includes(q)
+                              );
+                            })
+                            .map((loan) => (
+                              <option key={loan.id} value={loan.id}>
+                                {loan.loanNumber} - {loan.clientName ?? loan.clientReference ?? "Unknown"} - {loan.productName ?? "Loan"}
+                              </option>
+                            ))}
+                        </select>
                       </div>
                     ) : null}
                     {requiresLedgerAccount ? (
