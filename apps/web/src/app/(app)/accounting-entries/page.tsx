@@ -735,43 +735,78 @@ export default function JournalEntriesPage() {
             ) : null}
 
             <h2 className="fs-text font-semibold text-heading">Ledger Entries</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[9%]">Dr/Cr</TableHead>
-                  <TableHead className="w-[11%]">Code</TableHead>
-                  <TableHead>Ledger</TableHead>
-                  <TableHead className="w-[24%] text-right">Debit Amount (TSh)</TableHead>
-                  <TableHead className="w-[24%] text-right">Credit Amount (TSh)</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {detail.lines.map((line) => (
-                  <TableRow key={line.id}>
-                    <TableCell className="text-muted-foreground">{line.debitMinor === "0" ? "Cr" : "Dr"}</TableCell>
-                    <TableCell className="text-muted-foreground">{line.accountCode}</TableCell>
-                    <TableCell className="font-medium text-strong">{line.accountName}</TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {line.debitMinor === "0" ? "-" : entryAmount(line.debitMinor)}
+            <div className="space-y-2 md:hidden" aria-label="Ledger entry lines">
+              {detail.lines.map((line) => (
+                <article key={line.id} className="min-w-0 rounded-[var(--card-radius)] border border-card-border bg-card p-3">
+                  <div className="flex min-w-0 items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="break-words fs-text font-semibold text-strong">{line.accountName}</p>
+                      <p className="mt-1 fs-caption text-muted-foreground">Code {line.accountCode}</p>
+                    </div>
+                    <Badge variant="secondary">{line.debitMinor === "0" ? "Cr" : "Dr"}</Badge>
+                  </div>
+                  <dl className="mt-3 grid min-w-0 grid-cols-2 gap-3 fs-caption">
+                    <div className="min-w-0">
+                      <dt className="text-muted-foreground">Debit (TSh)</dt>
+                      <dd className="break-words tabular-nums text-strong">{line.debitMinor === "0" ? "—" : entryAmount(line.debitMinor)}</dd>
+                    </div>
+                    <div className="min-w-0">
+                      <dt className="text-muted-foreground">Credit (TSh)</dt>
+                      <dd className="break-words tabular-nums text-strong">{line.creditMinor === "0" ? "—" : entryAmount(line.creditMinor)}</dd>
+                    </div>
+                  </dl>
+                </article>
+              ))}
+              <dl className="grid grid-cols-2 gap-3 border-t border-row-border pt-3 fs-caption font-semibold">
+                <div>
+                  <dt className="text-muted-foreground">Total debit</dt>
+                  <dd className="tabular-nums text-strong">{entryAmount(detail.debitMinor)}</dd>
+                </div>
+                <div>
+                  <dt className="text-muted-foreground">Total credit</dt>
+                  <dd className="tabular-nums text-strong">{entryAmount(detail.creditMinor)}</dd>
+                </div>
+              </dl>
+            </div>
+            <div className="hidden min-w-0 md:block">
+              <Table className="min-w-[640px]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[9%]">Dr/Cr</TableHead>
+                    <TableHead className="w-[11%]">Code</TableHead>
+                    <TableHead>Ledger</TableHead>
+                    <TableHead className="w-[24%] text-right">Debit Amount (TSh)</TableHead>
+                    <TableHead className="w-[24%] text-right">Credit Amount (TSh)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {detail.lines.map((line) => (
+                    <TableRow key={line.id}>
+                      <TableCell className="text-muted-foreground">{line.debitMinor === "0" ? "Cr" : "Dr"}</TableCell>
+                      <TableCell className="text-muted-foreground">{line.accountCode}</TableCell>
+                      <TableCell className="font-medium text-strong">{line.accountName}</TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {line.debitMinor === "0" ? "-" : entryAmount(line.debitMinor)}
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {line.creditMinor === "0" ? "-" : entryAmount(line.creditMinor)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell colSpan={3} className="text-right font-semibold">Total:</TableCell>
+                    <TableCell className="text-right font-semibold tabular-nums">
+                      Dr {entryAmount(detail.debitMinor)}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {line.creditMinor === "0" ? "-" : entryAmount(line.creditMinor)}
+                    <TableCell className="text-right font-semibold tabular-nums">
+                      Cr {entryAmount(detail.creditMinor)}
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TableCell colSpan={3} className="text-right font-semibold">Total:</TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">
-                    Dr {entryAmount(detail.debitMinor)}
-                  </TableCell>
-                  <TableCell className="text-right font-semibold tabular-nums">
-                    Cr {entryAmount(detail.creditMinor)}
-                  </TableCell>
-                </TableRow>
-              </TableFooter>
-            </Table>
+                </TableFooter>
+              </Table>
+            </div>
 
             <div className="space-y-2 fs-text text-body">
               <p><span className="font-semibold">Narration:</span> {detail.description || "N/A"}</p>

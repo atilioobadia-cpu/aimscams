@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { cn } from "cn";
 
@@ -18,6 +19,11 @@ type ModalProps = {
 export function Modal({ open, onClose, title, children, footer, size = "default", unsaved = false }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setPortalTarget(document.body);
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -50,10 +56,10 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
 
   if (!visible && !open) return null;
 
-  return (
+  const modal = (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center transition-opacity duration-150",
+        "fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto p-3 transition-opacity duration-150 sm:p-6",
         open ? "opacity-100" : "opacity-0",
       )}
       onClick={(e) => {
@@ -82,29 +88,30 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
         aria-modal="true"
         aria-labelledby="modal-title"
         className={cn(
-          "relative z-10 flex max-h-[90vh] flex-col rounded-[11px] bg-surface shadow-xl transition-transform duration-150",
+          "relative z-10 flex max-h-[calc(100dvh-1.5rem)] min-w-0 flex-col overflow-hidden rounded-[11px] bg-surface shadow-xl transition-transform duration-150 sm:max-h-[calc(100dvh-3rem)]",
           open ? "scale-100" : "scale-95",
-          size === "extra-wide" ? "w-[1280px] max-w-[92vw]" : size === "wide" ? "w-[1080px] max-w-[92vw]" : size === "large" ? "w-[900px] max-w-[92vw]" : "w-[643px] max-w-[92vw]",
+          size === "extra-wide" ? "w-full sm:w-[1280px] sm:max-w-[92vw]" : size === "wide" ? "w-full sm:w-[1080px] sm:max-w-[92vw]" : size === "large" ? "w-full sm:w-[900px] sm:max-w-[92vw]" : "w-full sm:w-[643px] sm:max-w-[92vw]",
         )}
       >
-        <div className="flex items-center justify-between border-b border-chrome px-5 py-3">
-          <h2 id="modal-title" className="fs-text font-bold text-strong">{title}</h2>
+        <div className="flex min-w-0 items-center justify-between gap-3 border-b border-chrome px-4 py-3 sm:px-5">
+          <h2 id="modal-title" className="min-w-0 break-words fs-text font-bold text-strong">{title}</h2>
           <button
             type="button"
             onClick={onClose}
-            className="grid size-6 place-items-center rounded text-muted-foreground hover:text-strong focus-visible:ring-2 focus-visible:ring-ring/50"
+            className="grid size-6 shrink-0 place-items-center rounded text-muted-foreground hover:text-strong focus-visible:ring-2 focus-visible:ring-ring/50"
             aria-label="Close"
           >
             <X className="size-4" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-5 py-4">{children}</div>
+        <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-4 py-4 sm:px-5">{children}</div>
         {footer ? (
-          <div className="flex items-center justify-end gap-4 border-t border-chrome px-5 py-3">
+          <div className="flex flex-wrap items-center justify-end gap-2 border-t border-chrome px-4 py-3 sm:gap-4 sm:px-5">
             {footer}
           </div>
         ) : null}
       </div>
     </div>
   );
+  return portalTarget ? createPortal(modal, portalTarget) : modal;
 }

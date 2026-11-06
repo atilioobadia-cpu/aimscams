@@ -563,7 +563,7 @@ table.dashboard-parity-table td {
 }
 
 /* Compact accounting Entries page controls measured from Wakandi's register. */
-.entries-page { color: #495057; }
+.entries-page { min-width: 0; max-width: 100%; overflow-x: clip; color: #495057; }
 .entries-page { margin-top: 6px; }
 .entries-actions { gap: 5px; }
 .entries-export,
@@ -678,7 +678,7 @@ table.dashboard-parity-table td {
 .entries-clear { border: 0; background: none; padding: 5px 8px; color: #057573; font: 500 12px var(--font-roboto), Roboto, sans-serif; cursor: pointer; }
 .entries-popover-actions button[type="submit"] { border-radius: 5px; background: #057573; color: #fff; }
 .entries-archive-note { width: 250px; color: #6c757d; }
-.entries-register { overflow: visible; }
+.entries-register { min-width: 0; max-width: 100%; overflow: hidden; }
 .entries-table { border-collapse: collapse; }
 .entries-table th {
   height: 52.8px;
