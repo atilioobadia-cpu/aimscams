@@ -157,19 +157,20 @@ export default function LoanApplicationsPage() {
 
   return (
     <div className="space-y-[15px]">
-      <PageHeader
-        variant="card"
-        icon={<FileText className="size-[19.33px] shrink-0 text-primary" aria-hidden="true" />}
-        title="Loan Applications"
-        className="min-h-[69.33px] px-[19.33px] py-0 sm:pl-[20.67px] sm:pr-[19.33px] [&>div:first-child]:gap-[10.67px] [&_h1]:!font-semibold [&_h2]:!font-semibold"
-        actions={data?.canCreate ? (
-          <Button asChild variant="outline" className="!h-[28.77px] !gap-[4px] !rounded-[6px] !border-primary !px-[8.4px] !text-[11.76px] font-medium text-primary">
-            <Link href="/account-loan-application-create"><Plus className="size-[14px]" aria-hidden="true" />New Loan Application</Link>
-          </Button>
-        ) : null}
-      />
+      <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+        <div className="flex min-h-[69.33px] items-center justify-between gap-[13.44px] px-[20.67px] py-[16px]">
+          <div className="flex min-w-0 items-center gap-[10.67px]">
+            <FileText className="size-[19.33px] shrink-0 text-primary" aria-hidden="true" />
+            <h1 className="fs-text font-semibold text-heading">Loan Applications</h1>
+          </div>
+          {data?.canCreate ? (
+            <Button asChild variant="outline" className="!h-[28.77px] !gap-[4px] !rounded-[6px] !border-primary !px-[8.4px] !text-[11.76px] font-medium text-primary">
+              <Link href="/account-loan-application-create"><Plus className="size-[14px]" aria-hidden="true" />New Loan Application</Link>
+            </Button>
+          ) : null}
+        </div>
 
-      <div role="tablist" aria-label="Loan application status" className="flex h-[45px] items-stretch border-b border-card-border bg-surface px-0">
+        <div role="tablist" aria-label="Loan application status" className="flex h-[45px] items-stretch border-t border-card-border bg-surface px-[20.67px]">
         {(Object.keys(statusGroups) as ApplicationTab[]).map((label) => (
           <button
             key={label}
@@ -200,13 +201,14 @@ export default function LoanApplicationsPage() {
           </button>
         ))}
       </div>
+      </section>
 
       <section
         id="loan-application-list-panel"
         role="tabpanel"
         aria-labelledby={`loan-app-tab-${tab.toLocaleLowerCase()}`}
         tabIndex={0}
-        className="mx-5 !mt-[15px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface"
+        className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface"
       >
         <div className="min-h-[56px] border-b border-card-border p-[10.08px]">
           <div className="flex flex-col gap-[6.72px] sm:flex-row sm:items-center">
