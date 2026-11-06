@@ -111,6 +111,12 @@ function todayIso(): string {
   return new Date(now.getTime() - offset).toISOString().slice(0, 10);
 }
 
+function tenureInDays(count: number, period: LoanTenurePeriod): number {
+  if (period === "DAYS") return count;
+  if (period === "WEEKS") return count * 7;
+  return count * 30;
+}
+
 export function LoanApplicationWizard({
   initial,
   applicationId,
@@ -298,8 +304,8 @@ export function LoanApplicationWizard({
     setInterestRate((product.interestRateBp / 100).toFixed(2));
     const method = INTEREST_METHODS.find((item) => item.value === product.interestMethod);
     if (method) setInterestMethod(method.value);
-    setTenure(String(product.minTenureMonths));
-    setTenurePeriod("MONTHS");
+    setTenure(String(product.minTenureCount));
+    setTenurePeriod(product.tenurePeriod);
     setGracePeriod(String(Math.round(product.gracePeriodDays / 30)));
   }
 
@@ -324,17 +330,14 @@ export function LoanApplicationWizard({
           return "Tenure must be a whole number between 1 and 600.";
         }
         if (selectedProduct) {
-          const equivalentMonths =
-            tenurePeriod === "DAYS"
-              ? Math.ceil(count / 30)
-              : tenurePeriod === "WEEKS"
-                ? Math.ceil((count * 7) / 30)
-                : count;
+          const requestedDays = tenureInDays(count, tenurePeriod);
+          const minimumDays = tenureInDays(selectedProduct.minTenureCount, selectedProduct.tenurePeriod);
+          const maximumDays = tenureInDays(selectedProduct.maxTenureCount, selectedProduct.tenurePeriod);
           if (
-            equivalentMonths < selectedProduct.minTenureMonths ||
-            equivalentMonths > selectedProduct.maxTenureMonths
+            requestedDays < minimumDays ||
+            requestedDays > maximumDays
           ) {
-            return `Tenure must fall between ${selectedProduct.minTenureMonths} and ${selectedProduct.maxTenureMonths} months for ${selectedProduct.name}.`;
+            return `Tenure must fall between ${selectedProduct.minTenureCount} and ${selectedProduct.maxTenureCount} ${selectedProduct.tenurePeriod.toLowerCase()} for ${selectedProduct.name}.`;
           }
         }
         const rate = Number(interestRate);
@@ -579,7 +582,7 @@ export function LoanApplicationWizard({
             <div className="grid gap-4 md:grid-cols-2">
               <div className="md:col-span-2">
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-client-search">
-                  Client/Member
+                  Client/Member *
                 </label>
                 {selectedClient ? (
                   <div className="flex items-center justify-between gap-3 rounded-[6px] border border-[#dee2e6] bg-[#f8fafc] px-[12px] py-[8px]">
@@ -621,6 +624,7 @@ export function LoanApplicationWizard({
                       onFocus={() => setClientOpen(true)}
                       placeholder="Search by client name or member ID"
                       autoComplete="off"
+                      aria-required="true"
                       className="h-[var(--control-height)] pl-9"
                     />
                     {clientOpen ? (
@@ -661,15 +665,16 @@ export function LoanApplicationWizard({
             <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-product">
-                  Product
+                  Product *
                 </label>
                 <select
                   id="la-product"
+                  required
                   value={productId}
                   onChange={(event) => chooseProduct(event.target.value)}
                   className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
                 >
-                  <option value="">Select product</option>
+                  <option value="">{loadingOptions ? "Loading products…" : products.length ? "Select product" : "No active loan products configured"}</option>
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name} ({product.code})
@@ -678,7 +683,7 @@ export function LoanApplicationWizard({
                 </select>
                 {selectedProduct ? (
                   <p className="mt-1 fs-text text-muted-foreground">
-                    {formatTzs(selectedProduct.minPrincipalMinor)} – {formatTzs(selectedProduct.maxPrincipalMinor)}
+                    {formatTzs(selectedProduct.minPrincipalMinor)} – {formatTzs(selectedProduct.maxPrincipalMinor)} · {selectedProduct.interestRateBp / 100}% per month · {selectedProduct.tenurePeriod.toLowerCase()} {selectedProduct.minTenureCount}–{selectedProduct.maxTenureCount}
                   </p>
                 ) : null}
               </div>

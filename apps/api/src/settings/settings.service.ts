@@ -20,6 +20,7 @@ import {
   parseOptionalMinor,
   parsePaymentDestination,
   parseTenurePeriod,
+  tenureInDays,
   tenureInMonths,
 } from './loan-applications.logic.js';
 import {
@@ -497,8 +498,86 @@ export class SettingsService {
     return {
       items: products.map((product) => this.serializeLoanProduct(product)),
       canView: this.can(auth, 'Settings Product : View'),
+      canCreate: this.can(auth, 'Settings Product : Create'),
       canEdit: this.can(auth, 'Settings Product : Edit'),
     };
+  }
+
+  async createLoanProduct(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
+    const organisationId = auth.user.organisation.id;
+    const code = requiredText(body.code, 'Product code').toUpperCase();
+    if (!/^[A-Z0-9_-]{2,32}$/.test(code)) {
+      throw new BadRequestException('Product code must contain 2 to 32 letters, numbers, hyphens or underscores.');
+    }
+    const name = requiredText(body.name, 'Product name');
+    const duplicate = await this.prisma.loanProduct.findUnique({
+      where: { organisationId_code: { organisationId, code } },
+      select: { id: true },
+    });
+    if (duplicate) throw new ConflictException('A loan product with that code already exists.');
+
+    const minPrincipalValue = String(body.minPrincipalMinor ?? '').trim();
+    const maxPrincipalValue = String(body.maxPrincipalMinor ?? '').trim();
+    let minPrincipalMinor: bigint;
+    let maxPrincipalMinor: bigint;
+    try {
+      minPrincipalMinor = BigInt(minPrincipalValue);
+      maxPrincipalMinor = BigInt(maxPrincipalValue);
+    } catch {
+      throw new BadRequestException('Loan amount bounds must be whole minor-unit values.');
+    }
+    if (minPrincipalMinor <= 0n || maxPrincipalMinor < minPrincipalMinor) {
+      throw new BadRequestException('Maximum loan amount must be greater than or equal to the positive minimum.');
+    }
+
+    const tenurePeriod = parseTenurePeriod(body.tenurePeriod);
+    const minTenure = parseInteger(body.minTenureCount, 'Minimum tenure', 1, 600);
+    const maxTenure = parseInteger(body.maxTenureCount, 'Maximum tenure', minTenure, 600);
+    const interestRateBp = parseInteger(body.interestRateBp, 'Interest rate', 0, 100000);
+    const interestMethod = parseInterestMethod(body.interestMethod);
+    const statusValue = String(body.status ?? 'ACTIVE').trim().toUpperCase();
+    if (statusValue !== 'DRAFT' && statusValue !== 'ACTIVE' && statusValue !== 'INACTIVE') {
+      throw new BadRequestException('Status must be DRAFT, ACTIVE or INACTIVE.');
+    }
+    const description = optionalText(body.description);
+
+    const product = await this.prisma.loanProduct.create({
+      data: {
+        organisationId,
+        code,
+        name,
+        status: statusValue,
+        description,
+        minPrincipalMinor,
+        maxPrincipalMinor,
+        minTenureMonths: minTenure,
+        maxTenureMonths: maxTenure,
+        tenurePeriod,
+        interestRateBp,
+        interestMethod,
+        repaymentFrequency: tenurePeriod === 'WEEKS' ? 'WEEKLY' : tenurePeriod === 'DAYS' ? 'DAILY' : 'MONTHLY',
+        gracePeriodDays: 0,
+        arrearsClassificationDays: 30,
+        managementFeeBp: 0,
+        penaltyBp: 0,
+      },
+    });
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Loan product created',
+      entityType: 'LoanProduct',
+      entityId: product.id,
+      before: undefined,
+      after: this.serializeLoanProduct(product),
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+
+    return { product: this.serializeLoanProduct(product), canEdit: this.can(auth, 'Settings Product : Edit') };
   }
 
   async getLoanProduct(auth: AuthContext, id: string) {
@@ -2354,14 +2433,15 @@ export class SettingsService {
       600,
     );
     const tenurePeriod = parseTenurePeriod(body.tenurePeriod);
-    if (
-      product &&
-      (tenureInMonths(tenureCount, tenurePeriod) < product.minTenureMonths ||
-        tenureInMonths(tenureCount, tenurePeriod) > product.maxTenureMonths)
-    ) {
-      throw new BadRequestException(
-        `Tenure must fall between ${product.minTenureMonths} and ${product.maxTenureMonths} months for ${product.name}.`,
-      );
+    if (product) {
+      const requestedDays = tenureInDays(tenureCount, tenurePeriod);
+      const minimumDays = tenureInDays(product.minTenureMonths, product.tenurePeriod);
+      const maximumDays = tenureInDays(product.maxTenureMonths, product.tenurePeriod);
+      if (requestedDays < minimumDays || requestedDays > maximumDays) {
+        throw new BadRequestException(
+          `Tenure must fall between ${product.minTenureMonths} and ${product.maxTenureMonths} ${product.tenurePeriod.toLowerCase()} for ${product.name}.`,
+        );
+      }
     }
     const interestRateBp =
       body.interestRateBp === undefined || body.interestRateBp === null || body.interestRateBp === ''
@@ -2528,14 +2608,15 @@ export class SettingsService {
       600,
     );
     const tenurePeriod = parseTenurePeriod(body.tenurePeriod ?? existing.tenurePeriod);
-    if (
-      product &&
-      (tenureInMonths(tenureCount, tenurePeriod) < product.minTenureMonths ||
-        tenureInMonths(tenureCount, tenurePeriod) > product.maxTenureMonths)
-    ) {
-      throw new BadRequestException(
-        `Tenure must fall between ${product.minTenureMonths} and ${product.maxTenureMonths} months for ${product.name}.`,
-      );
+    if (product) {
+      const requestedDays = tenureInDays(tenureCount, tenurePeriod);
+      const minimumDays = tenureInDays(product.minTenureMonths, product.tenurePeriod);
+      const maximumDays = tenureInDays(product.maxTenureMonths, product.tenurePeriod);
+      if (requestedDays < minimumDays || requestedDays > maximumDays) {
+        throw new BadRequestException(
+          `Tenure must fall between ${product.minTenureMonths} and ${product.maxTenureMonths} ${product.tenurePeriod.toLowerCase()} for ${product.name}.`,
+        );
+      }
     }
     const interestRateBp =
       body.interestRateBp === undefined || body.interestRateBp === null || body.interestRateBp === ''
@@ -2971,6 +3052,9 @@ export class SettingsService {
       description: product.description,
       minPrincipalMinor: product.minPrincipalMinor.toString(),
       maxPrincipalMinor: product.maxPrincipalMinor.toString(),
+      tenurePeriod: product.tenurePeriod,
+      minTenureCount: product.minTenureMonths,
+      maxTenureCount: product.maxTenureMonths,
       minTenureMonths: product.minTenureMonths,
       maxTenureMonths: product.maxTenureMonths,
       interestRateBp: product.interestRateBp,

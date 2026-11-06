@@ -355,6 +355,8 @@ model LoanProduct {
   description             String?
   minPrincipalMinor       BigInt
   maxPrincipalMinor       BigInt
+  // The min/max tenure values are expressed in this unit.
+  tenurePeriod            LoanTenurePeriod   @default(MONTHS)
   minTenureMonths         Int
   maxTenureMonths         Int
   interestRateBp          Int

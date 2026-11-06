@@ -264,6 +264,12 @@ export function tenureInMonths(count: number, period: TenurePeriod): number {
   return count;
 }
 
+export function tenureInDays(count: number, period: TenurePeriod): number {
+  if (period === 'DAYS') return count;
+  if (period === 'WEEKS') return count * 7;
+  return count * 30;
+}
+
 export function parseTenurePeriod(value: unknown): TenurePeriod {
   const code = textOf(value).toUpperCase() || 'MONTHS';
   if (!(TENURE_PERIODS as readonly string[]).includes(code)) {

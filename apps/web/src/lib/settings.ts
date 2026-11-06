@@ -223,6 +223,9 @@ export type LoanProduct = {
   description: string | null;
   minPrincipalMinor: string;
   maxPrincipalMinor: string;
+  tenurePeriod: LoanTenurePeriod;
+  minTenureCount: number;
+  maxTenureCount: number;
   minTenureMonths: number;
   maxTenureMonths: number;
   interestRateBp: number;
@@ -244,6 +247,7 @@ export type LoanProduct = {
 export type LoanProductListResponse = {
   items: LoanProduct[];
   canView: boolean;
+  canCreate: boolean;
   canEdit: boolean;
 };
 
@@ -258,6 +262,25 @@ export async function listLoanProducts(filter: { q?: string; status?: string } =
   if (filter.status) params.set("status", filter.status);
   const suffix = params.size > 0 ? `?${params.toString()}` : "";
   return apiRequest<LoanProductListResponse>(`/settings/products/loans${suffix}`);
+}
+
+export async function createLoanProduct(payload: {
+  code: string;
+  name: string;
+  status: LoanProductStatus;
+  description?: string;
+  minPrincipalMinor: string;
+  maxPrincipalMinor: string;
+  tenurePeriod: LoanTenurePeriod;
+  minTenureCount: number;
+  maxTenureCount: number;
+  interestRateBp: number;
+  interestMethod: string;
+}): Promise<LoanProductResponse> {
+  return apiRequest<LoanProductResponse>("/settings/products/loans", {
+    method: "POST",
+    body: payload,
+  });
 }
 
 export async function getLoanProduct(id: string): Promise<LoanProductResponse> {

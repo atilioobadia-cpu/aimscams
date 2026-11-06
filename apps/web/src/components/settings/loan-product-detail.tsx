@@ -116,7 +116,7 @@ export function LoanProductDetail({ id }: { id: string }) {
               <Field label="Repayment frequency" value={product.repaymentFrequency} />
               <Field label="Interest rate" value={`${(product.interestRateBp / 100).toFixed(2)}%`} />
               <Field label="Principal range" value={`${product.minPrincipalMinor} – ${product.maxPrincipalMinor}`} />
-              <Field label="Tenure (months)" value={`${product.minTenureMonths} – ${product.maxTenureMonths}`} />
+              <Field label={`Tenure (${product.tenurePeriod.toLowerCase()})`} value={`${product.minTenureCount} – ${product.maxTenureCount}`} />
               <Field label="Grace period (days)" value={String(product.gracePeriodDays)} />
               <Field label="Arrears classification (days)" value={String(product.arrearsClassificationDays)} />
               <Field label="Management fee" value={`${(product.managementFeeBp / 100).toFixed(2)}%`} />

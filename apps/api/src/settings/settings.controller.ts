@@ -346,6 +346,16 @@ export class SettingsController {
     return this.settings.listLoanProducts(auth, { q, status });
   }
 
+  @Post('products/loans')
+  @RequirePermissions('Settings Product : Create')
+  async createLoanProduct(
+    @CurrentAuth() auth: AuthContext,
+    @Body() body: Record<string, unknown>,
+    @Req() request: Request,
+  ) {
+    return this.settings.createLoanProduct(auth, body, requestContext(request));
+  }
+
   @Get('products/loans/:id')
   @RequirePermissions('Settings Product : View')
   async getLoanProduct(
