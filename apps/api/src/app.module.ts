@@ -8,6 +8,7 @@ import { AccountingModule } from './accounting/accounting.module.js';
 import { SettingsModule } from './settings/settings.module.js';
 import { TransactionsModule } from './transactions/transactions.module.js';
 import { MessagesModule } from './messages/messages.module.js';
+import { DashboardModule } from './dashboard/dashboard.module.js';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MessagesModule } from './messages/messages.module.js';
     SettingsModule,
     TransactionsModule,
     MessagesModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],

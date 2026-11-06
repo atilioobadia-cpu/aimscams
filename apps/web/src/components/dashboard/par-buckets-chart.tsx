@@ -13,16 +13,20 @@ const toneClasses = {
   "90+": "bg-chart-bar-dark",
 } as const;
 
-const categories = [
-  { id: "current", label: "Current", value: "5000000000", tone: "current" as const },
-  { id: "1-30", label: "1-30 Days", value: "1379000000", tone: "1-30" as const },
-  { id: "31-90", label: "31-90 Days", value: "2529000000", tone: "31-90" as const },
-  { id: "90+", label: "90+ Days", value: "464000000", tone: "90+" as const },
-];
+type ParBucket = {
+  id: string;
+  label: string;
+  value: string;
+  tone: "current" | "1-30" | "31-90" | "90+";
+};
 
-const MAX_VALUE = 5000000000;
+type ParBucketsChartProps = {
+  buckets: ParBucket[];
+};
 
-export function ParBucketsChart() {
+export function ParBucketsChart({ buckets }: ParBucketsChartProps) {
+  const categories = buckets;
+  const MAX_VALUE = Math.max(...categories.map((c) => Number(c.value)), 1);
   const [activeBar, setActiveBar] = useState<string | null>(null);
 
   const ticks = [50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 0].map((value) => value * 100000000);

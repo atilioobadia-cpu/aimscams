@@ -12,15 +12,19 @@ const toneClasses = {
   loans: "bg-chart-bar",
 } as const;
 
-const categories = [
-  { id: "savings", label: "Savings", value: "0", tone: "savings" as const },
-  { id: "shares", label: "Shares", value: "0", tone: "shares" as const },
-  { id: "loans", label: "Loans", value: "11532500000", tone: "loans" as const },
-];
+type SavingsSharesLoansChartProps = {
+  savings: string;
+  shares: string;
+  loans: string;
+};
 
-const MAX_VALUE = 12000000000;
-
-export function SavingsSharesLoansChart() {
+export function SavingsSharesLoansChart({ savings, shares, loans }: SavingsSharesLoansChartProps) {
+  const categories = [
+    { id: "savings", label: "Savings", value: savings, tone: "savings" as const },
+    { id: "shares", label: "Shares", value: shares, tone: "shares" as const },
+    { id: "loans", label: "Loans", value: loans, tone: "loans" as const },
+  ];
+  const MAX_VALUE = Math.max(...categories.map((c) => Number(c.value)), 1);
   const [activeBar, setActiveBar] = useState<string | null>(null);
 
   function percentageOfRange(value: string, max: number): number {

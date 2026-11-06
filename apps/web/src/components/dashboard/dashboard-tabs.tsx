@@ -270,6 +270,21 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     [loans, clientByReference, filters],
   );
 
+  const parBuckets = useMemo(() => {
+    const buckets = [
+      { id: "current", label: "Current", value: "0", tone: "current" as const },
+      { id: "1-30", label: "1-30 Days", value: "0", tone: "1-30" as const },
+      { id: "31-90", label: "31-90 Days", value: "0", tone: "31-90" as const },
+      { id: "90+", label: "90+ Days", value: "0", tone: "90+" as const },
+    ];
+    for (const loan of loans ?? []) {
+      const dpd = loan.daysPastDue ?? 0;
+      const bucket = dpd <= 0 ? buckets[0] : dpd <= 30 ? buckets[1] : dpd <= 90 ? buckets[2] : buckets[3];
+      bucket.value = (BigInt(bucket.value) + BigInt(loan.outstandingPrincipalMinor || "0")).toString();
+    }
+    return buckets;
+  }, [loans]);
+
   const liveKpis = useMemo<KpiFixture[]>(() => {
     if (!clients || !loans) return data.kpis;
     const totalMembers = clients.length;
@@ -334,8 +349,12 @@ export function DashboardTabs({ data }: DashboardViewProps) {
         <KpiGrid kpis={liveKpis} />
         <FundsChart funds={data.funds} />
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2" style={{ gap: "13.44px" }}>
-          <SavingsSharesLoansChart />
-          <ParBucketsChart />
+          <SavingsSharesLoansChart
+            savings={data.portfolio.segments.find((s) => s.id === "savings")?.value ?? "0"}
+            shares={data.portfolio.segments.find((s) => s.id === "shares")?.value ?? "0"}
+            loans={data.portfolio.segments.find((s) => s.id === "loans")?.value ?? "0"}
+          />
+          <ParBucketsChart buckets={parBuckets} />
         </div>
       </TabsContent>
 

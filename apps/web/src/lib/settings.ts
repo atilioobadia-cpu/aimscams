@@ -1248,3 +1248,10 @@ export function loanApplicationDocumentUrl(applicationId: string, documentId: st
     ) ?? ""
   );
 }
+
+import type { DashboardFixture } from "@/lib/fixtures/dashboard";
+
+export async function listDashboard(): Promise<DashboardFixture> {
+  return apiRequest<DashboardFixture>("/dashboard");
+}
+
