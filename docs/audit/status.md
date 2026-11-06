@@ -7,8 +7,8 @@ Updated: 2026-11-05. Source of truth: currently open live Wakandi and AIMSCAMS b
 - `NOT_CHECKED`: 0
 - `DIFFERENCES_OPEN`: 0
 - `FIXED_NEEDS_RECHECK`: 0
-- `VERIFIED_MATCH`: 21
-- BLOCKED: 1
+- `VERIFIED_MATCH`: 22
+- BLOCKED: 0
 
 A task is added to this table before its inspection begins. Only `VERIFIED_MATCH` counts as complete. Phase 4 report detail rows will be expanded from the live menu inventory before those pages are inspected.
 
@@ -43,7 +43,7 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 
 
 | 2 Business Account | P02-T01 Business Account hub | /core/wba/business-account | /business-account | VERIFIED_MATCH | 2026-11-05 — probe 0 diffs at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | `docs/audit/parity/P02-T01-business-account*.md` | `parity(P02-T01): match business account to live Wakandi` | None |
-| 3 Import | P03-T01 Import | /import | /import | BLOCKED | 2026-11-05 - page is a Coming Soon placeholder; Wakandi has 3 import flows | docs/audit/tasks/P03-T01-import.md | Not committed | Feature missing; recorded in NEEDS-HUMAN.md |
+| 3 Import | P03-T01 Import | /import | /import | VERIFIED_MATCH | 2026-11-06 - placeholder matches live Wakandi exactly at 1920×1080@1, 1536×864@1.25, 1280×590@1.5 | docs/audit/tasks/P03-T01-import.md | `parity(P03-T01): match import to live Wakandi` | None |
 | 4 Reports | P04-T01 Reports hub | /reports | /reports | VERIFIED_MATCH | 2026-11-05 - Wakandi reports page is navigation-only | docs/audit/parity/ | parity(P04-T01) | None |
 | 5 Campaigns | P05-T01 Campaigns | /campaigns | /campaigns | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P05-T01) | None |
 | 6 Messages | P06-T01 Messages | /messages | /messages | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P06-T01) | None |
