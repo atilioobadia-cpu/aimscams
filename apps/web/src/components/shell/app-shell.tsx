@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 import { AppHeader } from "@/components/shell/app-header";
 import { AppSidebar } from "@/components/shell/app-sidebar";
-import { ChatFab } from "@/components/shell/chat-fab";
 import { ToastProvider } from "@/components/ui/toast";
 import type { DashboardFixture } from "@/lib/fixtures/dashboard";
 import { applyAppearancePreferences, readAppearancePreferences } from "@/lib/appearance";
@@ -73,8 +72,6 @@ export function AppShell({ children, institution, branch, user }: AppShellProps)
             {children}
           </div>
         </main>
-
-        <ChatFab />
       </div>
     </ToastProvider>
   );
