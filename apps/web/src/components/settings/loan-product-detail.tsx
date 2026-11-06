@@ -9,7 +9,7 @@ import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api";
 import { formatMinorUnitsExact } from "@/lib/format";
-import { getLoanProduct, type LoanProduct } from "@/lib/settings";
+import { getLoanProduct, listFeePenalties, type LoanProduct, type FeePenalty } from "@/lib/settings";
 import { titleCase } from "@/lib/privacy";
 import { cn } from "cn";
 
@@ -94,6 +94,7 @@ function Table({ columns, rows }: { columns: string[]; rows: string[][] }) {
 
 export function LoanProductDetail({ id }: { id: string }) {
   const [product, setProduct] = useState<LoanProduct | null>(null);
+  const [fees, setFees] = useState<FeePenalty[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
@@ -102,6 +103,16 @@ export function LoanProductDetail({ id }: { id: string }) {
 
   useEffect(() => {
     let active = true;
+
+    void listFeePenalties()
+      .then((response) => {
+        if (!active) return;
+        setFees(response.items);
+      })
+      .catch(() => {
+        if (!active) return;
+        setFees([]);
+      });
 
     void getLoanProduct(id)
       .then((response) => {
@@ -282,11 +293,19 @@ export function LoanProductDetail({ id }: { id: string }) {
               <Section title="Loan Product Charges" icon={List}>
                 <div className="md:col-span-2 lg:col-span-3">
                   <Table
-                    columns={["Payment Mode", "Payment Upon Loan Repayment", "Charge Name", "Charge Fee Type"]}
-                    rows={[
-                      ["Payment Upon Processing And Disbursement", "N.A.", "LOAN MANAGEMENT FEE", "Percentage"],
-                      ["Payment Upon Delayed Repayment", "N.A.", "LOAN PENALTY", "Percentage"],
-                    ]}
+                    columns={["Payment Mode", "Payment Upon Loan Repayment", "Charge Name", "Charge Fee Type", "Component", "Value"]}
+                    rows={fees.map((fee) => [
+                      fee.name === "LOAN MANAGEMENT FEE"
+                        ? "Payment Upon Processing And Disbursement"
+                        : "Payment Upon Delayed Repayment",
+                      "N.A.",
+                      fee.name,
+                      humanize(fee.amountType),
+                      fee.name === "LOAN MANAGEMENT FEE" ? "Loan Amount" : "Current Due Principal And Interest",
+                      fee.amountType === "PERCENTAGE" && fee.rateBp !== null
+                        ? `${(fee.rateBp / 100).toFixed(1).replace(/\\.0$/, "")}%`
+                        : fee.amountMinor ?? "N.A.",
+                    ])}
                   />
                 </div>
               </Section>
@@ -310,12 +329,12 @@ export function LoanProductDetail({ id }: { id: string }) {
                   <Table
                     columns={["Account Type", "Account", "Type"]}
                     rows={[
-                      ["Loan Portfolio Account", product.principalAccountId ?? "N.A.", "Assets"],
-                      ["Accrued Account", product.interestIncomeAccountId ?? "N.A.", "Assets"],
-                      ["Income From Interest", product.interestIncomeAccountId ?? "N.A.", "Income"],
-                      ["Expenses Losses Written Off", product.chargesIncomeAccountId ?? "N/A", "Expense"],
-                      ["Overpayment Account", product.penaltyIncomeAccountId ?? "N/A", "LIABILITIES"],
-                      ["Loan Suspense Account", "N.A.", "Assets"],
+                      ["Loan Portfolio Account", product.principalAccountLabel ?? "N.A.", "Assets"],
+                      ["Accrued Account", product.accruedAccountLabel ?? "N.A.", "Assets"],
+                      ["Income From Interest", product.interestIncomeAccountLabel ?? "N.A.", "Income"],
+                      ["Expenses Losses Written Off", product.expenseAccountLabel ?? "N.A.", "Expense"],
+                      ["Overpayment Account", product.overpaymentAccountLabel ?? "N.A.", "Liabilities"],
+                      ["Loan Suspense Account", product.suspenseAccountLabel ?? "N.A.", "Assets"],
                     ]}
                   />
                 </div>

@@ -560,6 +560,14 @@ export class SettingsService {
         arrearsClassificationDays: 30,
         managementFeeBp: 0,
         penaltyBp: 0,
+        principalAccountId: body.principalAccountId ? String(body.principalAccountId).trim() : null,
+        accruedAccountId: body.accruedAccountId ? String(body.accruedAccountId).trim() : null,
+        interestIncomeAccountId: body.interestIncomeAccountId ? String(body.interestIncomeAccountId).trim() : null,
+        chargesIncomeAccountId: body.chargesIncomeAccountId ? String(body.chargesIncomeAccountId).trim() : null,
+        penaltyIncomeAccountId: body.penaltyIncomeAccountId ? String(body.penaltyIncomeAccountId).trim() : null,
+        expenseAccountId: body.expenseAccountId ? String(body.expenseAccountId).trim() : null,
+        overpaymentAccountId: body.overpaymentAccountId ? String(body.overpaymentAccountId).trim() : null,
+        suspenseAccountId: body.suspenseAccountId ? String(body.suspenseAccountId).trim() : null,
       },
     });
 
@@ -585,8 +593,42 @@ export class SettingsService {
       where: { id, organisationId: auth.user.organisation.id },
     });
     if (!product) throw new NotFoundException('Loan product not found.');
+
+    const accountIds = [
+      product.principalAccountId,
+      product.accruedAccountId,
+      product.interestIncomeAccountId,
+      product.chargesIncomeAccountId,
+      product.penaltyIncomeAccountId,
+      product.expenseAccountId,
+      product.overpaymentAccountId,
+      product.suspenseAccountId,
+    ].filter((value): value is string => Boolean(value));
+    const accounts = accountIds.length
+      ? await this.prisma.glAccount.findMany({ where: { id: { in: accountIds } } })
+      : [];
+    const byId = new Map(accounts.map((account) => [account.id, account]));
+    const label = (id: string | null) => {
+      if (!id) return null;
+      const account = byId.get(id);
+      if (!account) return null;
+      return `${account.accountNumber ?? account.code}:${account.name}:${account.code}`;
+    };
+
+    const enriched = {
+      ...product,
+      principalAccountLabel: label(product.principalAccountId),
+      accruedAccountLabel: label(product.accruedAccountId),
+      interestIncomeAccountLabel: label(product.interestIncomeAccountId),
+      chargesIncomeAccountLabel: label(product.chargesIncomeAccountId),
+      penaltyIncomeAccountLabel: label(product.penaltyIncomeAccountId),
+      expenseAccountLabel: label(product.expenseAccountId),
+      overpaymentAccountLabel: label(product.overpaymentAccountId),
+      suspenseAccountLabel: label(product.suspenseAccountId),
+    };
+
     return {
-      product: this.serializeLoanProduct(product),
+      product: this.serializeLoanProduct(enriched as never),
       canEdit: this.can(auth, 'Settings Product : Edit'),
     };
   }
@@ -1709,6 +1751,15 @@ export class SettingsService {
       if (!name) throw new BadRequestException('Name is required.');
       data.name = name;
     }
+
+    if (body.principalAccountId !== undefined) data.principalAccountId = body.principalAccountId ? String(body.principalAccountId).trim() : null;
+    if (body.accruedAccountId !== undefined) data.accruedAccountId = body.accruedAccountId ? String(body.accruedAccountId).trim() : null;
+    if (body.interestIncomeAccountId !== undefined) data.interestIncomeAccountId = body.interestIncomeAccountId ? String(body.interestIncomeAccountId).trim() : null;
+    if (body.chargesIncomeAccountId !== undefined) data.chargesIncomeAccountId = body.chargesIncomeAccountId ? String(body.chargesIncomeAccountId).trim() : null;
+    if (body.penaltyIncomeAccountId !== undefined) data.penaltyIncomeAccountId = body.penaltyIncomeAccountId ? String(body.penaltyIncomeAccountId).trim() : null;
+    if (body.expenseAccountId !== undefined) data.expenseAccountId = body.expenseAccountId ? String(body.expenseAccountId).trim() : null;
+    if (body.overpaymentAccountId !== undefined) data.overpaymentAccountId = body.overpaymentAccountId ? String(body.overpaymentAccountId).trim() : null;
+    if (body.suspenseAccountId !== undefined) data.suspenseAccountId = body.suspenseAccountId ? String(body.suspenseAccountId).trim() : null;
 
     const updated = await this.prisma.loanProduct.update({ where: { id }, data });
 
@@ -3076,9 +3127,21 @@ export class SettingsService {
       managementFeeBp: product.managementFeeBp,
       penaltyBp: product.penaltyBp,
       principalAccountId: product.principalAccountId,
+      principalAccountLabel: (product as { principalAccountLabel?: string | null }).principalAccountLabel ?? null,
+      accruedAccountId: product.accruedAccountId,
+      accruedAccountLabel: (product as { accruedAccountLabel?: string | null }).accruedAccountLabel ?? null,
       interestIncomeAccountId: product.interestIncomeAccountId,
+      interestIncomeAccountLabel: (product as { interestIncomeAccountLabel?: string | null }).interestIncomeAccountLabel ?? null,
       chargesIncomeAccountId: product.chargesIncomeAccountId,
+      chargesIncomeAccountLabel: (product as { chargesIncomeAccountLabel?: string | null }).chargesIncomeAccountLabel ?? null,
       penaltyIncomeAccountId: product.penaltyIncomeAccountId,
+      penaltyIncomeAccountLabel: (product as { penaltyIncomeAccountLabel?: string | null }).penaltyIncomeAccountLabel ?? null,
+      expenseAccountId: product.expenseAccountId,
+      expenseAccountLabel: (product as { expenseAccountLabel?: string | null }).expenseAccountLabel ?? null,
+      overpaymentAccountId: product.overpaymentAccountId,
+      overpaymentAccountLabel: (product as { overpaymentAccountLabel?: string | null }).overpaymentAccountLabel ?? null,
+      suspenseAccountId: product.suspenseAccountId,
+      suspenseAccountLabel: (product as { suspenseAccountLabel?: string | null }).suspenseAccountLabel ?? null,
       workflowStages: product.workflowStages,
       createdAt: product.createdAt.toISOString(),
       updatedAt: product.updatedAt.toISOString(),

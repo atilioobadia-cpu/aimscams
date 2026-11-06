@@ -367,9 +367,13 @@ model LoanProduct {
   managementFeeBp         Int               @default(0)
   penaltyBp               Int               @default(0)
   principalAccountId      String?
+  accruedAccountId        String?
   interestIncomeAccountId String?
   chargesIncomeAccountId  String?
   penaltyIncomeAccountId  String?
+  expenseAccountId        String?
+  overpaymentAccountId    String?
+  suspenseAccountId       String?
   workflowStages          Json?
   createdAt               DateTime          @default(now())
   updatedAt               DateTime          @updatedAt
@@ -390,11 +394,22 @@ enum LoanProductStatus {
 }
 
 
+enum SavingsProductType {
+  SAVINGS
+  CURRENT
+  DEPOSIT
+  FIXED_DEPOSIT
+  RECURRING_DEPOSIT
+}
+
 model SavingsProduct {
   id                      String               @id @default(uuid()) @db.Uuid
   organisationId          String               @db.Uuid
   code                    String
   name                    String
+  type                    SavingsProductType   @default(SAVINGS)
+  accountNumber           String?
+  glAccountCode           String?
   status                  SavingsProductStatus @default(DRAFT)
   description             String?
   allowedAsGuarantor      Boolean              @default(false)
@@ -411,6 +426,7 @@ model SavingsProduct {
   savingsAccounts SavingsAccount[]
 
   @@unique([organisationId, code])
+  @@unique([organisationId, accountNumber])
   @@index([organisationId, status])
   @@map("savings_product")
 }
@@ -450,12 +466,14 @@ model FeePenalty {
   id            String             @id @default(uuid()) @db.Uuid
   organisationId String            @db.Uuid
   code          String
+  accountNumber String?
   name          String
   kind          FeePenaltyKind
   amountType    FeeAmountType
   amountMinor   BigInt?
   rateBp        Int?
   glAccountId   String?
+  taxInclusive  Boolean            @default(false)
   status        FeePenaltyStatus   @default(ACTIVE)
   description   String?
   createdAt     DateTime           @default(now())
@@ -464,6 +482,7 @@ model FeePenalty {
   organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
 
   @@unique([organisationId, code])
+  @@unique([organisationId, accountNumber])
   @@index([organisationId, status])
   @@map("fee_penalty")
 }
