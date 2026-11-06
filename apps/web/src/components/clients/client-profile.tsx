@@ -342,7 +342,7 @@ function ClientRecordDialog({
             onSubmit(values, selectedFile);
           }} className="space-y-4">
             <DialogHeader>
-              <DialogTitle>{kind === "residence" && isEditing ? "Edit Residence" : definition.title}</DialogTitle>
+              <DialogTitle>{isEditing ? `Edit ${definition.title.replace(/^Add /, "")}` : definition.title}</DialogTitle>
               <DialogDescription>{kind === "residence" ? isEditing ? "Update the current residence. The client keeps one residence record." : "Only one residence is kept for a client. Saving a new residence replaces the current one." : "Save this information to the client profile."}</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -441,7 +441,7 @@ export function ClientProfile({ id }: { id: string }) {
   const [recordDialogKind, setRecordDialogKind] = useState<ClientRecordKind | null>(null);
   const [recordDialogInstance, setRecordDialogInstance] = useState(0);
   const [recordDialogInitialValues, setRecordDialogInitialValues] = useState<Record<string, string>>({});
-  const [editingResidenceIndex, setEditingResidenceIndex] = useState<number | null>(null);
+  const [editingRecordIndex, setEditingRecordIndex] = useState<number | null>(null);
   const [savingRecord, setSavingRecord] = useState(false);
   const [recordError, setRecordError] = useState<string | null>(null);
   const { pushToast } = useToast();
@@ -449,7 +449,7 @@ export function ClientProfile({ id }: { id: string }) {
   function openRecordDialog(kind: ClientRecordKind, initialValues: Record<string, string> = {}, editIndex: number | null = null) {
     setRecordError(null);
     setRecordDialogInitialValues(initialValues);
-    setEditingResidenceIndex(kind === "residence" ? editIndex : null);
+    setEditingRecordIndex(editIndex);
     setRecordDialogInstance((current) => current + 1);
     setRecordDialogKind(kind);
   }
@@ -652,22 +652,26 @@ export function ClientProfile({ id }: { id: string }) {
         return;
       }
       const existingRecords = profileRecords(definition.section);
-      const previousResidence = kind === "residence" && editIndex !== null
-        ? residenceRecords[editIndex]
+      const previousRecord = editIndex !== null
+        ? existingRecords[editIndex]
         : undefined;
       const record: Record<string, string> = {
-        ...(previousResidence ? previousResidence as Record<string, string> : {}),
-        id: previousResidence ? stringValue(previousResidence.id) : crypto.randomUUID(),
+        ...(previousRecord ? previousRecord as Record<string, string> : {}),
+        id: previousRecord ? stringValue(previousRecord.id) : crypto.randomUUID(),
         ...values,
       };
-      if (kind === "charge") {
+      if (kind === "charge" && !previousRecord) {
         record.creationDate = new Date().toISOString().slice(0, 10);
         record.outstandingDays = "0";
         record.outstandingAmount = values.amount ?? "0";
         record.status = "Unpaid";
       }
-      if (kind === "residence" && !previousResidence) record.status = "ACTIVE";
-      const recordsToSave = kind === "residence" ? [record] : [...existingRecords, record];
+      if (kind === "residence" && !previousRecord) record.status = "ACTIVE";
+      const recordsToSave = kind === "residence"
+        ? [record]
+        : editIndex !== null
+          ? existingRecords.map((existing, index) => index === editIndex ? record : existing)
+          : [...existingRecords, record];
       const residenceAddress = ["houseNumber", "addressLine1", "addressLine2", "addressLine3", "areaWard", "districtCity", "regionState", "country", "postalCode"]
         .map((field) => record[field]?.trim())
         .filter(Boolean)
@@ -680,7 +684,7 @@ export function ClientProfile({ id }: { id: string }) {
       });
       setClient(response.client);
       setRecordDialogKind(null);
-      setEditingResidenceIndex(null);
+      setEditingRecordIndex(null);
       pushToast(`${definition.title.replace("Add ", "")} saved.`);
     } catch (failure) {
       setRecordError(message(failure, "Could not save the client information."));
@@ -1148,7 +1152,26 @@ export function ClientProfile({ id }: { id: string }) {
                 <div className="mb-3 flex justify-end">
                   <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("bank")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Bank</Button>
                 </div>
-                <TabTable columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address", "Actions"]} rows={bankRecords.map((record) => [stringValue(record.bankName), stringValue(record.accountNumber), stringValue(record.bicSwiftCode), stringValue(record.branchAddress), "—"])} emptyMessage="No data available" />
+                <TabTable
+                  columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address", "Actions"]}
+                  rows={bankRecords.map((record, index) => [
+                    stringValue(record.bankName),
+                    stringValue(record.accountNumber),
+                    stringValue(record.bicSwiftCode),
+                    stringValue(record.branchAddress),
+                    canEdit ? (
+                      <RowActionsMenu
+                        key={stringValue(record.id) || index}
+                        label={`bank detail ${index + 1}`}
+                        className="size-8"
+                        actions={[
+                          { label: "Edit", icon: Edit2, onSelect: () => openRecordDialog("bank", Object.fromEntries(["bankName", "accountNumber", "bicSwiftCode", "branchAddress"].map((key) => [key, stringValue(record[key])])), index) },
+                        ]}
+                      />
+                    ) : "—",
+                  ])}
+                  emptyMessage="No data available"
+                />
               </div>
             </TabsContent>
 
@@ -1188,12 +1211,12 @@ export function ClientProfile({ id }: { id: string }) {
             key={recordDialogInstance}
             kind={recordDialogKind}
             initialValues={recordDialogInitialValues}
-            isEditing={editingResidenceIndex !== null}
+            isEditing={editingRecordIndex !== null}
             open={recordDialogKind !== null}
             saving={savingRecord}
             error={recordError}
-            onOpenChange={(open) => { if (!open && !savingRecord) { setRecordDialogKind(null); setEditingResidenceIndex(null); } }}
-            onSubmit={(values, file) => { if (recordDialogKind) void saveProfileRecord(recordDialogKind, values, editingResidenceIndex, file); }}
+            onOpenChange={(open) => { if (!open && !savingRecord) { setRecordDialogKind(null); setEditingRecordIndex(null); } }}
+            onSubmit={(values, file) => { if (recordDialogKind) void saveProfileRecord(recordDialogKind, values, editingRecordIndex, file); }}
           />
         </>
       ) : null}
