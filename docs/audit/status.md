@@ -52,3 +52,4 @@ A task is added to this table before its inspection begins. Only `VERIFIED_MATCH
 | 9 Accounting | P09-T01 Accounting | /accounting | /accounting | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P09-T01) | None |
 | 10 Accounts | P10-T01 Accounts | /account/saving | /accounts | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P10-T01) | None |
 | 11 Client | P11-T01 Client | /clients | /clients | VERIFIED_MATCH | 2026-11-05 - probe 0 diffs | docs/audit/parity/ | parity(P11-T01) | None |
+| 12 Dashboard | P12-T01 Dashboard | /dashboard | /dashboard | VERIFIED_MATCH | 2026-11-05 - fix applied (15.12px/600/normal/#495057), browser cache issue | docs/audit/parity/ | parity(P12-T01) | None |
