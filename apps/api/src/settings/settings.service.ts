@@ -63,6 +63,46 @@ interface BranchInput {
   hours?: unknown;
 }
 
+const CLIENT_PROFILE_RECORD_FIELDS: Record<string, readonly string[]> = {
+  charges: ['id', 'chargeType', 'creationDate', 'dueDate', 'outstandingDays', 'amount', 'outstandingAmount', 'status'],
+  residenceRecords: ['id', 'houseNumber', 'addressLine1', 'addressLine2', 'addressLine3', 'areaWard', 'districtCity', 'regionState', 'country', 'postalCode'],
+  kycRecords: ['id', 'documentType', 'uploadedDate', 'comments', 'documentName'],
+  incomeRecords: ['id', 'companyName', 'companyAddress', 'monthlyIncome', 'contractType', 'businessAddress', 'registrationNumber', 'businessLicenseNumber', 'tinNumber', 'businessTurnover'],
+  assetRecords: ['id', 'assetType', 'value', 'location', 'notes'],
+  bankDetails: ['id', 'bankName', 'accountNumber', 'bicSwiftCode', 'branchAddress'],
+};
+
+function parseClientProfileRecords(value: unknown): Prisma.InputJsonObject {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new BadRequestException('Profile details must be an object.');
+  }
+
+  const result: Record<string, Prisma.InputJsonValue> = {};
+  for (const [key, records] of Object.entries(value as Record<string, unknown>)) {
+    const allowedFields = CLIENT_PROFILE_RECORD_FIELDS[key];
+    if (!allowedFields) throw new BadRequestException(`Unsupported client profile section: ${key}.`);
+    if (!Array.isArray(records) || records.length > 100) {
+      throw new BadRequestException('A profile section must contain no more than 100 records.');
+    }
+
+    result[key] = records.map((record) => {
+      if (!record || typeof record !== 'object' || Array.isArray(record)) {
+        throw new BadRequestException('Profile records must be objects.');
+      }
+      const clean: Record<string, string> = {};
+      for (const [field, fieldValue] of Object.entries(record as Record<string, unknown>)) {
+        if (!allowedFields.includes(field)) throw new BadRequestException(`Unsupported profile field: ${field}.`);
+        if (typeof fieldValue !== 'string' || fieldValue.length > 1000) {
+          throw new BadRequestException('Profile fields must be text of no more than 1000 characters.');
+        }
+        clean[field] = fieldValue.trim();
+      }
+      return clean;
+    });
+  }
+  return result;
+}
+
 type BranchRecord = Prisma.BranchGetPayload<{
   include: { hours: true; _count: { select: { users: true } } };
 }>;
@@ -1833,6 +1873,13 @@ export class SettingsService {
       }
       data.status = status as 'ACTIVE' | 'INACTIVE' | 'PENDING';
     }
+    if (body.kycStatus !== undefined) {
+      const kycStatus = String(body.kycStatus).trim().toUpperCase();
+      if (kycStatus !== 'PENDING' && kycStatus !== 'APPROVED' && kycStatus !== 'REJECTED') {
+        throw new BadRequestException('KYC status must be PENDING, APPROVED or REJECTED.');
+      }
+      data.kycStatus = kycStatus as 'PENDING' | 'APPROVED' | 'REJECTED';
+    }
     if (body.groupId !== undefined) {
       const groupId = typeof body.groupId === 'string' ? body.groupId.trim() : '';
       if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(groupId)) {
@@ -1851,6 +1898,12 @@ export class SettingsService {
       if (!group) throw new NotFoundException('Group not found.');
       data.group = { connect: { id: group.id } };
     }
+    if (body.profilePatch !== undefined) {
+      const existing = before.profile && typeof before.profile === 'object' && !Array.isArray(before.profile)
+        ? before.profile as Prisma.InputJsonObject
+        : {};
+      data.profile = { ...existing, ...parseClientProfileRecords(body.profilePatch) };
+    }
 
     const updated = await this.prisma.client.update({ where: { id }, data });
 
@@ -1859,7 +1912,11 @@ export class SettingsService {
       branchId: auth.user.branch?.id ?? null,
       actorUserId: auth.user.id,
       actorLabel: auth.user.email,
-      action: body.groupId !== undefined ? 'Client added to group' : 'Client updated',
+      action: body.kycStatus !== undefined
+        ? 'Client KYC status updated'
+        : body.profilePatch !== undefined
+          ? 'Client profile details updated'
+          : body.groupId !== undefined ? 'Client added to group' : 'Client updated',
       entityType: 'Client',
       entityId: id,
       before: this.serializeClient(before),

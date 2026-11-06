@@ -28,17 +28,18 @@ import {
   UserRound,
   UserX,
   Wallet,
-  X,
 } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { EmptyState } from "@/components/data/empty-state";
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
-import { getClient, listLoanApplications, listLoans, listMembershipPolicies, listSavingsAccounts, type Client, type Loan, type LoanApplication, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
+import { getClient, listLoanApplications, listLoans, listMembershipPolicies, listSavingsAccounts, updateClient, type Client, type Loan, type LoanApplication, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
 import { maskEmail, titleCase } from "@/lib/privacy";
 import { cn } from "cn";
 
@@ -176,6 +177,107 @@ function TabTable({ columns, rows, emptyMessage, emptyHeight, minTableWidth = 72
   );
 }
 
+type ClientRecordKind = "charge" | "residence" | "kyc" | "income" | "asset" | "bank";
+type RecordField = { key: string; label: string; type?: "text" | "date" | "number" | "textarea"; required?: boolean };
+
+const recordDefinitions: Record<ClientRecordKind, { title: string; section: string; fields: RecordField[] }> = {
+  charge: { title: "Add Charge", section: "charges", fields: [
+    { key: "chargeType", label: "Charge Type", required: true },
+    { key: "dueDate", label: "Due Date", type: "date" },
+    { key: "amount", label: "Amount (TSh)", type: "number", required: true },
+  ] },
+  residence: { title: "Add Residence", section: "residenceRecords", fields: [
+    { key: "houseNumber", label: "House Number" },
+    { key: "addressLine1", label: "Address Line 1", required: true },
+    { key: "addressLine2", label: "Address Line 2" },
+    { key: "addressLine3", label: "Address Line 3" },
+    { key: "areaWard", label: "Area / Ward" },
+    { key: "districtCity", label: "District / City" },
+    { key: "regionState", label: "Region / State" },
+    { key: "country", label: "Country" },
+    { key: "postalCode", label: "Pincode / Zip" },
+  ] },
+  kyc: { title: "Add KYC Record", section: "kycRecords", fields: [
+    { key: "documentType", label: "Document Type", required: true },
+    { key: "documentName", label: "Document Name", required: true },
+    { key: "comments", label: "Comments", type: "textarea" },
+  ] },
+  income: { title: "Add Income", section: "incomeRecords", fields: [
+    { key: "companyName", label: "Company Name", required: true },
+    { key: "companyAddress", label: "Company Address" },
+    { key: "monthlyIncome", label: "Monthly Income (TSh)", type: "number" },
+    { key: "contractType", label: "Contract Type" },
+    { key: "businessAddress", label: "Business Address" },
+    { key: "registrationNumber", label: "Business Registration Number (BRELA)" },
+    { key: "businessLicenseNumber", label: "Business License Number" },
+    { key: "tinNumber", label: "TIN Number" },
+    { key: "businessTurnover", label: "Business Turnover" },
+  ] },
+  asset: { title: "Add Asset", section: "assetRecords", fields: [
+    { key: "assetType", label: "Asset Type", required: true },
+    { key: "value", label: "Value (TSh)", type: "number" },
+    { key: "location", label: "Location" },
+    { key: "notes", label: "Comments / Notes", type: "textarea" },
+  ] },
+  bank: { title: "Add Bank", section: "bankDetails", fields: [
+    { key: "bankName", label: "Bank Name", required: true },
+    { key: "accountNumber", label: "Account Number", required: true },
+    { key: "bicSwiftCode", label: "BIC / Swift Code" },
+    { key: "branchAddress", label: "Branch Address" },
+  ] },
+};
+
+function ClientRecordDialog({
+  kind,
+  open,
+  saving,
+  error,
+  onOpenChange,
+  onSubmit,
+}: {
+  kind: ClientRecordKind | null;
+  open: boolean;
+  saving: boolean;
+  error: string | null;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: Record<string, string>) => void;
+}) {
+  const [values, setValues] = useState<Record<string, string>>({});
+  const definition = kind ? recordDefinitions[kind] : null;
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {definition ? (
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
+          <form onSubmit={(event) => { event.preventDefault(); onSubmit(values); }} className="space-y-4">
+            <DialogHeader>
+              <DialogTitle>{definition.title}</DialogTitle>
+              <DialogDescription>Save this information to the client profile.</DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {definition.fields.map((field) => (
+                <label key={field.key} className={cn("space-y-1", field.type === "textarea" && "sm:col-span-2")}>
+                  <span className="block text-[13.44px] font-medium text-[#495057]">{field.label}{field.required ? " *" : ""}</span>
+                  {field.type === "textarea" ? (
+                    <textarea required={field.required} maxLength={1000} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} className="min-h-20 w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 text-[13.44px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40" />
+                  ) : (
+                    <Input required={field.required} type={field.type ?? "text"} min={field.type === "number" ? "0" : undefined} step={field.type === "number" ? "any" : undefined} maxLength={field.type === "number" ? undefined : 1000} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+                  )}
+                </label>
+              ))}
+            </div>
+            {error ? <p role="alert" className="text-[13.44px] text-destructive">{error}</p> : null}
+            <DialogFooter>
+              <Button type="button" variant="outline" disabled={saving} onClick={() => onOpenChange(false)}>Cancel</Button>
+              <Button type="submit" disabled={saving}>{saving ? "Saving…" : "Save"}</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      ) : null}
+    </Dialog>
+  );
+}
+
 export function ClientProfile({ id }: { id: string }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -196,6 +298,17 @@ export function ClientProfile({ id }: { id: string }) {
   const [showAllAccounts, setShowAllAccounts] = useState(true);
   const [statementStart, setStatementStart] = useState("");
   const [statementEnd, setStatementEnd] = useState("");
+  const [recordDialogKind, setRecordDialogKind] = useState<ClientRecordKind | null>(null);
+  const [recordDialogInstance, setRecordDialogInstance] = useState(0);
+  const [savingRecord, setSavingRecord] = useState(false);
+  const [recordError, setRecordError] = useState<string | null>(null);
+  const { pushToast } = useToast();
+
+  function openRecordDialog(kind: ClientRecordKind) {
+    setRecordError(null);
+    setRecordDialogInstance((current) => current + 1);
+    setRecordDialogKind(kind);
+  }
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -346,10 +459,59 @@ export function ClientProfile({ id }: { id: string }) {
   const contact = objectValue(profile.contact);
   const residenceDetails = objectValue(profile.residenceDetails);
   const currentResidence = stringValue(residenceDetails.currentAddress) || stringValue(profile.residence);
-  const lastResidence = stringValue(residenceDetails.lastAddress);
-  const sameAsCurrentResidence = residenceDetails.sameAsCurrent === true;
   const initials = client?.fullName.split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() || "NA";
   const editHref = canEdit && client ? `/clients/${encodeURIComponent(client.id)}/edit` : undefined;
+  const profileRecords = (key: string): Record<string, unknown>[] =>
+    Array.isArray(profile[key]) ? (profile[key] as unknown[]).map(objectValue) : [];
+  const chargeRecords = profileRecords("charges");
+  const residenceRecords = profileRecords("residenceRecords");
+  const kycRecords = profileRecords("kycRecords");
+  const incomeRecords = profileRecords("incomeRecords");
+  const assetRecords = profileRecords("assetRecords");
+  const bankRecords = profileRecords("bankDetails");
+
+  async function saveProfileRecord(kind: ClientRecordKind, values: Record<string, string>) {
+    if (!client || !canEdit) return;
+    setSavingRecord(true);
+    setRecordError(null);
+    try {
+      const definition = recordDefinitions[kind];
+      const record: Record<string, string> = { id: crypto.randomUUID(), ...values };
+      if (kind === "charge") {
+        record.creationDate = new Date().toISOString().slice(0, 10);
+        record.outstandingDays = "0";
+        record.outstandingAmount = values.amount ?? "0";
+        record.status = "Unpaid";
+      }
+      if (kind === "kyc") record.uploadedDate = new Date().toISOString().slice(0, 10);
+      const response = await updateClient(client.id, {
+        profilePatch: { [definition.section]: [...profileRecords(definition.section), record] },
+        ...(kind === "kyc" ? { kycStatus: "PENDING" as const } : {}),
+      });
+      setClient(response.client);
+      setRecordDialogKind(null);
+      pushToast(`${definition.title.replace("Add ", "")} saved.`);
+    } catch (failure) {
+      setRecordError(message(failure, "Could not save the client information."));
+    } finally {
+      setSavingRecord(false);
+    }
+  }
+
+  async function unapproveKyc() {
+    if (!client || !canEdit) return;
+    if (client.kycStatus === "PENDING") {
+      pushToast("KYC is already pending.");
+      return;
+    }
+    try {
+      const response = await updateClient(client.id, { kycStatus: "PENDING" });
+      setClient(response.client);
+      pushToast("KYC approval was removed.");
+    } catch (failure) {
+      pushToast(message(failure, "Could not update KYC status."));
+    }
+  }
 
   const selectedPolicy = membershipPolicies.find((policy) =>
     policy.id === membership.membershipPolicyId
@@ -676,55 +838,55 @@ export function ClientProfile({ id }: { id: string }) {
             <TabsContent value="charges">
               <div className="min-h-[312px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex justify-end">
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Charge</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("charge")} className="h-[30px] rounded-[6px] border-primary bg-white px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Charge</Button>
                 </div>
-                <TabTable columns={["Charges Type", "Creation Date", "Due Date", "Outstanding Days", "Amount (TSh)", "Outstanding Amount (TSh)", "Status", "Actions"]} rows={[]} emptyMessage="No data available" emptyHeight={220} />
+                <TabTable columns={["Charges Type", "Creation Date", "Due Date", "Outstanding Days", "Amount (TSh)", "Outstanding Amount (TSh)", "Status", "Actions"]} rows={chargeRecords.map((record) => [stringValue(record.chargeType), stringValue(record.creationDate), stringValue(record.dueDate), stringValue(record.outstandingDays), stringValue(record.amount), stringValue(record.outstandingAmount), stringValue(record.status), "—"])} emptyMessage="No data available" emptyHeight={220} />
               </div>
             </TabsContent>
 
             <TabsContent value="residence">
               <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex justify-end">
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Residence</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("residence")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Residence</Button>
                 </div>
-                <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={currentResidence ? [[currentResidence, "", "", "", "", "", "", "", "", ""]] : []} emptyMessage="No data available" minTableWidth={1080} />
+                <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={residenceRecords.length ? residenceRecords.map((record) => ["houseNumber", "addressLine1", "addressLine2", "addressLine3", "areaWard", "districtCity", "regionState", "country", "postalCode"].map((key) => stringValue(record[key])).concat("—")) : currentResidence ? [["", currentResidence, "", "", "", "", "", "", "", "—"]] : []} emptyMessage="No data available" minTableWidth={1080} />
               </div>
             </TabsContent>
 
             <TabsContent value="kyc">
               <div className="min-h-[260px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex gap-2">
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add KYC</Button>
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("kyc")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add KYC</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => void unapproveKyc()} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
                 </div>
-                <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={[]} emptyMessage="No data available" emptyHeight={150} />
+                <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={kycRecords.map((record) => [stringValue(record.documentType), stringValue(record.uploadedDate), stringValue(record.comments), stringValue(record.documentName), "—"])} emptyMessage="No data available" emptyHeight={150} />
               </div>
             </TabsContent>
 
             <TabsContent value="income">
               <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex justify-end">
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Income</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("income")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Income</Button>
                 </div>
-                <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number(Brela)", "Business License Number", "TIN Number", "Business Turn Over(weekly,yearly)", "Actions"]} rows={[]} emptyMessage="No data available" minTableWidth={1500} />
+                <TabTable columns={["Company Name", "Company Address", "Monthly Income", "Contract Type", "Business Address", "Business Registration Number(Brela)", "Business License Number", "TIN Number", "Business Turn Over(weekly,yearly)", "Actions"]} rows={incomeRecords.map((record) => ["companyName", "companyAddress", "monthlyIncome", "contractType", "businessAddress", "registrationNumber", "businessLicenseNumber", "tinNumber", "businessTurnover"].map((key) => stringValue(record[key])).concat("—"))} emptyMessage="No data available" minTableWidth={1500} />
               </div>
             </TabsContent>
 
             <TabsContent value="assets">
               <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex justify-end">
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Asset</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("asset")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Asset</Button>
                 </div>
-                <TabTable columns={["Type", "Value", "Location", "Comments / Notes", "Actions"]} rows={[]} emptyMessage="No data available" />
+                <TabTable columns={["Type", "Value", "Location", "Comments / Notes", "Actions"]} rows={assetRecords.map((record) => [stringValue(record.assetType), stringValue(record.value), stringValue(record.location), stringValue(record.notes), "—"])} emptyMessage="No data available" />
               </div>
             </TabsContent>
 
             <TabsContent value="bank">
               <div className="min-h-[180px] rounded-b-[8px] bg-white px-[18px] pb-[18px] pt-[14px]">
                 <div className="mb-3 flex justify-end">
-                  <Button variant="outline" className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Bank</Button>
+                  <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("bank")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Bank</Button>
                 </div>
-                <TabTable columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address", "Actions"]} rows={[]} emptyMessage="No data available" />
+                <TabTable columns={["Bank Name", "Account Number", "BIC/Swift Code", "Branch Address", "Actions"]} rows={bankRecords.map((record) => [stringValue(record.bankName), stringValue(record.accountNumber), stringValue(record.bicSwiftCode), stringValue(record.branchAddress), "—"])} emptyMessage="No data available" />
               </div>
             </TabsContent>
 
@@ -760,6 +922,15 @@ export function ClientProfile({ id }: { id: string }) {
               </div>
             </TabsContent>
           </Tabs>
+          <ClientRecordDialog
+            key={recordDialogInstance}
+            kind={recordDialogKind}
+            open={recordDialogKind !== null}
+            saving={savingRecord}
+            error={recordError}
+            onOpenChange={(open) => { if (!open && !savingRecord) setRecordDialogKind(null); }}
+            onSubmit={(values) => { if (recordDialogKind) void saveProfileRecord(recordDialogKind, values); }}
+          />
         </>
       ) : null}
     </div>
