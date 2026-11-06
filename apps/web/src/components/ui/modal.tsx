@@ -1,7 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import { cn } from "cn";
@@ -16,14 +16,18 @@ type ModalProps = {
   unsaved?: boolean;
 };
 
+const subscribeToNothing = () => () => {};
+const getPortalTarget = () => document.body;
+const getServerPortalTarget = () => null;
+
 export function Modal({ open, onClose, title, children, footer, size = "default", unsaved = false }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    setPortalTarget(document.body);
-  }, []);
+  const portalTarget = useSyncExternalStore(
+    subscribeToNothing,
+    getPortalTarget,
+    getServerPortalTarget,
+  );
 
   useEffect(() => {
     if (open) {
@@ -55,6 +59,7 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
   }, [open, unsaved, onClose]);
 
   if (!visible && !open) return null;
+  if (!portalTarget) return null;
 
   const modal = (
     <div
@@ -113,5 +118,6 @@ export function Modal({ open, onClose, title, children, footer, size = "default"
       </div>
     </div>
   );
-  return portalTarget ? createPortal(modal, portalTarget) : modal;
+
+  return createPortal(modal, portalTarget);
 }
