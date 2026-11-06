@@ -65,7 +65,7 @@ interface BranchInput {
 
 const CLIENT_PROFILE_RECORD_FIELDS: Record<string, readonly string[]> = {
   charges: ['id', 'chargeType', 'creationDate', 'dueDate', 'outstandingDays', 'amount', 'outstandingAmount', 'status'],
-  residenceRecords: ['id', 'houseNumber', 'addressLine1', 'addressLine2', 'addressLine3', 'areaWard', 'districtCity', 'regionState', 'country', 'postalCode'],
+  residenceRecords: ['id', 'houseNumber', 'addressLine1', 'addressLine2', 'addressLine3', 'areaWard', 'districtCity', 'regionState', 'country', 'postalCode', 'status'],
   kycRecords: ['id', 'documentType', 'uploadedDate', 'comments', 'documentName'],
   incomeRecords: ['id', 'companyName', 'companyAddress', 'monthlyIncome', 'contractType', 'businessAddress', 'registrationNumber', 'businessLicenseNumber', 'tinNumber', 'businessTurnover'],
   assetRecords: ['id', 'assetType', 'value', 'location', 'notes'],
@@ -79,6 +79,23 @@ function parseClientProfileRecords(value: unknown): Prisma.InputJsonObject {
 
   const result: Record<string, Prisma.InputJsonValue> = {};
   for (const [key, records] of Object.entries(value as Record<string, unknown>)) {
+    if (key === 'residenceDetails') {
+      if (!records || typeof records !== 'object' || Array.isArray(records)) {
+        throw new BadRequestException('Residence details must be an object.');
+      }
+      const clean: Record<string, string | boolean> = {};
+      for (const [field, fieldValue] of Object.entries(records as Record<string, unknown>)) {
+        if (field === 'sameAsCurrent' && typeof fieldValue === 'boolean') {
+          clean[field] = fieldValue;
+        } else if ((field === 'currentAddress' || field === 'lastAddress') && typeof fieldValue === 'string' && fieldValue.length <= 1000) {
+          clean[field] = fieldValue.trim();
+        } else {
+          throw new BadRequestException(`Invalid residence detail: ${field}.`);
+        }
+      }
+      result[key] = clean;
+      continue;
+    }
     const allowedFields = CLIENT_PROFILE_RECORD_FIELDS[key];
     if (!allowedFields) throw new BadRequestException(`Unsupported client profile section: ${key}.`);
     if (!Array.isArray(records) || records.length > 100) {
@@ -1902,7 +1919,17 @@ export class SettingsService {
       const existing = before.profile && typeof before.profile === 'object' && !Array.isArray(before.profile)
         ? before.profile as Prisma.InputJsonObject
         : {};
-      data.profile = { ...existing, ...parseClientProfileRecords(body.profilePatch) };
+      const profilePatch = parseClientProfileRecords(body.profilePatch);
+      const existingResidenceDetails = existing.residenceDetails && typeof existing.residenceDetails === 'object' && !Array.isArray(existing.residenceDetails)
+        ? existing.residenceDetails as Prisma.InputJsonObject
+        : {};
+      data.profile = {
+        ...existing,
+        ...profilePatch,
+        ...(profilePatch.residenceDetails ? {
+          residenceDetails: { ...existingResidenceDetails, ...profilePatch.residenceDetails as Prisma.InputJsonObject },
+        } : {}),
+      };
     }
 
     const updated = await this.prisma.client.update({ where: { id }, data });

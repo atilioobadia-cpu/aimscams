@@ -137,7 +137,7 @@ function EmptyTable({ columns, message: emptyMessage, icon: Icon = Building2 }: 
   );
 }
 
-function TabTable({ columns, rows, emptyMessage, emptyHeight, minTableWidth = 720 }: { columns: string[]; rows: string[][]; emptyMessage: string; emptyHeight?: number; minTableWidth?: number }) {
+function TabTable({ columns, rows, emptyMessage, emptyHeight, minTableWidth = 720 }: { columns: string[]; rows: React.ReactNode[][]; emptyMessage: string; emptyHeight?: number; minTableWidth?: number }) {
   return (
     <div className="table-scroll overflow-x-auto bg-white">
       <table className="w-full text-left text-[13.44px]" style={{ minWidth: minTableWidth }}>
@@ -252,7 +252,7 @@ function ClientRecordDialog({
           <form onSubmit={(event) => { event.preventDefault(); onSubmit(values); }} className="space-y-4">
             <DialogHeader>
               <DialogTitle>{definition.title}</DialogTitle>
-              <DialogDescription>Save this information to the client profile.</DialogDescription>
+              <DialogDescription>{kind === "residence" ? "Only one residence is kept for a client. Saving a new residence replaces the current one." : "Save this information to the client profile."}</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {definition.fields.map((field) => (
@@ -483,9 +483,19 @@ export function ClientProfile({ id }: { id: string }) {
         record.outstandingAmount = values.amount ?? "0";
         record.status = "Unpaid";
       }
+      if (kind === "residence") record.status = "ACTIVE";
       if (kind === "kyc") record.uploadedDate = new Date().toISOString().slice(0, 10);
+      const existingRecords = profileRecords(definition.section);
+      const recordsToSave = kind === "residence" ? [record] : [...existingRecords, record];
+      const residenceAddress = ["houseNumber", "addressLine1", "addressLine2", "addressLine3", "areaWard", "districtCity", "regionState", "country", "postalCode"]
+        .map((field) => values[field]?.trim())
+        .filter(Boolean)
+        .join(", ");
       const response = await updateClient(client.id, {
-        profilePatch: { [definition.section]: [...profileRecords(definition.section), record] },
+        profilePatch: {
+          [definition.section]: recordsToSave,
+          ...(kind === "residence" ? { residenceDetails: { currentAddress: residenceAddress, sameAsCurrent: false } } : {}),
+        },
         ...(kind === "kyc" ? { kycStatus: "PENDING" as const } : {}),
       });
       setClient(response.client);
@@ -493,6 +503,27 @@ export function ClientProfile({ id }: { id: string }) {
       pushToast(`${definition.title.replace("Add ", "")} saved.`);
     } catch (failure) {
       setRecordError(message(failure, "Could not save the client information."));
+    } finally {
+      setSavingRecord(false);
+    }
+  }
+
+  async function setResidenceActive(index: number, active: boolean) {
+    if (!client || !canEdit) return;
+    setSavingRecord(true);
+    try {
+      const nextRecords = residenceRecords.length
+        ? residenceRecords.map((record, recordIndex) => recordIndex === index
+          ? { ...record, status: active ? "ACTIVE" : "INACTIVE" }
+          : record)
+        : currentResidence
+          ? [{ id: crypto.randomUUID(), addressLine1: currentResidence, status: active ? "ACTIVE" : "INACTIVE" }]
+          : [];
+      const response = await updateClient(client.id, { profilePatch: { residenceRecords: nextRecords } });
+      setClient(response.client);
+      pushToast(active ? "Residence activated." : "Residence deactivated.");
+    } catch (failure) {
+      pushToast(message(failure, "Could not update residence status."));
     } finally {
       setSavingRecord(false);
     }
@@ -849,7 +880,23 @@ export function ClientProfile({ id }: { id: string }) {
                 <div className="mb-3 flex justify-end">
                   <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("residence")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add Residence</Button>
                 </div>
-                <TabTable columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]} rows={residenceRecords.length ? residenceRecords.map((record) => ["houseNumber", "addressLine1", "addressLine2", "addressLine3", "areaWard", "districtCity", "regionState", "country", "postalCode"].map((key) => stringValue(record[key])).concat("—")) : currentResidence ? [["", currentResidence, "", "", "", "", "", "", "", "—"]] : []} emptyMessage="No data available" minTableWidth={1080} />
+                <TabTable
+                  columns={["House Number", "Address Line 1", "Address Line 2", "Address Line 3", "Area / Ward", "District / City", "Region / State", "Country", "Pincode / Zip", "Actions"]}
+                  rows={residenceRecords.length
+                    ? residenceRecords.map((record, index) => {
+                        const active = stringValue(record.status).toUpperCase() !== "INACTIVE";
+                        return [
+                          ...["houseNumber", "addressLine1", "addressLine2", "addressLine3", "areaWard", "districtCity", "regionState", "country", "postalCode"].map((key) => stringValue(record[key])),
+                          <Button key={stringValue(record.id) || index} type="button" variant="outline" disabled={!canEdit || savingRecord} aria-label={`${active ? "Deactivate" : "Activate"} residence ${index + 1}`} onClick={() => void setResidenceActive(index, !active)} className="h-[28px] rounded-[5px] border-primary px-2 text-[11.76px] font-medium text-primary hover:bg-primary-tint">{active ? "Deactivate" : "Activate"}</Button>,
+                        ];
+                      })
+                    : currentResidence ? [[
+                        "", currentResidence, "", "", "", "", "", "", "",
+                        <Button key="current-residence" type="button" variant="outline" disabled={!canEdit || savingRecord} aria-label="Deactivate residence 1" onClick={() => void setResidenceActive(0, false)} className="h-[28px] rounded-[5px] border-primary px-2 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Deactivate</Button>,
+                      ]] : []}
+                  emptyMessage="No data available"
+                  minTableWidth={1080}
+                />
               </div>
             </TabsContent>
 
