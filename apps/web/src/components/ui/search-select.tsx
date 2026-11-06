@@ -12,6 +12,8 @@ export function SearchSelect({
   options,
   value,
   disabled = false,
+  required = false,
+  invalid = false,
   allowCustom = false,
   clearable = false,
   placeholder = "Search...",
@@ -21,6 +23,8 @@ export function SearchSelect({
   options: SearchOption[];
   value: string;
   disabled?: boolean;
+  required?: boolean;
+  invalid?: boolean;
   allowCustom?: boolean;
   clearable?: boolean;
   placeholder?: string;
@@ -42,10 +46,12 @@ export function SearchSelect({
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-required={required}
+        aria-invalid={invalid || undefined}
         aria-controls={`${id}-options`}
         disabled={disabled}
         onClick={() => { setQuery(""); setOpen((current) => !current); }}
-        className={`flex h-[var(--control-height)] w-full items-center justify-between rounded-[var(--control-radius)] border border-input bg-background px-3 text-left fs-text text-body disabled:cursor-not-allowed disabled:opacity-60 ${clearable ? "pr-16" : "pr-9"}`}
+        className={`flex h-[var(--control-height)] w-full items-center justify-between rounded-[var(--control-radius)] border ${invalid ? "border-destructive" : "border-input"} bg-background px-3 text-left fs-text text-body disabled:cursor-not-allowed disabled:opacity-60 ${clearable ? "pr-16" : "pr-9"}`}
       >
         <span className={currentLabel ? "truncate" : "truncate text-muted-foreground"}>{currentLabel || (disabled ? "Loading..." : placeholder)}</span>
       </button>

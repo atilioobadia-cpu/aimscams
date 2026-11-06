@@ -37,6 +37,7 @@ import { RowActionsMenu } from "@/components/data/row-actions-menu";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { SearchSelect } from "@/components/ui/search-select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
@@ -179,7 +180,78 @@ function TabTable({ columns, rows, emptyMessage, emptyHeight, minTableWidth = 72
 }
 
 type ClientRecordKind = "charge" | "residence" | "kyc" | "income" | "asset" | "bank";
-type RecordField = { key: string; label: string; type?: "text" | "date" | "number" | "textarea" | "select"; required?: boolean; requiredWhen?: { field: string; value: string }; visibleWhen?: { field: string; value: string }; options?: string[] };
+type RecordField = { key: string; label: string; type?: "text" | "date" | "number" | "textarea" | "select" | "bank-select"; required?: boolean; requiredWhen?: { field: string; value: string }; visibleWhen?: { field: string; value: string }; options?: string[] };
+
+const bankOptions = [
+  "ABSA BANK",
+  "ACCESS BANK",
+  "AFRICAN BANKING COOPERATION",
+  "AKIBA BANK LTD",
+  "AMANA BANK",
+  "AZANIA BANKCORP LIMITED",
+  "BANK OF AFRICA",
+  "BANK OF BARODA",
+  "BANK OF BARODA (TANZANIA) LIMITED",
+  "BANK OF INDIA",
+  "BANK OF TANZANIA",
+  "BARCLAYS BANK TANZANIA",
+  "BRAC BANK UGANDA",
+  "CAIRO INTERNATIONAL BANK",
+  "CANARA BANK",
+  "CENTENARY RURAL DEVELOPMENT",
+  "CHINA DASHENG BANK LIMITED",
+  "CITIBANK",
+  "COMMERCIAL BANK OF AFRICA",
+  "COMMERCIAL BANK OF CHINA",
+  "COOPERATIVE BANK OF KENYA",
+  "CRDB BANK LIMITED",
+  "DAR ES SALAAM COMMUNITY BANK",
+  "DFCU BANK",
+  "DIAMOND TRUST BANK",
+  "ECO BANK TANZANIA LTD",
+  "EQUITY BANK",
+  "EQUITY BANK TANZANIA",
+  "EXIM BANK",
+  "FAMILY BANK",
+  "FINANCE TRUST BANK",
+  "FIRST NATIONAL BANK TANZANIA",
+  "GLOBAL TRUST BANK",
+  "GT BANK (T) LTD",
+  "GUARDIAN BANK LIMITED",
+  "HABIB AFRICAN LTD",
+  "HOUSING FINANCE",
+  "I & M BANK",
+  "INTERNATIONAL COMMERCIAL BANK (TANZANIA) LTD",
+  "KENYA COMMERCIAL BANK",
+  "KILIMANJARO COOPERATIVE BANK",
+  "KINGDOM BANK",
+  "MAENDELEO BANK PLC",
+  "MKOMBOZI BANK",
+  "MWALIMU COMMERCIAL BANK",
+  "MWANGA COMMUNITY BANK",
+  "NATIONAL BANK OF KENYA",
+  "NATIONAL MICROFINANCE BANK",
+  "NBC BANK LIMITED",
+  "NCBA BANK KENYA PLC",
+  "NCBA BANK UGANDA LIMITED",
+  "NIC BANK",
+  "OPPORTUNITY BANK",
+  "PEOPLE BANK OF ZANZIBAR",
+  "POST BANK KENYA",
+  "POST BANK UGANDA LTD",
+  "PRIDE MICROFINANCE LTD",
+  "SELCOM MICROFINANCE BANK TANZANIA LIMITED",
+  "STANBIC BANK",
+  "STANDARD CHARTERED",
+  "TANZANIA INVESTMENTS BANK",
+  "TOP FINANCE BANK",
+  "TPB BANK PLC",
+  "TROPICAL AFRICA BANK",
+  "UBL BANK (TANZANIA) LTD",
+  "UCHUMI BANK LTD",
+  "UGAFODE MICRO FINANCE",
+  "UNITED BANK FOR AFRICA",
+].map((label) => ({ id: label, label }));
 
 const recordDefinitions: Record<ClientRecordKind, { title: string; section: string; fields: RecordField[] }> = {
   charge: { title: "Add Charge", section: "charges", fields: [
@@ -224,7 +296,7 @@ const recordDefinitions: Record<ClientRecordKind, { title: string; section: stri
     { key: "notes", label: "Comments / Notes", type: "textarea" },
   ] },
   bank: { title: "Add Bank", section: "bankDetails", fields: [
-    { key: "bankName", label: "Bank Name", required: true },
+    { key: "bankName", label: "Bank Name", type: "bank-select", required: true },
     { key: "accountNumber", label: "Account Number", required: true },
     { key: "bicSwiftCode", label: "BIC / Swift Code" },
     { key: "branchAddress", label: "Branch Address" },
@@ -253,13 +325,22 @@ function ClientRecordDialog({
   const [values, setValues] = useState<Record<string, string>>(initialValues);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [bankError, setBankError] = useState<string | null>(null);
   const definition = kind ? recordDefinitions[kind] : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {definition ? (
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
-          <form onSubmit={(event) => { event.preventDefault(); onSubmit(values, selectedFile); }} className="space-y-4">
+          <form onSubmit={(event) => {
+            event.preventDefault();
+            if (kind === "bank" && !values.bankName) {
+              setBankError("Select a bank to continue.");
+              return;
+            }
+            setBankError(null);
+            onSubmit(values, selectedFile);
+          }} className="space-y-4">
             <DialogHeader>
               <DialogTitle>{kind === "residence" && isEditing ? "Edit Residence" : definition.title}</DialogTitle>
               <DialogDescription>{kind === "residence" ? isEditing ? "Update the current residence. The client keeps one residence record." : "Only one residence is kept for a client. Saving a new residence replaces the current one." : "Save this information to the client profile."}</DialogDescription>
@@ -270,7 +351,23 @@ function ClientRecordDialog({
                 return (
                 <label key={field.key} className={cn("space-y-1", field.type === "textarea" && "sm:col-span-2")}>
                   <span className="block text-[13.44px] font-medium text-[#495057]">{field.label}{required ? " *" : ""}</span>
-                  {field.type === "select" ? (
+                  {field.type === "bank-select" ? (
+                    <>
+                      <SearchSelect
+                        id="client-bank-name"
+                        options={bankOptions}
+                        value={values[field.key] ?? ""}
+                        placeholder="Select bank"
+                        required={required}
+                        invalid={Boolean(bankError)}
+                        onValueChange={(value) => {
+                          setValues((current) => ({ ...current, [field.key]: value }));
+                          setBankError(null);
+                        }}
+                      />
+                      {bankError ? <span role="alert" className="block text-[13.44px] text-destructive">{bankError}</span> : null}
+                    </>
+                  ) : field.type === "select" ? (
                     <select required={required} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => field.key === "incomeSource" ? { incomeSource: event.target.value } : ({ ...current, [field.key]: event.target.value }))} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 text-[13.44px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
                       <option value="" disabled>Select {field.label.toLowerCase()}</option>
                       {field.options?.map((option) => <option key={option} value={option}>{option}</option>)}
@@ -288,7 +385,8 @@ function ClientRecordDialog({
                 <span className="block text-[13.44px] font-medium text-[#495057]">Select file *</span>
                 <Input
                   type="file"
-                  required
+                  required={Boolean(values.documentType)}
+                  disabled={!values.documentType}
                   accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
                   aria-describedby="kyc-file-help kyc-file-error"
                   onChange={(event) => {
