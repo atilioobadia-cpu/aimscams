@@ -303,7 +303,7 @@ export function LoanProductDetail({ id }: { id: string }) {
                       humanize(fee.amountType),
                       fee.name === "LOAN MANAGEMENT FEE" ? "Loan Amount" : "Current Due Principal And Interest",
                       fee.amountType === "PERCENTAGE" && fee.rateBp !== null
-                        ? `${(fee.rateBp / 100).toFixed(1).replace(/\\.0$/, "")}%`
+                        ? `${(fee.rateBp / 100).toFixed(1).replace(/\.0$/, "")}%`
                         : fee.amountMinor ?? "N.A.",
                     ])}
                   />
