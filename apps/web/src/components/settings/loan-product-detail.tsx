@@ -2,14 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Briefcase, Calendar, FileText, GitBranch, Percent, Shield, Settings as SettingsIcon, List, BookOpen } from "lucide-react";
 
 import { ErrorPanel, ForbiddenPanel, PanelSkeleton } from "@/components/accounting/states";
 import { PageHeader } from "@/components/data/page-header";
 import { Button } from "@/components/ui/button";
 import { ApiError } from "@/lib/api";
+import { formatMinorUnitsExact } from "@/lib/format";
 import { getLoanProduct, type LoanProduct } from "@/lib/settings";
 import { titleCase } from "@/lib/privacy";
+import { cn } from "cn";
 
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
@@ -17,23 +19,76 @@ function message(failure: unknown, fallback: string): string {
   return fallback;
 }
 
-function Field({ label, value }: { label: string; value: string }) {
+function humanize(value: string | null | undefined): string {
+  if (!value) return "N.A.";
+  return value
+    .toLowerCase()
+    .split(/[_\s]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function Field({ label, value, pill }: { label: string; value: string; pill?: "yes" | "no" | "na" | "none" }) {
   return (
     <div>
       <dt className="fs-text font-medium text-muted-foreground">{label}</dt>
-      <dd className="mt-1 fs-text text-strong">{value}</dd>
+      <dd className="mt-1">
+        {pill && pill !== "none" ? (
+          <span
+            className={cn(
+              "inline-flex items-center rounded-full px-[8.4px] py-[1.68px] fs-text font-medium",
+              pill === "yes" && "bg-[#e1eeee] text-[#057573]",
+              pill === "no" && "bg-[#fde8e8] text-[#c0392b]",
+              pill === "na" && "bg-[#f1f3f5] text-[#495057] font-semibold",
+            )}
+          >
+            {value}
+          </span>
+        ) : (
+          <span className="fs-text text-strong">{value}</span>
+        )}
+      </dd>
     </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, icon: Icon, children }: { title: string; icon: React.ComponentType<{ className?: string }>; children: React.ReactNode }) {
   return (
     <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
-      <h2 className="mb-[var(--space-12)] fs-text font-bold text-strong">{title}</h2>
+      <div className="mb-[var(--space-12)] flex items-center gap-[8.4px]">
+        <Icon className="size-[16px] text-primary" aria-hidden="true" />
+        <h2 className="fs-text font-bold text-strong">{title}</h2>
+      </div>
       <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2 lg:grid-cols-3">
         {children}
       </dl>
     </section>
+  );
+}
+
+function Table({ columns, rows }: { columns: string[]; rows: string[][] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[640px] text-left fs-text">
+        <thead className="border-b border-card-border bg-subtle font-semibold tracking-wide text-label">
+          <tr>
+            {columns.map((column) => (
+              <th key={column} className="whitespace-nowrap px-3 py-2.5">{column}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr key={rowIndex} className="border-b border-card-border last:border-0" style={{ height: "44px" }}>
+              {row.map((cell, cellIndex) => (
+                <td key={cellIndex} className="whitespace-nowrap px-3 py-2.5 text-body">{cell}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -43,6 +98,7 @@ export function LoanProductDetail({ id }: { id: string }) {
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [notFound, setNotFound] = useState(false);
+  const [tab, setTab] = useState<"Summary" | "History">("Summary");
 
   useEffect(() => {
     let active = true;
@@ -96,6 +152,8 @@ export function LoanProductDetail({ id }: { id: string }) {
     );
   }
 
+  const gracePeriod = product?.gracePeriodDays ? `${product.gracePeriodDays} days` : "N.A.";
+
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-3">
@@ -115,98 +173,159 @@ export function LoanProductDetail({ id }: { id: string }) {
         <ErrorPanel message={error} onRetry={() => window.location.reload()} />
       ) : product ? (
         <>
-          <PageHeader
-            title={`${product.code} — ${product.name}`}
-            description={product.description ?? "Loan product terms snapshotted onto accounts."}
-          />
+          <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[20.16px] shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-[13.44px]">
+              <div className="flex items-center gap-[13.44px]">
+                <span className="flex size-[40px] items-center justify-center rounded-[8px] border border-primary bg-primary-tint text-primary">
+                  <Briefcase className="size-[20px]" aria-hidden="true" />
+                </span>
+                <h1 className="text-[20.16px] font-bold uppercase tracking-wide text-heading">{product.name}</h1>
+              </div>
+              <div className="flex flex-wrap items-center gap-[26.88px]">
+                <div>
+                  <p className="fs-text font-semibold text-strong">Status</p>
+                  <span className="mt-1 inline-flex items-center rounded-full bg-[#e1eeee] px-[8.4px] py-[1.68px] fs-text font-medium text-[#057573]">
+                    {titleCase(product.status)}
+                  </span>
+                </div>
+                <div>
+                  <p className="fs-text font-semibold text-strong">Loan Type</p>
+                  <p className="mt-1 fs-text text-body">N.A.</p>
+                </div>
+                <div>
+                  <p className="fs-text font-semibold text-strong">Last Updated</p>
+                  <p className="mt-1 fs-text text-body">N.A.</p>
+                </div>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/settings/products/loan">
+                  <ArrowLeft className="size-4" aria-hidden="true" />
+                  Back
+                </Link>
+              </Button>
+            </div>
+          </section>
 
-          <Section title="Status">
-            <Field label="Status" value={titleCase(product.status)} />
-            <Field label="Loan Type" value="N/A" />
-            <Field label="Last Updated" value="N/A" />
-          </Section>
+          <div className="flex gap-[6.72px] border-b border-card-border bg-subtle px-[6.72px]">
+            {(["Summary", "History"] as const).map((label) => (
+              <button
+                key={label}
+                type="button"
+                className={cn(
+                  "px-[13.44px] py-[8.4px] fs-text font-semibold transition-colors",
+                  tab === label ? "border-b-2 border-primary text-primary" : "text-muted-foreground hover:text-strong",
+                )}
+                onClick={() => setTab(label)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
-          <Section title="Terms">
-            <Field label="Minimum Loan Amount" value={product.minPrincipalMinor} />
-            <Field label="Maximum Loan Amount" value={product.maxPrincipalMinor} />
-            <Field label="Tenure Period" value={`${product.minTenureCount} – ${product.maxTenureCount} ${product.tenurePeriod}`} />
-            <Field label="Grace Period" value={`${product.gracePeriodDays} days`} />
-            <Field label="Multiplier On Savings" value="1" />
-            <Field label="Multiplier On Shares" value="1" />
-          </Section>
+          {tab === "Summary" ? (
+            <div className="space-y-[13.44px]">
+              <Section title="Terms" icon={FileText}>
+                <Field label="Minimum Loan Amount" value={formatMinorUnitsExact(product.minPrincipalMinor)} />
+                <Field label="Maximum Loan Amount" value={formatMinorUnitsExact(product.maxPrincipalMinor)} />
+                <Field label="Tenure Period" value={`${product.minTenureCount} - ${product.maxTenureCount} ${titleCase(product.tenurePeriod.toLowerCase())}`} />
+                <Field label="Grace Period" value={gracePeriod} />
+                <Field label="Interest On Grace Period" value="No" pill="no" />
+                <Field label="Multiplier On Savings" value="1" />
+                <Field label="Multiplier On Shares" value="1" />
+              </Section>
 
-          <Section title="Settings">
-            <Field label="Before Due Date Notification Days" value="0" />
-            <Field label="Number of Grace Period Before Moving Into Arrear" value="0" />
-            <Field label="Over Due Date Notification Days" value="0" />
-            <Field label="Number Of Days Before Becoming NPA" value="0" />
-            <Field label="After Default Notification Days" value="0" />
-            <Field label="Loan Provisioning" value="N/A" />
-            <Field label="Enable Multiple Disbursements (Loan Tranche)" value="No" />
-            <Field label="Enable Multiple Loans" value="N/A" />
-            <Field label="Quick Loan" value="No" />
-            <Field label="Exclude holidays on arrears" value="No" />
-          </Section>
+              <Section title="Settings" icon={SettingsIcon}>
+                <Field label="Before Due Date Notification Days" value="0" />
+                <Field label="Number of Grace Period Before Moving Into Arrear" value="0" />
+                <Field label="Over Due Date Notification Days" value="0" />
+                <Field label="Number Of Days Before Becoming NPA" value="0" />
+                <Field label="After Default Notification Days" value="0" />
+                <Field label="Loan Provisioning" value="N.A." pill="na" />
+                <Field label="Enable Multiple Disbursements (Loan Tranche)" value="No" pill="no" />
+                <Field label="Enable Multiple Loans" value="N.A." pill="na" />
+                <Field label="Quick Loan" value="No" pill="no" />
+                <Field label="Exclude holidays on arrears" value="No" pill="no" />
+              </Section>
 
-          <Section title="Interest">
-            <Field label="Interest Rate" value={`${(product.interestRateBp / 100).toFixed(2)}% per Month - Fixed`} />
-            <Field label="Interest Rate Calculation Method" value={product.interestMethod} />
-            <Field label="Fixed Yearly Interest" value="No" />
-          </Section>
+              <Section title="Interest" icon={Percent}>
+                <Field label="Interest Rate" value={`${(product.interestRateBp / 100).toFixed(1)}% per Month - Fixed`} />
+                <Field label="Interest Rate Calculation Method" value={humanize(product.interestMethod)} />
+                <Field label="Fixed Yearly Interest" value="No" pill="no" />
+                <div className="md:col-span-2 lg:col-span-3">
+                  <h3 className="mb-[var(--space-8)] fs-text font-bold text-strong">Income</h3>
+                  <dl className="grid gap-x-[var(--space-24)] gap-y-[var(--space-14)] md:grid-cols-2 lg:grid-cols-3">
+                    <Field label="Configure Type" value="Accrual" />
+                    <Field label="Accrual Interest Calculation Term" value="On Due Date" />
+                    <Field label="Accrue interest after maturity" value="N.A." pill="na" />
+                    <Field label="% cap on principal Borrowed is required" value="N.A." />
+                  </dl>
+                </div>
+              </Section>
 
-          <Section title="Income">
-            <Field label="Configure Type" value="Accrual" />
-            <Field label="Accrual Interest Calculation Term" value="On Due Date" />
-            <Field label="Accrue interest after maturity" value="N/A" />
-            <Field label="% cap on principal Borrowed is required" value="N/A" />
-          </Section>
+              <Section title="Repayments" icon={Calendar}>
+                <Field label="Repayment Strategy" value="Charges, Interest and Principal" />
+                <Field label="Advance Payment Strategy" value="N.A." />
+                <Field label="Advance Payments Adjustment" value="Adjust Next Installment" />
+                <Field label="Pre-closure Interest Calculation" value="N.A." />
+                <Field label="Recalculate Interest On Repayment" value="N.A." pill="na" />
+                <Field label="Recalculate Interest On Accrual" value="N.A." pill="na" />
+                <Field label="Interest Compounding On" value="N.A." />
+              </Section>
 
-          <Section title="Repayments">
-            <Field label="Repayment Strategy" value="Charges, Interest and Principal" />
-            <Field label="Advance Payment Strategy" value="N/A" />
-            <Field label="Advance Payments Adjustment" value="Adjust Next Installment" />
-            <Field label="Pre-closure Interest Calculation" value="N/A" />
-            <Field label="Recalculate Interest On Repayment" value="N/A" />
-            <Field label="Recalculate Interest On Accrual" value="N.A." />
-            <Field label="Interest Compounding On" value="N.A." />
-          </Section>
+              <Section title="Guarantors and Collateral" icon={Shield}>
+                <Field label="Guarantors" value="Others" />
+                <Field label="Minimum Number Of Guarantors" value="2" />
+                <Field label="Collateral Type" value="Others" />
+                <Field label="Collateral Ratio" value="150" />
+              </Section>
 
-          <Section title="Guarantors and Collateral">
-            <Field label="Guarantors" value="Others" />
-            <Field label="Minimum Number Of Guarantors" value="2" />
-            <Field label="Collateral Type" value="Others" />
-            <Field label="Collateral Ratio" value="150" />
-          </Section>
+              <Section title="Loan Product Charges" icon={List}>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Table
+                    columns={["Payment Mode", "Payment Upon Loan Repayment", "Charge Name", "Charge Fee Type"]}
+                    rows={[
+                      ["Payment Upon Processing And Disbursement", "N.A.", "LOAN MANAGEMENT FEE", "Percentage"],
+                      ["Payment Upon Delayed Repayment", "N.A.", "LOAN PENALTY", "Percentage"],
+                    ]}
+                  />
+                </div>
+              </Section>
 
-          <Section title="Loan Product Charges">
-            <Field label="Payment Upon Processing And Disbursement" value="N/A" />
-            <Field label="Payment Upon Delayed Repayment" value="N/A" />
-          </Section>
+              <Section title="Loan Product Stages" icon={GitBranch}>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Table
+                    columns={["Loan Stage", "Default Role", "Default Assignee", "Description"]}
+                    rows={[
+                      ["KYC & Documentation", "Loan Officer", "N.A.", "N.A."],
+                      ["Guarantor & Collateral", "Credit Officer", "N.A.", "N.A."],
+                      ["Eligibility & Credit Verification", "Accountant", "N.A.", "N.A."],
+                      ["Sanctions & Approval", "Managing Director", "N.A.", "N.A."],
+                    ]}
+                  />
+                </div>
+              </Section>
 
-          <Section title="Loan Product Stages">
-            <Field label="KYC & Documentation" value="Loan Officer" />
-            <Field label="Guarantor & Collateral" value="Credit Officer" />
-            <Field label="Eligibility & Credit Verification" value="Accountant" />
-            <Field label="Sanctions & Approval" value="Managing Director" />
-          </Section>
-
-          <Section title="Accounting Settings">
-            <Field label="Loan Portfolio Account" value={product.principalAccountId ?? "N/A"} />
-            <Field label="Accrued Account" value={product.interestIncomeAccountId ?? "N/A"} />
-            <Field label="Income From Interest" value={product.interestIncomeAccountId ?? "N/A"} />
-            <Field label="Expenses Losses Written Off" value={product.chargesIncomeAccountId ?? "N/A"} />
-            <Field label="Overpayment Account" value={product.penaltyIncomeAccountId ?? "N/A"} />
-            <Field label="Loan Suspense Account" value="N/A" />
-          </Section>
-
-          {product.workflowStages ? (
-            <section className="rounded-[var(--card-radius)] border border-card-border bg-card p-[var(--space-16)]">
-              <h2 className="fs-text font-bold text-strong">Workflow stages</h2>
-              <pre className="mt-3 overflow-auto rounded-[var(--card-radius)] bg-subtle p-[var(--space-12)] fs-text text-body">
-                {JSON.stringify(product.workflowStages, null, 2)}
-              </pre>
-            </section>
-          ) : null}
+              <Section title="Accounting Settings" icon={BookOpen}>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <Table
+                    columns={["Account Type", "Account", "Type"]}
+                    rows={[
+                      ["Loan Portfolio Account", product.principalAccountId ?? "N.A.", "Assets"],
+                      ["Accrued Account", product.interestIncomeAccountId ?? "N.A.", "Assets"],
+                      ["Income From Interest", product.interestIncomeAccountId ?? "N.A.", "Income"],
+                      ["Expenses Losses Written Off", product.chargesIncomeAccountId ?? "N/A", "Expense"],
+                      ["Overpayment Account", product.penaltyIncomeAccountId ?? "N/A", "LIABILITIES"],
+                      ["Loan Suspense Account", "N.A.", "Assets"],
+                    ]}
+                  />
+                </div>
+              </Section>
+            </div>
+          ) : (
+            <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-24)] text-center">
+              <p className="fs-text text-muted-foreground">No history available.</p>
+            </div>
+          )}
         </>
       ) : null}
     </div>
