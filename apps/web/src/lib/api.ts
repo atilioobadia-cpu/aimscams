@@ -101,3 +101,36 @@ export async function apiRequest<T>(path: string, options: ApiRequestOptions = {
 
   return payload as T;
 }
+
+export async function apiUpload<T>(path: string, body: FormData): Promise<T> {
+  const headers = new Headers({ accept: 'application/json' });
+  const csrf = readCookie('aimscams_csrf');
+  if (csrf) headers.set('x-csrf-token', csrf);
+
+  const response = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    cache: 'no-store',
+    body,
+  });
+
+  const text = await response.text();
+  let payload: unknown = null;
+  if (text) {
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      payload = null;
+    }
+  }
+  if (!response.ok) {
+    const record = payload && typeof payload === 'object' ? (payload as { code?: unknown }) : null;
+    throw new ApiError(
+      messageFromPayload(payload, `Request failed with status ${response.status}.`),
+      response.status,
+      typeof record?.code === 'string' ? record.code : undefined,
+    );
+  }
+  return payload as T;
+}

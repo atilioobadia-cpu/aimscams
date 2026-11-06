@@ -40,7 +40,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/components/ui/toast";
 import { ApiError } from "@/lib/api";
-import { getClient, listLoanApplications, listLoans, listMembershipPolicies, listSavingsAccounts, updateClient, type Client, type Loan, type LoanApplication, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
+import { clientKycDocumentUrl, getClient, listClientKycDocuments, listLoanApplications, listLoans, listMembershipPolicies, listSavingsAccounts, updateClient, uploadClientKycDocument, type Client, type ClientKycDocument, type Loan, type LoanApplication, type MembershipPolicy, type SavingsAccount } from "@/lib/settings";
 import { maskEmail, titleCase } from "@/lib/privacy";
 import { cn } from "cn";
 
@@ -179,7 +179,7 @@ function TabTable({ columns, rows, emptyMessage, emptyHeight, minTableWidth = 72
 }
 
 type ClientRecordKind = "charge" | "residence" | "kyc" | "income" | "asset" | "bank";
-type RecordField = { key: string; label: string; type?: "text" | "date" | "number" | "textarea"; required?: boolean };
+type RecordField = { key: string; label: string; type?: "text" | "date" | "number" | "textarea" | "select"; required?: boolean; requiredWhen?: { field: string; value: string }; visibleWhen?: { field: string; value: string }; options?: string[] };
 
 const recordDefinitions: Record<ClientRecordKind, { title: string; section: string; fields: RecordField[] }> = {
   charge: { title: "Add Charge", section: "charges", fields: [
@@ -199,20 +199,23 @@ const recordDefinitions: Record<ClientRecordKind, { title: string; section: stri
     { key: "postalCode", label: "Pincode / Zip" },
   ] },
   kyc: { title: "Add KYC Record", section: "kycRecords", fields: [
-    { key: "documentType", label: "Document Type", required: true },
-    { key: "documentName", label: "Document Name", required: true },
+    { key: "documentType", label: "Document Type", type: "select", required: true, options: [
+      "Affidavit", "Bank Statement", "Birth Certificate", "Cancelled Cheque", "Driving License", "Identity",
+      "KRA Pin Certificate", "Logo", "Military ID", "National ID", "Nida Id", "Others",
+    ] },
     { key: "comments", label: "Comments", type: "textarea" },
   ] },
   income: { title: "Add Income", section: "incomeRecords", fields: [
-    { key: "companyName", label: "Company Name", required: true },
-    { key: "companyAddress", label: "Company Address" },
-    { key: "monthlyIncome", label: "Monthly Income (TSh)", type: "number" },
-    { key: "contractType", label: "Contract Type" },
-    { key: "businessAddress", label: "Business Address" },
-    { key: "registrationNumber", label: "Business Registration Number (BRELA)" },
-    { key: "businessLicenseNumber", label: "Business License Number" },
-    { key: "tinNumber", label: "TIN Number" },
-    { key: "businessTurnover", label: "Business Turnover" },
+    { key: "incomeSource", label: "Income Type", type: "select", required: true, options: ["Employment", "Business"] },
+    { key: "companyName", label: "Company Name", requiredWhen: { field: "incomeSource", value: "Employment" }, visibleWhen: { field: "incomeSource", value: "Employment" } },
+    { key: "companyAddress", label: "Company Address", requiredWhen: { field: "incomeSource", value: "Employment" }, visibleWhen: { field: "incomeSource", value: "Employment" } },
+    { key: "monthlyIncome", label: "Income (TSh)", type: "number", requiredWhen: { field: "incomeSource", value: "Employment" }, visibleWhen: { field: "incomeSource", value: "Employment" } },
+    { key: "contractType", label: "Contract Type", type: "select", options: ["Permanent", "Part-Time", "Freelance", "Internship"], requiredWhen: { field: "incomeSource", value: "Employment" }, visibleWhen: { field: "incomeSource", value: "Employment" } },
+    { key: "businessAddress", label: "Business Address", requiredWhen: { field: "incomeSource", value: "Business" }, visibleWhen: { field: "incomeSource", value: "Business" } },
+    { key: "registrationNumber", label: "Business Registration Number (Brela)", requiredWhen: { field: "incomeSource", value: "Business" }, visibleWhen: { field: "incomeSource", value: "Business" } },
+    { key: "businessLicenseNumber", label: "Business License Number", requiredWhen: { field: "incomeSource", value: "Business" }, visibleWhen: { field: "incomeSource", value: "Business" } },
+    { key: "tinNumber", label: "TIN Number", requiredWhen: { field: "incomeSource", value: "Business" }, visibleWhen: { field: "incomeSource", value: "Business" } },
+    { key: "businessTurnover", label: "Business Turn Over (weekly, yearly)", requiredWhen: { field: "incomeSource", value: "Business" }, visibleWhen: { field: "incomeSource", value: "Business" } },
   ] },
   asset: { title: "Add Asset", section: "assetRecords", fields: [
     { key: "assetType", label: "Asset Type", required: true },
@@ -245,32 +248,65 @@ function ClientRecordDialog({
   saving: boolean;
   error: string | null;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (values: Record<string, string>) => void;
+  onSubmit: (values: Record<string, string>, file?: File | null) => void;
 }) {
   const [values, setValues] = useState<Record<string, string>>(initialValues);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
   const definition = kind ? recordDefinitions[kind] : null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {definition ? (
         <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
-          <form onSubmit={(event) => { event.preventDefault(); onSubmit(values); }} className="space-y-4">
+          <form onSubmit={(event) => { event.preventDefault(); onSubmit(values, selectedFile); }} className="space-y-4">
             <DialogHeader>
               <DialogTitle>{kind === "residence" && isEditing ? "Edit Residence" : definition.title}</DialogTitle>
               <DialogDescription>{kind === "residence" ? isEditing ? "Update the current residence. The client keeps one residence record." : "Only one residence is kept for a client. Saving a new residence replaces the current one." : "Save this information to the client profile."}</DialogDescription>
             </DialogHeader>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {definition.fields.map((field) => (
+              {definition.fields.filter((field) => !field.visibleWhen || values[field.visibleWhen.field] === field.visibleWhen.value).map((field) => {
+                const required = field.required || (field.requiredWhen !== undefined && values[field.requiredWhen.field] === field.requiredWhen.value);
+                return (
                 <label key={field.key} className={cn("space-y-1", field.type === "textarea" && "sm:col-span-2")}>
-                  <span className="block text-[13.44px] font-medium text-[#495057]">{field.label}{field.required ? " *" : ""}</span>
-                  {field.type === "textarea" ? (
-                    <textarea required={field.required} maxLength={1000} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} className="min-h-20 w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 text-[13.44px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40" />
+                  <span className="block text-[13.44px] font-medium text-[#495057]">{field.label}{required ? " *" : ""}</span>
+                  {field.type === "select" ? (
+                    <select required={required} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => field.key === "incomeSource" ? { incomeSource: event.target.value } : ({ ...current, [field.key]: event.target.value }))} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 text-[13.44px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                      <option value="" disabled>Select {field.label.toLowerCase()}</option>
+                      {field.options?.map((option) => <option key={option} value={option}>{option}</option>)}
+                    </select>
+                  ) : field.type === "textarea" ? (
+                    <textarea required={required} maxLength={1000} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} className="min-h-20 w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 text-[13.44px] text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/40" />
                   ) : (
-                    <Input required={field.required} type={field.type ?? "text"} min={field.type === "number" ? "0" : undefined} step={field.type === "number" ? "any" : undefined} maxLength={field.type === "number" ? undefined : 1000} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+                    <Input required={required} type={field.type ?? "text"} min={field.type === "number" ? "0" : undefined} step={field.type === "number" ? "any" : undefined} maxLength={field.type === "number" ? undefined : 1000} value={values[field.key] ?? ""} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
                   )}
                 </label>
-              ))}
+              );})}
             </div>
+            {kind === "kyc" ? (
+              <label className="block space-y-1">
+                <span className="block text-[13.44px] font-medium text-[#495057]">Select file *</span>
+                <Input
+                  type="file"
+                  required
+                  accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
+                  aria-describedby="kyc-file-help kyc-file-error"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0] ?? null;
+                    if (file && file.size > 5 * 1024 * 1024) {
+                      event.target.value = "";
+                      setSelectedFile(null);
+                      setFileError("The selected file must be 5 MB or smaller.");
+                      return;
+                    }
+                    setSelectedFile(file);
+                    setFileError(null);
+                  }}
+                />
+                <span id="kyc-file-help" className="block text-[12px] text-muted-foreground">PDF, JPG or PNG. Maximum size: 5 MB.</span>
+                {fileError ? <span id="kyc-file-error" role="alert" className="block text-[13.44px] text-destructive">{fileError}</span> : null}
+              </label>
+            ) : null}
             {error ? <p role="alert" className="text-[13.44px] text-destructive">{error}</p> : null}
             <DialogFooter>
               <Button type="button" variant="outline" disabled={saving} onClick={() => onOpenChange(false)}>Cancel</Button>
@@ -299,6 +335,7 @@ export function ClientProfile({ id }: { id: string }) {
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loanApplications, setLoanApplications] = useState<LoanApplication[]>([]);
   const [savings, setSavings] = useState<SavingsAccount[]>([]);
+  const [kycDocuments, setKycDocuments] = useState<ClientKycDocument[]>([]);
   const [membershipPolicies, setMembershipPolicies] = useState<MembershipPolicy[]>([]);
   const [showAllAccounts, setShowAllAccounts] = useState(true);
   const [statementStart, setStatementStart] = useState("");
@@ -355,6 +392,21 @@ export function ClientProfile({ id }: { id: string }) {
       active = false;
     };
   }, [id]);
+
+  useEffect(() => {
+    if (!client) return;
+    let active = true;
+    void listClientKycDocuments(client.id)
+      .then((response) => {
+        if (active) setKycDocuments(response.items);
+      })
+      .catch(() => {
+        if (active) setKycDocuments([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [client]);
 
   useEffect(() => {
     if (!client) return;
@@ -479,12 +531,28 @@ export function ClientProfile({ id }: { id: string }) {
   const assetRecords = profileRecords("assetRecords");
   const bankRecords = profileRecords("bankDetails");
 
-  async function saveProfileRecord(kind: ClientRecordKind, values: Record<string, string>, editIndex: number | null = null) {
+  async function saveProfileRecord(kind: ClientRecordKind, values: Record<string, string>, editIndex: number | null = null, file: File | null = null) {
     if (!client || !canEdit) return;
     setSavingRecord(true);
     setRecordError(null);
     try {
       const definition = recordDefinitions[kind];
+      if (kind === "kyc") {
+        if (!file) {
+          setRecordError("Select a document file.");
+          return;
+        }
+        const response = await uploadClientKycDocument(client.id, {
+          documentType: values.documentType ?? "",
+          comments: values.comments,
+          file,
+        });
+        setKycDocuments((current) => [response.document, ...current]);
+        setClient((current) => current ? { ...current, kycStatus: "PENDING" } : current);
+        setRecordDialogKind(null);
+        pushToast("KYC document uploaded.");
+        return;
+      }
       const existingRecords = profileRecords(definition.section);
       const previousResidence = kind === "residence" && editIndex !== null
         ? residenceRecords[editIndex]
@@ -501,7 +569,6 @@ export function ClientProfile({ id }: { id: string }) {
         record.status = "Unpaid";
       }
       if (kind === "residence" && !previousResidence) record.status = "ACTIVE";
-      if (kind === "kyc") record.uploadedDate = new Date().toISOString().slice(0, 10);
       const recordsToSave = kind === "residence" ? [record] : [...existingRecords, record];
       const residenceAddress = ["houseNumber", "addressLine1", "addressLine2", "addressLine3", "areaWard", "districtCity", "regionState", "country", "postalCode"]
         .map((field) => record[field]?.trim())
@@ -512,7 +579,6 @@ export function ClientProfile({ id }: { id: string }) {
           [definition.section]: recordsToSave,
           ...(kind === "residence" ? { residenceDetails: { currentAddress: residenceAddress, sameAsCurrent: false } } : {}),
         },
-        ...(kind === "kyc" ? { kycStatus: "PENDING" as const } : {}),
       });
       setClient(response.client);
       setRecordDialogKind(null);
@@ -943,7 +1009,21 @@ export function ClientProfile({ id }: { id: string }) {
                   <Button type="button" variant="outline" disabled={!canEdit} onClick={() => openRecordDialog("kyc")} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint"><Plus className="size-[14px]" aria-hidden="true" />Add KYC</Button>
                   <Button type="button" variant="outline" disabled={!canEdit} onClick={() => void unapproveKyc()} className="h-[30px] rounded-[6px] border-primary px-3 text-[11.76px] font-medium text-primary hover:bg-primary-tint">Unapprove KYC</Button>
                 </div>
-                <TabTable columns={["Document", "Uploaded Date", "Comments", "Document Name", "Actions"]} rows={kycRecords.map((record) => [stringValue(record.documentType), stringValue(record.uploadedDate), stringValue(record.comments), stringValue(record.documentName), "—"])} emptyMessage="No data available" emptyHeight={150} />
+                <TabTable
+                  columns={["Document Type", "File", "Uploaded Date", "Comments", "Actions"]}
+                  rows={[
+                    ...kycDocuments.map((document) => [
+                      document.documentType,
+                      <a key={document.id} href={clientKycDocumentUrl(id, document.id)} target="_blank" rel="noreferrer" className="font-medium text-primary underline-offset-2 hover:underline">{document.fileName}</a>,
+                      document.createdAt.slice(0, 10),
+                      document.comments ?? "",
+                      "—",
+                    ]),
+                    ...kycRecords.map((record) => [stringValue(record.documentType), stringValue(record.documentName), stringValue(record.uploadedDate), stringValue(record.comments), "—"]),
+                  ]}
+                  emptyMessage="No data available"
+                  emptyHeight={150}
+                />
               </div>
             </TabsContent>
 
@@ -1015,7 +1095,7 @@ export function ClientProfile({ id }: { id: string }) {
             saving={savingRecord}
             error={recordError}
             onOpenChange={(open) => { if (!open && !savingRecord) { setRecordDialogKind(null); setEditingResidenceIndex(null); } }}
-            onSubmit={(values) => { if (recordDialogKind) void saveProfileRecord(recordDialogKind, values, editingResidenceIndex); }}
+            onSubmit={(values, file) => { if (recordDialogKind) void saveProfileRecord(recordDialogKind, values, editingResidenceIndex, file); }}
           />
         </>
       ) : null}

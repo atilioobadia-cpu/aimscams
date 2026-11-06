@@ -12,6 +12,7 @@ import { AuditService } from '../auth/audit.service.js';
 import type { AuthContext } from '../auth/auth.types.js';
 import { PRISMA } from '../prisma/prisma.module.js';
 import {
+  matchesSignature,
   parseEconomicSector,
   parseInterestMethod,
   parseIsoDate,
@@ -67,10 +68,26 @@ const CLIENT_PROFILE_RECORD_FIELDS: Record<string, readonly string[]> = {
   charges: ['id', 'chargeType', 'creationDate', 'dueDate', 'outstandingDays', 'amount', 'outstandingAmount', 'status'],
   residenceRecords: ['id', 'houseNumber', 'addressLine1', 'addressLine2', 'addressLine3', 'areaWard', 'districtCity', 'regionState', 'country', 'postalCode', 'status'],
   kycRecords: ['id', 'documentType', 'uploadedDate', 'comments', 'documentName'],
-  incomeRecords: ['id', 'companyName', 'companyAddress', 'monthlyIncome', 'contractType', 'businessAddress', 'registrationNumber', 'businessLicenseNumber', 'tinNumber', 'businessTurnover'],
+  incomeRecords: ['id', 'incomeSource', 'companyName', 'companyAddress', 'monthlyIncome', 'contractType', 'businessAddress', 'registrationNumber', 'businessLicenseNumber', 'tinNumber', 'businessTurnover'],
   assetRecords: ['id', 'assetType', 'value', 'location', 'notes'],
   bankDetails: ['id', 'bankName', 'accountNumber', 'bicSwiftCode', 'branchAddress'],
 };
+
+const CLIENT_KYC_DOCUMENT_TYPES = [
+  'Affidavit',
+  'Bank Statement',
+  'Birth Certificate',
+  'Cancelled Cheque',
+  'Driving License',
+  'Identity',
+  'KRA Pin Certificate',
+  'Logo',
+  'Military ID',
+  'National ID',
+  'Nida Id',
+  'Others',
+] as const;
+const MAX_CLIENT_KYC_DOCUMENT_BYTES = 5 * 1024 * 1024;
 
 function parseClientProfileRecords(value: unknown): Prisma.InputJsonObject {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -102,7 +119,7 @@ function parseClientProfileRecords(value: unknown): Prisma.InputJsonObject {
       throw new BadRequestException('A profile section must contain no more than 100 records.');
     }
 
-    result[key] = records.map((record) => {
+    const parsedRecords = records.map((record) => {
       if (!record || typeof record !== 'object' || Array.isArray(record)) {
         throw new BadRequestException('Profile records must be objects.');
       }
@@ -116,6 +133,25 @@ function parseClientProfileRecords(value: unknown): Prisma.InputJsonObject {
       }
       return clean;
     });
+    if (key === 'incomeRecords') {
+      for (const record of parsedRecords) {
+        const incomeSource = record.incomeSource;
+        if (incomeSource === undefined) continue; // Legacy income rows predate the type field.
+        const requiredFields = incomeSource === 'Employment'
+          ? ['companyName', 'companyAddress', 'monthlyIncome', 'contractType']
+          : incomeSource === 'Business'
+            ? ['businessAddress', 'registrationNumber', 'businessLicenseNumber', 'tinNumber', 'businessTurnover']
+            : null;
+        if (!requiredFields) throw new BadRequestException('Select Employment or Business as the income type.');
+        if (requiredFields.some((field) => !record[field]?.trim())) {
+          throw new BadRequestException(`Complete all required ${incomeSource.toLowerCase()} income fields.`);
+        }
+        if (incomeSource === 'Employment' && !['Permanent', 'Part-Time', 'Freelance', 'Internship'].includes(record.contractType ?? '')) {
+          throw new BadRequestException('Select a supported employment contract type.');
+        }
+      }
+    }
+    result[key] = parsedRecords;
   }
   return result;
 }
@@ -1953,6 +1989,113 @@ export class SettingsService {
     });
 
     return { client: this.serializeClient(updated), canEdit: this.can(auth, 'Client : Edit') };
+  }
+
+  async listClientKycDocuments(auth: AuthContext, clientId: string) {
+    const organisationId = auth.user.organisation.id;
+    const client = await this.prisma.client.findFirst({
+      where: { id: clientId, organisationId },
+      select: { id: true },
+    });
+    if (!client) throw new NotFoundException('Client not found.');
+    const documents = await this.prisma.clientKycDocument.findMany({
+      where: { organisationId, clientId },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      select: {
+        id: true,
+        documentType: true,
+        fileName: true,
+        contentType: true,
+        sizeBytes: true,
+        comments: true,
+        createdAt: true,
+      },
+    });
+    return { items: documents.map((document) => ({ ...document, createdAt: document.createdAt.toISOString() })) };
+  }
+
+  async uploadClientKycDocument(
+    auth: AuthContext,
+    clientId: string,
+    body: Record<string, unknown>,
+    file: { originalname: string; mimetype: string; size: number; buffer: Buffer } | undefined,
+    context: MutationContext,
+  ) {
+    const organisationId = auth.user.organisation.id;
+    const client = await this.prisma.client.findFirst({
+      where: { id: clientId, organisationId },
+      select: { id: true, kycStatus: true },
+    });
+    if (!client) throw new NotFoundException('Client not found.');
+    if (!file || !Buffer.isBuffer(file.buffer) || file.size === 0) {
+      throw new BadRequestException('Select a document file.');
+    }
+    if (file.size > MAX_CLIENT_KYC_DOCUMENT_BYTES) {
+      throw new BadRequestException('The selected file must be 5 MB or smaller.');
+    }
+    if (!['application/pdf', 'image/png', 'image/jpeg'].includes(file.mimetype)) {
+      throw new BadRequestException('Select a PDF, PNG or JPEG file.');
+    }
+    if (!matchesSignature(file.mimetype, file.buffer)) {
+      throw new BadRequestException('The file does not match its declared type.');
+    }
+    const documentType = String(body.documentType ?? '').trim();
+    if (!(CLIENT_KYC_DOCUMENT_TYPES as readonly string[]).includes(documentType)) {
+      throw new BadRequestException('Select a supported KYC document type.');
+    }
+    const comments = optionalText(body.comments);
+    if (comments && comments.length > 1000) {
+      throw new BadRequestException('Comments must be 1,000 characters or fewer.');
+    }
+    const fileName = requiredText(file.originalname, 'File name').slice(0, 200);
+    const [document] = await this.prisma.$transaction([
+      this.prisma.clientKycDocument.create({
+        data: {
+          organisationId,
+          clientId,
+          documentType,
+          fileName,
+          contentType: file.mimetype,
+          sizeBytes: file.size,
+          data: new Uint8Array(file.buffer),
+          comments: comments || null,
+          uploadedByUserId: auth.user.id,
+        },
+        select: {
+          id: true,
+          documentType: true,
+          fileName: true,
+          contentType: true,
+          sizeBytes: true,
+          comments: true,
+          createdAt: true,
+        },
+      }),
+      ...(client.kycStatus === 'PENDING' ? [] : [this.prisma.client.update({ where: { id: clientId }, data: { kycStatus: 'PENDING' } })]),
+    ]);
+
+    await this.audit.record({
+      organisationId,
+      branchId: auth.user.branch?.id ?? null,
+      actorUserId: auth.user.id,
+      actorLabel: auth.user.email,
+      action: 'Client KYC document uploaded',
+      entityType: 'Client KYC document',
+      entityId: document.id,
+      after: { clientId, documentType, fileName, sizeBytes: file.size },
+      ipAddress: context.ipAddress,
+      userAgent: context.userAgent,
+    });
+    return { document: { ...document, createdAt: document.createdAt.toISOString() } };
+  }
+
+  async getClientKycDocument(auth: AuthContext, clientId: string, documentId: string) {
+    const document = await this.prisma.clientKycDocument.findFirst({
+      where: { id: documentId, clientId, organisationId: auth.user.organisation.id },
+      select: { fileName: true, contentType: true, data: true, sizeBytes: true },
+    });
+    if (!document) throw new NotFoundException('KYC document not found.');
+    return { ...document, data: Buffer.from(document.data) };
   }
 
   async getClient(auth: AuthContext, id: string) {

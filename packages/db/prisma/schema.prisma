@@ -74,6 +74,7 @@ model Organisation {
   savingsAccounts SavingsAccount[]
   loanApplications LoanApplication[]
   loanApplicationDocuments LoanApplicationDocument[]
+  clientKycDocuments ClientKycDocument[]
   loans            Loan[]
   loanSchedules    LoanSchedule[]
   tillSessions     TillSession[]
@@ -168,6 +169,7 @@ model User {
   loginAttempts       LoginAttempt[]
   auditEvents         AuditEvent[]
   loanApplicationsAsOfficer LoanApplication[]
+  clientKycUploads         ClientKycDocument[]
   tillSessions              TillSession[]
 
   @@unique([organisationId, email])
@@ -633,6 +635,7 @@ model Client {
   members      Client[]     @relation("ClientGroup")
   savingsAccounts SavingsAccount[]
   loanApplications LoanApplication[]
+  kycDocuments     ClientKycDocument[]
   loans            Loan[]
   transactions     Transaction[]
 
@@ -764,6 +767,27 @@ model LoanApplicationDocument {
   @@index([loanApplicationId])
   @@index([organisationId])
   @@map("loan_application_document")
+}
+
+model ClientKycDocument {
+  id               String   @id @default(uuid()) @db.Uuid
+  organisationId   String   @db.Uuid
+  clientId         String   @db.Uuid
+  documentType     String
+  fileName         String
+  contentType      String
+  sizeBytes        Int
+  data             Bytes
+  comments         String?
+  uploadedByUserId String?  @db.Uuid
+  createdAt        DateTime @default(now())
+
+  organisation Organisation @relation(fields: [organisationId], references: [id], onDelete: Cascade)
+  client       Client       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  uploadedBy   User?        @relation(fields: [uploadedByUserId], references: [id], onDelete: SetNull)
+
+  @@index([organisationId, clientId, createdAt])
+  @@map("client_kyc_document")
 }
 
 model Loan {

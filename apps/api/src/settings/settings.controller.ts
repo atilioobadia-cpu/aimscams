@@ -11,7 +11,10 @@ import {
   Query,
   Req,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import type { Request, Response } from 'express';
 
 import { CurrentAuth, RequirePermissions } from '../auth/auth.decorators.js';
@@ -151,6 +154,45 @@ export class SettingsController {
     @Req() request: Request,
   ) {
     return this.settings.updateClient(auth, id, body, requestContext(request));
+  }
+
+  @Get('clients/:id/kyc-documents')
+  @RequirePermissions('Client : View')
+  async listClientKycDocuments(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+  ) {
+    return this.settings.listClientKycDocuments(auth, id);
+  }
+
+  @Post('clients/:id/kyc-documents')
+  @RequirePermissions('Client : Edit')
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 5 * 1024 * 1024, files: 1 } }))
+  async uploadClientKycDocument(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Body() body: Record<string, unknown>,
+    @UploadedFile() file: { originalname: string; mimetype: string; size: number; buffer: Buffer } | undefined,
+    @Req() request: Request,
+  ) {
+    return this.settings.uploadClientKycDocument(auth, id, body, file, requestContext(request));
+  }
+
+  @Get('clients/:id/kyc-documents/:documentId/file')
+  @RequirePermissions('Client : View')
+  async getClientKycDocument(
+    @CurrentAuth() auth: AuthContext,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) id: string,
+    @Param('documentId', new ParseUUIDPipe({ errorHttpStatusCode: 404 })) documentId: string,
+    @Res() response: Response,
+  ) {
+    const document = await this.settings.getClientKycDocument(auth, id, documentId);
+    response.setHeader('Content-Type', document.contentType);
+    response.setHeader('Content-Length', String(document.sizeBytes));
+    response.setHeader('Cache-Control', 'private, no-store');
+    response.setHeader('X-Content-Type-Options', 'nosniff');
+    response.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${encodeURIComponent(document.fileName)}`);
+    response.send(document.data);
   }
 
   @Patch('savings-accounts/:id')

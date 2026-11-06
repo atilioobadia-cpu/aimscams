@@ -1,4 +1,4 @@
-import { apiAssetUrl, apiRequest } from "@/lib/api";
+import { apiAssetUrl, apiRequest, apiUpload } from "@/lib/api";
 
 export type InstitutionDialect = "TCDC" | "BOT";
 export type BranchStatus = "OPEN" | "CLOSED";
@@ -859,6 +859,38 @@ export async function updateClient(id: string, payload: { status?: string; group
 }
 export async function getClient(id: string): Promise<ClientResponse> {
   return apiRequest<ClientResponse>(`/settings/clients/${encodeURIComponent(id)}`);
+}
+
+export type ClientKycDocument = {
+  id: string;
+  documentType: string;
+  fileName: string;
+  contentType: string;
+  sizeBytes: number;
+  comments: string | null;
+  createdAt: string;
+};
+
+export async function listClientKycDocuments(clientId: string): Promise<{ items: ClientKycDocument[] }> {
+  return apiRequest<{ items: ClientKycDocument[] }>(`/settings/clients/${encodeURIComponent(clientId)}/kyc-documents`);
+}
+
+export async function uploadClientKycDocument(
+  clientId: string,
+  input: { documentType: string; comments?: string; file: File },
+): Promise<{ document: ClientKycDocument }> {
+  const body = new FormData();
+  body.append("documentType", input.documentType);
+  body.append("comments", input.comments ?? "");
+  body.append("file", input.file, input.file.name);
+  return apiUpload<{ document: ClientKycDocument }>(
+    `/settings/clients/${encodeURIComponent(clientId)}/kyc-documents`,
+    body,
+  );
+}
+
+export function clientKycDocumentUrl(clientId: string, documentId: string): string {
+  return apiAssetUrl(`/settings/clients/${encodeURIComponent(clientId)}/kyc-documents/${encodeURIComponent(documentId)}/file`) ?? "";
 }
 export type SavingsAccountStatus = "ACTIVE" | "INACTIVE" | "CLOSED";
 

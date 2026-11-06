@@ -374,7 +374,7 @@ export function parseIsoDate(value: unknown, field: string): Date | null {
   return parsed;
 }
 
-function matchesSignature(contentType: string, data: Buffer): boolean {
+export function matchesSignature(contentType: string, data: Buffer): boolean {
   if (contentType === 'application/pdf') {
     return data.length >= 5 && data.toString('ascii', 0, 5) === '%PDF-';
   }
