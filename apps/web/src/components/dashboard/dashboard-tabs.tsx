@@ -270,6 +270,23 @@ export function DashboardTabs({ data }: DashboardViewProps) {
     [loans, clientByReference, filters],
   );
 
+  const liveKpis = useMemo<KpiFixture[]>(() => {
+    if (!clients || !loans) return data.kpis;
+    const totalMembers = clients.length;
+    const outstandingPrincipal = loans.reduce((sum, loan) => sum + BigInt(loan.outstandingPrincipalMinor || "0"), 0n);
+    const arrearsLoans = loans.filter((loan) => (loan.daysPastDue ?? 0) > 0);
+    const principalInArrears = arrearsLoans.reduce((sum, loan) => sum + BigInt(loan.outstandingPrincipalMinor || "0"), 0n);
+    const clientsInArrears = new Set(arrearsLoans.map((loan) => loan.clientReference).filter(Boolean)).size;
+    const byId = new Map(data.kpis.map((kpi) => [kpi.id, kpi]));
+    return data.kpis.map((kpi) => {
+      if (kpi.id === "total-members") return { ...kpi, value: String(totalMembers) };
+      if (kpi.id === "outstanding-principal") return { ...kpi, value: outstandingPrincipal.toString() };
+      if (kpi.id === "principal-in-arrears") return { ...kpi, value: principalInArrears.toString() };
+      if (kpi.id === "clients-in-arrears") return { ...kpi, value: String(clientsInArrears) };
+      return kpi;
+    });
+  }, [clients, loans, data.kpis]);
+
   function changeFilter(key: DashboardFilterKey, value: string) {
     setFilters((current) => ({ ...current, [key]: value }));
   }
@@ -314,7 +331,7 @@ export function DashboardTabs({ data }: DashboardViewProps) {
       </div>
 
       <TabsContent value="overview" className="mt-[13.44px] space-y-[13.44px] pb-[26.88px] outline-none">
-        <KpiGrid kpis={data.kpis} />
+        <KpiGrid kpis={liveKpis} />
         <FundsChart funds={data.funds} />
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2" style={{ gap: "13.44px" }}>
           <SavingsSharesLoansChart />
