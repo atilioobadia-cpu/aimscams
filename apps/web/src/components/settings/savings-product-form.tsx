@@ -18,6 +18,7 @@ import {
   updateSavingsProduct,
   type SavingsProduct,
   type SavingsProductStatus,
+  type SavingsProductType,
 } from "@/lib/settings";
 
 function message(failure: unknown, fallback: string): string {
@@ -41,6 +42,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [status, setStatus] = useState<SavingsProductStatus>("DRAFT");
+  const [type, setType] = useState<SavingsProductType>("SAVINGS");
   const [description, setDescription] = useState("");
   const [allowedAsGuarantor, setAllowedAsGuarantor] = useState(false);
   const [allowedAsCollateral, setAllowedAsCollateral] = useState(false);
@@ -62,6 +64,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
         setCode(product.code);
         setName(product.name);
         setStatus(product.status);
+        setType(product.type ?? "SAVINGS");
         setDescription(product.description ?? "");
         setAllowedAsGuarantor(product.allowedAsGuarantor);
         setAllowedAsCollateral(product.allowedAsCollateral);
@@ -118,6 +121,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
       const payload = {
         code: trimmedCode,
         name: trimmedName,
+        type,
         status,
         description: description.trim() || null,
         allowedAsGuarantor,
@@ -190,7 +194,7 @@ export function SavingsProductFormPage({ mode, productId }: { mode: "create" | "
             <header className="border-b border-chrome px-5 py-4"><h2 className="fs-text font-semibold text-strong">Details</h2></header>
             <div className="grid gap-4 px-5 py-4 md:grid-cols-2">
               <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-name">Name <span className="text-accent-red" aria-hidden="true">*</span></label><Input id="sp-name" value={name} onChange={(event) => setName(event.target.value)} className="h-[var(--control-height)]" /></div>
-              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-type">Type <span className="text-accent-red" aria-hidden="true">*</span></label><select id="sp-type" disabled aria-describedby="sp-contract-note" className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-subtle px-3 fs-text text-muted-foreground"><option>Not available in this product model</option></select></div>
+              <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-type">Type <span className="text-accent-red" aria-hidden="true">*</span></label><select id="sp-type" value={type} onChange={(event) => setType(event.target.value as SavingsProductType)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="SAVINGS">Savings</option><option value="CURRENT">Current</option><option value="DEPOSIT">Deposits</option><option value="FIXED_DEPOSIT">Fixed Deposits</option><option value="RECURRING_DEPOSIT">Recurring Deposits</option></select></div>
               <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-code">Product Code</label><Input id="sp-code" value={code} onChange={(event) => setCode(event.target.value)} className="h-[var(--control-height)]" /></div>
               <div><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-status">Status</label><select id="sp-status" value={status} onChange={(event) => setStatus(event.target.value as SavingsProductStatus)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-3 fs-text"><option value="DRAFT">Draft</option><option value="ACTIVE">Active</option><option value="INACTIVE">Inactive</option></select></div>
               <div className="md:col-span-2"><label className="mb-1 block fs-text font-medium text-body" htmlFor="sp-description">Description</label><textarea id="sp-description" value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className="w-full rounded-[var(--control-radius)] border border-input bg-background px-3 py-2 fs-text" /></div>

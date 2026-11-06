@@ -337,11 +337,13 @@ export async function createInterestRate(payload: {
 }
 
 export type SavingsProductStatus = "DRAFT" | "ACTIVE" | "INACTIVE";
+export type SavingsProductType = "SAVINGS" | "CURRENT" | "DEPOSIT" | "FIXED_DEPOSIT" | "RECURRING_DEPOSIT";
 
 export type SavingsProduct = {
   id: string;
   code: string;
   name: string;
+  type: SavingsProductType;
   status: SavingsProductStatus;
   description: string | null;
   allowedAsGuarantor: boolean;

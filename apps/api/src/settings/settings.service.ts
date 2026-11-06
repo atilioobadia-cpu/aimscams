@@ -657,6 +657,9 @@ export class SettingsService {
         allowedAsCollateral: body.allowedAsCollateral === true,
         allowedMultipleAccounts: body.allowedMultipleAccounts === true,
         allowInterestPayout: body.allowInterestPayout === true,
+        type: (['SAVINGS', 'CURRENT', 'DEPOSIT', 'FIXED_DEPOSIT', 'RECURRING_DEPOSIT'].includes(String(body.type ?? 'SAVINGS').trim().toUpperCase())
+          ? String(body.type ?? 'SAVINGS').trim().toUpperCase()
+          : 'SAVINGS') as 'SAVINGS' | 'CURRENT' | 'DEPOSIT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT',
         minBalanceMinor: BigInt(String(body.minBalanceMinor ?? '0')),
         interestRateBp: Number(body.interestRateBp ?? 0),
         interestPayoutFrequency: String(body.interestPayoutFrequency ?? 'MONTHLY').trim() || 'MONTHLY',
@@ -711,6 +714,13 @@ export class SettingsService {
     if (body.allowedMultipleAccounts !== undefined) data.allowedMultipleAccounts = body.allowedMultipleAccounts === true;
     if (body.allowInterestPayout !== undefined) data.allowInterestPayout = body.allowInterestPayout === true;
     if (body.minBalanceMinor !== undefined) data.minBalanceMinor = BigInt(String(body.minBalanceMinor));
+    if (body.type !== undefined) {
+      const type = String(body.type).trim().toUpperCase();
+      if (!['SAVINGS', 'CURRENT', 'DEPOSIT', 'FIXED_DEPOSIT', 'RECURRING_DEPOSIT'].includes(type)) {
+        throw new BadRequestException('Type must be SAVINGS, CURRENT, DEPOSIT, FIXED_DEPOSIT or RECURRING_DEPOSIT.');
+      }
+      data.type = type as 'SAVINGS' | 'CURRENT' | 'DEPOSIT' | 'FIXED_DEPOSIT' | 'RECURRING_DEPOSIT';
+    }
     if (body.interestRateBp !== undefined) data.interestRateBp = Number(body.interestRateBp);
     if (body.interestPayoutFrequency !== undefined) data.interestPayoutFrequency = String(body.interestPayoutFrequency).trim() || 'MONTHLY';
 
@@ -744,6 +754,7 @@ export class SettingsService {
       allowedAsCollateral: product.allowedAsCollateral,
       allowedMultipleAccounts: product.allowedMultipleAccounts,
       allowInterestPayout: product.allowInterestPayout,
+      type: product.type,
       minBalanceMinor: product.minBalanceMinor.toString(),
       interestRateBp: product.interestRateBp,
       interestPayoutFrequency: product.interestPayoutFrequency,
