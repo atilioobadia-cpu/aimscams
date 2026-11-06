@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -115,6 +115,57 @@ function tenureInDays(count: number, period: LoanTenurePeriod): number {
   if (period === "DAYS") return count;
   if (period === "WEEKS") return count * 7;
   return count * 30;
+}
+
+type ScheduleRow = {
+  no: number;
+  dueDate: string;
+  principal: number;
+  interest: number;
+  amount: number;
+};
+
+function formatScheduleDate(date: Date): string {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = date.toLocaleDateString("en-US", { month: "short" });
+  const year = date.getFullYear();
+  return `${day} ${month} ${year}`;
+}
+
+function generateSchedule(principalMajor: number, tenureCount: number, rateBp: number, startDate: string): ScheduleRow[] {
+  if (!principalMajor || !tenureCount || !rateBp) return [];
+  const monthlyRate = rateBp / 10000;
+  const payment = (principalMajor * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -tenureCount));
+  const rows: ScheduleRow[] = [];
+  let balance = principalMajor;
+  const start = new Date(`${startDate}T00:00:00`);
+  for (let i = 1; i <= tenureCount; i += 1) {
+    const dueDate = new Date(start);
+    dueDate.setMonth(dueDate.getMonth() + (i - 1));
+    const interest = balance * monthlyRate;
+    let principalPortion = payment - interest;
+    let amount = payment;
+    if (i === tenureCount) {
+      principalPortion = balance;
+      amount = principalPortion + interest;
+    }
+    balance = Math.max(0, balance - principalPortion);
+    rows.push({
+      no: i,
+      dueDate: formatScheduleDate(dueDate),
+      principal: principalPortion,
+      interest,
+      amount,
+    });
+  }
+  // Adjust last row to reconcile rounding.
+  const totalPrincipal = rows.reduce((sum, row) => sum + row.principal, 0);
+  const diff = principalMajor - totalPrincipal;
+  if (rows.length > 0) {
+    rows[rows.length - 1].principal += diff;
+    rows[rows.length - 1].amount = rows[rows.length - 1].principal + rows[rows.length - 1].interest;
+  }
+  return rows;
 }
 
 export function LoanApplicationWizard({
@@ -295,6 +346,19 @@ export function LoanApplicationWizard({
   const selectedClient = clients.find((client) => client.id === clientId) ?? null;
   const selectedProduct = products.find((product) => product.id === productId) ?? null;
   const sector = sectors.find((item) => item.code === economicSector) ?? null;
+
+  const principalMajor = Number(principal.replace(/,/g, "")) || 0;
+  const schedule = useMemo(() => {
+    if (!selectedProduct || !principalMajor || !tenure) return [];
+    const count = Number(tenure);
+    if (!Number.isInteger(count) || count < 1) return [];
+    const principalMinor = parseMajorToMinor(principal);
+    if (principalMinor === null || principalMinor <= 0n) return [];
+    const min = BigInt(selectedProduct.minPrincipalMinor);
+    const max = BigInt(selectedProduct.maxPrincipalMinor);
+    if (principalMinor < min || principalMinor > max) return [];
+    return generateSchedule(principalMajor, count, selectedProduct.interestRateBp, installmentStartDate);
+  }, [selectedProduct, principal, tenure, installmentStartDate]);
   const subSector = sector?.children.find((item) => item.code === subEconomicSector) ?? null;
 
   function chooseProduct(id: string) {
@@ -778,6 +842,44 @@ export function LoanApplicationWizard({
               />
               Charge interest during the grace period
             </label>
+
+            {schedule.length > 0 ? (
+              <div className="rounded-[var(--card-radius)] border border-card-border bg-subtle p-[var(--space-12)]">
+                <table className="w-full text-left fs-text">
+                  <thead className="border-b border-card-border bg-subtle font-semibold text-strong">
+                    <tr>
+                      <th className="px-3 py-2.5">#</th>
+                      <th className="px-3 py-2.5">Due Date</th>
+                      <th className="px-3 py-2.5 text-right">Principal (TSh)</th>
+                      <th className="px-3 py-2.5 text-right">Interest (TSh)</th>
+                      <th className="px-3 py-2.5 text-right font-bold">Amount (TSh)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {schedule.map((row: ScheduleRow) => (
+                      <tr key={row.no} className="border-b border-card-border last:border-0" style={{ height: "55px" }}>
+                        <td className="px-3 py-2.5">{row.no}</td>
+                        <td className="px-3 py-2.5">{row.dueDate}</td>
+                        <td className="px-3 py-2.5 text-right">{formatTzs(String(Math.round(row.principal * 100)))}</td>
+                        <td className="px-3 py-2.5 text-right">{formatTzs(String(Math.round(row.interest * 100)))}</td>
+                        <td className="px-3 py-2.5 text-right font-bold">{formatTzs(String(Math.round(row.amount * 100)))}</td>
+                      </tr>
+                    ))}
+                    <tr className="bg-subtle font-bold">
+                      <td className="px-3 py-2.5">Total</td>
+                      <td className="px-3 py-2.5">—</td>
+                      <td className="px-3 py-2.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.principal, 0) * 100)))}</td>
+                      <td className="px-3 py-2.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.interest, 0) * 100)))}</td>
+                      <td className="px-3 py-2.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.amount, 0) * 100)))}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="flex h-[100px] items-center rounded-[var(--card-radius)] border border-card-border bg-subtle px-[var(--space-16)]">
+                <span className="fs-text text-muted-foreground">Check payment schedule</span>
+              </div>
+            )}
 
             <div className="flex justify-end border-t border-card-border pt-3">
               <Button
