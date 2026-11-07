@@ -39,7 +39,7 @@ export function TellerWorkspaceHeader({
         <div className="flex min-w-[300px] items-center justify-end gap-12">
           <div className="min-w-[120px] text-left">
             <p className="fs-caption font-semibold uppercase tracking-wide text-label">Branch status</p>
-            <p className="mt-1 fs-text font-semibold text-primary">Unavailable</p>
+            <p className="mt-1 fs-text font-semibold text-primary">{till ? "Open" : "Unavailable"}</p>
           </div>
           <div className="min-w-[140px] text-left">
             <p className="fs-caption font-semibold uppercase tracking-wide text-label">Balance</p>
