@@ -952,6 +952,7 @@ export function LoanApplicationWizard({
               <Button
                 type="submit"
                 data-testid="wizard-next"
+                disabled={Boolean(validateStep(0))}
                 className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
               >
                 Next
