@@ -85,6 +85,9 @@ type AppSidebarProps = {
 
 function isActivePath(pathname: string, href: string): boolean {
   if (href === "/dashboard") return pathname === href;
+  if (href === "/account-loan-application") {
+    return pathname === href || pathname.startsWith(`${href}-`) || pathname.startsWith(`${href}/`);
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
