@@ -207,6 +207,7 @@ export function LoanApplicationWizard({
   const [tenurePeriod, setTenurePeriod] = useState<LoanTenurePeriod>("MONTHS");
   const [gracePeriod, setGracePeriod] = useState("0");
   const [interestRate, setInterestRate] = useState("");
+  const [interestRatePeriod, setInterestRatePeriod] = useState("Month");
   const [interestMethod, setInterestMethod] = useState<LoanInterestMethod>(
     "REDUCING_BALANCE_EQUAL_INSTALLMENT",
   );
@@ -367,6 +368,7 @@ export function LoanApplicationWizard({
     const product = products.find((item) => item.id === id);
     if (!product) return;
     setInterestRate((product.interestRateBp / 100).toFixed(1).replace(/\.0$/, ""));
+    setInterestRatePeriod(product.repaymentFrequency === "MONTHLY" ? "Month" : product.repaymentFrequency === "WEEKLY" ? "Week" : "Day");
     const method = INTEREST_METHODS.find((item) => item.value === product.interestMethod);
     if (method) setInterestMethod(method.value);
     setTenure(String(product.minTenureCount));
@@ -819,15 +821,29 @@ export function LoanApplicationWizard({
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-rate">
                   Interest Rate *
                 </label>
-                <Input
-                  id="la-rate"
-                  value={selectedProduct ? `${interestRate}%` : interestRate}
-                  onChange={(event) => setInterestRate(event.target.value)}
-                  inputMode="decimal"
-                  placeholder="0"
-                  className={selectedProduct ? "h-[var(--control-height)] border-input bg-[#e2e8f0] text-muted-foreground" : "h-[var(--control-height)]"}
-                  disabled={Boolean(selectedProduct)}
-                />
+                <div className="flex items-stretch overflow-hidden rounded-[var(--control-radius)] border border-input">
+                  <Input
+                    id="la-rate"
+                    value={selectedProduct ? `${interestRate}%` : interestRate}
+                    onChange={(event) => setInterestRate(event.target.value)}
+                    inputMode="decimal"
+                    placeholder="0"
+                    className={selectedProduct ? "h-[var(--control-height)] w-[60%] rounded-none border-0 bg-[#e2e8f0] text-muted-foreground" : "h-[var(--control-height)] w-[60%] rounded-none border-0"}
+                    disabled={Boolean(selectedProduct)}
+                  />
+                  <div className="w-px bg-border" />
+                  <select
+                    aria-label="Interest rate period"
+                    value={interestRatePeriod}
+                    onChange={(event) => setInterestRatePeriod(event.target.value)}
+                    className={selectedProduct ? "h-[var(--control-height)] w-[40%] rounded-none border-0 bg-[#e2e8f0] px-[var(--space-12)] fs-text text-muted-foreground" : "h-[var(--control-height)] w-[40%] rounded-none border-0 bg-background px-[var(--space-12)] fs-text"}
+                    disabled={Boolean(selectedProduct)}
+                  >
+                    <option value="Month">Month</option>
+                    <option value="Week">Week</option>
+                    <option value="Day">Day</option>
+                  </select>
+                </div>
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-method">
