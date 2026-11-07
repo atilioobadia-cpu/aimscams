@@ -202,6 +202,8 @@ export function LoanApplicationWizard({
 
   const [clientId, setClientId] = useState("");
   const [productId, setProductId] = useState("");
+  const [productQuery, setProductQuery] = useState("");
+  const [productOpen, setProductOpen] = useState(false);
   const [principal, setPrincipal] = useState("");
   const [tenure, setTenure] = useState("12");
   const [tenurePeriod, setTenurePeriod] = useState<LoanTenurePeriod>("MONTHS");
@@ -735,20 +737,48 @@ export function LoanApplicationWizard({
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-product">
                   Product *
                 </label>
-                <select
-                  id="la-product"
-                  required
-                  value={productId}
-                  onChange={(event) => chooseProduct(event.target.value)}
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-                >
-                  <option value="">{loadingOptions ? "Loading products…" : products.length ? "Select product" : "No active loan products configured"}</option>
-                  {products.map((product) => (
-                    <option key={product.id} value={product.id}>
-                      {product.name} ({product.code})
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <Input
+                    id="la-product"
+                    value={productQuery || (selectedProduct ? `${selectedProduct.name.toUpperCase()} (${selectedProduct.code})` : "")}
+                    onChange={(event) => {
+                      setProductQuery(event.target.value);
+                      setProductOpen(true);
+                      if (!event.target.value) setProductId("");
+                    }}
+                    onFocus={() => setProductOpen(true)}
+                    placeholder={loadingOptions ? "Loading products…" : "Search..."}
+                    className="h-[var(--control-height)]"
+                  />
+                  {productOpen ? (
+                    <div className="absolute z-10 mt-1 max-h-[240px] w-full overflow-y-auto rounded-[var(--control-radius)] border border-card-border bg-surface shadow-lg">
+                      {products
+                        .filter((product) =>
+                          `${product.name} ${product.code}`.toLowerCase().includes(productQuery.trim().toLowerCase()),
+                        )
+                        .map((product) => (
+                          <button
+                            key={product.id}
+                            type="button"
+                            className="block w-full px-[var(--space-12)] py-[var(--space-8)] text-left fs-text hover:bg-subtle"
+                            onClick={() => {
+                              setProductId(product.id);
+                              setProductQuery(`${product.name.toUpperCase()} (${product.code})`);
+                              setProductOpen(false);
+                              chooseProduct(product.id);
+                            }}
+                          >
+                            {product.name.toUpperCase()} ({product.code})
+                          </button>
+                        ))}
+                      {products.filter((product) =>
+                        `${product.name} ${product.code}`.toLowerCase().includes(productQuery.trim().toLowerCase()),
+                      ).length === 0 ? (
+                        <p className="px-[var(--space-12)] py-[var(--space-8)] fs-text text-muted-foreground">No options</p>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
                 {selectedProduct ? (
                   <p className="mt-1 fs-text text-muted-foreground">
                     {formatTzs(selectedProduct.minPrincipalMinor)} – {formatTzs(selectedProduct.maxPrincipalMinor)} · {selectedProduct.interestRateBp / 100}% per month · {selectedProduct.tenurePeriod.toLowerCase()} {selectedProduct.minTenureCount}–{selectedProduct.maxTenureCount}
