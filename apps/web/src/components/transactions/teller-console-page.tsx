@@ -173,6 +173,19 @@ export function TellerConsolePage() {
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loanQuery, setLoanQuery] = useState("");
   const selectedLoan = loans.find((loan) => loan.id === loanId) ?? null;
+  const [transactionDate, setTransactionDate] = useState(new Date().toISOString().slice(0, 10));
+  const [reference, setReference] = useState("");
+  const [receipt, setReceipt] = useState("");
+  const [cheque, setCheque] = useState("");
+  const amountToBeDisbursed = selectedLoan
+    ? (BigInt(selectedLoan.principalMinor) - BigInt(selectedLoan.principalMinor) / 20n).toString()
+    : "0";
+
+  useEffect(() => {
+    if (selectedLoan) {
+      setAmount((Number(selectedLoan.principalMinor) / 100 * 0.95).toFixed(2));
+    }
+  }, [selectedLoan]);
   const [counterAccountCode, setCounterAccountCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [narration, setNarration] = useState("");
@@ -664,26 +677,88 @@ export function TellerConsolePage() {
                       </div>
                     ) : null}
                     {requiresLoan && selectedLoan ? (
-                      <div className="grid gap-3 md:grid-cols-2">
-                        <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
-                          <h3 className="mb-2 fs-text font-bold text-strong">Client Information</h3>
-                          <dl className="grid gap-2">
-                            <div><dt className="fs-text text-muted-foreground">Member name</dt><dd className="fs-text text-strong">{selectedLoan.clientName ?? "N.A."}</dd></div>
-                            <div><dt className="fs-text text-muted-foreground">Member ID</dt><dd className="fs-text text-strong">{selectedLoan.clientReference ?? "N.A."}</dd></div>
-                            <div><dt className="fs-text text-muted-foreground">Branch</dt><dd className="fs-text text-strong">Mwanza Branch</dd></div>
-                          </dl>
+                      <>
+                        <div className="grid gap-3 md:grid-cols-2">
+                          <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
+                            <h3 className="mb-2 fs-text font-bold text-strong">Client Information</h3>
+                            <dl className="grid gap-2">
+                              <div><dt className="fs-text text-muted-foreground">Member name</dt><dd className="fs-text text-strong">{selectedLoan.clientName ?? "N.A."}</dd></div>
+                              <div><dt className="fs-text text-muted-foreground">Member ID</dt><dd className="fs-text text-strong">{selectedLoan.clientReference ?? "N.A."}</dd></div>
+                              <div><dt className="fs-text text-muted-foreground">Branch</dt><dd className="fs-text text-strong">Mwanza Branch</dd></div>
+                            </dl>
+                          </div>
+                          <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
+                            <h3 className="mb-2 fs-text font-bold text-strong">Loan Information</h3>
+                            <dl className="grid gap-2">
+                              <div><dt className="fs-text text-muted-foreground">Loan number</dt><dd className="fs-text text-strong">{selectedLoan.loanNumber}</dd></div>
+                              <div><dt className="fs-text text-muted-foreground">Product</dt><dd className="fs-text text-strong">{selectedLoan.productName ?? "N.A."}</dd></div>
+                              <div><dt className="fs-text text-muted-foreground">Principal</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.principalMinor)}</dd></div>
+                              <div><dt className="fs-text text-muted-foreground">Outstanding</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.outstandingPrincipalMinor)}</dd></div>
+                              <div><dt className="fs-text text-muted-foreground">Interest rate</dt><dd className="fs-text text-strong">{(selectedLoan.interestRateBp / 100).toFixed(2)}%</dd></div>
+                            </dl>
+                            <h4 className="mt-3 fs-text font-bold text-strong">Loan Charges</h4>
+                            <div className="mt-1 overflow-x-auto">
+                              <table className="w-full text-left fs-text">
+                                <thead className="border-b border-card-border bg-subtle font-semibold text-label">
+                                  <tr>
+                                    <th className="px-3 py-2">Charge Fee Type</th>
+                                    <th className="px-3 py-2 text-right">Balance (TSh)</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr className="border-b border-card-border">
+                                    <td className="px-3 py-2">LOAN MANAGEMENT FEE</td>
+                                    <td className="px-3 py-2 text-right">{formatTzs(String(Math.round(Number(selectedLoan.principalMinor) * 0.05)))}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <p className="mt-2 fs-text text-muted-foreground">Amount to be disbursed: {formatTzs(String(Math.round(Number(selectedLoan.principalMinor) * 0.95)))}</p>
+                          </div>
                         </div>
                         <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
-                          <h3 className="mb-2 fs-text font-bold text-strong">Loan Information</h3>
-                          <dl className="grid gap-2">
-                            <div><dt className="fs-text text-muted-foreground">Loan number</dt><dd className="fs-text text-strong">{selectedLoan.loanNumber}</dd></div>
-                            <div><dt className="fs-text text-muted-foreground">Product</dt><dd className="fs-text text-strong">{selectedLoan.productName ?? "N.A."}</dd></div>
-                            <div><dt className="fs-text text-muted-foreground">Principal</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.principalMinor)}</dd></div>
-                            <div><dt className="fs-text text-muted-foreground">Outstanding</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.outstandingPrincipalMinor)}</dd></div>
-                            <div><dt className="fs-text text-muted-foreground">Interest rate</dt><dd className="fs-text text-strong">{(selectedLoan.interestRateBp / 100).toFixed(2)}%</dd></div>
-                          </dl>
+                          <h3 className="mb-2 fs-text font-bold text-strong">Transaction Details</h3>
+                          <div className="grid gap-3 md:grid-cols-2">
+                            <div>
+                              <label className="mb-1 block fs-text font-medium text-body">Transaction Date *</label>
+                              <Input type="date" value={transactionDate} onChange={(e) => setTransactionDate(e.target.value)} className="h-[var(--control-height)]" />
+                            </div>
+                            <div>
+                              <label className="mb-1 block fs-text font-medium text-body">Transaction Mode *</label>
+                              <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                                <option value="CASH">Cash</option>
+                                <option value="BANK">Bank</option>
+                                <option value="CHEQUE">Cheque</option>
+                                <option value="MOBILE">Mobile Money</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            <label className="mb-1 block fs-text font-medium text-body">Till Account *</label>
+                            <p className="fs-text text-muted-foreground">Account Balance (TSh): {formatTzs("100000000")}</p>
+                          </div>
+                          <div className="mt-3 grid gap-3 md:grid-cols-3">
+                            <Input placeholder="Reference number" value={reference} onChange={(e) => setReference(e.target.value)} className="h-[var(--control-height)]" />
+                            <Input placeholder="Receipt number" value={receipt} onChange={(e) => setReceipt(e.target.value)} className="h-[var(--control-height)]" />
+                            <Input placeholder="Cheque number" value={cheque} onChange={(e) => setCheque(e.target.value)} className="h-[var(--control-height)]" />
+                          </div>
+                          <div className="mt-3">
+                            <label className="mb-1 block fs-text font-medium text-body">Narration / Description</label>
+                            <Input placeholder="A clear description of this transaction" value={narration} onChange={(e) => setNarration(e.target.value)} className="h-[var(--control-height)]" />
+                          </div>
+                          <div className="mt-3 flex justify-end">
+                            <Input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} className="h-[var(--control-height)] w-1/2 text-right" />
+                          </div>
+                          <div className="mt-3 flex justify-end gap-2 border-t border-card-border pt-3">
+                            <Button type="button" variant="outline" onClick={() => { setLoanId(""); setLoanQuery(""); setAmount(""); }} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
+                              Reset
+                            </Button>
+                            <Button type="submit" disabled={submitting} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
+                              {submitting ? "Posting..." : "Submit"}
+                            </Button>
+                          </div>
                         </div>
-                      </div>
+                      </>
                     ) : null}
                     {requiresLedgerAccount ? (
                       <div>
