@@ -1185,6 +1185,28 @@ export function LoanApplicationWizard({
                 placeholder="Anything the credit officer should know"
               />
             </div>
+
+            <div className="flex justify-end border-t border-card-border pt-3">
+              <Button
+                type="button"
+                data-testid="wizard-next"
+                onClick={() => {
+                  const failure = validateStep(1);
+                  if (failure) {
+                    setStepError(failure);
+                    return;
+                  }
+                  setStepError(null);
+                  setStep(2);
+                  setMaxStep((current) => Math.max(current, 2));
+                }}
+                disabled={Boolean(validateStep(1))}
+                className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
+              >
+                Next
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Button>
+            </div>
           </div>
           </div>
         ) : null}
