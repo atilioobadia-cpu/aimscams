@@ -1023,7 +1023,7 @@ export function LoanApplicationWizard({
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-officer">
-                  Loan officer
+                  Loan Officer *
                 </label>
                 <select
                   id="la-officer"
