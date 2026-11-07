@@ -1297,8 +1297,8 @@ export function LoanApplicationWizard({
                 data-testid="wizard-next"
                 onClick={() => {
                   setStepError(null);
-                  setStep(3);
-                  setMaxStep((current) => Math.max(current, 4));
+                  setStep(4);
+                  setMaxStep((current) => Math.max(current, 5));
                 }}
                 className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
               >
