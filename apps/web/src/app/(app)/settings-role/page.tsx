@@ -285,7 +285,7 @@ export default function RolesPage() {
               </TableHeader>
               <TableBody>
                 {pageRoles.map((role) => (
-                  <TableRow key={role.id} className="h-[52.27px] border-b border-chrome bg-white [&>td]:!py-[10.08px]">
+                  <TableRow key={role.id} className="h-[37.48px] border-b border-chrome bg-white [&>td]:!py-[6.72px]">
                     <TableCell className="!px-[13.44px] !py-[10.08px] fs-text !text-heading">{role.isSystem ? role.name : codeLabel(role.code)}</TableCell>
                     {showDisplayName ? <TableCell className="!px-[13.44px] !py-[10.08px] fs-text !text-heading">{role.name}</TableCell> : null}
                     <TableCell className="w-20 bg-subtle/40 px-[13.44px] !py-[10.08px] text-right">
@@ -300,7 +300,7 @@ export default function RolesPage() {
                   </TableRow>
                 ))}
                 {pageRoles.length === 0 ? (
-                  <TableRow><TableCell colSpan={showDisplayName ? 3 : 2} className="h-28 text-center fs-text text-muted-foreground">No roles match your search.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={showDisplayName ? 3 : 2} className="h-[37.48px] text-center fs-text text-muted-foreground">No roles match your search.</TableCell></TableRow>
                 ) : null}
               </TableBody>
             </Table>
