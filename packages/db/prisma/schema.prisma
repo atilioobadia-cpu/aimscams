@@ -732,6 +732,7 @@ model LoanApplication {
   interestOnGrace Boolean                @default(false)
   installmentStartDate DateTime?         @db.Date
   debtCapacityMinor BigInt?
+  insiderRelationship String?
   economicSector String?
   subEconomicSector String?
   subSubEconomicSector String?
@@ -746,6 +747,9 @@ model LoanApplication {
   nomineePhone   String?
   nomineeIdNumber String?
   nomineePercentage Int?
+  nextOfKinEntries Json?
+  guarantorEntries Json?
+  collateralEntries Json?
   paymentDestination PaymentDestination?
   bankName       String?
   bankAccountName String?

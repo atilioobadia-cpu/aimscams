@@ -370,6 +370,137 @@ export function requireDocumentsForSubmission({
   }
 }
 
+export type NextOfKinEntry = {
+  fullName: string;
+  relation: string;
+  phone: string;
+  idNumber: string | null;
+  percentage: number | null;
+};
+
+export type LoanApplicationGuarantorEntry = {
+  category: 'SAVINGS' | 'SHARES' | 'OTHER';
+  clientId: string | null;
+  guaranteeType: 'PERCENTAGE' | 'AMOUNT';
+  value: string;
+  blockFund: boolean;
+};
+
+export type LoanApplicationCollateralEntry = {
+  assetName: string;
+  assetType: string;
+  currentValuationMinor: string;
+  blockAmountMinor: string;
+  comment: string;
+  documentName: string;
+};
+
+export function parseNextOfKinEntries(value: unknown): NextOfKinEntry[] {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value)) throw new BadRequestException('Next of kin entries must be a list.');
+  if (value.length > 10) throw new BadRequestException('Add at most ten next of kin entries.');
+
+  return value.map((entry: unknown, index) => {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      throw new BadRequestException(`Next of kin ${index + 1} is invalid.`);
+    }
+    const row = entry as Record<string, unknown>;
+    const fullName = typeof row.fullName === 'string' ? row.fullName.trim() : '';
+    const relation = typeof row.relation === 'string' ? row.relation.trim() : '';
+    const phone = typeof row.phone === 'string' ? row.phone.trim() : '';
+    const idNumber = typeof row.idNumber === 'string' && row.idNumber.trim() ? row.idNumber.trim() : null;
+    const percentText = row.percentage === null || row.percentage === undefined || row.percentage === ''
+      ? null
+      : String(row.percentage).trim();
+    const percentage = percentText === null ? null : Number(percentText);
+
+    if (!fullName || !relation || !phone) {
+      throw new BadRequestException(`Next of kin ${index + 1} requires a name, relationship and phone number.`);
+    }
+    if (percentage !== null && (!Number.isInteger(percentage) || percentage < 1 || percentage > 100)) {
+      throw new BadRequestException(`Next of kin ${index + 1} percentage must be between 1 and 100.`);
+    }
+    return { fullName, relation, phone, idNumber, percentage };
+  });
+}
+
+function recordValue(value: unknown, field: string, index: number): Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new BadRequestException(`${field} ${index + 1} is invalid.`);
+  }
+  return value as Record<string, unknown>;
+}
+
+export function parseLoanApplicationGuarantors(value: unknown): LoanApplicationGuarantorEntry[] {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value)) throw new BadRequestException('Guarantors must be a list.');
+  if (value.length > 30) throw new BadRequestException('Add at most 30 guarantors.');
+  return value.map((item, index) => {
+    const row = recordValue(item, 'Guarantor', index);
+    const category = String(row.category ?? '').toUpperCase();
+    if (category !== 'SAVINGS' && category !== 'SHARES' && category !== 'OTHER') {
+      throw new BadRequestException(`Guarantor ${index + 1} category is invalid.`);
+    }
+    const guaranteeType = String(row.guaranteeType ?? '').toUpperCase();
+    if (guaranteeType !== 'PERCENTAGE' && guaranteeType !== 'AMOUNT') {
+      throw new BadRequestException(`Guarantor ${index + 1} guarantee type is invalid.`);
+    }
+    const clientId = typeof row.clientId === 'string' && row.clientId.trim() ? row.clientId.trim() : null;
+    const valueText = String(row.value ?? '').trim();
+    if (!clientId) throw new BadRequestException(`Select a member for guarantor ${index + 1}.`);
+    if (!valueText) throw new BadRequestException(`Enter a guarantee value for guarantor ${index + 1}.`);
+    if (guaranteeType === 'PERCENTAGE') {
+      const percent = Number(valueText);
+      if (!Number.isInteger(percent) || percent < 1 || percent > 100) {
+        throw new BadRequestException(`Guarantor ${index + 1} percentage must be between 1 and 100.`);
+      }
+    } else {
+      try {
+        if (BigInt(valueText) <= 0n) throw new Error('non-positive');
+      } catch {
+        throw new BadRequestException(`Guarantor ${index + 1} amount must be a positive minor-unit value.`);
+      }
+    }
+    return {
+      category,
+      clientId,
+      guaranteeType,
+      value: valueText,
+      blockFund: row.blockFund === true,
+    };
+  });
+}
+
+export function parseLoanApplicationCollaterals(value: unknown): LoanApplicationCollateralEntry[] {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value)) throw new BadRequestException('Collaterals must be a list.');
+  if (value.length > 30) throw new BadRequestException('Add at most 30 collaterals.');
+  return value.map((item, index) => {
+    const row = recordValue(item, 'Collateral', index);
+    const assetName = typeof row.assetName === 'string' ? row.assetName.trim() : '';
+    const assetType = typeof row.assetType === 'string' ? row.assetType.trim() : '';
+    const currentValuationMinor = String(row.currentValuationMinor ?? '').trim();
+    const blockAmountMinor = String(row.blockAmountMinor ?? '').trim();
+    const comment = typeof row.comment === 'string' ? row.comment.trim() : '';
+    const documentName = typeof row.documentName === 'string' ? row.documentName.trim() : '';
+    if (!assetName || !assetType || !comment || !documentName) {
+      throw new BadRequestException(`Collateral ${index + 1} requires asset name, asset type, comment and a document.`);
+    }
+    let valuation: bigint;
+    let blockAmount: bigint;
+    try {
+      valuation = BigInt(currentValuationMinor);
+      blockAmount = BigInt(blockAmountMinor);
+    } catch {
+      throw new BadRequestException(`Collateral ${index + 1} valuation and block amount must be valid minor-unit values.`);
+    }
+    if (valuation <= 0n || blockAmount <= 0n || blockAmount > valuation) {
+      throw new BadRequestException(`Collateral ${index + 1} block amount must be positive and cannot exceed its valuation.`);
+    }
+    return { assetName, assetType, currentValuationMinor, blockAmountMinor, comment, documentName };
+  });
+}
+
 export function parseOptionalMinor(value: unknown, field: string): bigint | null {
   if (value === undefined || value === null) return null;
   const text = textOf(value);

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { generateSchedule as calculateRepaymentSchedule, money, rate, toMajor } from "@aimscams/domain";
 import {
   ArrowLeft,
   ArrowRight,
@@ -10,7 +11,7 @@ import {
   FileText,
   LoaderCircle,
   Paperclip,
-  Search,
+  Plus,
   Trash2,
   X,
 } from "lucide-react";
@@ -23,7 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/toast";
 import { parseMajorToMinor } from "@/lib/accounting";
 import { ApiError } from "@/lib/api";
-import { formatTzs } from "@/lib/format";
+import { formatMinorUnitsExact, formatTzs } from "@/lib/format";
 import {
   createLoanApplication,
   updateLoanApplication,
@@ -48,9 +49,31 @@ const STEPS = [
   { key: "details", label: "Details" },
   { key: "additional", label: "Additional Details" },
   { key: "nominee", label: "Next of Kin" },
+  { key: "guarantors", label: "Guarantors" },
+  { key: "collaterals", label: "Collaterals" },
   { key: "payment", label: "Payment Destination" },
   { key: "documents", label: "Loan Documents" },
 ] as const;
+
+type GuarantorEntry = {
+  id: string;
+  category: "SAVINGS" | "SHARES" | "OTHER";
+  clientId: string;
+  searchText: string;
+  guaranteeType: "PERCENTAGE" | "AMOUNT";
+  value: string;
+  blockFund: boolean;
+};
+
+type CollateralEntry = {
+  id: string;
+  assetName: string;
+  assetType: string;
+  currentValuation: string;
+  blockAmount: string;
+  comment: string;
+  documentName: string;
+};
 
 const TENURE_PERIODS: { value: LoanTenurePeriod; label: string }[] = [
   { value: "MONTHS", label: "Months" },
@@ -100,16 +123,19 @@ type Attachment = {
   dataUrl: string;
 };
 
+type NextOfKinEntry = {
+  id: string;
+  fullName: string;
+  relation: string;
+  phone: string;
+  idNumber: string;
+  percentage: string;
+};
+
 function message(failure: unknown, fallback: string): string {
   if (failure instanceof ApiError) return failure.message;
   if (failure instanceof Error && failure.message) return failure.message;
   return fallback;
-}
-
-function todayIso(): string {
-  const now = new Date();
-  const offset = now.getTimezoneOffset() * 60_000;
-  return new Date(now.getTime() - offset).toISOString().slice(0, 10);
 }
 
 function tenureInDays(count: number, period: LoanTenurePeriod): number {
@@ -118,12 +144,20 @@ function tenureInDays(count: number, period: LoanTenurePeriod): number {
   return count * 30;
 }
 
+function formatMajorInput(value: string): string {
+  const normalized = value.replace(/,/g, "").replace(/[^\d.]/g, "");
+  const [whole = "", ...fractionParts] = normalized.split(".");
+  const fraction = fractionParts.join("").slice(0, 2);
+  const groupedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return fractionParts.length > 0 ? `${groupedWhole}.${fraction}` : groupedWhole;
+}
+
 type ScheduleRow = {
   no: number;
   dueDate: string;
-  principal: number;
-  interest: number;
-  amount: number;
+  principalMinor: string;
+  interestMinor: string;
+  amountMinor: string;
 };
 
 function formatScheduleDate(date: Date): string {
@@ -133,52 +167,29 @@ function formatScheduleDate(date: Date): string {
   return `${day} ${month} ${year}`;
 }
 
-function generateSchedule(principalMajor: number, tenureCount: number, rateBp: number, startDate: string): ScheduleRow[] {
-  if (!principalMajor || !tenureCount || !rateBp) return [];
-  const monthlyRate = rateBp / 10000;
-  const payment = (principalMajor * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -tenureCount));
-  const rows: ScheduleRow[] = [];
-  let balance = principalMajor;
-  const start = new Date(`${startDate}T00:00:00`);
-  for (let i = 1; i <= tenureCount; i += 1) {
-    const dueDate = new Date(start);
-    dueDate.setMonth(dueDate.getMonth() + (i - 1));
-    const interest = balance * monthlyRate;
-    let principalPortion = payment - interest;
-    let amount = payment;
-    if (i === tenureCount) {
-      principalPortion = balance;
-      amount = principalPortion + interest;
+function scheduleMethod(method: LoanInterestMethod): "equal_instalment" | "equal_principal" | "flat" {
+  switch (method) {
+    case "REDUCING_BALANCE_EQUAL_INSTALLMENT":
+      return "equal_instalment";
+    case "REDUCING_BALANCE_EQUAL_PRINCIPAL":
+      return "equal_principal";
+    case "FLAT_RATE":
+      return "flat";
+    default: {
+      const exhaustive: never = method;
+      return exhaustive;
     }
-    balance = Math.max(0, balance - principalPortion);
-    rows.push({
-      no: i,
-      dueDate: formatScheduleDate(dueDate),
-      principal: principalPortion,
-      interest,
-      amount,
-    });
   }
-  // Adjust last row to reconcile rounding.
-  const totalPrincipal = rows.reduce((sum, row) => sum + row.principal, 0);
-  const diff = principalMajor - totalPrincipal;
-  if (rows.length > 0) {
-    rows[rows.length - 1].principal += diff;
-    rows[rows.length - 1].amount = rows[rows.length - 1].principal + rows[rows.length - 1].interest;
-  }
-  return rows;
 }
 
 export function LoanApplicationWizard({
   initial,
   applicationId,
   cancelHref,
-  cancelLabel = "Cancel",
 }: {
   initial?: LoanApplication;
   applicationId?: string;
   cancelHref?: string;
-  cancelLabel?: string;
 } = {}) {
   const router = useRouter();
   const { pushToast } = useToast();
@@ -217,25 +228,27 @@ export function LoanApplicationWizard({
     "REDUCING_BALANCE_EQUAL_INSTALLMENT",
   );
   const [interestOnGrace, setInterestOnGrace] = useState(false);
-  const [installmentStartDate, setInstallmentStartDate] = useState(todayIso());
+  const [installmentStartDate, setInstallmentStartDate] = useState("");
   const [loanOfficerId, setLoanOfficerId] = useState("");
   const [debtCapacity, setDebtCapacity] = useState("");
+  const [insiderRelationship, setInsiderRelationship] = useState("None");
   const [economicSector, setEconomicSector] = useState("");
   const [subEconomicSector, setSubEconomicSector] = useState("");
   const [subSubEconomicSector, setSubSubEconomicSector] = useState("");
   const [description, setDescription] = useState("");
 
   const [purpose, setPurpose] = useState("");
-  const [hasGuarantor, setHasGuarantor] = useState(false);
-  const [hasCollateral, setHasCollateral] = useState(false);
+  const [guaranteedByMembers, setGuaranteedByMembers] = useState(true);
+  const [guarantorSelectOpenId, setGuarantorSelectOpenId] = useState<string | null>(null);
+  const [savingsGuarantors, setSavingsGuarantors] = useState<GuarantorEntry[]>([]);
+  const [sharesGuarantors, setSharesGuarantors] = useState<GuarantorEntry[]>([]);
+  const [otherGuarantors, setOtherGuarantors] = useState<GuarantorEntry[]>([]);
+  const [collateralsEnabled, setCollateralsEnabled] = useState(false);
+  const [collateralEntries, setCollateralEntries] = useState<CollateralEntry[]>([]);
   const [disbursementPreference, setDisbursementPreference] = useState("Cash at branch");
   const [remarks, setRemarks] = useState("");
 
-  const [nomineeName, setNomineeName] = useState("");
-  const [nomineeRelation, setNomineeRelation] = useState("");
-  const [nomineePhone, setNomineePhone] = useState("");
-  const [nomineeIdNumber, setNomineeIdNumber] = useState("");
-  const [nomineePercentage, setNomineePercentage] = useState("");
+  const [nextOfKinEntries, setNextOfKinEntries] = useState<NextOfKinEntry[]>([]);
 
   const [paymentDestination, setPaymentDestination] = useState<PaymentDestination>("CASH");
   const [bankName, setBankName] = useState("");
@@ -277,26 +290,58 @@ export function LoanApplicationWizard({
       setInterestRate((initial.interestRateBp / 100).toFixed(2));
       setInterestMethod(initial.interestMethod);
       setInterestOnGrace(initial.interestOnGrace);
-      setInstallmentStartDate(initial.installmentStartDate ?? todayIso());
+      setInstallmentStartDate(initial.installmentStartDate ?? "");
       setLoanOfficerId(initial.loanOfficerId ?? "");
       setDebtCapacity(
-        initial.debtCapacityMinor ? (BigInt(initial.debtCapacityMinor) / 100n).toString() : "",
+        initial.debtCapacityMinor ? toMajor(money(BigInt(initial.debtCapacityMinor))) : "",
       );
+      setInsiderRelationship(initial.insiderRelationship ?? "None");
       setEconomicSector(initial.economicSector ?? "");
       setSubEconomicSector(initial.subEconomicSector ?? "");
       setSubSubEconomicSector(initial.subSubEconomicSector ?? "");
       setDescription(initial.description ?? "");
       setPurpose(initial.purpose ?? "");
-      setHasGuarantor(initial.hasGuarantor);
-      setHasCollateral(initial.hasCollateral);
+      setGuaranteedByMembers(initial.hasGuarantor);
+      setCollateralsEnabled(initial.hasCollateral);
+      const savedGuarantors = (initial.guarantorEntries ?? []).map((entry) => ({
+        ...entry,
+        value: entry.guaranteeType === "AMOUNT" ? toMajor(money(BigInt(entry.value))) : entry.value,
+      }));
+      setSavingsGuarantors(savedGuarantors.filter((entry) => entry.category === "SAVINGS").map((entry, index) => ({ id: `saved-savings-${index}`, searchText: "", ...entry })));
+      setSharesGuarantors(savedGuarantors.filter((entry) => entry.category === "SHARES").map((entry, index) => ({ id: `saved-shares-${index}`, searchText: "", ...entry })));
+      setOtherGuarantors(savedGuarantors.filter((entry) => entry.category === "OTHER").map((entry, index) => ({ id: `saved-other-${index}`, searchText: "", ...entry })));
+      setCollateralEntries((initial.collateralEntries ?? []).map((entry, index) => ({
+        id: `saved-collateral-${index}`,
+        assetName: entry.assetName,
+        assetType: entry.assetType,
+        currentValuation: toMajor(money(BigInt(entry.currentValuationMinor))),
+        blockAmount: toMajor(money(BigInt(entry.blockAmountMinor))),
+        comment: entry.comment,
+        documentName: entry.documentName,
+      })));
       setDisbursementPreference(initial.disbursementPreference ?? "Cash at branch");
       setRemarks(initial.remarks ?? "");
-      setNomineeName(initial.nomineeName ?? "");
-      setNomineeRelation(initial.nomineeRelation ?? "");
-      setNomineePhone(initial.nomineePhone ?? "");
-      setNomineeIdNumber(initial.nomineeIdNumber ?? "");
-      setNomineePercentage(initial.nomineePercentage !== null ? String(initial.nomineePercentage) : "");
-      setPaymentDestination(initial.paymentDestination ?? "CASH");
+       const savedNextOfKin = initial.nextOfKinEntries ?? [];
+       setNextOfKinEntries(savedNextOfKin.length > 0
+         ? savedNextOfKin.map((entry, index) => ({
+             id: `saved-${index}`,
+             fullName: entry.fullName,
+             relation: entry.relation,
+             phone: entry.phone,
+             idNumber: entry.idNumber ?? "",
+             percentage: entry.percentage === null || entry.percentage === undefined ? "" : String(entry.percentage),
+           }))
+         : initial.nomineeName || initial.nomineePhone || initial.nomineeRelation
+           ? [{
+               id: "legacy-saved",
+               fullName: initial.nomineeName ?? "",
+               relation: initial.nomineeRelation ?? "",
+               phone: initial.nomineePhone ?? "",
+               idNumber: initial.nomineeIdNumber ?? "",
+               percentage: initial.nomineePercentage === null ? "" : String(initial.nomineePercentage),
+             }]
+           : []);
+       setPaymentDestination(initial.paymentDestination ?? "CASH");
       setBankName(initial.bankName ?? "");
       setBankAccountName(initial.bankAccountName ?? "");
       setBankAccountNumber(initial.bankAccountNumber ?? "");
@@ -363,11 +408,124 @@ export function LoanApplicationWizard({
     };
   }, [clientQuery, clientOpen]);
 
+  useEffect(() => {
+    if (step !== 3 || clients.length > 0) return;
+    let active = true;
+    void listClients({})
+      .then((result) => {
+        if (active) setClients(result.items);
+      })
+      .catch(() => {
+        if (active) setClients([]);
+      });
+    return () => {
+      active = false;
+    };
+  }, [step, clients.length]);
+
   const selectedClient = clients.find((client) => client.id === clientId) ?? null;
   const selectedProduct = products.find((product) => product.id === productId) ?? null;
   const sector = sectors.find((item) => item.code === economicSector) ?? null;
+  const allGuarantors = useMemo(
+    () => [...savingsGuarantors, ...sharesGuarantors, ...otherGuarantors],
+    [savingsGuarantors, sharesGuarantors, otherGuarantors],
+  );
+  const validGuarantorCount = allGuarantors.filter((entry) => {
+    if (!entry.clientId || !entry.value.trim()) return false;
+    if (entry.guaranteeType === "PERCENTAGE") {
+      const percent = Number(entry.value);
+      return Number.isInteger(percent) && percent >= 1 && percent <= 100;
+    }
+    const amount = parseMajorToMinor(entry.value);
+    return amount !== null && amount > 0n;
+  }).length;
 
-  const principalMajor = Number(principal.replace(/,/g, "")) || 0;
+  function addGuarantor(category: GuarantorEntry["category"]) {
+    const entry: GuarantorEntry = { id: crypto.randomUUID(), category, clientId: "", searchText: "", guaranteeType: "PERCENTAGE", value: "", blockFund: false };
+    if (category === "SAVINGS") setSavingsGuarantors((rows) => [...rows, entry]);
+    else if (category === "SHARES") setSharesGuarantors((rows) => [...rows, entry]);
+    else setOtherGuarantors((rows) => [...rows, entry]);
+  }
+
+  function updateGuarantor(category: GuarantorEntry["category"], id: string, patch: Partial<GuarantorEntry>) {
+    const update = (rows: GuarantorEntry[]) => rows.map((row) => row.id === id ? { ...row, ...patch } : row);
+    if (category === "SAVINGS") setSavingsGuarantors(update);
+    else if (category === "SHARES") setSharesGuarantors(update);
+    else setOtherGuarantors(update);
+  }
+
+  function removeGuarantor(category: GuarantorEntry["category"], id: string) {
+    const remove = (rows: GuarantorEntry[]) => rows.filter((row) => row.id !== id);
+    if (category === "SAVINGS") setSavingsGuarantors(remove);
+    else if (category === "SHARES") setSharesGuarantors(remove);
+    else setOtherGuarantors(remove);
+  }
+
+  function renderGuarantorRows(category: GuarantorEntry["category"], rows: GuarantorEntry[]) {
+    return rows.map((entry, index) => {
+      const usedIds = allGuarantors.filter((row) => row.id !== entry.id).map((row) => row.clientId);
+      const query = entry.searchText.toLowerCase().trim();
+      const options = clients.filter((client) =>
+        client.id !== clientId &&
+        (!usedIds.includes(client.id) || client.id === entry.clientId) &&
+        (!query || `${client.fullName} ${client.referenceNo}`.toLowerCase().includes(query)),
+      );
+      const selected = clients.find((client) => client.id === entry.clientId);
+      return (
+        <div key={entry.id} className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="relative">
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor={`guarantor-member-${entry.id}`}>Member Name <span className="text-accent-red" aria-hidden="true">*</span></label>
+              <Input
+                id={`guarantor-member-${entry.id}`}
+                value={entry.searchText || selected?.fullName || ""}
+                onFocus={() => setGuarantorSelectOpenId(entry.id)}
+                onChange={(event) => {
+                  updateGuarantor(category, entry.id, { clientId: "", searchText: event.target.value });
+                  setGuarantorSelectOpenId(entry.id);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") setGuarantorSelectOpenId(null);
+                }}
+                placeholder="Search..."
+                autoComplete="off"
+                className="h-[var(--control-height)]"
+              />
+              {guarantorSelectOpenId === entry.id ? (
+                <div className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-[var(--control-radius)] border border-card-border bg-surface shadow-md">
+                  {options.length === 0 ? <p className="px-3 py-2 fs-text text-muted-foreground">No options</p> : options.map((client) => (
+                    <button key={client.id} type="button" onMouseDown={(event) => event.preventDefault()} onClick={() => {
+                      updateGuarantor(category, entry.id, { clientId: client.id, searchText: client.fullName });
+                      setGuarantorSelectOpenId(null);
+                    }} className="block w-full px-3 py-2 text-left fs-text text-body hover:bg-subtle">
+                      {client.fullName} - {client.referenceNo}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+            <div>
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor={`guarantor-type-${entry.id}`}>Guarantee Type <span className="text-accent-red" aria-hidden="true">*</span></label>
+              <select id={`guarantor-type-${entry.id}`} value={entry.guaranteeType} onChange={(event) => updateGuarantor(category, entry.id, { guaranteeType: event.target.value as GuarantorEntry["guaranteeType"], value: "" })} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                <option value="PERCENTAGE">Percentage</option>
+                <option value="AMOUNT">Amount</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor={`guarantor-value-${entry.id}`}>Value <span className="text-accent-red" aria-hidden="true">*</span></label>
+              <Input id={`guarantor-value-${entry.id}`} type="number" min={entry.guaranteeType === "PERCENTAGE" ? 1 : 0.01} max={entry.guaranteeType === "PERCENTAGE" ? 100 : undefined} value={entry.value} onChange={(event) => updateGuarantor(category, entry.id, { value: event.target.value })} className="h-[var(--control-height)]" />
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <label className="flex items-center gap-2 fs-text text-body"><input type="checkbox" checked={entry.blockFund} onChange={(event) => updateGuarantor(category, entry.id, { blockFund: event.target.checked })} className="size-4 accent-primary" />Block Fund</label>
+              <Button type="button" variant="outline" size="icon-lg" aria-label={`Remove guarantor ${index + 1}`} onClick={() => removeGuarantor(category, entry.id)} className="size-[40px] rounded-full border-accent-red text-accent-red hover:bg-accent-red/10"><Trash2 className="size-4" aria-hidden="true" /></Button>
+            </div>
+          </div>
+        </div>
+      );
+    });
+  }
+
+  const principalMinor = parseMajorToMinor(principal);
   const scheduleStartDate = installmentStartDate || (() => {
     const d = new Date();
     d.setMonth(d.getMonth() + 1);
@@ -375,16 +533,36 @@ export function LoanApplicationWizard({
     return new Date(d.getTime() - offset).toISOString().slice(0, 10);
   })();
   const schedule = useMemo(() => {
-    if (!selectedProduct || !principalMajor || !tenure) return [];
+    if (!selectedProduct || principalMinor === null || principalMinor <= 0n || !tenure) return [];
     const count = Number(tenure);
     if (!Number.isInteger(count) || count < 1) return [];
-    const principalMinor = parseMajorToMinor(principal);
-    if (principalMinor === null || principalMinor <= 0n) return [];
     const min = BigInt(selectedProduct.minPrincipalMinor);
     const max = BigInt(selectedProduct.maxPrincipalMinor);
     if (principalMinor < min || principalMinor > max) return [];
-    return generateSchedule(principalMajor, count, selectedProduct.interestRateBp, scheduleStartDate);
-  }, [selectedProduct, principal, tenure, scheduleStartDate]);
+    const termMonths = tenurePeriod === "MONTHS" ? count : tenurePeriod === "WEEKS" ? Math.ceil(count * 7 / 30) : Math.ceil(count / 30);
+    const schedule = calculateRepaymentSchedule({
+      principal: money(principalMinor),
+      annualRate: rate(BigInt(selectedProduct.interestRateBp) * 12n, 10_000n),
+      termMonths,
+      firstDueDate: scheduleStartDate,
+      method: scheduleMethod(interestMethod),
+    });
+    return schedule.rows.map((row) => ({
+      no: row.no,
+      dueDate: formatScheduleDate(new Date(`${row.dueDate}T00:00:00`)),
+      principalMinor: row.principal.minor.toString(),
+      interestMinor: row.interest.minor.toString(),
+      amountMinor: row.total.minor.toString(),
+    }));
+  }, [selectedProduct, principalMinor, tenure, tenurePeriod, scheduleStartDate, interestMethod]);
+  const scheduleTotals = schedule.reduce(
+    (totals, row) => ({
+      principalMinor: totals.principalMinor + BigInt(row.principalMinor),
+      interestMinor: totals.interestMinor + BigInt(row.interestMinor),
+      amountMinor: totals.amountMinor + BigInt(row.amountMinor),
+    }),
+    { principalMinor: 0n, interestMinor: 0n, amountMinor: 0n },
+  );
   const subSector = sector?.children.find((item) => item.code === subEconomicSector) ?? null;
 
   function chooseProduct(id: string) {
@@ -440,7 +618,6 @@ export function LoanApplicationWizard({
         return null;
       }
       if (index === 1) {
-        if (!installmentStartDate) return "Choose the installment start date.";
         if (!loanOfficerId) return "Select the loan officer.";
         if (debtCapacity.trim() && parseMajorToMinor(debtCapacity) === null) {
           return "Debt capacity must be a valid amount.";
@@ -449,20 +626,52 @@ export function LoanApplicationWizard({
         return null;
       }
       if (index === 2) {
-        const filled = [nomineeName, nomineeRelation, nomineePhone, nomineeIdNumber, nomineePercentage].filter(
-          (value) => value.trim(),
-        ).length;
-        if (filled === 0) return null;
-        if (!nomineeName.trim()) return "Enter the next of kin name.";
-        if (!nomineeRelation) return "Select the relationship.";
-        if (!nomineePhone.trim()) return "Enter the next of kin phone number.";
-        const percent = Number(nomineePercentage);
-        if (!Number.isInteger(percent) || percent < 1 || percent > 100) {
-          return "Nominee percentage must be a whole number between 1 and 100.";
+        for (const [index, entry] of nextOfKinEntries.entries()) {
+          if (!entry.fullName.trim()) return `Enter the name for next of kin ${index + 1}.`;
+          if (!entry.relation) return `Select a relationship for next of kin ${index + 1}.`;
+          if (!entry.phone.trim()) return `Enter a phone number for next of kin ${index + 1}.`;
+          if (entry.percentage.trim()) {
+            const percent = Number(entry.percentage);
+            if (!Number.isInteger(percent) || percent < 1 || percent > 100) {
+              return `Next of kin ${index + 1} percentage must be a whole number between 1 and 100.`;
+            }
+          }
         }
         return null;
       }
       if (index === 3) {
+        if (guaranteedByMembers && validGuarantorCount < 2) return "Minimum 2 guarantor(s) required.";
+        if (guaranteedByMembers && validGuarantorCount !== allGuarantors.length) return "Complete every guarantor entry before continuing.";
+        if (guaranteedByMembers && allGuarantors.some((entry) => entry.clientId === clientId)) {
+          return "The applicant cannot be their own guarantor.";
+        }
+        if (guaranteedByMembers) {
+          const selectedIds = allGuarantors.map((entry) => entry.clientId).filter(Boolean);
+          if (new Set(selectedIds).size !== selectedIds.length) return "A member cannot be added more than once as a guarantor.";
+        }
+        return null;
+      }
+      if (index === 4) {
+        if (!collateralsEnabled) return null;
+        if (collateralEntries.length === 0) return "Add at least one collateral.";
+        for (const [index, collateral] of collateralEntries.entries()) {
+          if (!collateral.assetName.trim()) return `Enter an asset name for collateral ${index + 1}.`;
+          if (!collateral.assetType.trim()) return `Enter an asset type for collateral ${index + 1}.`;
+          const valuation = parseMajorToMinor(collateral.currentValuation);
+          const blockAmount = parseMajorToMinor(collateral.blockAmount);
+          if (!valuation || valuation <= 0n) return `Enter a valid valuation for collateral ${index + 1}.`;
+          if (!blockAmount || blockAmount <= 0n || blockAmount > valuation) return `Block amount for collateral ${index + 1} must be positive and cannot exceed its valuation.`;
+          if (!collateral.comment.trim()) return `Enter a comment for collateral ${index + 1}.`;
+          const hasCollateralDocument =
+            attachments.some((attachment) => attachment.kind === "COLLATERAL" && attachment.name === collateral.documentName) ||
+            (initial?.documents.some((document) => document.kind === "COLLATERAL" && document.name === collateral.documentName) ?? false);
+          if (!collateral.documentName || !hasCollateralDocument) {
+            return `Attach a document for collateral ${index + 1}.`;
+          }
+        }
+        return null;
+      }
+      if (index === 5) {
         if (paymentDestination === "BANK") {
           if (!bankName) return "Select the bank.";
           if (!bankAccountName.trim()) return "Enter the account name.";
@@ -474,7 +683,7 @@ export function LoanApplicationWizard({
         }
         return null;
       }
-      if (index === 4 && attachments.length === 0) {
+      if (index === 6 && attachments.length === 0 && (initial?.documents.length ?? 0) === 0) {
         return "Attach at least one loan document.";
       }
       return null;
@@ -483,21 +692,22 @@ export function LoanApplicationWizard({
       bankAccountName,
       bankAccountNumber,
       bankName,
-      attachments.length,
+      attachments,
       clientId,
       debtCapacity,
       economicSector,
+      guaranteedByMembers,
+      validGuarantorCount,
+      allGuarantors,
+      collateralsEnabled,
+      collateralEntries,
       gracePeriod,
-      installmentStartDate,
       interestRate,
+      initial,
       loanOfficerId,
       mnoProvider,
       mnoWalletNumber,
-      nomineeIdNumber,
-      nomineeName,
-      nomineePercentage,
-      nomineePhone,
-      nomineeRelation,
+      nextOfKinEntries,
       paymentDestination,
       principal,
       productId,
@@ -523,7 +733,7 @@ export function LoanApplicationWizard({
     setStep((current) => Math.max(current - 1, 0));
   }
 
-  async function addFiles(files: FileList | null) {
+  async function addFiles(files: FileList | null, kind: LoanDocumentKind = "OTHER") {
     if (!files || files.length === 0) return;
     setStepError(null);
     const next: Attachment[] = [];
@@ -543,7 +753,7 @@ export function LoanApplicationWizard({
       const dataUrl = await readFile(file);
       next.push({
         id: `${file.name}-${file.size}-${Math.random().toString(36).slice(2, 8)}`,
-        kind: "OTHER",
+        kind,
         name: file.name,
         sizeBytes: file.size,
         dataUrl,
@@ -554,7 +764,7 @@ export function LoanApplicationWizard({
 
   async function submit(status: "DRAFT" | "SUBMITTED") {
     for (let index = 0; index < STEPS.length; index += 1) {
-      if (status === "DRAFT" && index === 4) continue;
+      if (status === "DRAFT" && index === 6) continue;
       const failure = validateStep(index);
       if (failure) {
         setStep(index);
@@ -581,25 +791,50 @@ export function LoanApplicationWizard({
         interestRateBp: Math.round(Number(interestRate) * 100),
         interestMethod,
         interestOnGrace,
-        installmentStartDate,
+        installmentStartDate: installmentStartDate || scheduleStartDate,
         loanOfficerId,
         debtCapacityMinor: debtCapacity.trim()
           ? (parseMajorToMinor(debtCapacity) ?? 0n).toString()
           : null,
+        insiderRelationship: insiderRelationship === "None" ? null : insiderRelationship,
         economicSector,
         subEconomicSector: subEconomicSector || null,
         subSubEconomicSector: subSubEconomicSector || null,
         description: description.trim() || null,
         purpose: purpose || null,
-        hasGuarantor,
-        hasCollateral,
+        hasGuarantor: guaranteedByMembers,
+        hasCollateral: collateralsEnabled,
+        guarantorEntries: (guaranteedByMembers ? allGuarantors : []).map((entry) => ({
+          category: entry.category,
+          clientId: entry.clientId,
+          guaranteeType: entry.guaranteeType,
+          value: entry.guaranteeType === "AMOUNT"
+            ? (parseMajorToMinor(entry.value) ?? 0n).toString()
+            : entry.value,
+          blockFund: entry.blockFund,
+        })),
+        collateralEntries: (collateralsEnabled ? collateralEntries : []).map((entry) => ({
+          assetName: entry.assetName.trim(),
+          assetType: entry.assetType.trim(),
+          currentValuationMinor: (parseMajorToMinor(entry.currentValuation) ?? 0n).toString(),
+          blockAmountMinor: (parseMajorToMinor(entry.blockAmount) ?? 0n).toString(),
+          comment: entry.comment.trim(),
+          documentName: entry.documentName,
+        })),
         disbursementPreference,
         remarks: remarks.trim() || null,
-        nomineeName: nomineeName.trim() || null,
-        nomineeRelation: nomineeRelation || null,
-        nomineePhone: nomineePhone.trim() || null,
-        nomineeIdNumber: nomineeIdNumber.trim() || null,
-        nomineePercentage: nomineePercentage.trim() ? Number(nomineePercentage) : null,
+        nomineeName: nextOfKinEntries[0]?.fullName.trim() || null,
+        nomineeRelation: nextOfKinEntries[0]?.relation || null,
+        nomineePhone: nextOfKinEntries[0]?.phone.trim() || null,
+        nomineeIdNumber: nextOfKinEntries[0]?.idNumber.trim() || null,
+        nomineePercentage: nextOfKinEntries[0]?.percentage.trim() ? Number(nextOfKinEntries[0].percentage) : null,
+        nextOfKinEntries: nextOfKinEntries.map((entry) => ({
+          fullName: entry.fullName.trim(),
+          relation: entry.relation,
+          phone: entry.phone.trim(),
+          idNumber: entry.idNumber.trim() || null,
+          percentage: entry.percentage.trim() ? Number(entry.percentage) : null,
+        })),
         paymentDestination,
         bankName: paymentDestination === "BANK" ? bankName : null,
         bankAccountName: paymentDestination === "BANK" ? bankAccountName.trim() : null,
@@ -716,6 +951,9 @@ export function LoanApplicationWizard({
                         setClientOpen(true);
                       }}
                       onFocus={() => setClientOpen(true)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Escape") setClientOpen(false);
+                      }}
                       placeholder="Search..."
                       autoComplete="off"
                       aria-required="true"
@@ -754,9 +992,6 @@ export function LoanApplicationWizard({
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-product">
                   Product *
@@ -771,6 +1006,9 @@ export function LoanApplicationWizard({
                       if (!event.target.value) setProductId("");
                     }}
                     onFocus={() => setProductOpen(true)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") setProductOpen(false);
+                    }}
                     placeholder={loadingOptions ? "Loading products…" : "Search..."}
                     className="h-[var(--control-height)]"
                   />
@@ -803,27 +1041,22 @@ export function LoanApplicationWizard({
                     </div>
                   ) : null}
                 </div>
-                {selectedProduct ? (
-                  <p className="mt-1 fs-text text-muted-foreground">
-                    {formatTzs(selectedProduct.minPrincipalMinor)} – {formatTzs(selectedProduct.maxPrincipalMinor)} · {selectedProduct.interestRateBp / 100}% per month · {selectedProduct.tenurePeriod.toLowerCase()} {selectedProduct.minTenureCount}–{selectedProduct.maxTenureCount}
-                  </p>
-                ) : null}
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-principal">
-                  Principal Amount (TSh)
+                  Principal Amount (TSh) *
                 </label>
                 <Input
                   id="la-principal"
                   value={principal}
-                  onChange={(event) => setPrincipal(event.target.value)}
+                  onChange={(event) => setPrincipal(formatMajorInput(event.target.value))}
                   inputMode="decimal"
                   placeholder="Enter Principal Amount"
                   className="h-[var(--control-height)]"
                 />
                 {selectedProduct ? (
                   <p className="mt-1 fs-text text-muted-foreground">
-                    Max range: {selectedProduct.maxPrincipalMinor}, Min range: {selectedProduct.minPrincipalMinor}
+                    Max range: {formatMinorUnitsExact(selectedProduct.maxPrincipalMinor)}, Min range: {formatMinorUnitsExact(selectedProduct.minPrincipalMinor)}
                   </p>
                 ) : null}
               </div>
@@ -858,18 +1091,6 @@ export function LoanApplicationWizard({
                     Max range: {selectedProduct.maxTenureCount}, Min range: {selectedProduct.minTenureCount}
                   </p>
                 ) : null}
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-grace">
-                  Grace period (months)
-                </label>
-                <Input
-                  id="la-grace"
-                  value={gracePeriod}
-                  onChange={(event) => setGracePeriod(event.target.value)}
-                  inputMode="numeric"
-                  className="h-[var(--control-height)]"
-                />
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-rate">
@@ -917,26 +1138,27 @@ export function LoanApplicationWizard({
                   ))}
                 </select>
               </div>
-            </div>
-
-            <div>
-              <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-interest-on-grace">
-                Interest On Grace Period
-              </label>
-              <select
-                id="la-interest-on-grace"
-                value={interestOnGrace ? "True" : "False"}
-                onChange={(event) => setInterestOnGrace(event.target.value === "True")}
-                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-              >
-                <option value="False">False</option>
-                <option value="True">True</option>
-              </select>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-grace">Grace Period</label>
+                <Input id="la-grace" value={gracePeriod} onChange={(event) => setGracePeriod(event.target.value)} inputMode="numeric" className="h-[var(--control-height)]" />
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-start">Installment Start Date</label>
+                <Input id="la-start" type="date" value={installmentStartDate} onChange={(event) => setInstallmentStartDate(event.target.value)} className="h-[var(--control-height)]" />
+                <p className="mt-1 fs-text text-muted-foreground">If left blank, the preview starts one month from today. Grace-period treatment is not included in this preview.</p>
+              </div>
+              <div>
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-interest-on-grace">Interest On Grace Period</label>
+                <select id="la-interest-on-grace" value={interestOnGrace ? "True" : "False"} onChange={(event) => setInterestOnGrace(event.target.value === "True")} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                  <option value="False">False</option>
+                  <option value="True">True</option>
+                </select>
+              </div>
             </div>
 
             {schedule.length > 0 ? (
-              <div className="max-h-[320px] overflow-y-auto rounded-[var(--card-radius)] border border-card-border bg-subtle p-[4px]">
-                <table className="w-full border-collapse text-left fs-text">
+              <div className="max-h-[320px] max-w-[960px] overflow-auto rounded-[var(--card-radius)] border border-card-border bg-subtle p-[4px]">
+                <table className="w-full min-w-[760px] border-collapse text-left fs-text">
                   <thead className="sticky top-0 z-10 border-b border-card-border bg-subtle font-semibold text-strong">
                     <tr>
                       <th className="border border-card-border px-2 py-1.5">#</th>
@@ -951,17 +1173,17 @@ export function LoanApplicationWizard({
                       <tr key={row.no} className="border-b border-card-border last:border-0" style={{ height: "40px" }}>
                         <td className="border border-card-border px-2 py-1.5">{row.no}</td>
                         <td className="border border-card-border px-2 py-1.5">{row.dueDate}</td>
-                        <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(row.principal * 100)))}</td>
-                        <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(row.interest * 100)))}</td>
-                        <td className="border border-card-border px-2 py-1.5 text-right font-bold">{formatTzs(String(Math.round(row.amount * 100)))}</td>
+                        <td className="border border-card-border px-2 py-1.5 text-right">{formatMinorUnitsExact(row.principalMinor)}</td>
+                        <td className="border border-card-border px-2 py-1.5 text-right">{formatMinorUnitsExact(row.interestMinor)}</td>
+                        <td className="border border-card-border px-2 py-1.5 text-right font-bold">{formatMinorUnitsExact(row.amountMinor)}</td>
                       </tr>
                     ))}
                     <tr className="bg-subtle font-bold">
                       <td className="border border-card-border px-2 py-1.5">Total</td>
                       <td className="border border-card-border px-2 py-1.5">—</td>
-                      <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.principal, 0) * 100)))}</td>
-                      <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.interest, 0) * 100)))}</td>
-                      <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.amount, 0) * 100)))}</td>
+                      <td className="border border-card-border px-2 py-1.5 text-right">{formatMinorUnitsExact(scheduleTotals.principalMinor)}</td>
+                      <td className="border border-card-border px-2 py-1.5 text-right">{formatMinorUnitsExact(scheduleTotals.interestMinor)}</td>
+                      <td className="border border-card-border px-2 py-1.5 text-right">{formatMinorUnitsExact(scheduleTotals.amountMinor)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1035,16 +1257,10 @@ export function LoanApplicationWizard({
 
             <div className="grid gap-4 md:grid-cols-3">
               <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-start">
-                  Installment start date
-                </label>
-                <Input
-                  id="la-start"
-                  type="date"
-                  value={installmentStartDate}
-                  onChange={(event) => setInstallmentStartDate(event.target.value)}
-                  className="h-[var(--control-height)]"
-                />
+                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-insider-relationship">Insider Relationship</label>
+                <select id="la-insider-relationship" value={insiderRelationship} onChange={(event) => setInsiderRelationship(event.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                  {["None", ...RELATIONS].map((relation) => <option key={relation} value={relation}>{relation}</option>)}
+                </select>
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-officer">
@@ -1059,7 +1275,7 @@ export function LoanApplicationWizard({
                   <option value="">{loadingOptions ? "Loading…" : "Select officer"}</option>
                   {officers.map((officer) => (
                     <option key={officer.id} value={officer.id}>
-                      {officer.fullName}
+                      {officer.fullName.toUpperCase()}
                     </option>
                   ))}
                 </select>
@@ -1159,25 +1375,6 @@ export function LoanApplicationWizard({
               />
             </div>
 
-            <div className="grid gap-2 md:grid-cols-2">
-              <label className="flex items-center gap-2 fs-text text-strong">
-                <input
-                  type="checkbox"
-                  checked={hasGuarantor}
-                  onChange={(event) => setHasGuarantor(event.target.checked)}
-                />
-                Guaranteed by Members
-              </label>
-              <label className="flex items-center gap-2 fs-text text-strong">
-                <input
-                  type="checkbox"
-                  checked={hasCollateral}
-                  onChange={(event) => setHasCollateral(event.target.checked)}
-                />
-                Collateral is offered for this loan
-              </label>
-            </div>
-
             <div>
               <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-remarks">
                 Remarks
@@ -1224,76 +1421,55 @@ export function LoanApplicationWizard({
         {step === 2 ? (
           <div id="loan-application-panel-nominee" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
-            <p className="fs-text text-muted-foreground">
-              Optional. Record one next of kin for this application. Leave blank when the client has not
-              nominated anyone.
-            </p>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-nominee-name">
-                  Full name
-                </label>
-                <Input
-                  id="la-nominee-name"
-                  value={nomineeName}
-                  onChange={(event) => setNomineeName(event.target.value)}
-                  className="h-[var(--control-height)]"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-nominee-relation">
-                  Relationship
-                </label>
-                <select
-                  id="la-nominee-relation"
-                  value={nomineeRelation}
-                  onChange={(event) => setNomineeRelation(event.target.value)}
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-                >
-                  <option value="">Select relationship</option>
-                  {RELATIONS.map((relation) => (
-                    <option key={relation} value={relation}>
-                      {relation}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-nominee-phone">
-                  Phone number
-                </label>
-                <Input
-                  id="la-nominee-phone"
-                  value={nomineePhone}
-                  onChange={(event) => setNomineePhone(event.target.value)}
-                  inputMode="tel"
-                  className="h-[var(--control-height)]"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-nominee-id">
-                  National ID number
-                </label>
-                <Input
-                  id="la-nominee-id"
-                  value={nomineeIdNumber}
-                  onChange={(event) => setNomineeIdNumber(event.target.value)}
-                  className="h-[var(--control-height)]"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-nominee-percent">
-                  Share (%)
-                </label>
-                <Input
-                  id="la-nominee-percent"
-                  value={nomineePercentage}
-                  onChange={(event) => setNomineePercentage(event.target.value)}
-                  inputMode="numeric"
-                  placeholder="100"
-                  className="h-[var(--control-height)]"
-                />
-              </div>
+            <div className="space-y-[13.44px]">
+              {nextOfKinEntries.map((entry, index) => (
+                <fieldset key={entry.id} className="rounded-[var(--card-radius)] border border-card-border p-[var(--space-16)]">
+                  <legend className="px-2 fs-text font-semibold text-strong">Next of kin {index + 1}</legend>
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <div>
+                      <label className="mb-1 block fs-text font-medium text-body" htmlFor={`la-nominee-name-${entry.id}`}>Full name</label>
+                      <Input id={`la-nominee-name-${entry.id}`} value={entry.fullName} onChange={(event) => setNextOfKinEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, fullName: event.target.value } : row))} className="h-[var(--control-height)]" />
+                    </div>
+                    <div>
+                      <label className="mb-1 block fs-text font-medium text-body" htmlFor={`la-nominee-relation-${entry.id}`}>Relationship</label>
+                      <select id={`la-nominee-relation-${entry.id}`} value={entry.relation} onChange={(event) => setNextOfKinEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, relation: event.target.value } : row))} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
+                        <option value="">Select relationship</option>
+                        {RELATIONS.map((relation) => <option key={relation} value={relation}>{relation}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-1 block fs-text font-medium text-body" htmlFor={`la-nominee-phone-${entry.id}`}>Phone number</label>
+                      <Input id={`la-nominee-phone-${entry.id}`} value={entry.phone} onChange={(event) => setNextOfKinEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, phone: event.target.value } : row))} inputMode="tel" className="h-[var(--control-height)]" />
+                    </div>
+                    <div>
+                      <label className="mb-1 block fs-text font-medium text-body" htmlFor={`la-nominee-id-${entry.id}`}>National ID number</label>
+                      <Input id={`la-nominee-id-${entry.id}`} value={entry.idNumber} onChange={(event) => setNextOfKinEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, idNumber: event.target.value } : row))} className="h-[var(--control-height)]" />
+                    </div>
+                    <div>
+                      <label className="mb-1 block fs-text font-medium text-body" htmlFor={`la-nominee-percent-${entry.id}`}>Share (%)</label>
+                      <Input id={`la-nominee-percent-${entry.id}`} value={entry.percentage} onChange={(event) => setNextOfKinEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, percentage: event.target.value } : row))} inputMode="numeric" placeholder="100" className="h-[var(--control-height)]" />
+                    </div>
+                    <div className="flex items-end justify-end">
+                      <Button type="button" variant="outline" size="icon-lg" aria-label={`Remove next of kin ${index + 1}`} onClick={() => setNextOfKinEntries((rows) => rows.filter((row) => row.id !== entry.id))} className="size-[40px] rounded-full border-accent-red text-accent-red hover:bg-accent-red/10">
+                        <Trash2 className="size-4" aria-hidden="true" />
+                      </Button>
+                    </div>
+                  </div>
+                </fieldset>
+              ))}
+              {nextOfKinEntries.length === 0 ? (
+                <div className="flex min-h-[160px] items-center justify-center">
+                  <Button type="button" variant="outline" size="icon-lg" aria-label="Add next of kin" onClick={() => setNextOfKinEntries([{ id: crypto.randomUUID(), fullName: "", relation: "", phone: "", idNumber: "", percentage: "" }])} className="size-[56px] rounded-full border-primary text-primary">
+                    <Plus className="size-6" aria-hidden="true" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex justify-start">
+                  <Button type="button" variant="outline" size="icon-lg" aria-label="Add next of kin" onClick={() => setNextOfKinEntries((rows) => [...rows, { id: crypto.randomUUID(), fullName: "", relation: "", phone: "", idNumber: "", percentage: "" }])} className="size-[40px] rounded-full border-primary text-primary">
+                    <Plus className="size-5" aria-hidden="true" />
+                  </Button>
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end border-t border-card-border pt-3">
@@ -1301,10 +1477,16 @@ export function LoanApplicationWizard({
                 type="button"
                 data-testid="wizard-next"
                 onClick={() => {
+                  const failure = validateStep(2);
+                  if (failure) {
+                    setStepError(failure);
+                    return;
+                  }
                   setStepError(null);
-                  setStep(4);
-                  setMaxStep((current) => Math.max(current, 5));
+                  setStep(3);
+                  setMaxStep((current) => Math.max(current, 3));
                 }}
+                disabled={Boolean(validateStep(2))}
                 className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
               >
                 Next
@@ -1317,10 +1499,78 @@ export function LoanApplicationWizard({
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <button type="button" data-testid="wizard-step-payment" aria-expanded={step === 3} aria-controls="loan-application-panel-payment" onClick={() => { if (Number('3') > maxStep) return; setStepError(null); setStep(3); }} style={{ opacity: maxStep < 3 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 3 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
-            Payment Destination <ChevronDown className={`size-5 transition-transform ${step === 3 ? "rotate-180" : ""}`} aria-hidden="true" />
+          <button type="button" data-testid="wizard-step-guarantors" aria-expanded={step === 3} aria-controls="loan-application-panel-guarantors" onClick={() => { if (3 > maxStep) return; setStepError(null); setStep(3); }} style={{ opacity: maxStep < 3 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 3 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Guarantors <ChevronDown className={`size-5 transition-transform ${step === 3 ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
-        {step === 3 ? (
+          {step === 3 ? (
+            <div id="loan-application-panel-guarantors" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
+              <label className="flex items-center gap-2 fs-text font-medium text-body">
+                <input type="checkbox" checked={guaranteedByMembers} onChange={(event) => setGuaranteedByMembers(event.target.checked)} className="size-4 accent-primary" />
+                Guaranteed by Members
+              </label>
+              {guaranteedByMembers ? (
+                <>
+                  <div className="flex items-center justify-between">
+                    <h3 className="fs-text font-semibold text-strong">Savings Accounts</h3>
+                    <Button type="button" variant="outline" size="icon-lg" aria-label="Add savings guarantor" onClick={() => addGuarantor("SAVINGS")} className="size-[40px] rounded-full border-primary text-primary"><Plus className="size-5" aria-hidden="true" /></Button>
+                  </div>
+                  {renderGuarantorRows("SAVINGS", savingsGuarantors)}
+                  <div className="flex items-center justify-between">
+                    <h3 className="fs-text font-semibold text-strong">Shares Accounts</h3>
+                    <Button type="button" variant="outline" size="icon-lg" aria-label="Add shares guarantor" onClick={() => addGuarantor("SHARES")} className="size-[40px] rounded-full border-primary text-primary"><Plus className="size-5" aria-hidden="true" /></Button>
+                  </div>
+                  {sharesGuarantors.length ? renderGuarantorRows("SHARES", sharesGuarantors) : <div className="rounded-[var(--card-radius)] border border-card-border px-4 py-6 text-center fs-text text-muted-foreground">No Shares member guarantors added</div>}
+                  <div className="flex items-center justify-between">
+                    <h3 className="fs-text font-semibold text-strong">Other Guarantors</h3>
+                    <Button type="button" variant="outline" size="icon-lg" aria-label="Add other guarantor" onClick={() => addGuarantor("OTHER")} className="size-[40px] rounded-full border-primary text-primary"><Plus className="size-5" aria-hidden="true" /></Button>
+                  </div>
+                  {otherGuarantors.length ? renderGuarantorRows("OTHER", otherGuarantors) : <div className="rounded-[var(--card-radius)] border border-card-border px-4 py-6 text-center fs-text text-muted-foreground">No other guarantors added</div>}
+                </>
+              ) : null}
+              {guaranteedByMembers && validGuarantorCount < 2 ? (
+                <p className="text-right fs-text font-semibold text-accent-red">Minimum 2 guarantor(s) required</p>
+              ) : null}
+              <div className="flex justify-end border-t border-card-border pt-3">
+                <Button type="button" data-testid="wizard-next" disabled={Boolean(validateStep(3))} onClick={() => { const failure = validateStep(3); if (failure) { setStepError(failure); return; } setStepError(null); setStep(4); setMaxStep((current) => Math.max(current, 4)); }} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">Next <ArrowRight className="size-4" aria-hidden="true" /></Button>
+              </div>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-collaterals" aria-expanded={step === 4} aria-controls="loan-application-panel-collaterals" onClick={() => { if (4 > maxStep) return; setStepError(null); setStep(4); }} style={{ opacity: maxStep < 4 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 4 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Collaterals <ChevronDown className={`size-5 transition-transform ${step === 4 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
+          {step === 4 ? (
+            <div id="loan-application-panel-collaterals" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
+              <label className="flex items-center gap-2 fs-text font-medium text-body">
+                <input type="checkbox" checked={collateralsEnabled} onChange={(event) => setCollateralsEnabled(event.target.checked)} className="size-4 accent-primary" />
+                Others
+              </label>
+              {collateralsEnabled ? collateralEntries.map((entry, index) => (
+                <div key={entry.id} className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div><label className="mb-1 block fs-text font-medium text-body">Asset Name *</label><Input value={entry.assetName} onChange={(event) => setCollateralEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, assetName: event.target.value } : row))} className="h-[var(--control-height)]" /></div>
+                    <div><label className="mb-1 block fs-text font-medium text-body">Asset Type *</label><Input value={entry.assetType} onChange={(event) => setCollateralEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, assetType: event.target.value } : row))} className="h-[var(--control-height)]" /></div>
+                    <div><label className="mb-1 block fs-text font-medium text-body">Current Valuation *</label><Input type="number" min="0.01" value={entry.currentValuation} onChange={(event) => setCollateralEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, currentValuation: event.target.value } : row))} className="h-[var(--control-height)]" /></div>
+                    <div><label className="mb-1 block fs-text font-medium text-body">Block Amount *</label><Input type="number" min="0.01" value={entry.blockAmount} onChange={(event) => setCollateralEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, blockAmount: event.target.value } : row))} className="h-[var(--control-height)]" /></div>
+                    <div className="md:col-span-2"><label className="mb-1 block fs-text font-medium text-body">Comment *</label><Textarea value={entry.comment} onChange={(event) => setCollateralEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, comment: event.target.value } : row))} rows={3} /></div>
+                    <div className="md:col-span-2"><label className="mb-1 block fs-text font-medium text-body">Document *</label><input type="file" accept="application/pdf,image/png,image/jpeg" onChange={(event) => { const file = event.target.files?.[0]; if (!file) return; setCollateralEntries((rows) => rows.map((row) => row.id === entry.id ? { ...row, documentName: file.name } : row)); void addFiles(event.target.files, "COLLATERAL"); event.target.value = ""; }} className="block w-full fs-text text-body" />{entry.documentName ? <p className="mt-1 fs-text text-muted-foreground">{entry.documentName}</p> : null}</div>
+                    <div className="flex justify-end gap-2 md:col-span-2"><Button type="button" variant="outline" size="icon-lg" aria-label={`Remove collateral ${index + 1}`} onClick={() => { setCollateralEntries((rows) => rows.filter((row) => row.id !== entry.id)); if (entry.documentName) setAttachments((rows) => rows.filter((file) => file.name !== entry.documentName)); }} className="size-[40px] rounded-full border-accent-red text-accent-red"><Trash2 className="size-4" aria-hidden="true" /></Button></div>
+                  </div>
+                </div>
+              )) : null}
+              {collateralsEnabled ? <Button type="button" variant="outline" size="icon-lg" aria-label="Add collateral" onClick={() => setCollateralEntries((rows) => [...rows, { id: crypto.randomUUID(), assetName: "", assetType: "", currentValuation: "", blockAmount: "", comment: "", documentName: "" }])} className="size-[40px] rounded-full border-primary text-primary"><Plus className="size-5" aria-hidden="true" /></Button> : null}
+              <div className="flex justify-end border-t border-card-border pt-3"><Button type="button" data-testid="wizard-next" disabled={Boolean(validateStep(4))} onClick={() => { const failure = validateStep(4); if (failure) { setStepError(failure); return; } setStepError(null); setStep(5); setMaxStep((current) => Math.max(current, 5)); }} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">Next <ArrowRight className="size-4" aria-hidden="true" /></Button></div>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
+          <button type="button" data-testid="wizard-step-payment" aria-expanded={step === 5} aria-controls="loan-application-panel-payment" onClick={() => { if (5 > maxStep) return; setStepError(null); setStep(5); }} style={{ opacity: maxStep < 5 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 5 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Payment Destination <ChevronDown className={`size-5 transition-transform ${step === 5 ? "rotate-180" : ""}`} aria-hidden="true" />
+          </button>
+        {step === 5 ? (
           <div id="loan-application-panel-payment" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <fieldset>
@@ -1448,10 +1698,10 @@ export function LoanApplicationWizard({
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <button type="button" data-testid="wizard-step-documents" aria-expanded={step === 4} aria-controls="loan-application-panel-documents" onClick={() => { if (Number('4') > maxStep) return; setStepError(null); setStep(4); }} style={{ opacity: maxStep < 4 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 4 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
-            Loan Documents <ChevronDown className={`size-5 transition-transform ${step === 4 ? "rotate-180" : ""}`} aria-hidden="true" />
+          <button type="button" data-testid="wizard-step-documents" aria-expanded={step === 6} aria-controls="loan-application-panel-documents" onClick={() => { if (6 > maxStep) return; setStepError(null); setStep(6); }} style={{ opacity: maxStep < 6 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 6 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+            Loan Documents <ChevronDown className={`size-5 transition-transform ${step === 6 ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
-        {step === 4 ? (
+        {step === 6 ? (
           <div id="loan-application-panel-documents" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <div>
@@ -1478,6 +1728,22 @@ export function LoanApplicationWizard({
                 }}
               />
             </div>
+
+            {initial?.documents.length ? (
+              <div>
+                <p className="mb-2 fs-text font-medium text-body">Previously attached documents</p>
+                <ul className="divide-y divide-card-border rounded-[var(--control-radius)] border border-card-border">
+                  {initial.documents.map((document) => (
+                    <li key={document.id} className="flex flex-wrap items-center gap-3 px-3 py-2">
+                      <FileText className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                      <span className="min-w-0 flex-1 truncate fs-text text-body">{document.name}</span>
+                      <span className="fs-text text-muted-foreground">{document.kind.replaceAll("_", " ").toLowerCase()}</span>
+                      <span className="fs-text text-muted-foreground">{(document.sizeBytes / 1024).toFixed(0)} KB</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             {attachments.length ? (
               <ul className="divide-y divide-card-border rounded-[var(--control-radius)] border border-card-border">
@@ -1552,7 +1818,7 @@ export function LoanApplicationWizard({
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Next of kin</dt>
-                  <dd className="text-body">{nomineeName.trim() || "Not recorded"}</dd>
+                  <dd className="text-body">{nextOfKinEntries[0]?.fullName.trim() || "Not recorded"}</dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Destination</dt>

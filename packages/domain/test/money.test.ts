@@ -26,6 +26,7 @@ describe('money', () => {
   it('round-trips back to major units', () => {
     expect(toMajor(fromMajor('0.05'))).toBe('0.05');
     expect(toMajor(fromMajor('1234567.89'))).toBe('1234567.89');
+    expect(toMajor(money(900719925474099123n))).toBe('9007199254740991.23');
     expect(toMajor(money(-5n))).toBe('-0.05');
   });
 

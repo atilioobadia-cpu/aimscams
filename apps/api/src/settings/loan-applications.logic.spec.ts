@@ -5,8 +5,11 @@ import {
   MAX_DOCUMENT_BYTES,
   parseEconomicSector,
   parseInterestMethod,
+  parseLoanApplicationCollaterals,
+  parseLoanApplicationGuarantors,
   parseIsoDate,
   parseLoanDocuments,
+  parseNextOfKinEntries,
   parseOptionalMinor,
   parsePaymentDestination,
   parseTenurePeriod,
@@ -208,5 +211,82 @@ describe('requireDocumentsForSubmission', () => {
     expect(() =>
       requireDocumentsForSubmission({ status: 'SUBMITTED', newDocumentCount: 0, existingDocumentCount: 1 }),
     ).not.toThrow();
+  });
+});
+
+describe('parseNextOfKinEntries', () => {
+  it('normalizes complete entries while preserving optional fields', () => {
+    expect(parseNextOfKinEntries([
+      { fullName: '  Ada Example ', relation: ' Sister ', phone: ' 0712345678 ', idNumber: '', percentage: 50 },
+    ])).toEqual([
+      { fullName: 'Ada Example', relation: 'Sister', phone: '0712345678', idNumber: null, percentage: 50 },
+    ]);
+  });
+
+  it('rejects incomplete entries', () => {
+    expect(() => parseNextOfKinEntries([{ fullName: 'Ada', relation: '', phone: '' }])).toThrow(
+      'Next of kin 1 requires a name, relationship and phone number.',
+    );
+  });
+
+  it('rejects percentages outside the valid range', () => {
+    expect(() => parseNextOfKinEntries([
+      { fullName: 'Ada', relation: 'Sister', phone: '0712345678', percentage: 101 },
+    ])).toThrow('Next of kin 1 percentage must be between 1 and 100.');
+  });
+});
+
+describe('parseLoanApplicationGuarantors', () => {
+  it('preserves valid percentage and minor-unit amount guarantees', () => {
+    expect(parseLoanApplicationGuarantors([
+      { category: 'SAVINGS', clientId: 'member-1', guaranteeType: 'PERCENTAGE', value: '50', blockFund: true },
+      { category: 'OTHER', clientId: 'member-2', guaranteeType: 'AMOUNT', value: '900719925474099123', blockFund: false },
+    ])).toEqual([
+      { category: 'SAVINGS', clientId: 'member-1', guaranteeType: 'PERCENTAGE', value: '50', blockFund: true },
+      { category: 'OTHER', clientId: 'member-2', guaranteeType: 'AMOUNT', value: '900719925474099123', blockFund: false },
+    ]);
+  });
+
+  it('rejects amount values that are not positive integer minor units', () => {
+    expect(() => parseLoanApplicationGuarantors([
+      { category: 'SAVINGS', clientId: 'member-1', guaranteeType: 'AMOUNT', value: '10.50' },
+    ])).toThrow('Guarantor 1 amount must be a positive minor-unit value.');
+  });
+});
+
+describe('parseLoanApplicationCollaterals', () => {
+  it('preserves positive minor-unit valuation and block amounts', () => {
+    expect(parseLoanApplicationCollaterals([
+      {
+        assetName: 'Vehicle',
+        assetType: 'Motor vehicle',
+        currentValuationMinor: '900719925474099123',
+        blockAmountMinor: '250000',
+        comment: 'Independent valuation received',
+        documentName: 'valuation.pdf',
+      },
+    ])).toEqual([
+      {
+        assetName: 'Vehicle',
+        assetType: 'Motor vehicle',
+        currentValuationMinor: '900719925474099123',
+        blockAmountMinor: '250000',
+        comment: 'Independent valuation received',
+        documentName: 'valuation.pdf',
+      },
+    ]);
+  });
+
+  it('rejects a block amount above the collateral valuation', () => {
+    expect(() => parseLoanApplicationCollaterals([
+      {
+        assetName: 'Vehicle',
+        assetType: 'Motor vehicle',
+        currentValuationMinor: '10000',
+        blockAmountMinor: '10001',
+        comment: 'Independent valuation received',
+        documentName: 'valuation.pdf',
+      },
+    ])).toThrow('Collateral 1 block amount must be positive and cannot exceed its valuation.');
   });
 });
