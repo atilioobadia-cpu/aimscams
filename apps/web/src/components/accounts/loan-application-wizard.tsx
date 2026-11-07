@@ -848,9 +848,9 @@ export function LoanApplicationWizard({
             </label>
 
             {schedule.length > 0 ? (
-              <div className="rounded-[var(--card-radius)] border border-card-border bg-subtle p-[var(--space-12)]">
+              <div className="max-h-[470px] overflow-y-auto rounded-[var(--card-radius)] border border-card-border bg-subtle p-[var(--space-12)]">
                 <table className="w-full text-left fs-text">
-                  <thead className="border-b border-card-border bg-subtle font-semibold text-strong">
+                  <thead className="sticky top-0 z-10 border-b border-card-border bg-subtle font-semibold text-strong">
                     <tr>
                       <th className="px-3 py-2.5">#</th>
                       <th className="px-3 py-2.5">Due Date</th>
