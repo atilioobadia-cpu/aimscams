@@ -160,6 +160,7 @@ function failureMessage(failure: unknown): string {
 
 export function TellerConsolePage() {
   const [till, setTill] = useState<TillInfo | null>(null);
+  const [sectionOpen, setSectionOpen] = useState({ account: true, loan: true, transaction: true });
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
