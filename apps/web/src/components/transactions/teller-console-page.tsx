@@ -190,11 +190,6 @@ export function TellerConsolePage() {
     return true;
   }, [amount, selectedLoan, amountToBeDisbursed]);
 
-  useEffect(() => {
-    if (selectedLoan) {
-      setAmount((Number(selectedLoan.principalMinor) / 100 * 0.95).toFixed(2));
-    }
-  }, [selectedLoan]);
   const [counterAccountCode, setCounterAccountCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [narration, setNarration] = useState("");
@@ -662,7 +657,16 @@ export function TellerConsolePage() {
                         <select
                           id="transaction-loan"
                           value={loanId}
-                          onChange={(event) => setLoanId(event.target.value)}
+                          onChange={(event) => {
+                            const nextLoanId = event.target.value;
+                            const nextLoan = loans.find((loan) => loan.id === nextLoanId) ?? null;
+                            setLoanId(nextLoanId);
+                            setAmount(
+                              nextLoan
+                                ? (Number(nextLoan.principalMinor) * 0.95 / 100).toFixed(2)
+                                : "",
+                            );
+                          }}
                           className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
                           required
                         >
