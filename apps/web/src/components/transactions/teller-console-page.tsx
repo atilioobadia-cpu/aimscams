@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   BookOpenText,
   ChevronDown,
@@ -180,6 +180,14 @@ export function TellerConsolePage() {
   const amountToBeDisbursed = selectedLoan
     ? (BigInt(selectedLoan.principalMinor) - BigInt(selectedLoan.principalMinor) / 20n).toString()
     : "0";
+
+  const amountValid = useMemo(() => {
+    const n = Number(amount.replace(/,/g, ""));
+    if (!selectedLoan) return false;
+    if (!Number.isFinite(n) || n <= 0) return false;
+    if (n > Number(amountToBeDisbursed) / 100) return false;
+    return true;
+  }, [amount, selectedLoan, amountToBeDisbursed]);
 
   useEffect(() => {
     if (selectedLoan) {
@@ -753,7 +761,7 @@ export function TellerConsolePage() {
                             <Button type="button" variant="outline" onClick={() => { setLoanId(""); setLoanQuery(""); setAmount(""); }} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
                               Reset
                             </Button>
-                            <Button type="submit" disabled={submitting} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
+                            <Button type="submit" disabled={submitting || !amountValid} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
                               {submitting ? "Posting..." : "Submit"}
                             </Button>
                           </div>
