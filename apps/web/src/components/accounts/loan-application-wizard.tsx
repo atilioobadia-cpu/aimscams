@@ -895,14 +895,20 @@ export function LoanApplicationWizard({
               </div>
             </div>
 
-            <label className="flex items-center gap-2 fs-text text-strong">
-              <input
-                type="checkbox"
-                checked={interestOnGrace}
-                onChange={(event) => setInterestOnGrace(event.target.checked)}
-              />
-              Charge interest during the grace period
-            </label>
+            <div>
+              <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-interest-on-grace">
+                Interest On Grace Period
+              </label>
+              <select
+                id="la-interest-on-grace"
+                value={interestOnGrace ? "True" : "False"}
+                onChange={(event) => setInterestOnGrace(event.target.value === "True")}
+                className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+              >
+                <option value="False">False</option>
+                <option value="True">True</option>
+              </select>
+            </div>
 
             {schedule.length > 0 ? (
               <div className="max-h-[470px] overflow-y-auto rounded-[var(--card-radius)] border border-card-border bg-subtle p-[var(--space-12)]">
