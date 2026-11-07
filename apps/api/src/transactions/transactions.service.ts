@@ -456,7 +456,55 @@ export class TransactionsService {
     const valueDate = body.valueDate ? String(body.valueDate) : todayInDarEsSalaam();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(valueDate)) throw new Error("Invalid value date.");
 
-    const lines = buildLedgerLines(type, amountMinor, cashAccount, counterAccountCode, "1201");
+    // For loan disbursement, look up the loan product to get the correct GL accounts
+    // and calculate the management fee.
+    let loanAccountCode = "1201";
+    let feeIncomeAccountCode: string | null = null;
+    let feeMinor = 0n;
+    let principalMinor = amountMinor;
+    if (type.code === "LOAN_DISBURSEMENT" && loanId) {
+      const loan = await this.prisma.loan.findFirst({
+        where: { id: loanId, organisationId },
+        include: { product: true },
+      });
+      if (loan) {
+        principalMinor = loan.principalMinor;
+        feeMinor = (principalMinor * 500n) / 10000n;
+        if (loan.product?.principalAccountId) {
+          const pa = await this.prisma.$queryRaw<{ code: string }[]>`
+            select code from gl_account where id = ${loan.product.principalAccountId}::uuid
+          `;
+          if (pa[0]?.code) loanAccountCode = pa[0].code;
+        }
+        if (loan.product?.chargesIncomeAccountId) {
+          const ca = await this.prisma.$queryRaw<{ code: string }[]>`
+            select code from gl_account where id = ${loan.product.chargesIncomeAccountId}::uuid
+          `;
+          if (ca[0]?.code) feeIncomeAccountCode = ca[0].code;
+        } else {
+          const fee = await this.prisma.feePenalty.findFirst({
+            where: { organisationId, name: "LOAN MANAGEMENT FEE", status: "ACTIVE" },
+          });
+          if (fee?.glAccountId) {
+            const fa = await this.prisma.$queryRaw<{ code: string }[]>`
+              select code from gl_account where id = ${fee.glAccountId}::uuid
+            `;
+            if (fa[0]?.code) feeIncomeAccountCode = fa[0].code;
+          }
+        }
+      }
+    }
+
+    const lines =
+      type.code === "LOAN_DISBURSEMENT" && loanId
+        ? [
+            { account: loanAccountCode, debitMinor: principalMinor },
+            { account: cashAccount, creditMinor: principalMinor - feeMinor },
+            ...(feeMinor > 0n && feeIncomeAccountCode
+              ? [{ account: feeIncomeAccountCode, creditMinor: feeMinor }]
+              : []),
+          ]
+        : buildLedgerLines(type, amountMinor, cashAccount, counterAccountCode, loanAccountCode);
 
     const transactionNo = await this.nextTransactionNo(organisationId);
     const idempotencyKey = body.idempotencyKey ? String(body.idempotencyKey) : `txn:${transactionNo}`;
