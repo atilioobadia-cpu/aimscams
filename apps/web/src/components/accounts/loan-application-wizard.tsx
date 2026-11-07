@@ -1161,7 +1161,7 @@ export function LoanApplicationWizard({
                   checked={hasGuarantor}
                   onChange={(event) => setHasGuarantor(event.target.checked)}
                 />
-                A guarantor will pledge savings for this loan
+                Guaranteed by Members
               </label>
               <label className="flex items-center gap-2 fs-text text-strong">
                 <input
