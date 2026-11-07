@@ -1058,7 +1058,7 @@ export function LoanApplicationWizard({
             <div className="grid gap-4 md:grid-cols-3">
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-sector">
-                  Economic sector
+                  Economic Sector *
                 </label>
                 <select
                   id="la-sector"
