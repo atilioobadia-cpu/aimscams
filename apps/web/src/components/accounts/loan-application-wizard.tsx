@@ -12,6 +12,7 @@ import {
   Paperclip,
   Search,
   Trash2,
+  X,
 } from "lucide-react";
 
 import { FormError, ForbiddenPanel } from "@/components/accounting/states";
@@ -58,7 +59,7 @@ const TENURE_PERIODS: { value: LoanTenurePeriod; label: string }[] = [
 ];
 
 const INTEREST_METHODS: { value: LoanInterestMethod; label: string }[] = [
-  { value: "REDUCING_BALANCE_EQUAL_INSTALLMENT", label: "Reducing balance with equal installment" },
+  { value: "REDUCING_BALANCE_EQUAL_INSTALLMENT", label: "Reducing Balance With Equal Installment" },
   { value: "REDUCING_BALANCE_EQUAL_PRINCIPAL", label: "Reducing balance with equal principal" },
   { value: "FLAT_RATE", label: "Flat rate" },
 ];
@@ -365,7 +366,7 @@ export function LoanApplicationWizard({
     setProductId(id);
     const product = products.find((item) => item.id === id);
     if (!product) return;
-    setInterestRate((product.interestRateBp / 100).toFixed(2));
+    setInterestRate((product.interestRateBp / 100).toFixed(1).replace(/\.0$/, ""));
     const method = INTEREST_METHODS.find((item) => item.value === product.interestMethod);
     if (method) setInterestMethod(method.value);
     setTenure(String(product.minTenureCount));
@@ -610,15 +611,16 @@ export function LoanApplicationWizard({
   return (
     <div className="flex flex-col gap-[26px]">
       <PageHeader
-        className="min-h-[88px]"
+        className="min-h-[105px]"
         variant="card"
-        icon={<FileText className="size-6 shrink-0 text-primary" aria-hidden="true" />}
+        iconPlain
+        icon={<FileText className="size-[20.16px] shrink-0 text-primary" aria-hidden="true" />}
         title={applicationId ? "Update Loan Application" : "Create Loan Application"}
+        titleClassName="text-[28px] font-bold leading-[normal] text-heading"
         actions={
-          <Button asChild variant="ghost" size="sm">
+          <Button asChild variant="ghost" size="icon" aria-label="Close">
             <Link href={cancelHref ?? "/account-loan-application"}>
-              <ArrowLeft className="size-4" aria-hidden="true" />
-              {cancelLabel}
+              <X className="size-[20px]" aria-hidden="true" />
             </Link>
           </Button>
         }
@@ -804,26 +806,28 @@ export function LoanApplicationWizard({
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-rate">
-                  Interest rate (% per month)
+                  Interest Rate *
                 </label>
                 <Input
                   id="la-rate"
-                  value={interestRate}
+                  value={selectedProduct ? `${interestRate}%` : interestRate}
                   onChange={(event) => setInterestRate(event.target.value)}
                   inputMode="decimal"
-                  placeholder="0.00"
-                  className="h-[var(--control-height)]"
+                  placeholder="0"
+                  className={selectedProduct ? "h-[var(--control-height)] border-input bg-[#e2e8f0] text-muted-foreground" : "h-[var(--control-height)]"}
+                  disabled={Boolean(selectedProduct)}
                 />
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-method">
-                  Interest calculation method
+                  Interest Calculation Method *
                 </label>
                 <select
                   id="la-method"
                   value={interestMethod}
                   onChange={(event) => setInterestMethod(event.target.value as LoanInterestMethod)}
-                  className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+                  className={selectedProduct ? "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-[#e2e8f0] px-[var(--space-12)] fs-text text-muted-foreground" : "h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"}
+                  disabled={Boolean(selectedProduct)}
                 >
                   {INTEREST_METHODS.map((method) => (
                     <option key={method.value} value={method.value}>
