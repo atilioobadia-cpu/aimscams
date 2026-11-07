@@ -4,11 +4,7 @@ import { useEffect, useState } from "react";
 
 import { DashboardFilterBar, type DashboardFilterKey, type DashboardFilters } from "@/components/dashboard/dashboard-filter-bar";
 import {
-  AgeBandsChart,
   ChurnedUsersChart,
-  DisabilityDoughnut,
-  GenderDoughnut,
-  ImpairmentDoughnut,
   MemberGrowthChart,
   NewVsRecurringChart,
   RegisteredUsersChart,
@@ -139,12 +135,6 @@ export function MembersView({
       <NewVsRecurringChart clients={clients} />
       <RegisteredUsersChart clients={clients} />
       <ChurnedUsersChart />
-      <div className="grid grid-cols-1 gap-[20.16px] lg:grid-cols-2">
-        <GenderDoughnut clients={clients} />
-        <AgeBandsChart clients={clients} />
-        <DisabilityDoughnut clients={clients} />
-        <ImpairmentDoughnut clients={clients} />
-      </div>
       <section className="min-h-[254.77px] overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
         <div className="flex min-h-[58px] flex-wrap items-center justify-between gap-3 px-5 pt-4">
           <h2 className="fs-text font-bold text-strong">Churned Members by Gender</h2>
