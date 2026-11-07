@@ -775,19 +775,20 @@ export function LoanApplicationWizard({
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-tenure">
                   Tenure
                 </label>
-                <div className="grid items-center gap-2" style={{ gridTemplateColumns: "minmax(0, 1fr) 110px" }}>
+                <div className="flex items-stretch overflow-hidden rounded-[var(--control-radius)] border border-input">
                   <Input
                     id="la-tenure"
                     value={tenure}
                     onChange={(event) => setTenure(event.target.value)}
                     inputMode="numeric"
-                    className="h-[var(--control-height)]"
+                    className="h-[var(--control-height)] w-[60%] rounded-none border-0"
                   />
+                  <div className="w-px bg-border" />
                   <select
                     aria-label="Tenure period"
                     value={tenurePeriod}
                     onChange={(event) => setTenurePeriod(event.target.value as LoanTenurePeriod)}
-                    className="h-[var(--control-height)] rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+                    className="h-[var(--control-height)] w-[40%] rounded-none border-0 bg-background px-[var(--space-12)] fs-text"
                   >
                     {TENURE_PERIODS.map((period) => (
                       <option key={period.value} value={period.value}>
