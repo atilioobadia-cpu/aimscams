@@ -172,6 +172,7 @@ export function TellerConsolePage() {
   const [loanId, setLoanId] = useState("");
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loanQuery, setLoanQuery] = useState("");
+  const selectedLoan = loans.find((loan) => loan.id === loanId) ?? null;
   const [counterAccountCode, setCounterAccountCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [narration, setNarration] = useState("");
@@ -660,6 +661,28 @@ export function TellerConsolePage() {
                               </option>
                             ))}
                         </select>
+                      </div>
+                    ) : null}
+                    {requiresLoan && selectedLoan ? (
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
+                          <h3 className="mb-2 fs-text font-bold text-strong">Client Information</h3>
+                          <dl className="grid gap-2">
+                            <div><dt className="fs-text text-muted-foreground">Member name</dt><dd className="fs-text text-strong">{selectedLoan.clientName ?? "N.A."}</dd></div>
+                            <div><dt className="fs-text text-muted-foreground">Member ID</dt><dd className="fs-text text-strong">{selectedLoan.clientReference ?? "N.A."}</dd></div>
+                            <div><dt className="fs-text text-muted-foreground">Branch</dt><dd className="fs-text text-strong">Mwanza Branch</dd></div>
+                          </dl>
+                        </div>
+                        <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
+                          <h3 className="mb-2 fs-text font-bold text-strong">Loan Information</h3>
+                          <dl className="grid gap-2">
+                            <div><dt className="fs-text text-muted-foreground">Loan number</dt><dd className="fs-text text-strong">{selectedLoan.loanNumber}</dd></div>
+                            <div><dt className="fs-text text-muted-foreground">Product</dt><dd className="fs-text text-strong">{selectedLoan.productName ?? "N.A."}</dd></div>
+                            <div><dt className="fs-text text-muted-foreground">Principal</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.principalMinor)}</dd></div>
+                            <div><dt className="fs-text text-muted-foreground">Outstanding</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.outstandingPrincipalMinor)}</dd></div>
+                            <div><dt className="fs-text text-muted-foreground">Interest rate</dt><dd className="fs-text text-strong">{(selectedLoan.interestRateBp / 100).toFixed(2)}%</dd></div>
+                          </dl>
+                        </div>
                       </div>
                     ) : null}
                     {requiresLedgerAccount ? (
