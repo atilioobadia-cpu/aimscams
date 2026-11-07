@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -205,6 +205,8 @@ export function LoanApplicationWizard({
   const [productId, setProductId] = useState("");
   const [productQuery, setProductQuery] = useState("");
   const [productOpen, setProductOpen] = useState(false);
+  const productRef = useRef<HTMLDivElement>(null);
+  const clientRef = useRef<HTMLDivElement>(null);
   const [principal, setPrincipal] = useState("");
   const [tenure, setTenure] = useState("12");
   const [tenurePeriod, setTenurePeriod] = useState<LoanTenurePeriod>("MONTHS");
@@ -326,6 +328,19 @@ export function LoanApplicationWizard({
     return () => {
       active = false;
     };
+  }, []);
+
+  useEffect(() => {
+    function handleClick(event: MouseEvent) {
+      if (productRef.current && !productRef.current.contains(event.target as Node)) {
+        setProductOpen(false);
+      }
+      if (clientRef.current && !clientRef.current.contains(event.target as Node)) {
+        setClientOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
   useEffect(() => {
@@ -651,8 +666,8 @@ export function LoanApplicationWizard({
         {step === 0 ? (
           <div id="loan-application-panel-details" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="md:col-span-2">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-client-search">
                   Client/Member *
                 </label>
@@ -681,11 +696,7 @@ export function LoanApplicationWizard({
                     </Button>
                   </div>
                 ) : (
-                  <div className="relative">
-                    <Search
-                      className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                      aria-hidden="true"
-                    />
+                  <div className="relative" ref={clientRef}>
                     <Input
                       id="la-client-search"
                       value={clientQuery}
@@ -694,10 +705,10 @@ export function LoanApplicationWizard({
                         setClientOpen(true);
                       }}
                       onFocus={() => setClientOpen(true)}
-                      placeholder="Search by client name or member ID"
+                      placeholder="Search..."
                       autoComplete="off"
                       aria-required="true"
-                      className="h-[var(--control-height)] pl-9"
+                      className="h-[var(--control-height)]"
                     />
                     {clientOpen ? (
                       <div className="absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-[var(--control-radius)] border border-card-border bg-surface shadow-md">
@@ -739,7 +750,7 @@ export function LoanApplicationWizard({
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-product">
                   Product *
                 </label>
-                <div className="relative">
+                <div className="relative" ref={productRef}>
                   <Input
                     id="la-product"
                     value={productQuery || (selectedProduct ? selectedProduct.name.toUpperCase() : "")}
