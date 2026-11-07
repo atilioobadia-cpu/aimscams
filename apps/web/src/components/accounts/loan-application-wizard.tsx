@@ -762,9 +762,14 @@ export function LoanApplicationWizard({
                   value={principal}
                   onChange={(event) => setPrincipal(event.target.value)}
                   inputMode="decimal"
-                  placeholder="0"
+                  placeholder="Enter Principal Amount"
                   className="h-[var(--control-height)]"
                 />
+                {selectedProduct ? (
+                  <p className="mt-1 fs-text text-muted-foreground">
+                    Max range: {selectedProduct.maxPrincipalMinor}, Min range: {selectedProduct.minPrincipalMinor}
+                  </p>
+                ) : null}
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-tenure">
@@ -791,6 +796,11 @@ export function LoanApplicationWizard({
                     ))}
                   </select>
                 </div>
+                {selectedProduct ? (
+                  <p className="mt-1 fs-text text-muted-foreground">
+                    Max range: {selectedProduct.maxTenureCount}, Min range: {selectedProduct.minTenureCount}
+                  </p>
+                ) : null}
               </div>
               <div>
                 <label className="mb-1 block fs-text font-medium text-body" htmlFor="la-grace">
