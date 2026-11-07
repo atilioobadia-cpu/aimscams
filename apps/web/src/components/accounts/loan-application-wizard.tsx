@@ -930,33 +930,33 @@ export function LoanApplicationWizard({
             </div>
 
             {schedule.length > 0 ? (
-              <div className="max-h-[320px] overflow-y-auto rounded-[var(--card-radius)] border border-card-border bg-subtle p-[8px]">
-                <table className="w-full text-left fs-text">
+              <div className="max-h-[320px] overflow-y-auto rounded-[var(--card-radius)] border border-card-border bg-subtle p-[4px]">
+                <table className="w-full border-collapse text-left fs-text">
                   <thead className="sticky top-0 z-10 border-b border-card-border bg-subtle font-semibold text-strong">
                     <tr>
-                      <th className="px-2 py-1.5">#</th>
-                      <th className="px-2 py-1.5">Due Date</th>
-                      <th className="px-2 py-1.5 text-right">Principal (TSh)</th>
-                      <th className="px-2 py-1.5 text-right">Interest (TSh)</th>
-                      <th className="px-2 py-1.5 text-right font-bold">Amount (TSh)</th>
+                      <th className="border border-card-border px-2 py-1.5">#</th>
+                      <th className="border border-card-border px-2 py-1.5">Due Date</th>
+                      <th className="border border-card-border px-2 py-1.5 text-right">Principal (TSh)</th>
+                      <th className="border border-card-border px-2 py-1.5 text-right">Interest (TSh)</th>
+                      <th className="border border-card-border px-2 py-1.5 text-right font-bold">Amount (TSh)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {schedule.map((row: ScheduleRow) => (
                       <tr key={row.no} className="border-b border-card-border last:border-0" style={{ height: "40px" }}>
-                        <td className="px-2 py-1.5">{row.no}</td>
-                        <td className="px-2 py-1.5">{row.dueDate}</td>
-                        <td className="px-2 py-1.5 text-right">{formatTzs(String(Math.round(row.principal * 100)))}</td>
-                        <td className="px-2 py-1.5 text-right">{formatTzs(String(Math.round(row.interest * 100)))}</td>
-                        <td className="px-2 py-1.5 text-right font-bold">{formatTzs(String(Math.round(row.amount * 100)))}</td>
+                        <td className="border border-card-border px-2 py-1.5">{row.no}</td>
+                        <td className="border border-card-border px-2 py-1.5">{row.dueDate}</td>
+                        <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(row.principal * 100)))}</td>
+                        <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(row.interest * 100)))}</td>
+                        <td className="border border-card-border px-2 py-1.5 text-right font-bold">{formatTzs(String(Math.round(row.amount * 100)))}</td>
                       </tr>
                     ))}
                     <tr className="bg-subtle font-bold">
-                      <td className="px-2 py-1.5">Total</td>
-                      <td className="px-2 py-1.5">—</td>
-                      <td className="px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.principal, 0) * 100)))}</td>
-                      <td className="px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.interest, 0) * 100)))}</td>
-                      <td className="px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.amount, 0) * 100)))}</td>
+                      <td className="border border-card-border px-2 py-1.5">Total</td>
+                      <td className="border border-card-border px-2 py-1.5">—</td>
+                      <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.principal, 0) * 100)))}</td>
+                      <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.interest, 0) * 100)))}</td>
+                      <td className="border border-card-border px-2 py-1.5 text-right">{formatTzs(String(Math.round(schedule.reduce((s: number, r: ScheduleRow) => s + r.amount, 0) * 100)))}</td>
                     </tr>
                   </tbody>
                 </table>
