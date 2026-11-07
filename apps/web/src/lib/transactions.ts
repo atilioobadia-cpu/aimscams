@@ -210,6 +210,7 @@ export type CreateTransactionPayload = {
   valueDate?: string;
   narration?: string;
   chequeNo?: string;
+  reference?: string;
   receiptNo?: string;
   externalRef?: string;
   provider?: string;

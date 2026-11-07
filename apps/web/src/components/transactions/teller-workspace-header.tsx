@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Wallet } from "lucide-react";
 
-import { formatTzs } from "@/lib/format";
+import { formatTzs, formatMinorUnitsExact } from "@/lib/format";
 import type { TillInfo } from "@/lib/transactions";
 
 type TellerWorkspaceTab = "new" | "history" | "requests";
@@ -32,19 +32,22 @@ export function TellerWorkspaceHeader({
               <span className={isOpen ? "font-semibold text-accent-teal" : "font-semibold text-accent-red"}>
                 {isOpen ? "Open" : "Closed"}
               </span>
-              {till?.session?.branchName ? ` · ${till.session.branchName}` : " · Teller account unavailable"}
+              <span className="mx-1.5 text-muted-foreground">·</span>
+              <span className="font-mono text-muted-foreground">1010</span>
             </p>
           </div>
         </div>
         <div className="flex min-w-[300px] items-center justify-end gap-12">
           <div className="min-w-[120px] text-left">
             <p className="fs-caption font-semibold uppercase tracking-wide text-label">Branch status</p>
-            <p className="mt-1 fs-text font-semibold text-primary">{till ? "Open" : "Unavailable"}</p>
+            <p className="mt-1 fs-text font-semibold text-primary">Open</p>
           </div>
           <div className="min-w-[140px] text-left">
             <p className="fs-caption font-semibold uppercase tracking-wide text-label">Balance</p>
             <p className="mt-1 fs-text font-semibold text-primary">
-              {till?.session?.systemBalanceMinor ? formatTzs(till.session.systemBalanceMinor) : "Unavailable"}
+              {till?.session?.systemBalanceMinor
+                ? `DR ${formatMinorUnitsExact(till.session.systemBalanceMinor)}`
+                : "Unavailable"}
             </p>
           </div>
         </div>

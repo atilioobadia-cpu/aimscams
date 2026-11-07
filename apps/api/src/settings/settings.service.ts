@@ -16,7 +16,10 @@ import {
   parseEconomicSector,
   parseInterestMethod,
   parseIsoDate,
+  parseLoanApplicationCollaterals,
+  parseLoanApplicationGuarantors,
   parseLoanDocuments,
+  parseNextOfKinEntries,
   parseOptionalMinor,
   parsePaymentDestination,
   parseTenurePeriod,
@@ -180,8 +183,26 @@ const LOAN_APPLICATION_INCLUDE = {
 } satisfies Prisma.LoanApplicationInclude;
 
 const LOAN_INCLUDE = {
-  client: { select: { fullName: true, referenceNo: true } },
-  product: { select: { name: true, code: true } },
+  client: {
+    select: {
+      fullName: true,
+      referenceNo: true,
+      memberNo: true,
+      phone: true,
+      email: true,
+      profile: true,
+      branch: { select: { name: true } },
+    },
+  },
+  product: {
+    select: {
+      name: true,
+      code: true,
+      managementFeeBp: true,
+      principalAccountId: true,
+      chargesIncomeAccountId: true,
+    },
+  },
   application: {
     select: {
       applicationNo: true,
@@ -2435,6 +2456,28 @@ export class SettingsService {
     };
   }
 
+  private async validateLoanApplicationGuarantors(
+    organisationId: string,
+    applicantClientId: string,
+    guarantors: ReturnType<typeof parseLoanApplicationGuarantors>,
+  ): Promise<void> {
+    const clientIds = guarantors.map((entry) => entry.clientId).filter((id): id is string => Boolean(id));
+    if (new Set(clientIds).size !== clientIds.length) {
+      throw new BadRequestException('A member cannot be added more than once as a guarantor.');
+    }
+    if (clientIds.includes(applicantClientId)) {
+      throw new BadRequestException('The applicant cannot be their own guarantor.');
+    }
+    if (clientIds.length === 0) return;
+    const knownClients = await this.prisma.client.findMany({
+      where: { organisationId, id: { in: clientIds } },
+      select: { id: true },
+    });
+    if (knownClients.length !== clientIds.length) {
+      throw new BadRequestException('A selected guarantor is not a client in this organisation.');
+    }
+  }
+
   async createLoanApplication(auth: AuthContext, body: Record<string, unknown>, context: MutationContext) {
     const organisationId = auth.user.organisation.id;
     const clientId = String(body.clientId ?? '').trim();
@@ -2546,8 +2589,25 @@ export class SettingsService {
     }
 
     const documents = parseLoanDocuments(body.documents);
+    const nextOfKinEntries = parseNextOfKinEntries(body.nextOfKinEntries);
     const status = body.status === 'SUBMITTED' ? 'SUBMITTED' : 'DRAFT';
     requireDocumentsForSubmission({ status, newDocumentCount: documents.length });
+    const guarantorEntries = parseLoanApplicationGuarantors(body.guarantorEntries);
+    const collateralEntries = parseLoanApplicationCollaterals(body.collateralEntries);
+    for (const collateral of collateralEntries) {
+      if (!documents.some((document) => document.kind === 'COLLATERAL' && document.name === collateral.documentName)) {
+        throw new BadRequestException(`Upload the collateral document for ${collateral.assetName}.`);
+      }
+    }
+    await this.validateLoanApplicationGuarantors(organisationId, clientId, guarantorEntries);
+    const hasGuarantor = body.hasGuarantor === true || guarantorEntries.length > 0;
+    const hasCollateral = body.hasCollateral === true || collateralEntries.length > 0;
+    if (status === 'SUBMITTED' && hasGuarantor && guarantorEntries.length < 2) {
+      throw new BadRequestException('Minimum 2 guarantor(s) required.');
+    }
+    if (status === 'SUBMITTED' && hasCollateral && collateralEntries.length === 0) {
+      throw new BadRequestException('Add at least one complete collateral.');
+    }
 
     const item = await this.prisma.loanApplication.create({
       data: {
@@ -2568,11 +2628,12 @@ export class SettingsService {
         interestOnGrace,
         installmentStartDate,
         debtCapacityMinor: parseOptionalMinor(body.debtCapacityMinor, 'Debt capacity'),
+        insiderRelationship: optionalText(body.insiderRelationship),
         ...sector,
         description: optionalText(body.description),
         purpose: optionalText(body.purpose),
-        hasGuarantor: body.hasGuarantor === true,
-        hasCollateral: body.hasCollateral === true,
+        hasGuarantor,
+        hasCollateral,
         disbursementPreference: optionalText(body.disbursementPreference),
         remarks: optionalText(body.remarks),
         nomineeName: optionalText(body.nomineeName),
@@ -2583,6 +2644,9 @@ export class SettingsService {
           body.nomineePercentage === undefined || body.nomineePercentage === null || body.nomineePercentage === ''
             ? null
             : parseInteger(body.nomineePercentage, 'Nominee percentage', 1, 100),
+        nextOfKinEntries: nextOfKinEntries.length ? nextOfKinEntries : Prisma.DbNull,
+        guarantorEntries: guarantorEntries.length ? guarantorEntries : Prisma.DbNull,
+        collateralEntries: collateralEntries.length ? collateralEntries : Prisma.DbNull,
         paymentDestination,
         bankName: optionalText(body.bankName),
         bankAccountName: optionalText(body.bankAccountName),
@@ -2719,12 +2783,41 @@ export class SettingsService {
     }
 
     const documents = parseLoanDocuments(body.documents);
+    const nextOfKinEntries = body.nextOfKinEntries === undefined
+      ? (Array.isArray(existing.nextOfKinEntries) ? parseNextOfKinEntries(existing.nextOfKinEntries) : [])
+      : parseNextOfKinEntries(body.nextOfKinEntries);
     const status = body.status === 'SUBMITTED' ? 'SUBMITTED' : existing.status === 'SUBMITTED' ? 'SUBMITTED' : 'DRAFT';
     requireDocumentsForSubmission({
       status,
       newDocumentCount: documents.length,
       existingDocumentCount: existing.documents.length,
     });
+    const guarantorEntries = body.guarantorEntries === undefined
+      ? (Array.isArray(existing.guarantorEntries) ? parseLoanApplicationGuarantors(existing.guarantorEntries) : [])
+      : parseLoanApplicationGuarantors(body.guarantorEntries);
+    const collateralEntries = body.collateralEntries === undefined
+      ? (Array.isArray(existing.collateralEntries) ? parseLoanApplicationCollaterals(existing.collateralEntries) : [])
+      : parseLoanApplicationCollaterals(body.collateralEntries);
+    for (const collateral of collateralEntries) {
+      const uploadedWithUpdate = documents.some((document) => document.kind === 'COLLATERAL' && document.name === collateral.documentName);
+      const alreadyStored = existing.documents.some((document) => document.kind === 'COLLATERAL' && document.name === collateral.documentName);
+      if (!uploadedWithUpdate && !alreadyStored) {
+        throw new BadRequestException(`Upload the collateral document for ${collateral.assetName}.`);
+      }
+    }
+    await this.validateLoanApplicationGuarantors(organisationId, clientId, guarantorEntries);
+    const hasGuarantor = body.hasGuarantor === undefined
+      ? existing.hasGuarantor || guarantorEntries.length > 0
+      : body.hasGuarantor === true;
+    const hasCollateral = body.hasCollateral === undefined
+      ? existing.hasCollateral || collateralEntries.length > 0
+      : body.hasCollateral === true;
+    if (status === 'SUBMITTED' && hasGuarantor && guarantorEntries.length < 2) {
+      throw new BadRequestException('Minimum 2 guarantor(s) required.');
+    }
+    if (status === 'SUBMITTED' && hasCollateral && collateralEntries.length === 0) {
+      throw new BadRequestException('Add at least one complete collateral.');
+    }
 
     const updated = await this.prisma.loanApplication.update({
       where: { id },
@@ -2745,11 +2838,14 @@ export class SettingsService {
         debtCapacityMinor: body.debtCapacityMinor === undefined
           ? existing.debtCapacityMinor
           : parseOptionalMinor(body.debtCapacityMinor, 'Debt capacity'),
+        insiderRelationship: body.insiderRelationship === undefined
+          ? existing.insiderRelationship
+          : optionalText(body.insiderRelationship),
         ...sector,
         description: body.description === undefined ? existing.description : optionalText(body.description),
         purpose: body.purpose === undefined ? existing.purpose : optionalText(body.purpose),
-        hasGuarantor: body.hasGuarantor === undefined ? existing.hasGuarantor : body.hasGuarantor === true,
-        hasCollateral: body.hasCollateral === undefined ? existing.hasCollateral : body.hasCollateral === true,
+        hasGuarantor,
+        hasCollateral,
         disbursementPreference: body.disbursementPreference === undefined ? existing.disbursementPreference : optionalText(body.disbursementPreference),
         remarks: body.remarks === undefined ? existing.remarks : optionalText(body.remarks),
         nomineeName: body.nomineeName === undefined ? existing.nomineeName : optionalText(body.nomineeName),
@@ -2762,6 +2858,9 @@ export class SettingsService {
             : body.nomineePercentage === null || body.nomineePercentage === ''
               ? null
               : parseInteger(body.nomineePercentage, 'Nominee percentage', 1, 100),
+        nextOfKinEntries: nextOfKinEntries.length ? nextOfKinEntries : Prisma.DbNull,
+        guarantorEntries: guarantorEntries.length ? guarantorEntries : Prisma.DbNull,
+        collateralEntries: collateralEntries.length ? collateralEntries : Prisma.DbNull,
         paymentDestination,
         bankName: body.bankName === undefined ? existing.bankName : optionalText(body.bankName),
         bankAccountName: body.bankAccountName === undefined ? existing.bankAccountName : optionalText(body.bankAccountName),
@@ -3006,8 +3105,16 @@ export class SettingsService {
       disbursedAt: item.disbursedAt ? item.disbursedAt.toISOString() : null,
       clientName: item.client?.fullName ?? null,
       clientReference: item.client?.referenceNo ?? null,
+      clientMemberNo: item.client?.memberNo ?? null,
+      clientPhone: item.client?.phone ?? null,
+      clientEmail: item.client?.email ?? null,
+      clientBranchName: item.client?.branch?.name ?? null,
+      clientProfile: item.client?.profile ?? null,
       productName: item.product?.name ?? null,
       productCode: item.product?.code ?? null,
+      productManagementFeeBp: item.product?.managementFeeBp ?? 0,
+      productPrincipalAccountId: item.product?.principalAccountId ?? null,
+      productChargesIncomeAccountId: item.product?.chargesIncomeAccountId ?? null,
       applicationNo: item.application?.applicationNo ?? null,
       applicationId: item.applicationId ?? null,
       loanOfficerName: item.application?.loanOfficer?.fullName ?? null,
@@ -3072,6 +3179,7 @@ export class SettingsService {
         ? item.installmentStartDate.toISOString().slice(0, 10)
         : null,
       debtCapacityMinor: item.debtCapacityMinor?.toString() ?? null,
+      insiderRelationship: item.insiderRelationship,
       economicSector: item.economicSector,
       subEconomicSector: item.subEconomicSector,
       subSubEconomicSector: item.subSubEconomicSector,
@@ -3086,6 +3194,9 @@ export class SettingsService {
       nomineePhone: item.nomineePhone,
       nomineeIdNumber: item.nomineeIdNumber,
       nomineePercentage: item.nomineePercentage,
+      nextOfKinEntries: item.nextOfKinEntries ?? [],
+      guarantorEntries: item.guarantorEntries ?? [],
+      collateralEntries: item.collateralEntries ?? [],
       paymentDestination: item.paymentDestination,
       bankName: item.bankName,
       bankAccountName: item.bankAccountName,

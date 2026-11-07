@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Clock,
   CreditCard,
   FileText,
@@ -272,7 +273,7 @@ function SidebarItem({
             aria-hidden="true"
           >
             {expanded ? (
-              <ChevronRight className="size-[10.752px]" strokeWidth={3} />
+              <ChevronUp className="size-[10.752px]" strokeWidth={3} />
             ) : (
               <ChevronDown className="size-[10.752px]" strokeWidth={3} />
             )}

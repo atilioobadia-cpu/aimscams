@@ -2,10 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  BookOpenText,
+  ArrowRight,
+  Calendar,
+  Check,
   ChevronDown,
   ChevronUp,
   CircleDollarSign,
+  RefreshCw,
   Search,
   UsersRound,
   WalletCards,
@@ -16,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TellerWorkspaceHeader } from "@/components/transactions/teller-workspace-header";
 import { ApiError } from "@/lib/api";
-import { formatTzs } from "@/lib/format";
+import { formatMinorUnitsExact, formatTzs } from "@/lib/format";
 import { createTransaction, getTill, type TillInfo } from "@/lib/transactions";
 import { listLoans, type Loan } from "@/lib/settings";
 
@@ -43,7 +46,7 @@ const TELLER_CATEGORIES = [
     key: "ledger",
     label: "General Ledger",
     description: "Record internal entries such as expenses or journal postings.",
-    icon: BookOpenText,
+    icon: CircleDollarSign,
     types: [
       "GL_RECEIPT",
       "OTHER_INCOME",
@@ -99,15 +102,15 @@ const TYPE_LABELS: Record<string, string> = {
 };
 
 const TYPE_DESCRIPTIONS: Record<string, string> = {
-  SHARES_DEPOSIT: "Add funds to a member’s share account.",
-  SHARES_WITHDRAWAL: "Withdraw funds from a member’s share account.",
-  SAVINGS_DEPOSIT: "Add funds to a member’s savings account.",
-  SAVINGS_WITHDRAWAL: "Withdraw funds from a member’s savings account.",
+  SAVINGS_DEPOSIT: "Add funds to a member's savings account.",
+  SAVINGS_WITHDRAWAL: "Withdraw funds from a member's savings account.",
+  SHARES_DEPOSIT: "Add funds to a member's share account.",
+  SHARES_WITHDRAWAL: "Withdraw funds from a member's share account.",
   LOAN_REPAYMENT: "Record a payment made towards a loan.",
   LOAN_DISBURSEMENT: "Release funds for an approved loan.",
+  LOAN_APPLICATION_FEE: "Pay fees for pending loan applications.",
   FEE_PENALTY_APPLY: "Apply a fee, penalty, or application charge.",
   FEE_PENALTY_REVERSE: "Reverse a previously applied charge.",
-  LOAN_APPLICATION_FEE: "Pay fees for pending loan applications.",
   ERROR_CORRECTION: "Correct a previously recorded transaction.",
   GL_RECEIPT: "Record general income or cash received.",
   OTHER_INCOME: "Record income from other GL accounts.",
@@ -160,7 +163,6 @@ function failureMessage(failure: unknown): string {
 
 export function TellerConsolePage() {
   const [till, setTill] = useState<TillInfo | null>(null);
-  const [sectionOpen, setSectionOpen] = useState({ account: true, loan: true, transaction: true });
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -168,29 +170,13 @@ export function TellerConsolePage() {
   const [type, setType] = useState("");
   const [openStep, setOpenStep] = useState<1 | 2 | null>(1);
   const [amount, setAmount] = useState("");
-  const [clientId, setClientId] = useState("");
-  const [savingsAccountId, setSavingsAccountId] = useState("");
   const [loanId, setLoanId] = useState("");
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loanQuery, setLoanQuery] = useState("");
-  const selectedLoan = loans.find((loan) => loan.id === loanId) ?? null;
   const [transactionDate, setTransactionDate] = useState(new Date().toISOString().slice(0, 10));
   const [reference, setReference] = useState("");
   const [receipt, setReceipt] = useState("");
   const [cheque, setCheque] = useState("");
-  const amountToBeDisbursed = selectedLoan
-    ? (BigInt(selectedLoan.principalMinor) - BigInt(selectedLoan.principalMinor) / 20n).toString()
-    : "0";
-
-  const amountValid = useMemo(() => {
-    const n = Number(amount.replace(/,/g, ""));
-    if (!selectedLoan) return false;
-    if (!Number.isFinite(n) || n <= 0) return false;
-    if (n > Number(amountToBeDisbursed) / 100) return false;
-    return true;
-  }, [amount, selectedLoan, amountToBeDisbursed]);
-
-  const [counterAccountCode, setCounterAccountCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [narration, setNarration] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -201,10 +187,31 @@ export function TellerConsolePage() {
   const [tillActionError, setTillActionError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
+  const selectedLoan = loans.find((loan) => loan.id === loanId) ?? null;
+
+  const feeMinor = selectedLoan
+    ? (BigInt(selectedLoan.principalMinor) * BigInt(selectedLoan.productManagementFeeBp ?? 0)) / 10000n
+    : 0n;
+  const amountToBeDisbursedMinor = selectedLoan
+    ? BigInt(selectedLoan.principalMinor) - feeMinor
+    : 0n;
+
+  const amountValid = useMemo(() => {
+    const normalized = amount.replace(/,/g, "");
+    if (!/^\d+(\.\d{1,2})?$/.test(normalized)) return false;
+    const amountMinor = BigInt(Math.round(Number(normalized) * 100));
+    if (amountMinor <= 0n) return false;
+    if (amountMinor > amountToBeDisbursedMinor) return false;
+    if (paymentMethod === "CASH" && till?.session?.systemBalanceMinor) {
+      if (amountMinor > BigInt(till.session.systemBalanceMinor)) return false;
+    }
+    return true;
+  }, [amount, amountToBeDisbursedMinor, paymentMethod, till]);
+
   useEffect(() => {
     if (type !== "LOAN_DISBURSEMENT") return;
     let cancelled = false;
-    void listLoans({})
+    void listLoans({ status: "APPROVED" })
       .then((response) => {
         if (!cancelled) setLoans(response.items);
       })
@@ -273,17 +280,23 @@ export function TellerConsolePage() {
     try {
       const result = await createTransaction({
         type,
-        amountMinor: amount,
-        clientId: clientId || undefined,
-        savingsAccountId: savingsAccountId || undefined,
+        amountMinor: String(Math.round(Number(amount.replace(/,/g, "")) * 100)),
         loanId: loanId || undefined,
-        counterAccountCode: counterAccountCode || undefined,
         paymentMethod,
+        valueDate: transactionDate,
         narration: narration || undefined,
+        reference,
+        receiptNo: receipt,
+        chequeNo: cheque,
       });
       setSubmitSuccess(`Posted transaction ${result.transactionNo} (${result.accountingStatus}).`);
+      setLoanId("");
+      setLoanQuery("");
       setAmount("");
       setNarration("");
+      setReference("");
+      setReceipt("");
+      setCheque("");
       setReloadKey((value) => value + 1);
     } catch (failure) {
       setSubmitError(failureMessage(failure));
@@ -293,19 +306,16 @@ export function TellerConsolePage() {
   }
 
   const isOpen = till?.session?.status === "OPEN";
-  const selectedCategoryDetails = TELLER_CATEGORIES.find(
-    (category) => category.key === selectedCategory,
-  );
-  const requiresClient = selectedCategory === "client";
-  const requiresSavingsAccount = type === "SAVINGS_DEPOSIT" || type === "SAVINGS_WITHDRAWAL";
+  const selectedCategoryDetails = TELLER_CATEGORIES.find((category) => category.key === selectedCategory);
   const requiresLoan = type.startsWith("LOAN_");
-  const requiresLedgerAccount = selectedCategory === "ledger";
+
   function clearTransactionDetails() {
     setAmount("");
-    setClientId("");
-    setSavingsAccountId("");
     setLoanId("");
-    setCounterAccountCode("");
+    setLoanQuery("");
+    setReference("");
+    setReceipt("");
+    setCheque("");
     setNarration("");
     setSubmitError(null);
     setSubmitSuccess(null);
@@ -341,490 +351,432 @@ export function TellerConsolePage() {
   }
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-3">
       <TellerWorkspaceHeader till={till} activeTab="new" />
 
-      {error ? (
-        <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} />
-      ) : null}
+      {error ? <ErrorPanel message={error} onRetry={() => setReloadKey((value) => value + 1)} /> : null}
 
       <section className="rounded-[var(--card-radius)] border border-card-border bg-surface p-5">
-        <div>
-          <div>
-            <button
-              type="button"
-              aria-expanded={openStep === 1}
-              onClick={openCategoryStep}
-              className="mb-4 inline-flex min-h-[39px] items-center gap-3 rounded-full border border-card-border bg-surface py-1 pl-2 pr-4 fs-text font-semibold text-strong hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-              aria-label={`Step 1 of 2: ${openStep === 1 ? "Choose Category" : (selectedCategoryDetails?.label ?? "Choose Category")}`}
-            >
-              <span className="grid size-[27px] place-items-center rounded-full bg-primary text-primary-foreground">
-                1
-              </span>
-              <span>
-                {openStep === 1
-                  ? "Choose Category"
-                  : (selectedCategoryDetails?.label ?? "Choose Category")}
-              </span>
-              {openStep === 1 ? (
-                <ChevronUp className="size-4 text-primary" aria-hidden="true" />
-              ) : (
-                <ChevronDown className="size-4 text-primary" aria-hidden="true" />
-              )}
+        {/* Stepper */}
+        <div className="mb-5 space-y-2">
+          <div className="flex items-center gap-3">
+            <span className="grid size-7 place-items-center rounded-full bg-primary text-primary-foreground fs-text font-bold">1</span>
+            <UsersRound className="size-4 text-primary" aria-hidden="true" />
+            <span className="fs-text font-bold text-primary">Client Transaction</span>
+            <button type="button" onClick={openCategoryStep} className="ml-auto" aria-label="Change category">
+              <ChevronDown className={`size-4 text-primary transition-transform ${openStep === 1 ? "rotate-180" : ""}`} />
             </button>
-            {openStep === 1 ? (
-              <div className="grid max-w-[927px] grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                {TELLER_CATEGORIES.map((category) => (
-                  <button
-                    key={category.key}
-                    type="button"
-                    onClick={() => chooseCategory(category.key)}
-                    className={`flex min-h-[137px] flex-col items-center justify-center rounded-[var(--card-radius)] bg-surface p-3 text-center transition-colors hover:border-primary hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 ${categoryFocus === category.key ? "border-2 border-primary" : "border border-card-border"}`}
-                  >
-                    <span className="mb-4 grid size-[34px] place-items-center rounded-[10px] bg-primary-tint text-primary">
-                      {category.key === "client" ? (
-                        <UsersRound className="size-5" aria-hidden="true" />
-                      ) : category.key === "ledger" ? (
-                        <BookOpenText className="size-5" aria-hidden="true" />
-                      ) : category.key === "till" ? (
-                        <WalletCards className="size-5" aria-hidden="true" />
-                      ) : (
-                        <UsersRound className="size-5" aria-hidden="true" />
-                      )}
-                    </span>
-                    <span className="block fs-text font-semibold text-strong">
-                      {category.label}
-                    </span>
-                    <span className="mt-1 block max-w-[260px] fs-caption leading-[1.35] text-muted-foreground">
-                      {category.description}
-                    </span>
-                  </button>
-                ))}
+          </div>
+          {openStep === 1 ? (
+            <div className="ml-10 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {TELLER_CATEGORIES.map((category) => (
+                <button
+                  key={category.key}
+                  type="button"
+                  onClick={() => chooseCategory(category.key)}
+                  className={`flex min-h-[100px] flex-col items-center justify-center rounded-[var(--card-radius)] border p-3 text-center transition-colors hover:border-primary hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 ${categoryFocus === category.key ? "border-2 border-primary" : "border border-card-border"}`}
+                >
+                  <span className="mb-2 grid size-[34px] place-items-center rounded-[10px] bg-primary-tint text-primary">
+                    {category.icon ? <category.icon className="size-5" aria-hidden="true" /> : <CircleDollarSign className="size-5" aria-hidden="true" />}
+                  </span>
+                  <span className="block fs-text font-semibold text-strong">{category.label}</span>
+                  <span className="mt-1 block fs-caption leading-[1.35] text-muted-foreground">{category.description}</span>
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="flex items-center gap-3">
+            <span className="grid size-7 place-items-center rounded-full bg-primary text-primary-foreground fs-text font-bold">2</span>
+            <CircleDollarSign className="size-4 text-primary" aria-hidden="true" />
+            <span className="fs-text font-bold text-primary">Disburse Loan</span>
+            <button type="button" onClick={openTypeStep} className="ml-auto" aria-label="Change type">
+              <ChevronDown className={`size-4 text-primary transition-transform ${openStep === 2 ? "rotate-180" : ""}`} />
+            </button>
+          </div>
+          {openStep === 2 ? (
+            <div className="ml-10 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {selectedCategoryDetails?.types.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  disabled={!AVAILABLE_TYPES.has(item)}
+                  onClick={() => { setType(item); setOpenStep(null); clearTransactionDetails(); }}
+                  className="flex min-h-[90px] flex-col items-center justify-center rounded-[var(--card-radius)] border border-card-border bg-surface p-4 text-center transition-colors hover:border-primary hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <span className="mb-2 grid size-[34px] place-items-center rounded-[10px] bg-primary-tint text-primary">
+                    <CircleDollarSign className="size-5" aria-hidden="true" />
+                  </span>
+                  <span className="block fs-text font-semibold text-strong">{TYPE_LABELS[item]}</span>
+                  <span className="mt-1 block fs-caption leading-[1.35] text-muted-foreground">{TYPE_DESCRIPTIONS[item]}</span>
+                  {!AVAILABLE_TYPES.has(item) ? <span className="mt-1 fs-caption text-muted-foreground">Not available locally</span> : null}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="flex items-center gap-3">
+            <span className="grid size-7 place-items-center rounded-full bg-heading text-white fs-text font-bold">3</span>
+            <span className="fs-text font-bold text-heading">Enter Transaction Details</span>
+          </div>
+        </div>
+
+        {selectedCategoryDetails && type ? (
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            {!isOpen ? (
+              <div className="rounded-[var(--card-radius)] border border-accent-red/30 bg-accent-red/5 p-4">
+                <p className="fs-text text-accent-red" role="alert">
+                  No till session is open. Open a till before posting transactions.
+                </p>
+                <Button type="button" variant="outline" onClick={() => setType("TILL_OPENING")} className="mt-2 h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
+                  Open till
+                </Button>
               </div>
             ) : null}
-          </div>
 
-          {selectedCategoryDetails ? (
-            <div className={openStep === 1 ? "mt-4" : ""}>
-              <button
-                type="button"
-                aria-expanded={openStep === 2}
-                onClick={openTypeStep}
-                className="mb-4 inline-flex min-h-[39px] items-center gap-3 rounded-full border border-card-border bg-surface py-1 pl-2 pr-4 fs-text font-semibold text-strong hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-                aria-label={`Step 2 of 2: ${openStep === 2 ? "Choose Type" : type ? TYPE_LABELS[type] : "Choose Type"}`}
-              >
-                <span className="grid size-[27px] place-items-center rounded-full bg-primary text-primary-foreground">
-                  2
-                </span>
-                <span>
-                  {openStep === 2 ? "Choose Type" : type ? TYPE_LABELS[type] : "Choose Type"}
-                </span>
-                {openStep === 2 ? (
-                  <ChevronUp className="size-4 text-primary" aria-hidden="true" />
-                ) : (
-                  <ChevronDown className="size-4 text-primary" aria-hidden="true" />
-                )}
-              </button>
-              {openStep === 2 ? (
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {selectedCategoryDetails.types.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      disabled={!AVAILABLE_TYPES.has(item)}
-                      onClick={() => {
-                        setType(item);
-                        setOpenStep(null);
-                        clearTransactionDetails();
-                      }}
-                      className="flex min-h-[112px] flex-col items-center justify-center rounded-[var(--card-radius)] border border-card-border bg-surface p-4 text-center transition-colors hover:border-primary hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      <span className="mb-2 grid size-[34px] place-items-center rounded-[10px] bg-primary-tint text-primary">
-                        <CircleDollarSign className="size-5" aria-hidden="true" />
-                      </span>
-                      <span className="block fs-text font-semibold text-strong">
-                        {TYPE_LABELS[item]}
-                      </span>
-                      <span className="mt-1 block fs-caption leading-[1.35] text-muted-foreground">
-                        {TYPE_DESCRIPTIONS[item]}
-                      </span>
-                      {!AVAILABLE_TYPES.has(item) ? (
-                        <span className="mt-1 fs-caption text-muted-foreground">
-                          Not available locally
-                        </span>
-                      ) : null}
-                    </button>
-                  ))}
+            {/* Block A: Account & Client Information */}
+            <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+              <div className="border-b border-card-border px-[var(--space-16)] py-[var(--space-12)]">
+                <h2 className="fs-text font-bold text-strong">Account &amp; Client Information</h2>
+              </div>
+              <div className="space-y-4 p-[var(--space-16)]">
+                <div>
+                  <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-loan-search">
+                    Search Account <span className="text-accent-red" aria-hidden="true">*</span>
+                  </label>
+                  <select
+                    id="transaction-loan"
+                    value={loanId}
+                    onChange={(event) => {
+                      const nextLoanId = event.target.value;
+                      setLoanId(nextLoanId);
+                      const nextLoan = loans.find((loan) => loan.id === nextLoanId);
+                      if (nextLoan) {
+                        const fee = (BigInt(nextLoan.principalMinor) * BigInt(nextLoan.productManagementFeeBp ?? 0)) / 10000n;
+                        const net = BigInt(nextLoan.principalMinor) - fee;
+                        setAmount((Number(net) / 100).toFixed(2));
+                      } else {
+                        setAmount("");
+                      }
+                    }}
+                    className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+                    required
+                  >
+                    <option value="">No approved loans awaiting disbursement</option>
+                    {loans
+                      .filter((loan) => {
+                        const q = loanQuery.trim().toLowerCase();
+                        if (!q) return true;
+                        return (
+                          (loan.loanNumber ?? "").toLowerCase().includes(q) ||
+                          (loan.clientName ?? "").toLowerCase().includes(q) ||
+                          (loan.clientReference ?? "").toLowerCase().includes(q) ||
+                          (loan.productName ?? "").toLowerCase().includes(q)
+                        );
+                      })
+                      .map((loan) => (
+                        <option key={loan.id} value={loan.id}>
+                          {loan.productName?.toUpperCase() ?? "LOAN"}{" "}
+                          <span className="text-muted-foreground">● New</span>{" "}
+                          {loan.loanNumber} - {loan.clientName ?? loan.clientReference ?? "Unknown"}
+                        </option>
+                      ))}
+                  </select>
+                  <Input
+                    id="transaction-loan-search"
+                    value={loanQuery}
+                    onChange={(event) => setLoanQuery(event.target.value)}
+                    placeholder="Search account number, member name, member ID or product"
+                    className="mt-2 h-[var(--control-height)]"
+                  />
                 </div>
-              ) : null}
-            </div>
-          ) : null}
 
-          {selectedCategoryDetails && type ? (
-            <div className="border-t border-card-border pt-4">
-              <h2 className="mb-4 fs-text font-bold text-strong">{TYPE_LABELS[type]}</h2>
-              {selectedCategory === "till" ? (
-                <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-[var(--card-radius)] border border-card-border bg-subtle p-3">
-                  <div>
-                    <p className="fs-text font-semibold text-strong">
-                      Till status: {isOpen ? "Open" : "Closed"}
-                    </p>
-                    <p className="fs-caption text-muted-foreground">
-                      {till?.businessDate ?? "Today"} · Cash in{" "}
-                      {formatTzs(till?.cashInMinor ?? "0")} · Cash out{" "}
-                      {formatTzs(till?.cashOutMinor ?? "0")}
-                    </p>
-                    {isOpen ? (
-                      <p className="fs-caption text-muted-foreground">
-                        System balance {formatTzs(till?.session?.systemBalanceMinor ?? "0")}
-                      </p>
-                    ) : null}
-                  </div>
-                  <div className="flex flex-wrap items-end gap-2">
-                    {type === "TILL_OPENING" && !isOpen ? (
-                      <>
-                        <div>
-                          <label
-                            className="mb-1 block fs-caption font-medium text-body"
-                            htmlFor="open-float"
-                          >
-                            Opening float (minor units)
-                          </label>
-                          <Input
-                            id="open-float"
-                            value={openFloat}
-                            onChange={(event) => setOpenFloat(event.target.value)}
-                            placeholder="0"
-                            className="h-[var(--control-height)] w-[180px]"
-                          />
-                        </div>
-                        <Button type="button" onClick={handleOpenTill} disabled={!openFloat}>
-                          Open till
-                        </Button>
-                      </>
-                    ) : type === "TILL_CLOSING" && isOpen ? (
-                      <>
-                        <div>
-                          <label
-                            className="mb-1 block fs-caption font-medium text-body"
-                            htmlFor="counted-cash"
-                          >
-                            Counted cash (minor units)
-                          </label>
-                          <Input
-                            id="counted-cash"
-                            value={countedCash}
-                            onChange={(event) => setCountedCash(event.target.value)}
-                            placeholder="0"
-                            className="h-[var(--control-height)] w-[180px]"
-                          />
-                        </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={handleCloseTill}
-                          disabled={!countedCash}
-                        >
-                          Close till
-                        </Button>
-                      </>
-                    ) : null}
-                  </div>
-                  {tillActionError ? (
-                    <p className="w-full fs-text text-accent-red" role="alert">
-                      {tillActionError}
-                    </p>
-                  ) : null}
-                  {till?.session?.status === "CLOSED" &&
-                  till.session.varianceMinor &&
-                  till.session.varianceMinor !== "0" ? (
-                    <p className="w-full fs-text text-accent-yellow" role="status">
-                      Variance {formatTzs(till.session.varianceMinor)} recorded as a pending
-                      request.
-                    </p>
-                  ) : null}
-                </div>
-              ) : null}
-              {selectedCategory !== "till" ? (
-                <form className="space-y-4" onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
-                    <div>
-                      <label
-                        className="mb-1 block fs-caption font-medium text-body"
-                        htmlFor="transaction-type-display"
-                      >
-                        Transaction type
-                      </label>
-                      <Input
-                        id="transaction-type-display"
-                        value={TYPE_LABELS[type]}
-                        readOnly
-                        className="h-[var(--control-height)] bg-subtle"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        className="mb-1 block fs-text font-medium text-body"
-                        htmlFor="transaction-amount"
-                      >
-                        Amount (minor units)
-                      </label>
-                      <Input
-                        id="transaction-amount"
-                        value={amount}
-                        onChange={(event) => setAmount(event.target.value)}
-                        placeholder="0"
-                        className="h-[var(--control-height)]"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label
-                        className="mb-1 block fs-text font-medium text-body"
-                        htmlFor="transaction-payment"
-                      >
-                        Payment method
-                      </label>
-                      <select
-                        id="transaction-payment"
-                        value={paymentMethod}
-                        onChange={(event) => setPaymentMethod(event.target.value)}
-                        className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-                      >
-                        <option value="CASH">Cash</option>
-                        <option value="BANK">Bank</option>
-                        <option value="MNO">Mobile money</option>
-                        <option value="CHEQUE">Cheque</option>
-                      </select>
-                    </div>
-                    {requiresClient ? (
-                      <div>
-                        <label
-                          className="mb-1 block fs-caption font-medium text-body"
-                          htmlFor="transaction-client"
-                        >
-                          Client ID *
-                        </label>
-                        <Input
-                          id="transaction-client"
-                          value={clientId}
-                          onChange={(event) => setClientId(event.target.value)}
-                          placeholder="Enter client ID"
-                          className="h-[var(--control-height)]"
-                          required
-                        />
-                      </div>
-                    ) : null}
-                    {requiresSavingsAccount ? (
-                      <div>
-                        <label
-                          className="mb-1 block fs-caption font-medium text-body"
-                          htmlFor="transaction-savings"
-                        >
-                          Search Account *
-                        </label>
-                        <div className="relative">
-                          <Search
-                            className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                          <Input
-                            id="transaction-savings"
-                            value={savingsAccountId}
-                            onChange={(event) => setSavingsAccountId(event.target.value)}
-                            placeholder="Search..."
-                            className="h-[var(--control-height)] pl-8"
-                            required
-                          />
-                        </div>
-                      </div>
-                    ) : null}
-                    {requiresLoan ? (
-                      <div>
-                        <label
-                          className="mb-1 block fs-caption font-medium text-body"
-                          htmlFor="transaction-loan"
-                        >
-                          Loan account *
-                        </label>
-                        <Input
-                          id="transaction-loan-search"
-                          value={loanQuery}
-                          onChange={(event) => setLoanQuery(event.target.value)}
-                          placeholder="Search account number or member name"
-                          className="mb-2 h-[var(--control-height)]"
-                        />
-                        <select
-                          id="transaction-loan"
-                          value={loanId}
-                          onChange={(event) => {
-                            const nextLoanId = event.target.value;
-                            const nextLoan = loans.find((loan) => loan.id === nextLoanId) ?? null;
-                            setLoanId(nextLoanId);
-                            setAmount(
-                              nextLoan
-                                ? (Number(nextLoan.principalMinor) * 0.95 / 100).toFixed(2)
-                                : "",
-                            );
-                          }}
-                          className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
-                          required
-                        >
-                          <option value="">Select approved loan</option>
-                          {loans
-                            .filter((loan) => {
-                              const q = loanQuery.trim().toLowerCase();
-                              if (!q) return true;
-                              return (
-                                (loan.loanNumber ?? "").toLowerCase().includes(q) ||
-                                (loan.clientName ?? "").toLowerCase().includes(q) ||
-                                (loan.clientReference ?? "").toLowerCase().includes(q)
-                              );
-                            })
-                            .map((loan) => (
-                              <option key={loan.id} value={loan.id}>
-                                {loan.loanNumber} - {loan.clientName ?? loan.clientReference ?? "Unknown"} - {loan.productName ?? "Loan"}
-                              </option>
-                            ))}
-                        </select>
-                      </div>
-                    ) : null}
-                    {requiresLoan && selectedLoan ? (
-                      <>
-                        <div className="grid gap-3 md:grid-cols-2">
-                          <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
-                            <h3 className="mb-2 fs-text font-bold text-strong">Client Information</h3>
-                            <dl className="grid gap-2">
-                              <div><dt className="fs-text text-muted-foreground">Member name</dt><dd className="fs-text text-strong">{selectedLoan.clientName ?? "N.A."}</dd></div>
-                              <div><dt className="fs-text text-muted-foreground">Member ID</dt><dd className="fs-text text-strong">{selectedLoan.clientReference ?? "N.A."}</dd></div>
-                              <div><dt className="fs-text text-muted-foreground">Branch</dt><dd className="fs-text text-strong">Mwanza Branch</dd></div>
-                            </dl>
-                          </div>
-                          <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
-                            <h3 className="mb-2 fs-text font-bold text-strong">Loan Information</h3>
-                            <dl className="grid gap-2">
-                              <div><dt className="fs-text text-muted-foreground">Loan number</dt><dd className="fs-text text-strong">{selectedLoan.loanNumber}</dd></div>
-                              <div><dt className="fs-text text-muted-foreground">Product</dt><dd className="fs-text text-strong">{selectedLoan.productName ?? "N.A."}</dd></div>
-                              <div><dt className="fs-text text-muted-foreground">Principal</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.principalMinor)}</dd></div>
-                              <div><dt className="fs-text text-muted-foreground">Outstanding</dt><dd className="fs-text text-strong">{formatTzs(selectedLoan.outstandingPrincipalMinor)}</dd></div>
-                              <div><dt className="fs-text text-muted-foreground">Interest rate</dt><dd className="fs-text text-strong">{(selectedLoan.interestRateBp / 100).toFixed(2)}%</dd></div>
-                            </dl>
-                            <h4 className="mt-3 fs-text font-bold text-strong">Loan Charges</h4>
-                            <div className="mt-1 overflow-x-auto">
-                              <table className="w-full text-left fs-text">
-                                <thead className="border-b border-card-border bg-subtle font-semibold text-label">
-                                  <tr>
-                                    <th className="px-3 py-2">Charge Fee Type</th>
-                                    <th className="px-3 py-2 text-right">Balance (TSh)</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr className="border-b border-card-border">
-                                    <td className="px-3 py-2">LOAN MANAGEMENT FEE</td>
-                                    <td className="px-3 py-2 text-right">{formatTzs(String(Math.round(Number(selectedLoan.principalMinor) * 0.05)))}</td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                {selectedLoan ? (
+                  <>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      {/* Client Information */}
+                      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+                        <h3 className="mb-3 fs-text font-bold text-strong">Client Information</h3>
+                        <div className="flex gap-4">
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="grid size-16 place-items-center rounded-full bg-indigo-100 text-indigo-700 fs-title font-bold">
+                              {(selectedLoan.clientName ?? "NA")
+                                .split(" ")
+                                .map((part) => part.charAt(0))
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase()}
                             </div>
-                            <p className="mt-2 fs-text text-muted-foreground">Amount to be disbursed: {formatTzs(String(Math.round(Number(selectedLoan.principalMinor) * 0.95)))}</p>
+                            <div className="w-24 rounded border border-dashed border-card-border p-1 text-center fs-caption text-muted-foreground">
+                              Signature
+                            </div>
                           </div>
-                        </div>
-                        <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-12)]">
-                          <h3 className="mb-2 fs-text font-bold text-strong">Transaction Details</h3>
-                          <div className="grid gap-3 md:grid-cols-2">
+                          <dl className="grid flex-1 gap-2">
                             <div>
-                              <label className="mb-1 block fs-text font-medium text-body">Transaction Date *</label>
-                              <Input type="date" value={transactionDate} onChange={(e) => setTransactionDate(e.target.value)} className="h-[var(--control-height)]" />
+                              <dt className="fs-caption font-bold uppercase text-label">Email address</dt>
+                              <dd className="fs-text text-body">{selectedLoan.clientEmail ?? "N.A."}</dd>
                             </div>
                             <div>
-                              <label className="mb-1 block fs-text font-medium text-body">Transaction Mode *</label>
-                              <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text">
-                                <option value="CASH">Cash</option>
-                                <option value="BANK">Bank</option>
-                                <option value="CHEQUE">Cheque</option>
-                                <option value="MOBILE">Mobile Money</option>
-                              </select>
+                              <dt className="fs-caption font-bold uppercase text-label">Phone number</dt>
+                              <dd className="fs-text text-body">{selectedLoan.clientPhone ?? "N.A."}</dd>
                             </div>
+                            <div>
+                              <dt className="fs-caption font-bold uppercase text-label">Branch name</dt>
+                              <dd className="fs-text text-body">{selectedLoan.clientBranchName ?? "N.A."}</dd>
+                            </div>
+                            <div>
+                              <dt className="fs-caption font-bold uppercase text-label">Policy name</dt>
+                              <dd className="fs-text text-body">{selectedLoan.productName ?? "N.A."}</dd>
+                            </div>
+                          </dl>
+                        </div>
+                      </div>
+
+                      {/* Account Details */}
+                      <div className="rounded-[var(--card-radius)] border border-card-border bg-surface p-[var(--space-16)]">
+                        <h3 className="mb-3 fs-text font-bold text-strong">Account Details</h3>
+                        <dl className="grid grid-cols-2 gap-x-4 gap-y-2">
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Member name</dt>
+                            <dd className="fs-text text-body">{selectedLoan.clientName ?? "N.A."}</dd>
                           </div>
-                          <div className="mt-3">
-                            <label className="mb-1 block fs-text font-medium text-body">Till Account *</label>
-                            <p className="fs-text text-muted-foreground">Account Balance (TSh): {formatTzs("100000000")}</p>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Account number</dt>
+                            <dd className="fs-text font-mono text-body">{selectedLoan.loanNumber}</dd>
                           </div>
-                          <div className="mt-3 grid gap-3 md:grid-cols-3">
-                            <Input placeholder="Reference number" value={reference} onChange={(e) => setReference(e.target.value)} className="h-[var(--control-height)]" />
-                            <Input placeholder="Receipt number" value={receipt} onChange={(e) => setReceipt(e.target.value)} className="h-[var(--control-height)]" />
-                            <Input placeholder="Cheque number" value={cheque} onChange={(e) => setCheque(e.target.value)} className="h-[var(--control-height)]" />
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Product name</dt>
+                            <dd className="fs-text text-body">{selectedLoan.productName ?? "N.A."}</dd>
                           </div>
-                          <div className="mt-3">
-                            <label className="mb-1 block fs-text font-medium text-body">Narration / Description</label>
-                            <Input placeholder="A clear description of this transaction" value={narration} onChange={(e) => setNarration(e.target.value)} className="h-[var(--control-height)]" />
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Member ID</dt>
+                            <dd className="fs-text text-body">{selectedLoan.clientMemberNo ?? "N.A."}</dd>
                           </div>
-                          <div className="mt-3 flex justify-end">
-                            <Input type="text" value={amount} onChange={(e) => setAmount(e.target.value)} className="h-[var(--control-height)] w-1/2 text-right" />
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Member type</dt>
+                            <dd className="fs-text text-body">Individual</dd>
                           </div>
-                          <div className="mt-3 flex justify-end gap-2 border-t border-card-border pt-3">
-                            <Button type="button" variant="outline" onClick={() => { setLoanId(""); setLoanQuery(""); setAmount(""); }} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-                              Reset
-                            </Button>
-                            <Button type="submit" disabled={submitting || !amountValid} className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold">
-                              {submitting ? "Posting..." : "Submit"}
-                            </Button>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Reference number</dt>
+                            <dd className="fs-text text-body">{selectedLoan.clientReference ?? "N.A."}</dd>
+                          </div>
+                          <div className="col-span-2">
+                            <dt className="fs-caption font-bold uppercase text-label">Address</dt>
+                            <dd className="fs-text text-body">
+                              {(() => {
+                                const profile = selectedLoan.clientProfile as Record<string, unknown> | null;
+                                const residence = profile?.residenceDetails as Record<string, unknown> | undefined;
+                                const current = residence?.currentAddress;
+                                return typeof current === "string" && current ? current : "N.A.";
+                              })()}
+                            </dd>
+                          </div>
+                        </dl>
+                      </div>
+                    </div>
+
+                    {/* Block B: Loan Information */}
+                    <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+                      <div className="flex items-center justify-between border-b border-card-border bg-subtle px-[var(--space-16)] py-[var(--space-12)]">
+                        <h2 className="fs-text font-bold text-strong">Loan Information</h2>
+                        <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
+                      </div>
+                      <div className="space-y-4 p-[var(--space-16)]">
+                        <dl className="grid grid-cols-2 gap-x-4 gap-y-3 md:grid-cols-4">
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Loan officer</dt>
+                            <dd className="fs-text text-body">{selectedLoan.loanOfficerName ?? "N.A."}</dd>
+                          </div>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Status</dt>
+                            <dd className="fs-text text-body">
+                              <span className="rounded bg-amber-100 px-2 py-0.5 fs-caption font-semibold text-amber-800">New</span>
+                            </dd>
+                          </div>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Nominal interest rate</dt>
+                            <dd className="fs-text text-body">{(selectedLoan.interestRateBp / 100).toFixed(2)} %</dd>
+                          </div>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Tenure</dt>
+                            <dd className="fs-text text-body">{selectedLoan.tenureCount} {selectedLoan.tenurePeriod.charAt(0) + selectedLoan.tenurePeriod.slice(1).toLowerCase()}</dd>
+                          </div>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Expiry date</dt>
+                            <dd className="fs-text text-body">{selectedLoan.installmentStartDate ?? "N.A."}</dd>
+                          </div>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Principal loan amount (TSH)</dt>
+                            <dd className="fs-text text-body">{formatMinorUnitsExact(selectedLoan.principalMinor)}</dd>
+                          </div>
+                          <div>
+                            <dt className="fs-caption font-bold uppercase text-label">Amount to be disburse (TSH)</dt>
+                            <dd className="fs-text font-bold text-body">{formatMinorUnitsExact(amountToBeDisbursedMinor)}</dd>
+                          </div>
+                        </dl>
+
+                        <div>
+                          <h4 className="mb-2 fs-text font-bold text-strong">Loan Charges</h4>
+                          <div className="overflow-x-auto rounded-[var(--card-radius)] border border-card-border">
+                            <table className="w-full min-w-[320px] text-left fs-text">
+                              <thead className="border-b border-card-border bg-subtle font-semibold text-label">
+                                <tr>
+                                  <th className="px-3 py-2">Charge fee type</th>
+                                  <th className="px-3 py-2 text-right">Balance (TSH)</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr className="border-b border-card-border">
+                                  <td className="px-3 py-2">LOAN MANAGEMENT FEE</td>
+                                  <td className="px-3 py-2 text-right">{formatMinorUnitsExact(feeMinor)}</td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
-                      </>
-                    ) : null}
-                    {requiresLedgerAccount ? (
-                      <div>
-                        <label
-                          className="mb-1 block fs-caption font-medium text-body"
-                          htmlFor="transaction-counter"
-                        >
-                          Counter account code *
-                        </label>
-                        <Input
-                          id="transaction-counter"
-                          value={counterAccountCode}
-                          onChange={(event) => setCounterAccountCode(event.target.value)}
-                          placeholder="Search..."
-                          className="h-[var(--control-height)]"
-                          required
-                        />
                       </div>
-                    ) : null}
-                    <div>
-                      <label
-                        className="mb-1 block fs-text font-medium text-body"
-                        htmlFor="transaction-narration"
-                      >
-                        Narration
-                      </label>
-                      <Input
-                        id="transaction-narration"
-                        value={narration}
-                        onChange={(event) => setNarration(event.target.value)}
-                        placeholder="Optional"
-                        className="h-[var(--control-height)]"
-                      />
-                    </div>
-                  </div>
-                  {submitError ? (
-                    <p className="fs-text text-accent-red" role="alert">
-                      {submitError}
-                    </p>
-                  ) : null}
-                  {submitSuccess ? (
-                    <p className="fs-text text-accent-teal" role="status">
-                      {submitSuccess}
-                    </p>
-                  ) : null}
-                  <Button type="submit" disabled={submitting || !amount}>
-                    {submitting ? "Posting..." : "Post transaction"}
-                  </Button>
-                </form>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
+                    </section>
+
+                    {/* Block C: Transaction Details */}
+                    <section className="rounded-[var(--card-radius)] border border-card-border bg-surface">
+                      <div className="flex items-center justify-between border-b border-card-border bg-subtle px-[var(--space-16)] py-[var(--space-12)]">
+                        <h2 className="fs-text font-bold text-strong">Transaction Details</h2>
+                        <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
+                      </div>
+                      <div className="space-y-4 p-[var(--space-16)]">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                          <div>
+                            <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-date">
+                              Transaction Date <span className="text-accent-red" aria-hidden="true">*</span>
+                            </label>
+                            <div className="relative">
+                              <Input
+                                id="transaction-date"
+                                type="date"
+                                value={transactionDate}
+                                onChange={(e) => setTransactionDate(e.target.value)}
+                                className="h-[var(--control-height)] pr-10"
+                              />
+                              <Calendar className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+                            </div>
+                          </div>
+                          <div>
+                            <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-mode">
+                              Transaction Mode <span className="text-accent-red" aria-hidden="true">*</span>
+                            </label>
+                            <select
+                              id="transaction-mode"
+                              value={paymentMethod}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                              className="h-[var(--control-height)] w-full rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] fs-text"
+                            >
+                              <option value="CASH">Cash</option>
+                              <option value="BANK">Bank</option>
+                              <option value="CHEQUE">Cheque</option>
+                              <option value="MOBILE">Mobile Money</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-till">
+                            Till Account <span className="text-accent-red" aria-hidden="true">*</span>
+                          </label>
+                          <div className="rounded-[var(--control-radius)] border border-input bg-background px-[var(--space-12)] py-2 fs-text text-body">
+                            <span className="font-bold">Till</span>
+                            <br />
+                            <span className="font-mono text-muted-foreground">1010</span>
+                            <span className="text-muted-foreground"> - </span>
+                            <span>{till?.session?.branchName ?? "Teller"}</span>
+                            <span className="ml-2 rounded bg-subtle px-1.5 py-0.5 fs-caption text-muted-foreground">Till</span>
+                          </div>
+                          <p className="mt-1 fs-text text-muted-foreground">
+                            Account Balance (TSh):{" "}
+                            <span className="font-bold">
+                              {till?.session?.systemBalanceMinor
+                                ? `DR ${formatMinorUnitsExact(till.session.systemBalanceMinor)}`
+                                : "Unavailable"}
+                            </span>
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                          <div>
+                            <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-reference">
+                              Reference
+                            </label>
+                            <Input id="transaction-reference" value={reference} onChange={(e) => setReference(e.target.value)} placeholder="Reference number" className="h-[var(--control-height)]" />
+                          </div>
+                          <div>
+                            <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-receipt">
+                              Receipt #
+                            </label>
+                            <Input id="transaction-receipt" value={receipt} onChange={(e) => setReceipt(e.target.value)} placeholder="Receipt number" className="h-[var(--control-height)]" />
+                          </div>
+                          <div>
+                            <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-cheque">
+                              Cheque #
+                            </label>
+                            <Input id="transaction-cheque" value={cheque} onChange={(e) => setCheque(e.target.value)} placeholder="Cheque number" className="h-[var(--control-height)]" />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-narration">
+                            Narration / Description
+                          </label>
+                          <Input id="transaction-narration" value={narration} onChange={(e) => setNarration(e.target.value)} placeholder="A clear description of this transaction" className="h-[var(--control-height)]" />
+                        </div>
+
+                        <div className="flex justify-end">
+                          <div className="w-full md:w-1/2">
+                            <label className="mb-1 block fs-text font-medium text-body" htmlFor="transaction-amount">
+                              Amount <span className="text-accent-red" aria-hidden="true">*</span>
+                            </label>
+                            <Input
+                              id="transaction-amount"
+                              value={amount}
+                              onChange={(e) => setAmount(e.target.value)}
+                              className="h-[var(--control-height)] text-right"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2 border-t border-card-border pt-3">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => {
+                              setLoanId("");
+                              setLoanQuery("");
+                              clearTransactionDetails();
+                            }}
+                            className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
+                          >
+                            <RefreshCw className="size-4" aria-hidden="true" />
+                            Reset
+                          </Button>
+                          <Button
+                            type="submit"
+                            disabled={submitting || !isOpen || !amountValid || !loanId}
+                            className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
+                          >
+                            {submitting ? "Posting..." : "Submit"}
+                            <Check className="size-4" aria-hidden="true" />
+                          </Button>
+                        </div>
+                      </div>
+                    </section>
+                  </>
+                ) : null}
+              </div>
+            </section>
+
+            {submitError ? <p className="fs-text text-accent-red" role="alert">{submitError}</p> : null}
+            {submitSuccess ? <p className="fs-text text-accent-teal" role="status">{submitSuccess}</p> : null}
+          </form>
+        ) : null}
       </section>
     </div>
   );

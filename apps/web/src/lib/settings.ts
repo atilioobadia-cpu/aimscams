@@ -1021,6 +1021,7 @@ export type LoanApplication = {
   interestOnGrace: boolean;
   installmentStartDate: string | null;
   debtCapacityMinor: string | null;
+  insiderRelationship: string | null;
   economicSector: string | null;
   subEconomicSector: string | null;
   subSubEconomicSector: string | null;
@@ -1035,6 +1036,9 @@ export type LoanApplication = {
   nomineePhone: string | null;
   nomineeIdNumber: string | null;
   nomineePercentage: number | null;
+  nextOfKinEntries?: LoanApplicationNextOfKinInput[];
+  guarantorEntries?: LoanApplicationGuarantorInput[];
+  collateralEntries?: LoanApplicationCollateralInput[];
   paymentDestination: PaymentDestination | null;
   bankName: string | null;
   bankAccountName: string | null;
@@ -1089,6 +1093,31 @@ export type LoanApplicationDocumentInput = {
   dataUrl: string;
 };
 
+export type LoanApplicationNextOfKinInput = {
+  fullName: string;
+  relation: string;
+  phone: string;
+  idNumber?: string | null;
+  percentage?: number | null;
+};
+
+export type LoanApplicationGuarantorInput = {
+  category: "SAVINGS" | "SHARES" | "OTHER";
+  clientId: string;
+  guaranteeType: "PERCENTAGE" | "AMOUNT";
+  value: string;
+  blockFund: boolean;
+};
+
+export type LoanApplicationCollateralInput = {
+  assetName: string;
+  assetType: string;
+  currentValuationMinor: string;
+  blockAmountMinor: string;
+  comment: string;
+  documentName: string;
+};
+
 export type LoanApplicationInput = {
   clientId: string;
   productId?: string | null;
@@ -1102,6 +1131,7 @@ export type LoanApplicationInput = {
   installmentStartDate: string;
   loanOfficerId: string;
   debtCapacityMinor?: string | null;
+  insiderRelationship?: string | null;
   economicSector: string;
   subEconomicSector?: string | null;
   subSubEconomicSector?: string | null;
@@ -1116,6 +1146,9 @@ export type LoanApplicationInput = {
   nomineePhone?: string | null;
   nomineeIdNumber?: string | null;
   nomineePercentage?: number | null;
+  nextOfKinEntries?: LoanApplicationNextOfKinInput[];
+  guarantorEntries?: LoanApplicationGuarantorInput[];
+  collateralEntries?: LoanApplicationCollateralInput[];
   paymentDestination: PaymentDestination;
   bankName?: string | null;
   bankAccountName?: string | null;
@@ -1190,8 +1223,16 @@ export type Loan = {
   disbursedAt: string | null;
   clientName: string | null;
   clientReference: string | null;
+  clientMemberNo: string | null;
+  clientPhone: string | null;
+  clientEmail: string | null;
+  clientBranchName: string | null;
+  clientProfile: Record<string, unknown> | null;
   productName: string | null;
   productCode: string | null;
+  productManagementFeeBp: number;
+  productPrincipalAccountId: string | null;
+  productChargesIncomeAccountId: string | null;
   applicationNo: string | null;
   applicationId?: string | null;
   loanOfficerName: string | null;
