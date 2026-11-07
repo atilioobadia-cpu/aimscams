@@ -56,7 +56,7 @@ export const navItems: NavItem[] = [
     href: "/accounts",
     chevron: true,
     children: [
-      { label: "Loan applications", icon: "file", href: "/account-loan-application" },
+      { label: "Applications", icon: "file", href: "/account-loan-application" },
       { label: "Loans", icon: "landmark", href: "/account-loan" },
       { label: "Savings", icon: "piggy", href: "/account-saving" },
     ],

@@ -474,12 +474,16 @@ export function LoanApplicationWizard({
         }
         return null;
       }
+      if (index === 4 && attachments.length === 0) {
+        return "Attach at least one loan document.";
+      }
       return null;
     },
     [
       bankAccountName,
       bankAccountNumber,
       bankName,
+      attachments.length,
       clientId,
       debtCapacity,
       economicSector,
@@ -550,6 +554,7 @@ export function LoanApplicationWizard({
 
   async function submit(status: "DRAFT" | "SUBMITTED") {
     for (let index = 0; index < STEPS.length; index += 1) {
+      if (status === "DRAFT" && index === 4) continue;
       const failure = validateStep(index);
       if (failure) {
         setStep(index);
@@ -1450,7 +1455,7 @@ export function LoanApplicationWizard({
           <div id="loan-application-panel-documents" className="space-y-5 border-t border-card-border px-[19px] py-[18px]">
           <div className="space-y-5">
             <div>
-              <p className="fs-text font-medium text-body">Attachments</p>
+               <p className="fs-text font-medium text-body">Attachments <span className="text-accent-red" aria-hidden="true">*</span></p>
               <p className="mt-1 fs-text text-muted-foreground">
                 PDF, PNG or JPEG, up to 2 MB each. Attach at most five.
               </p>

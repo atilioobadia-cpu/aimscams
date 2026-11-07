@@ -10,6 +10,7 @@ import {
   parseOptionalMinor,
   parsePaymentDestination,
   parseTenurePeriod,
+  requireDocumentsForSubmission,
   tenureInMonths,
 } from './loan-applications.logic.js';
 
@@ -189,5 +190,23 @@ describe('parseLoanDocuments', () => {
         },
       ]),
     ).toThrow(BadRequestException);
+  });
+});
+
+describe('requireDocumentsForSubmission', () => {
+  it('requires a document for submitted applications', () => {
+    expect(() => requireDocumentsForSubmission({ status: 'SUBMITTED', newDocumentCount: 0 })).toThrow(
+      'Attach at least one loan document.',
+    );
+  });
+
+  it('allows drafts without attachments', () => {
+    expect(() => requireDocumentsForSubmission({ status: 'DRAFT', newDocumentCount: 0 })).not.toThrow();
+  });
+
+  it('allows existing attachments on a submitted update', () => {
+    expect(() =>
+      requireDocumentsForSubmission({ status: 'SUBMITTED', newDocumentCount: 0, existingDocumentCount: 1 }),
+    ).not.toThrow();
   });
 });

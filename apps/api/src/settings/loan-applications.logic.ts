@@ -356,6 +356,20 @@ export function parseLoanDocuments(value: unknown): ParsedDocument[] {
   return value.map(parseLoanDocument);
 }
 
+export function requireDocumentsForSubmission({
+  status,
+  newDocumentCount,
+  existingDocumentCount = 0,
+}: {
+  status: 'DRAFT' | 'SUBMITTED';
+  newDocumentCount: number;
+  existingDocumentCount?: number;
+}): void {
+  if (status === 'SUBMITTED' && newDocumentCount + existingDocumentCount === 0) {
+    throw new BadRequestException('Attach at least one loan document.');
+  }
+}
+
 export function parseOptionalMinor(value: unknown, field: string): bigint | null {
   if (value === undefined || value === null) return null;
   const text = textOf(value);

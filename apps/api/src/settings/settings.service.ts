@@ -20,6 +20,7 @@ import {
   parseOptionalMinor,
   parsePaymentDestination,
   parseTenurePeriod,
+  requireDocumentsForSubmission,
   tenureInDays,
   tenureInMonths,
 } from './loan-applications.logic.js';
@@ -605,7 +606,9 @@ export class SettingsService {
       product.suspenseAccountId,
     ].filter((value): value is string => Boolean(value));
     const accounts = accountIds.length
-      ? await this.prisma.glAccount.findMany({ where: { id: { in: accountIds } } })
+      ? await this.prisma.$queryRaw<Array<{ id: string; code: string; name: string; accountNumber: string | null }>>`
+          select id, code, name, code as "accountNumber" from gl_account where id = any(${accountIds}::uuid[])
+        `
       : [];
     const byId = new Map(accounts.map((account) => [account.id, account]));
     const label = (id: string | null) => {
@@ -2544,6 +2547,7 @@ export class SettingsService {
 
     const documents = parseLoanDocuments(body.documents);
     const status = body.status === 'SUBMITTED' ? 'SUBMITTED' : 'DRAFT';
+    requireDocumentsForSubmission({ status, newDocumentCount: documents.length });
 
     const item = await this.prisma.loanApplication.create({
       data: {
@@ -2716,6 +2720,11 @@ export class SettingsService {
 
     const documents = parseLoanDocuments(body.documents);
     const status = body.status === 'SUBMITTED' ? 'SUBMITTED' : existing.status === 'SUBMITTED' ? 'SUBMITTED' : 'DRAFT';
+    requireDocumentsForSubmission({
+      status,
+      newDocumentCount: documents.length,
+      existingDocumentCount: existing.documents.length,
+    });
 
     const updated = await this.prisma.loanApplication.update({
       where: { id },
