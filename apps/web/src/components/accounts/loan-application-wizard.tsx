@@ -1290,6 +1290,22 @@ export function LoanApplicationWizard({
                 />
               </div>
             </div>
+
+            <div className="flex justify-end border-t border-card-border pt-3">
+              <Button
+                type="button"
+                data-testid="wizard-next"
+                onClick={() => {
+                  setStepError(null);
+                  setStep(2);
+                  setMaxStep((current) => Math.max(current, 3));
+                }}
+                className="h-[var(--control-height)] px-[var(--space-16)] fs-text font-semibold"
+              >
+                Next
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Button>
+            </div>
           </div>
           </div>
         ) : null}
