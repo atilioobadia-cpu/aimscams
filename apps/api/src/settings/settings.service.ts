@@ -3052,8 +3052,12 @@ export class SettingsService {
       include: LOAN_INCLUDE,
       orderBy: [{ createdAt: 'desc' }],
     });
+    const fee = await this.prisma.feePenalty.findFirst({
+      where: { organisationId, name: "LOAN MANAGEMENT FEE", status: "ACTIVE" },
+    });
+    const feeBp = fee?.rateBp ?? 0;
     return {
-      items: items.map((item) => this.serializeLoan(item)),
+      items: items.map((item) => this.serializeLoan(item, feeBp)),
       canView: this.can(auth, 'Loan Account : View'),
     };
   }
@@ -3065,12 +3069,15 @@ export class SettingsService {
       include: LOAN_INCLUDE,
     });
     if (!item) throw new NotFoundException('Loan not found.');
+    const fee = await this.prisma.feePenalty.findFirst({
+      where: { organisationId, name: "LOAN MANAGEMENT FEE", status: "ACTIVE" },
+    });
     const schedule = await this.prisma.loanSchedule.findMany({
       where: { loanId: id },
       orderBy: [{ installmentNo: 'asc' }],
     });
     return {
-      loan: this.serializeLoan(item),
+      loan: this.serializeLoan(item, fee?.rateBp ?? 0),
       schedule: schedule.map((row) => ({
         id: row.id,
         installmentNo: row.installmentNo,
@@ -3087,7 +3094,7 @@ export class SettingsService {
     };
   }
 
-  private serializeLoan(item: any) {
+  private serializeLoan(item: any, managementFeeBp: number = 0) {
     return {
       id: item.id,
       loanNumber: item.loanNumber,
@@ -3112,7 +3119,7 @@ export class SettingsService {
       clientProfile: item.client?.profile ?? null,
       productName: item.product?.name ?? null,
       productCode: item.product?.code ?? null,
-      productManagementFeeBp: item.product?.managementFeeBp ?? 0,
+      productManagementFeeBp: item.product?.managementFeeBp || managementFeeBp,
       productPrincipalAccountId: item.product?.principalAccountId ?? null,
       productChargesIncomeAccountId: item.product?.chargesIncomeAccountId ?? null,
       applicationNo: item.application?.applicationNo ?? null,
