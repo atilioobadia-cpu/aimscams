@@ -986,7 +986,7 @@ export function LoanApplicationWizard({
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <button type="button" data-testid="wizard-step-additional" aria-expanded={step === 1} aria-controls="loan-application-panel-additional" onClick={() => { if (Number('1') > maxStep) return; setStepError(null); setStep(1); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 1 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+          <button type="button" data-testid="wizard-step-additional" aria-expanded={step === 1} aria-controls="loan-application-panel-additional" onClick={() => { if (Number('1') > maxStep) return; setStepError(null); setStep(1); }} style={{ opacity: maxStep < 1 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 1 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
             Additional Details <ChevronDown className={`size-5 transition-transform ${step === 1 ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
         {step === 1 ? (
@@ -1191,7 +1191,7 @@ export function LoanApplicationWizard({
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <button type="button" data-testid="wizard-step-nominee" aria-expanded={step === 2} aria-controls="loan-application-panel-nominee" onClick={() => { if (Number('2') > maxStep) return; setStepError(null); setStep(2); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 2 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+          <button type="button" data-testid="wizard-step-nominee" aria-expanded={step === 2} aria-controls="loan-application-panel-nominee" onClick={() => { if (Number('2') > maxStep) return; setStepError(null); setStep(2); }} style={{ opacity: maxStep < 2 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 2 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
             Next of Kin <ChevronDown className={`size-5 transition-transform ${step === 2 ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
         {step === 2 ? (
@@ -1274,7 +1274,7 @@ export function LoanApplicationWizard({
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <button type="button" data-testid="wizard-step-payment" aria-expanded={step === 3} aria-controls="loan-application-panel-payment" onClick={() => { if (Number('3') > maxStep) return; setStepError(null); setStep(3); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 3 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+          <button type="button" data-testid="wizard-step-payment" aria-expanded={step === 3} aria-controls="loan-application-panel-payment" onClick={() => { if (Number('3') > maxStep) return; setStepError(null); setStep(3); }} style={{ opacity: maxStep < 3 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 3 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
             Payment Destination <ChevronDown className={`size-5 transition-transform ${step === 3 ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
         {step === 3 ? (
@@ -1405,7 +1405,7 @@ export function LoanApplicationWizard({
         </section>
 
         <section className="overflow-hidden rounded-[var(--card-radius)] border border-card-border bg-surface">
-          <button type="button" data-testid="wizard-step-documents" aria-expanded={step === 4} aria-controls="loan-application-panel-documents" onClick={() => { if (Number('4') > maxStep) return; setStepError(null); setStep(4); }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 4 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
+          <button type="button" data-testid="wizard-step-documents" aria-expanded={step === 4} aria-controls="loan-application-panel-documents" onClick={() => { if (Number('4') > maxStep) return; setStepError(null); setStep(4); }} style={{ opacity: maxStep < 4 ? 0.5 : 1 }} className={`flex min-h-[58px] w-full items-center justify-between px-[19px] text-left fs-text font-semibold ${step === 4 ? "bg-surface text-primary" : "bg-[#f1f1f2] text-muted-foreground"} hover:bg-subtle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/50`}>
             Loan Documents <ChevronDown className={`size-5 transition-transform ${step === 4 ? "rotate-180" : ""}`} aria-hidden="true" />
           </button>
         {step === 4 ? (
